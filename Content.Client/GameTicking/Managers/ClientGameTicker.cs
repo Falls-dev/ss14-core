@@ -1,3 +1,4 @@
+using Content.Client.Audio;
 using Content.Client.Gameplay;
 using Content.Client.Lobby;
 using Content.Client.RoundEnd;
@@ -129,7 +130,6 @@ namespace Content.Client.GameTicking.Managers
 
         private void RoundEnd(RoundEndMessageEvent message)
         {
-            // Force an update in the event of this song being the same as the last.
             RestartSound = message.RestartSound;
 
             // Don't open duplicate windows (mainly for replays).

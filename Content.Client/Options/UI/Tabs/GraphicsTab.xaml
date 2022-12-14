@@ -41,6 +41,8 @@
             <CheckBox Name="FpsCounterCheckBox" Text="{Loc 'ui-options-fps-counter'}" />
             <CheckBox Name="LogInChatCheckBox" Text="Логировать действия в чат" />
             <CheckBox Name="ShowTrailsCheckBox" Text="Отображать трейлы от пуль" />
+            <CheckBox Name="FilmGrainCheckBox" Text="{Loc 'ui-options-film-grain'}"/>
+            <CheckBox Name="ShadersCheckBox" Text="{Loc 'ui-options-shaders'}" />
         </BoxContainer>
         <controls:StripeBack HasBottomEdge="False" HasMargins="False">
             <Button Name="ApplyButton"

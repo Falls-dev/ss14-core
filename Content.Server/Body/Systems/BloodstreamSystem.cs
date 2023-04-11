@@ -44,7 +44,7 @@ public sealed class BloodstreamSystem : EntitySystem
     [Dependency] private readonly AlertsSystem _alertsSystem = default!;
     [Dependency] private readonly ForensicsSystem _forensicsSystem = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _speed = default!; // WD
-    [Dependency] private readonly BloodLossAccent _bloodLossAccent = default!;
+    [Dependency] private readonly BloodLossAccent _bloodLossAccent = default!; // WD
 
     public override void Initialize()
     {
@@ -382,6 +382,7 @@ public sealed class BloodstreamSystem : EntitySystem
                 _forensicsSystem.TransferDna(puddleUid, uid, canDnaBeCleaned: false);
             }
 
+            _audio.PlayPvs(component.BloodLossSound, uid, component.DefaultParams);
             tempSolution.RemoveAllSolution();
         }
 

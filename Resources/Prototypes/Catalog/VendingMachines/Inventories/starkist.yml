@@ -2,11 +2,14 @@
   id: StarkistInventory
   startingInventory:
     DrinkStarkistCan: 4
-    DrinkGrapeCan: 2
-    DrinkRootBeerCan: 2
-    DrinkIcedTeaCan: 2
-    DrinkLemonLimeCan: 2
-    DrinkFourteenLokoCan: 2
+    #WD edit start
+    DrinkGrapeCan: 4
+    DrinkRootBeerCan: 4
+    DrinkIcedTeaCan: 4
+    DrinkLemonLimeCan: 4
+    DrinkDrGibbCan: 4
+    DrinkFourteenLokoCan: 4
+    #WD edit end
   emaggedInventory:
     DrinkNukieCan: 2
     DrinkChangelingStingCan: 2

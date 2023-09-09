@@ -1,12 +1,15 @@
 - type: vendingMachineInventory
   id: ShamblersJuiceInventory
   startingInventory:
+    #WD edit start
     DrinkShamblersJuiceCan: 4
-    DrinkGrapeCan: 2
-    DrinkRootBeerCan: 2
-    DrinkIcedTeaCan: 2
-    DrinkLemonLimeCan: 2
-    DrinkFourteenLokoCan: 2
+    DrinkGrapeCan: 4
+    DrinkRootBeerCan: 4
+    DrinkIcedTeaCan: 4
+    DrinkLemonLimeCan: 4
+    DrinkDrGibbCan: 4
+    DrinkFourteenLokoCan: 4
+
   emaggedInventory:
     DrinkNukieCan: 2
-    DrinkChangelingStingCan: 2
+

@@ -1,0 +1,21 @@
+- type: entity
+  id: ActionChangelingAbsorb
+  name: Absorb
+  description: Absorbs the human.
+  noSpawn: true
+  components:
+  - type: EntityTargetAction
+    itemIconStyle: NoItem
+    icon: Interface/Actions/ling_absorb.png
+    event: !type:AbsorbDnaActionEvent
+
+- type: entity
+  id: ActionChangelingTransform
+  name: Transform
+  description: Transform to the chosen person.
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/transform.png
+      event: !type:TransformActionEvent

@@ -196,6 +196,8 @@
         type: HumanoidMarkingModifierBoundUserInterface
       - key: enum.StrippingUiKey.Key
         type: StrippableBoundUserInterface
+      - key: enum.ListViewSelectorUiKey.Key
+        type: ListViewSelectorBui
   - type: Puller
   - type: Speech
     speechSounds: Alto

@@ -1,12 +1,13 @@
 ﻿using Content.Shared.Humanoid;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.Changeling;
 
 
-[RegisterComponent,NetworkedComponent]
-public sealed partial class ChangelingComponent: Component
+[RegisterComponent, NetworkedComponent]
+public sealed partial class ChangelingComponent : Component
 {
     [ViewVariables(VVAccess.ReadOnly)]
     public string StoreCurrencyName = "Points";
@@ -61,6 +62,8 @@ public struct HumanoidData
     public HumanoidAppearanceComponent AppearanceComponent;
 
     public string Name;
+
+    public string Dna;
 
     public EntityUid? EntityUid;
 }

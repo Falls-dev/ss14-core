@@ -1,28 +1,28 @@
 ﻿using System.Linq;
 using Content.Server.Actions;
-using Content.Server.Database;
 using Content.Server.DoAfter;
 using Content.Server.Forensics;
 using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
 using Content.Server.Popups;
-using Content.Shared.Actions;
 using Content.Shared.Changeling;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
+using Content.Shared.Miracle.UI;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Preferences;
 using Content.Shared.Pulling.Components;
 using Content.Shared.Standing;
+using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects.Components.Localization;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Changeling;
 
-public sealed class ChangelingSystem: EntitySystem
+public sealed class ChangelingSystem : EntitySystem
 {
     [Dependency] private readonly ActionsSystem _action = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
@@ -33,10 +33,11 @@ public sealed class ChangelingSystem: EntitySystem
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly IdentitySystem _identity = default!;
-
+    [Dependency] private readonly UserInterfaceSystem _ui = default!;
 
     [ValidatePrototypeId<EntityPrototype>]
     private const string ChangelingAbsorb = "ActionChangelingAbsorb";
+
     [ValidatePrototypeId<EntityPrototype>]
     private const string ChangelingTransform = "ActionChangelingTransform";
 
@@ -47,43 +48,192 @@ public sealed class ChangelingSystem: EntitySystem
         SubscribeLocalEvent<ChangelingComponent, ComponentInit>(OnInit);
 
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaActionEvent>(OnAbsorb);
+        SubscribeLocalEvent<ChangelingComponent, TransformActionEvent>(OnTransform);
+
+        SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaDoAfterEvent>(OnAbsorbDoAfter);
 
-        SubscribeLocalEvent<ChangelingComponent, TransformActionEvent>(OnTransform);
-        SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
+        SubscribeLocalEvent<ChangelingComponent, ListViewItemSelectedMessage>(OnTransformUiMessage);
+    }
+
+    #region Handlers
+
+    private void OnInit(EntityUid uid, ChangelingComponent component, ComponentInit args)
+    {
+        CopyHumanoidData(uid, uid, component);
+        _action.AddAction(uid, ref component.AbsorbAction, ChangelingAbsorb);
+        _action.AddAction(uid, ref component.TransformAction, ChangelingTransform);
+    }
+
+    private void OnAbsorb(EntityUid uid, ChangelingComponent component, AbsorbDnaActionEvent args)
+    {
+        if (!HasComp<HumanoidAppearanceComponent>(args.Target))
+        {
+            _popup.PopupEntity("You can't absorb not humans!", args.Performer);
+            return;
+        }
+
+        if (HasComp<AbsorbedComponent>(args.Target))
+        {
+            _popup.PopupEntity("This person already absorbed!", args.Performer);
+            return;
+        }
+
+        if (!_stateSystem.IsDown(args.Target))
+        {
+            _popup.PopupEntity("Target must be down!", args.Performer);
+            return;
+        }
+
+        if (!TryComp<SharedPullableComponent>(args.Target, out var pulled))
+        {
+            _popup.PopupEntity("You must pull target!", args.Performer);
+            return;
+        }
+
+        if (!pulled.BeingPulled)
+        {
+            _popup.PopupEntity("You must pull target!", args.Performer);
+            return;
+        }
+
+
+        _doAfterSystem.TryStartDoAfter(
+            new DoAfterArgs(EntityManager, args.Performer, component.AbsorbDnaDelay, new AbsorbDnaDoAfterEvent(), uid,
+                args.Target, uid)
+            {
+                BreakOnTargetMove = true,
+                BreakOnUserMove = true
+            });
     }
 
     private void OnTransform(EntityUid uid, ChangelingComponent component, TransformActionEvent args)
     {
+        if (!TryComp<ActorComponent>(uid, out var actorComponent))
+            return;
+
         if (component.AbsorbedEntities.Count <= 1)
         {
             _popup.PopupEntity("You don't have any persons to transform!", uid);
             return;
         }
 
+        if (!_ui.TryGetUi(uid, ListViewSelectorUiKey.Key, out var bui))
+            return;
+
+        var state = component.AbsorbedEntities.ToDictionary(humanoidData
+            => humanoidData.Key, humanoidData
+            => humanoidData.Value.Name);
+
+        _ui.SetUiState(bui, new ListViewBuiState(state));
+        _ui.OpenUi(bui, actorComponent.PlayerSession);
+    }
+
+    private void OnTransformUiMessage(EntityUid uid, ChangelingComponent component, ListViewItemSelectedMessage args)
+    {
+        var selectedDna = args.SelectedItem;
+        var user = GetEntity(args.Entity);
+
         _doAfterSystem.TryStartDoAfter(
-            new DoAfterArgs(EntityManager, uid, component.TransformDelay, new TransformDoAfterEvent(), uid,
-                uid, uid)
+            new DoAfterArgs(EntityManager, user, component.TransformDelay, new TransformDoAfterEvent{SelectedDna = selectedDna}, user,
+                user, user)
             {
                 BreakOnUserMove = true
             });
+
+        if (!TryComp<ActorComponent>(uid, out var actorComponent))
+            return;
+
+        if (!_ui.TryGetUi(user, ListViewSelectorUiKey.Key, out var bui))
+            return;
+
+        _ui.CloseUi(bui, actorComponent.PlayerSession);
     }
 
-    private void TryTransform(EntityUid uid, ChangelingComponent component)
+    #endregion
+
+    #region DoAfters
+
+    private void OnTransformDoAfter(EntityUid uid, ChangelingComponent component, TransformDoAfterEvent args)
     {
-        var person = component.AbsorbedEntities.Last();
+        if (args.Handled || args.Cancelled)
+            return;
+
+        TryTransform(args.User, args.SelectedDna, component);
+
+        args.Handled = true;
+    }
+
+    private void OnAbsorbDoAfter(EntityUid uid, ChangelingComponent component, AbsorbDnaDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled || args.Target == null)
+        {
+            return;
+        }
+
+        CopyHumanoidData(uid, (EntityUid) args.Target, component);
+
+        if(!_mobThresholdSystem.TryGetThresholdForState((EntityUid) args.Target, MobState.Dead, out var damage))
+            return;
+
+        DamageSpecifier dmg = new();
+        dmg.DamageDict.Add("Bloodloss", damage.Value); //todo change damage type
+        _damage.TryChangeDamage(args.Target, dmg, true, origin: uid);
+
+        EnsureComp<AbsorbedComponent>((EntityUid) args.Target);
+
+        args.Handled = true;
+    }
+
+    #endregion
+
+    #region Helpers
+
+    private void CopyHumanoidData(EntityUid uid, EntityUid target, ChangelingComponent component)
+    {
+        if(!TryComp<MetaDataComponent>(target, out var targetMeta))
+            return;
+        if(!TryComp<HumanoidAppearanceComponent>(target, out var targetAppearance))
+            return;
+        if(!TryComp<DnaComponent>(target, out var targetDna))
+            return;
+        if (!TryPrototype(target, out var proto, targetMeta))
+            return;
+
+        if(component.AbsorbedEntities.ContainsKey(proto.Name))
+            return;
+
+        component.AbsorbedEntities.Add(targetDna.DNA, new HumanoidData
+        {
+            EntityPrototype = proto,
+            MetaDataComponent = targetMeta,
+            AppearanceComponent = targetAppearance,
+            Name = targetMeta.EntityName,
+            EntityUid = target,
+            Dna = targetDna.DNA
+        });
+
+        Dirty(uid, component);
+    }
+
+    private void TryTransform(EntityUid uid, string dna, ChangelingComponent component)
+    {
+        if (!component.AbsorbedEntities.TryGetValue(dna, out var person))
+        {
+            return;
+        }
 
         if(!TryComp<HumanoidAppearanceComponent>(uid, out var appearance))
             return;
 
-        ClonePerson(uid,person.Value.AppearanceComponent, appearance);
+        ClonePerson(uid,person.AppearanceComponent, appearance);
 
 
         if(!TryComp<MetaDataComponent>(uid, out var meta))
             return;
 
-        _metaData.SetEntityName(uid, person.Value.MetaDataComponent!.EntityName, meta);
-        _metaData.SetEntityDescription(uid, person.Value.MetaDataComponent!.EntityDescription, meta);
+        _metaData.SetEntityName(uid, person.MetaDataComponent!.EntityName, meta);
+        _metaData.SetEntityDescription(uid, person.MetaDataComponent!.EntityDescription, meta);
 
         _identity.QueueIdentityUpdate(uid);
     }
@@ -109,117 +259,5 @@ public sealed class ChangelingSystem: EntitySystem
         Dirty(target, targetHumanoid);
     }
 
-    private void OnTransformDoAfter(EntityUid uid, ChangelingComponent component, TransformDoAfterEvent args)
-    {
-        if (args.Handled || args.Cancelled)
-        {
-            return;
-        }
-
-        TryTransform(uid, component);
-
-        args.Handled = true;
-    }
-
-    private void OnInit(EntityUid uid, ChangelingComponent component, ComponentInit args)
-    {
-        CopyHumanoidData(uid, uid, component);
-        _action.AddAction(uid, ref component.AbsorbAction, ChangelingAbsorb);
-        _action.AddAction(uid, ref component.TransformAction, ChangelingTransform);
-    }
-
-
-    private void OnAbsorbDoAfter(EntityUid uid, ChangelingComponent component, AbsorbDnaDoAfterEvent args)
-    {
-        if (args.Handled || args.Cancelled || args.Target == null)
-        {
-            return;
-        }
-
-        CopyHumanoidData(uid, (EntityUid) args.Target, component);
-
-        if(!_mobThresholdSystem.TryGetThresholdForState((EntityUid) args.Target, MobState.Dead, out var damage))
-            return;
-
-        DamageSpecifier dmg = new();
-        dmg.DamageDict.Add("Bloodloss", damage.Value); //todo change damage type
-        _damage.TryChangeDamage(args.Target, dmg, true, origin: uid);
-
-        EnsureComp<AbsorbedComponent>((EntityUid) args.Target);
-
-        args.Handled = true;
-    }
-
-    private void CopyHumanoidData(EntityUid uid, EntityUid target, ChangelingComponent component)
-    {
-        if(!TryComp<MetaDataComponent>(target, out var targetMeta))
-            return;
-        if(!TryComp<HumanoidAppearanceComponent>(target, out var targetAppearance))
-            return;
-        if(!TryComp<DnaComponent>(target, out var targetDna))
-            return;
-        if (!TryPrototype(target, out var proto, targetMeta))
-            return;
-
-        if(component.AbsorbedEntities.ContainsKey(proto.Name))
-            return;
-
-        component.AbsorbedEntities.Add(targetDna.DNA, new HumanoidData
-        {
-            EntityPrototype = proto,
-            MetaDataComponent = targetMeta,
-            AppearanceComponent = targetAppearance,
-            Name = proto.Name,
-            EntityUid = target
-        });
-
-        Dirty(uid, component);
-    }
-
-    private void OnAbsorb(EntityUid uid, ChangelingComponent component, AbsorbDnaActionEvent args)
-    {
-        TryAbsorb(uid, args.Performer, args.Target, component);
-    }
-
-    private void TryAbsorb(EntityUid uid, EntityUid performer, EntityUid target, ChangelingComponent component)
-    {
-        if (!HasComp<HumanoidAppearanceComponent>(target))
-        {
-            _popup.PopupEntity("You can't absorb not humans!", performer);
-            return;
-        }
-
-        if (HasComp<AbsorbedComponent>(target))
-        {
-            _popup.PopupEntity("This person already absorbed!", performer);
-            return;
-        }
-
-        if (!_stateSystem.IsDown(target))
-        {
-            _popup.PopupEntity("Target must be down!", performer);
-            return;
-        }
-
-        if (!TryComp<SharedPullableComponent>(target, out var pulled))
-        {
-            _popup.PopupEntity("You must pull target!", performer);
-            return;
-        }
-
-        if (!pulled.BeingPulled)
-        {
-            _popup.PopupEntity("You must pull target!", performer);
-            return;
-        }
-
-
-        _doAfterSystem.TryStartDoAfter(
-            new DoAfterArgs(EntityManager, performer, component.AbsorbDnaDelay, new AbsorbDnaDoAfterEvent(), uid,
-                target, uid)
-            {
-                BreakOnTargetMove = true,
-                BreakOnUserMove = true
-            });
-    }
+    #endregion
 }

@@ -86,3 +86,16 @@
       event: !type:MuteStingActionEvent
       canTargetSelf: false
       useDelay: 30
+
+- type: entity
+  id: ActionHallucinationSting
+  name: Hallucination Sting
+  description: Injects large doses of hallucinogenic chemicals into their victim.
+  noSpawn: true
+  components:
+    - type: EntityTargetAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/sting_hallucination.png
+      event: !type:HallucinationStingActionEvent
+      canTargetSelf: false
+      useDelay: 30

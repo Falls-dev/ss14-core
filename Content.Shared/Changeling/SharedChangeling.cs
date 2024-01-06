@@ -59,3 +59,7 @@ public sealed partial class MuteStingActionEvent : EntityTargetActionEvent
 {
 
 }
+public sealed partial class HallucinationStingActionEvent : EntityTargetActionEvent
+{
+
+}

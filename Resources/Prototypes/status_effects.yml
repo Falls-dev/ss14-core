@@ -59,3 +59,7 @@
 
 - type: statusEffect
   id: StaminaModifier
+
+- type: statusEffect
+  id: BlurryVision
+  alwaysAllowed: true

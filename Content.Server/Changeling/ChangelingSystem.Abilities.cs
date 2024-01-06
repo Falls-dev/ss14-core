@@ -6,7 +6,6 @@ using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Popups;
-using Content.Server.Speech.Muting;
 using Content.Shared.Changeling;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
@@ -57,6 +56,7 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, TransformStingItemSelectedMessage>(OnTransformStingMessage);
         SubscribeLocalEvent<ChangelingComponent, BlindStingActionEvent>(OnBlindSting);
         SubscribeLocalEvent<ChangelingComponent, MuteStingActionEvent>(OnMuteSting);
+        SubscribeLocalEvent<ChangelingComponent, HallucinationStingActionEvent>(OnHallucinationSting);
 
         SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaDoAfterEvent>(OnAbsorbDoAfter);
@@ -127,7 +127,7 @@ public sealed partial class ChangelingSystem
         if (!TryComp<ActorComponent>(uid, out var actorComponent))
             return;
 
-        if (component.AbsorbedEntities.Count <= 1)
+        if (component.AbsorbedEntities.Count <= 1 && !component.IsLesserForm)
         {
             _popup.PopupEntity("You don't have any persons to transform!", uid);
             return;
@@ -276,14 +276,14 @@ public sealed partial class ChangelingSystem
     private void OnBlindSting(EntityUid uid, ChangelingComponent component, BlindStingActionEvent args)
     {
         if (!HasComp<HumanoidAppearanceComponent>(args.Target) ||
-            !TryComp<BlindableComponent>(args.Target, out var blindable))
+            !TryComp<BlindableComponent>(args.Target, out var blindComp))
         {
             _popup.PopupEntity("We cannot sting that!", uid);
             return;
         }
 
-        _blindingSystem.AdjustEyeDamage((args.Target, blindable), 1);
-        var statusTimeSpan = TimeSpan.FromSeconds(25 * MathF.Sqrt(blindable.EyeDamage));
+        _blindingSystem.AdjustEyeDamage((args.Target, blindComp), 1);
+        var statusTimeSpan = TimeSpan.FromSeconds(25 * MathF.Sqrt(blindComp.EyeDamage));
         _statusEffectsSystem.TryAddStatusEffect(args.Target, TemporaryBlindnessSystem.BlindingStatusEffect,
             statusTimeSpan, false, TemporaryBlindnessSystem.BlindingStatusEffect);
 
@@ -301,6 +301,21 @@ public sealed partial class ChangelingSystem
         var statusTimeSpan = TimeSpan.FromSeconds(30);
         _statusEffectsSystem.TryAddStatusEffect(args.Target, "Muted",
             statusTimeSpan, false, "Muted");
+
+        args.Handled = true;
+    }
+
+    private void OnHallucinationSting(EntityUid uid, ChangelingComponent component, HallucinationStingActionEvent args)
+    {
+        if (!HasComp<HumanoidAppearanceComponent>(args.Target))
+        {
+            _popup.PopupEntity("We cannot sting that!", uid);
+            return;
+        }
+
+        var statusTimeSpan = TimeSpan.FromSeconds(30);
+        _statusEffectsSystem.TryAddStatusEffect(args.Target, "BlurryVision",
+            statusTimeSpan, false, "BlurryVision");
 
         args.Handled = true;
     }
@@ -328,7 +343,17 @@ public sealed partial class ChangelingSystem
             return;
         }
 
-        CopyHumanoidData(uid, args.Target.Value, component);
+        if (TryComp<ChangelingComponent>(args.Target.Value, out var changelingComponent))
+        {
+            var total = component.AbsorbedEntities
+                .Concat(changelingComponent.AbsorbedEntities)
+                .ToDictionary(pair => pair.Key, pair => pair.Value);
+            component.AbsorbedEntities = total;
+        }
+        else
+        {
+            CopyHumanoidData(uid, args.Target.Value, component);
+        }
 
         KillUser(args.Target.Value, "Cellular");
 
@@ -343,6 +368,13 @@ public sealed partial class ChangelingSystem
     {
         if (args.Handled || args.Cancelled || args.Target == null)
         {
+            return;
+        }
+
+        if (HasComp<AbsorbedComponent>(args.Target))
+        {
+            _popup.PopupEntity("You're lost.",args.Target.Value);
+            component.IsRegenerating = false;
             return;
         }
 
@@ -375,12 +407,7 @@ public sealed partial class ChangelingSystem
             polyChangeling.IsLesserForm = true;
         }
 
-        _action.RemoveAction(polyChangeling.RegenerateAction);
-        _action.RemoveAction(polyChangeling.AbsorbAction);
-        _action.RemoveAction(polyChangeling.LesserFormAction);
-        _action.RemoveAction(polyChangeling.TransformStingAction);
-
-        Dirty(polymorphEntity.Value, polyChangeling);
+        RemoveLesserFormActions(polymorphEntity.Value, polyChangeling);
 
         args.Handled = true;
     }
@@ -388,6 +415,19 @@ public sealed partial class ChangelingSystem
     #endregion
 
     #region Helpers
+
+    private void RemoveLesserFormActions(EntityUid uid, ChangelingComponent component)
+    {
+        _action.RemoveAction(component.RegenerateAction);
+        _action.RemoveAction(component.AbsorbAction);
+        _action.RemoveAction(component.LesserFormAction);
+        _action.RemoveAction(component.TransformStingAction);
+        _action.RemoveAction(component.MuteStingAction);
+        _action.RemoveAction(component.BlindStingAction);
+        _action.RemoveAction(component.HallucinationStingAction);
+
+        Dirty(uid, component);
+    }
 
     private void KillUser(EntityUid target, string damageType)
     {

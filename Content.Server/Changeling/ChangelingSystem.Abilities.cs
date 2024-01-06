@@ -9,6 +9,8 @@ using Content.Server.Popups;
 using Content.Shared.Changeling;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
+using Content.Shared.Eye.Blinding.Components;
+using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Miracle.UI;
@@ -16,6 +18,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Pulling.Components;
 using Content.Shared.Standing;
+using Content.Shared.StatusEffect;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects.Components.Localization;
 using Robust.Shared.Player;
@@ -38,6 +41,9 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly ISerializationManager _serializationManager = default!;
     [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
     [Dependency] private readonly PolymorphSystem _polymorph = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
+    [Dependency] private readonly BlindableSystem _blindingSystem = default!;
+
 
     private void InitializeAbilities()
     {
@@ -48,6 +54,7 @@ public sealed partial class ChangelingSystem
 
         SubscribeLocalEvent<ChangelingComponent, TransformStingActionEvent>(OnTransformSting);
         SubscribeLocalEvent<ChangelingComponent, TransformStingItemSelectedMessage>(OnTransformStingMessage);
+        SubscribeLocalEvent<ChangelingComponent, BlindStingActionEvent>(OnBlindSting);
 
         SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaDoAfterEvent>(OnAbsorbDoAfter);
@@ -262,6 +269,23 @@ public sealed partial class ChangelingSystem
         _ui.CloseUi(bui, actorComponent.PlayerSession);
 
         _action.StartUseDelay(component.TransformStingAction);
+    }
+
+    private void OnBlindSting(EntityUid uid, ChangelingComponent component, BlindStingActionEvent args)
+    {
+        if (!HasComp<HumanoidAppearanceComponent>(args.Target) ||
+            !TryComp<BlindableComponent>(args.Target, out var blindable))
+        {
+            _popup.PopupEntity("We cannot sting that!", uid);
+            return;
+        }
+
+        _blindingSystem.AdjustEyeDamage((args.Target, blindable), 1);
+        var statusTimeSpan = TimeSpan.FromSeconds(25 * MathF.Sqrt(blindable.EyeDamage));
+        _statusEffectsSystem.TryAddStatusEffect(args.Target, TemporaryBlindnessSystem.BlindingStatusEffect,
+            statusTimeSpan, false, TemporaryBlindnessSystem.BlindingStatusEffect);
+
+        args.Handled = true;
     }
 
     #endregion

@@ -60,3 +60,16 @@
       event: !type:TransformStingActionEvent
       canTargetSelf: false
       useDelay: 120
+
+- type: entity
+  id: ActionBlindSting
+  name: Blind Sting
+  description: Stings a human, completely blinding them for a short time.
+  noSpawn: true
+  components:
+    - type: EntityTargetAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/sting_blind.png
+      event: !type:BlindStingActionEvent
+      canTargetSelf: false
+      useDelay: 30

@@ -49,3 +49,8 @@ public sealed partial class TransformStingActionEvent : EntityTargetActionEvent
 {
 
 }
+
+public sealed partial class BlindStingActionEvent : EntityTargetActionEvent
+{
+
+}

@@ -21,7 +21,10 @@ public sealed partial class ChangelingSystem : EntitySystem
     private const string ChangelingLesserForm = "ActionChangelingLesserForm";
 
     [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingTransformString = "ActionTransformSting";
+    private const string ChangelingTransformSting = "ActionTransformSting";
+
+    [ValidatePrototypeId<EntityPrototype>]
+    private const string ChangelingBlindSting = "ActionBlindSting";
 
     public override void Initialize()
     {
@@ -40,6 +43,7 @@ public sealed partial class ChangelingSystem : EntitySystem
         _action.AddAction(uid, ref component.TransformAction, ChangelingTransform);
         _action.AddAction(uid, ref component.RegenerateAction, ChangelingRegenerate);
         _action.AddAction(uid, ref component.LesserFormAction, ChangelingLesserForm);
-        _action.AddAction(uid, ref component.TransformStingAction, ChangelingTransformString);
+        _action.AddAction(uid, ref component.TransformStingAction, ChangelingTransformSting);
+        _action.AddAction(uid, ref component.BlindStingAction, ChangelingBlindSting);
     }
 }

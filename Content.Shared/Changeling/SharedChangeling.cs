@@ -54,3 +54,8 @@ public sealed partial class BlindStingActionEvent : EntityTargetActionEvent
 {
 
 }
+
+public sealed partial class MuteStingActionEvent : EntityTargetActionEvent
+{
+
+}

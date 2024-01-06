@@ -1,5 +1,6 @@
 ﻿using Content.Shared.Actions;
 using Content.Shared.Changeling;
+using Content.Shared.Examine;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Changeling;
@@ -26,11 +27,16 @@ public sealed partial class ChangelingSystem : EntitySystem
     [ValidatePrototypeId<EntityPrototype>]
     private const string ChangelingBlindSting = "ActionBlindSting";
 
+    [ValidatePrototypeId<EntityPrototype>]
+    private const string ChangelingMuteSting = "ActionMuteSting";
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<ChangelingComponent, ComponentInit>(OnInit);
+
+        SubscribeLocalEvent<AbsorbedComponent, ExaminedEvent>(OnExamine);
 
         InitializeAbilities();
     }
@@ -45,5 +51,11 @@ public sealed partial class ChangelingSystem : EntitySystem
         _action.AddAction(uid, ref component.LesserFormAction, ChangelingLesserForm);
         _action.AddAction(uid, ref component.TransformStingAction, ChangelingTransformSting);
         _action.AddAction(uid, ref component.BlindStingAction, ChangelingBlindSting);
+        _action.AddAction(uid, ref component.MuteStingAction, ChangelingMuteSting);
+    }
+
+    private void OnExamine(EntityUid uid, AbsorbedComponent component, ExaminedEvent args)
+    {
+        args.PushMarkup("[color=#A30000]His juices sucked up![/color]");
     }
 }

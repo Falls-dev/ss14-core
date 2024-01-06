@@ -75,6 +75,9 @@ public sealed partial class ChangelingComponent : Component
     [DataField]
     public EntityUid? BlindStingAction;
 
+    [DataField]
+    public EntityUid? MuteStingAction;
+
 }
 
 public struct HumanoidData

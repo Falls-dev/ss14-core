@@ -6,6 +6,7 @@ using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Popups;
+using Content.Server.Speech.Muting;
 using Content.Shared.Changeling;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
@@ -55,6 +56,7 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, TransformStingActionEvent>(OnTransformSting);
         SubscribeLocalEvent<ChangelingComponent, TransformStingItemSelectedMessage>(OnTransformStingMessage);
         SubscribeLocalEvent<ChangelingComponent, BlindStingActionEvent>(OnBlindSting);
+        SubscribeLocalEvent<ChangelingComponent, MuteStingActionEvent>(OnMuteSting);
 
         SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaDoAfterEvent>(OnAbsorbDoAfter);
@@ -284,6 +286,21 @@ public sealed partial class ChangelingSystem
         var statusTimeSpan = TimeSpan.FromSeconds(25 * MathF.Sqrt(blindable.EyeDamage));
         _statusEffectsSystem.TryAddStatusEffect(args.Target, TemporaryBlindnessSystem.BlindingStatusEffect,
             statusTimeSpan, false, TemporaryBlindnessSystem.BlindingStatusEffect);
+
+        args.Handled = true;
+    }
+
+    private void OnMuteSting(EntityUid uid, ChangelingComponent component, MuteStingActionEvent args)
+    {
+        if (!HasComp<HumanoidAppearanceComponent>(args.Target))
+        {
+            _popup.PopupEntity("We cannot sting that!", uid);
+            return;
+        }
+
+        var statusTimeSpan = TimeSpan.FromSeconds(30);
+        _statusEffectsSystem.TryAddStatusEffect(args.Target, "Muted",
+            statusTimeSpan, false, "Muted");
 
         args.Handled = true;
     }

@@ -73,3 +73,16 @@
       event: !type:BlindStingActionEvent
       canTargetSelf: false
       useDelay: 30
+
+- type: entity
+  id: ActionMuteSting
+  name: Mute Sting
+  description: Silently stings a human, temporarily silencing them.
+  noSpawn: true
+  components:
+    - type: EntityTargetAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/sting_mute.png
+      event: !type:MuteStingActionEvent
+      canTargetSelf: false
+      useDelay: 30

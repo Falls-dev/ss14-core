@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Content.Server.Administration.Systems;
+using Content.Server.Chemistry.EntitySystems;
 using Content.Server.DoAfter;
 using Content.Server.Forensics;
 using Content.Server.Humanoid;
@@ -9,6 +10,7 @@ using Content.Server.Popups;
 using Content.Server.Temperature.Systems;
 using Content.Server.Traits.Assorted;
 using Content.Shared.Changeling;
+using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Eye.Blinding.Components;
@@ -46,7 +48,7 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
     [Dependency] private readonly BlindableSystem _blindingSystem = default!;
     [Dependency] private readonly TemperatureSystem _temperatureSystem = default!;
-
+    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
 
     private void InitializeAbilities()
     {
@@ -61,6 +63,8 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, MuteStingActionEvent>(OnMuteSting);
         SubscribeLocalEvent<ChangelingComponent, HallucinationStingActionEvent>(OnHallucinationSting);
         SubscribeLocalEvent<ChangelingComponent, CryoStingActionEvent>(OnCryoSting);
+
+        SubscribeLocalEvent<ChangelingComponent, AdrenalineSacsActionEvent>(OnAdrenalineSacs);
 
         SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaDoAfterEvent>(OnAbsorbDoAfter);
@@ -341,6 +345,19 @@ public sealed partial class ChangelingSystem
         args.Handled = true;
     }
 
+    private void OnAdrenalineSacs(EntityUid uid, ChangelingComponent component, AdrenalineSacsActionEvent args)
+    {
+        if(_mobStateSystem.IsDead(uid))
+            return;
+
+        if (!_solutionContainer.TryGetInjectableSolution(uid, out var injectable, out _))
+            return;
+
+        _solutionContainer.TryAddReagent(injectable.Value, "Stimulants", 50);
+
+        args.Handled = true;
+    }
+
     #endregion
 
     #region DoAfters
@@ -448,6 +465,7 @@ public sealed partial class ChangelingSystem
         _action.RemoveAction(component.BlindStingAction);
         _action.RemoveAction(component.HallucinationStingAction);
         _action.RemoveAction(component.CryoStingAction);
+        _action.RemoveAction(component.AdrenalineSacsAction);
 
         Dirty(uid, component);
     }

@@ -81,6 +81,9 @@ public sealed partial class ChangelingComponent : Component
 
     [DataField]
     public EntityUid? CryoStingAction;
+
+    [DataField]
+    public EntityUid? AdrenalineSacsAction;
 }
 
 public struct HumanoidData

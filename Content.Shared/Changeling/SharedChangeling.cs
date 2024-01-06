@@ -68,3 +68,8 @@ public sealed partial class CryoStingActionEvent : EntityTargetActionEvent
 {
 
 }
+
+public sealed partial class AdrenalineSacsActionEvent : InstantActionEvent
+{
+
+}

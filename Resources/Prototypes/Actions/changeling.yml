@@ -112,3 +112,15 @@
       event: !type:CryoStingActionEvent
       canTargetSelf: false
       useDelay: 30
+
+- type: entity
+  id: ActionAdrenalineSacs
+  name: Adrenaline Sacs
+  description: Allows to make use of additional adrenaline to instantly recover from knockdown.
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/adrenaline_sacs.png
+      event: !type:AdrenalineSacsActionEvent
+      useDelay: 60

@@ -33,6 +33,9 @@ public sealed partial class ChangelingComponent : Component
     [DataField("pointsBalance")]
     public int PointsBalance;
 
+    [ViewVariables(VVAccess.ReadOnly)]
+    public bool IsRegenerating;
+
     [ViewVariables(VVAccess.ReadOnly), DataField("absorbedEntities")]
     public Dictionary<string, HumanoidData> AbsorbedEntities = new();
 

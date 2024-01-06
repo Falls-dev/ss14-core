@@ -158,6 +158,8 @@ public sealed partial class ChangelingSystem
             {
                 RequireCanInteract = false
             });
+
+        component.IsRegenerating = true;
     }
 
     #endregion
@@ -201,6 +203,8 @@ public sealed partial class ChangelingSystem
 
         _popup.PopupEntity("We're fully regenerated!", (EntityUid) args.Target);
 
+        component.IsRegenerating = false;
+
         args.Handled = true;
     }
 
@@ -214,7 +218,7 @@ public sealed partial class ChangelingSystem
             return;
 
         DamageSpecifier dmg = new();
-        dmg.DamageDict.Add(damageType, damage.Value); //todo change damage type
+        dmg.DamageDict.Add(damageType, damage.Value);
         _damage.TryChangeDamage(target, dmg, true);
     }
 

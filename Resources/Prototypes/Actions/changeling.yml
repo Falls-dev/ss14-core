@@ -19,3 +19,15 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/transform.png
       event: !type:TransformActionEvent
+
+- type: entity
+  id: ActionChangelingRegenerate
+  name: Regenerate
+  description: Enter in a regenerative stasis to heal self.
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/reviving_stasis.png
+      event: !type:RegenerateActionEvent
+      checkCanInteract: false

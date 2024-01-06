@@ -24,3 +24,14 @@ public sealed partial class TransformActionEvent : InstantActionEvent
 {
 
 }
+
+[Serializable, NetSerializable]
+public sealed partial class RegenerateDoAfterEvent : SimpleDoAfterEvent
+{
+}
+
+public sealed partial class RegenerateActionEvent : InstantActionEvent
+{
+
+}
+

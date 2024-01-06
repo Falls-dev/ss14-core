@@ -43,13 +43,19 @@ public sealed partial class ChangelingComponent : Component
     public float AbsorbDnaDelay = 10f;
 
     [ViewVariables(VVAccess.ReadWrite), DataField("TransformDelay")]
-    public float TransformDelay = 3f;
+    public float TransformDelay = 2f;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField("RegenerateDelay")]
+    public float RegenerateDelay = 20f;
 
     [DataField]
     public EntityUid? AbsorbAction;
 
     [DataField]
     public EntityUid? TransformAction;
+
+    [DataField]
+    public EntityUid? RegenerateAction;
 
 }
 

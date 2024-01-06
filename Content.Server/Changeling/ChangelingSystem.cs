@@ -1,25 +1,6 @@
-﻿using System.Linq;
-using Content.Server.Actions;
-using Content.Server.DoAfter;
-using Content.Server.Forensics;
-using Content.Server.Humanoid;
-using Content.Server.IdentityManagement;
-using Content.Server.Popups;
+﻿using Content.Server.Actions;
 using Content.Shared.Changeling;
-using Content.Shared.Damage;
-using Content.Shared.DoAfter;
-using Content.Shared.Humanoid;
-using Content.Shared.Humanoid.Markings;
-using Content.Shared.Miracle.UI;
-using Content.Shared.Mobs;
-using Content.Shared.Mobs.Systems;
-using Content.Shared.Pulling.Components;
-using Content.Shared.Standing;
-using Robust.Server.GameObjects;
-using Robust.Shared.GameObjects.Components.Localization;
-using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.Manager;
 
 namespace Content.Server.Changeling;
 
@@ -32,6 +13,9 @@ public sealed partial class ChangelingSystem : EntitySystem
 
     [ValidatePrototypeId<EntityPrototype>]
     private const string ChangelingTransform = "ActionChangelingTransform";
+
+    [ValidatePrototypeId<EntityPrototype>]
+    private const string ChangelingRegenerate = "ActionChangelingRegenerate";
 
     public override void Initialize()
     {
@@ -48,5 +32,6 @@ public sealed partial class ChangelingSystem : EntitySystem
         CopyHumanoidData(uid, uid, component);
         _action.AddAction(uid, ref component.AbsorbAction, ChangelingAbsorb);
         _action.AddAction(uid, ref component.TransformAction, ChangelingTransform);
+        _action.AddAction(uid, ref component.RegenerateAction, ChangelingRegenerate);
     }
 }

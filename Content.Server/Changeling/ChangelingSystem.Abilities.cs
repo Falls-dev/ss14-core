@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Content.Server.Administration.Systems;
 using Content.Server.DoAfter;
 using Content.Server.Forensics;
 using Content.Server.Humanoid;
@@ -14,6 +15,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Pulling.Components;
 using Content.Shared.Standing;
+using Npgsql.Replication.PgOutput.Messages;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects.Components.Localization;
 using Robust.Shared.Player;
@@ -26,6 +28,7 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly DoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
+    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly StandingStateSystem _stateSystem = default!;
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidAppearance = default!;
@@ -33,14 +36,18 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly IdentitySystem _identity = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly ISerializationManager _serializationManager = default!;
+    [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
+
 
     private void InitializeAbilities()
     {
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaActionEvent>(OnAbsorb);
         SubscribeLocalEvent<ChangelingComponent, TransformActionEvent>(OnTransform);
+        SubscribeLocalEvent<ChangelingComponent, RegenerateActionEvent>(OnRegenerate);
 
         SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaDoAfterEvent>(OnAbsorbDoAfter);
+        SubscribeLocalEvent<ChangelingComponent, RegenerateDoAfterEvent>(OnRegenerateDoAfter);
 
         SubscribeLocalEvent<ChangelingComponent, ListViewItemSelectedMessage>(OnTransformUiMessage);
     }
@@ -78,7 +85,6 @@ public sealed partial class ChangelingSystem
             _popup.PopupEntity("You must pull target!", args.Performer);
             return;
         }
-
 
         _doAfterSystem.TryStartDoAfter(
             new DoAfterArgs(EntityManager, args.Performer, component.AbsorbDnaDelay, new AbsorbDnaDoAfterEvent(), uid,
@@ -133,6 +139,27 @@ public sealed partial class ChangelingSystem
         _ui.CloseUi(bui, actorComponent.PlayerSession);
     }
 
+    private void OnRegenerate(EntityUid uid, ChangelingComponent component, RegenerateActionEvent args)
+    {
+        if(!TryComp<DamageableComponent>(uid, out var damageableComponent))
+            return;
+
+        if (damageableComponent.TotalDamage >= 0 && !_mobStateSystem.IsDead(uid))
+        {
+            KillUser(uid, "Cellular") ;
+        }
+
+        _popup.PopupEntity("We beginning our regeneration.", uid);
+
+        _doAfterSystem.TryStartDoAfter(
+            new DoAfterArgs(EntityManager, args.Performer, component.RegenerateDelay,
+                new RegenerateDoAfterEvent(), args.Performer,
+                args.Performer, args.Performer)
+            {
+                RequireCanInteract = false
+            });
+    }
+
     #endregion
 
     #region DoAfters
@@ -156,14 +183,23 @@ public sealed partial class ChangelingSystem
 
         CopyHumanoidData(uid, (EntityUid) args.Target, component);
 
-        if (!_mobThresholdSystem.TryGetThresholdForState((EntityUid) args.Target, MobState.Dead, out var damage))
-            return;
-
-        DamageSpecifier dmg = new();
-        dmg.DamageDict.Add("Bloodloss", damage.Value); //todo change damage type
-        _damage.TryChangeDamage(args.Target, dmg, true, origin: uid);
+        KillUser((EntityUid) args.Target, "Cellular");
 
         EnsureComp<AbsorbedComponent>((EntityUid) args.Target);
+
+        args.Handled = true;
+    }
+
+    private void OnRegenerateDoAfter(EntityUid uid, ChangelingComponent component, RegenerateDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled)
+        {
+            return;
+        }
+
+        _rejuvenate.PerformRejuvenate((EntityUid) args.Target!);
+
+        _popup.PopupEntity("We're fully regenerated!", (EntityUid) args.Target);
 
         args.Handled = true;
     }
@@ -171,6 +207,16 @@ public sealed partial class ChangelingSystem
     #endregion
 
     #region Helpers
+
+    private void KillUser(EntityUid target, string damageType)
+    {
+        if (!_mobThresholdSystem.TryGetThresholdForState(target, MobState.Dead, out var damage))
+            return;
+
+        DamageSpecifier dmg = new();
+        dmg.DamageDict.Add(damageType, damage.Value); //todo change damage type
+        _damage.TryChangeDamage(target, dmg, true);
+    }
 
     private void CopyHumanoidData(EntityUid uid, EntityUid target, ChangelingComponent component)
     {

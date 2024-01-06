@@ -19,6 +19,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects.Components.Localization;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager;
 
 namespace Content.Server.Changeling;
 
@@ -34,6 +35,7 @@ public sealed class ChangelingSystem : EntitySystem
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly IdentitySystem _identity = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private readonly ISerializationManager _serializationManager = default!;
 
     [ValidatePrototypeId<EntityPrototype>]
     private const string ChangelingAbsorb = "ActionChangelingAbsorb";
@@ -197,20 +199,25 @@ public sealed class ChangelingSystem : EntitySystem
             return;
         if(!TryComp<DnaComponent>(target, out var targetDna))
             return;
-        if (!TryPrototype(target, out var proto, targetMeta))
+        if (!TryPrototype(target, out var prototype, targetMeta))
             return;
 
-        if(component.AbsorbedEntities.ContainsKey(proto.Name))
+        if(component.AbsorbedEntities.ContainsKey(prototype.Name))
             return;
+
+        var appearance = _serializationManager.CreateCopy(targetAppearance, notNullableOverride: true);
+        var meta = _serializationManager.CreateCopy(targetMeta, notNullableOverride: true);
+        var proto = _serializationManager.CreateCopy(prototype, notNullableOverride: true);
+        var dna = _serializationManager.CreateCopy(targetDna, notNullableOverride: true);
 
         component.AbsorbedEntities.Add(targetDna.DNA, new HumanoidData
         {
             EntityPrototype = proto,
-            MetaDataComponent = targetMeta,
-            AppearanceComponent = targetAppearance,
-            Name = targetMeta.EntityName,
+            MetaDataComponent = meta,
+            AppearanceComponent = appearance,
+            Name = meta.EntityName,
             EntityUid = target,
-            Dna = targetDna.DNA
+            Dna = dna.DNA
         });
 
         Dirty(uid, component);

@@ -69,6 +69,9 @@ public sealed partial class ChangelingComponent : Component
     [DataField]
     public EntityUid? LesserFormAction;
 
+    [DataField]
+    public EntityUid? TransformStingAction;
+
 }
 
 public struct HumanoidData
@@ -78,4 +81,6 @@ public struct HumanoidData
     public HumanoidAppearanceComponent AppearanceComponent;
 
     public string Name;
+
+    public string Dna;
 }

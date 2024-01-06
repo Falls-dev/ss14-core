@@ -198,6 +198,8 @@
         type: StrippableBoundUserInterface
       - key: enum.ListViewSelectorUiKey.Key
         type: ListViewSelectorBui
+      - key: enum.TransformStingSelectorUiKey.Key
+        type: TransformStingSelectorBui
   - type: Puller
   - type: Speech
     speechSounds: Alto

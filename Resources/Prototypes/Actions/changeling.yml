@@ -46,5 +46,17 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/lesser_form.png
       event: !type:LesserFormActionEvent
-      checkCanInteract: false
       useDelay: 90
+
+- type: entity
+  id: ActionTransformSting
+  name: Transform Sting
+  description: Injects a retrovirus that forces human victim to transform into another.
+  noSpawn: true
+  components:
+    - type: EntityTargetAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/sting_transform.png
+      event: !type:TransformStingActionEvent
+      canTargetSelf: false
+      useDelay: 120

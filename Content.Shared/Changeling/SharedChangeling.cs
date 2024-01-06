@@ -44,3 +44,8 @@ public sealed partial class LesserFormActionEvent : InstantActionEvent
 {
 
 }
+
+public sealed partial class TransformStingActionEvent : EntityTargetActionEvent
+{
+
+}

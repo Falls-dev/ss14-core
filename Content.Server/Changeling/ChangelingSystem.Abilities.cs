@@ -46,6 +46,9 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, RegenerateActionEvent>(OnRegenerate);
         SubscribeLocalEvent<ChangelingComponent, LesserFormActionEvent>(OnLesserForm);
 
+        SubscribeLocalEvent<ChangelingComponent, TransformStingActionEvent>(OnTransformSting);
+        SubscribeLocalEvent<ChangelingComponent, TransformStingItemSelectedMessage>(OnTransformStingMessage);
+
         SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaDoAfterEvent>(OnAbsorbDoAfter);
         SubscribeLocalEvent<ChangelingComponent, RegenerateDoAfterEvent>(OnRegenerateDoAfter);
@@ -69,6 +72,19 @@ public sealed partial class ChangelingSystem
             _popup.PopupEntity("This person already absorbed!", args.Performer);
             return;
         }
+
+        if (!TryComp<DnaComponent>(args.Target, out var dnaComponent))
+        {
+           _popup.PopupEntity("Unknown creature!", uid);
+            return;
+        }
+
+        if (component.AbsorbedEntities.ContainsKey(dnaComponent.DNA))
+        {
+            _popup.PopupEntity("This DNA already absorbed!", uid);
+            return;
+        }
+
 
         if (!_stateSystem.IsDown(args.Target))
         {
@@ -198,6 +214,56 @@ public sealed partial class ChangelingSystem
         });
     }
 
+    private void OnTransformSting(EntityUid uid, ChangelingComponent component, TransformStingActionEvent args)
+    {
+        if (!HasComp<HumanoidAppearanceComponent>(args.Target))
+        {
+            _popup.PopupEntity("We can't transform that!", args.Performer);
+            return;
+        }
+
+        if (!TryComp<ActorComponent>(uid, out var actorComponent))
+            return;
+
+        if (component.AbsorbedEntities.Count < 1)
+        {
+            _popup.PopupEntity("You don't have any persons to transform!", uid);
+            return;
+        }
+
+        if (!_ui.TryGetUi(uid, TransformStingSelectorUiKey.Key, out var bui))
+            return;
+
+        var target = GetNetEntity(args.Target);
+
+        var state = component.AbsorbedEntities.ToDictionary(humanoidData
+            => humanoidData.Key, humanoidData
+            => humanoidData.Value.Name);
+
+        _ui.SetUiState(bui, new TransformStingBuiState(state, target));
+        _ui.OpenUi(bui, actorComponent.PlayerSession);
+    }
+
+    private void OnTransformStingMessage(EntityUid uid, ChangelingComponent component, TransformStingItemSelectedMessage args)
+    {
+        var selectedDna = args.SelectedItem;
+        var humanData = component.AbsorbedEntities[selectedDna];
+        var target = GetEntity(args.Target);
+        var user = GetEntity(args.Entity);
+
+        if (!TryComp<ActorComponent>(uid, out var actorComponent))
+            return;
+
+        if (!_ui.TryGetUi(user, TransformStingSelectorUiKey.Key, out var bui))
+            return;
+
+        TransformPerson(target, humanData);
+
+        _ui.CloseUi(bui, actorComponent.PlayerSession);
+
+        _action.StartUseDelay(component.TransformStingAction);
+    }
+
     #endregion
 
     #region DoAfters
@@ -207,7 +273,7 @@ public sealed partial class ChangelingSystem
         if (args.Handled || args.Cancelled)
             return;
 
-        TryTransform(args.User, args.SelectedDna, component);
+        TryTransformChangeling(args.User, args.SelectedDna, component);
 
         _action.StartUseDelay(component.TransformAction);
 
@@ -271,6 +337,7 @@ public sealed partial class ChangelingSystem
         _action.RemoveAction(polyChangeling.RegenerateAction);
         _action.RemoveAction(polyChangeling.AbsorbAction);
         _action.RemoveAction(polyChangeling.LesserFormAction);
+        _action.RemoveAction(polyChangeling.TransformStingAction);
 
         Dirty(polymorphEntity.Value, polyChangeling);
 
@@ -313,12 +380,38 @@ public sealed partial class ChangelingSystem
             MetaDataComponent = meta,
             AppearanceComponent = appearance,
             Name = meta.EntityName,
+            Dna = targetDna.DNA
         });
 
         Dirty(uid, component);
     }
 
-    private void TryTransform(EntityUid uid, string dna, ChangelingComponent component)
+    private void TransformPerson(EntityUid target, HumanoidData transformData)
+    {
+        if (!TryComp<HumanoidAppearanceComponent>(target, out var appearance))
+            return;
+
+        ClonePerson(target, transformData.AppearanceComponent, appearance);
+        TransferDna(target, transformData.Dna);
+
+        if (!TryComp<MetaDataComponent>(target, out var meta))
+            return;
+
+        _metaData.SetEntityName(target, transformData.MetaDataComponent!.EntityName, meta);
+        _metaData.SetEntityDescription(target, transformData.MetaDataComponent!.EntityDescription, meta);
+
+        _identity.QueueIdentityUpdate(target);
+    }
+
+    private void TransferDna(EntityUid target, string dna)
+    {
+        if(!TryComp<DnaComponent>(target, out var dnaComponent))
+            return;
+
+        dnaComponent.DNA = dna;
+    }
+
+    private void TryTransformChangeling(EntityUid uid, string dna, ChangelingComponent component)
     {
         if (!component.AbsorbedEntities.TryGetValue(dna, out var person))
             return;
@@ -337,19 +430,7 @@ public sealed partial class ChangelingSystem
             _action.StartUseDelay(revertedComp.LesserFormAction);
         }
 
-        if (!TryComp<HumanoidAppearanceComponent>(reverted, out var appearance))
-            return;
-
-        ClonePerson(reverted.Value, person.AppearanceComponent, appearance);
-
-
-        if (!TryComp<MetaDataComponent>(reverted, out var meta))
-            return;
-
-        _metaData.SetEntityName(reverted.Value, person.MetaDataComponent!.EntityName, meta);
-        _metaData.SetEntityDescription(reverted.Value, person.MetaDataComponent!.EntityDescription, meta);
-
-        _identity.QueueIdentityUpdate(reverted.Value);
+        TransformPerson(reverted.Value, person);
     }
 
     private void ClonePerson(EntityUid target, HumanoidAppearanceComponent sourceHumanoid,

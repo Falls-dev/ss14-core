@@ -148,3 +148,12 @@
   revertOnDeath: true
   revertOnCrit: true
   duration: 20
+
+- type: polymorph
+  id: MonkeyChangeling
+  entity: MobMonkey
+  forced: true
+  inventory: Drop
+  revertOnCrit: false
+  revertOnDeath: false
+  transferDamage: true

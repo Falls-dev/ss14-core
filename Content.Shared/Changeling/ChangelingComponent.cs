@@ -36,6 +36,9 @@ public sealed partial class ChangelingComponent : Component
     [ViewVariables(VVAccess.ReadOnly)]
     public bool IsRegenerating;
 
+    [ViewVariables(VVAccess.ReadOnly)]
+    public bool IsLesserForm;
+
     [ViewVariables(VVAccess.ReadOnly), DataField("absorbedEntities")]
     public Dictionary<string, HumanoidData> AbsorbedEntities = new();
 
@@ -51,6 +54,9 @@ public sealed partial class ChangelingComponent : Component
     [ViewVariables(VVAccess.ReadWrite), DataField("RegenerateDelay")]
     public float RegenerateDelay = 20f;
 
+    [ViewVariables(VVAccess.ReadWrite), DataField("LesserFormDelay")]
+    public float LesserFormDelay = 5f;
+
     [DataField]
     public EntityUid? AbsorbAction;
 
@@ -60,19 +66,16 @@ public sealed partial class ChangelingComponent : Component
     [DataField]
     public EntityUid? RegenerateAction;
 
+    [DataField]
+    public EntityUid? LesserFormAction;
+
 }
 
 public struct HumanoidData
 {
-    public EntityPrototype? EntityPrototype;
-
     public MetaDataComponent? MetaDataComponent;
 
     public HumanoidAppearanceComponent AppearanceComponent;
 
     public string Name;
-
-    public string Dna;
-
-    public EntityUid? EntityUid;
 }

@@ -35,3 +35,12 @@ public sealed partial class RegenerateActionEvent : InstantActionEvent
 
 }
 
+[Serializable, NetSerializable]
+public sealed partial class LesserFormDoAfterEvent : SimpleDoAfterEvent
+{
+}
+
+public sealed partial class LesserFormActionEvent : InstantActionEvent
+{
+
+}

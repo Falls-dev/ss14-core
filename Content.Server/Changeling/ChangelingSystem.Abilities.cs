@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using Content.Server.Administration.Systems;
 using Content.Server.DoAfter;
 using Content.Server.Forensics;
 using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
+using Content.Server.Polymorph.Systems;
 using Content.Server.Popups;
 using Content.Shared.Changeling;
 using Content.Shared.Damage;
@@ -37,6 +39,8 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly ISerializationManager _serializationManager = default!;
     [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
+    [Dependency] private readonly PolymorphSystem _polymorph = default!;
+
 
 
     private void InitializeAbilities()
@@ -44,10 +48,12 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaActionEvent>(OnAbsorb);
         SubscribeLocalEvent<ChangelingComponent, TransformActionEvent>(OnTransform);
         SubscribeLocalEvent<ChangelingComponent, RegenerateActionEvent>(OnRegenerate);
+        SubscribeLocalEvent<ChangelingComponent, LesserFormActionEvent>(OnLesserForm);
 
         SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaDoAfterEvent>(OnAbsorbDoAfter);
         SubscribeLocalEvent<ChangelingComponent, RegenerateDoAfterEvent>(OnRegenerateDoAfter);
+        SubscribeLocalEvent<ChangelingComponent, LesserFormDoAfterEvent>(OnLesserFormDoAfter);
 
         SubscribeLocalEvent<ChangelingComponent, ListViewItemSelectedMessage>(OnTransformUiMessage);
     }
@@ -162,6 +168,21 @@ public sealed partial class ChangelingSystem
         component.IsRegenerating = true;
     }
 
+    private void OnLesserForm(EntityUid uid, ChangelingComponent component, LesserFormActionEvent args)
+    {
+        if(_mobStateSystem.IsDead(uid) || component.IsRegenerating)
+            return;
+
+        if(component.IsLesserForm)
+            return;
+
+        _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.Performer, component.LesserFormDelay,
+            new LesserFormDoAfterEvent(), args.Performer, args.Performer)
+        {
+            BreakOnUserMove = true
+        });
+    }
+
     #endregion
 
     #region DoAfters
@@ -183,27 +204,50 @@ public sealed partial class ChangelingSystem
             return;
         }
 
-        CopyHumanoidData(uid, (EntityUid) args.Target, component);
+        CopyHumanoidData(uid, args.Target.Value, component);
 
-        KillUser((EntityUid) args.Target, "Cellular");
+        KillUser(args.Target.Value, "Cellular");
 
-        EnsureComp<AbsorbedComponent>((EntityUid) args.Target);
+        EnsureComp<AbsorbedComponent>(args.Target.Value);
 
         args.Handled = true;
     }
 
     private void OnRegenerateDoAfter(EntityUid uid, ChangelingComponent component, RegenerateDoAfterEvent args)
     {
-        if (args.Handled || args.Cancelled)
+        if (args.Handled || args.Cancelled || args.Target == null)
         {
             return;
         }
 
-        _rejuvenate.PerformRejuvenate((EntityUid) args.Target!);
+        _rejuvenate.PerformRejuvenate(args.Target.Value);
 
-        _popup.PopupEntity("We're fully regenerated!", (EntityUid) args.Target);
+        _popup.PopupEntity("We're fully regenerated!",  args.Target.Value);
 
         component.IsRegenerating = false;
+
+        args.Handled = true;
+    }
+
+    private void OnLesserFormDoAfter(EntityUid uid, ChangelingComponent component, LesserFormDoAfterEvent args)
+    {
+        if(args.Handled || args.Cancelled)
+            return;
+
+        var polymorphEntity = _polymorph.PolymorphEntity(args.User, "MonkeyChangeling");
+
+        if(polymorphEntity == null)
+            return;
+
+        if (!EnsureComp<ChangelingComponent>(polymorphEntity.Value, out var polyChangeling))
+        {
+            polyChangeling.PointsBalance = component.PointsBalance;
+            polyChangeling.ChemicalsBalance = component.ChemicalsBalance;
+            polyChangeling.AbsorbedEntities = component.AbsorbedEntities;
+            polyChangeling.IsLesserForm = true;
+        }
+
+        Dirty(polymorphEntity.Value, polyChangeling);
 
         args.Handled = true;
     }
@@ -238,17 +282,12 @@ public sealed partial class ChangelingSystem
 
         var appearance = _serializationManager.CreateCopy(targetAppearance, notNullableOverride: true);
         var meta = _serializationManager.CreateCopy(targetMeta, notNullableOverride: true);
-        var proto = _serializationManager.CreateCopy(prototype, notNullableOverride: true);
-        var dna = _serializationManager.CreateCopy(targetDna, notNullableOverride: true);
 
         component.AbsorbedEntities.Add(targetDna.DNA, new HumanoidData
         {
-            EntityPrototype = proto,
             MetaDataComponent = meta,
             AppearanceComponent = appearance,
             Name = meta.EntityName,
-            EntityUid = target,
-            Dna = dna.DNA
         });
 
         Dirty(uid, component);
@@ -261,19 +300,27 @@ public sealed partial class ChangelingSystem
             return;
         }
 
-        if (!TryComp<HumanoidAppearanceComponent>(uid, out var appearance))
+        EntityUid? reverted = uid;
+
+        if (component.IsLesserForm)
+        {
+            reverted = _polymorph.Revert(uid);
+            component.IsLesserForm = false;
+        }
+
+        if (!TryComp<HumanoidAppearanceComponent>(reverted, out var appearance))
             return;
 
-        ClonePerson(uid, person.AppearanceComponent, appearance);
+        ClonePerson(reverted.Value, person.AppearanceComponent, appearance);
 
 
-        if (!TryComp<MetaDataComponent>(uid, out var meta))
+        if (!TryComp<MetaDataComponent>(reverted, out var meta))
             return;
 
-        _metaData.SetEntityName(uid, person.MetaDataComponent!.EntityName, meta);
-        _metaData.SetEntityDescription(uid, person.MetaDataComponent!.EntityDescription, meta);
+        _metaData.SetEntityName(reverted.Value, person.MetaDataComponent!.EntityName, meta);
+        _metaData.SetEntityDescription(reverted.Value, person.MetaDataComponent!.EntityDescription, meta);
 
-        _identity.QueueIdentityUpdate(uid);
+        _identity.QueueIdentityUpdate(reverted.Value);
     }
 
     private void ClonePerson(EntityUid target, HumanoidAppearanceComponent sourceHumanoid,

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using Content.Server.Administration.Systems;
 using Content.Server.DoAfter;
 using Content.Server.Forensics;
@@ -17,7 +16,6 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Pulling.Components;
 using Content.Shared.Standing;
-using Npgsql.Replication.PgOutput.Messages;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects.Components.Localization;
 using Robust.Shared.Player;
@@ -40,8 +38,6 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly ISerializationManager _serializationManager = default!;
     [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
     [Dependency] private readonly PolymorphSystem _polymorph = default!;
-
-
 
     private void InitializeAbilities()
     {
@@ -115,9 +111,21 @@ public sealed partial class ChangelingSystem
         if (!_ui.TryGetUi(uid, ListViewSelectorUiKey.Key, out var bui))
             return;
 
-        var state = component.AbsorbedEntities.ToDictionary(humanoidData
-            => humanoidData.Key, humanoidData
-            => humanoidData.Value.Name);
+
+        Dictionary<string, string> state;
+
+        if (TryComp<DnaComponent>(uid, out var dnaComponent))
+        {
+            state = component.AbsorbedEntities.Where(key => key.Key != dnaComponent.DNA).ToDictionary(humanoidData
+                => humanoidData.Key, humanoidData
+                => humanoidData.Value.Name);
+        }
+        else
+        {
+            state = component.AbsorbedEntities.ToDictionary(humanoidData
+                => humanoidData.Key, humanoidData
+                => humanoidData.Value.Name);
+        }
 
         _ui.SetUiState(bui, new ListViewBuiState(state));
         _ui.OpenUi(bui, actorComponent.PlayerSession);
@@ -170,11 +178,18 @@ public sealed partial class ChangelingSystem
 
     private void OnLesserForm(EntityUid uid, ChangelingComponent component, LesserFormActionEvent args)
     {
-        if(_mobStateSystem.IsDead(uid) || component.IsRegenerating)
+        if (_mobStateSystem.IsDead(uid) || component.IsRegenerating)
+        {
+            _popup.PopupEntity("We can do this right now!", uid);
             return;
+        }
+
 
         if(component.IsLesserForm)
+        {
+            _popup.PopupEntity("We're already in the lesser form!", uid);
             return;
+        }
 
         _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.Performer, component.LesserFormDelay,
             new LesserFormDoAfterEvent(), args.Performer, args.Performer)
@@ -194,6 +209,8 @@ public sealed partial class ChangelingSystem
 
         TryTransform(args.User, args.SelectedDna, component);
 
+        _action.StartUseDelay(component.TransformAction);
+
         args.Handled = true;
     }
 
@@ -210,6 +227,8 @@ public sealed partial class ChangelingSystem
 
         EnsureComp<AbsorbedComponent>(args.Target.Value);
 
+        _action.StartUseDelay(component.AbsorbAction);
+
         args.Handled = true;
     }
 
@@ -225,6 +244,8 @@ public sealed partial class ChangelingSystem
         _popup.PopupEntity("We're fully regenerated!",  args.Target.Value);
 
         component.IsRegenerating = false;
+
+        _action.StartUseDelay(component.RegenerateAction);
 
         args.Handled = true;
     }
@@ -246,6 +267,10 @@ public sealed partial class ChangelingSystem
             polyChangeling.AbsorbedEntities = component.AbsorbedEntities;
             polyChangeling.IsLesserForm = true;
         }
+
+        _action.RemoveAction(polyChangeling.RegenerateAction);
+        _action.RemoveAction(polyChangeling.AbsorbAction);
+        _action.RemoveAction(polyChangeling.LesserFormAction);
 
         Dirty(polymorphEntity.Value, polyChangeling);
 
@@ -296,16 +321,20 @@ public sealed partial class ChangelingSystem
     private void TryTransform(EntityUid uid, string dna, ChangelingComponent component)
     {
         if (!component.AbsorbedEntities.TryGetValue(dna, out var person))
-        {
             return;
-        }
 
         EntityUid? reverted = uid;
 
         if (component.IsLesserForm)
         {
             reverted = _polymorph.Revert(uid);
-            component.IsLesserForm = false;
+
+            if(!TryComp<ChangelingComponent>(reverted, out var revertedComp))
+                return;
+
+            revertedComp.IsLesserForm = false;
+
+            _action.StartUseDelay(revertedComp.LesserFormAction);
         }
 
         if (!TryComp<HumanoidAppearanceComponent>(reverted, out var appearance))

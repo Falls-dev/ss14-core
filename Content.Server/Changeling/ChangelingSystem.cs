@@ -1,4 +1,4 @@
-﻿using Content.Server.Actions;
+﻿using Content.Shared.Actions;
 using Content.Shared.Changeling;
 using Robust.Shared.Prototypes;
 
@@ -6,7 +6,7 @@ namespace Content.Server.Changeling;
 
 public sealed partial class ChangelingSystem : EntitySystem
 {
-    [Dependency] private readonly ActionsSystem _action = default!;
+    [Dependency] private readonly SharedActionsSystem _action = default!;
 
     [ValidatePrototypeId<EntityPrototype>]
     private const string ChangelingAbsorb = "ActionChangelingAbsorb";

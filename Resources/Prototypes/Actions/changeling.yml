@@ -9,6 +9,7 @@
     icon: Interface/Actions/ling_absorb.png
     event: !type:AbsorbDnaActionEvent
     canTargetSelf: false
+    useDelay: 10
 
 - type: entity
   id: ActionChangelingTransform
@@ -20,6 +21,7 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/transform.png
       event: !type:TransformActionEvent
+      useDelay: 30
 
 - type: entity
   id: ActionChangelingRegenerate
@@ -32,6 +34,7 @@
       icon: Interface/Actions/reviving_stasis.png
       event: !type:RegenerateActionEvent
       checkCanInteract: false
+      useDelay: 120
 
 - type: entity
   id: ActionChangelingLesserForm
@@ -44,3 +47,4 @@
       icon: Interface/Actions/lesser_form.png
       event: !type:LesserFormActionEvent
       checkCanInteract: false
+      useDelay: 90

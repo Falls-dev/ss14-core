@@ -2,20 +2,17 @@
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
-using Robust.Shared.Prototypes;
 
 namespace Content.Client.Miracle.Changeling.UI.ListViewSelector;
 
 [GenerateTypedNameReferences]
-public partial class ListViewSelectorWindow : DefaultWindow
+public sealed partial class ListViewSelectorWindow : DefaultWindow
 {
     public Action<string>? ItemSelected;
 
-    private readonly IPrototypeManager _prototypeManager;
-    public ListViewSelectorWindow(IPrototypeManager prototypeManager)
+    public ListViewSelectorWindow()
     {
         RobustXamlLoader.Load(this);
-        _prototypeManager = prototypeManager;
     }
 
     public void PopulateList(Dictionary<string, string> items)
@@ -25,7 +22,6 @@ public partial class ListViewSelectorWindow : DefaultWindow
         foreach (var item in items)
         {
             var button = new Button();
-            var itemName = item;
 
             button.Text = item.Value;
 

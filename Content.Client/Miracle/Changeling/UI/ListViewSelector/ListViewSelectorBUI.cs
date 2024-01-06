@@ -1,12 +1,9 @@
 ﻿using Content.Shared.Miracle.UI;
-using Robust.Shared.Prototypes;
 
 namespace Content.Client.Miracle.Changeling.UI.ListViewSelector;
 
 public sealed class ListViewSelectorBui : BoundUserInterface
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-
     private ListViewSelectorWindow? _window;
 
     public ListViewSelectorBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
@@ -18,7 +15,7 @@ public sealed class ListViewSelectorBui : BoundUserInterface
     {
         base.Open();
 
-        _window = new ListViewSelectorWindow(_prototypeManager);
+        _window = new ListViewSelectorWindow();
         _window.OpenCentered();
         _window.OnClose += Close;
 

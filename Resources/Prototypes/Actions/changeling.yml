@@ -99,3 +99,16 @@
       event: !type:HallucinationStingActionEvent
       canTargetSelf: false
       useDelay: 30
+
+- type: entity
+  id: ActionCryoSting
+  name: Cryogenic Sting
+  description: Injects the target with a blend of chemicals that begins to turn their blood to ice.
+  noSpawn: true
+  components:
+    - type: EntityTargetAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/sting_cryo.png
+      event: !type:CryoStingActionEvent
+      canTargetSelf: false
+      useDelay: 30

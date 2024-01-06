@@ -63,3 +63,8 @@ public sealed partial class HallucinationStingActionEvent : EntityTargetActionEv
 {
 
 }
+
+public sealed partial class CryoStingActionEvent : EntityTargetActionEvent
+{
+
+}

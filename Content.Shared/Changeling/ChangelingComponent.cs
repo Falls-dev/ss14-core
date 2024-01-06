@@ -1,7 +1,5 @@
 ﻿using Content.Shared.Humanoid;
 using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
 
 namespace Content.Shared.Changeling;
 
@@ -81,6 +79,8 @@ public sealed partial class ChangelingComponent : Component
     [DataField]
     public EntityUid? HallucinationStingAction;
 
+    [DataField]
+    public EntityUid? CryoStingAction;
 }
 
 public struct HumanoidData

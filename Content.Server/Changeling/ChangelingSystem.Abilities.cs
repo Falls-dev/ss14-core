@@ -6,6 +6,8 @@ using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Popups;
+using Content.Server.Temperature.Systems;
+using Content.Server.Traits.Assorted;
 using Content.Shared.Changeling;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
@@ -43,6 +45,7 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly PolymorphSystem _polymorph = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
     [Dependency] private readonly BlindableSystem _blindingSystem = default!;
+    [Dependency] private readonly TemperatureSystem _temperatureSystem = default!;
 
 
     private void InitializeAbilities()
@@ -57,6 +60,7 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, BlindStingActionEvent>(OnBlindSting);
         SubscribeLocalEvent<ChangelingComponent, MuteStingActionEvent>(OnMuteSting);
         SubscribeLocalEvent<ChangelingComponent, HallucinationStingActionEvent>(OnHallucinationSting);
+        SubscribeLocalEvent<ChangelingComponent, CryoStingActionEvent>(OnCryoSting);
 
         SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaDoAfterEvent>(OnAbsorbDoAfter);
@@ -320,6 +324,23 @@ public sealed partial class ChangelingSystem
         args.Handled = true;
     }
 
+    private void OnCryoSting(EntityUid uid, ChangelingComponent component, CryoStingActionEvent args)
+    {
+        if (!HasComp<HumanoidAppearanceComponent>(args.Target))
+        {
+            _popup.PopupEntity("We cannot sting that!", uid);
+            return;
+        }
+
+        var statusTimeSpan = TimeSpan.FromSeconds(30);
+        _statusEffectsSystem.TryAddStatusEffect(args.Target, "SlowedDown",
+            statusTimeSpan, false, "SlowedDown");
+
+        _temperatureSystem.ForceChangeTemperature(args.Target, 100);
+
+        args.Handled = true;
+    }
+
     #endregion
 
     #region DoAfters
@@ -358,6 +379,7 @@ public sealed partial class ChangelingSystem
         KillUser(args.Target.Value, "Cellular");
 
         EnsureComp<AbsorbedComponent>(args.Target.Value);
+        EnsureComp<UncloneableComponent>(args.Target.Value);
 
         _action.StartUseDelay(component.AbsorbAction);
 
@@ -425,6 +447,7 @@ public sealed partial class ChangelingSystem
         _action.RemoveAction(component.MuteStingAction);
         _action.RemoveAction(component.BlindStingAction);
         _action.RemoveAction(component.HallucinationStingAction);
+        _action.RemoveAction(component.CryoStingAction);
 
         Dirty(uid, component);
     }

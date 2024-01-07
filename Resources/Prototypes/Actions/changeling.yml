@@ -124,3 +124,48 @@
       icon: Interface/Actions/adrenaline_sacs.png
       event: !type:AdrenalineSacsActionEvent
       useDelay: 60
+
+- type: entity
+  id: ActionFleshmend
+  name: Fleshmend
+  description: Rapidly heal all type of damage.
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/fleshmend.png
+      event: !type:FleshmendActionEvent
+      useDelay: 60
+
+- type: entity
+  id: ActionArmblade
+  name: Arm Blade
+  description: Reforms one of the changeling's arms into a grotesque blade made out of bone and flesh.
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/arm_blade.png
+      event: !type:ArmbladeActionEvent
+
+- type: entity
+  id: ActionShield
+  name: Organic Shield
+  description: Reforms one of the changeling's arms into a large, fleshy shield.
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/changeling_shield.png
+      event: !type:OrganicShieldActionEvent
+
+- type: entity
+  id: ActionArmor
+  name: Chitinous Armor
+  description: Inflates the changeling's body into an all-consuming chitinous mass of armor.
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/changeling_armor.png
+      event: !type:ChitinousArmorActionEvent

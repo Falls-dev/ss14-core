@@ -141,6 +141,17 @@
 
 - type: entity
   parent: ClothingOuterArmorHeavy
+  id: ClothingOuterChangeling
+  name: chitinous armor
+  description: Chitinous and flesh mass of armor.
+  components:
+    - type: Sprite
+      sprite: Clothing/OuterClothing/Armor/changeling.rsi
+    - type: Clothing
+      sprite: Clothing/OuterClothing/Armor/changeling.rsi
+
+- type: entity
+  parent: ClothingOuterArmorHeavy
   id: ClothingOuterArmorHeavyGreen
   name: green heavy armor suit
   description: A heavily armored suit with green accents that protects against excessive damage.
@@ -182,6 +193,8 @@
     sprite: Clothing/OuterClothing/Armor/magusred.rsi
   - type: Clothing
     sprite: Clothing/OuterClothing/Armor/magusred.rsi
+
+
 
 - type: entity
   parent: ClothingOuterBaseLarge

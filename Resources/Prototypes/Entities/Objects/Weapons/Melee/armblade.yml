@@ -22,3 +22,6 @@
     qualities:
       - Prying
   - type: Prying
+  - type: Unremoveable
+    deleteOnDrop: false
+  - type: ToolForcePowered

@@ -15,8 +15,10 @@ using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Eye.Blinding.Systems;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
+using Content.Shared.Inventory;
 using Content.Shared.Miracle.UI;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -49,6 +51,9 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly BlindableSystem _blindingSystem = default!;
     [Dependency] private readonly TemperatureSystem _temperatureSystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
+    [Dependency] private readonly InventorySystem _inventorySystem = default!;
+
 
     private void InitializeAbilities()
     {
@@ -65,6 +70,10 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, CryoStingActionEvent>(OnCryoSting);
 
         SubscribeLocalEvent<ChangelingComponent, AdrenalineSacsActionEvent>(OnAdrenalineSacs);
+        SubscribeLocalEvent<ChangelingComponent, FleshmendActionEvent>(OnFleshmend);
+        SubscribeLocalEvent<ChangelingComponent, ArmbladeActionEvent>(OnArmblade);
+        SubscribeLocalEvent<ChangelingComponent, OrganicShieldActionEvent>(OnShield);
+        SubscribeLocalEvent<ChangelingComponent, ChitinousArmorActionEvent>(OnArmor);
 
         SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaDoAfterEvent>(OnAbsorbDoAfter);
@@ -92,7 +101,7 @@ public sealed partial class ChangelingSystem
 
         if (!TryComp<DnaComponent>(args.Target, out var dnaComponent))
         {
-           _popup.PopupEntity("Unknown creature!", uid);
+            _popup.PopupEntity("Unknown creature!", uid);
             return;
         }
 
@@ -188,12 +197,12 @@ public sealed partial class ChangelingSystem
 
     private void OnRegenerate(EntityUid uid, ChangelingComponent component, RegenerateActionEvent args)
     {
-        if(!TryComp<DamageableComponent>(uid, out var damageableComponent))
+        if (!TryComp<DamageableComponent>(uid, out var damageableComponent))
             return;
 
         if (damageableComponent.TotalDamage >= 0 && !_mobStateSystem.IsDead(uid))
         {
-            KillUser(uid, "Cellular") ;
+            KillUser(uid, "Cellular");
         }
 
         _popup.PopupEntity("We beginning our regeneration.", uid);
@@ -218,7 +227,7 @@ public sealed partial class ChangelingSystem
         }
 
 
-        if(component.IsLesserForm)
+        if (component.IsLesserForm)
         {
             _popup.PopupEntity("We're already in the lesser form!", uid);
             return;
@@ -261,7 +270,8 @@ public sealed partial class ChangelingSystem
         _ui.OpenUi(bui, actorComponent.PlayerSession);
     }
 
-    private void OnTransformStingMessage(EntityUid uid, ChangelingComponent component, TransformStingItemSelectedMessage args)
+    private void OnTransformStingMessage(EntityUid uid, ChangelingComponent component,
+        TransformStingItemSelectedMessage args)
     {
         var selectedDna = args.SelectedItem;
         var humanData = component.AbsorbedEntities[selectedDna];
@@ -347,13 +357,125 @@ public sealed partial class ChangelingSystem
 
     private void OnAdrenalineSacs(EntityUid uid, ChangelingComponent component, AdrenalineSacsActionEvent args)
     {
-        if(_mobStateSystem.IsDead(uid))
+        if (_mobStateSystem.IsDead(uid))
             return;
 
         if (!_solutionContainer.TryGetInjectableSolution(uid, out var injectable, out _))
             return;
 
         _solutionContainer.TryAddReagent(injectable.Value, "Stimulants", 50);
+
+        args.Handled = true;
+    }
+
+    private void OnFleshmend(EntityUid uid, ChangelingComponent component, FleshmendActionEvent args)
+    {
+        if (_mobStateSystem.IsDead(uid))
+            return;
+
+        if (!_solutionContainer.TryGetInjectableSolution(uid, out var injectable, out _))
+            return;
+
+        _solutionContainer.TryAddReagent(injectable.Value, "Omnizine", 50);
+        _solutionContainer.TryAddReagent(injectable.Value, "TranexamicAcid", 10);
+
+        args.Handled = true;
+    }
+
+    private void OnArmblade(EntityUid uid, ChangelingComponent component, ArmbladeActionEvent args)
+    {
+        foreach (var eHand in _handsSystem.EnumerateHands(uid))
+        {
+            if (eHand.HeldEntity == null || !TryComp<MetaDataComponent>(eHand.HeldEntity.Value, out var meta))
+                continue;
+
+            if (meta.EntityPrototype is not { ID: "ArmBlade" })
+                continue;
+            Del(eHand.HeldEntity);
+            return;
+        }
+
+        if (!_handsSystem.TryGetEmptyHand(uid, out var hand))
+        {
+            _popup.PopupEntity("We need to have at least one empty hand!", uid);
+            return;
+        }
+
+        var blade = Spawn("ArmBlade", Transform(uid).Coordinates);
+
+        if (!_handsSystem.TryPickup(uid, blade, hand, animate: false))
+        {
+            Del(blade);
+            return;
+        }
+
+        args.Handled = true;
+    }
+
+    private void OnShield(EntityUid uid, ChangelingComponent component, OrganicShieldActionEvent args)
+    {
+        foreach (var eHand in _handsSystem.EnumerateHands(uid))
+        {
+            if (eHand.HeldEntity == null || !TryComp<MetaDataComponent>(eHand.HeldEntity.Value, out var meta))
+                continue;
+
+            if (meta.EntityPrototype is not { ID: "OrganicShield" })
+                continue;
+            Del(eHand.HeldEntity);
+            return;
+        }
+
+        if (!_handsSystem.TryGetEmptyHand(uid, out var hand))
+        {
+            _popup.PopupEntity("We need to have at least one empty hand!", uid);
+            return;
+        }
+
+        var blade = Spawn("OrganicShield", Transform(uid).Coordinates);
+
+        if (!_handsSystem.TryPickup(uid, blade, hand, animate: false))
+        {
+            Del(blade);
+            return;
+        }
+
+        args.Handled = true;
+    }
+
+    private void OnArmor(EntityUid uid, ChangelingComponent component, ChitinousArmorActionEvent args)
+    {
+        const string outerName = "outerClothing";
+        const string protoName = "ClothingOuterChangeling";
+
+        if (!_inventorySystem.TryGetSlotEntity(uid, outerName, out var outerEnt))
+        {
+            _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
+            return;
+        }
+
+
+        if (!TryComp<MetaDataComponent>(outerEnt, out var meta))
+        {
+            _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
+            return;
+        }
+
+        if (meta.EntityPrototype == null)
+        {
+            _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
+            return;
+        }
+
+        if (meta.EntityPrototype.ID == protoName)
+        {
+            _inventorySystem.TryUnequip(uid, outerName, out var removedItem);
+            QueueDel(removedItem);
+            return;
+        }
+
+        _inventorySystem.TryUnequip(uid, outerName, out _);
+
+        _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
 
         args.Handled = true;
     }
@@ -410,14 +532,14 @@ public sealed partial class ChangelingSystem
 
         if (HasComp<AbsorbedComponent>(args.Target))
         {
-            _popup.PopupEntity("You're lost.",args.Target.Value);
+            _popup.PopupEntity("You're lost.", args.Target.Value);
             component.IsRegenerating = false;
             return;
         }
 
         _rejuvenate.PerformRejuvenate(args.Target.Value);
 
-        _popup.PopupEntity("We're fully regenerated!",  args.Target.Value);
+        _popup.PopupEntity("We're fully regenerated!", args.Target.Value);
 
         component.IsRegenerating = false;
 
@@ -428,12 +550,12 @@ public sealed partial class ChangelingSystem
 
     private void OnLesserFormDoAfter(EntityUid uid, ChangelingComponent component, LesserFormDoAfterEvent args)
     {
-        if(args.Handled || args.Cancelled)
+        if (args.Handled || args.Cancelled)
             return;
 
         var polymorphEntity = _polymorph.PolymorphEntity(args.User, "MonkeyChangeling");
 
-        if(polymorphEntity == null)
+        if (polymorphEntity == null)
             return;
 
         if (!EnsureComp<ChangelingComponent>(polymorphEntity.Value, out var polyChangeling))
@@ -521,7 +643,7 @@ public sealed partial class ChangelingSystem
 
         var polymorphEntity = _polymorph.PolymorphEntity(target, transformData.EntityPrototype.ID);
 
-        if(polymorphEntity == null)
+        if (polymorphEntity == null)
             return null;
 
         if (!TryComp<HumanoidAppearanceComponent>(polymorphEntity.Value, out var polyAppearance))
@@ -543,7 +665,7 @@ public sealed partial class ChangelingSystem
 
     private void TransferDna(EntityUid target, string dna)
     {
-        if(!TryComp<DnaComponent>(target, out var dnaComponent))
+        if (!TryComp<DnaComponent>(target, out var dnaComponent))
             return;
 
         dnaComponent.DNA = dna;
@@ -560,7 +682,7 @@ public sealed partial class ChangelingSystem
             ? TransformPerson(reverted.Value, person, humanoidOverride: true)
             : TransformPerson(reverted.Value, person);
 
-        if(reverted == null)
+        if (reverted == null)
             return;
 
         if (!EnsureComp<ChangelingComponent>(reverted.Value, out var polyChangeling))
@@ -578,12 +700,13 @@ public sealed partial class ChangelingSystem
 
         _action.StartUseDelay(polyChangeling.TransformAction);
     }
-/// <summary>
-/// Used for cloning appearance
-/// </summary>
-/// <param name="target">Acceptor</param>
-/// <param name="sourceHumanoid">Source appearance</param>
-/// <param name="targetHumanoid">Acceptor appearance component</param>
+
+    /// <summary>
+    /// Used for cloning appearance
+    /// </summary>
+    /// <param name="target">Acceptor</param>
+    /// <param name="sourceHumanoid">Source appearance</param>
+    /// <param name="targetHumanoid">Acceptor appearance component</param>
     private void ClonePerson(EntityUid target, HumanoidAppearanceComponent sourceHumanoid,
         HumanoidAppearanceComponent targetHumanoid)
     {

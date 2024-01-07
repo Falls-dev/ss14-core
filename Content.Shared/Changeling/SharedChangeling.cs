@@ -73,3 +73,23 @@ public sealed partial class AdrenalineSacsActionEvent : InstantActionEvent
 {
 
 }
+
+public sealed partial class FleshmendActionEvent : InstantActionEvent
+{
+
+}
+
+public sealed partial class ArmbladeActionEvent : InstantActionEvent
+{
+
+}
+
+public sealed partial class OrganicShieldActionEvent : InstantActionEvent
+{
+
+}
+
+public sealed partial class ChitinousArmorActionEvent : InstantActionEvent
+{
+
+}

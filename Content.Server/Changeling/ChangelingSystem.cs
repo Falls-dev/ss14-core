@@ -39,6 +39,18 @@ public sealed partial class ChangelingSystem : EntitySystem
     [ValidatePrototypeId<EntityPrototype>]
     private const string ChangelingAdrenalineSacs = "ActionAdrenalineSacs";
 
+    [ValidatePrototypeId<EntityPrototype>]
+    private const string ChangelingFleshmend = "ActionFleshmend";
+
+    [ValidatePrototypeId<EntityPrototype>]
+    private const string ChangelingArmblade = "ActionArmblade";
+
+    [ValidatePrototypeId<EntityPrototype>]
+    private const string ChangelingShield = "ActionShield";
+
+    [ValidatePrototypeId<EntityPrototype>]
+    private const string ChangelingArmor = "ActionArmor";
+
     public override void Initialize()
     {
         base.Initialize();
@@ -64,6 +76,10 @@ public sealed partial class ChangelingSystem : EntitySystem
         _action.AddAction(uid, ref component.HallucinationStingAction, ChangelingHallucinationSting);
         _action.AddAction(uid, ref component.CryoStingAction, ChangelingCryoSting);
         _action.AddAction(uid, ref component.AdrenalineSacsAction, ChangelingAdrenalineSacs);
+        _action.AddAction(uid, ref component.FleshmendAction, ChangelingFleshmend);
+        _action.AddAction(uid, ref component.ArmbladeAction, ChangelingArmblade);
+        _action.AddAction(uid, ref component.ShieldAction, ChangelingShield);
+        _action.AddAction(uid, ref component.ArmorAction, ChangelingArmor);
     }
 
     private void OnExamine(EntityUid uid, AbsorbedComponent component, ExaminedEvent args)

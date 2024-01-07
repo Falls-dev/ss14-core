@@ -1,5 +1,6 @@
 ﻿using Content.Shared.Humanoid;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Changeling;
 
@@ -25,10 +26,10 @@ public sealed partial class ChangelingComponent : Component
     [DataField("chemicalCap")]
     public int ChemicalCapacity = 75;
 
-    [DataField("chemicalsBalance")]
+    [ViewVariables(VVAccess.ReadWrite), DataField("chemicalsBalance")]
     public int ChemicalsBalance;
 
-    [DataField("pointsBalance")]
+    [ViewVariables(VVAccess.ReadWrite), DataField("pointsBalance")]
     public int PointsBalance;
 
     [ViewVariables(VVAccess.ReadOnly)]
@@ -88,6 +89,8 @@ public sealed partial class ChangelingComponent : Component
 
 public struct HumanoidData
 {
+    public EntityPrototype EntityPrototype;
+
     public MetaDataComponent? MetaDataComponent;
 
     public HumanoidAppearanceComponent AppearanceComponent;

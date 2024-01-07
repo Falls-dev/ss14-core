@@ -369,8 +369,6 @@ public sealed partial class ChangelingSystem
 
         TryTransformChangeling(args.User, args.SelectedDna, component);
 
-        _action.StartUseDelay(component.TransformAction);
-
         args.Handled = true;
     }
 
@@ -499,6 +497,7 @@ public sealed partial class ChangelingSystem
 
         component.AbsorbedEntities.Add(targetDna.DNA, new HumanoidData
         {
+            EntityPrototype = prototype,
             MetaDataComponent = meta,
             AppearanceComponent = appearance,
             Name = meta.EntityName,
@@ -508,21 +507,38 @@ public sealed partial class ChangelingSystem
         Dirty(uid, component);
     }
 
-    private void TransformPerson(EntityUid target, HumanoidData transformData)
+    /// <summary>
+    /// Transforms chosen person to another, transferring it's appearance
+    /// </summary>
+    /// <param name="target">Transform target</param>
+    /// <param name="transformData">Transform data</param>
+    /// <param name="humanoidOverride">Override first check on HumanoidAppearanceComponent</param>
+    /// <returns>Id of the transformed entity</returns>
+    private EntityUid? TransformPerson(EntityUid target, HumanoidData transformData, bool humanoidOverride = false)
     {
-        if (!TryComp<HumanoidAppearanceComponent>(target, out var appearance))
-            return;
+        if (!HasComp<HumanoidAppearanceComponent>(target) && !humanoidOverride)
+            return null;
 
-        ClonePerson(target, transformData.AppearanceComponent, appearance);
-        TransferDna(target, transformData.Dna);
+        var polymorphEntity = _polymorph.PolymorphEntity(target, transformData.EntityPrototype.ID);
 
-        if (!TryComp<MetaDataComponent>(target, out var meta))
-            return;
+        if(polymorphEntity == null)
+            return null;
 
-        _metaData.SetEntityName(target, transformData.MetaDataComponent!.EntityName, meta);
-        _metaData.SetEntityDescription(target, transformData.MetaDataComponent!.EntityDescription, meta);
+        if (!TryComp<HumanoidAppearanceComponent>(polymorphEntity.Value, out var polyAppearance))
+            return null;
 
-        _identity.QueueIdentityUpdate(target);
+        ClonePerson(polymorphEntity.Value, transformData.AppearanceComponent, polyAppearance);
+        TransferDna(polymorphEntity.Value, transformData.Dna);
+
+        if (!TryComp<MetaDataComponent>(polymorphEntity.Value, out var meta))
+            return null;
+
+        _metaData.SetEntityName(polymorphEntity.Value, transformData.MetaDataComponent!.EntityName, meta);
+        _metaData.SetEntityDescription(polymorphEntity.Value, transformData.MetaDataComponent!.EntityDescription, meta);
+
+        _identity.QueueIdentityUpdate(polymorphEntity.Value);
+
+        return polymorphEntity;
     }
 
     private void TransferDna(EntityUid target, string dna)
@@ -540,21 +556,34 @@ public sealed partial class ChangelingSystem
 
         EntityUid? reverted = uid;
 
-        if (component.IsLesserForm)
+        reverted = component.IsLesserForm
+            ? TransformPerson(reverted.Value, person, humanoidOverride: true)
+            : TransformPerson(reverted.Value, person);
+
+        if(reverted == null)
+            return;
+
+        if (!EnsureComp<ChangelingComponent>(reverted.Value, out var polyChangeling))
         {
-            reverted = _polymorph.Revert(uid);
-
-            if(!TryComp<ChangelingComponent>(reverted, out var revertedComp))
-                return;
-
-            revertedComp.IsLesserForm = false;
-
-            _action.StartUseDelay(revertedComp.LesserFormAction);
+            polyChangeling.PointsBalance = component.PointsBalance;
+            polyChangeling.ChemicalsBalance = component.ChemicalsBalance;
+            polyChangeling.AbsorbedEntities = component.AbsorbedEntities;
         }
 
-        TransformPerson(reverted.Value, person);
-    }
+        if (component.IsLesserForm)
+        {
+            //Don't copy IsLesserForm bool, because transferred component, in fact, new. Bool default value if false.
+            _action.StartUseDelay(polyChangeling.LesserFormAction);
+        }
 
+        _action.StartUseDelay(polyChangeling.TransformAction);
+    }
+/// <summary>
+/// Used for cloning appearance
+/// </summary>
+/// <param name="target">Acceptor</param>
+/// <param name="sourceHumanoid">Source appearance</param>
+/// <param name="targetHumanoid">Acceptor appearance component</param>
     private void ClonePerson(EntityUid target, HumanoidAppearanceComponent sourceHumanoid,
         HumanoidAppearanceComponent targetHumanoid)
     {
@@ -563,6 +592,7 @@ public sealed partial class ChangelingSystem
         targetHumanoid.EyeColor = sourceHumanoid.EyeColor;
         targetHumanoid.Age = sourceHumanoid.Age;
         _humanoidAppearance.SetSex(target, sourceHumanoid.Sex, false, targetHumanoid);
+        _humanoidAppearance.SetSpecies(target, sourceHumanoid.Species);
         targetHumanoid.CustomBaseLayers = new Dictionary<HumanoidVisualLayers,
             CustomBaseLayerInfo>(sourceHumanoid.CustomBaseLayers);
         targetHumanoid.MarkingSet = new MarkingSet(sourceHumanoid.MarkingSet);

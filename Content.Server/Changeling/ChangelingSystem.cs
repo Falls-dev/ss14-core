@@ -51,6 +51,9 @@ public sealed partial class ChangelingSystem : EntitySystem
     [ValidatePrototypeId<EntityPrototype>]
     private const string ChangelingArmor = "ActionArmor";
 
+    [ValidatePrototypeId<EntityPrototype>]
+    private const string ChangelingTentacleArm = "ActionTentacleArm";
+
     public override void Initialize()
     {
         base.Initialize();
@@ -80,6 +83,7 @@ public sealed partial class ChangelingSystem : EntitySystem
         _action.AddAction(uid, ref component.ArmbladeAction, ChangelingArmblade);
         _action.AddAction(uid, ref component.ShieldAction, ChangelingShield);
         _action.AddAction(uid, ref component.ArmorAction, ChangelingArmor);
+        _action.AddAction(uid, ref component.TentacleArmAction, ChangelingTentacleArm);
     }
 
     private void OnExamine(EntityUid uid, AbsorbedComponent component, ExaminedEvent args)

@@ -93,3 +93,8 @@ public sealed partial class ChitinousArmorActionEvent : InstantActionEvent
 {
 
 }
+
+public sealed partial class TentacleArmActionEvent : InstantActionEvent
+{
+
+}

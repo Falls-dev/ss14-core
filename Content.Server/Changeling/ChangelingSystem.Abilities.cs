@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Content.Server.Administration.Systems;
-using Content.Server.Chemistry.EntitySystems;
 using Content.Server.DoAfter;
 using Content.Server.Forensics;
 using Content.Server.Humanoid;
@@ -74,6 +73,7 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, ArmbladeActionEvent>(OnArmblade);
         SubscribeLocalEvent<ChangelingComponent, OrganicShieldActionEvent>(OnShield);
         SubscribeLocalEvent<ChangelingComponent, ChitinousArmorActionEvent>(OnArmor);
+        SubscribeLocalEvent<ChangelingComponent, TentacleArmActionEvent>(OnTentacleArm);
 
         SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaDoAfterEvent>(OnAbsorbDoAfter);
@@ -384,60 +384,14 @@ public sealed partial class ChangelingSystem
 
     private void OnArmblade(EntityUid uid, ChangelingComponent component, ArmbladeActionEvent args)
     {
-        foreach (var eHand in _handsSystem.EnumerateHands(uid))
-        {
-            if (eHand.HeldEntity == null || !TryComp<MetaDataComponent>(eHand.HeldEntity.Value, out var meta))
-                continue;
-
-            if (meta.EntityPrototype is not { ID: "ArmBlade" })
-                continue;
-            Del(eHand.HeldEntity);
-            return;
-        }
-
-        if (!_handsSystem.TryGetEmptyHand(uid, out var hand))
-        {
-            _popup.PopupEntity("We need to have at least one empty hand!", uid);
-            return;
-        }
-
-        var blade = Spawn("ArmBlade", Transform(uid).Coordinates);
-
-        if (!_handsSystem.TryPickup(uid, blade, hand, animate: false))
-        {
-            Del(blade);
-            return;
-        }
+        SpawnOrDeleteItem(uid, "ArmBlade");
 
         args.Handled = true;
     }
 
     private void OnShield(EntityUid uid, ChangelingComponent component, OrganicShieldActionEvent args)
     {
-        foreach (var eHand in _handsSystem.EnumerateHands(uid))
-        {
-            if (eHand.HeldEntity == null || !TryComp<MetaDataComponent>(eHand.HeldEntity.Value, out var meta))
-                continue;
-
-            if (meta.EntityPrototype is not { ID: "OrganicShield" })
-                continue;
-            Del(eHand.HeldEntity);
-            return;
-        }
-
-        if (!_handsSystem.TryGetEmptyHand(uid, out var hand))
-        {
-            _popup.PopupEntity("We need to have at least one empty hand!", uid);
-            return;
-        }
-
-        var blade = Spawn("OrganicShield", Transform(uid).Coordinates);
-
-        if (!_handsSystem.TryPickup(uid, blade, hand, animate: false))
-        {
-            Del(blade);
-            return;
-        }
+        SpawnOrDeleteItem(uid, "OrganicShield");
 
         args.Handled = true;
     }
@@ -476,6 +430,13 @@ public sealed partial class ChangelingSystem
         _inventorySystem.TryUnequip(uid, outerName, out _);
 
         _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
+
+        args.Handled = true;
+    }
+
+    private void OnTentacleArm(EntityUid uid, ChangelingComponent component, TentacleArmActionEvent args)
+    {
+        SpawnOrDeleteItem(uid, "TentacleArmGun");
 
         args.Handled = true;
     }
@@ -727,6 +688,35 @@ public sealed partial class ChangelingSystem
         }
 
         Dirty(target, targetHumanoid);
+    }
+
+    private void SpawnOrDeleteItem(EntityUid target, string prototypeName)
+    {
+
+        foreach (var eHand in _handsSystem.EnumerateHands(target))
+        {
+            if (eHand.HeldEntity == null || !TryComp<MetaDataComponent>(eHand.HeldEntity.Value, out var meta))
+                continue;
+
+            if (meta.EntityPrototype != null && meta.EntityPrototype.ID != prototypeName)
+                continue;
+
+            Del(eHand.HeldEntity);
+            return;
+        }
+
+        if (!_handsSystem.TryGetEmptyHand(target, out var hand))
+        {
+            _popup.PopupEntity("We need to have at least one empty hand!", target);
+            return;
+        }
+
+        var blade = Spawn(prototypeName, Transform(target).Coordinates);
+
+        if (!_handsSystem.TryPickup(target, blade, hand, animate: false))
+        {
+            Del(blade);
+        }
     }
 
     #endregion

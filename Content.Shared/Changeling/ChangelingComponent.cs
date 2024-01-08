@@ -97,6 +97,9 @@ public sealed partial class ChangelingComponent : Component
 
     [DataField]
     public EntityUid? ArmorAction;
+
+    [DataField]
+    public EntityUid? TentacleArmAction;
 }
 
 public struct HumanoidData

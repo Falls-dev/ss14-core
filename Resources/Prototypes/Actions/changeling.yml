@@ -169,3 +169,14 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/changeling_armor.png
       event: !type:ChitinousArmorActionEvent
+
+- type: entity
+  id: ActionTentacleArm
+  name: Tentacle Arm
+  description: Reforms one of the arms into a tentacle. Can grab items or humans depending on mode.
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/tentacle_arm.png
+      event: !type:TentacleArmActionEvent

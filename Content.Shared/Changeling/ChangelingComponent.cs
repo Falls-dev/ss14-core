@@ -8,29 +8,23 @@ namespace Content.Shared.Changeling;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ChangelingComponent : Component
 {
-    [ViewVariables(VVAccess.ReadOnly)]
-    public string StoreCurrencyName = "Points";
-
-    [ViewVariables(VVAccess.ReadOnly)]
-    public string AbilityCurrencyName = "Chemicals";
-
-    [DataField("startingPoints")]
-    public int StartingPoints = 10;
-
     [DataField("chemRegenRate")]
-    public int ChemicalRegenRate = 1;
-
-    [DataField("chemRegenTime")]
-    public float ChemicalRegenTime = 2f;
+    public int ChemicalRegenRate = 2;
 
     [DataField("chemicalCap")]
     public int ChemicalCapacity = 75;
 
     [ViewVariables(VVAccess.ReadWrite), DataField("chemicalsBalance")]
-    public int ChemicalsBalance;
+    public int ChemicalsBalance = 20;
 
     [ViewVariables(VVAccess.ReadWrite), DataField("pointsBalance")]
-    public int PointsBalance;
+    public int PointsBalance = 10;
+
+    [ViewVariables(VVAccess.ReadOnly)]
+    public float Accumulator;
+
+    [ViewVariables(VVAccess.ReadOnly)]
+    public float UpdateDelay = 6f;
 
     [ViewVariables(VVAccess.ReadOnly)]
     public bool IsRegenerating;
@@ -55,6 +49,9 @@ public sealed partial class ChangelingComponent : Component
 
     [ViewVariables(VVAccess.ReadWrite), DataField("LesserFormDelay")]
     public float LesserFormDelay = 5f;
+
+    [DataField]
+    public EntityUid? ChangelingShopAction;
 
     [DataField]
     public EntityUid? AbsorbAction;

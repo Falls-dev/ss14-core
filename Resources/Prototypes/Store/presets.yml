@@ -15,3 +15,11 @@
   - UplinkPointless
   currencyWhitelist:
   - Telecrystal
+
+- type: storePreset
+  id: StorePresetChangeling
+  storeName: Evolution Shop
+  categories:
+    - ChangelingAbilities
+  currencyWhitelist:
+    - ChangelingPoint

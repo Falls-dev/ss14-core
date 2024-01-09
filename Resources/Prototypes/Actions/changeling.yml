@@ -1,4 +1,15 @@
 - type: entity
+  id: ActionChangelingShop
+  name: Shop
+  description: Abilities shop.
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      icon: Interface/Actions/shop.png
+      event: !type:ChangelingShopActionEvent
+
+- type: entity
   id: ActionChangelingAbsorb
   name: Absorb
   description: Absorbs the human.

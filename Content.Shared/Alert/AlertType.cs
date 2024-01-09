@@ -39,6 +39,7 @@ namespace Content.Shared.Alert
         VowOfSilence,
         VowBroken,
         Essence,
+        Chemicals,
         Corporeal,
         Bleed,
         Pacified,

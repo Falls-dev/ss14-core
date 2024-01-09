@@ -98,3 +98,8 @@ public sealed partial class TentacleArmActionEvent : InstantActionEvent
 {
 
 }
+
+public sealed partial class ChangelingShopActionEvent : InstantActionEvent
+{
+
+}

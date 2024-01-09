@@ -6,17 +6,21 @@ using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Popups;
+using Content.Server.Store.Components;
 using Content.Server.Temperature.Systems;
 using Content.Server.Traits.Assorted;
+using Content.Shared.Actions;
 using Content.Shared.Changeling;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Eye.Blinding.Systems;
+using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
+using Content.Shared.Implants.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Miracle.UI;
 using Content.Shared.Mobs;
@@ -27,6 +31,7 @@ using Content.Shared.StatusEffect;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects.Components.Localization;
 using Robust.Shared.Player;
+using Robust.Shared.Random;
 using Robust.Shared.Serialization.Manager;
 
 namespace Content.Server.Changeling;
@@ -47,11 +52,11 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
     [Dependency] private readonly PolymorphSystem _polymorph = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
-    [Dependency] private readonly BlindableSystem _blindingSystem = default!;
     [Dependency] private readonly TemperatureSystem _temperatureSystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
     [Dependency] private readonly InventorySystem _inventorySystem = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
 
     private void InitializeAbilities()
@@ -284,6 +289,9 @@ public sealed partial class ChangelingSystem
         if (!_ui.TryGetUi(user, TransformStingSelectorUiKey.Key, out var bui))
             return;
 
+        if (!TakeChemicals(uid, component, 50))
+            return;
+
         TransformPerson(target, humanData);
 
         _ui.CloseUi(bui, actorComponent.PlayerSession);
@@ -294,14 +302,16 @@ public sealed partial class ChangelingSystem
     private void OnBlindSting(EntityUid uid, ChangelingComponent component, BlindStingActionEvent args)
     {
         if (!HasComp<HumanoidAppearanceComponent>(args.Target) ||
-            !TryComp<BlindableComponent>(args.Target, out var blindComp))
+            !HasComp<BlindableComponent>(args.Target))
         {
             _popup.PopupEntity("We cannot sting that!", uid);
             return;
         }
 
-        _blindingSystem.AdjustEyeDamage((args.Target, blindComp), 1);
-        var statusTimeSpan = TimeSpan.FromSeconds(25 * MathF.Sqrt(blindComp.EyeDamage));
+        if (!TakeChemicals(uid, component, 25))
+            return;
+
+        var statusTimeSpan = TimeSpan.FromSeconds(25);
         _statusEffectsSystem.TryAddStatusEffect(args.Target, TemporaryBlindnessSystem.BlindingStatusEffect,
             statusTimeSpan, false, TemporaryBlindnessSystem.BlindingStatusEffect);
 
@@ -315,6 +325,9 @@ public sealed partial class ChangelingSystem
             _popup.PopupEntity("We cannot sting that!", uid);
             return;
         }
+
+        if (!TakeChemicals(uid, component, 20))
+            return;
 
         var statusTimeSpan = TimeSpan.FromSeconds(30);
         _statusEffectsSystem.TryAddStatusEffect(args.Target, "Muted",
@@ -331,6 +344,9 @@ public sealed partial class ChangelingSystem
             return;
         }
 
+        if (!TakeChemicals(uid, component, 5))
+            return;
+
         var statusTimeSpan = TimeSpan.FromSeconds(30);
         _statusEffectsSystem.TryAddStatusEffect(args.Target, "BlurryVision",
             statusTimeSpan, false, "BlurryVision");
@@ -345,6 +361,9 @@ public sealed partial class ChangelingSystem
             _popup.PopupEntity("We cannot sting that!", uid);
             return;
         }
+
+        if (!TakeChemicals(uid, component, 15))
+            return;
 
         var statusTimeSpan = TimeSpan.FromSeconds(30);
         _statusEffectsSystem.TryAddStatusEffect(args.Target, "SlowedDown",
@@ -363,6 +382,9 @@ public sealed partial class ChangelingSystem
         if (!_solutionContainer.TryGetInjectableSolution(uid, out var injectable, out _))
             return;
 
+        if (!TakeChemicals(uid, component, 30))
+            return;
+
         _solutionContainer.TryAddReagent(injectable.Value, "Stimulants", 50);
 
         args.Handled = true;
@@ -374,6 +396,9 @@ public sealed partial class ChangelingSystem
             return;
 
         if (!_solutionContainer.TryGetInjectableSolution(uid, out var injectable, out _))
+            return;
+
+        if (!TakeChemicals(uid, component, 20))
             return;
 
         _solutionContainer.TryAddReagent(injectable.Value, "Omnizine", 50);
@@ -450,6 +475,9 @@ public sealed partial class ChangelingSystem
         if (args.Handled || args.Cancelled)
             return;
 
+        if (!TakeChemicals(uid, component, 5))
+            return;
+
         TryTransformChangeling(args.User, args.SelectedDna, component);
 
         args.Handled = true;
@@ -473,6 +501,8 @@ public sealed partial class ChangelingSystem
         {
             CopyHumanoidData(uid, args.Target.Value, component);
         }
+
+        AddCurrency(uid, args.Target.Value);
 
         KillUser(args.Target.Value, "Cellular");
 
@@ -498,6 +528,9 @@ public sealed partial class ChangelingSystem
             return;
         }
 
+        if (!TakeChemicals(uid, component, 15))
+            return;
+
         _rejuvenate.PerformRejuvenate(args.Target.Value);
 
         _popup.PopupEntity("We're fully regenerated!", args.Target.Value);
@@ -517,6 +550,9 @@ public sealed partial class ChangelingSystem
         var polymorphEntity = _polymorph.PolymorphEntity(args.User, "MonkeyChangeling");
 
         if (polymorphEntity == null)
+            return;
+
+        if (!TakeChemicals(uid, component, 5))
             return;
 
         if (!EnsureComp<ChangelingComponent>(polymorphEntity.Value, out var polyChangeling))
@@ -547,6 +583,11 @@ public sealed partial class ChangelingSystem
         _action.RemoveAction(component.HallucinationStingAction);
         _action.RemoveAction(component.CryoStingAction);
         _action.RemoveAction(component.AdrenalineSacsAction);
+        _action.RemoveAction(component.FleshmendAction);
+        _action.RemoveAction(component.ArmbladeAction);
+        _action.RemoveAction(component.ShieldAction);
+        _action.RemoveAction(component.ArmorAction);
+        _action.RemoveAction(component.TentacleArmAction);
 
         Dirty(uid, component);
     }
@@ -612,6 +653,7 @@ public sealed partial class ChangelingSystem
 
         ClonePerson(polymorphEntity.Value, transformData.AppearanceComponent, polyAppearance);
         TransferDna(polymorphEntity.Value, transformData.Dna);
+        _implantSystem.TransferImplants(target, polymorphEntity.Value);
 
         if (!TryComp<MetaDataComponent>(polymorphEntity.Value, out var meta))
             return null;
@@ -648,18 +690,22 @@ public sealed partial class ChangelingSystem
 
         if (!EnsureComp<ChangelingComponent>(reverted.Value, out var polyChangeling))
         {
-            polyChangeling.PointsBalance = component.PointsBalance;
             polyChangeling.ChemicalsBalance = component.ChemicalsBalance;
             polyChangeling.AbsorbedEntities = component.AbsorbedEntities;
         }
 
+        // _actionContainerSystem.TransferAllActions(uid, reverted.Value);
+
+
         if (component.IsLesserForm)
         {
             //Don't copy IsLesserForm bool, because transferred component, in fact, new. Bool default value if false.
-            _action.StartUseDelay(polyChangeling.LesserFormAction);
+            _action.StartUseDelay(component.LesserFormAction);
         }
 
-        _action.StartUseDelay(polyChangeling.TransformAction);
+        _chemicalsSystem.UpdateAlert(reverted.Value, component);
+
+        _action.StartUseDelay(component.TransformAction);
     }
 
     /// <summary>
@@ -692,7 +738,6 @@ public sealed partial class ChangelingSystem
 
     private void SpawnOrDeleteItem(EntityUid target, string prototypeName)
     {
-
         foreach (var eHand in _handsSystem.EnumerateHands(target))
         {
             if (eHand.HeldEntity == null || !TryComp<MetaDataComponent>(eHand.HeldEntity.Value, out var meta))
@@ -711,11 +756,51 @@ public sealed partial class ChangelingSystem
             return;
         }
 
-        var blade = Spawn(prototypeName, Transform(target).Coordinates);
+        var item = Spawn(prototypeName, Transform(target).Coordinates);
 
-        if (!_handsSystem.TryPickup(target, blade, hand, animate: false))
+        if (!_handsSystem.TryPickup(target, item, hand, animate: false))
         {
-            Del(blade);
+            Del(item);
+        }
+    }
+
+    private bool TakeChemicals(EntityUid uid, ChangelingComponent component, int quantity)
+    {
+        if (!_chemicalsSystem.RemoveChemicals(uid, component, quantity))
+        {
+            _popup.PopupEntity("We're lacking of chemicals!", uid);
+            return false;
+        }
+
+        _popup.PopupEntity($"Used {quantity} of chemicals.", uid);
+
+        return true;
+    }
+
+    private void AddCurrency(EntityUid uid, EntityUid absorbed)
+    {
+        if (!TryComp<ImplantedComponent>(uid, out var implant))
+            return;
+
+        foreach (var entity in implant.ImplantContainer.ContainedEntities)
+        {
+            if (!TryComp<StoreComponent>(entity, out var store))
+                continue;
+
+            if (_mobStateSystem.IsDead(absorbed))
+            {
+                var points = _random.Next(1, 3);
+                var toAdd = new Dictionary<string, FixedPoint2> { { "ChangelingPoint", points } };
+                _storeSystem.TryAddCurrency(toAdd, entity, store);
+            }
+            else
+            {
+                var points = _random.Next(2, 4);
+                var toAdd = new Dictionary<string, FixedPoint2> { { "ChangelingPoint", points } };
+                _storeSystem.TryAddCurrency(toAdd, entity, store);
+            }
+
+            return;
         }
     }
 

@@ -691,6 +691,30 @@ public abstract class SharedActionsSystem : EntitySystem
         }
     }
 
+    public void GrantContainedActionsFiltered(Entity<ActionsComponent?> performer, Entity<ActionsContainerComponent?> container)
+    {
+        if (!Resolve(container, ref container.Comp))
+            return;
+
+        performer.Comp ??= EnsureComp<ActionsComponent>(performer);
+
+        foreach (var actionId in container.Comp.Container.ContainedEntities)
+        {
+            if (!TryComp<ActionsContainerComponent>(performer.Owner, out var actionsContainerComponent))
+                return;
+
+            var actions = actionsContainerComponent.Container.ContainedEntities;
+
+            var toAdd = MetaData(actionId).EntityPrototype?.ID;
+
+            if (actions.Select(act => MetaData(act).EntityPrototype?.ID).Any(ext => toAdd == ext))
+                continue;
+
+            if (TryGetActionData(actionId, out var action))
+                AddActionDirect(performer, actionId, performer.Comp, action);
+        }
+    }
+
     public IEnumerable<(EntityUid Id, BaseActionComponent Comp)> GetActions(EntityUid holderId, ActionsComponent? actions = null)
     {
         if (!Resolve(holderId, ref actions, false))

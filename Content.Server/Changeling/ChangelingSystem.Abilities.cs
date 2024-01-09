@@ -9,7 +9,6 @@ using Content.Server.Popups;
 using Content.Server.Store.Components;
 using Content.Server.Temperature.Systems;
 using Content.Server.Traits.Assorted;
-using Content.Shared.Actions;
 using Content.Shared.Changeling;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
@@ -57,7 +56,6 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
     [Dependency] private readonly InventorySystem _inventorySystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-
 
     private void InitializeAbilities()
     {
@@ -613,7 +611,7 @@ public sealed partial class ChangelingSystem
         if (!TryPrototype(target, out var prototype, targetMeta))
             return;
 
-        if (component.AbsorbedEntities.ContainsKey(prototype.Name))
+        if (component.AbsorbedEntities.ContainsKey(targetDna.DNA))
             return;
 
         var appearance = _serializationManager.CreateCopy(targetAppearance, notNullableOverride: true);
@@ -653,7 +651,6 @@ public sealed partial class ChangelingSystem
 
         ClonePerson(polymorphEntity.Value, transformData.AppearanceComponent, polyAppearance);
         TransferDna(polymorphEntity.Value, transformData.Dna);
-        _implantSystem.TransferImplants(target, polymorphEntity.Value);
 
         if (!TryComp<MetaDataComponent>(polymorphEntity.Value, out var meta))
             return null;
@@ -688,14 +685,17 @@ public sealed partial class ChangelingSystem
         if (reverted == null)
             return;
 
-        if (!EnsureComp<ChangelingComponent>(reverted.Value, out var polyChangeling))
+        var toAdd = new ChangelingComponent()
         {
-            polyChangeling.ChemicalsBalance = component.ChemicalsBalance;
-            polyChangeling.AbsorbedEntities = component.AbsorbedEntities;
-        }
+            ChemicalsBalance = component.ChemicalsBalance,
+            AbsorbedEntities = component.AbsorbedEntities,
+            IsInited = component.IsInited
+        };
 
-        // _actionContainerSystem.TransferAllActions(uid, reverted.Value);
+        EntityManager.AddComponent(reverted.Value, toAdd);
 
+        _action.GrantContainedActionsFiltered(reverted.Value,uid);
+        _implantSystem.TransferImplants(uid, reverted.Value);
 
         if (component.IsLesserForm)
         {

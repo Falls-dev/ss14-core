@@ -210,10 +210,10 @@ public abstract class SharedSubdermalImplantSystem : EntitySystem
             // For instance, verifying if the recipient can receive specific implants, etc.
 
             // Remove the implant from the donor's implant container
-            _container.Remove(donorImplant, donorImplantContainer);
+            _container.Remove(donorImplant, donorImplantContainer, force: true);
 
             // Insert the implant into the recipient's implant container
-            _container.Insert(donorImplant, recipientImplantContainer);
+            _container.Insert(donorImplant, recipientImplantContainer, force: true);
 
             if(!TryComp<SubdermalImplantComponent>(donorImplant, out var subdermal))
                 return;

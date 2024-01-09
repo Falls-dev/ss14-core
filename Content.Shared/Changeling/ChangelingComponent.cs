@@ -50,6 +50,8 @@ public sealed partial class ChangelingComponent : Component
     [ViewVariables(VVAccess.ReadWrite), DataField("LesserFormDelay")]
     public float LesserFormDelay = 5f;
 
+    public bool IsInited;
+
     [DataField]
     public EntityUid? ChangelingShopAction;
 

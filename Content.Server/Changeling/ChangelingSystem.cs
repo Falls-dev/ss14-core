@@ -97,6 +97,7 @@ public sealed partial class ChangelingSystem : EntitySystem
         // _action.AddAction(uid, ref component.TentacleArmAction, ChangelingTentacleArm);
 
         _chemicalsSystem.UpdateAlert(uid, component);
+        component.IsInited = true;
     }
 
     private void OnExamine(EntityUid uid, AbsorbedComponent component, ExaminedEvent args)
@@ -106,6 +107,8 @@ public sealed partial class ChangelingSystem : EntitySystem
 
     private void SetupShop(EntityUid uid, ChangelingComponent component)
     {
+        if(component.IsInited)
+            return;
 
         var coords = Transform(uid).Coordinates;
         var implant = Spawn("ChangelingShopImplant", coords);
@@ -123,6 +126,9 @@ public sealed partial class ChangelingSystem : EntitySystem
 
     private void SetupInitActions(EntityUid uid, ChangelingComponent component)
     {
+        if(component.IsInited)
+            return;
+
         _action.AddAction(uid, ChangelingAbsorb);
         _action.AddAction(uid, ChangelingTransform);
         _action.AddAction(uid, ChangelingRegenerate);

@@ -694,8 +694,8 @@ public sealed partial class ChangelingSystem
 
         EntityManager.AddComponent(reverted.Value, toAdd);
 
-        _action.GrantContainedActionsFiltered(reverted.Value,uid);
         _implantSystem.TransferImplants(uid, reverted.Value);
+        _action.GrantContainedActionsFiltered(reverted.Value,uid);
 
         if (component.IsLesserForm)
         {

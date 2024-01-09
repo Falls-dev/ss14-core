@@ -124,7 +124,7 @@ public abstract class SharedSubdermalImplantSystem : EntitySystem
         var implantContainer = implantedComp.ImplantContainer;
 
         component.ImplantedEntity = target;
-        _container.Insert(implant, implantContainer);
+        _container.Insert(implant, implantContainer, force: true);
     }
 
     /// <summary>
@@ -192,13 +192,8 @@ public abstract class SharedSubdermalImplantSystem : EntitySystem
         if (!TryComp<ImplantedComponent>(donor, out var donorImplanted))
             return;
 
-        // Add ImplantedComponent to the recipient
-        EnsureComp<ImplantedComponent>(recipient, out var recipientImplanted);
-
-
         // Get the implant containers for both the donor and recipient entities
         var donorImplantContainer = donorImplanted.ImplantContainer;
-        var recipientImplantContainer = recipientImplanted.ImplantContainer;
 
         // Get all implants from the donor's implant container
         var donorImplants = donorImplantContainer.ContainedEntities.ToArray();
@@ -212,17 +207,12 @@ public abstract class SharedSubdermalImplantSystem : EntitySystem
             // Remove the implant from the donor's implant container
             _container.Remove(donorImplant, donorImplantContainer, force: true);
 
-            // Insert the implant into the recipient's implant container
-            _container.Insert(donorImplant, recipientImplantContainer, force: true);
-
             if(!TryComp<SubdermalImplantComponent>(donorImplant, out var subdermal))
                 return;
 
-            subdermal.ImplantedEntity = recipient;
-            Dirty(recipient, subdermal);
+            // Insert the implant into the recipient's implant container
+            ForceImplant(recipient, donorImplant, subdermal);
         }
-
-        Dirty(recipient, recipientImplanted);
     }
 
     //Miracle edit end

@@ -9,6 +9,7 @@ using Content.Server.Popups;
 using Content.Server.Store.Components;
 using Content.Server.Temperature.Systems;
 using Content.Server.Traits.Assorted;
+using Content.Shared.Actions;
 using Content.Shared.Changeling;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
@@ -24,6 +25,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Miracle.UI;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Pulling;
 using Content.Shared.Pulling.Components;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffect;
@@ -56,6 +58,10 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
     [Dependency] private readonly InventorySystem _inventorySystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly ActionContainerSystem _actionContainerSystem = default!;
+    [Dependency] private readonly SharedPullingSystem _pullingSystem = default!;
+
+
 
     private void InitializeAbilities()
     {
@@ -290,6 +296,10 @@ public sealed partial class ChangelingSystem
         if (!TakeChemicals(uid, component, 50))
             return;
 
+        if (TryComp(target, out SharedPullerComponent? puller) && puller.Pulling is { } pulled &&
+            TryComp(pulled, out SharedPullableComponent? pullable))
+            _pullingSystem.TryStopPull(pullable);
+
         TransformPerson(target, humanData);
 
         _ui.CloseUi(bui, actorComponent.PlayerSession);
@@ -476,6 +486,10 @@ public sealed partial class ChangelingSystem
         if (!TakeChemicals(uid, component, 5))
             return;
 
+        if (TryComp(uid, out SharedPullerComponent? puller) && puller.Pulling is { } pulled &&
+            TryComp(pulled, out SharedPullableComponent? pullable))
+            _pullingSystem.TryStopPull(pullable);
+
         TryTransformChangeling(args.User, args.SelectedDna, component);
 
         args.Handled = true;
@@ -487,6 +501,10 @@ public sealed partial class ChangelingSystem
         {
             return;
         }
+
+        if (TryComp(uid, out SharedPullerComponent? puller) && puller.Pulling is { } pulled &&
+            TryComp(pulled, out SharedPullableComponent? pullable))
+            _pullingSystem.TryStopPull(pullable);
 
         if (TryComp<ChangelingComponent>(args.Target.Value, out var changelingComponent))
         {
@@ -695,7 +713,8 @@ public sealed partial class ChangelingSystem
         EntityManager.AddComponent(reverted.Value, toAdd);
 
         _implantSystem.TransferImplants(uid, reverted.Value);
-        _action.GrantContainedActionsFiltered(reverted.Value,uid);
+        _actionContainerSystem.TransferAllActionsFiltered(uid, reverted.Value);
+        _action.GrantContainedActions(reverted.Value,reverted.Value);
 
         if (component.IsLesserForm)
         {

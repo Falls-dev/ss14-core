@@ -78,7 +78,7 @@ public sealed partial class ChangelingSystem : EntitySystem
 
         _implantSystem.ForceImplant(uid, implant, implantComp);
 
-        if(!TryComp<StoreComponent>(implant, out var implantStore))
+        if (!TryComp<StoreComponent>(implant, out var implantStore))
             return;
 
         implantStore.Balance.Add("ChangelingPoint", component.StartingPointsBalance);

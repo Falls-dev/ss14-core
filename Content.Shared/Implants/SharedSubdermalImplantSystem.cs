@@ -117,14 +117,15 @@ public abstract class SharedSubdermalImplantSystem : EntitySystem
     /// <param name="target">The entity to be implanted</param>
     /// <param name="implant"> The implant</param>
     /// <param name="component">The implant component</param>
-    public void ForceImplant(EntityUid target, EntityUid implant, SubdermalImplantComponent component)
+    /// <param name="containerForce">Should we force inserting in container</param>
+    public void ForceImplant(EntityUid target, EntityUid implant, SubdermalImplantComponent component, bool containerForce = false)
     {
         //If the target doesn't have the implanted component, add it.
         var implantedComp = EnsureComp<ImplantedComponent>(target);
         var implantContainer = implantedComp.ImplantContainer;
 
         component.ImplantedEntity = target;
-        _container.Insert(implant, implantContainer, force: true);
+        _container.Insert(implant, implantContainer, force: containerForce);
     }
 
     /// <summary>
@@ -211,7 +212,7 @@ public abstract class SharedSubdermalImplantSystem : EntitySystem
                 return;
 
             // Insert the implant into the recipient's implant container
-            ForceImplant(recipient, donorImplant, subdermal);
+            ForceImplant(recipient, donorImplant, subdermal, true);
         }
     }
 

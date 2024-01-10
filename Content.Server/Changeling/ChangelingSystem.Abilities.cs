@@ -78,8 +78,8 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, CryoStingActionEvent>(OnCryoSting);
 
         SubscribeLocalEvent<ChangelingComponent, AdrenalineSacsActionEvent>(OnAdrenalineSacs);
-        SubscribeLocalEvent<ChangelingComponent, FleshmendActionEvent>(OnFleshmend);
-        SubscribeLocalEvent<ChangelingComponent, ArmbladeActionEvent>(OnArmblade);
+        SubscribeLocalEvent<ChangelingComponent, FleshmendActionEvent>(OnFleshMend);
+        SubscribeLocalEvent<ChangelingComponent, ArmbladeActionEvent>(OnArmBlade);
         SubscribeLocalEvent<ChangelingComponent, OrganicShieldActionEvent>(OnShield);
         SubscribeLocalEvent<ChangelingComponent, ChitinousArmorActionEvent>(OnArmor);
         SubscribeLocalEvent<ChangelingComponent, TentacleArmActionEvent>(OnTentacleArm);
@@ -119,7 +119,6 @@ public sealed partial class ChangelingSystem
             _popup.PopupEntity("This DNA already absorbed!", uid);
             return;
         }
-
 
         if (!_stateSystem.IsDown(args.Target))
         {
@@ -161,7 +160,6 @@ public sealed partial class ChangelingSystem
 
         if (!_ui.TryGetUi(uid, ListViewSelectorUiKey.Key, out var bui))
             return;
-
 
         Dictionary<string, string> state;
 
@@ -234,7 +232,6 @@ public sealed partial class ChangelingSystem
             _popup.PopupEntity("We can do this right now!", uid);
             return;
         }
-
 
         if (component.IsLesserForm)
         {
@@ -398,7 +395,7 @@ public sealed partial class ChangelingSystem
         args.Handled = true;
     }
 
-    private void OnFleshmend(EntityUid uid, ChangelingComponent component, FleshmendActionEvent args)
+    private void OnFleshMend(EntityUid uid, ChangelingComponent component, FleshmendActionEvent args)
     {
         if (_mobStateSystem.IsDead(uid))
             return;
@@ -415,7 +412,7 @@ public sealed partial class ChangelingSystem
         args.Handled = true;
     }
 
-    private void OnArmblade(EntityUid uid, ChangelingComponent component, ArmbladeActionEvent args)
+    private void OnArmBlade(EntityUid uid, ChangelingComponent component, ArmbladeActionEvent args)
     {
         SpawnOrDeleteItem(uid, "ArmBlade");
 
@@ -439,7 +436,6 @@ public sealed partial class ChangelingSystem
             _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
             return;
         }
-
 
         if (!TryComp<MetaDataComponent>(outerEnt, out var meta))
         {
@@ -628,7 +624,6 @@ public sealed partial class ChangelingSystem
             return;
         if (!TryPrototype(target, out var prototype, targetMeta))
             return;
-
         if (component.AbsorbedEntities.ContainsKey(targetDna.DNA))
             return;
 

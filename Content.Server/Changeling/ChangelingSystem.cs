@@ -107,7 +107,7 @@ public sealed partial class ChangelingSystem : EntitySystem
 
     private void SetupShop(EntityUid uid, ChangelingComponent component)
     {
-        if(component.IsInited)
+        if (component.IsInited)
             return;
 
         var coords = Transform(uid).Coordinates;
@@ -126,7 +126,7 @@ public sealed partial class ChangelingSystem : EntitySystem
 
     private void SetupInitActions(EntityUid uid, ChangelingComponent component)
     {
-        if(component.IsInited)
+        if (component.IsInited)
             return;
 
         _action.AddAction(uid, ChangelingAbsorb);

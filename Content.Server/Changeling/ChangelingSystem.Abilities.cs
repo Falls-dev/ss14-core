@@ -667,12 +667,16 @@ public sealed partial class ChangelingSystem
         var appearance = _serializationManager.CreateCopy(targetAppearance, notNullableOverride: true);
         var meta = _serializationManager.CreateCopy(targetMeta, notNullableOverride: true);
 
+        var name = string.IsNullOrEmpty(meta.EntityName)
+            ? "Unknown Creature"
+            : meta.EntityName;
+
         component.AbsorbedEntities.Add(targetDna.DNA, new HumanoidData
         {
             EntityPrototype = prototype,
             MetaDataComponent = meta,
             AppearanceComponent = appearance,
-            Name = meta.EntityName,
+            Name = name,
             Dna = targetDna.DNA
         });
 

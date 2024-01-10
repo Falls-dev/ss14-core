@@ -18,7 +18,7 @@ public sealed partial class ChangelingComponent : Component
     public int ChemicalsBalance = 20;
 
     [ViewVariables(VVAccess.ReadWrite), DataField("pointsBalance")]
-    public int PointsBalance = 10;
+    public int StartingPointsBalance = 10;
 
     [ViewVariables(VVAccess.ReadOnly)]
     public float Accumulator;
@@ -51,54 +51,6 @@ public sealed partial class ChangelingComponent : Component
     public float LesserFormDelay = 5f;
 
     public bool IsInited;
-
-    [DataField]
-    public EntityUid? ChangelingShopAction;
-
-    [DataField]
-    public EntityUid? AbsorbAction;
-
-    [DataField]
-    public EntityUid? TransformAction;
-
-    [DataField]
-    public EntityUid? RegenerateAction;
-
-    [DataField]
-    public EntityUid? LesserFormAction;
-
-    [DataField]
-    public EntityUid? TransformStingAction;
-
-    [DataField]
-    public EntityUid? BlindStingAction;
-
-    [DataField]
-    public EntityUid? MuteStingAction;
-
-    [DataField]
-    public EntityUid? HallucinationStingAction;
-
-    [DataField]
-    public EntityUid? CryoStingAction;
-
-    [DataField]
-    public EntityUid? AdrenalineSacsAction;
-
-    [DataField]
-    public EntityUid? FleshmendAction;
-
-    [DataField]
-    public EntityUid? ArmbladeAction;
-
-    [DataField]
-    public EntityUid? ShieldAction;
-
-    [DataField]
-    public EntityUid? ArmorAction;
-
-    [DataField]
-    public EntityUid? TentacleArmAction;
 }
 
 public struct HumanoidData

@@ -5,64 +5,15 @@ using Content.Shared.Changeling;
 using Content.Shared.Examine;
 using Content.Shared.Implants;
 using Content.Shared.Implants.Components;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.Changeling;
 
 public sealed partial class ChangelingSystem : EntitySystem
 {
     [Dependency] private readonly SharedActionsSystem _action = default!;
-
     [Dependency] private readonly ChemicalsSystem _chemicalsSystem = default!;
-
     [Dependency] private readonly SharedSubdermalImplantSystem _implantSystem = default!;
-
     [Dependency] private readonly StoreSystem _storeSystem = default!;
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingAbsorb = "ActionChangelingAbsorb";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingTransform = "ActionChangelingTransform";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingRegenerate = "ActionChangelingRegenerate";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingLesserForm = "ActionChangelingLesserForm";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingTransformSting = "ActionTransformSting";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingBlindSting = "ActionBlindSting";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingMuteSting = "ActionMuteSting";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingHallucinationSting = "ActionHallucinationSting";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingCryoSting = "ActionCryoSting";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingAdrenalineSacs = "ActionAdrenalineSacs";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingFleshmend = "ActionFleshmend";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingArmblade = "ActionArmblade";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingShield = "ActionShield";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingArmor = "ActionArmor";
-
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string ChangelingTentacleArm = "ActionTentacleArm";
 
     public override void Initialize()
     {
@@ -76,6 +27,7 @@ public sealed partial class ChangelingSystem : EntitySystem
         InitializeShop();
     }
 
+    #region Handlers
 
     private void OnInit(EntityUid uid, ChangelingComponent component, ComponentInit args)
     {
@@ -83,7 +35,11 @@ public sealed partial class ChangelingSystem : EntitySystem
         SetupInitActions(uid, component);
         CopyHumanoidData(uid, uid, component);
 
-        // _action.AddAction(uid, ref component.LesserFormAction, ChangelingLesserForm);
+        // TODO: Transfer abilities in shop!!
+        // TODO: Antagonist role, GameRule
+        // TODO: Testing!!!!!
+
+        // _action.AddAction(uid, ChangelingLesserForm);
         // _action.AddAction(uid, ref component.TransformStingAction, ChangelingTransformSting);
         // _action.AddAction(uid, ref component.BlindStingAction, ChangelingBlindSting);
         // _action.AddAction(uid, ref component.MuteStingAction, ChangelingMuteSting);
@@ -105,6 +61,10 @@ public sealed partial class ChangelingSystem : EntitySystem
         args.PushMarkup("[color=#A30000]His juices sucked up![/color]");
     }
 
+    #endregion
+
+    #region Helpers
+
     private void SetupShop(EntityUid uid, ChangelingComponent component)
     {
         if (component.IsInited)
@@ -121,7 +81,7 @@ public sealed partial class ChangelingSystem : EntitySystem
         if(!TryComp<StoreComponent>(implant, out var implantStore))
             return;
 
-        implantStore.Balance.Add("ChangelingPoint", component.PointsBalance);
+        implantStore.Balance.Add("ChangelingPoint", component.StartingPointsBalance);
     }
 
     private void SetupInitActions(EntityUid uid, ChangelingComponent component)
@@ -133,4 +93,6 @@ public sealed partial class ChangelingSystem : EntitySystem
         _action.AddAction(uid, ChangelingTransform);
         _action.AddAction(uid, ChangelingRegenerate);
     }
+
+    #endregion
 }

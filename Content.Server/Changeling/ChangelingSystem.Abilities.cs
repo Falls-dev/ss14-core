@@ -61,8 +61,6 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly ActionContainerSystem _actionContainerSystem = default!;
     [Dependency] private readonly SharedPullingSystem _pullingSystem = default!;
 
-
-
     private void InitializeAbilities()
     {
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaActionEvent>(OnAbsorb);
@@ -91,6 +89,27 @@ public sealed partial class ChangelingSystem
 
         SubscribeLocalEvent<ChangelingComponent, ListViewItemSelectedMessage>(OnTransformUiMessage);
     }
+
+    #region Data
+
+    private const string ChangelingAbsorb = "ActionChangelingAbsorb";
+    private const string ChangelingTransform = "ActionChangelingTransform";
+    private const string ChangelingRegenerate = "ActionChangelingRegenerate";
+    private const string ChangelingLesserForm = "ActionChangelingLesserForm";
+    private const string ChangelingTransformSting = "ActionTransformSting";
+    private const string ChangelingBlindSting = "ActionBlindSting";
+    private const string ChangelingMuteSting = "ActionMuteSting";
+    private const string ChangelingHallucinationSting = "ActionHallucinationSting";
+    private const string ChangelingCryoSting = "ActionCryoSting";
+    private const string ChangelingAdrenalineSacs = "ActionAdrenalineSacs";
+    private const string ChangelingFleshMend = "ActionFleshmend";
+    private const string ChangelingArmBlade = "ActionArmblade";
+    private const string ChangelingShield = "ActionShield";
+    private const string ChangelingArmor = "ActionArmor";
+    private const string ChangelingTentacleArm = "ActionTentacleArm";
+
+    #endregion
+
 
     #region Handlers
 
@@ -301,7 +320,7 @@ public sealed partial class ChangelingSystem
 
         _ui.CloseUi(bui, actorComponent.PlayerSession);
 
-        _action.StartUseDelay(component.TransformStingAction);
+        StartUseDelayById(uid, ChangelingTransformSting);
     }
 
     private void OnBlindSting(EntityUid uid, ChangelingComponent component, BlindStingActionEvent args)
@@ -521,7 +540,7 @@ public sealed partial class ChangelingSystem
         EnsureComp<AbsorbedComponent>(args.Target.Value);
         EnsureComp<UncloneableComponent>(args.Target.Value);
 
-        _action.StartUseDelay(component.AbsorbAction);
+        StartUseDelayById(uid, ChangelingAbsorb);
 
         args.Handled = true;
     }
@@ -549,7 +568,7 @@ public sealed partial class ChangelingSystem
 
         component.IsRegenerating = false;
 
-        _action.StartUseDelay(component.RegenerateAction);
+        StartUseDelayById(uid, ChangelingRegenerate);
 
         args.Handled = true;
     }
@@ -567,15 +586,23 @@ public sealed partial class ChangelingSystem
         if (!TakeChemicals(uid, component, 5))
             return;
 
-        if (!EnsureComp<ChangelingComponent>(polymorphEntity.Value, out var polyChangeling))
+        var toAdd = new ChangelingComponent()
         {
-            polyChangeling.PointsBalance = component.PointsBalance;
-            polyChangeling.ChemicalsBalance = component.ChemicalsBalance;
-            polyChangeling.AbsorbedEntities = component.AbsorbedEntities;
-            polyChangeling.IsLesserForm = true;
-        }
+            ChemicalsBalance = component.ChemicalsBalance,
+            AbsorbedEntities = component.AbsorbedEntities,
+            IsInited = component.IsInited,
+            IsLesserForm = true
+        };
 
-        RemoveLesserFormActions(polymorphEntity.Value, polyChangeling);
+        EntityManager.AddComponent(polymorphEntity.Value, toAdd);
+
+        _implantSystem.TransferImplants(uid, polymorphEntity.Value);
+        _actionContainerSystem.TransferAllActionsFiltered(uid, polymorphEntity.Value);
+        _action.GrantContainedActions(polymorphEntity.Value, polymorphEntity.Value);
+
+        RemoveLesserFormActions(polymorphEntity.Value);
+
+        _chemicalsSystem.UpdateAlert(polymorphEntity.Value, component);
 
         args.Handled = true;
     }
@@ -584,24 +611,34 @@ public sealed partial class ChangelingSystem
 
     #region Helpers
 
-    private void RemoveLesserFormActions(EntityUid uid, ChangelingComponent component)
+    private void RemoveLesserFormActions(EntityUid uid)
     {
-        _action.RemoveAction(component.RegenerateAction);
-        _action.RemoveAction(component.AbsorbAction);
-        _action.RemoveAction(component.LesserFormAction);
-        _action.RemoveAction(component.TransformStingAction);
-        _action.RemoveAction(component.MuteStingAction);
-        _action.RemoveAction(component.BlindStingAction);
-        _action.RemoveAction(component.HallucinationStingAction);
-        _action.RemoveAction(component.CryoStingAction);
-        _action.RemoveAction(component.AdrenalineSacsAction);
-        _action.RemoveAction(component.FleshmendAction);
-        _action.RemoveAction(component.ArmbladeAction);
-        _action.RemoveAction(component.ShieldAction);
-        _action.RemoveAction(component.ArmorAction);
-        _action.RemoveAction(component.TentacleArmAction);
+        if (!TryComp<ActionsComponent>(uid, out var actionsComponent))
+            return;
 
-        Dirty(uid, component);
+        foreach (var action in actionsComponent.Actions.ToArray())
+        {
+            if (!HasComp<LesserFormRestrictedComponent>(action))
+                continue;
+
+            _action.RemoveAction(uid, action);
+        }
+    }
+
+    private void StartUseDelayById(EntityUid performer, string actionProto)
+    {
+        if (!TryComp<ActionsComponent>(performer, out var actionsComponent))
+            return;
+
+        foreach (var action in actionsComponent.Actions.ToArray())
+        {
+            var id = MetaData(action).EntityPrototype?.ID;
+
+            if (id != actionProto)
+                continue;
+
+            _action.StartUseDelay(action);
+        }
     }
 
     private void KillUser(EntityUid target, string damageType)
@@ -714,12 +751,12 @@ public sealed partial class ChangelingSystem
         if (component.IsLesserForm)
         {
             //Don't copy IsLesserForm bool, because transferred component, in fact, new. Bool default value if false.
-            _action.StartUseDelay(component.LesserFormAction);
+            StartUseDelayById(reverted.Value, ChangelingLesserForm);
         }
 
         _chemicalsSystem.UpdateAlert(reverted.Value, component);
 
-        _action.StartUseDelay(component.TransformAction);
+        StartUseDelayById(reverted.Value, ChangelingTransform);
     }
 
     /// <summary>

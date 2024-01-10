@@ -8,6 +8,7 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/shop.png
       event: !type:ChangelingShopActionEvent
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionChangelingAbsorb
@@ -21,6 +22,7 @@
     event: !type:AbsorbDnaActionEvent
     canTargetSelf: false
     useDelay: 10
+  - type: LesserFormRestricted
 
 - type: entity
   id: ActionChangelingTransform
@@ -46,6 +48,7 @@
       event: !type:RegenerateActionEvent
       checkCanInteract: false
       useDelay: 120
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionChangelingLesserForm
@@ -58,6 +61,7 @@
       icon: Interface/Actions/lesser_form.png
       event: !type:LesserFormActionEvent
       useDelay: 90
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionTransformSting
@@ -71,6 +75,7 @@
       event: !type:TransformStingActionEvent
       canTargetSelf: false
       useDelay: 120
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionBlindSting
@@ -84,6 +89,7 @@
       event: !type:BlindStingActionEvent
       canTargetSelf: false
       useDelay: 30
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionMuteSting
@@ -97,6 +103,7 @@
       event: !type:MuteStingActionEvent
       canTargetSelf: false
       useDelay: 30
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionHallucinationSting
@@ -110,6 +117,7 @@
       event: !type:HallucinationStingActionEvent
       canTargetSelf: false
       useDelay: 30
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionCryoSting
@@ -123,6 +131,7 @@
       event: !type:CryoStingActionEvent
       canTargetSelf: false
       useDelay: 30
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionAdrenalineSacs
@@ -135,6 +144,7 @@
       icon: Interface/Actions/adrenaline_sacs.png
       event: !type:AdrenalineSacsActionEvent
       useDelay: 60
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionFleshmend
@@ -147,6 +157,7 @@
       icon: Interface/Actions/fleshmend.png
       event: !type:FleshmendActionEvent
       useDelay: 60
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionArmblade
@@ -158,6 +169,7 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/arm_blade.png
       event: !type:ArmbladeActionEvent
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionShield
@@ -169,6 +181,7 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/changeling_shield.png
       event: !type:OrganicShieldActionEvent
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionArmor
@@ -180,6 +193,7 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/changeling_armor.png
       event: !type:ChitinousArmorActionEvent
+    - type: LesserFormRestricted
 
 - type: entity
   id: ActionTentacleArm
@@ -191,3 +205,4 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/tentacle_arm.png
       event: !type:TentacleArmActionEvent
+    - type: LesserFormRestricted

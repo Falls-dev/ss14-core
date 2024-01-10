@@ -70,5 +70,16 @@
 
 # changeling
 - type: storeCategory
+  id: ChangelingStings
+  name: store-category-stings
+  priority: 0
+
+- type: storeCategory
   id: ChangelingAbilities
   name: store-category-abilities
+  priority: 1
+
+- type: storeCategory
+  id: ChangelingBoosters
+  name: store-category-boosters
+  priority: 2

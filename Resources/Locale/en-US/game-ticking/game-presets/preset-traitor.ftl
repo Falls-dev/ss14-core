@@ -12,6 +12,12 @@ traitor-description = There are traitors among us...
 traitor-not-enough-ready-players = Not enough players readied up for the game! There were {$readyPlayersCount} players readied up out of {$minimumPlayers} needed. Can't start Traitor.
 traitor-no-one-ready = No players readied up! Can't start Traitor.
 
+#Changeling
+changeling-title = Changeling
+changeling-description = A changeling has boarded the station!
+changeling-not-enough-ready-players = Not enough players readied up for the game! There were {$readyPlayersCount} players readied up out of {$minimumPlayers} needed. Can't start Changeling.
+changeling-no-one-ready = No players readied up! Can't start Changeling.
+
 ## TraitorDeathMatch
 traitor-death-match-title = Traitor Deathmatch
 traitor-death-match-description = Everyone's a traitor. Everyone wants each other dead.

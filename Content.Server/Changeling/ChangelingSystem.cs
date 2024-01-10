@@ -35,22 +35,8 @@ public sealed partial class ChangelingSystem : EntitySystem
         SetupInitActions(uid, component);
         CopyHumanoidData(uid, uid, component);
 
-        // TODO: Transfer abilities in shop!!
-        // TODO: Antagonist role, GameRule
+        // TODO: Objectives
         // TODO: Testing!!!!!
-
-        // _action.AddAction(uid, ChangelingLesserForm);
-        // _action.AddAction(uid, ref component.TransformStingAction, ChangelingTransformSting);
-        // _action.AddAction(uid, ref component.BlindStingAction, ChangelingBlindSting);
-        // _action.AddAction(uid, ref component.MuteStingAction, ChangelingMuteSting);
-        // _action.AddAction(uid, ref component.HallucinationStingAction, ChangelingHallucinationSting);
-        // _action.AddAction(uid, ref component.CryoStingAction, ChangelingCryoSting);
-        // _action.AddAction(uid, ref component.AdrenalineSacsAction, ChangelingAdrenalineSacs);
-        // _action.AddAction(uid, ref component.FleshmendAction, ChangelingFleshmend);
-        // _action.AddAction(uid, ref component.ArmbladeAction, ChangelingArmblade);
-        // _action.AddAction(uid, ref component.ShieldAction, ChangelingShield);
-        // _action.AddAction(uid, ref component.ArmorAction, ChangelingArmor);
-        // _action.AddAction(uid, ref component.TentacleArmAction, ChangelingTentacleArm);
 
         _chemicalsSystem.UpdateAlert(uid, component);
         component.IsInited = true;

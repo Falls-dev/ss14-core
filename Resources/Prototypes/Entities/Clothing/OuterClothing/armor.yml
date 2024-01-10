@@ -149,6 +149,8 @@
       sprite: Clothing/OuterClothing/Armor/changeling.rsi
     - type: Clothing
       sprite: Clothing/OuterClothing/Armor/changeling.rsi
+    - type: Unremoveable
+      deleteOnDrop: true
 
 - type: entity
   parent: ClothingOuterArmorHeavy

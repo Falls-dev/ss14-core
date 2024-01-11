@@ -3,7 +3,6 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Physics;
 using Content.Shared.Projectiles;
-using Content.Shared.Random;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Misc;
@@ -21,8 +20,7 @@ namespace Content.Shared.Changeling;
 
 public abstract class SharedTentacleGun : EntitySystem
 {
-
-    [Dependency] protected readonly IGameTiming Timing = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly INetManager _netManager = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
@@ -31,8 +29,6 @@ public abstract class SharedTentacleGun : EntitySystem
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
-
-    public const string TentacleJoint = "tentacle";
     public override void Initialize()
     {
         base.Initialize();
@@ -63,7 +59,7 @@ public abstract class SharedTentacleGun : EntitySystem
 
     private void OnTentacleCollide(EntityUid uid, TentacleProjectileComponent component, ref ProjectileEmbedEvent args)
     {
-        if (!Timing.IsFirstTimePredicted)
+        if (!_timing.IsFirstTimePredicted)
             return;
 
         if (!HasComp<TentacleGunComponent>(args.Weapon))

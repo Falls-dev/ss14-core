@@ -23,5 +23,5 @@
       - Prying
   - type: Prying
   - type: Unremoveable
-    deleteOnDrop: false
+    deleteOnDrop: true
   - type: ToolForcePowered

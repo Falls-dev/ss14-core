@@ -137,7 +137,7 @@
           Blunt: 1.5
           Piercing: 1.5
     - type: Unremoveable
-      deleteOnDrop: false
+      deleteOnDrop: true
     - type: Destructible
       thresholds:
         - trigger:

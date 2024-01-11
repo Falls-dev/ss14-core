@@ -49,6 +49,8 @@ public sealed class VoiceRecorderSystem : EntitySystem
             component.Listening = false;
             return;
         }
+        ToggleListening(uid, component, component.Listening);
+
     }
 
     public void OnActivate(EntityUid uid, VoiceRecorderComponent component, ActivateInWorldEvent args)
@@ -78,10 +80,22 @@ public sealed class VoiceRecorderSystem : EntitySystem
         {
             component.Recordings.Clear();
             EnsureComp<ActiveListenerComponent>(uid).Range = component.Range;
+            _audioSystem.PlayPvs(component.SoundStartOfRecording, uid,
+                AudioParams.Default
+                    .WithVariation(0.25f)
+                    .WithVolume(0.3f)
+                    .WithRolloffFactor(2.8f)
+                    .WithMaxDistance(1.5f));
         }
         else
         {
             RemComp<ActiveListenerComponent>(uid);
+            _audioSystem.PlayPvs(component.SoundEndOfRecording, uid,
+                AudioParams.Default
+                    .WithVariation(0.25f)
+                    .WithVolume(0.3f)
+                    .WithRolloffFactor(2.8f)
+                    .WithMaxDistance(1.5f));
         }
         if (TryComp<AppearanceComponent>(uid, out var appearance) &&
              TryComp<ItemComponent>(uid, out var item))
@@ -127,7 +141,7 @@ public sealed class VoiceRecorderSystem : EntitySystem
         var stamp = new StampDisplayInfo();
         stamp.StampedName = Loc.GetString("voice-recorder-stamp");
         stamp.StampedColor = new Color(47, 47, 56);
-        _paperSystem.TryStamp(printed, stamp, "paper_stamp-generic", null);
+        _paperSystem.TryStamp(printed, stamp, "paper_stamp-transcript", null);
         _handsSystem.PickupOrDrop(user, printed, checkActionBlocker: false);
         _audioSystem.PlayPvs(component.SoundPrint, uid,
             AudioParams.Default

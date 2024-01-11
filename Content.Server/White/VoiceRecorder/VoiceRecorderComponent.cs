@@ -31,6 +31,12 @@ public sealed partial class VoiceRecorderComponent : Component
     [DataField("soundPrint")]
     public SoundSpecifier SoundPrint = new SoundPathSpecifier("/Audio/Machines/short_print_and_rip.ogg");
 
+    [DataField("soundEndOfRecording")]
+    public SoundSpecifier SoundEndOfRecording = new SoundPathSpecifier("/Audio/Machines/id_insert.ogg");
+
+    [DataField("soundStartOfRecording")]
+    public SoundSpecifier SoundStartOfRecording = new SoundPathSpecifier("/Audio/Weapons/Guns/MagIn/pistol_magin.ogg");
+
     /// <summary>
     /// What the machine will print
     /// </summary>

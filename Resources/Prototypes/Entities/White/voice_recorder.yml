@@ -7,7 +7,7 @@
     - type: Sprite # Sprites section
       sprite: White/VoiceRecorder/voicerecorder.rsi
       layers:
-        - state: icon
+        - state: icon-on
     - type: GenericVisualizer
       visuals:
         enum.ToggleVisuals.Toggled:

@@ -4,7 +4,7 @@
   name: Voice Recorder
   description: BLCK-M type voice recorder. Has built-in printer for printing transcripts. Each new record erases previous one.
   components:
-    - type: Sprite # Sprites section
+    - type: Sprite
       sprite: White/VoiceRecorder/voicerecorder.rsi
       layers:
         - state: icon-on
@@ -13,7 +13,7 @@
         enum.ToggleVisuals.Toggled:
           enum.ToggleVisuals.Layer:
             True: { state: icon-on }
-            False: { state: icon } # END
+            False: { state: icon }
     - type: Item
       heldPrefix: off
       sprite: White/VoiceRecorder/voicerecorder.rsi

@@ -173,7 +173,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
 
         EnsureComp<ChangelingComponent>(entity);
 
-        var objective = _objectives.TryCreateObjective(mindId, mind, "AbsorbDnaObjective");
+        var objective = _objectives.TryCreateObjective(mindId, mind, "AbsorbChangelingObjective");
         if (objective == null)
             return false;
 

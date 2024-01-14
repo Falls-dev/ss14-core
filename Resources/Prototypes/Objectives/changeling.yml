@@ -15,10 +15,36 @@
   noSpawn: true
   parent: BaseChangelingObjective
   id: AbsorbDnaObjective
-  description: Absorb as many you can.
   components:
     - type: Objective
       icon:
         sprite: Objects/Weapons/Bombs/spidercharge.rsi # TODO: Change icon
         state: icon
     - type: AbsorbDnaCondition
+
+- type: entity
+  noSpawn: true
+  parent: BaseChangelingObjective
+  id: AbsorbMoreDnaObjective
+  name: Absorb more humans, that others in the Hive.
+  description: Absorb as many you can.
+  components:
+    - type: Objective
+      icon:
+        sprite: Objects/Weapons/Bombs/spidercharge.rsi # TODO: Change icon
+        state: icon
+    - type: AbsorbMoreCondition
+
+- type: entity
+  noSpawn: true
+  parent: BaseChangelingObjective
+  id: AbsorbChangelingObjective
+  components:
+    - type: Objective
+      icon:
+        sprite: Objects/Weapons/Bombs/spidercharge.rsi # TODO: Change icon
+        state: icon
+    - type: TargetObjective
+      title: objective-condition-absorb-changeling-title
+    - type: PickRandomChangeling
+    - type: AbsorbChangelingCondition

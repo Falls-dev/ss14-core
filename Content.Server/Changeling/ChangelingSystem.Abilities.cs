@@ -537,7 +537,9 @@ public sealed partial class ChangelingSystem
 
         KillUser(args.Target.Value, "Cellular");
 
-        EnsureComp<AbsorbedComponent>(args.Target.Value);
+        EnsureComp<AbsorbedComponent>(args.Target.Value, out var absorbedComponent);
+        absorbedComponent.Absorber = uid;
+
         EnsureComp<UncloneableComponent>(args.Target.Value);
 
         StartUseDelayById(uid, ChangelingAbsorb);

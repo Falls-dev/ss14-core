@@ -118,8 +118,7 @@ public sealed class ChangelingConditionsSystem : EntitySystem
 
         foreach (var changelingRule in EntityQuery<ChangelingRuleComponent>())
         {
-            var changelingMinds = changelingRule.ChangelingMinds;
-            changelingMinds.Remove(args.MindId);
+            var changelingMinds = changelingRule.ChangelingMinds.Except(new List<EntityUid> { args.MindId }).ToList();
 
             if (changelingMinds.Count == 0)
             {

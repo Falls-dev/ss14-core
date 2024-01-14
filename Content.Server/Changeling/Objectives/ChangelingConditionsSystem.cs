@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Content.Server.Changeling.Objectives.Components;
-using Content.Server.Mind;
 using Content.Server.Objectives.Components;
 using Content.Server.Objectives.Systems;
 using Content.Shared.Changeling;
@@ -15,8 +14,6 @@ public sealed class ChangelingConditionsSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly TargetObjectiveSystem _target = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-
 
     public override void Initialize()
     {
@@ -119,24 +116,19 @@ public sealed class ChangelingConditionsSystem : EntitySystem
         if (target.Target != null)
             return;
 
-        var query = EntityQueryEnumerator<ChangelingComponent>();
-
-
-        List<EntityUid> changelings = new();
-        while (query.MoveNext(out var cUid, out _))
+        foreach (var changelingRule in EntityQuery<ChangelingRuleComponent>())
         {
+            var changelingMinds = changelingRule.ChangelingMinds;
+            changelingMinds.Remove(args.MindId);
 
-            if (args.Mind.CurrentEntity != cUid)
-                changelings.Add(cUid);
+            if (changelingMinds.Count == 0)
+            {
+                args.Cancelled = true;
+                return;
+            }
+
+            _target.SetTarget(uid, _random.Pick(changelingMinds), target);
         }
-
-        if (changelings.Count == 0)
-        {
-            args.Cancelled = true;
-            return;
-        }
-
-        _target.SetTarget(uid, _random.Pick(changelings), target);
     }
 
 

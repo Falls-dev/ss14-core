@@ -122,8 +122,9 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
                 changeling.StartCandidates[player] = ev.Profiles[player.UserId];
             }
 
-            var delay = TimeSpan.FromSeconds(ChangelingStartDelay +
-                                             _random.NextFloat(0f, ChangelingStartDelayVariance));
+            // var delay = TimeSpan.FromSeconds(ChangelingStartDelay + _random.NextFloat(0f, ChangelingStartDelayVariance));
+
+            var delay = TimeSpan.FromSeconds(1); // For testing, TODO: replace with above
 
             changeling.AnnounceAt = _gameTiming.CurTime + delay;
 
@@ -171,6 +172,12 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         _npcFaction.AddFaction(entity, "Syndicate");
 
         EnsureComp<ChangelingComponent>(entity);
+
+        var objective = _objectives.TryCreateObjective(mindId, mind, "AbsorbDnaObjective");
+        if (objective == null)
+            return false;
+
+        _mindSystem.AddObjective(mindId, mind, objective.Value);
 
         // TODO Add objectives
         // if (giveObjectives)

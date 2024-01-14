@@ -1,0 +1,24 @@
+﻿- type: entity
+  abstract: true
+  parent: BaseObjective
+  id: BaseChangelingObjective
+  components:
+    - type: Objective
+      difficulty: 1.5
+      issuer: syndicate
+    - type: RoleRequirement
+      roles:
+        components:
+          - ChangelingRole
+
+- type: entity
+  noSpawn: true
+  parent: BaseChangelingObjective
+  id: AbsorbDnaObjective
+  description: Absorb as many you can.
+  components:
+    - type: Objective
+      icon:
+        sprite: Objects/Weapons/Bombs/spidercharge.rsi # TODO: Change icon
+        state: icon
+    - type: AbsorbDnaCondition

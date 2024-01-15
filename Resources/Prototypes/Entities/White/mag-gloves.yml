@@ -23,3 +23,15 @@
     - type: Fiber
       fiberMaterial: fibers-nanomachines
     - type: FingerprintMask
+    - type: MagneticGloves
+
+- type: entity
+  id: ActionToggleMagneticGloves
+  parent: ActionBaseToggleMagboots
+  noSpawn: true
+  components:
+    - type: InstantAction
+      itemIconStyle: NoItem
+      event: !type:ToggleMagneticGlovesEvent
+      icon: { sprite: Clothing/Shoes/Boots/magboots.rsi, state: icon }
+      iconOn: { sprite : Clothing/Shoes/Boots/magboots.rsi, state: icon-on }

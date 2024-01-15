@@ -21,6 +21,7 @@ using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.White.MagGloves;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -827,7 +828,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         var target = GetEntity(ev.Target);
 
         if (Deleted(target) ||
-            user == target)
+            user == target || HasComp<KeepItemsOnFallComponent>(target)) // Can't disarm entity who keep items on fall
         {
             return false;
         }

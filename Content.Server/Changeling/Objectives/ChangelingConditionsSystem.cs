@@ -104,6 +104,9 @@ public sealed class ChangelingConditionsSystem : EntitySystem
             otherAbsorbed.Add(absorbed);
         }
 
+        if (otherAbsorbed.Count == 0)
+            return 1f;
+
         var isTheMost = otherAbsorbed.Max() < selfAbsorbed;
 
         return isTheMost ? 1f : 0f;

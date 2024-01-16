@@ -4,6 +4,7 @@ using Content.Server.DoAfter;
 using Content.Server.Forensics;
 using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
+using Content.Server.Mind;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Popups;
 using Content.Server.Store.Components;
@@ -22,6 +23,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Implants.Components;
 using Content.Shared.Inventory;
+using Content.Shared.Mind;
 using Content.Shared.Miracle.UI;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -60,6 +62,8 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ActionContainerSystem _actionContainerSystem = default!;
     [Dependency] private readonly SharedPullingSystem _pullingSystem = default!;
+    [Dependency] private readonly MindSystem _mindSystem = default!;
+
 
     private void InitializeAbilities()
     {
@@ -517,6 +521,9 @@ public sealed partial class ChangelingSystem
             return;
         }
 
+        if(!_mindSystem.TryGetMind(uid, out var mindId, out _))
+            return;
+
         if (TryComp(uid, out SharedPullerComponent? puller) && puller.Pulling is { } pulled &&
             TryComp(pulled, out SharedPullableComponent? pullable))
             _pullingSystem.TryStopPull(pullable);
@@ -538,7 +545,8 @@ public sealed partial class ChangelingSystem
         KillUser(args.Target.Value, "Cellular");
 
         EnsureComp<AbsorbedComponent>(args.Target.Value, out var absorbedComponent);
-        absorbedComponent.Absorber = uid;
+
+        absorbedComponent.AbsorberMind = mindId;
 
         EnsureComp<UncloneableComponent>(args.Target.Value);
 

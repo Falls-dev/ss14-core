@@ -137,13 +137,13 @@
 - type: weightedRandom
   id: ChangelingObjectiveGroupSteal
   weights:
-    CaptainIDStealObjectiveCh: 1
-    CMOHyposprayStealObjectiveCh: 1
-    RDHardsuitStealObjectiveCh: 1
-    NukeDiskStealObjectiveCh: 1
-    MagbootsStealObjectiveCh: 1
-    CorgiMeatStealObjectiveCh: 1
-    ClipboardStealObjectiveCh: 1
+    CaptainIDStealObjectiveCh: 0.5
+    CMOHyposprayStealObjectiveCh: 0.5
+    RDHardsuitStealObjectiveCh: 0.5
+    NukeDiskStealObjectiveCh: 0.5
+    MagbootsStealObjectiveCh: 0.5
+    CorgiMeatStealObjectiveCh: 0.5
+    ClipboardStealObjectiveCh: 0.5
     CaptainGunStealObjectiveCh: 0.5
     CaptainJetpackStealObjectiveCh: 0.5
     HandTeleporterStealObjectiveCh: 0.5

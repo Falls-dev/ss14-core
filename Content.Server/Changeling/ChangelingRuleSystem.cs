@@ -9,7 +9,6 @@ using Content.Server.NPC.Systems;
 using Content.Server.Objectives;
 using Content.Server.Roles;
 using Content.Shared.Changeling;
-using Content.Shared.Mind;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Roles;
@@ -33,13 +32,13 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
     [Dependency] private readonly SharedRoleSystem _roleSystem = default!;
     [Dependency] private readonly ObjectivesSystem _objectives = default!;
 
-    private const int PlayersPerChangeling = 1; //default 10
+    private const int PlayersPerChangeling = 10;
     private const int MaxChangelings = 5;
 
     private const float ChangelingStartDelay = 3f * 60;
     private const float ChangelingStartDelayVariance = 3f * 60;
 
-    private const int ChangelingMinPlayers = 0; //default 10
+    private const int ChangelingMinPlayers = 10;
 
     private const int ChangelingMaxDifficulty = 5;
     private const int ChangelingMaxPicks = 20;
@@ -52,8 +51,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         SubscribeLocalEvent<RulePlayerJobsAssignedEvent>(OnPlayersSpawned);
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(HandleLatejoin);
 
-        // SubscribeLocalEvent<ChangelingRuleComponent, ObjectivesTextGetInfoEvent>(OnObjectivesTextGetInfo);
-        // SubscribeLocalEvent<ChangelingRuleComponent, ObjectivesTextPrependEvent>(OnObjectivesTextPrepend);
+        SubscribeLocalEvent<ChangelingRuleComponent, ObjectivesTextGetInfoEvent>(OnObjectivesTextGetInfo);
     }
 
     protected override void ActiveTick(EntityUid uid, ChangelingRuleComponent component, GameRuleComponent gameRule, float frameTime)
@@ -123,9 +121,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
                 changeling.StartCandidates[player] = ev.Profiles[player.UserId];
             }
 
-            // var delay = TimeSpan.FromSeconds(ChangelingStartDelay + _random.NextFloat(0f, ChangelingStartDelayVariance));
-
-            var delay = TimeSpan.FromSeconds(1); // For testing, TODO: replace with above
+            var delay = TimeSpan.FromSeconds(ChangelingStartDelay + _random.NextFloat(0f, ChangelingStartDelayVariance));
 
             changeling.AnnounceAt = _gameTiming.CurTime + delay;
 
@@ -165,7 +161,15 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
             PrototypeId = changelingRule.ChangelingPrototypeId
         }, mind);
 
+        var briefing = Loc.GetString("changeling-role-briefing-short");
+
+        _roleSystem.MindAddRole(mindId, new RoleBriefingComponent
+        {
+            Briefing = briefing
+        }, mind, true);
+
         _roleSystem.MindPlaySound(mindId, changelingRule.GreetSoundNotification, mind);
+        SendChangelingBriefing(mindId);
         changelingRule.ChangelingMinds.Add(mindId);
 
         // Change the faction
@@ -174,13 +178,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
 
         EnsureComp<ChangelingComponent>(entity);
 
-        // var objective = _objectives.TryCreateObjective(mindId, mind, "AbsorbChangelingObjective");
-        // if (objective == null)
-        //     return false;
 
-        // _mindSystem.AddObjective(mindId, mind, objective.Value);
-
-        // TODO Add objectives
         if (giveObjectives)
         {
             var maxDifficulty = ChangelingMaxDifficulty;
@@ -200,22 +198,13 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         return true;
     }
 
-    /// <summary>
-    ///     Send a codewords and uplink codes to traitor chat.
-    /// </summary>
-    /// <param name="mind">A mind (player)</param>
-    /// <param name="codewords">Codewords</param>
-    /// <param name="code">Uplink codes</param>
-    // private void SendTraitorBriefing(EntityUid mind, string[] codewords, Note[]? code)
-    // {
-    //     if (!_mindSystem.TryGetSession(mind, out var session))
-    //         return;
-    //
-    //     _chatManager.DispatchServerMessage(session, Loc.GetString("traitor-role-greeting"));
-    //     _chatManager.DispatchServerMessage(session, Loc.GetString("traitor-role-codewords", ("codewords", string.Join(", ", codewords))));
-    //     if (code != null)
-    //         _chatManager.DispatchServerMessage(session, Loc.GetString("traitor-role-uplink-code", ("code", string.Join("-", code).Replace("sharp","#"))));
-    // }
+    private void SendChangelingBriefing(EntityUid mind)
+    {
+        if (!_mindSystem.TryGetSession(mind, out var session))
+            return;
+
+        _chatManager.DispatchServerMessage(session, Loc.GetString("changeling-role-greeting"));
+    }
 
     private void HandleLatejoin(PlayerSpawnCompleteEvent ev)
     {
@@ -268,48 +257,9 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         }
     }
 
-    // private void OnObjectivesTextGetInfo(EntityUid uid, ChangelingRuleComponent comp, ref ObjectivesTextGetInfoEvent args)
-    // {
-    //     args.Minds = comp.ChangelingMinds;
-    //     args.AgentName = Loc.GetString("traitor-round-end-agent-name");
-    // }
-
-    // private void OnObjectivesTextPrepend(EntityUid uid, ChangelingRuleComponent comp, ref ObjectivesTextPrependEvent args)
-    // {
-    //     args.Text += "\n" + Loc.GetString("traitor-round-end-codewords", ("codewords", string.Join(", ", comp.Codewords)));
-    // }
-
-    // public List<(EntityUid Id, MindComponent Mind)> GetOtherTraitorMindsAliveAndConnected(MindComponent ourMind)
-    // {
-    //     List<(EntityUid Id, MindComponent Mind)> allTraitors = new();
-    //     foreach (var traitor in EntityQuery<ChangelingRuleComponent>())
-    //     {
-    //         foreach (var role in GetOtherTraitorMindsAliveAndConnected(ourMind, traitor))
-    //         {
-    //             if (!allTraitors.Contains(role))
-    //                 allTraitors.Add(role);
-    //         }
-    //     }
-    //
-    //     return allTraitors;
-    // }
-    //
-    // private List<(EntityUid Id, MindComponent Mind)> GetOtherTraitorMindsAliveAndConnected(MindComponent ourMind, ChangelingRuleComponent component)
-    // {
-    //     var changelings = new List<(EntityUid Id, MindComponent Mind)>();
-    //     foreach (var changeling in component.ChangelingMinds)
-    //     {
-    //         if (TryComp(changeling, out MindComponent? mind) &&
-    //             mind.OwnedEntity != null &&
-    //             mind.Session != null &&
-    //             mind != ourMind &&
-    //             _mobStateSystem.IsAlive(mind.OwnedEntity.Value) &&
-    //             mind.CurrentEntity == mind.OwnedEntity)
-    //         {
-    //             changelings.Add((changeling, mind));
-    //         }
-    //     }
-    //
-    //     return changelings;
-    // }
+    private void OnObjectivesTextGetInfo(EntityUid uid, ChangelingRuleComponent comp, ref ObjectivesTextGetInfoEvent args)
+    {
+        args.Minds = comp.ChangelingMinds;
+        args.AgentName = Loc.GetString("changeling-round-end-agent-name");
+    }
 }

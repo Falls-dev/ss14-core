@@ -11,6 +11,7 @@ using Content.Server.Roles;
 using Content.Shared.Changeling;
 using Content.Shared.Mind;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Objectives.Components;
 using Content.Shared.Roles;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -173,28 +174,28 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
 
         EnsureComp<ChangelingComponent>(entity);
 
-        var objective = _objectives.TryCreateObjective(mindId, mind, "AbsorbChangelingObjective");
-        if (objective == null)
-            return false;
+        // var objective = _objectives.TryCreateObjective(mindId, mind, "AbsorbChangelingObjective");
+        // if (objective == null)
+        //     return false;
 
-        _mindSystem.AddObjective(mindId, mind, objective.Value);
+        // _mindSystem.AddObjective(mindId, mind, objective.Value);
 
         // TODO Add objectives
-        // if (giveObjectives)
-        // {
-        //     var maxDifficulty = ChangelingMaxDifficulty;
-        //     var maxPicks = ChangelingMaxPicks;
-        //     var difficulty = 0f;
-        //     for (var pick = 0; pick < maxPicks && maxDifficulty > difficulty; pick++)
-        //     {
-        //         var objective = _objectives.GetRandomObjective(mindId, mind, "TraitorObjectiveGroups");
-        //         if (objective == null)
-        //             continue;
-        //
-        //         _mindSystem.AddObjective(mindId, mind, objective.Value);
-        //         difficulty += Comp<ObjectiveComponent>(objective.Value).Difficulty;
-        //     }
-        // }
+        if (giveObjectives)
+        {
+            var maxDifficulty = ChangelingMaxDifficulty;
+            var maxPicks = ChangelingMaxPicks;
+            var difficulty = 0f;
+            for (var pick = 0; pick < maxPicks && maxDifficulty > difficulty; pick++)
+            {
+                var objective = _objectives.GetRandomObjective(mindId, mind, "ChangelingObjectiveGroups");
+                if (objective == null)
+                    continue;
+
+                _mindSystem.AddObjective(mindId, mind, objective.Value);
+                difficulty += Comp<ObjectiveComponent>(objective.Value).Difficulty;
+            }
+        }
 
         return true;
     }

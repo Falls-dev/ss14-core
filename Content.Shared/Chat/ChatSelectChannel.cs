@@ -51,6 +51,8 @@
         /// </summary>
         Admin = ChatChannel.AdminChat,
 
+        Changeling = ChatChannel.Changeling,
+
         Console = ChatChannel.Unspecified
     }
 }

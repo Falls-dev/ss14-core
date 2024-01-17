@@ -35,9 +35,6 @@ public sealed partial class ChangelingSystem : EntitySystem
         SetupInitActions(uid, component);
         CopyHumanoidData(uid, uid, component);
 
-        // TODO: Objectives
-        // TODO: Testing!!!!!
-
         _chemicalsSystem.UpdateAlert(uid, component);
         component.IsInited = true;
     }

@@ -75,14 +75,19 @@ namespace Content.Shared.Chat
         AdminChat = 1 << 12,
 
         /// <summary>
+        /// Changeling
+        /// </summary>
+        Changeling = 1 << 13,
+
+        /// <summary>
         ///     Unspecified.
         /// </summary>
-        Unspecified = 1 << 13,
+        Unspecified = 1 << 14,
 
         /// <summary>
         ///     Channels considered to be IC.
         /// </summary>
-        IC = Local | Whisper | Radio | Dead | Emotes | Damage | Visual,
+        IC = Local | Whisper | Radio | Dead | Emotes | Damage | Visual | Changeling,
 
         AdminRelated = Admin | AdminAlert | AdminChat,
     }

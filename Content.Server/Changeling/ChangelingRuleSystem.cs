@@ -9,6 +9,7 @@ using Content.Server.NPC.Systems;
 using Content.Server.Objectives;
 using Content.Server.Roles;
 using Content.Shared.Changeling;
+using Content.Shared.GameTicking;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Roles;
@@ -27,10 +28,10 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
     [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly SharedRoleSystem _roleSystem = default!;
     [Dependency] private readonly ObjectivesSystem _objectives = default!;
+    [Dependency] private readonly ChangelingNameGenerator _nameGenerator = default!;
 
     private const int PlayersPerChangeling = 10;
     private const int MaxChangelings = 5;
@@ -50,6 +51,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         SubscribeLocalEvent<RoundStartAttemptEvent>(OnStartAttempt);
         SubscribeLocalEvent<RulePlayerJobsAssignedEvent>(OnPlayersSpawned);
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(HandleLatejoin);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(ClearUsedNames);
 
         SubscribeLocalEvent<ChangelingRuleComponent, ObjectivesTextGetInfoEvent>(OnObjectivesTextGetInfo);
     }
@@ -176,7 +178,10 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         _npcFaction.RemoveFaction(entity, "NanoTrasen", false);
         _npcFaction.AddFaction(entity, "Syndicate");
 
-        EnsureComp<ChangelingComponent>(entity);
+        EnsureComp<ChangelingComponent>(entity, out var readyChangeling);
+
+        readyChangeling.HiveName = _nameGenerator.GetName();
+        Dirty(entity, readyChangeling);
 
 
         if (giveObjectives)
@@ -261,5 +266,10 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
     {
         args.Minds = comp.ChangelingMinds;
         args.AgentName = Loc.GetString("changeling-round-end-agent-name");
+    }
+
+    private void ClearUsedNames(RoundRestartCleanupEvent ev)
+    {
+        _nameGenerator.ClearUsed();
     }
 }

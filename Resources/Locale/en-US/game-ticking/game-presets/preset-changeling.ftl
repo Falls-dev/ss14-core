@@ -9,5 +9,5 @@ changeling-role-greeting =
     Your objectives are listed in the character menu.
     Use the evolution shop to gain new abilities.
     Death to Nanotrasen!
-changeling-role-briefing-short = Use :g to communicate with other members of the Hive.
+changeling-role-briefing-short = Use '<' to communicate with other members of the Hive.
 

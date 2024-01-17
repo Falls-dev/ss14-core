@@ -11,6 +11,7 @@ using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.ActionBlocker;
 using Content.Shared.CCVar;
+using Content.Shared.Changeling;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Ghost;
@@ -300,6 +301,9 @@ public sealed partial class ChatSystem : SharedChatSystem
             case InGameOOCChatType.Looc:
                 SendLOOC(source, player, message, hideChat);
                 break;
+            case InGameOOCChatType.Changeling:
+                SendChangelingChat(source, player, message, hideChat);
+                break;
         }
     }
 
@@ -585,6 +589,38 @@ public sealed partial class ChatSystem : SharedChatSystem
         SendInVoiceRange(ChatChannel.LOOC, message, wrappedMessage, source, hideChat ? ChatTransmitRange.HideChat : ChatTransmitRange.Normal, player.UserId);
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"LOOC from {player:Player}: {message}");
     }
+
+    private void SendChangelingChat(EntityUid source, ICommonSession player, string message, bool hideChat)
+    {
+        if (!TryComp<ChangelingComponent>(source, out var changeling))
+            return;
+
+        var clients = GetChangelingChatClients();
+
+        var playerName = changeling.HiveName;
+
+        message = $"{char.ToUpper(message[0])}{message[1..]}";
+
+        var wrappedMessage = Loc.GetString("chat-manager-send-changeling-chat-wrap-message",
+            ("player", playerName),
+            ("message", FormattedMessage.EscapeText(message)));
+
+        _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Changeling chat from {player:Player}-({playerName}): {message}");
+
+        _chatManager.ChatMessageToMany(ChatChannel.Changeling, message, wrappedMessage, source,
+            hideChat, false, clients.ToList());
+    }
+
+    private IEnumerable<INetChannel> GetChangelingChatClients()
+    {
+        return Filter.Empty()
+            .AddWhereAttachedEntity(HasComp<GhostComponent>)
+            .AddWhereAttachedEntity(HasComp<ChangelingComponent>)
+            .Recipients
+            .Union(_adminManager.ActiveAdmins)
+            .Select(p => p.Channel);
+    }
+
 
     private void SendDeadChat(EntityUid source, ICommonSession player, string message, bool hideChat)
     {
@@ -938,7 +974,8 @@ public enum InGameICChatType : byte
 public enum InGameOOCChatType : byte
 {
     Looc,
-    Dead
+    Dead,
+    Changeling,
 }
 
 /// <summary>

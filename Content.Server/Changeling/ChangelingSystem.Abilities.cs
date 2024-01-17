@@ -313,6 +313,13 @@ public sealed partial class ChangelingSystem
         if (!_ui.TryGetUi(user, TransformStingSelectorUiKey.Key, out var bui))
             return;
 
+        if (HasComp<ChangelingComponent>(target))
+        {
+            _popup.PopupEntity("Transform virus was ineffective!", user);
+            return;
+        }
+
+
         if (!TakeChemicals(uid, component, 50))
             return;
 
@@ -596,8 +603,9 @@ public sealed partial class ChangelingSystem
         if (!TakeChemicals(uid, component, 5))
             return;
 
-        var toAdd = new ChangelingComponent()
+        var toAdd = new ChangelingComponent
         {
+            HiveName = component.HiveName,
             ChemicalsBalance = component.ChemicalsBalance,
             AbsorbedEntities = component.AbsorbedEntities,
             IsInited = component.IsInited,
@@ -749,8 +757,9 @@ public sealed partial class ChangelingSystem
         if (reverted == null)
             return;
 
-        var toAdd = new ChangelingComponent()
+        var toAdd = new ChangelingComponent
         {
+            HiveName = component.HiveName,
             ChemicalsBalance = component.ChemicalsBalance,
             AbsorbedEntities = component.AbsorbedEntities,
             IsInited = component.IsInited

@@ -32,6 +32,9 @@ public sealed partial class ChangelingComponent : Component
     [ViewVariables(VVAccess.ReadOnly)]
     public bool IsLesserForm;
 
+    [ViewVariables(VVAccess.ReadOnly)]
+    public string HiveName;
+
     [ViewVariables(VVAccess.ReadOnly), DataField("absorbedEntities")]
     public Dictionary<string, HumanoidData> AbsorbedEntities = new();
 

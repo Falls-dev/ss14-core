@@ -42,3 +42,5 @@
     radius: 1.5
     energy: 2
     color: yellow
+  - type: ChangeThrowForce
+    throwForce: 20

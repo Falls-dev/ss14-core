@@ -66,6 +66,7 @@ namespace Content.Client.Stylesheets
         public const string StyleClassStorageButton = "storageButton";
         public const string StyleClassFuckyWuckyBackground = "FuckyWuckyBackground";
         public const string StyleClassGayShitBackground = "GayShitBackground";
+        public const string StyleClassLobbyGayBackground = "LobbyGayBackground";
 
         public const string StyleClassSliderRed = "Red";
         public const string StyleClassSliderGreen = "Green";
@@ -225,6 +226,17 @@ namespace Content.Client.Stylesheets
 
             gayShitBackground.SetPatchMargin(StyleBox.Margin.All, 2);
             gayShitBackground.SetExpandMargin(StyleBox.Margin.All, -2);
+
+            var lobbyGayBackgroundTex = resCache.GetTexture("/Textures/Interface/Nano/lobby_gay.png");
+            var lobbyGayBackground = new StyleBoxTexture
+            {
+                Texture = lobbyGayBackgroundTex,
+                Mode = StyleBoxTexture.StretchMode.Tile
+            };
+
+            lobbyGayBackground.SetPatchMargin(StyleBox.Margin.All, 24);
+            lobbyGayBackground.SetExpandMargin(StyleBox.Margin.All, -4);
+            lobbyGayBackground.SetContentMarginOverride(StyleBox.Margin.All, 8);
 
             var contextMenuBackground = new StyleBoxTexture
             {
@@ -697,6 +709,13 @@ namespace Content.Client.Stylesheets
                     new[]
                     {
                         new StyleProperty("font-color", Color.FromHex("#3C484181")),
+                    }),
+
+                new StyleRule(
+                    new SelectorElement(null, new[] {StyleClassLobbyGayBackground}, null, null),
+                    new[]
+                    {
+                        new StyleProperty(PanelContainer.StylePropertyPanel, lobbyGayBackground),
                     }),
 
                 // Context Menu window

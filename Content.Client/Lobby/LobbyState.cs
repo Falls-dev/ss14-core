@@ -1,3 +1,4 @@
+using Content.Client._Ohio.Buttons;
 using Content.Client.GameTicking.Managers;
 using Content.Client.LateJoin;
 using Content.Client.Lobby.UI;
@@ -48,12 +49,15 @@ namespace Content.Client.Lobby
             _lobby = (LobbyGui) _userInterfaceManager.ActiveScreen;
 
             var chatController = _userInterfaceManager.GetUIController<ChatUIController>();
+
             _gameTicker = _entityManager.System<ClientGameTicker>();
-            _characterSetup = new CharacterSetupGui(_entityManager, _resourceCache, _preferencesManager,
-                _prototypeManager, _configurationManager);
+
+            _characterSetup = new CharacterSetupGui(_entityManager, _resourceCache, _preferencesManager, _prototypeManager, _configurationManager);
+
             LayoutContainer.SetAnchorPreset(_characterSetup, LayoutContainer.LayoutPreset.Wide);
 
             _lobby.CharacterSetupState.AddChild(_characterSetup);
+
             chatController.SetMainChat(true);
 
             _voteManager.SetPopupContainer(_lobby.VoteContainer);
@@ -70,10 +74,12 @@ namespace Content.Client.Lobby
             };
 
             LayoutContainer.SetAnchorPreset(_lobby, LayoutContainer.LayoutPreset.Wide);
+
             _lobby.ServerName.Text = _baseClient.GameInfo?.ServerName; //The eye of refactor gazes upon you...
+
             UpdateLobbyUi();
 
-            _lobby.CharacterPreview.CharacterSetupButton.OnPressed += OnSetupPressed;
+            _lobby.CharacterSetupButton.OnPressed += OnSetupPressed;
             _lobby.ReadyButton.OnPressed += OnReadyPressed;
             _lobby.ReadyButton.OnToggled += OnReadyToggled;
 
@@ -89,14 +95,16 @@ namespace Content.Client.Lobby
         protected override void Shutdown()
         {
             var chatController = _userInterfaceManager.GetUIController<ChatUIController>();
+
             chatController.SetMainChat(false);
+
             _gameTicker.InfoBlobUpdated -= UpdateLobbyUi;
             _gameTicker.LobbyStatusUpdated -= LobbyStatusUpdated;
             _gameTicker.LobbyLateJoinStatusUpdated -= LobbyLateJoinStatusUpdated;
 
             _voteManager.ClearPopupContainer();
 
-            _lobby!.CharacterPreview.CharacterSetupButton.OnPressed -= OnSetupPressed;
+            _lobby!.CharacterSetupButton.OnPressed -= OnSetupPressed;
             _lobby!.ReadyButton.OnPressed -= OnReadyPressed;
             _lobby!.ReadyButton.OnToggled -= OnReadyToggled;
 
@@ -175,7 +183,6 @@ namespace Content.Client.Lobby
 
         private void LobbyStatusUpdated()
         {
-            UpdateLobbyBackground();
             UpdateLobbyUi();
         }
 
@@ -188,7 +195,7 @@ namespace Content.Client.Lobby
         {
             if (_gameTicker.IsGameStarted)
             {
-                _lobby!.ReadyButton.Text = Loc.GetString("lobby-state-ready-button-join-state");
+                MakeButtonJoinGame(_lobby!.ReadyButton);
                 _lobby!.ReadyButton.ToggleMode = false;
                 _lobby!.ReadyButton.Pressed = false;
                 _lobby!.ObserveButton.Disabled = false;
@@ -196,7 +203,12 @@ namespace Content.Client.Lobby
             else
             {
                 _lobby!.StartTime.Text = string.Empty;
-                _lobby!.ReadyButton.Text = Loc.GetString(_lobby!.ReadyButton.Pressed ? "lobby-state-player-status-ready": "lobby-state-player-status-not-ready");
+
+                if (_lobby!.ReadyButton.Pressed)
+                    MakeButtonReady(_lobby!.ReadyButton);
+                else
+                    MakeButtonUnReady(_lobby!.ReadyButton);
+
                 _lobby!.ReadyButton.ToggleMode = true;
                 _lobby!.ReadyButton.Disabled = false;
                 _lobby!.ReadyButton.Pressed = _gameTicker.AreWeReady;
@@ -208,41 +220,7 @@ namespace Content.Client.Lobby
                 _lobby!.ServerInfo.SetInfoBlob(_gameTicker.ServerInfoBlob);
             }
 
-            if (_gameTicker.LobbySong == null)
-            {
-                _lobby!.LobbySong.SetMarkup(Loc.GetString("lobby-state-song-no-song-text"));
-            }
-            else if (_resourceCache.TryGetResource<AudioResource>(_gameTicker.LobbySong, out var lobbySongResource))
-            {
-                var lobbyStream = lobbySongResource.AudioStream;
-
-                var title = string.IsNullOrEmpty(lobbyStream.Title) ?
-                    Loc.GetString("lobby-state-song-unknown-title") :
-                    lobbyStream.Title;
-
-                var artist = string.IsNullOrEmpty(lobbyStream.Artist) ?
-                    Loc.GetString("lobby-state-song-unknown-artist") :
-                    lobbyStream.Artist;
-
-                var markup = Loc.GetString("lobby-state-song-text",
-                    ("songTitle", title),
-                    ("songArtist", artist));
-
-                _lobby!.LobbySong.SetMarkup(markup);
-            }
-        }
-
-        private void UpdateLobbyBackground()
-        {
-            if (_gameTicker.LobbyBackground != null)
-            {
-                _lobby!.Background.Texture = _resourceCache.GetResource<TextureResource>(_gameTicker.LobbyBackground );
-            }
-            else
-            {
-                _lobby!.Background.Texture = null;
-            }
-
+            _lobby!.Version.SetMarkup("Version: 1.0");
         }
 
         private void SetReady(bool newReady)
@@ -253,6 +231,39 @@ namespace Content.Client.Lobby
             }
 
             _consoleHost.ExecuteCommand($"toggleready {newReady}");
+        }
+
+        private void MakeButtonReady(OhioLobbyButton button)
+        {
+            var ready = "/Textures/Ohio/Lobby/ready/ready.png";
+            var readyHighLighted = "/Textures/Ohio/Lobby/ready/ready_highlighted.png";
+            var readyPressed = "/Textures/Ohio/Lobby/ready/ready_pressed.png";
+
+            button.TexturePath = ready;
+            button.TextureHighLightedPath = readyHighLighted;
+            button.TexturePressedPath = readyPressed;
+        }
+
+        private void MakeButtonUnReady(OhioLobbyButton button)
+        {
+            var notReady = "/Textures/Ohio/Lobby/ready/not_ready.png";
+            var notReadyHighLighted = "/Textures/Ohio/Lobby/ready/not_ready_highlighted.png";
+            var notReadyPressed = "/Textures/Ohio/Lobby/ready/not_ready_pressed.png";
+
+            button.TexturePath = notReady;
+            button.TextureHighLightedPath = notReadyHighLighted;
+            button.TexturePressedPath = notReadyPressed;
+        }
+
+        private void MakeButtonJoinGame(OhioLobbyButton button)
+        {
+            var joinGame = "/Textures/Ohio/Lobby/join/join_game.png";
+            var joinGameHighLighted = "/Textures/Ohio/Lobby/join/join_game_highlighted.png";
+            var joinGamePressed = "/Textures/Ohio/Lobby/join/join_game_pressed.png";
+
+            button.TexturePath = joinGame;
+            button.TextureHighLightedPath = joinGameHighLighted;
+            button.TexturePressedPath = joinGamePressed;
         }
     }
 }

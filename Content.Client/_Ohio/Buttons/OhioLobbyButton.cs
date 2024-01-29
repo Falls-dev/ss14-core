@@ -20,15 +20,20 @@ public class OhioLobbyButton : BaseButton
     private string? _texturePressedPath;
     private string? _textureDisabledPath;
 
+    private Texture? _arrowTexture;
+    private string? _arrowTexturePath = "/Textures/Ohio/Lobby/arrow.png";
+
     public OhioLobbyButton()
     {
+        _arrowTexture = Theme.ResolveTexture(_arrowTexturePath);
+
         DrawModeChanged();
     }
 
     // Textures GET-SET Start
 
     [ViewVariables]
-    public Texture? TextureNormal
+    private Texture? TextureNormal
     {
         get => _texture;
         set
@@ -127,6 +132,28 @@ public class OhioLobbyButton : BaseButton
     // Textures Path GET-SET END
 
 
+    // Arrow Texture GET-SET START
+
+    public Texture? ArrowTexture
+    {
+        get => _arrowTexture;
+        set
+        {
+            _arrowTexture = value;
+            InvalidateMeasure();
+        }
+    }
+
+    public string ArrowTexturePath
+    {
+        set
+        {
+            _arrowTexturePath = value;
+            ArrowTexture = Theme.ResolveTexture(_arrowTexturePath);
+        }
+    }
+
+    // Arrow Texture GET-SET END
 
     public Vector2 Scale
     {
@@ -158,6 +185,21 @@ public class OhioLobbyButton : BaseButton
             return;
 
         handle.DrawTextureRectRegion(texture, PixelSizeBox);
+
+        // Draw the arrow indicator when selected
+        if (IsHovered)
+        {
+            var arrowTexture = _arrowTexture;
+
+            if (arrowTexture == null)
+            {
+                return;
+            }
+
+            var arrowPosition = new Vector2(PixelSizeBox.Right - 155, PixelSizeBox.Top + (PixelSizeBox.Height - arrowTexture.Size.Y) / 2);
+
+            handle.DrawTextureRectRegion(arrowTexture, UIBox2.FromDimensions(arrowPosition, arrowTexture.Size));
+        }
     }
 
     protected override Vector2 MeasureOverride(Vector2 availableSize)

@@ -18,27 +18,19 @@
   - node: welder
     entity: Welder
     edges:
-      - to: screwed-welder
+      - to: no-igniter
         steps:
         - tool: Screwing
           doAfter: 1
-  - node: screwed-welder
-    edges:
-      - to: no-igniter
-        steps:
-          - material: MetalRod
-            amount: 5
-            doAfter: 5
+        - material: MetalRod
+          amount: 5
+          doAfter: 5
   - node: no-igniter
     entity: WeaponFlamethrowerUnfinished
     edges:
-      - to: unscrewed
-        steps:
-          - tag: Igniter
-  - node: unscrewed
-    edges:
       - to: flamethrower
         steps:
+          - tag: Igniter
           - tool: Screwing
             doAfter: 1
   - node: flamethrower
@@ -57,40 +49,21 @@
             amount: 3
             doAfter: 3
   - node: unfinished
-    edges:
-      - to: rods
-  - node: unfinished
     entity: WeaponPoweredCrossbowUnfinished
-    edges:
-      - to: welded
-        steps:
-          - tool: Welding
-            doAfter: 5
-  - node: welded
-    edges:
-      - to: cables
-        steps:
-          - material: Cable
-            amount: 5
-            doAfter: 0.5
-  - node: cables
-    edges:
-      - to: plastic
-        steps:
-          - material: Plastic
-            amount: 3
-            doAfter: 0.5
-  - node: plastic
-    edges:
-      - to: unscrewed
-        steps:
-          - material: Cable
-            amount: 5
-            doAfter: 0.5
-  - node: unscrewed
     edges:
       - to: crossbow
         steps:
+          - tool: Welding
+            doAfter: 5
+          - material: Cable
+            amount: 5
+            doAfter: 0.5
+          - material: Plastic
+            amount: 3
+            doAfter: 0.5
+          - material: Cable
+            amount: 5
+            doAfter: 0.5
           - tool: Screwing
             doAfter: 1
   - node: crossbow
@@ -130,3 +103,23 @@
         - !type:SpawnPrototype
           prototype: Telecrystal1
         - !type:EmptyAllContainers
+
+- type: constructionGraph
+  id: ChainsawGraph
+  start: circular
+  graph:
+  - node: circular
+    entity: EnergySword
+    edges:
+      - to: chainsaw
+        steps:
+          - material: Cable
+            amount: 3
+            doAfter: 0.5
+          - material: Plasteel
+            amount: 5
+            doAfter: 3
+          - tool: Welding
+            doAfter: 5
+  - node: chainsaw
+    entity: Chainsaw

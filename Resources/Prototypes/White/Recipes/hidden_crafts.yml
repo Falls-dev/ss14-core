@@ -3,7 +3,6 @@
   start: esword
   graph:
   - node: esword
-    entity: EnergySword
     edges:
       - to: desword
         steps:
@@ -16,7 +15,6 @@
   start: welder
   graph:
   - node: welder
-    entity: Welder
     edges:
       - to: no-igniter
         steps:
@@ -41,7 +39,6 @@
   start: stock
   graph:
   - node: stock
-    entity: RifleStock
     edges:
       - to: unfinished
         steps:
@@ -109,7 +106,6 @@
   start: circular
   graph:
   - node: circular
-    entity: EnergySword
     edges:
       - to: chainsaw
         steps:
@@ -123,3 +119,28 @@
             doAfter: 5
   - node: chainsaw
     entity: Chainsaw
+
+- type: constructionGraph
+  id: SwordGraph
+  start: knife
+  graph:
+  - node: knife
+    edges:
+      - to: machete
+        steps:
+          - tool: Welding
+            doAfter: 5
+            completed:
+            - !type:AddTag
+              tag: "WeldedKnife"
+          - tag: WeldedKnife
+  - node: machete
+    entity: Machete
+    edges:
+      - to: sword
+        steps:
+          - tool: Welding
+            doAfter: 5
+          - tag: WeldedKnife
+  - node: sword
+    entity: Claymore

@@ -245,3 +245,7 @@
     qualities:
       - Sawing
     speed: 2.0
+  - type: Construction
+    deconstructionTarget: null
+    graph: ChainsawGraph
+    node: circular

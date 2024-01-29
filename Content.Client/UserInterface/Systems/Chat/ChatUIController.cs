@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using Content.Client.Administration.Managers;
@@ -20,6 +19,10 @@ using Content.Shared.Damage.ForceSay;
 using Content.Shared.Examine;
 using Content.Shared.Input;
 using Content.Shared.Radio;
+using Content.Shared._White;
+using Content.Shared._White.Utils;
+using Content.Shared._White.Cult;
+using Content.Shared._White.Cult.Systems;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
@@ -34,6 +37,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Replays;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using CultistComponent = Content.Shared._White.Cult.Components.CultistComponent;
 
 namespace Content.Client.UserInterface.Systems.Chat;
 
@@ -50,7 +54,8 @@ public sealed class ChatUIController : UIController
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IReplayRecordingManager _replayRecording = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly CultistWordGeneratorManager _wordGenerator = default!;
+    [Dependency] private readonly IEntityManager _entities = default!;
 
     [UISystemDependency] private readonly ExamineSystem? _examine = default;
     [UISystemDependency] private readonly GhostSystem? _ghost = default;
@@ -72,6 +77,7 @@ public sealed class ChatUIController : UIController
         {SharedChatSystem.RadioCommonPrefix, ChatSelectChannel.Radio},
         {SharedChatSystem.DeadPrefix, ChatSelectChannel.Dead},
         {SharedChatSystem.ChangelingPrefix, ChatSelectChannel.Changeling}
+        {SharedChatSystem.CultPrefix, ChatSelectChannel.Cult}, //WD EDIT
     };
 
     public static readonly Dictionary<ChatSelectChannel, char> ChannelPrefixes = new()
@@ -86,6 +92,8 @@ public sealed class ChatUIController : UIController
         {ChatSelectChannel.Radio, SharedChatSystem.RadioCommonPrefix},
         {ChatSelectChannel.Dead, SharedChatSystem.DeadPrefix},
         {ChatSelectChannel.Changeling, SharedChatSystem.ChangelingPrefix}
+        {ChatSelectChannel.Cult, SharedChatSystem.CultPrefix} // WD EDIT
+
     };
 
     /// <summary>
@@ -201,6 +209,9 @@ public sealed class ChatUIController : UIController
         _input.SetInputCommand(ContentKeyFunctions.FocusChangelingChat,
             InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Changeling)));
 
+        _input.SetInputCommand(ContentKeyFunctions.FocusCultChat,
+            InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Cult)));
+
         _input.SetInputCommand(ContentKeyFunctions.FocusRadio,
             InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Radio)));
 
@@ -217,6 +228,9 @@ public sealed class ChatUIController : UIController
             InputCmdHandler.FromDelegate(_ => CycleChatChannel(false)));
 
         SubscribeLocalEvent<ChangelingUserStart>(OnUpdateChangelingChat);
+        // WD EDIT
+        SubscribeLocalEvent<EventCultistComponentState>(OnUpdateCultState);
+        // WD EDIT END
 
         var gameplayStateLoad = UIManager.GetUIController<GameplayStateLoadController>();
         gameplayStateLoad.OnScreenLoad += OnScreenLoad;
@@ -227,6 +241,13 @@ public sealed class ChatUIController : UIController
     {
         UpdateChannelPermissions();
     }
+    
+    // WD EDIT
+    private void OnUpdateCultState(EventCultistComponentState ev)
+    {
+        UpdateChannelPermissions();
+    }
+    // WD EDIT END
 
     public void OnScreenLoad()
     {
@@ -249,19 +270,37 @@ public sealed class ChatUIController : UIController
         }
 
         ChatBox chatBox;
-        string? chatSizeRaw;
+        //White modification start
+        string chatSizeRaw;
+        Vector2 chatSize;
+        //End
 
         switch (UIManager.ActiveScreen)
         {
             case DefaultGameScreen defaultScreen:
                 chatBox = defaultScreen.ChatBox;
-                chatSizeRaw = _config.GetCVar(CCVars.DefaultScreenChatSize);
-                SetChatSizing(chatSizeRaw, defaultScreen, setting);
+                //White modification start
+                chatSizeRaw = _config.GetCVar(WhiteCVars.DefaultChatSize);
+
+                chatSize = Vector2Utils.ParseVector2FromString(chatSizeRaw, ';');
+
+                //БЛЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯТЬ
+                if (chatSize.X <= 0 || chatSize.Y <= 0 || chatSize.X > 1000 || chatSize.Y > 1000)
+                {
+                    chatSize = Vector2Utils.ParseVector2FromString(WhiteCVars.DefaultChatSize.DefaultValue, ';');
+                    _config.SetCVar(WhiteCVars.DefaultChatSize, WhiteCVars.DefaultChatSize.DefaultValue);
+                }
+
+                //End
+                SetChatSizing(chatSize, defaultScreen, setting);
                 break;
             case SeparatedChatGameScreen separatedScreen:
                 chatBox = separatedScreen.ChatBox;
-                chatSizeRaw = _config.GetCVar(CCVars.SeparatedScreenChatSize);
-                SetChatSizing(chatSizeRaw, separatedScreen, setting);
+                //White modification start
+                chatSizeRaw = _config.GetCVar(WhiteCVars.SeparatedChatSize);
+                chatSize = Vector2Utils.ParseVector2FromString(chatSizeRaw, ';');
+                //End
+                SetChatSizing(chatSize, separatedScreen, setting);
                 break;
             default:
                 // this could be better?
@@ -275,7 +314,7 @@ public sealed class ChatUIController : UIController
         chatBox.Main = setting;
     }
 
-    private void SetChatSizing(string sizing, InGameScreen screen, bool setting)
+    private void SetChatSizing(Vector2 sizing, InGameScreen screen, bool setting)
     {
         if (!setting)
         {
@@ -285,19 +324,9 @@ public sealed class ChatUIController : UIController
 
         screen.OnChatResized += StoreChatSize;
 
-        if (string.IsNullOrEmpty(sizing))
-        {
-            return;
-        }
-
-        var split = sizing.Split(",");
-
-        var chatSize = new Vector2(
-            float.Parse(split[0], CultureInfo.InvariantCulture),
-            float.Parse(split[1], CultureInfo.InvariantCulture));
-
-
-        screen.SetChatSize(chatSize);
+        //White modification start
+        screen.SetChatSize(sizing);
+        //End
     }
 
     private void StoreChatSize(Vector2 size)
@@ -307,15 +336,17 @@ public sealed class ChatUIController : UIController
             throw new Exception("Cannot get active screen!");
         }
 
-        var stringSize =
-            $"{size.X.ToString(CultureInfo.InvariantCulture)},{size.Y.ToString(CultureInfo.InvariantCulture)}";
         switch (UIManager.ActiveScreen)
         {
             case DefaultGameScreen _:
-                _config.SetCVar(CCVars.DefaultScreenChatSize, stringSize);
+                //White modification start
+                _config.SetCVar(WhiteCVars.DefaultChatSize, size.ConvertToString(';'));
+                //End
                 break;
             case SeparatedChatGameScreen _:
-                _config.SetCVar(CCVars.SeparatedScreenChatSize, stringSize);
+                //White modification start
+                _config.SetCVar(WhiteCVars.SeparatedChatSize, size.ConvertToString(';'));
+                //End
                 break;
             default:
                 // do nothing
@@ -394,6 +425,7 @@ public sealed class ChatUIController : UIController
             return;
         }
 
+        msg.Message = FormattedMessage.RemoveMarkup(msg.Message);
         EnqueueSpeechBubble(ent, msg, speechType);
     }
 
@@ -514,13 +546,14 @@ public sealed class ChatUIController : UIController
             CanSendChannels |= ChatSelectChannel.Admin;
         }
 
+        // WD EDIT
         var localEnt = _player.LocalPlayer != null ? _player.LocalPlayer.ControlledEntity : null;
-        if (_entityManager.HasComponent<ChangelingComponent>(localEnt))
+        if (_entities.TryGetComponent(localEnt, out CultistComponent? comp))
         {
-            FilterableChannels |= ChatChannel.Changeling;
-            CanSendChannels |= ChatSelectChannel.Changeling;
+            FilterableChannels |= ChatChannel.Cult;
+            CanSendChannels |= ChatSelectChannel.Cult;
         }
-
+        // WD EDIT END
 
         SelectableChannels = CanSendChannels;
 
@@ -810,6 +843,13 @@ public sealed class ChatUIController : UIController
             case ChatChannel.Whisper:
                 AddSpeechBubble(msg, SpeechBubble.SpeechType.Whisper);
                 break;
+
+            // WD EDIT
+            case ChatChannel.Cult:
+                msg.Message = _wordGenerator.GenerateText(msg.Message);
+                AddSpeechBubble(msg, SpeechBubble.SpeechType.Whisper);
+                break;
+            // WD EDIT END
 
             case ChatChannel.Dead:
                 if (_ghost is not {IsGhost: true})

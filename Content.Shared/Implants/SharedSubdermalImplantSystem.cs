@@ -125,7 +125,8 @@ public abstract class SharedSubdermalImplantSystem : EntitySystem
         var implantContainer = implantedComp.ImplantContainer;
 
         component.ImplantedEntity = target;
-        _container.Insert(implant, implantContainer, force: containerForce);
+        RaiseLocalEvent(new SubdermalImplantInserted(target, component));
+        _container.Insert(implant, implantContainer);
     }
 
     /// <summary>

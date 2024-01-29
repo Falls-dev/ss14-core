@@ -81,8 +81,8 @@ namespace Content.Client.Chat.Managers
                     break;
 
                 case ChatSelectChannel.Changeling:
-                    var localEnt = _player.LocalPlayer != null ? _player.LocalPlayer.ControlledEntity : null;
-                    if (_entityManager.HasComponent<ChangelingComponent>(localEnt))
+                    var localEntity = _player.LocalPlayer != null ? _player.LocalPlayer.ControlledEntity : null;
+                    if (_entityManager.HasComponent<ChangelingComponent>(localEntity))
                         _consoleHost.ExecuteCommand($"gsay \"{CommandParsing.Escape(str)}\"");
                     break;
 

@@ -23,7 +23,7 @@ public sealed partial class ChannelFilterPopup : Popup
         ChatChannel.AdminAlert,
         ChatChannel.AdminChat,
         ChatChannel.Server,
-        ChatChannel.Changeling
+        ChatChannel.Changeling,
         ChatChannel.Cult // WD EDIT
     };
 

@@ -110,7 +110,7 @@ public abstract class SharedTentacleGun : EntitySystem
 
             var force = physicsComponent.Mass * 2.5f / 2;
 
-            _throwingSystem.TryThrow(activeItem, Transform(args.Shooter).Coordinates, force);
+            _throwingSystem.TryThrow(activeItem, Transform(args.Shooter!.Value).Coordinates, force);
             break;
         }
     }
@@ -122,7 +122,7 @@ public abstract class SharedTentacleGun : EntitySystem
         if (!_stunSystem.TryParalyze(args.Embedded, stunTime, true))
             return false;
 
-        _throwingSystem.TryThrow(args.Embedded, Transform(args.Shooter).Coordinates, 5f);
+        _throwingSystem.TryThrow(args.Embedded, Transform(args.Shooter!.Value).Coordinates, 5f);
 
         return true;
     }

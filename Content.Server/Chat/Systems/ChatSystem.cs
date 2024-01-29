@@ -360,6 +360,7 @@ public sealed partial class ChatSystem : SharedChatSystem
                 break;
             case InGameOOCChatType.Changeling:
                 SendChangelingChat(source, player, message, hideChat);
+                break;
             case InGameOOCChatType.Cult:
                 SendCultChat(source, player, message, hideChat);
                 break;
@@ -797,6 +798,9 @@ public sealed partial class ChatSystem : SharedChatSystem
         return Filter.Empty()
             .AddWhereAttachedEntity(HasComp<GhostComponent>)
             .AddWhereAttachedEntity(HasComp<ChangelingComponent>)
+            .Recipients
+            .Select(p => p.Channel);
+    }
 
     // WD EDIT
     private void SendCultChat(EntityUid source, ICommonSession player, string message, bool hideChat)

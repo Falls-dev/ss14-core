@@ -555,7 +555,7 @@ public sealed partial class ChangelingSystem
 
         absorbedComponent.AbsorberMind = mindId;
 
-        EnsureComp<UncloneableComponent>(args.Target.Value);
+        //EnsureComp<UncloneableComponent>(args.Target.Value);
 
         StartUseDelayById(uid, ChangelingAbsorb);
 

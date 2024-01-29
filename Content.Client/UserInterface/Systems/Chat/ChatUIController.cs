@@ -76,7 +76,7 @@ public sealed class ChatUIController : UIController
         {SharedChatSystem.AdminPrefix, ChatSelectChannel.Admin},
         {SharedChatSystem.RadioCommonPrefix, ChatSelectChannel.Radio},
         {SharedChatSystem.DeadPrefix, ChatSelectChannel.Dead},
-        {SharedChatSystem.ChangelingPrefix, ChatSelectChannel.Changeling}
+        {SharedChatSystem.ChangelingPrefix, ChatSelectChannel.Changeling},
         {SharedChatSystem.CultPrefix, ChatSelectChannel.Cult}, //WD EDIT
     };
 
@@ -91,7 +91,7 @@ public sealed class ChatUIController : UIController
         {ChatSelectChannel.Admin, SharedChatSystem.AdminPrefix},
         {ChatSelectChannel.Radio, SharedChatSystem.RadioCommonPrefix},
         {ChatSelectChannel.Dead, SharedChatSystem.DeadPrefix},
-        {ChatSelectChannel.Changeling, SharedChatSystem.ChangelingPrefix}
+        {ChatSelectChannel.Changeling, SharedChatSystem.ChangelingPrefix},
         {ChatSelectChannel.Cult, SharedChatSystem.CultPrefix} // WD EDIT
 
     };
@@ -241,7 +241,7 @@ public sealed class ChatUIController : UIController
     {
         UpdateChannelPermissions();
     }
-    
+
     // WD EDIT
     private void OnUpdateCultState(EventCultistComponentState ev)
     {

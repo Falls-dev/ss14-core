@@ -16,7 +16,7 @@
   - UplinkSales
   currencyWhitelist:
   - Telecrystal
-    sales:
+  sales:
     enabled: true
     minMultiplier: 0.01
     maxMultiplier: 0.99

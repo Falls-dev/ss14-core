@@ -29,12 +29,14 @@ namespace Content.Client.Lobby.UI
                     Center.Visible = true;
                     RightSide.Visible = true;
                     Version.Visible = true;
+                    LabelName.Visible = true;
                     break;
                 case LobbyGuiState.CharacterSetup:
                     CharacterSetupState.Visible = true;
                     Center.Visible = false;
                     RightSide.Visible = false;
                     Version.Visible = false;
+                    LabelName.Visible = false;
                     break;
             }
         }

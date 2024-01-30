@@ -50,43 +50,45 @@
                     <!-- Vertical Padding -->
                     <Control VerticalExpand="True"/>
 
+                    <ui:OhioRichTextLabel Name="LabelName" Access="Public" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 0 0 350"/>
+
                     <!-- Ohio Container -->
-                    <PanelContainer HorizontalAlignment="Center" Name="Center" VerticalAlignment="Center">
+                    <PanelContainer HorizontalAlignment="Left" Name="Center" VerticalAlignment="Center">
 
-                        <BoxContainer Name="OhioContainer" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <BoxContainer Name="OhioContainer" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40 0 0 150">
 
-                            <buttons:OhioLobbyButton
+                            <buttons:OhioLobbyTextButton
                                 Name="ReadyButton"
                                 Access="Public"
                                 ToggleMode="True"
-                                TexturePath="/Textures/Ohio/Lobby/ready/not_ready.png"
-                                TextureHighLightedPath="/Textures/Ohio/Lobby/ready/not_ready_highlighted.png"
-                                TexturePressedPath="/Textures/Ohio/Lobby/ready/not_ready_pressed.png"
-                                />
+                                ButtonText="Ready"
+                                Margin="0 0 0 10"
+                                Fraction="3"
+                            />
 
-                            <buttons:OhioUICommandButton
-                                Command="observe"
-                                Name="ObserveButton" Access="Public"
-                                WindowType="{x:Type lobbyUi:ObserveWarningWindow}"
-                                TexturePath="/Textures/Ohio/Lobby/observe/observe.png"
-                                TextureHighLightedPath="/Textures/Ohio/Lobby/observe/observe_highlighted.png"
-                                TexturePressedPath="/Textures/Ohio/Lobby/observe/observe_pressed.png"
-                                TextureDisabledPath="/Textures/Ohio/Lobby/observe/observe_disabled.png" />
+                            <buttons:OhioLobbyTextButton
+                                Name="ObserveButton"
+                                Access="Public"
+                                ButtonText="Observe"
+                                Margin="0 10 0 10"
+                                Fraction="3.1"
+                            />
 
-                            <buttons:OhioLobbyButton
+                            <buttons:OhioLobbyTextButton
                                 Name="CharacterSetupButton"
                                 Access="Public"
-                                TexturePath="/Textures/Ohio/Lobby/character_setup/character_setup.png"
-                                TextureHighLightedPath="/Textures/Ohio/Lobby/character_setup/character_setup_highlighted.png"
-                                TexturePressedPath="/Textures/Ohio/Lobby/character_setup/character_setup_pressed.png"
-                              />
+                                ButtonText="Character Setup"
+                                Margin="0 10 0 10"
+                                Fraction="1.5"
+                            />
 
-                            <buttons:OhioLobbyButton
+                            <buttons:OhioLobbyTextButton
                                 Name="OptionsButton"
                                 Access="Public"
-                                TexturePath="/Textures/Ohio/Lobby/settings/settings.png"
-                                TextureHighLightedPath="/Textures/Ohio/Lobby/settings/settings_highlighted.png"
-                                TexturePressedPath="/Textures/Ohio/Lobby/settings/settings_pressed.png"/>
+                                ButtonText="Options"
+                                Margin="0 10 0 0"
+                                Fraction="3.1"
+                            />
 
                         </BoxContainer>
 

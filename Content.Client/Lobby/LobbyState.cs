@@ -220,6 +220,7 @@ namespace Content.Client.Lobby
                 _lobby!.ServerInfo.SetInfoBlob(_gameTicker.ServerInfoBlob);
             }
 
+            _lobby!.LabelName.SetMarkup("[font=\"Bedstead\" size=20] Green Miracle [/font]");
             _lobby!.Version.SetMarkup("Version: 1.0");
         }
 
@@ -233,37 +234,22 @@ namespace Content.Client.Lobby
             _consoleHost.ExecuteCommand($"toggleready {newReady}");
         }
 
-        private void MakeButtonReady(OhioLobbyButton button)
+        private void MakeButtonReady(OhioLobbyTextButton button)
         {
-            var ready = "/Textures/Ohio/Lobby/ready/ready.png";
-            var readyHighLighted = "/Textures/Ohio/Lobby/ready/ready_highlighted.png";
-            var readyPressed = "/Textures/Ohio/Lobby/ready/ready_pressed.png";
-
-            button.TexturePath = ready;
-            button.TextureHighLightedPath = readyHighLighted;
-            button.TexturePressedPath = readyPressed;
+            button.ButtonText = "Ready";
+            button.Fraction = 3f;
         }
 
-        private void MakeButtonUnReady(OhioLobbyButton button)
+        private void MakeButtonUnReady(OhioLobbyTextButton button)
         {
-            var notReady = "/Textures/Ohio/Lobby/ready/not_ready.png";
-            var notReadyHighLighted = "/Textures/Ohio/Lobby/ready/not_ready_highlighted.png";
-            var notReadyPressed = "/Textures/Ohio/Lobby/ready/not_ready_pressed.png";
-
-            button.TexturePath = notReady;
-            button.TextureHighLightedPath = notReadyHighLighted;
-            button.TexturePressedPath = notReadyPressed;
+            button.ButtonText = "UnReady";
+            button.Fraction = 2.9f;
         }
 
-        private void MakeButtonJoinGame(OhioLobbyButton button)
+        private void MakeButtonJoinGame(OhioLobbyTextButton button)
         {
-            var joinGame = "/Textures/Ohio/Lobby/join/join_game.png";
-            var joinGameHighLighted = "/Textures/Ohio/Lobby/join/join_game_highlighted.png";
-            var joinGamePressed = "/Textures/Ohio/Lobby/join/join_game_pressed.png";
-
-            button.TexturePath = joinGame;
-            button.TextureHighLightedPath = joinGameHighLighted;
-            button.TexturePressedPath = joinGamePressed;
+            button.ButtonText = "Join Game";
+            button.Fraction = 2.6f;
         }
     }
 }

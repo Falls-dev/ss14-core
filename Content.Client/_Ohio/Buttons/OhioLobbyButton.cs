@@ -196,7 +196,7 @@ public class OhioLobbyButton : BaseButton
                 return;
             }
 
-            var arrowPosition = new Vector2(PixelSizeBox.Right - 155, PixelSizeBox.Top + (PixelSizeBox.Height - arrowTexture.Size.Y) / 2);
+            var arrowPosition = new Vector2(SizeBox.Right - 150, SizeBox.Top + (SizeBox.Height - arrowTexture.Size.Y) / 2);
 
             handle.DrawTextureRectRegion(arrowTexture, UIBox2.FromDimensions(arrowPosition, arrowTexture.Size));
         }

@@ -63,15 +63,14 @@
                                 ToggleMode="True"
                                 ButtonText="Ready"
                                 Margin="0 0 0 10"
-                                Fraction="3"
                             />
 
-                            <buttons:OhioLobbyTextButton
+                            <buttons:OhioUICommandButton
                                 Name="ObserveButton"
+                                WindowType="{x:Type lobbyUi:ObserveWarningWindow}"
                                 Access="Public"
                                 ButtonText="Observe"
                                 Margin="0 10 0 10"
-                                Fraction="3.1"
                             />
 
                             <buttons:OhioLobbyTextButton
@@ -79,7 +78,6 @@
                                 Access="Public"
                                 ButtonText="Character Setup"
                                 Margin="0 10 0 10"
-                                Fraction="1.5"
                             />
 
                             <buttons:OhioLobbyTextButton
@@ -87,7 +85,6 @@
                                 Access="Public"
                                 ButtonText="Options"
                                 Margin="0 10 0 0"
-                                Fraction="3.1"
                             />
 
                         </BoxContainer>

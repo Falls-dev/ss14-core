@@ -237,19 +237,16 @@ namespace Content.Client.Lobby
         private void MakeButtonReady(OhioLobbyTextButton button)
         {
             button.ButtonText = "Ready";
-            button.Fraction = 3f;
         }
 
         private void MakeButtonUnReady(OhioLobbyTextButton button)
         {
-            button.ButtonText = "UnReady";
-            button.Fraction = 2.9f;
+            button.ButtonText = "Not Ready";
         }
 
         private void MakeButtonJoinGame(OhioLobbyTextButton button)
         {
             button.ButtonText = "Join Game";
-            button.Fraction = 2.6f;
         }
     }
 }

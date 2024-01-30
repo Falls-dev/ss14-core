@@ -3,7 +3,7 @@ using Robust.Client.Console;
 namespace Content.Client._Ohio.Buttons;
 
 [Virtual]
-public class OhioCommandButton : OhioLobbyButton
+public class OhioCommandButton : OhioLobbyTextButton
 {
     public string? Command { get; set; }
 

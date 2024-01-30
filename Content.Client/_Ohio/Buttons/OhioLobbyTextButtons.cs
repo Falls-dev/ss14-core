@@ -8,7 +8,8 @@ using Color = Robust.Shared.Maths.Color;
 
 namespace Content.Client._Ohio.Buttons;
 
-public sealed class OhioLobbyTextButton : TextureButton
+[Virtual]
+public class OhioLobbyTextButton : TextureButton // ShitCode Edition
 {
     [Dependency] private readonly IResourceCache _resourceCache = default!;
 
@@ -21,22 +22,11 @@ public sealed class OhioLobbyTextButton : TextureButton
         set => _buttonText = value;
     }
 
-    private float _fraction;
-
-    public float Fraction
-    {
-        set => _fraction = value;
-    }
-
-    private Texture? _arrowTexture;
-    private string? _arrowTexturePath = "/Textures/Ohio/Lobby/arrow.png";
-
     public OhioLobbyTextButton()
     {
         IoCManager.InjectDependencies(this);
 
-        _font = new VectorFont(_resourceCache.GetResource<FontResource>("/Fonts/Bedstead/Bedstead.otf"), 10);
-        _arrowTexture = Theme.ResolveTexture(_arrowTexturePath);
+        _font = new VectorFont(_resourceCache.GetResource<FontResource>("/Fonts/Bedstead/Bedstead.otf"), 15);
     }
 
     private void RebuildTexture()
@@ -44,7 +34,7 @@ public sealed class OhioLobbyTextButton : TextureButton
         if (_buttonText == null)
             return;
 
-        var fontMeasure = MeasureText(_font, _buttonText) * UIScale;
+        var fontMeasure = MeasureText(_font, _buttonText);
 
         var blank = new Image<Rgba32>((int)fontMeasure.X, (int)fontMeasure.Y);
         blank[0, 0] = new Rgba32(0, 0, 0, 0);
@@ -79,7 +69,14 @@ public sealed class OhioLobbyTextButton : TextureButton
         if (string.IsNullOrEmpty(_buttonText))
             return;
 
-        DrawText(handle, Color.White);
+        var color = Color.White;
+
+        if (ToggleMode)
+        {
+            color = Color.Red;
+        }
+
+        DrawText(handle, color);
     }
 
     private void DrawHover(DrawingHandleScreen handle)
@@ -117,21 +114,6 @@ public sealed class OhioLobbyTextButton : TextureButton
 
         RebuildTexture();
 
-        if (IsHovered && !Disabled)
-        {
-            var arrowTexture = _arrowTexture;
-
-            if (arrowTexture == null)
-            {
-                return;
-            }
-
-            var arrowPosition = new Vector2(SizeBox.Right - 160, SizeBox.Top + (SizeBox.Height - arrowTexture.Size.Y) / 2);
-
-            handle.DrawTextureRectRegion(arrowTexture, UIBox2.FromDimensions(arrowPosition, arrowTexture.Size));
-
-        }
-
         handle.DrawString(
             _font,
             Vector2.Zero,
@@ -143,9 +125,8 @@ public sealed class OhioLobbyTextButton : TextureButton
     private Vector2 MeasureText(Font font, string text)
     {
         var textSize = font.GetHeight(0.9f);
-        var width = textSize * text.Length / _fraction;
-        var height = textSize;
+        var width = textSize * text.Length / 1.5f;
 
-        return new Vector2(width, height);
+        return new Vector2(width, textSize);
     }
 }

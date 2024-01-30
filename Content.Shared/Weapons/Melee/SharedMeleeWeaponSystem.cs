@@ -21,7 +21,7 @@ using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
-using Content.Shared.White.MagGloves;
+using Content.Shared._White.MagGloves;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -828,13 +828,18 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         var target = GetEntity(ev.Target);
 
         if (Deleted(target) ||
-            user == target || HasComp<KeepItemsOnFallComponent>(target)) // Can't disarm entity who keep items on fall
+            user == target)
         {
             return false;
         }
 
         // Play a sound to give instant feedback; same with playing the animations
         Audio.PlayPredicted(component.SwingSound, meleeUid, user);
+
+        if (HasComp<PreventDisarmComponent>(target)) // Can't disarm entity with prevent disarm component
+        {
+            return false;
+        }
         return true;
     }
 

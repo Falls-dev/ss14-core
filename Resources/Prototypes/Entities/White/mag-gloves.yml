@@ -5,33 +5,73 @@
   description: A pair of gloves with magnetic palms. Slip proof.
   components:
     - type: Sprite
-      sprite: Clothing/Hands/Gloves/spaceninja.rsi
+      sprite: White/MagGloves/maggloves.rsi
       layers:
         - state: icon
 #          map: [ "enum.ToggleVisuals.Layer" ]
     - type: Clothing
-      sprite: Clothing/Hands/Gloves/spaceninja.rsi
+      sprite: White/MagGloves/maggloves.rsi
     - type: Appearance
-#    - type: GenericVisualizer
-#      visuals:
-#        enum.ToggleVisuals.Toggled:
-#          enum.ToggleVisuals.Layer:
-#            True: {state: icon-green}
-#            False: {state: icon}
+    - type: GenericVisualizer
+      visuals:
+        enum.ToggleVisuals.Toggled:
+          enum.ToggleVisuals.Layer:
+            True: {state: icon-on}
+            False: {state: icon}
     - type: GloveHeatResistance
       heatResistance: 1400
     - type: Fiber
       fiberMaterial: fibers-nanomachines
     - type: FingerprintMask
     - type: MagneticGloves
+    - type: Battery
+      maxCharge: 1000
+      startingCharge: 1000
 
 - type: entity
-  id: ActionToggleMagneticGloves
-  parent: ActionBaseToggleMagboots
+  id: ClothingHandsGlovesMagneticAdvanced
+  parent: ClothingHandsGlovesMagnetic
+  name: advanced magnetic gloves
+  description: A pair of gloves with magnetic palms. Slip proof.
+  components:
+    - type: Sprite
+      sprite: White/MagGloves/magglovesadvanced.rsi
+      layers:
+        - state: icon
+    - type: Clothing
+      sprite: White/MagGloves/magglovesadvanced.rsi
+    - type: MagneticGlovesAdvanced
+    - type: MagneticGloves
+      action: ActionToggleMagneticGlovesAdvanced
+
+- type: entity
+  id: ActionToggleMagneticGlovesBase
+  name: Toggle Magnetic Gloves
+  description: Toggles Magnetic Gloves on and off
   noSpawn: true
   components:
     - type: InstantAction
       itemIconStyle: NoItem
       event: !type:ToggleMagneticGlovesEvent
-      icon: { sprite: Clothing/Shoes/Boots/magboots.rsi, state: icon }
-      iconOn: { sprite : Clothing/Shoes/Boots/magboots.rsi, state: icon-on }
+
+- type: entity
+  id: ActionToggleMagneticGloves
+  parent: ActionToggleMagneticGlovesBase
+  name: Toggle Magnetic Gloves
+  description: Prevents owner from losing items from hands on fall.
+  noSpawn: true
+  components:
+    - type: InstantAction
+      icon: { sprite: White/MagGloves/maggloves.rsi, state: icon }
+      iconOn: { sprite: White/MagGloves/maggloves.rsi, state: icon-on }
+
+- type: entity
+  id: ActionToggleMagneticGlovesAdvanced
+  parent: ActionToggleMagneticGlovesBase
+  name: Toggle Magnetic Gloves
+  description: Prevents owner from losing items from hands on fall, being disarmed or robbed.
+  noSpawn: true
+  components:
+    - type: InstantAction
+      icon: { sprite: White/MagGloves/magglovesadvanced.rsi, state: icon }
+      iconOn: { sprite: White/MagGloves/magglovesadvanced.rsi, state: icon-on }

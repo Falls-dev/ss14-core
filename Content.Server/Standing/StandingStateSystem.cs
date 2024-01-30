@@ -3,7 +3,7 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Standing;
 using Content.Shared.Throwing;
-using Content.Shared.White.MagGloves;
+using Content.Shared._White.MagGloves;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Random;
 

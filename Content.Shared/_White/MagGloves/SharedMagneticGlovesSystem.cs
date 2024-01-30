@@ -1,9 +1,11 @@
 using Content.Shared.Actions;
-using Content.Shared.Clothing;
+using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.Inventory;
+using Content.Shared.Item;
+using Content.Shared.Toggleable;
 using Robust.Shared.Containers;
 
-namespace Content.Shared.White.MagGloves;
+namespace Content.Shared._White.MagGloves;
 
 /// <summary>
 /// This handles...
@@ -14,6 +16,9 @@ public sealed class SharedMagneticGlovesSystem : EntitySystem
     [Dependency] private readonly SharedActionsSystem _sharedActions = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedContainerSystem _sharedContainer = default!;
+    [Dependency] private readonly SharedItemSystem _item = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly ClothingSystem _clothing = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<MagneticGlovesComponent, GetItemActionsEvent>(OnGetActions);
@@ -26,6 +31,7 @@ public sealed class SharedMagneticGlovesSystem : EntitySystem
         {
             args.AddAction(ref component.ToggleActionEntity, component.ToggleAction);
         }
+
     }
 
     public void OnToggleGloves(EntityUid uid, MagneticGlovesComponent component, ToggleMagneticGlovesEvent args)
@@ -49,13 +55,31 @@ public sealed class SharedMagneticGlovesSystem : EntitySystem
             if (component.Enabled)
             {
                 EnsureComp<KeepItemsOnFallComponent>(container.Owner);
-                component.Debugger = "Enabled";
+                if (TryComp<MagneticGlovesAdvancedComponent>(uid, out var adv))
+                {
+                    EnsureComp<PreventDisarmComponent>(container.Owner);
+                    EnsureComp<PreventStrippingFromHandsAndGlovesComponent>(container.Owner);
+                    component.Debugger = "Enabled";
+                }
             }
             else
             {
                 RemComp<KeepItemsOnFallComponent>(container.Owner);
-                component.Debugger = "Disabled";
+                if (TryComp<MagneticGlovesAdvancedComponent>(uid, out var adv))
+                {
+                    RemComp<PreventDisarmComponent>(container.Owner);
+                    RemComp<PreventStrippingFromHandsAndGlovesComponent>(container.Owner);
+                    component.Debugger = "Disabled";
+                }
             }
+        }
+
+        if (TryComp<AppearanceComponent>(uid, out var appearance) &&
+            TryComp<ItemComponent>(uid, out var item))
+        {
+            _item.SetHeldPrefix(uid, component.Enabled ? "on" : "off", false, item);
+            _appearance.SetData(uid, ToggleVisuals.Toggled, component.Enabled, appearance);
+            _clothing.SetEquippedPrefix(uid, component.Enabled ? "on" : null);
         }
     }
 }

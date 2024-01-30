@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.White.MagGloves;
+namespace Content.Shared._White.MagGloves;
 
 /// <summary>
 /// This is used for...
@@ -14,8 +14,11 @@ public sealed partial class MagneticGlovesComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? ToggleActionEntity;
 
-    [DataField]
+    [DataField("action")]
     public EntProtoId ToggleAction = "ActionToggleMagneticGloves";
+
+    [DataField("wattage"), ViewVariables(VVAccess.ReadWrite)]
+    public float Wattage = 16.5f;
 
     [DataField]
     public string Debugger = "";

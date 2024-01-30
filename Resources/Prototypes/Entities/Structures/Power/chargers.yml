@@ -108,6 +108,7 @@
           - HitscanBatteryAmmoProvider
           - ProjectileBatteryAmmoProvider
           - Stunbaton
+          - MagneticGloves
 
 - type: entity
   parent: BaseItemRecharger

@@ -124,7 +124,7 @@ namespace Content.Client.Stylesheets
 
             var vScrollBarGrabberNormal = new StyleBoxFlat
             {
-                BackgroundColor = Color.DarkKhaki.WithAlpha(0.35f), ContentMarginLeftOverride = DefaultGrabberSize,
+                BackgroundColor = Color.Gray.WithAlpha(0.35f), ContentMarginLeftOverride = DefaultGrabberSize,
                 ContentMarginTopOverride = DefaultGrabberSize
             };
             var vScrollBarGrabberHover = new StyleBoxFlat
@@ -140,7 +140,7 @@ namespace Content.Client.Stylesheets
 
             var hScrollBarGrabberNormal = new StyleBoxFlat
             {
-                BackgroundColor = Color.DarkKhaki.WithAlpha(0.35f), ContentMarginTopOverride = DefaultGrabberSize
+                BackgroundColor = Color.Gray.WithAlpha(0.35f), ContentMarginTopOverride = DefaultGrabberSize
             };
             var hScrollBarGrabberHover = new StyleBoxFlat
             {
@@ -177,7 +177,7 @@ namespace Content.Client.Stylesheets
                     new[]
                     {
                         new StyleProperty(TextureButton.StylePropertyTexture, textureCloseButton),
-                        new StyleProperty(Control.StylePropertyModulateSelf, Color.FromHex("#4B596A")),
+                        new StyleProperty(Control.StylePropertyModulateSelf, Color.FromHex("#1e1e1e")),
                     }),
                 // Window close button hover.
                 new StyleRule(
@@ -185,7 +185,7 @@ namespace Content.Client.Stylesheets
                         new[] {TextureButton.StylePseudoClassHover}),
                     new[]
                     {
-                        new StyleProperty(Control.StylePropertyModulateSelf, Color.FromHex("#7F3636")),
+                        new StyleProperty(Control.StylePropertyModulateSelf, Color.FromHex("#960000")),
                     }),
                 // Window close button pressed.
                 new StyleRule(
@@ -193,7 +193,7 @@ namespace Content.Client.Stylesheets
                         new[] {TextureButton.StylePseudoClassPressed}),
                     new[]
                     {
-                        new StyleProperty(Control.StylePropertyModulateSelf, Color.FromHex("#753131")),
+                        new StyleProperty(Control.StylePropertyModulateSelf, Color.FromHex("#141414")),
                     }),
 
                 // Scroll bars

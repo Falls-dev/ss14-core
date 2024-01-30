@@ -29,7 +29,7 @@ namespace Content.Client.Stylesheets
                 // Ew, but ok
                 new[]
                 {
-                    $"/Fonts/IBMPlexSans/IBMPlexSans-{variation}.ttf",
+                    $"/Fonts/IBMPlexMono/IBMPlexMono-Regular.ttf",
                     $"/Fonts/NotoSans/NotoSansSymbols-{sv}.ttf",
                     "/Fonts/NotoSans/NotoSansSymbols2-Regular.ttf",
                 },

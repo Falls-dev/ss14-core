@@ -152,7 +152,6 @@ namespace Content.Client.Lobby
                 return;
             }
 
-            _lobby!.StationTime.Text =  Loc.GetString("lobby-state-player-status-round-not-started");
             string text;
 
             if (_gameTicker.Paused)

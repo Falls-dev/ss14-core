@@ -26,11 +26,20 @@ namespace Content.Client.Stylesheets
 
         public StyleSpace(IResourceCache resCache) : base(resCache)
         {
+            var whiteRabbit = resCache.GetFont
+            (
+                new []
+                {
+                    "/Fonts/IBMPlexMono/IBMPlexMono-Regular.ttf"
+                },
+                10
+            );
+
             var notoSans10 = resCache.GetFont
             (
                 new []
                 {
-                    "/Fonts/NotoSans/NotoSans-Regular.ttf",
+                    "/Fonts/IBMPlexMono/IBMPlexMono-Regular.ttf",
                     "/Fonts/NotoSans/NotoSansSymbols-Regular.ttf",
                     "/Fonts/NotoSans/NotoSansSymbols2-Regular.ttf"
                 },
@@ -40,7 +49,7 @@ namespace Content.Client.Stylesheets
             (
                 new []
                 {
-                    "/Fonts/NotoSans/NotoSans-Bold.ttf",
+                    "/Fonts/IBMPlexMono/IBMPlexMono-Bold.ttf",
                     "/Fonts/NotoSans/NotoSansSymbols-Regular.ttf",
                     "/Fonts/NotoSans/NotoSansSymbols2-Regular.ttf"
                 },
@@ -72,11 +81,11 @@ namespace Content.Client.Stylesheets
             Stylesheet = new Stylesheet(BaseRules.Concat(new StyleRule[]
             {
                 Element<Label>().Class(StyleClassLabelHeading)
-                    .Prop(Label.StylePropertyFont, notoSansBold16)
+                    .Prop(Label.StylePropertyFont, whiteRabbit)
                     .Prop(Label.StylePropertyFontColor, SpaceRed),
 
                 Element<Label>().Class(StyleClassLabelSubText)
-                    .Prop(Label.StylePropertyFont, notoSans10)
+                    .Prop(Label.StylePropertyFont, whiteRabbit)
                     .Prop(Label.StylePropertyFontColor, Color.DarkGray),
 
                 Element<PanelContainer>().Class(ClassHighDivider)

@@ -70,7 +70,7 @@ namespace Content.Client.Lobby
             _characterSetup.SaveButton.OnPressed += _ =>
             {
                 _characterSetup.Save();
-                _lobby.CharacterPreview.UpdateUI();
+               //_lobby.CharacterPreview.UpdateUI();
             };
 
             LayoutContainer.SetAnchorPreset(_lobby, LayoutContainer.LayoutPreset.Wide);
@@ -89,7 +89,7 @@ namespace Content.Client.Lobby
 
             _preferencesManager.OnServerDataLoaded += PreferencesDataLoaded;
 
-            _lobby.CharacterPreview.UpdateUI();
+            //_lobby.CharacterPreview.UpdateUI();
         }
 
         protected override void Shutdown()
@@ -118,7 +118,7 @@ namespace Content.Client.Lobby
 
         private void PreferencesDataLoaded()
         {
-            _lobby?.CharacterPreview.UpdateUI();
+            //_lobby?.CharacterPreview.UpdateUI();
         }
 
         private void OnSetupPressed(BaseButton.ButtonEventArgs args)

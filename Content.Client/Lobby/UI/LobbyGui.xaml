@@ -130,7 +130,9 @@
 
                     <controls:HSpacer Spacing="5"/>
 
+                    <!--
                     <lobbyUi:LobbyCharacterPreviewPanel Name="CharacterPreview" Access="Public"/>
+                    -->
 
                     <controls:HSpacer Spacing="5"/>
 

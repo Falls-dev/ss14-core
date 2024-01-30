@@ -144,3 +144,33 @@
           - tag: WeldedKnife
   - node: sword
     entity: Claymore
+
+- type: constructionGraph
+  id: ImprovisedShellGraph
+  start: pipe_cut
+  graph:
+  - node: pipe_cut
+    edges:
+      - to: pipe_cut_closed
+        steps:
+          - material: Steel
+            amount: 1
+            doAfter: 0.5
+  - node: pipe_cut_closed
+    entity: PipeCutClosed
+    edges:
+      - to: shell
+        conditions:
+          - !type:MinSolution
+            solution: sol
+            reagent:
+              ReagentId: WeldingFuel
+            quantity: 5
+        steps:
+          - material: Cable
+            amount: 1
+            doAfter: 0.5
+          - tool: Screwing
+            doAfter: 1
+  - node: shell
+    entity: ShellShotgunImprovised

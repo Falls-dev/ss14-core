@@ -240,7 +240,6 @@
     - DoorBumpOpener
   - type: Carriable
   - type: TTS
-  - type: DeathGasps
   - type: ExaminableClothes
   - type: CharacterInformation
   - type: Penetrated

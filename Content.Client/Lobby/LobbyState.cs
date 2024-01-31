@@ -1,10 +1,14 @@
+using System.Linq;
+using System.Numerics;
 using Content.Client._Ohio.Buttons;
+using Content.Client.Changelog;
 using Content.Client.GameTicking.Managers;
 using Content.Client.LateJoin;
 using Content.Client.Lobby.UI;
 using Content.Client.Message;
 using Content.Client.Preferences;
 using Content.Client.Preferences.UI;
+using Content.Client.Resources;
 using Content.Client.UserInterface.Systems.Chat;
 using Content.Client.Voting;
 using Robust.Client;
@@ -15,7 +19,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
-
+using Robust.Shared.Utility;
 
 namespace Content.Client.Lobby
 {
@@ -31,12 +35,14 @@ namespace Content.Client.Lobby
         [Dependency] private readonly IGameTiming _gameTiming = default!;
         [Dependency] private readonly IVoteManager _voteManager = default!;
         [Dependency] private readonly IConfigurationManager _configurationManager = default!;
+        [Dependency] private readonly ChangelogManager _changelog = default!;
 
         [ViewVariables] private CharacterSetupGui? _characterSetup;
 
         private ClientGameTicker _gameTicker = default!;
 
         protected override Type? LinkedScreenType { get; } = typeof(LobbyGui);
+
         private LobbyGui? _lobby;
 
         protected override void Startup()
@@ -52,7 +58,8 @@ namespace Content.Client.Lobby
 
             _gameTicker = _entityManager.System<ClientGameTicker>();
 
-            _characterSetup = new CharacterSetupGui(_entityManager, _resourceCache, _preferencesManager, _prototypeManager, _configurationManager);
+            _characterSetup = new CharacterSetupGui(_entityManager, _resourceCache, _preferencesManager,
+                _prototypeManager, _configurationManager);
 
             LayoutContainer.SetAnchorPreset(_characterSetup, LayoutContainer.LayoutPreset.Wide);
 
@@ -70,7 +77,7 @@ namespace Content.Client.Lobby
             _characterSetup.SaveButton.OnPressed += _ =>
             {
                 _characterSetup.Save();
-               //_lobby.CharacterPreview.UpdateUI();
+                //_lobby.CharacterPreview.UpdateUI();
             };
 
             LayoutContainer.SetAnchorPreset(_lobby, LayoutContainer.LayoutPreset.Wide);
@@ -90,6 +97,7 @@ namespace Content.Client.Lobby
             _preferencesManager.OnServerDataLoaded += PreferencesDataLoaded;
 
             //_lobby.CharacterPreview.UpdateUI();
+            PopulateChangelog();
         }
 
         protected override void Shutdown()
@@ -148,7 +156,9 @@ namespace Content.Client.Lobby
             {
                 _lobby!.StartTime.Text = string.Empty;
                 var roundTime = _gameTiming.CurTime.Subtract(_gameTicker.RoundStartTimeSpan);
-                _lobby!.StationTime.Text = Loc.GetString("lobby-state-player-status-round-time", ("hours", roundTime.Hours), ("minutes", roundTime.Minutes));
+                _lobby!.StationTime.Text = Loc.GetString("lobby-state-player-status-round-time",
+                    ("hours", roundTime.Hours), ("minutes", roundTime.Minutes));
+
                 return;
             }
 
@@ -169,7 +179,9 @@ namespace Content.Client.Lobby
                 var seconds = difference.TotalSeconds;
                 if (seconds < 0)
                 {
-                    text = Loc.GetString(seconds < -5 ? "lobby-state-right-now-question" : "lobby-state-right-now-confirmation");
+                    text = Loc.GetString(seconds < -5
+                        ? "lobby-state-right-now-question"
+                        : "lobby-state-right-now-confirmation");
                 }
                 else
                 {
@@ -221,6 +233,7 @@ namespace Content.Client.Lobby
 
             _lobby!.LabelName.SetMarkup("[font=\"Bedstead\" size=20] Green Miracle [/font]");
             _lobby!.Version.SetMarkup("Version: 1.0");
+            _lobby!.ChangelogLabel.SetMarkup("Список изменений:");
         }
 
         private void SetReady(bool newReady)
@@ -246,6 +259,86 @@ namespace Content.Client.Lobby
         private void MakeButtonJoinGame(OhioLobbyTextButton button)
         {
             button.ButtonText = "Join Game";
+        }
+
+        private async void PopulateChangelog()
+        {
+            _lobby!.ChangelogContainer.Children.Clear();
+
+            var changelogs = await _changelog.LoadChangelog();
+            var whiteChangelog = changelogs.Find(cl => cl.Name == "ChangelogWhite");
+
+            if (whiteChangelog is null)
+            {
+                _lobby!.ChangelogContainer.Children.Add(
+                    new RichTextLabel().SetMarkup("Не удалось загрузить список изменений"));
+
+                return;
+            }
+
+            var entries = whiteChangelog.Entries
+                .OrderByDescending(c => c.Time)
+                .Take(5);
+
+            foreach (var entry in entries)
+            {
+                var box = new BoxContainer
+                {
+                    Orientation = BoxContainer.LayoutOrientation.Vertical,
+                    HorizontalAlignment = Control.HAlignment.Left,
+                    Children =
+                    {
+                        new Label
+                        {
+                            Align = Label.AlignMode.Left,
+                            Text = $"{entry.Author} {entry.Time.ToShortDateString()}",
+                            FontColorOverride = Color.FromHex("#888"),
+                            Margin = new Thickness(0, 10)
+                        }
+                    }
+                };
+
+                foreach (var change in entry.Changes)
+                {
+                    var container = new BoxContainer
+                    {
+                        Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                        HorizontalAlignment = Control.HAlignment.Left
+                    };
+
+                    var text = new RichTextLabel();
+                    text.SetMessage(FormattedMessage.FromMarkup(change.Message));
+                    text.MaxWidth = 350;
+
+                    container.AddChild(GetIcon(change.Type));
+                    container.AddChild(text);
+
+                    box.AddChild(container);
+                }
+
+                _lobby!.ChangelogContainer.AddChild(box);
+            }
+        }
+
+        private TextureRect GetIcon(ChangelogManager.ChangelogLineType type)
+        {
+            var (file, color) = type switch
+            {
+                ChangelogManager.ChangelogLineType.Add => ("plus.svg.192dpi.png", "#6ED18D"),
+                ChangelogManager.ChangelogLineType.Remove => ("minus.svg.192dpi.png", "#D16E6E"),
+                ChangelogManager.ChangelogLineType.Fix => ("bug.svg.192dpi.png", "#D1BA6E"),
+                ChangelogManager.ChangelogLineType.Tweak => ("wrench.svg.192dpi.png", "#6E96D1"),
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
+
+            return new TextureRect
+            {
+                Texture = _resourceCache.GetTexture(new ResPath($"/Textures/Interface/Changelog/{file}")),
+                VerticalAlignment = Control.VAlignment.Top,
+                TextureScale = new Vector2(0.5f, 0.5f),
+                Margin = new Thickness(2, 4, 6, 2),
+                ModulateSelfOverride = Color.FromHex(color)
+            };
         }
     }
 }

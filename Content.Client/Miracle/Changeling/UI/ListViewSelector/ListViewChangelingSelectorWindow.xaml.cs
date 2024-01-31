@@ -6,11 +6,11 @@ using Robust.Client.UserInterface.XAML;
 namespace Content.Client.Miracle.Changeling.UI.ListViewSelector;
 
 [GenerateTypedNameReferences]
-public sealed partial class ListViewSelectorWindow : DefaultWindow
+public sealed partial class ListViewChangelingSelectorWindow : DefaultWindow
 {
     public Action<string>? ItemSelected;
 
-    public ListViewSelectorWindow()
+    public ListViewChangelingSelectorWindow()
     {
         RobustXamlLoader.Load(this);
     }

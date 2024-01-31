@@ -4,7 +4,7 @@ namespace Content.Client.Miracle.Changeling.UI.ListViewSelector;
 
 public sealed class ListViewSelectorBui : BoundUserInterface
 {
-    private ListViewSelectorWindow? _window;
+    private ListViewChangelingSelectorWindow? _window;
 
     public ListViewSelectorBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -15,11 +15,11 @@ public sealed class ListViewSelectorBui : BoundUserInterface
     {
         base.Open();
 
-        _window = new ListViewSelectorWindow();
+        _window = new ListViewChangelingSelectorWindow();
         _window.OpenCentered();
         _window.OnClose += Close;
 
-        _window.ItemSelected += (item) =>
+        _window.ItemSelected += item =>
         {
             var msg = new ListViewItemSelectedMessage(item);
             SendMessage(msg);

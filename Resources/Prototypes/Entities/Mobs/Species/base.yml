@@ -201,7 +201,7 @@
         type: HumanoidMarkingModifierBoundUserInterface
       - key: enum.StrippingUiKey.Key
         type: StrippableBoundUserInterface
-      - key: enum.ListViewSelectorUiKey.Key
+      - key: enum.ListViewSelectorUiKeyChangeling.Key
         type: ListViewSelectorBui
       - key: enum.TransformStingSelectorUiKey.Key
         type: TransformStingSelectorBui

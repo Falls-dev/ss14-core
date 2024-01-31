@@ -76,8 +76,8 @@ public sealed class ChatUIController : UIController
         {SharedChatSystem.AdminPrefix, ChatSelectChannel.Admin},
         {SharedChatSystem.RadioCommonPrefix, ChatSelectChannel.Radio},
         {SharedChatSystem.DeadPrefix, ChatSelectChannel.Dead},
-        {SharedChatSystem.ChangelingPrefix, ChatSelectChannel.Changeling},
-        {SharedChatSystem.CultPrefix, ChatSelectChannel.Cult}, //WD EDIT
+        {SharedChatSystem.CultPrefix, ChatSelectChannel.Cult},
+        {SharedChatSystem.ChangelingPrefix, ChatSelectChannel.Changeling}
     };
 
     public static readonly Dictionary<ChatSelectChannel, char> ChannelPrefixes = new()
@@ -91,8 +91,8 @@ public sealed class ChatUIController : UIController
         {ChatSelectChannel.Admin, SharedChatSystem.AdminPrefix},
         {ChatSelectChannel.Radio, SharedChatSystem.RadioCommonPrefix},
         {ChatSelectChannel.Dead, SharedChatSystem.DeadPrefix},
-        {ChatSelectChannel.Changeling, SharedChatSystem.ChangelingPrefix},
-        {ChatSelectChannel.Cult, SharedChatSystem.CultPrefix} // WD EDIT
+        {ChatSelectChannel.Cult, SharedChatSystem.CultPrefix},
+        {ChatSelectChannel.Changeling, SharedChatSystem.ChangelingPrefix}
 
     };
 

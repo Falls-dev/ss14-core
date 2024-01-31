@@ -9,7 +9,6 @@ using Content.Server.Polymorph.Systems;
 using Content.Server.Popups;
 using Content.Server.Store.Components;
 using Content.Server.Temperature.Systems;
-using Content.Server.Traits.Assorted;
 using Content.Shared.Actions;
 using Content.Shared.Changeling;
 using Content.Shared.Chemistry.EntitySystems;
@@ -23,7 +22,6 @@ using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Implants.Components;
 using Content.Shared.Inventory;
-using Content.Shared.Mind;
 using Content.Shared.Miracle.UI;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -181,7 +179,7 @@ public sealed partial class ChangelingSystem
             return;
         }
 
-        if (!_ui.TryGetUi(uid, ListViewSelectorUiKey.Key, out var bui))
+        if (!_ui.TryGetUi(uid, ListViewSelectorUiKeyChangeling.Key, out var bui))
             return;
 
         Dictionary<string, string> state;
@@ -219,7 +217,7 @@ public sealed partial class ChangelingSystem
         if (!TryComp<ActorComponent>(uid, out var actorComponent))
             return;
 
-        if (!_ui.TryGetUi(user, ListViewSelectorUiKey.Key, out var bui))
+        if (!_ui.TryGetUi(user, ListViewSelectorUiKeyChangeling.Key, out var bui))
             return;
 
         _ui.CloseUi(bui, actorComponent.PlayerSession);
@@ -318,7 +316,6 @@ public sealed partial class ChangelingSystem
             _popup.PopupEntity("Transform virus was ineffective!", user);
             return;
         }
-
 
         if (!TakeChemicals(uid, component, 50))
             return;
@@ -555,7 +552,7 @@ public sealed partial class ChangelingSystem
 
         absorbedComponent.AbsorberMind = mindId;
 
-        //EnsureComp<UncloneableComponent>(args.Target.Value);
+        EnsureComp<UncloneableComponent>(args.Target.Value);
 
         StartUseDelayById(uid, ChangelingAbsorb);
 

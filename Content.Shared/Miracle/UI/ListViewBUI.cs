@@ -3,7 +3,7 @@
 namespace Content.Shared.Miracle.UI;
 
 [Serializable, NetSerializable]
-public enum ListViewSelectorUiKey
+public enum ListViewSelectorUiKeyChangeling
 {
     Key
 }

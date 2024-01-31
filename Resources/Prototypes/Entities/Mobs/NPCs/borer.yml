@@ -1,0 +1,104 @@
+- type: entity
+  name: basic borer
+  id: MobBorerBase
+  parent: SimpleSpaceMobBase
+  abstract: true
+  description: borer-entity-description
+  components:
+  - type: Sprite
+    drawdepth: SmallMobs
+    sprite: Mobs/Animals/borer.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: borer
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: borer
+      Dead:
+        Base: dead
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100
+        mask:
+        - SmallMobMask
+        layer:
+        - SmallMobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      20: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 4
+  - type: Tag
+    tags:
+    - CannotSuicide
+  - type: Respirator
+    damage:
+      types:
+        Asphyxiation: 0.2
+    damageRecovery:
+      types:
+        Asphyxiation: -1.0
+    maxSaturation: 15
+  - type: Bloodstream
+    bloodReagent: Slime
+    bloodlossDamage:
+      types:
+        Bloodloss:
+          1
+    bloodlossHealDamage:
+      types:
+        Bloodloss:
+          -0.25
+  - type: NoSlip
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    makeSentient: true
+    name: ghost-role-information-borer-name
+    description: ghost-role-information-borer-description
+  - type: CombatMode
+    combatToggleAction: ActionCombatModeToggleOff
+
+- type: entity
+  name: Cortical Borer
+  parent: MobBorerBase
+  id: MobSimpleBorer
+  components:
+    - type: Borer
+      reproduceCost: 100
+      assumeControlCost: 250
+    
+- type: entity
+  name: infested borer
+  parent: SimpleSpaceMobBase
+  id: MobInfestedBorer
+  noSpawn: true
+  components:
+  - type: Fixtures
+  - type: Tag
+    tags:
+    - CannotSuicide
+  - type: InfestedBorer
+  - type: CombatMode
+    combatToggleAction: ActionCombatModeToggleOff
+  - type: MobThresholds
+    triggersAlerts: false
+    thresholds:
+      0: Alive
+      1000: Dead
+  - type: Temperature
+    heatDamageThreshold: 10000
+    coldDamageThreshold: 0
+    currentTemperature: 200
+    coldDamage:
+      types:
+        Cold : 0 #per second, scales with temperature & other constants
+    heatDamage:
+      types:
+        Heat : 0 #per second, scales with temperature & other constants

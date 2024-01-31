@@ -1,7 +1,4 @@
-﻿using Content.Shared.Chemistry.Reagent;
-using Content.Shared.Tag;
-using Robust.Shared.GameStates;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Set;
+﻿using Robust.Shared.GameStates;
 
 namespace Content.Shared.Borer;
 

@@ -1,8 +1,6 @@
 ﻿using Content.Client.Actions;
-using Content.Client.CharacterInfo;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Systems.Actions;
-using Content.Client.UserInterface.Systems.Actions.Windows;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Shared.Actions;
 using Content.Shared.Borer;
@@ -101,11 +99,11 @@ public sealed class ReagentUIController : UIController, IOnSystemChanged<Actions
     {
         CommandBinds.Builder
             .Bind(ContentKeyFunctions.OpenActionsMenu, InputCmdHandler.FromDelegate(_ => OpenWindow()))
-            .Register<ActionUIController>();
+            .Register<ReagentWindow>();
     }
 
     public void OnStateExited(GameplayState state)
     {
-        CommandBinds.Unregister<ActionUIController>();
+        CommandBinds.Unregister<ReagentWindow>();
     }
 }

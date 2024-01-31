@@ -1,10 +1,8 @@
 ﻿using Content.Shared.Actions;
 using Content.Shared.Alert;
-using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Mind;
-using Content.Shared.Stealth.Components;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Borer;

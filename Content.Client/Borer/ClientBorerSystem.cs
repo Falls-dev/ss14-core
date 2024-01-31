@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using Content.Shared.Borer;
-using Robust.Client.Audio;
+﻿using Content.Shared.Borer;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.ResourceManagement;
@@ -16,7 +14,7 @@ public sealed class ClientBorerSystem : EntitySystem
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IOverlayManager _overlayManager = default!;
     [Dependency] private readonly IPlayerManager _playerMgr = default!;
-    /// <inheritdoc/>
+
     public override void Initialize()
     {
         SubscribeNetworkEvent<BorerOverlayResponceEvent>(OnOverlayResponce);
@@ -28,7 +26,6 @@ public sealed class ClientBorerSystem : EntitySystem
         _overlayManager.AddOverlay(new BorerOverlay(
             _entManager,
             _playerMgr,
-            _client,
-            _entManager.System<SharedTransformSystem>()));
+            _client));
     }
 }

@@ -17,8 +17,6 @@ public sealed partial class BorerComponent : Component
 
     public EntityUid? ActionStunEntity;
 
-    public EntityUid Target;
-
     [AutoNetworkedField]
     [ViewVariables(VVAccess.ReadOnly)]
     public int Points = 0;

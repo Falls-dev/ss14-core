@@ -1,4 +1,5 @@
-﻿using Robust.Shared.GameStates;
+﻿using Robust.Shared.Containers;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared.Borer;
 
@@ -8,5 +9,6 @@ namespace Content.Shared.Borer;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class BorerHostComponent : Component
 {
-    public EntityUid Borer;
+    //public EntityUid Borer;
+    public Container BorerContainer;
 }

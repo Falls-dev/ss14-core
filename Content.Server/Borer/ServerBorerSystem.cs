@@ -20,6 +20,8 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
+using Robust.Server.Containers;
+using Robust.Shared.Containers;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
@@ -47,6 +49,7 @@ public sealed class ServerBorerSystem : EntitySystem
     [Dependency] private readonly StunSystem _stuns = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly VomitSystem _vomitSystem = default!;
+    [Dependency] private ContainerSystem _container = default!;
 
     public override void Initialize()
     {
@@ -54,14 +57,18 @@ public sealed class ServerBorerSystem : EntitySystem
 
         SubscribeLocalEvent<BorerComponent, BorerInfestActionEvent>(OnInfest);
         SubscribeLocalEvent<BorerComponent, BorerInfestDoAfterEvent>(OnInfestAfter);
+
         SubscribeLocalEvent<InfestedBorerComponent, BorerOutActionEvent>(OnGetOut);
         SubscribeLocalEvent<InfestedBorerComponent, BorerBrainSpeechActionEvent>(OnTelepathicSpeech);
+
         SubscribeNetworkEvent<BorerInjectActionEvent>(OnInjectChemicals);
+
         SubscribeLocalEvent<InfestedBorerComponent, BorerScanInstantActionEvent>(OnBorerScan);
         SubscribeLocalEvent<BorerComponent, BorerStunActionEvent>(OnStunEvent);
 
         SubscribeLocalEvent<InfestedBorerComponent, BorerBrainTakeEvent>(OnTakeControl);
         SubscribeLocalEvent<InfestedBorerComponent, BorerBrainTakeAfterEvent>(OnTakeControlAfter);
+
         SubscribeLocalEvent<BorerHostComponent, BorerBrainReleaseEvent>(OnReleaseControl);
 
         SubscribeLocalEvent<BorerHostComponent, BorerReproduceEvent>(OnReproduce);
@@ -71,8 +78,8 @@ public sealed class ServerBorerSystem : EntitySystem
 
     private void OnReproduceAfter(EntityUid uid, BorerHostComponent component, BorerReproduceAfterEvent args)
     {
-        if (args.Cancelled || !TryComp(component.Borer, out InfestedBorerComponent? borerComp)
-                           || !WithrawPoints(component.Borer, borerComp.ReproduceCost)
+        if (args.Cancelled || !TryComp(component.BorerContainer.ContainedEntities[0], out InfestedBorerComponent? borerComp)
+                           || !WithrawPoints(component.BorerContainer.ContainedEntities[0], borerComp.ReproduceCost)
                            || !TryComp(uid, out TransformComponent? targetTransform))
             return;
         args.Handled = true;
@@ -82,9 +89,9 @@ public sealed class ServerBorerSystem : EntitySystem
 
     private void OnReproduce(EntityUid uid, BorerHostComponent component, BorerReproduceEvent args)
     {
-        if (!TryComp(component.Borer, out InfestedBorerComponent? borerComp))
+        if (!TryComp(component.BorerContainer.ContainedEntities[0], out InfestedBorerComponent? borerComp))
             return;
-        if (GetPoints(component.Borer) < borerComp.ReproduceCost)
+        if (GetPoints(component.BorerContainer.ContainedEntities[0]) < borerComp.ReproduceCost)
         {
             _popup.PopupEntity(Loc.GetString("borer-popup-lowchem"),
                 uid,
@@ -144,7 +151,7 @@ public sealed class ServerBorerSystem : EntitySystem
     private void OnReleaseControl(EntityUid uid, BorerHostComponent component, BorerBrainReleaseEvent args)
     {
         args.Handled = true;
-        ReleaseControl(component.Borer);
+        ReleaseControl(component.BorerContainer.ContainedEntities[0]);
     }
 
     private void OnResistAfterControl(EntityUid uid, InfestedBorerComponent component, BorerBrainResistAfterEvent args)
@@ -212,7 +219,7 @@ public sealed class ServerBorerSystem : EntitySystem
                 _chatManager.ChatMessageToOne(ChatChannel.Local,
                     Loc.GetString("borer-message-braintake-success"),
                     Loc.GetString("borer-message-braintake-success"),
-                    EntityUid.Invalid, false, borActor!.PlayerSession.ConnectedClient);
+                    EntityUid.Invalid, false, borActor!.PlayerSession.Channel);
             }
         }
 
@@ -225,7 +232,7 @@ public sealed class ServerBorerSystem : EntitySystem
                 _chatManager.ChatMessageToOne(ChatChannel.Local,
                     Loc.GetString("borer-message-braintake-alert"),
                     Loc.GetString("borer-message-braintake-alert"),
-                    EntityUid.Invalid, false, actor!.PlayerSession.ConnectedClient);
+                    EntityUid.Invalid, false, actor!.PlayerSession.Channel);
             }
         }
 
@@ -275,16 +282,15 @@ public sealed class ServerBorerSystem : EntitySystem
             return;
         }
 
-        component.Target = args.Target;
         StartInfest(uid, args.Target, component);
         args.Handled = true;
     }
 
-    [Obsolete("Obsolete")]
     private void OnInfestAfter(EntityUid uid, BorerComponent component, BorerInfestDoAfterEvent args)
     {
         if (args.Cancelled)
             return;
+
         if (!HasComp<HumanoidAppearanceComponent>(args.Target))
             return;
         if (TryComp(args.Target, out MobStateComponent? state) &&
@@ -305,36 +311,16 @@ public sealed class ServerBorerSystem : EntitySystem
             return;
         }
 
-        if (TryComp(args.Target, out TransformComponent? targetTransform))
-        {
-            var infestedBorer = _entityManager.SpawnEntity("MobInfestedBorer", targetTransform.Coordinates);
+        var hostComp = AddComp<BorerHostComponent>((EntityUid) args.Target!);
+        hostComp.BorerContainer = _container.EnsureContainer<Container>((EntityUid)args.Target!, "borerContainer");
+        _container.Insert(uid, hostComp.BorerContainer);
 
-            _movementSpeed.ChangeBaseSpeed(infestedBorer, 0f, 0f, 0f);
-            if (TryComp(infestedBorer, out TransformComponent? transform))
-                transform.AttachParent(component.Target);
+        var infestedComponent = AddComp<InfestedBorerComponent>(uid);
+        infestedComponent.Host = args.Target;
+        infestedComponent.Points = component.Points;
+        Dirty(uid, infestedComponent);
 
-            if (!TryComp<FixturesComponent>(infestedBorer, out var fixtures))
-                return;
-
-            foreach (var fixture in fixtures.Fixtures.Values)
-            {
-                _physics.SetHard(uid, fixture, false, fixtures);
-            }
-
-            if (_mindSystem.TryGetMind(uid, out var mindId, out var mind))
-                _mindSystem.TransferTo(mindId, infestedBorer, mind: mind);
-
-            if (TryComp(infestedBorer, out InfestedBorerComponent? infestedComp))
-            {
-                infestedComp.Host = args.Target;
-                infestedComp.Points = component.Points;
-                Dirty(infestedBorer, infestedComp);
-            }
-
-            var hostComp = AddComp<BorerHostComponent>((EntityUid) args.Target!);
-            hostComp.Borer = infestedBorer;
-            _entityManager.DeleteEntity(uid);
-        }
+        RemComp<BorerComponent>(uid);
     }
 
     private void StartInfest(EntityUid user, EntityUid target, BorerComponent comp)
@@ -353,56 +339,48 @@ public sealed class ServerBorerSystem : EntitySystem
     private void OnBorerScan(EntityUid uid, InfestedBorerComponent component, BorerScanInstantActionEvent args)
     {
         //Logger.Debug("BORER SCAN");
-        Dictionary<string, FixedPoint2> Solution = new();
+        Dictionary<string, FixedPoint2> solution = new();
         if (EntityManager.TryGetComponent((EntityUid) component.Host!,
                 out BloodstreamComponent? bloodContainer))
         {
             _solutionContainerSystem.TryGetSolution((EntityUid) component.Host, bloodContainer.ChemicalSolutionName,
-                out var Sol);
+                out var sol);
 
-            foreach (var reagent in Sol!.Value.Comp.Solution)
+            foreach (var reagent in sol!.Value.Comp.Solution)
             {
-                Solution.Add(reagent.Reagent.ToString(), reagent.Quantity);
+                solution.Add(reagent.Reagent.ToString(), reagent.Quantity);
             }
         }
 
-        RaiseNetworkEvent(new BorerScanDoAfterEvent(Solution), uid);
+        RaiseNetworkEvent(new BorerScanDoAfterEvent(solution), uid);
         args.Handled = true;
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        try
+
+        var infestedQuery = EntityQueryEnumerator<InfestedBorerComponent>();
+        while (infestedQuery.MoveNext(out var uid, out var comp) && HasComp<InfestedBorerComponent>(uid)
+                                                                 && comp.Host is not null)
         {
-            var infestedQuery = EntityQueryEnumerator<InfestedBorerComponent>();
-            while (infestedQuery.MoveNext(out var uid, out var comp) && HasComp<InfestedBorerComponent>(uid)
-                                                                     && comp.Host is not null)
+            if (comp.PointUpdateNext == TimeSpan.Zero)
             {
-                if (comp.PointUpdateNext == TimeSpan.Zero)
-                {
-                    comp.PointUpdateNext = _timing.CurTime + comp.PointUpdateRate;
-                    continue;
-                }
-
-                if (_timing.CurTime < comp.PointUpdateNext)
-                    continue;
-
-                comp.PointUpdateNext += comp.PointUpdateRate;
-                comp.Points += comp.PointUpdateValue;
-                SearchSugar(uid);
-                RaiseNetworkEvent(new BorerPointsUpdateEvent());
-                Dirty(uid, comp);
-                //Logger.Debug("Borer " + uid + " has " + comp.Points + " points");
+                comp.PointUpdateNext = _timing.CurTime + comp.PointUpdateRate;
+                continue;
             }
-        }
-        catch (Exception e)
-        {
-            Logger.Debug(e.Message);
+
+            if (_timing.CurTime < comp.PointUpdateNext)
+                continue;
+
+            comp.PointUpdateNext += comp.PointUpdateRate;
+            comp.Points += comp.PointUpdateValue;
+            SearchSugar(uid);
+            RaiseNetworkEvent(new BorerPointsUpdateEvent());
+            Dirty(uid, comp);
         }
     }
 
-    [Obsolete("Obsolete")]
     private void OnTelepathicSpeech(EntityUid uid, InfestedBorerComponent component, BorerBrainSpeechActionEvent args)
     {
         if (!EntityManager.TryGetComponent(uid, out ActorComponent? actor))
@@ -413,7 +391,7 @@ public sealed class ServerBorerSystem : EntitySystem
             {
                 _popup.PopupEntity(message, uid, uid, PopupType.Medium);
                 _chatManager.ChatMessageToOne(ChatChannel.Local, message, message, EntityUid.Invalid, false,
-                    actor.PlayerSession.ConnectedClient);
+                    actor.PlayerSession.Channel);
 
 
                 if (EntityManager.TryGetComponent(component.Host, out ActorComponent? hostActor))
@@ -421,7 +399,7 @@ public sealed class ServerBorerSystem : EntitySystem
                     _popup.PopupEntity(message, (EntityUid) component.Host!, (EntityUid) component.Host!,
                         PopupType.Medium);
                     _chatManager.ChatMessageToOne(ChatChannel.Local, message, message, EntityUid.Invalid, false,
-                        hostActor.PlayerSession.ConnectedClient);
+                        hostActor.PlayerSession.Channel);
                 }
             });
         args.Handled = true;
@@ -435,8 +413,6 @@ public sealed class ServerBorerSystem : EntitySystem
         {
             if (!WithrawPoints((EntityUid) borerEn, injectEvent.Cost))
                 return;
-
-            //infestedComponent.Points -= injectEvent.Cost;
 
             var solution = new Solution();
             solution.AddReagent(injectEvent.ProtoId, 10);
@@ -496,24 +472,21 @@ public sealed class ServerBorerSystem : EntitySystem
 
     public void GetOut(EntityUid uid)
     {
-        if (!TryComp(uid, out InfestedBorerComponent? component))
+        if (!TryComp(uid, out InfestedBorerComponent? component) ||
+            !TryComp(component.Host, out BorerHostComponent? hostComponent))
             return;
         ReleaseControl(uid);
-        if (TryComp(component.Host, out TransformComponent? targetTransform))
-        {
-            var borerEntity = _entityManager.SpawnEntity("MobSimpleBorer", targetTransform.Coordinates);
-            if (TryComp(borerEntity, out BorerComponent? borerComp))
-            {
-                borerComp.Points = component.Points;
-                Dirty(uid, borerComp);
-            }
 
-            if (_mindSystem.TryGetMind(uid, out var mindId, out var mind))
-                _mindSystem.TransferTo(mindId, borerEntity, mind: mind);
-            _vomitSystem.Vomit((EntityUid) component.Host, -20, -20);
-            RemComp<BorerHostComponent>((EntityUid) component.Host);
-            _entityManager.DeleteEntity(uid);
-        }
+        _vomitSystem.Vomit((EntityUid) component.Host!, -20, -20);
+        _container.Remove(uid, hostComponent.BorerContainer);
+        RemComp<BorerHostComponent>((EntityUid) component.Host);
+
+        var borerComponent = AddComp<BorerComponent>(uid);
+        borerComponent.Points = component.Points;
+        Dirty(uid, borerComponent);
+
+        RemComp<InfestedBorerComponent>(uid);
+
     }
 
     public int SearchSugar(EntityUid uid)

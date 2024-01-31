@@ -16,18 +16,39 @@ public sealed class SharedBorerSystem : EntitySystem
     [Dependency] private readonly SharedActionsSystem _action = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly SharedMindSystem _mindSystem = default!;
-
-    [Dependency] private readonly AlertsSystem _alertsSystem = default!;
     /// <inheritdoc/>
     public override void Initialize()
     {
         SubscribeLocalEvent<BorerComponent, ComponentStartup>(OnStartup);
-        SubscribeLocalEvent<InfestedBorerComponent, ComponentStartup>(OnStartupInfested);
+        SubscribeLocalEvent<BorerComponent, ComponentRemove>(OnRemove);
+
+        SubscribeLocalEvent<InfestedBorerComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<InfestedBorerComponent, ComponentRemove>(OnRemove);
+
         SubscribeLocalEvent<InfestedBorerComponent, ExamineAttemptEvent>(OnExamineAttempt);
         SubscribeLocalEvent<BorerComponent, ExamineAttemptEvent>(OnExamineAttempt);
 
         SubscribeLocalEvent<InfestedBorerComponent, BorerBrainResistEvent>(OnResistControl);
 
+    }
+
+    private void OnRemove(EntityUid uid, InfestedBorerComponent component, ComponentRemove args)
+    {
+        if (!TryComp(uid, out ActionsComponent? borerActComponent))
+            return;
+        _action.RemoveAction(uid, component.ActionBorerOutEntity, borerActComponent);
+        _action.RemoveAction(uid, component.ActionBorerScanEntity, borerActComponent);
+        _action.RemoveAction(uid, component.ActionBorerBrainTakeEntity, borerActComponent);
+        _action.RemoveAction(uid, component.ActionBorerBrainSpeechEntity, borerActComponent);
+        _action.RemoveAction(uid, component.ActionBorerInjectWindowOpenEntity, borerActComponent);
+    }
+
+    private void OnRemove(EntityUid uid, BorerComponent component, ComponentRemove args)
+    {
+        if (!TryComp(uid, out ActionsComponent? borerActComponent))
+            return;
+        _action.RemoveAction(uid, component.ActionInfestEntity, borerActComponent);
+        _action.RemoveAction(uid, component.ActionStunEntity, borerActComponent);
     }
 
     private void OnResistControl(EntityUid uid, InfestedBorerComponent component, BorerBrainResistEvent args)
@@ -48,10 +69,11 @@ public sealed class SharedBorerSystem : EntitySystem
             return;
         _action.AddAction(uid, ref component.ActionInfestEntity, component.ActionInfest, component: comp);
         _action.AddAction(uid, ref component.ActionStunEntity, component.ActionStun, component: comp);
+
         RaiseNetworkEvent(new BorerOverlayResponceEvent());
     }
 
-    private void OnStartupInfested(EntityUid uid, InfestedBorerComponent component, ComponentStartup args)
+    private void OnStartup(EntityUid uid, InfestedBorerComponent component, ComponentStartup args)
     {
         if (!TryComp(uid, out ActionsComponent? comp))
             return;
@@ -60,8 +82,6 @@ public sealed class SharedBorerSystem : EntitySystem
         _action.AddAction(uid, ref component.ActionBorerInjectWindowOpenEntity, component.ActionBorerInjectWindowOpen, component: comp);
         _action.AddAction(uid, ref component.ActionBorerScanEntity, component.ActionBorerScan, component: comp);
         _action.AddAction(uid, ref component.ActionBorerBrainTakeEntity, component.ActionBorerBrainTake, component: comp);
-
-        RaiseNetworkEvent(new BorerOverlayResponceEvent());
     }
     private void OnExamineAttempt(EntityUid uid, InfestedBorerComponent component, ExamineAttemptEvent args)
     {

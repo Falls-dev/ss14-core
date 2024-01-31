@@ -38,13 +38,6 @@
   - type: Tag
     tags:
     - CannotSuicide
-  - type: Respirator
-    damage:
-      types:
-        Asphyxiation: 0.2
-    damageRecovery:
-      types:
-        Asphyxiation: -1.0
     maxSaturation: 15
   - type: Bloodstream
     bloodReagent: Slime
@@ -64,6 +57,7 @@
     description: ghost-role-information-borer-description
   - type: CombatMode
     combatToggleAction: ActionCombatModeToggleOff
+  - type: Actions
 
 - type: entity
   name: Cortical Borer
@@ -73,32 +67,3 @@
     - type: Borer
       reproduceCost: 100
       assumeControlCost: 250
-    
-- type: entity
-  name: infested borer
-  parent: SimpleSpaceMobBase
-  id: MobInfestedBorer
-  noSpawn: true
-  components:
-  - type: Fixtures
-  - type: Tag
-    tags:
-    - CannotSuicide
-  - type: InfestedBorer
-  - type: CombatMode
-    combatToggleAction: ActionCombatModeToggleOff
-  - type: MobThresholds
-    triggersAlerts: false
-    thresholds:
-      0: Alive
-      1000: Dead
-  - type: Temperature
-    heatDamageThreshold: 10000
-    coldDamageThreshold: 0
-    currentTemperature: 200
-    coldDamage:
-      types:
-        Cold : 0 #per second, scales with temperature & other constants
-    heatDamage:
-      types:
-        Heat : 0 #per second, scales with temperature & other constants

@@ -5,6 +5,9 @@ uplink-pistol-viper-desc = Маленький, легко скрываемый, 
 uplink-rifle-ak-name = АК-74
 uplink-rifle-ak-description = Мощная штурмовая винтовка. Использует магазины для штурмовой винтовки (.30 винтовочные)
 
+uplink-smg-vector-name = Вектор
+uplink-smg-vector-description = Тяжелый пистолет-пулемет. Использует магазины для ПП (.40 магнум)
+
 uplink-revolver-python-name = Питон
 uplink-revolver-python-desc = Громкий и смертоносный револьвер. Использует "Магнум" 40-го калибра.
 uplink-pistol-cobra-name = Кобра
@@ -61,6 +64,9 @@ uplink-mosin-ammo-desc = Коробка с 50 патронами калибра 
 
 uplink-ak-ammo-name = Магазин (.30 винтовчные)
 uplink-ak-ammo-desc = Магазин с 30 патронами калибра .30 винтовочные. Совместим с АК-74.
+
+uplink-vector-ammo-name = Магазин для ПП (.40 магнум)
+uplink-vector-ammo-desc = Магазин с 25 патронами калибра .40 магнум. Совместим с Вектором.
 
 uplink-sniper-ammo-name = Коробка патронов (.60 антиматериальные)
 uplink-sniper-ammo-desc = Коробка с 10 патронами для снайперской винтовки Христова.

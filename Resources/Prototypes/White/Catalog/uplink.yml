@@ -99,3 +99,24 @@
     Telecrystal: 3
   categories:
   - UplinkArmor
+
+- type: listing
+  id: UplinkSMGVector
+  name: uplink-smg-vector-name
+  description: uplink-smg-vector-description
+  productEntity: WeaponSubMachineGunVector
+  cost:
+    Telecrystal: 30
+  categories:
+  - UplinkWeapons
+  saleLimit: 1
+
+- type: listing
+  id: UplinkVectorAmmo
+  name: uplink-vector-ammo-name
+  description: uplink-vector-ammo-desc
+  productEntity: MagazineMagnumSubMachineGun
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkAmmo

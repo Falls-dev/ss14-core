@@ -1,0 +1,176 @@
+- type: constructionGraph
+  id: EnergyDoubleSwordGraph
+  start: esword
+  graph:
+  - node: esword
+    edges:
+      - to: desword
+        steps:
+          - tag: EnergySword
+  - node: desword
+    entity: EnergySwordDouble
+
+- type: constructionGraph
+  id: WeaponFlamethrowerGraph
+  start: welder
+  graph:
+  - node: welder
+    edges:
+      - to: no-igniter
+        steps:
+        - tool: Screwing
+          doAfter: 1
+        - material: MetalRod
+          amount: 5
+          doAfter: 5
+  - node: no-igniter
+    entity: WeaponFlamethrowerUnfinished
+    edges:
+      - to: flamethrower
+        steps:
+          - tag: Igniter
+          - tool: Screwing
+            doAfter: 1
+  - node: flamethrower
+    entity: WeaponFlamethrower
+
+- type: constructionGraph
+  id: WeaponPoweredCrossbowGraph
+  start: stock
+  graph:
+  - node: stock
+    edges:
+      - to: unfinished
+        steps:
+          - material: MetalRod
+            amount: 3
+            doAfter: 3
+  - node: unfinished
+    entity: WeaponPoweredCrossbowUnfinished
+    edges:
+      - to: crossbow
+        steps:
+          - tool: Welding
+            doAfter: 5
+          - material: Cable
+            amount: 5
+            doAfter: 0.5
+          - material: Plastic
+            amount: 3
+            doAfter: 0.5
+          - material: Cable
+            amount: 5
+            doAfter: 0.5
+          - tool: Screwing
+            doAfter: 1
+  - node: crossbow
+    entity: WeaponPoweredCrossbow
+
+- type: constructionGraph
+  id: SnatcherprodGraph
+  start: rod
+  graph:
+  - node: rod
+    entity: PartRodMetal1
+    edges:
+      - to: unfinished
+        steps:
+          - material: Cable
+            amount: 15
+            doAfter: 1
+  - node: unfinished
+    entity: ProdUnfinished
+    edges:
+      - to: capacitor
+        steps:
+          - tag: CapacitorStockPart
+  - node: capacitor
+    edges:
+      - to: snatcherprod
+        steps:
+          - material: Telecrystal
+  - node: snatcherprod
+    entity: Snatcherprod
+    edges:
+      - to: rod
+        steps:
+          - tool: Cutting
+            doAfter: 5
+        completed:
+        - !type:SpawnPrototype
+          prototype: Telecrystal1
+        - !type:EmptyAllContainers
+
+- type: constructionGraph
+  id: ChainsawGraph
+  start: circular
+  graph:
+  - node: circular
+    edges:
+      - to: chainsaw
+        steps:
+          - material: Cable
+            amount: 3
+            doAfter: 0.5
+          - material: Plasteel
+            amount: 5
+            doAfter: 3
+          - tool: Welding
+            doAfter: 5
+  - node: chainsaw
+    entity: Chainsaw
+
+- type: constructionGraph
+  id: SwordGraph
+  start: knife
+  graph:
+  - node: knife
+    edges:
+      - to: machete
+        steps:
+          - tool: Welding
+            doAfter: 5
+            completed:
+            - !type:AddTag
+              tag: "WeldedKnife"
+          - tag: WeldedKnife
+  - node: machete
+    entity: Machete
+    edges:
+      - to: sword
+        steps:
+          - tool: Welding
+            doAfter: 5
+          - tag: WeldedKnife
+  - node: sword
+    entity: Claymore
+
+- type: constructionGraph
+  id: ImprovisedShellGraph
+  start: pipe_cut
+  graph:
+  - node: pipe_cut
+    edges:
+      - to: pipe_cut_closed
+        steps:
+          - material: Steel
+            amount: 1
+            doAfter: 0.5
+  - node: pipe_cut_closed
+    entity: PipeCutClosed
+    edges:
+      - to: shell
+        conditions:
+          - !type:MinSolution
+            solution: sol
+            reagent:
+              ReagentId: WeldingFuel
+            quantity: 5
+        steps:
+          - material: Cable
+            amount: 1
+            doAfter: 0.5
+          - tool: Screwing
+            doAfter: 1
+  - node: shell
+    entity: ShellShotgunImprovised

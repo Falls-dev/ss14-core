@@ -1,12 +1,15 @@
 using System.Collections.Immutable;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using Content.Server._Miracle.GulagSystem;
 using Content.Server.Chat.Managers;
 using Content.Server.Database;
 using Content.Server.GameTicking;
+using Content.Server._White;
+using Content.Server._White.PandaSocket.Interfaces;
+using Content.Server._White.PandaSocket.Main;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.Players;
@@ -33,14 +36,17 @@ public sealed class BanManager : IBanManager, IPostInjectInit
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly INetManager _netManager = default!;
     [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private readonly IPlayerLocator _playerLocator = default!; // WD
+    [Dependency] private readonly PandaWebManager _pandaWeb = default!; // WD
+    [Dependency] private readonly IEntityManager _entMan = default!; // WD
 
     private ISawmill _sawmill = default!;
 
     public const string SawmillId = "admin.bans";
     public const string JobPrefix = "Job:";
+    public const string UnknownServer = "unknown";
 
     private readonly Dictionary<NetUserId, HashSet<ServerRoleBanDef>> _cachedRoleBans = new();
-    private readonly Dictionary<NetUserId, HashSet<ServerBanDef>> _cachedServerBans = new(); // Miracle edit
 
     public void Initialize()
     {
@@ -54,10 +60,9 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         if (e.NewStatus != SessionStatus.Connected || _cachedRoleBans.ContainsKey(e.Session.UserId))
             return;
 
-        var netChannel = e.Session.ConnectedClient;
+        var netChannel = e.Session.Channel;
         ImmutableArray<byte>? hwId = netChannel.UserData.HWId.Length == 0 ? null : netChannel.UserData.HWId;
         await CacheDbRoleBans(e.Session.UserId, netChannel.RemoteEndPoint.Address, hwId);
-        await CacheDbServerBans(e.Session.UserId, netChannel.RemoteEndPoint.Address, hwId); //Miracle edit
 
         SendRoleBans(e.Session);
     }
@@ -92,17 +97,6 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         _cachedRoleBans[userId] = userRoleBans;
     }
 
-    //Miracle edit start
-    private async Task CacheDbServerBans(NetUserId userId, IPAddress? address = null, ImmutableArray<byte>? hwId = null)
-    {
-        var serverBans = await _db.GetServerBansAsync(address, userId, hwId, false);
-
-        var userServerBans = new HashSet<ServerBanDef>(serverBans);
-
-        _cachedServerBans[userId] = userServerBans;
-    }
-    //Miracle edit end
-
     public void Restart()
     {
         // Clear out players that have disconnected.
@@ -116,7 +110,6 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         foreach (var player in toRemove)
         {
             _cachedRoleBans.Remove(player);
-            _cachedServerBans.Remove(player); //Miracle edit
         }
 
         // Check for expired bans
@@ -124,22 +117,22 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         {
             roleBans.RemoveWhere(ban => DateTimeOffset.Now > ban.ExpirationTime);
         }
-
-        //Miracle edit start
-        foreach (var serverBan in _cachedServerBans.Values)
-        {
-            serverBan.RemoveWhere(ban => DateTimeOffset.Now > ban.ExpirationTime);
-        }
-        //Miracle edit end
     }
 
     #region Server Bans
-    public async void CreateServerBan(NetUserId? target, string? targetUsername, NetUserId? banningAdmin, (IPAddress, int)? addressRange, ImmutableArray<byte>? hwid, uint? minutes, NoteSeverity severity, string reason)
+    public async void CreateServerBan(NetUserId? target, string? targetUsername, NetUserId? banningAdmin, (IPAddress, int)? addressRange, ImmutableArray<byte>? hwid, uint? minutes, NoteSeverity severity, string reason, bool isGlobalBan)
     {
         DateTimeOffset? expires = null;
         if (minutes > 0)
         {
             expires = DateTimeOffset.Now + TimeSpan.FromMinutes(minutes.Value);
+        }
+
+        var serverName = _cfg.GetCVar(CCVars.AdminLogsServerName);
+
+        if (isGlobalBan)
+        {
+            serverName = UnknownServer;
         }
 
         _systems.TryGetEntitySystem<GameTicker>(out var ticker);
@@ -158,7 +151,8 @@ public sealed class BanManager : IBanManager, IPostInjectInit
             reason,
             severity,
             banningAdmin,
-            null);
+            null,
+            serverName);
 
         await _db.AddServerBanAsync(banDef);
         var adminName = banningAdmin == null
@@ -195,36 +189,16 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         // Is the player connected?
         if (!_playerManager.TryGetSessionById(target.Value, out var targetPlayer))
             return;
-        // Kick when perma
-        if (banDef.ExpirationTime == null)
-        {
-            var message = banDef.FormatBanMessage(_cfg, _localizationManager);
-            targetPlayer.ConnectedClient.Disconnect(message);
-        }
-        else // Teleport to gulag
-        {
-            var gulag = _systems.GetEntitySystem<GulagSystem>();
-            gulag.SendToGulag(targetPlayer);
-        }
+        // If they are, kick them
+        var message = banDef.FormatBanMessage(_cfg, _localizationManager);
+        targetPlayer.Channel.Disconnect(message);
     }
     #endregion
 
     #region Job Bans
     // If you are trying to remove timeOfBan, please don't. It's there because the note system groups role bans by time, reason and banning admin.
     // Removing it will clutter the note list. Please also make sure that department bans are applied to roles with the same DateTimeOffset.
-
-    //Miracle edit start
-    public HashSet<ServerBanDef> GetServerBans(NetUserId userId)
-    {
-        if (_cachedServerBans.TryGetValue(userId, out var bans))
-        {
-            return bans;
-        }
-
-        return new HashSet<ServerBanDef>();
-    }
-    //Miracle edit end
-    public async void CreateRoleBan(NetUserId? target, string? targetUsername, NetUserId? banningAdmin, (IPAddress, int)? addressRange, ImmutableArray<byte>? hwid, string role, uint? minutes, NoteSeverity severity, string reason, DateTimeOffset timeOfBan)
+    public async void CreateRoleBan(NetUserId? target, string? targetUsername, NetUserId? banningAdmin, (IPAddress, int)? addressRange, ImmutableArray<byte>? hwid, string role, uint? minutes, NoteSeverity severity, string reason, DateTimeOffset timeOfBan, bool isGlobalBan)
     {
         if (!_prototypeManager.TryIndex(role, out JobPrototype? _))
         {
@@ -236,6 +210,13 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         if (minutes > 0)
         {
             expires = DateTimeOffset.Now + TimeSpan.FromMinutes(minutes.Value);
+        }
+
+        var serverName = _cfg.GetCVar(CCVars.AdminLogsServerName);
+
+        if (isGlobalBan)
+        {
+            serverName = UnknownServer;
         }
 
         _systems.TryGetEntitySystem(out GameTicker? ticker);
@@ -255,7 +236,8 @@ public sealed class BanManager : IBanManager, IPostInjectInit
             severity,
             banningAdmin,
             null,
-            role);
+            role,
+            serverName);
 
         if (!await AddRoleBan(banDef))
         {
@@ -335,11 +317,249 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         };
 
         _sawmill.Debug($"Sent rolebans to {pSession.Name}");
-        _netManager.ServerSendMessage(bans, pSession.ConnectedClient);
+        _netManager.ServerSendMessage(bans, pSession.Channel);
     }
 
     public void PostInject()
     {
         _sawmill = _logManager.GetSawmill(SawmillId);
     }
+
+    //WD start
+    public async void UtkaCreateDepartmentBan(string admin, string target, DepartmentPrototype department, string reason, uint minutes, bool isGlobalBan,
+        IPandaStatusHandlerContext context)
+    {
+        var located = await _playerLocator.LookupIdByNameOrIdAsync(target);
+        if (located == null)
+        {
+            UtkaSendResponse(false, context);
+            return;
+        }
+
+        var targetUid = located.UserId;
+        var targetHWid = located.LastHWId;
+        var targetAddress = located.LastAddress;
+
+        DateTimeOffset? expires = null;
+        if (minutes > 0)
+        {
+            expires = DateTimeOffset.Now + TimeSpan.FromMinutes(minutes);
+        }
+
+        (IPAddress, int)? addressRange = null;
+        if (targetAddress != null)
+        {
+            if (targetAddress.IsIPv4MappedToIPv6)
+                targetAddress = targetAddress.MapToIPv4();
+
+            // Ban /64 for IPv4, /32 for IPv4.
+            var cidr = targetAddress.AddressFamily == AddressFamily.InterNetworkV6 ? 64 : 32;
+            addressRange = (targetAddress, cidr);
+        }
+
+        var cfg = UnsafePseudoIoC.ConfigurationManager;
+        var serverName = cfg.GetCVar(CCVars.AdminLogsServerName);
+
+        if (isGlobalBan)
+        {
+            serverName = "unknown";
+        }
+
+        var locatedPlayer = await _playerLocator.LookupIdByNameOrIdAsync(admin);
+        if (locatedPlayer == null)
+        {
+            UtkaSendResponse(false, context);
+            return;
+        }
+        var player = locatedPlayer.UserId;
+
+        UtkaSendResponse(true, context);
+
+        _systems.TryGetEntitySystem<GameTicker>(out var ticker);
+        int? roundId = ticker == null || ticker.RoundId == 0 ? null : ticker.RoundId;
+        var playtime = (await _db.GetPlayTimes(targetUid)).Find(p => p.Tracker == PlayTimeTrackingShared.TrackerOverall)?.TimeSpent ?? TimeSpan.Zero;
+
+        foreach (var job in department.Roles)
+        {
+            var role = string.Concat(JobPrefix, job);
+
+            var banDef = new ServerRoleBanDef(
+                null,
+                targetUid,
+                addressRange,
+                targetHWid,
+                DateTimeOffset.Now,
+                expires,
+                roundId,
+                playtime,
+                reason,
+                NoteSeverity.High,
+                player,
+                null,
+                role,
+                serverName);
+
+            if (!await AddRoleBan(banDef))
+                continue;
+
+            var banId = await UtkaGetBanId(reason, role, targetUid);
+
+            UtkaSendJobBanEvent(admin, target, minutes, job, isGlobalBan, reason, banId);
+        }
+
+        SendRoleBans(located);
+    }
+
+    public async void UtkaCreateJobBan(string admin, string target, string job, string reason, uint minutes, bool isGlobalBan,
+        IPandaStatusHandlerContext context)
+    {
+        if (!_prototypeManager.TryIndex<JobPrototype>(job, out _))
+        {
+            UtkaSendResponse(false, context);
+            return;
+        }
+
+        var role = string.Concat(JobPrefix, job);
+
+        var located = await _playerLocator.LookupIdByNameOrIdAsync(target);
+        if (located == null)
+        {
+            UtkaSendResponse(false, context);
+            return;
+        }
+
+        var targetUid = located.UserId;
+        var targetHWid = located.LastHWId;
+        var targetAddress = located.LastAddress;
+
+        DateTimeOffset? expires = null;
+        if (minutes > 0)
+        {
+            expires = DateTimeOffset.Now + TimeSpan.FromMinutes(minutes);
+        }
+
+        (IPAddress, int)? addressRange = null;
+        if (targetAddress != null)
+        {
+            if (targetAddress.IsIPv4MappedToIPv6)
+                targetAddress = targetAddress.MapToIPv4();
+
+            // Ban /64 for IPv4, /32 for IPv4.
+            var cidr = targetAddress.AddressFamily == AddressFamily.InterNetworkV6 ? 64 : 32;
+            addressRange = (targetAddress, cidr);
+        }
+
+        var cfg = UnsafePseudoIoC.ConfigurationManager;
+        var serverName = cfg.GetCVar(CCVars.AdminLogsServerName);
+
+        if (isGlobalBan)
+        {
+            serverName = "unknown";
+        }
+
+        var locatedPlayer = await _playerLocator.LookupIdByNameOrIdAsync(admin);
+        if (locatedPlayer == null)
+        {
+            UtkaSendResponse(false, context);
+            return;
+        }
+
+        _systems.TryGetEntitySystem<GameTicker>(out var ticker);
+        int? roundId = ticker == null || ticker.RoundId == 0 ? null : ticker.RoundId;
+        var playtime = (await _db.GetPlayTimes(targetUid)).Find(p => p.Tracker == PlayTimeTrackingShared.TrackerOverall)?.TimeSpent ?? TimeSpan.Zero;
+
+        var player = locatedPlayer.UserId;
+        var banDef = new ServerRoleBanDef(
+            null,
+            targetUid,
+            addressRange,
+            targetHWid,
+            DateTimeOffset.Now,
+            expires,
+            roundId,
+            playtime,
+            reason,
+            NoteSeverity.High,
+            player,
+            null,
+            role,
+            serverName);
+
+        if (!await AddRoleBan(banDef))
+        {
+            UtkaSendResponse(false, context);
+            return;
+        }
+
+        var banId = await UtkaGetBanId(reason, role, targetUid);
+
+        UtkaSendJobBanEvent(admin, target, minutes, job, isGlobalBan, reason, banId);
+        UtkaSendResponse(true, context);
+
+        SendRoleBans(located);
+    }
+
+    private void UtkaSendResponse(bool banned, IPandaStatusHandlerContext context)
+    {
+        var utkaBanned = new UtkaJobBanResponse()
+        {
+            Banned = banned
+        };
+
+        context.RespondJsonAsync(utkaBanned);
+    }
+
+    private async void UtkaSendJobBanEvent(string ackey, string ckey, uint duration, string job, bool global,
+        string reason, int banId)
+    {
+        if (job.Contains("Job:"))
+        {
+            job = job.Replace("Job:", "");
+        }
+
+        var utkaBanned = new UtkaBannedEvent()
+        {
+            ACkey = ackey,
+            Ckey = ckey,
+            Duration = duration,
+            Bantype = job,
+            Global = global,
+            Reason = reason,
+            Rid = EntitySystem.Get<GameTicker>().RoundId,
+            BanId = banId
+        };
+
+        _pandaWeb.SendBotPostMessage(utkaBanned);
+        _entMan.EventBus.RaiseEvent(EventSource.Local, utkaBanned);
+    }
+
+    private async Task<int> UtkaGetBanId(string reason, string role, NetUserId targetUid)
+    {
+        var banId = 0;
+        var banList = await _db.GetServerRoleBansAsync(null, targetUid, null);
+
+        foreach (var ban in banList)
+        {
+            if (ban.Reason == reason)
+            {
+                if (ban.Role == role && ban.Id != null)
+                {
+                    banId = ban.Id.Value;
+                }
+            }
+        }
+
+        return banId;
+    }
+
+    public void SendRoleBans(LocatedPlayerData located)
+    {
+        if (!_playerManager.TryGetSessionById(located.UserId, out var player))
+        {
+            return;
+        }
+
+        SendRoleBans(player);
+    }
+    //WD end
 }

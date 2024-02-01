@@ -80,6 +80,15 @@
     ruleChance: 0.5
 
 - type: entity
+  id: Changeling
+  parent: BaseGameRule
+  noSpawn: true
+  components:
+    - type: ChangelingRule
+#    - type: TraitorRule
+#      ruleChance: 0.6
+
+- type: entity
   id: Revolutionary
   parent: BaseGameRule
   noSpawn: true
@@ -123,3 +132,14 @@
   noSpawn: true
   components:
   - type: RampingStationEventScheduler
+
+# WD EDIT
+- type: entity
+  id: Cult
+  parent: BaseGameRule
+  noSpawn: true
+  components:
+    - type: CultRule
+      cultistStartingItems:
+        - RitualDagger
+        - CultRunicMetal20

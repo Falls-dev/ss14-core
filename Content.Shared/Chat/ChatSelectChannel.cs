@@ -46,10 +46,14 @@
         /// </summary>
         Dead = ChatChannel.Dead,
 
+        Cult = ChatChannel.Cult,
+
         /// <summary>
         ///     Admin chat
         /// </summary>
         Admin = ChatChannel.AdminChat,
+
+        Changeling = ChatChannel.Changeling,
 
         Console = ChatChannel.Unspecified
     }

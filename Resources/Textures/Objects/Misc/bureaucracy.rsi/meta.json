@@ -245,8 +245,20 @@
     {
       "name": "paper_stamp-warden"
     },
+      {
+          "name": "stamp-inspector"
+      },
+      {
+          "name": "paper_stamp-inspector"
+      },
     {
       "name": "paper_stamp-generic"
+    },
+      {
+          "name": "paper_stamp-geraldiy"
+    },
+    {
+      "name": "paper_stamp-transcript"
     }
   ]
 }

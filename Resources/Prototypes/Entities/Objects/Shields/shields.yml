@@ -47,7 +47,8 @@
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
             - !type:PlaySoundBehavior
-              sound: /Audio/Effects/metalbreak.ogg
+              sound:
+                collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
                 SheetSteel:
@@ -68,7 +69,7 @@
   description: A large tower shield. Good for controlling crowds.
   components:
     - type: StaticPrice
-      price: 100
+      price: 90
 
 - type: entity
   name: riot laser shield
@@ -89,6 +90,10 @@
           Heat: 0.7
         flatReductions:
           Heat: 2
+    - type: Reflect
+      reflectProb: 0.25
+      reflects:
+        - Energy
 
 - type: entity
   name: riot bullet shield
@@ -112,6 +117,48 @@
         flatReductions:
           Blunt: 1.5
           Piercing: 1.5
+
+#Changeling shield
+- type: entity
+  name: organic shield
+  parent: BaseShield
+  id: OrganicShield
+  description: A large, fleshy shield.
+  components:
+    - type: Sprite
+      state: changeling-icon
+    - type: Item
+      heldPrefix: changeling
+    - type: Blocking
+      passiveBlockModifier:
+        coefficients:
+          Blunt: 0.8
+          Piercing: 0.8
+      activeBlockModifier:
+        coefficients:
+          Blunt: 0.7
+          Piercing: 0.7
+        flatReductions:
+          Blunt: 1.5
+          Piercing: 1.5
+    - type: Unremoveable
+      deleteOnDrop: true
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 80
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+        - trigger:
+            !type:DamageTrigger
+            damage: 50
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+            - !type:PlaySoundBehavior
+              sound: /Audio/Effects/gib2.ogg
 
 #Craftable shields
 
@@ -160,10 +207,11 @@
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
             - !type:PlaySoundBehavior
-              sound: /Audio/Effects/metalbreak.ogg
+              sound:
+                collection: WoodDestroy
             - !type:SpawnEntitiesBehavior
               spawn:
-                MaterialWoodPlank:
+                MaterialWoodPlank1:
                   min: 5
                   max: 5
     - type: StaticPrice
@@ -215,7 +263,8 @@
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
             - !type:PlaySoundBehavior
-              sound: /Audio/Effects/metalbreak.ogg
+              sound:
+                collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
                 SheetSteel:
@@ -273,12 +322,12 @@
                   max: 1
             - !type:PlaySoundBehavior
               sound:
-                path: /Audio/Effects/woodhit.ogg
+                collection: WoodDestroy
 
 #Magic/Cult Shields (give these to wizard for now)
 
 - type: entity
-  name: Clockwork Shield
+  name: clockwork shield
   parent: BaseShield
   id: ClockworkShield
   description: Ratvar oyrffrf lbh jvgu uvf cebgrpgvba.
@@ -307,7 +356,7 @@
       #Have it break into brass when clock cult is in
 
 - type: entity
-  name: Mirror Shield
+  name: mirror shield
   parent: BaseShield
   id: MirrorShield
   description: Eerily glows red... you hear the geometer whispering
@@ -346,7 +395,8 @@
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
             - !type:PlaySoundBehavior
-              sound: /Audio/Effects/glass_break1.ogg
+              sound:
+                collection: GlassBreak
             - !type:SpawnEntitiesBehavior
               spawn:
                 SheetGlass:
@@ -364,9 +414,14 @@
         path: /Audio/Weapons/ebladeon.ogg
       soundDeactivate:
         path: /Audio/Weapons/ebladeoff.ogg
-    - type: ItemToggleActiveSound
-      activeSound:
-        path: /Audio/Weapons/ebladehum.ogg
+      soundFailToActivate:
+        path: /Audio/Machines/button.ogg
+        params:
+          variation: 0.250
+   # Causes sound issues in combination with Rechargeable
+   #- type: ItemToggleActiveSound
+   #  activeSound:
+   #    path: /Audio/Weapons/ebladehum.ogg
     - type: ItemToggleSize
       activatedSize: Huge
     - type: ItemToggleDisarmMalus
@@ -403,16 +458,17 @@
       color: blue
     - type: Reflect
       enabled: false
-      reflectProb: 0.95
+      reflectProb: 1
       reflects:
         - Energy
+      damageOnReflect: true
     - type: Blocking
       passiveBlockModifier:
         coefficients:
           Blunt: 1.0
           Slash: 0.9
           Piercing: 0.85
-          Heat: 0.6
+          Heat: 0.5
       activeBlockModifier:
         coefficients:
           Blunt: 1.2
@@ -425,27 +481,9 @@
     - type: Appearance
     - type: Damageable
       damageContainer: Shield
-    - type: Destructible
-      thresholds:
-        - trigger:
-            !type:DamageTrigger
-            damage: 180
-          behaviors:
-            - !type:DoActsBehavior
-              acts: [ "Destruction" ]
-        - trigger:
-            !type:DamageTrigger
-            damage: 150
-          behaviors:
-            - !type:DoActsBehavior
-              acts: [ "Destruction" ]
-            - !type:PlaySoundBehavior
-              sound: /Audio/Effects/metalbreak.ogg
-            - !type:SpawnEntitiesBehavior
-              spawn:
-                BrokenEnergyShield:
-                  min: 1
-                  max: 1
+    - type: Rechargeable
+      maxCharge: 20
+      rechargeDelay: 15
     - type: StaticPrice
       price: 350
 
@@ -518,7 +556,8 @@
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
             - !type:PlaySoundBehavior
-              sound: /Audio/Effects/metalbreak.ogg
+              sound:
+                collection: MetalGlassBreak
             - !type:SpawnEntitiesBehavior
               spawn:
                 SheetSteel:

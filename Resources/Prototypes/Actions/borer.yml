@@ -5,7 +5,9 @@
   noSpawn: true
   components:
   - type: EntityTargetAction
-    icon: Mobs/Animals/borer.rsi/action_infest.png
+    icon:
+      sprite: Mobs/Animals/borer.rsi
+      state: action_infest
     event: !type:BorerInfestActionEvent
     canTargetSelf: false
     useDelay: 4
@@ -17,7 +19,9 @@
   noSpawn: true
   components:
   - type: EntityTargetAction
-    icon: Mobs/Animals/borer.rsi/action_stun.png
+    icon:
+      sprite: Mobs/Animals/borer.rsi
+      state: action_stun
     event: !type:BorerStunActionEvent
     canTargetSelf: false
     useDelay: 4
@@ -29,7 +33,9 @@
   noSpawn: true
   components:
   - type: InstantAction
-    icon: Mobs/Animals/borer.rsi/action_out.png
+    icon:
+      sprite: Mobs/Animals/borer.rsi
+      state: action_out
     event: !type:BorerOutActionEvent
     useDelay: 4
     
@@ -40,7 +46,9 @@
   noSpawn: true
   components:
   - type: InstantAction
-    icon: Mobs/Animals/borer.rsi/action_brainspeech.png
+    icon:
+      sprite: Mobs/Animals/borer.rsi
+      state: action_brainspeech
     event: !type:BorerBrainSpeechActionEvent
     useDelay: 4
     
@@ -51,7 +59,9 @@
   noSpawn: true
   components:
   - type: InstantAction
-    icon: Mobs/Animals/borer.rsi/action_inject.png
+    icon:
+      sprite: Mobs/Animals/borer.rsi
+      state: action_inject
     event: !type:BorerInjectWindowOpenEvent
     useDelay: 4
     
@@ -62,7 +72,9 @@
   noSpawn: true
   components:
   - type: InstantAction
-    icon: Mobs/Animals/borer.rsi/action_scanreagents.png
+    icon:
+      sprite: Mobs/Animals/borer.rsi
+      state: action_scanreagents
     event: !type:BorerScanInstantActionEvent
     useDelay: 5
     
@@ -73,7 +85,9 @@
   noSpawn: true
   components:
   - type: InstantAction
-    icon: Mobs/Animals/borer.rsi/action_braintake.png
+    icon:
+      sprite: Mobs/Animals/borer.rsi
+      state: action_braintake
     event: !type:BorerBrainTakeEvent
     useDelay: 4
     
@@ -84,7 +98,9 @@
   noSpawn: true
   components:
   - type: InstantAction
-    icon: Mobs/Animals/borer.rsi/action_reproduce.png
+    icon:
+      sprite: Mobs/Animals/borer.rsi
+      state: action_reproduce
     event: !type:BorerReproduceEvent
     useDelay: 30
     
@@ -95,7 +111,9 @@
   noSpawn: true
   components:
   - type: InstantAction
-    icon: Mobs/Animals/borer.rsi/action_brainrelease.png
+    icon:
+      sprite: Mobs/Animals/borer.rsi
+      state: action_brainrelease
     event: !type:BorerBrainReleaseEvent
     useDelay: 4
     
@@ -106,6 +124,8 @@
   noSpawn: true
   components:
   - type: InstantAction
-    icon: Mobs/Animals/borer.rsi/action_brainrelease.png
+    icon:
+      sprite: Mobs/Animals/borer.rsi
+      state: action_brainrelease
     event: !type:BorerBrainResistEvent
     useDelay: 4

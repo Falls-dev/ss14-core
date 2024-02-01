@@ -171,7 +171,7 @@ public sealed class ServerBorerSystem : EntitySystem
             return;
         }
 
-        if (SearchSugar(uid) > 0)
+        if (GetSugarQuantityInHost(uid) > 0)
         {
             _popup.PopupEntity(Loc.GetString("borer-popup-toomuchsugar"), uid,
                 uid, PopupType.LargeCaution);
@@ -197,12 +197,25 @@ public sealed class ServerBorerSystem : EntitySystem
 
     private void OnTakeControlAfter(EntityUid uid, InfestedBorerComponent component, BorerBrainTakeAfterEvent args)
     {
-        if (args.Cancelled || !WithrawPoints(uid, component.AssumeControlCost))
-            return;
-
         if (!TryComp(uid, out ActionsComponent? comp) ||
             !TryComp((EntityUid) component.Host!, out ActionsComponent? hostComp))
             return;
+
+        else if (TryComp(component.Host, out MobStateComponent? state) &&
+            state.CurrentState == MobState.Critical)
+        {
+            _popup.PopupEntity(Loc.GetString("borer-popup-braintake-critical"), uid,
+                uid, PopupType.LargeCaution);
+            return;
+        }
+        else if (GetSugarQuantityInHost(uid) > 0)
+        {
+            _popup.PopupEntity(Loc.GetString("borer-popup-toomuchsugar"), uid,
+                uid, PopupType.LargeCaution);
+        }
+        else if (args.Cancelled || !WithrawPoints(uid, component.AssumeControlCost))
+            return;
+
         var borHasMind = _mindSystem.TryGetMind(uid, out var mindId, out var mind);
         var hostHasMind = _mindSystem.TryGetMind((EntityUid) component.Host!, out var hostMindId, out var hostMind);
 
@@ -232,7 +245,7 @@ public sealed class ServerBorerSystem : EntitySystem
                 _chatManager.ChatMessageToOne(ChatChannel.Local,
                     Loc.GetString("borer-message-braintake-alert"),
                     Loc.GetString("borer-message-braintake-alert"),
-                    EntityUid.Invalid, false, actor!.PlayerSession.Channel);
+                    EntityUid.Invalid, false, actor.PlayerSession.Channel);
             }
         }
 
@@ -275,7 +288,7 @@ public sealed class ServerBorerSystem : EntitySystem
             return;
         }
 
-        if (SearchSugar(uid) > 10)
+        if (GetSugarQuantityInEntity(args.Target) > 10)
         {
             _popup.PopupEntity(Loc.GetString("borer-popup-infest-sugar"), uid, uid, PopupType.LargeCaution);
             args.Handled = true;
@@ -304,7 +317,7 @@ public sealed class ServerBorerSystem : EntitySystem
             return;
         }
 
-        if (SearchSugar(uid) > 10)
+        if (GetSugarQuantityInHost(uid) > 10)
         {
             _popup.PopupEntity(Loc.GetString("borer-popup-infest-sugar"), uid, uid, PopupType.LargeCaution);
             args.Handled = true;
@@ -375,7 +388,7 @@ public sealed class ServerBorerSystem : EntitySystem
 
             comp.PointUpdateNext += comp.PointUpdateRate;
             comp.Points += comp.PointUpdateValue;
-            SearchSugar(uid);
+            GetSugarQuantityInHost(uid);
             RaiseNetworkEvent(new BorerPointsUpdateEvent());
             Dirty(uid, comp);
         }
@@ -465,8 +478,6 @@ public sealed class ServerBorerSystem : EntitySystem
 
     private void OnGetOut(EntityUid uid, InfestedBorerComponent component, BorerOutActionEvent args)
     {
-        //if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))
-        //return;
         GetOut(uid);
     }
 
@@ -489,27 +500,46 @@ public sealed class ServerBorerSystem : EntitySystem
 
     }
 
-    public int SearchSugar(EntityUid uid)
+    public int GetSugarQuantityInHost(EntityUid borerUid)
     {
         var sugarQuant = 0;
-        if (EntityManager.TryGetComponent(uid,
+        if (EntityManager.TryGetComponent(borerUid,
                 out InfestedBorerComponent? component) && EntityManager.TryGetComponent((EntityUid) component.Host!,
                 out BloodstreamComponent? bloodContainer))
         {
             _solutionContainerSystem.TryGetSolution((EntityUid) component.Host, bloodContainer.ChemicalSolutionName,
-                out var Sol);
-            foreach (var reagent in Sol!.Value.Comp.Solution)
+                out var sol);
+            foreach (var reagent in sol!.Value.Comp.Solution)
             {
-                //Sol.Value.Comp.Solution.TryGetReagentQuantity(pro, out var quantity);
                 if (reagent.Reagent.ToString() == "Sugar")
                 {
                     sugarQuant = reagent.Quantity.Int();
                     if (sugarQuant >= 30)
                     {
-                        GetOut(uid);
-                        _popup.PopupEntity(Loc.GetString("borer-popup-sugarleave"), uid, uid, PopupType.LargeCaution);
+                        GetOut(borerUid);
+                        _popup.PopupEntity(Loc.GetString("borer-popup-sugarleave"), borerUid, borerUid, PopupType.LargeCaution);
                         return reagent.Quantity.Int();
                     }
+                }
+            }
+        }
+
+        return sugarQuant;
+    }
+
+    public int GetSugarQuantityInEntity(EntityUid uid)
+    {
+        var sugarQuant = 0;
+        if (EntityManager.TryGetComponent(uid,
+                out BloodstreamComponent? bloodContainer))
+        {
+            _solutionContainerSystem.TryGetSolution(uid, bloodContainer.ChemicalSolutionName,
+                out var sol);
+            foreach (var reagent in sol!.Value.Comp.Solution)
+            {
+                if (reagent.Reagent.ToString() == "Sugar")
+                {
+                    sugarQuant = reagent.Quantity.Int();
                 }
             }
         }

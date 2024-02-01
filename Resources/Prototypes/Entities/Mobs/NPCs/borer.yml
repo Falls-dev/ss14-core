@@ -58,6 +58,7 @@
   - type: CombatMode
     combatToggleAction: ActionCombatModeToggleOff
   - type: Actions
+  - type: ActionsContainer
 
 - type: entity
   name: Cortical Borer

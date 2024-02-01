@@ -20,7 +20,7 @@ using Robust.Shared.Utility;
 namespace Content.Server._White.VoiceRecorder;
 
 /// <summary>
-/// This handles the voice recorder work.
+/// This handles the voice recorder all itself.
 /// </summary>
 public sealed class VoiceRecorderSystem : EntitySystem
 {

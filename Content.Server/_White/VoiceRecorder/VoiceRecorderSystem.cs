@@ -3,7 +3,9 @@ using Content.Server.Paper;
 using Content.Server.Popups;
 using Content.Server.Speech;
 using Content.Server.Speech.Components;
+using Content.Shared._White.VoiceRecorder;
 using Content.Shared.Examine;
+using Content.Shared.GameTicking;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Item;
@@ -12,9 +14,10 @@ using Content.Shared.Toggleable;
 using Content.Shared.Verbs;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.Server.White.VoiceRecorder;
+namespace Content.Server._White.VoiceRecorder;
 
 /// <summary>
 /// This handles the voice recorder work.
@@ -28,13 +31,15 @@ public sealed class VoiceRecorderSystem : EntitySystem
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly SharedItemSystem _item = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private readonly SharedGameTicker _gameTicker = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<VoiceRecorderComponent, ActivateInWorldEvent>(OnActivate);
-        // SubscribeLocalEvent<VoiceRecorderComponent, ExaminedEvent>(OnExamine);
+        SubscribeLocalEvent<VoiceRecorderComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<VoiceRecorderComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<VoiceRecorderComponent, ListenEvent>(SaveEntityMessage);
         SubscribeLocalEvent<VoiceRecorderComponent, ListenAttemptEvent>(CanListen);
@@ -51,6 +56,15 @@ public sealed class VoiceRecorderSystem : EntitySystem
         }
         ToggleListening(uid, component, component.Listening);
 
+    }
+
+    public void OnExamine(EntityUid uid, VoiceRecorderComponent component, ExaminedEvent args)
+    {
+        if (args.IsInDetailsRange)
+        {
+            var message = $"{Loc.GetString("voice-recorder-state")} {Loc.GetString( component.Listening ? "voice-recorder-state-on" : "voice-recorder-state-off")}";
+            args.PushMarkup(message);
+        }
     }
 
     public void OnActivate(EntityUid uid, VoiceRecorderComponent component, ActivateInWorldEvent args)
@@ -116,7 +130,9 @@ public sealed class VoiceRecorderSystem : EntitySystem
         if (!component.Listening)
             return;
 
-        component.Recordings.Add($"{Name(args.Source)}: {args.Message}");
+        var message = $"{_gameTiming.CurTime.Subtract(_gameTicker.RoundStartTimeSpan).ToString("hh\\:mm\\:ss")} {Name(args.Source)}: {args.Message}";
+        component.Recordings.Add(message);
+
         if (component.Recordings.Count > (component.MaximumEntries - 1))
         {
             ToggleListening(uid, component, false);
@@ -125,6 +141,11 @@ public sealed class VoiceRecorderSystem : EntitySystem
 
     public void OnPrint(EntityUid uid, VoiceRecorderComponent component, string[] messages, EntityUid user)
     {
+        if (_gameTiming.CurTime < component.PrintReadyAt)
+        {
+            _popup.PopupEntity(Loc.GetString("forensic-scanner-printer-not-ready"), uid, user);
+            return;
+        }
         // TEXT TO PRINT
         var text = new StringBuilder();
         text.AppendLine(component.CustomTitle == "" ? Loc.GetString("voice-recorder-title") : component.CustomTitle);
@@ -152,5 +173,6 @@ public sealed class VoiceRecorderSystem : EntitySystem
         _metaData.SetEntityName(printed, Loc.GetString("voice-recorder-paper-name"));
         _metaData.SetEntityDescription(printed, Loc.GetString("voice-recorder-paper-desc"));
         ToggleListening(uid, component, false);
+        component.PrintReadyAt = _gameTiming.CurTime + component.PrintCooldown;
     }
 }

@@ -3,7 +3,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
-namespace Content.Server.White.VoiceRecorder;
+namespace Content.Shared._White.VoiceRecorder;
 
 /// <summary>
 /// This is used for...
@@ -53,4 +53,16 @@ public sealed partial class VoiceRecorderComponent : Component
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField("customTitle")]
     public string CustomTitle = "";
+
+    /// <summary>
+    /// When will the recorder be ready to print again?
+    /// </summary>
+    [ViewVariables(VVAccess.ReadOnly)]
+    public TimeSpan PrintReadyAt = TimeSpan.Zero;
+
+    /// <summary>
+    /// How often can the recorder print out reports?
+    /// </summary>
+    [DataField("printCooldown")]
+    public TimeSpan PrintCooldown = TimeSpan.FromSeconds(5);
 }

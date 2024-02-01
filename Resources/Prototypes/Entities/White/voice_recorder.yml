@@ -1,7 +1,7 @@
 - type: entity
   parent: BaseItem
   id: VoiceRecorder
-  name: Voice Recorder
+  name: voice recorder
   description: BLCK-M type voice recorder. Has built-in printer for printing transcripts. Each new record erases previous one.
   components:
     - type: Sprite

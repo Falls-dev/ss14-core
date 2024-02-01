@@ -7,6 +7,9 @@ voice-recorder-start = *начало записи*
 voice-recorder-end = *конец записи*
 voice-recorder-paper-name = стенограмма
 voice-recorder-paper-desc = копия стенограммы записанной на диктофон типа BLCK-M
+voice-recorder-state = Диктофон
+voice-recorder-state-on = ведёт запись
+voice-recorder-state-off = выключен
 
 ent-VoiceRecorder = диктофон
     .desc = Диктофон типа BLCK-M. Имеет втроенный принтер для печати стенограмм. Каждая новая запись стирает предыдущую.

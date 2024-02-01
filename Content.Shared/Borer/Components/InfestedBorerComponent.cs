@@ -23,7 +23,7 @@ public sealed partial class InfestedBorerComponent : Component
 
     public TimeSpan PointUpdateRate = TimeSpan.FromSeconds(2);
 
-    public readonly int PointUpdateValue = 100;
+    public readonly int PointUpdateValue = 1;
 
     public string ActionBorerOut = "ActionBorerOut";
 

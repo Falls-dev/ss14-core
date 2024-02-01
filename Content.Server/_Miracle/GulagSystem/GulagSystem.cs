@@ -114,8 +114,17 @@ public sealed partial class GulagSystem : SharedGulagSystem
         SubscribeLocalEvent<GulagFillContainerComponent, MapInitEvent>(OnGulagContainerSpawned);
         SubscribeLocalEvent<KillReportedEvent>(OnKillReported);
 
+        SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnJoinedLobby);
         //safeguard
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
+    }
+
+    private void OnJoinedLobby(PlayerJoinedLobbyEvent ev)
+    {
+        if(IsUserGulaged(ev.PlayerSession.UserId, out _))
+        {
+            _chatManager.DispatchServerMessage(ev.PlayerSession, Loc.GetString("gulag-chat-join-message"));
+        }
     }
 
     private void OnKillReported(ref KillReportedEvent ev)

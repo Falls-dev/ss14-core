@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Content.Server._Miracle.GulagSystem;
 using Content.Server.Chat.Managers;
 using Content.Server.Database;
 using Content.Server.GameTicking;
@@ -39,6 +40,7 @@ public sealed class BanManager : IBanManager, IPostInjectInit
     public const string JobPrefix = "Job:";
 
     private readonly Dictionary<NetUserId, HashSet<ServerRoleBanDef>> _cachedRoleBans = new();
+    private readonly Dictionary<NetUserId, HashSet<ServerBanDef>> _cachedServerBans = new(); // Miracle edit
 
     public void Initialize()
     {
@@ -55,6 +57,7 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         var netChannel = e.Session.ConnectedClient;
         ImmutableArray<byte>? hwId = netChannel.UserData.HWId.Length == 0 ? null : netChannel.UserData.HWId;
         await CacheDbRoleBans(e.Session.UserId, netChannel.RemoteEndPoint.Address, hwId);
+        await CacheDbServerBans(e.Session.UserId, netChannel.RemoteEndPoint.Address, hwId); //Miracle edit
 
         SendRoleBans(e.Session);
     }
@@ -89,6 +92,17 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         _cachedRoleBans[userId] = userRoleBans;
     }
 
+    //Miracle edit start
+    private async Task CacheDbServerBans(NetUserId userId, IPAddress? address = null, ImmutableArray<byte>? hwId = null)
+    {
+        var serverBans = await _db.GetServerBansAsync(address, userId, hwId, false);
+
+        var userServerBans = new HashSet<ServerBanDef>(serverBans);
+
+        _cachedServerBans[userId] = userServerBans;
+    }
+    //Miracle edit end
+
     public void Restart()
     {
         // Clear out players that have disconnected.
@@ -102,6 +116,7 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         foreach (var player in toRemove)
         {
             _cachedRoleBans.Remove(player);
+            _cachedServerBans.Remove(player); //Miracle edit
         }
 
         // Check for expired bans
@@ -109,6 +124,13 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         {
             roleBans.RemoveWhere(ban => DateTimeOffset.Now > ban.ExpirationTime);
         }
+
+        //Miracle edit start
+        foreach (var serverBan in _cachedServerBans.Values)
+        {
+            serverBan.RemoveWhere(ban => DateTimeOffset.Now > ban.ExpirationTime);
+        }
+        //Miracle edit end
     }
 
     #region Server Bans
@@ -173,15 +195,35 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         // Is the player connected?
         if (!_playerManager.TryGetSessionById(target.Value, out var targetPlayer))
             return;
-        // If they are, kick them
-        var message = banDef.FormatBanMessage(_cfg, _localizationManager);
-        targetPlayer.ConnectedClient.Disconnect(message);
+        // Kick when perma
+        if (banDef.ExpirationTime == null)
+        {
+            var message = banDef.FormatBanMessage(_cfg, _localizationManager);
+            targetPlayer.ConnectedClient.Disconnect(message);
+        }
+        else // Teleport to gulag
+        {
+            var gulag = _systems.GetEntitySystem<GulagSystem>();
+            gulag.SendToGulag(targetPlayer);
+        }
     }
     #endregion
 
     #region Job Bans
     // If you are trying to remove timeOfBan, please don't. It's there because the note system groups role bans by time, reason and banning admin.
     // Removing it will clutter the note list. Please also make sure that department bans are applied to roles with the same DateTimeOffset.
+
+    //Miracle edit start
+    public HashSet<ServerBanDef> GetServerBans(NetUserId userId)
+    {
+        if (_cachedServerBans.TryGetValue(userId, out var bans))
+        {
+            return bans;
+        }
+
+        return new HashSet<ServerBanDef>();
+    }
+    //Miracle edit end
     public async void CreateRoleBan(NetUserId? target, string? targetUsername, NetUserId? banningAdmin, (IPAddress, int)? addressRange, ImmutableArray<byte>? hwid, string role, uint? minutes, NoteSeverity severity, string reason, DateTimeOffset timeOfBan)
     {
         if (!_prototypeManager.TryIndex(role, out JobPrototype? _))

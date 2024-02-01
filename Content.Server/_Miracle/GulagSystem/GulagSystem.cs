@@ -4,6 +4,7 @@ using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
+using Content.Server.Chat.Managers;
 using Content.Server.Database;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
@@ -11,7 +12,9 @@ using Content.Server.KillTracking;
 using Content.Server.Materials;
 using Content.Server.Mind;
 using Content.Server.Parallax;
+using Content.Server.Preferences.Managers;
 using Content.Server.Spawners.Components;
+using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared._Miracle.Cvars;
@@ -23,6 +26,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Materials;
 using Content.Shared.Parallax.Biomes;
+using Content.Shared.Popups;
 using Content.Shared.Preferences;
 using Content.Shared.Throwing;
 using Robust.Server.GameObjects;
@@ -61,8 +65,11 @@ public sealed partial class GulagSystem : SharedGulagSystem
     [Dependency] private readonly EntityStorageSystem _entityStorageSystem = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IServerPreferencesManager _preferencesManager = default!;
+    [Dependency] private readonly IChatManager _chatManager = default!;
+    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+    [Dependency] private readonly StationSystem _stationSystem = default!;
 
-    private EntityUid MainStation => _mapManager.GetMapEntityId(_gameTicker.DefaultMap);
 
     private readonly List<ProtoId<BiomeTemplatePrototype>> _gulagBiomes = new()
     {
@@ -111,7 +118,7 @@ public sealed partial class GulagSystem : SharedGulagSystem
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
     }
 
-    private void OnKillReported(KillReportedEvent ev)
+    private void OnKillReported(ref KillReportedEvent ev)
     {
         if (!HasComp<GulagBoundComponent>(ev.Entity))
         {
@@ -172,8 +179,20 @@ public sealed partial class GulagSystem : SharedGulagSystem
             return;
         }
 
-        var comp = Comp<StationCargoOrderDatabaseComponent>(MainStation);
-        _cargoSystem.AddAndApproveOrder(MainStation, "CrateGulag", 0, 1, "Gulag send this", "Main station", "STATION", comp);
+        var station = GetMainStation();
+
+        if (!station.HasValue)
+        {
+            return;
+        }
+
+        if (!TryComp<StationCargoOrderDatabaseComponent>(station.Value, out var comp))
+        {
+            return;
+        }
+
+        _cargoSystem.AddAndApproveOrder(station.Value, "CrateGulag", 0, 1, Loc.GetString("gulag-sender"),
+            Loc.GetString("gulag-order-description"), Loc.GetString("gulag-order-destination"), comp);
 
         _nextShuttleFillUpdate = DateTime.Now + _shuttleFillUpdateRate;
     }
@@ -213,6 +232,15 @@ public sealed partial class GulagSystem : SharedGulagSystem
         {
             SendToGulag(playerEntity.Value);
         }
+        else
+        {
+            SpawnPlayer(session, (HumanoidCharacterProfile)_preferencesManager.GetPreferences(session.UserId).SelectedCharacter);
+        }
+
+        var banDef = _banManager.GetServerBans(session.UserId).First();
+        var message = Loc.GetString("gulag-greetings-message", ("BanTime", $"{(banDef.ExpirationTime! - DateTime.Now).Value.TotalHours}"));
+
+        _chatManager.DispatchServerMessage(session, message);
     }
 
     private void OnInteract(EntityUid uid, GulagOreProcessorComponent component, InteractUsingEvent args)
@@ -230,6 +258,7 @@ public sealed partial class GulagSystem : SharedGulagSystem
     private void OnOreInserted(EntityUid uid, GulagOreProcessorComponent component, MaterialEntityInsertedEvent args)
     {
         var storageComponent = Comp<MaterialStorageComponent>(uid);
+        var userId = component.LastInteractedUser!.Value;
 
         foreach (var (materialId, currentVolume ) in storageComponent.Storage)
         {
@@ -237,14 +266,17 @@ public sealed partial class GulagSystem : SharedGulagSystem
             var stackVolume = _materialStorageSystem.GetSheetVolume(materialPrototype);
             var actualOreCount = currentVolume / stackVolume;
 
-            var price = materialPrototype.Price * actualOreCount;
+            var points = materialPrototype.Price * actualOreCount;
 
-            var userId = component.LastInteractedUser!.Value;
-            _pointsPerPlayer[userId] = price + _pointsPerPlayer.GetValueOrDefault(userId);
+            _pointsPerPlayer[userId] = points + _pointsPerPlayer.GetValueOrDefault(userId);
 
             _gulagMaterialStorage[materialId] = currentVolume + _gulagMaterialStorage.GetValueOrDefault(materialId);
             _materialStorageSystem.TrySetMaterialAmount(uid, materialId, 0);
+
         }
+
+        var time = ConvertPointsToTime(_pointsPerPlayer[userId]);
+        _popupSystem.PopupEntity(Loc.GetString("gulag-ban-time-changed", ("Time", $"{time.TotalSeconds}")), uid, PopupType.Medium);
     }
 
     public bool IsUserGulaged(NetUserId playerId, out HashSet<ServerBanDef> bans)
@@ -324,7 +356,7 @@ public sealed partial class GulagSystem : SharedGulagSystem
         }
 
         ev.Handled = true;
-        SpawnPlayer(ev.Player, ev.Profile);
+        SendToGulag(ev.Player);
     }
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
@@ -392,5 +424,30 @@ public sealed partial class GulagSystem : SharedGulagSystem
     private EntityCoordinates GetSpawnPosition()
     {
         return _spawnCoords.Count != 0 ? _random.Pick(_spawnCoords) : Transform(_mapEntity!.Value).Coordinates;
+    }
+
+    private EntityUid? GetMainStation()
+    {
+        var stations = _stationSystem.GetStations();
+
+        foreach (var station in stations)
+        {
+            var stationData = Comp<StationDataComponent>(station);
+
+            if (!HasComp<StationCargoOrderDatabaseComponent>(station))
+            {
+                continue;
+            }
+
+            foreach (var grid in stationData.Grids)
+            {
+                if (Transform(grid).MapID == _gameTicker.DefaultMap)
+                {
+                    return station;
+                }
+            }
+        }
+
+        return null!;
     }
 }

@@ -118,7 +118,7 @@ public sealed class ServerBorerSystem : EntitySystem
         if (!TryComp(borerUid, out ActionsComponent? wormActComp) ||
             !TryComp(borerUid, out InfestedBorerComponent? borComp) ||
             !borComp.Host.HasValue ||
-            !borComp.ControlligBrain)
+            !borComp.ControllingBrain)
             return;
 
         TryComp(borComp.Host.Value, out ActionsComponent? bodyActComp);
@@ -141,7 +141,7 @@ public sealed class ServerBorerSystem : EntitySystem
 
         _action.RemoveAction(borComp.Host.Value, borComp.ActionBorerReproduceEntity, bodyActComp);
 
-        borComp.ControlligBrain = false;
+        borComp.ControllingBrain = false;
         Dirty(borerUid, borComp);
     }
 
@@ -264,7 +264,7 @@ public sealed class ServerBorerSystem : EntitySystem
             _metaData.SetEntityName(component.ActionBorerReproduceEntity.Value,
                 $"{Loc.GetString("borer-abilities-reproduce-name")} ([color=red]{component.ReproduceCost}c[/color])");
 
-        component.ControlligBrain = true;
+        component.ControllingBrain = true;
         Dirty(uid, component);
     }
 

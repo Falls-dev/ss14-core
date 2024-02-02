@@ -34,7 +34,7 @@ public sealed class BorerOverlay : Overlay
             points = borComp.Points;
         else if (_entManager.TryGetComponent(localPlayer, out InfestedBorerComponent? infestedComp))
         {
-            if (infestedComp.ControlligBrain)
+            if (infestedComp.ControllingBrain)
                 return;
             points = infestedComp.Points;
         }

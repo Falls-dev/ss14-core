@@ -17,7 +17,7 @@ public sealed partial class InfestedBorerComponent : Component
 
     [AutoNetworkedField]
     [ViewVariables(VVAccess.ReadOnly)]
-    public bool ControlligBrain = false;
+    public bool ControllingBrain = false;
 
     public TimeSpan PointUpdateNext = TimeSpan.Zero;
 

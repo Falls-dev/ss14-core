@@ -1,4 +1,4 @@
-﻿ent-GulagOreProcessor = Приемник руды.
+﻿ent-GulagOreProcessor = Приемник руды с трудового лагеря.
     .desc = Загружаешь руду, сокращаешь срок.
 
 ent-CrateGulag = Контейнер руды.

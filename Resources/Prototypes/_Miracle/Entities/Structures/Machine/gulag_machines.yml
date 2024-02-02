@@ -3,7 +3,7 @@
   name: gulagMachine
   description: Shit
   parent: BaseMachinePowered
-  noSpawn: true
+  suffix: NoSpawn
   components:
     - type: Sprite
       sprite: Structures/Machines/ore_processor.rsi

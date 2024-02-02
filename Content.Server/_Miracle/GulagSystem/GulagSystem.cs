@@ -73,7 +73,7 @@ public sealed partial class GulagSystem : SharedGulagSystem
 
     private readonly List<ProtoId<BiomeTemplatePrototype>> _gulagBiomes = new()
     {
-        "Caves"
+        "GulagBiome"
     };
 
     private readonly List<string> _gulagMaps = new()

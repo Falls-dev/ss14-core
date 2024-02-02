@@ -15,7 +15,7 @@ public sealed class SharedBorerSystem : EntitySystem
 
     [Dependency] private readonly SharedActionsSystem _action = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly SharedMindSystem _mindSystem = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -69,19 +69,14 @@ public sealed class SharedBorerSystem : EntitySystem
             return;
         _action.AddAction(uid, ref component.ActionInfestEntity, component.ActionInfest, component: comp);
         _action.AddAction(uid, ref component.ActionStunEntity, component.ActionStun, component: comp);
-
+        _metaData.SetEntityName(uid, Loc.GetString("borer-entity-name"));
+        _metaData.SetEntityDescription(uid, Loc.GetString("borer-entity-description"));
         RaiseNetworkEvent(new BorerOverlayResponceEvent());
     }
 
     private void OnStartup(EntityUid uid, InfestedBorerComponent component, ComponentStartup args)
     {
-        if (!TryComp(uid, out ActionsComponent? comp))
-            return;
-        _action.AddAction(uid, ref component.ActionBorerOutEntity, component.ActionBorerOut, component: comp);
-        _action.AddAction(uid, ref component.ActionBorerBrainSpeechEntity, component.ActionBorerBrainSpeech, component: comp);
-        _action.AddAction(uid, ref component.ActionBorerInjectWindowOpenEntity, component.ActionBorerInjectWindowOpen, component: comp);
-        _action.AddAction(uid, ref component.ActionBorerScanEntity, component.ActionBorerScan, component: comp);
-        _action.AddAction(uid, ref component.ActionBorerBrainTakeEntity, component.ActionBorerBrainTake, component: comp);
+        AddInfestedAbilities(uid, component);
     }
     private void OnExamineAttempt(EntityUid uid, InfestedBorerComponent component, ExamineAttemptEvent args)
     {
@@ -104,6 +99,24 @@ public sealed class SharedBorerSystem : EntitySystem
             return infestedComp.AvailableReagents;
         else
             return new();
+    }
+
+    public bool AddInfestedAbilities(EntityUid uid, InfestedBorerComponent component)
+    {
+        if (!TryComp(uid, out ActionsComponent? comp))
+            return false;
+        _action.AddAction(uid, ref component.ActionBorerOutEntity, component.ActionBorerOut, component: comp);
+        _action.AddAction(uid, ref component.ActionBorerBrainSpeechEntity, component.ActionBorerBrainSpeech, component: comp);
+        _action.AddAction(uid, ref component.ActionBorerInjectWindowOpenEntity, component.ActionBorerInjectWindowOpen, component: comp);
+        _action.AddAction(uid, ref component.ActionBorerScanEntity, component.ActionBorerScan, component: comp);
+        _action.AddAction(uid, ref component.ActionBorerBrainTakeEntity, component.ActionBorerBrainTake, component: comp);
+        if (component.ActionBorerBrainTakeEntity.HasValue)
+        {
+            _metaData.SetEntityName(component.ActionBorerBrainTakeEntity.Value,
+                $"{Loc.GetString("borer-abilities-control-name")} ([color=red]{component.AssumeControlCost}c[/color])");
+        }
+
+        return true;
     }
 
     public int GetPoints(EntityUid borerUid)

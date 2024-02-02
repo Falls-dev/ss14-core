@@ -29,7 +29,7 @@ public sealed class BorerOverlay : Overlay
     }
     protected override void Draw(in OverlayDrawArgs args)
     {
-        var localPlayer = _playerManager.LocalPlayer?.ControlledEntity;
+        var localPlayer = _playerManager.LocalEntity;
         if (_entManager.TryGetComponent(localPlayer, out BorerComponent? borComp))
             points = borComp.Points;
         else if (_entManager.TryGetComponent(localPlayer, out InfestedBorerComponent? infestedComp))

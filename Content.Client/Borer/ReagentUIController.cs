@@ -57,21 +57,22 @@ public sealed class ReagentUIController : UIController, IOnSystemChanged<Actions
 
     private void OnInjectReagent(string protoId, int cost)
     {
-        var ent = _playerManager.LocalPlayer?.ControlledEntity;
         _borerSystem.RaiseInjectEvent(protoId, cost);
     }
     private void OpenWindow()
     {
-        if (_window == null || _window.IsOpen)
+        var ent = _playerManager.LocalEntity;
+        if (_window == null || _window.IsOpen || !ent.HasValue)
             return;
-        var ent = _playerManager.LocalPlayer?.ControlledEntity;
         if (!_reagentsLoaded)
         {
-            foreach (var reagent in _borerSystem.GetReagents((EntityUid)ent!))
+            foreach (var reagent in _borerSystem.GetReagents(ent.Value))
             {
                 var button = new Button();
-                button.Text = Loc.GetString("borer-ui-secrete-inject-label") + " "+
-                              Loc.GetString("reagent-name-"+reagent.Key.ToLower().Replace("spacedrugs", "space-drugs"))+"(10u) - "+reagent.Value;
+                button.Text = Loc.GetString("borer-ui-secrete-inject-label",
+                    ("reagent",Loc.GetString("reagent-name-"+
+                    reagent.Key.ToLower().Replace("spacedrugs", "space-drugs"))),
+                    ("cost", reagent.Value));
                 button.OnPressed += _ => OnInjectReagent(reagent.Key, reagent.Value);
                 _window.MainContainer.AddChild(button);
             }

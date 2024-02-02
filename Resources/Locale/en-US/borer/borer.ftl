@@ -1,32 +1,34 @@
 ghost-role-information-borer-name = Cortical Borer
 ghost-role-information-borer-description = We are Borer!
 
+borer-entity-name = Cortical Borer
 borer-entity-description = It looks like it's making you lose your mind.
+
 borer-abilities-infest-name = Infest
-borer-abilities-infest-description = Allows you to bury yourself into a host
+borer-abilities-infest-description = Allows you to [color=red]bury[/color] yourself into a host
 borer-abilities-paralyze-name = Paralyze Victim
-borer-abilities-paralyze-description = Sending a psychic lance straight to an unsuspecting victim.
+borer-abilities-paralyze-description = Sending a [color=red]psychic lance[/color] straight to an unsuspecting victim.
 borer-abilities-release-host-name = Release Host
-borer-abilities-release-host-description = Starts to leave the host
+borer-abilities-release-host-description = Starts to [color=red]leave[/color] the host
 borer-abilities-converse-name = Converse with Host
-borer-abilities-converse-description = Talks to the host. Nobody can intercept this. Only the host.
+borer-abilities-converse-description = [color=red]Talks[/color] to the host. Nobody can intercept this. Only the host.
 borer-abilities-secrete-name = Secrete Chemicals
-borer-abilities-secrete-description = Injects different kinda of chemicals into the host, from meth to bicardine.
+borer-abilities-secrete-description = [color=red]Injects[/color] different kinda of chemicals into the host, from meth to bicardine.
 borer-abilities-scan-name = Chemical Scanning
-borer-abilities-scan-description = Scan the host's blood for the presence of chemicals in it.
-borer-abilities-control-name = Assume Control (250c.)
-borer-abilities-control-description = Allows you to assume direct control of your host.
-borer-abilities-reproduce-name = Reproduce (100c.)
+borer-abilities-scan-description = [color=red]Scan the host's blood[/color] for the presence of reagents in it.
+borer-abilities-control-name = Assume Control
+borer-abilities-control-description = Allows you to [color=red]assume direct control[/color] of your host.
+borer-abilities-reproduce-name = Reproduce
 borer-abilities-reproduce-description = Create one of your own kind.
 borer-abilities-restore-name = Restore Control
-borer-abilities-restore-description = Restores control over the wearer's body.
+borer-abilities-restore-description = [color=red]Restores[/color] control over the host's body.
 borer-abilities-resist-name = Resist
-borer-abilities-resist-description = Resisting the control of your body.
+borer-abilities-resist-description = [color=red]Resisting the control[/color] of your body.
 
 borer-ui-scan-title = Scanning results
 borer-ui-scan-label = Reagents in the host's blood:
 borer-ui-secrete-title = Secrete chemicals
-borer-ui-secrete-inject-label = Inject
+borer-ui-secrete-inject-label = Inject {$reagent}(10u) - {$cost}c
 
 borer-ui-converse-title = Converse
 borer-ui-converse-message = Message
@@ -40,7 +42,7 @@ borer-popup-braintake-critical = You cannot control the brain of a creature in c
 
 borer-popup-toomuchsugar = Your host's blood sugar prevents you from doing that
 borer-popup-lowchem = Not enough chemicals!
-borer-popup-injected = (10u) successfully injected!
+borer-popup-injected = {$reagent}(10u) successfully injected!
 borer-popup-sugarleave = The host has too much sugar in his blood, you can't be in his body anymore
 
 borer-message-braintake-success = You've taken control of the host's brain! The host may resist this and try to regain control. Have fun while you still have time!

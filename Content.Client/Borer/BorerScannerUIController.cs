@@ -43,7 +43,7 @@ public sealed class BorerScannerUIController : UIController
     }
     private void OpenWindow(BorerScanDoAfterEvent msg, EntitySessionEventArgs args)
     {
-        var ent = _playerManager.LocalPlayer?.ControlledEntity;
+        var ent = _playerManager.LocalEntity;
         if (_window == null || _window.IsOpen || ent != args.SenderSession.AttachedEntity)
             return;
         _window.SolutionContainer.DisposeAllChildren();

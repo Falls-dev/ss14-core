@@ -3,7 +3,7 @@
   id: MobBorerBase
   parent: SimpleSpaceMobBase
   abstract: true
-  description: borer-entity-description
+  description: It looks like it's making you lose your mind.
   components:
   - type: Sprite
     drawdepth: SmallMobs

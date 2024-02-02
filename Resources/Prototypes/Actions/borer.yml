@@ -10,7 +10,7 @@
       state: action_infest
     event: !type:BorerInfestActionEvent
     canTargetSelf: false
-    useDelay: 4
+    useDelay: 15
     
 - type: entity
   id: ActionBorerStunVictim
@@ -24,7 +24,7 @@
       state: action_stun
     event: !type:BorerStunActionEvent
     canTargetSelf: false
-    useDelay: 4
+    useDelay: 40
     
 - type: entity
   id: ActionBorerOut

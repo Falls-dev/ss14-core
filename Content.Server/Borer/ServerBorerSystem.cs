@@ -225,13 +225,7 @@ public sealed class ServerBorerSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("borer-popup-braintake-success"), component.Host.Value,
                 component.Host.Value, PopupType.Large);
 
-            if (EntityManager.TryGetComponent(component.Host, out ActorComponent? borActor))
-            {
-                _chatManager.ChatMessageToOne(ChatChannel.Local,
-                    Loc.GetString("borer-message-braintake-success"),
-                    Loc.GetString("borer-message-braintake-success"),
-                    EntityUid.Invalid, false, borActor.PlayerSession.Channel);
-            }
+
         }
 
         if (hostHasMind)
@@ -411,16 +405,11 @@ public sealed class ServerBorerSystem : EntitySystem
             Loc.GetString("borer-ui-converse-message"), (string message) =>
             {
                 _popup.PopupEntity(message, uid, uid, PopupType.Medium);
-                _chatManager.ChatMessageToOne(ChatChannel.Local, message, message, EntityUid.Invalid, false,
-                    actor.PlayerSession.Channel);
-
 
                 if (EntityManager.TryGetComponent(component.Host, out ActorComponent? hostActor))
                 {
                     _popup.PopupEntity(message, component.Host.Value, component.Host.Value,
                         PopupType.Medium);
-                    _chatManager.ChatMessageToOne(ChatChannel.Local, message, message, EntityUid.Invalid, false,
-                        hostActor.PlayerSession.Channel);
                 }
             });
         args.Handled = true;

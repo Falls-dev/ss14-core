@@ -441,7 +441,8 @@ public sealed class ServerBorerSystem : EntitySystem
             _bloodstreamSystem.TryAddToChemicals(infestedComponent.Host.Value, solution);
             _reactiveSystem.DoEntityReaction(infestedComponent.Host.Value, solution, ReactionMethod.Injection);
 
-            _popup.PopupEntity(Loc.GetString("borer-popup-injected", ("reagent", injectEvent.ProtoId)),
+            _popup.PopupEntity(Loc.GetString("borer-popup-injected", ("reagent", Loc.GetString("reagent-name-"+
+                    injectEvent.ProtoId.ToLower().Replace("spacedrugs", "space-drugs")))),
                 borerEn.Value, borerEn.Value, PopupType.Medium);
         }
     }

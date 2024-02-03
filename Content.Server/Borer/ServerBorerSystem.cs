@@ -21,6 +21,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Silicons.Borgs.Components;
 using Robust.Server.Containers;
 using Robust.Shared.Containers;
 using Robust.Shared.Physics;
@@ -271,7 +272,9 @@ public sealed class ServerBorerSystem : EntitySystem
 
     private void OnInfest(EntityUid uid, BorerComponent component, BorerInfestActionEvent args)
     {
-        if (!HasComp<HumanoidAppearanceComponent>(args.Target) || HasComp<ChangelingComponent>(args.Target))
+        if (!HasComp<HumanoidAppearanceComponent>(args.Target)
+            || HasComp<ChangelingComponent>(args.Target)
+            || HasComp<BorgChassisComponent>(args.Target))
             return;
         if (TryComp(args.Target, out MobStateComponent? state) &&
             state.CurrentState == MobState.Dead)

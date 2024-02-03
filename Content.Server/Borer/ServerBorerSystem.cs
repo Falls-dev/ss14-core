@@ -270,7 +270,7 @@ public sealed class ServerBorerSystem : EntitySystem
 
     private void OnStunEvent(EntityUid uid, BorerComponent component, BorerStunActionEvent args)
     {
-        _stuns.TryParalyze(args.Target, TimeSpan.FromSeconds(5.1f), true);
+        _stuns.TryParalyze(args.Target, TimeSpan.FromSeconds(5.7f), true);
         args.Handled = true;
     }
 
@@ -504,7 +504,8 @@ public sealed class ServerBorerSystem : EntitySystem
         Dirty(uid, borerComponent);
 
         RemComp<InfestedBorerComponent>(uid);
-
+        _action.SetCooldown(borerComponent.ActionStunEntity, _timing.CurTime, _timing.CurTime+TimeSpan.FromSeconds(20));
+        _action.SetCooldown(borerComponent.ActionInfestEntity, _timing.CurTime, _timing.CurTime+TimeSpan.FromSeconds(20));
     }
 
     public int GetSugarQuantityInHost(EntityUid borerUid)

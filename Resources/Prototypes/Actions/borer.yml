@@ -9,6 +9,7 @@
       sprite: Mobs/Animals/borer.rsi
       state: action_infest
     event: !type:BorerInfestActionEvent
+    itemIconStyle: BigAction
     canTargetSelf: false
     useDelay: 15
     
@@ -23,6 +24,7 @@
       sprite: Mobs/Animals/borer.rsi
       state: action_stun
     event: !type:BorerStunActionEvent
+    itemIconStyle: BigAction
     canTargetSelf: false
     useDelay: 40
     

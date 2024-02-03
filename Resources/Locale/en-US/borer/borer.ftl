@@ -35,6 +35,7 @@ borer-ui-converse-message = Message
 
 borer-popup-infest-occupied = This creature's brain is already occupied
 borer-popup-infest-sugar = The creature has too much sugar in it's blood
+borer-popup-infest-failed = You can't infest into this creature
 
 borer-popup-braintake-alert = Your brain has been taken over!
 borer-popup-braintake-success = You've taken control of the host's brain!

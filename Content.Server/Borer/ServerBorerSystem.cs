@@ -275,7 +275,11 @@ public sealed class ServerBorerSystem : EntitySystem
         if (!HasComp<HumanoidAppearanceComponent>(args.Target)
             || HasComp<ChangelingComponent>(args.Target)
             || HasComp<BorgChassisComponent>(args.Target))
+        {
+            _popup.PopupEntity(Loc.GetString("borer-popup-infest-failed"), uid, uid);
             return;
+        }
+
         if (TryComp(args.Target, out MobStateComponent? state) &&
             state.CurrentState == MobState.Dead)
             return;

@@ -35,6 +35,7 @@ borer-ui-converse-message = Сообщение
 
 borer-popup-infest-occupied = Мозг этого существа уже кем-то занят
 borer-popup-infest-sugar = В крови существа слишком много сахара
+borer-popup-infest-failed = Вы не можете вселиться в это существо
 
 borer-popup-braintake-alert = Вы не управляете своим телом!
 borer-popup-braintake-success = Вы забрали контроль над телом!

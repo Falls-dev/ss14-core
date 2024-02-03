@@ -19,6 +19,7 @@
     <PackageReference Include="Newtonsoft.Json" />
     <PackageVersion Include="NetCoreServer" Version="6.7.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageVersion Remove="Microsoft.NET.ILLink.Tasks" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Content.Packaging\Content.Packaging.csproj" />
@@ -30,7 +31,6 @@
     <ProjectReference Include="..\Content.Shared\Content.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Objectives\Interfaces\" />
     <Folder Include="Tools\Systems\" />
   </ItemGroup>
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />

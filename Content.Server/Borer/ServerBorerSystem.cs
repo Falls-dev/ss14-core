@@ -8,6 +8,7 @@ using Content.Server.Popups;
 using Content.Server.Stunnable;
 using Content.Shared.Actions;
 using Content.Shared.Borer;
+using Content.Shared.Changeling;
 using Content.Shared.Chat;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
@@ -276,7 +277,7 @@ public sealed class ServerBorerSystem : EntitySystem
 
     private void OnInfest(EntityUid uid, BorerComponent component, BorerInfestActionEvent args)
     {
-        if (!HasComp<HumanoidAppearanceComponent>(args.Target))
+        if (!HasComp<HumanoidAppearanceComponent>(args.Target) || HasComp<ChangelingComponent>(args.Target))
             return;
         if (TryComp(args.Target, out MobStateComponent? state) &&
             state.CurrentState == MobState.Dead)

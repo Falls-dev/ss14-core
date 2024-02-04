@@ -1,4 +1,5 @@
 using Content.Client.Wires.Visualizers;
+using Content.Shared.Doors;
 using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
 using Content.Shared.Prying.Components;
@@ -25,6 +26,16 @@ public sealed class AirlockSystem : SharedAirlockSystem
         args.Cancelled = true;
     }
 
+    protected override void OnBeforeDoorClosed(EntityUid uid, AirlockComponent airlock, BeforeDoorClosedEvent args)
+    {
+        base.OnBeforeDoorClosed(uid, airlock, args);
+
+        if (_appearanceSystem.TryGetData<bool>(uid, DoorVisuals.BoltLights, out var boltLights) && boltLights)
+        {
+            args.Cancel();
+        }
+    }
+
     private void OnComponentStartup(EntityUid uid, AirlockComponent comp, ComponentStartup args)
     {
         // Has to be on component startup because we don't know what order components initialize in and running this before DoorComponent inits _will_ crash.
@@ -38,6 +49,7 @@ public sealed class AirlockSystem : SharedAirlockSystem
             door.OpenSpriteStates.Add((DoorVisualLayers.BaseEmergencyAccess, comp.OpenEmergencySpriteState));
             door.ClosedSpriteStates.Add((DoorVisualLayers.BaseUnlit, comp.ClosedSpriteState));
             door.ClosedSpriteStates.Add((DoorVisualLayers.BaseBolted, comp.ClosedBoltedSpriteState));
+            door.ClosedSpriteStates.Add((DoorVisualLayers.BaseEmergencyAccess, comp.ClosedEmergencySpriteState));
         }
 
         ((Animation) door.OpeningAnimation).AnimationTracks.Add(new AnimationTrackSpriteFlick

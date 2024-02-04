@@ -23,10 +23,10 @@
       "name": "open_unlit"
     },
     {
-      "name": "open_bolted_unlit"
+      "name": "bolted_open_unlit"
     },
     {
-      "name": "open_emergency_unlit"
+      "name": "emergency_open_unlit"
     },
     {
       "name": "closing",

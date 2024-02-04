@@ -501,7 +501,7 @@
   components:
   - type: AccessReader
     access: [["Salvage"]]
-    
+
 - type: entity
   parent: AirlockChemistryGlass
   id: AirlockChemistryGlassLocked
@@ -1010,6 +1010,16 @@
   suffix: External, Escape 3x4, Glass, Docking
   components:
     - type: GridFill
+
+- type: entity
+  parent: AirlockGlassShuttle
+  id: AirlockExternalGlassShuttleCargo
+  suffix: Cargo
+  components:
+  - type: PriorityDock
+    tag: DockCargo
+  - type: AccessReader
+    access: [ [ "Cargo" ] ]
 
 #HighSecDoors
 - type: entity

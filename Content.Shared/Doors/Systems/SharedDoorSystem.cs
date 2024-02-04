@@ -326,7 +326,7 @@ public abstract class SharedDoorSystem : EntitySystem
 
         // since both closing/closed and welded are door states, we need to prevent 'closing'
         // a welded door or else there will be weird state bugs
-        if (door.State is DoorState.Welded or DoorState.Closed)
+        if (door.State is DoorState.Welded or DoorState.Closed || (TryComp<DoorBoltComponent>(uid, out var bolt) && bolt.BoltsDown)) // WD edit
             return false;
 
         var ev = new BeforeDoorClosedEvent(door.PerformCollisionCheck, user); //WD EDIT
@@ -460,7 +460,7 @@ public abstract class SharedDoorSystem : EntitySystem
             //If the colliding entity is a slippable item ignore it by the airlock
             if (otherPhysics.CollisionLayer == (int)CollisionGroup.SlipLayer && otherPhysics.CollisionMask == (int)CollisionGroup.ItemMask)
                 continue;
-            
+
             //For when doors need to close over conveyor belts
             if (otherPhysics.CollisionLayer == (int) CollisionGroup.ConveyorMask)
                 continue;

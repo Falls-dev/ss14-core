@@ -106,7 +106,12 @@
       ]
     },
     {
-      "name": "panel_closed"
+      "name": "panel_open",
+      "delays": [
+        [
+          1
+        ]
+      ]
     },
     {
       "name": "panel_opening",
@@ -120,9 +125,6 @@
           0.2
         ]
       ]
-    },
-    {
-      "name": "panel_open"
     },
     {
       "name": "sparks",

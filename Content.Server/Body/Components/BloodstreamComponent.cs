@@ -166,14 +166,5 @@ namespace Content.Server.Body.Components
         /// </summary>
         [ViewVariables(VVAccess.ReadWrite)]
         public float StatusTime;
-
-        //WD-EDIT
-
-        /// <summary>
-        ///     Bool for bleeding alert.
-        /// </summary>
-        public bool IsBleeding => BleedAmount > 0;
-
-        //WD-EDIT
     }
 }

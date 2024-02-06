@@ -228,6 +228,12 @@ public sealed partial class ChangelingSystem
         if (!TryComp<DamageableComponent>(uid, out var damageableComponent))
             return;
 
+        if (component.ChemicalsBalance < 15)
+        {
+            _popup.PopupEntity("We're lacking of chemicals!", uid, uid);
+            return;
+        }
+
         if (damageableComponent.TotalDamage >= 0 && !_mobStateSystem.IsDead(uid))
         {
             KillUser(uid, "Cellular");

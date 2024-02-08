@@ -43,7 +43,7 @@ namespace Content.Server._Miracle.GulagSystem;
 
 public sealed partial class GulagSystem : SharedGulagSystem
 {
-    //1 second = 10 points
+    //1 second = 0.01 points
     [Dependency] private readonly AdminSystem _adminSystem = default!;
     [Dependency] private readonly IBanManager _banManager = default!;
     [Dependency] private readonly BiomeSystem _biome = default!;

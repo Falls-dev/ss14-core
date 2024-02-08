@@ -2,7 +2,6 @@ using Content.Shared.Ghost;
 using Content.Shared.Item;
 using Content.Shared.Popups;
 using Content.Shared._White.Cult.Components;
-using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Weapons.Melee.Events;
 

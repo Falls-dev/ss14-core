@@ -382,7 +382,16 @@ public sealed partial class GulagSystem : SharedGulagSystem
             var newExpirationTime = banDef.ExpirationTime!.Value.DateTime - ConvertPointsToTime(points);
 
             _db.EditServerBan(banDef.Id!.Value, banDef.Reason, banDef.Severity, newExpirationTime, banDef.UserId!.Value, DateTime.Now);
+
+            // Update time
+            _banManager.RemoveCachedServerBan(banDef.UserId.Value, banDef.Id.Value);
+            _banManager.AddCachedServerBan(new ServerBanDef(
+                banDef.Id, banDef.UserId, banDef.Address, banDef.HWId, banDef.BanTime, newExpirationTime,
+                banDef.RoundId, banDef.PlaytimeAtNote, banDef.Reason, banDef.Severity, banDef.BanningAdmin,
+                banDef.Unban, banDef.ServerName));
         }
+        
+        _pointsPerPlayer.Clear();
 
         _activeMap = null!;
         _mapEntity = null!;

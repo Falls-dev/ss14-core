@@ -385,6 +385,12 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         // Windup time checked elsewhere.
         var fireRate = TimeSpan.FromSeconds(1f / GetAttackRate(weaponUid, user, weapon));
+
+        if (attack is LightAttackEvent _)
+        {
+            fireRate *= 0.8f;
+        }
+
         var swings = 0;
 
         // TODO: If we get autoattacks then probably need a shotcounter like guns so we can do timing properly.
@@ -561,7 +567,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         var direction = targetMap.Position - userPos;
         var distance = Math.Min(component.Range, direction.Length());
 
-        var damage = GetDamage(meleeUid, user, component);
+        var damage = GetDamage(meleeUid, user, component) * 0.70f;
         var entities = GetEntityList(ev.Entities);
 
         if (entities.Count == 0)

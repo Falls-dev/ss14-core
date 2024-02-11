@@ -578,6 +578,10 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         var damage = GetDamage(meleeUid, user, component) * 0.70f;
         var entities = GetEntityList(ev.Entities);
 
+        // WD EDIT
+        _stamina.TakeStaminaDamage(user, 7);
+        // WD EDIT END
+
         if (entities.Count == 0)
         {
             if (meleeUid == user)

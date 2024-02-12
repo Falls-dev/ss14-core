@@ -399,6 +399,7 @@ public abstract partial class SharedGunSystem
             }
             else
             {
+                SetBoltClosed(uid, component, false, user: args.User, appearance: appearance); // WD EDIT
                 Appearance.SetData(uid, AmmoVisuals.MagLoaded, false, appearance);
                 return;
             }

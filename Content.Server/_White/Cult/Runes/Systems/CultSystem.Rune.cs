@@ -1123,38 +1123,27 @@ public sealed partial class CultSystem : EntitySystem
     {
         var playerEntity = args.Session.AttachedEntity;
 
-        if (!playerEntity.HasValue || !TryComp<CultistComponent>(playerEntity, out var comp) ||
-            !TryComp<ActionsComponent>(playerEntity, out var actionsComponent))
+        if (!playerEntity.HasValue || !TryComp<CultistComponent>(playerEntity, out var comp))
             return;
-
-        var cultistsActions = 0;
-
-        foreach (var userAction in actionsComponent.Actions)
-        {
-            var entityPrototypeId = MetaData(userAction).EntityPrototype?.ID;
-            if (entityPrototypeId != null && CultistComponent.CultistActions.Contains(entityPrototypeId))
-                cultistsActions++;
-        }
 
         var action = CultistComponent.CultistActions.FirstOrDefault(x => x.Equals(args.ActionType));
 
         if (action == null)
             return;
 
-        EntityUid? actionId = null;
         if (component.IsRune)
         {
-            if (cultistsActions > component.MaxAllowedCultistActions)
+            if (comp.SelectedEmpowers.Count > component.MaxAllowedCultistActions)
             {
                 _popupSystem.PopupEntity(Loc.GetString("cult-too-much-empowers"), uid);
                 return;
             }
 
-            _actionsSystem.AddAction(playerEntity.Value, ref actionId, action);
+            comp.SelectedEmpowers.Add(_actionsSystem.AddAction(playerEntity.Value, action));
         }
-        else if (cultistsActions < component.MinRequiredCultistActions)
+        else if (comp.SelectedEmpowers.Count < component.MinRequiredCultistActions)
         {
-            _actionsSystem.AddAction(playerEntity.Value, ref actionId, action);
+            comp.SelectedEmpowers.Add(_actionsSystem.AddAction(playerEntity.Value, action));
         }
     }
 

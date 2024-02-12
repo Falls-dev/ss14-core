@@ -364,6 +364,7 @@ public abstract partial class SharedGunSystem
             // No ammo returned.
             else
             {
+                CycleCartridge(uid, component, args.User); // WD EDIT
                 return;
             }
 

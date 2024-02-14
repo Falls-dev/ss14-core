@@ -2,7 +2,7 @@
     .desc = Сделан из чистого золота. Приятно отсвечивает и дает чувство защищенности.
     .suffix = { "" }
 
-ent-ClothingNeckNecklaceSilver = серебрянный крест
+ent-ClothingNeckNecklaceSilver = серебряный крест
     .desc = Приятно отсвечивает и дает чувство защищенности.
     .suffix = { "" }
 

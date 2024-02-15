@@ -1,8 +1,8 @@
 # Body Transforms
 - type: listing
   id: ChangelingLesserForm
-  name: changeling-shop-changeling-lesser-form
-  description: changeling-shop-changeling-lesser-form-desc
+  name: changeling-ability-changeling-lesser-form
+  description: changeling-ability-changeling-lesser-form-desc
   productAction: ActionChangelingLesserForm
   cost:
     ChangelingPoint: 1
@@ -14,8 +14,8 @@
 
 - type: listing
   id: ChangelingArmblade
-  name: changeling-shop-changeling-armblade
-  description: changeling-shop-changeling-armblade-desc
+  name: changeling-ability-changeling-armblade
+  description: changeling-ability-changeling-armblade-desc
   productAction: ActionArmblade
   cost:
     ChangelingPoint: 3
@@ -27,8 +27,8 @@
 
 - type: listing
   id: ChangelingShield
-  name: changeling-shop-changeling-shield
-  description: changeling-shop-changeling-shield-desc
+  name: changeling-ability-changeling-shield
+  description: changeling-ability-changeling-shield-desc
   productAction: ActionShield
   cost:
     ChangelingPoint: 3
@@ -40,8 +40,8 @@
 
 - type: listing
   id: ChangelingArmor
-  name: changeling-shop-changeling-armor
-  description: changeling-shop-changeling-armor-desc
+  name: changeling-ability-changeling-armor
+  description: changeling-ability-changeling-armor-desc
   productAction: ActionArmor
   cost:
     ChangelingPoint: 1
@@ -53,8 +53,8 @@
 
 - type: listing
   id: ChangelingTentacleArm
-  name: changeling-shop-tentacle-arm
-  description: changeling-shop-tentacle-arm-desc
+  name: changeling-ability-tentacle-arm
+  description: changeling-ability-tentacle-arm-desc
   productAction: ActionTentacleArm
   cost:
     ChangelingPoint: 4
@@ -67,8 +67,8 @@
 # Stings
 - type: listing
   id: ChangelingExtractionString
-  name: changeling-shop-extraction-sting
-  description: changeling-shop-extraction-sting-desc
+  name: changeling-ability-extraction-sting
+  description: changeling-ability-extraction-sting-desc
   productAction: ActionExtractionSting
   cost:
     ChangelingPoint: 0
@@ -80,8 +80,8 @@
 
 - type: listing
   id: ChangelingTransformSting
-  name: changeling-shop-transform-sting
-  description: changeling-shop-transform-sting-desc
+  name: changeling-ability-transform-sting
+  description: changeling-ability-transform-sting-desc
   productAction: ActionTransformSting
   cost:
     ChangelingPoint: 3
@@ -93,8 +93,8 @@
 
 - type: listing
   id: ChangelingBlindSting
-  name: changeling-shop-blind-sting
-  description: changeling-shop-blind-sting-desc
+  name: changeling-ability-blind-sting
+  description: changeling-ability-blind-sting-desc
   productAction: ActionBlindSting
   cost:
     ChangelingPoint: 2
@@ -106,8 +106,8 @@
 
 - type: listing
   id: ChangelingMuteSting
-  name: changeling-shop-mute-sting
-  description: changeling-shop-mute-sting-desc
+  name: changeling-ability-mute-sting
+  description: changeling-ability-mute-sting-desc
   productAction: ActionMuteSting
   cost:
     ChangelingPoint: 3
@@ -119,8 +119,8 @@
 
 - type: listing
   id: ChangelingHallucinationSting
-  name: changeling-shop-hallucination-sting
-  description: changeling-shop-hallucination-sting-desc
+  name: changeling-ability-hallucination-sting
+  description: changeling-ability-hallucination-sting-desc
   productAction: ActionHallucinationSting
   cost:
     ChangelingPoint: 1
@@ -132,8 +132,8 @@
 
 - type: listing
   id: ChangelingCryogenicSting
-  name: changeling-shop-cryo-sting
-  description: changeling-shop-cryo-sting-desc
+  name: changeling-ability-cryo-sting
+  description: changeling-ability-cryo-sting-desc
   productAction: ActionCryoSting
   cost:
     ChangelingPoint: 3
@@ -146,8 +146,8 @@
 # Boosters
 - type: listing
   id: ChangelingAdrenalineSacs
-  name: changeling-shop-adrelanine-sacks
-  description: changeling-shop-adrelanine-sacks-desc
+  name: changeling-ability-adrenaline-sacks
+  description: changeling-ability-adrenaline-sacks-desc
   productAction: ActionAdrenalineSacs
   cost:
     ChangelingPoint: 2
@@ -159,8 +159,8 @@
 
 - type: listing
   id: ChangelingFleshmend
-  name: changeling-shop-fleshmed
-  description: changeling-shop-fleshmed-desc
+  name: changeling-ability-fleshmend
+  description: changeling-ability-fleshmend-desc
   productAction: ActionFleshmend
   cost:
     ChangelingPoint: 2
@@ -172,8 +172,8 @@
 
 - type: listing
   id: ChangelingBiodegrade
-  name: changeling-shop-biodegrade
-  description: changeling-shop-biodegrade-desc
+  name: changeling-ability-biodegrade
+  description: changeling-ability-biodegrade-desc
   productAction: ActionBiodegrade
   cost:
     ChangelingPoint: 2

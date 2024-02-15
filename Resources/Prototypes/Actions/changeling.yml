@@ -52,8 +52,8 @@
 
 - type: entity
   id: ActionChangelingLesserForm
-  name: Lesser Form
-  description: Become a lesser form of self.
+  name: changeling-ability-changeling-lesser-form
+  description: changeling-ability-changeling-lesser-form-desc
   noSpawn: true
   components:
     - type: InstantAction
@@ -65,8 +65,8 @@
 
 - type: entity
   id: ActionExtractionSting
-  name: Extraction String
-  description: Safely extracts DNA from a target.
+  name: changeling-ability-extraction-sting
+  description: changeling-ability-extraction-sting-desc
   noSpawn: true
   components:
   - type: EntityTargetAction
@@ -79,8 +79,8 @@
 
 - type: entity
   id: ActionTransformSting
-  name: Transform Sting
-  description: Injects a retrovirus that forces human victim to transform into another.
+  name: changeling-ability-transform-sting
+  description: changeling-ability-transform-sting-desc
   noSpawn: true
   components:
     - type: EntityTargetAction
@@ -93,8 +93,8 @@
 
 - type: entity
   id: ActionBlindSting
-  name: Blind Sting
-  description: Stings a human, completely blinding them for a short time.
+  name: changeling-ability-blind-sting
+  description: changeling-ability-blind-sting-desc
   noSpawn: true
   components:
     - type: EntityTargetAction
@@ -107,8 +107,8 @@
 
 - type: entity
   id: ActionMuteSting
-  name: Mute Sting
-  description: Silently stings a human, temporarily silencing them.
+  name: changeling-ability-mute-sting
+  description: changeling-ability-mute-sting-desc
   noSpawn: true
   components:
     - type: EntityTargetAction
@@ -121,8 +121,8 @@
 
 - type: entity
   id: ActionHallucinationSting
-  name: Hallucination Sting
-  description: Injects large doses of hallucinogenic chemicals into their victim.
+  name: changeling-ability-hallucination-sting
+  description: changeling-ability-hallucination-sting-desc
   noSpawn: true
   components:
     - type: EntityTargetAction
@@ -135,8 +135,8 @@
 
 - type: entity
   id: ActionCryoSting
-  name: Cryogenic Sting
-  description: Injects the target with a blend of chemicals that begins to turn their blood to ice.
+  name: changeling-ability-cryo-sting
+  description: changeling-ability-cryo-sting-desc
   noSpawn: true
   components:
     - type: EntityTargetAction
@@ -149,8 +149,8 @@
 
 - type: entity
   id: ActionAdrenalineSacs
-  name: Adrenaline Sacs
-  description: Allows to make use of additional adrenaline to instantly recover from knockdown.
+  name: changeling-ability-adrenaline-sacks
+  description: changeling-ability-adrenaline-sacks.desc
   noSpawn: true
   components:
     - type: InstantAction
@@ -162,8 +162,8 @@
 
 - type: entity
   id: ActionFleshmend
-  name: Fleshmend
-  description: Rapidly heal all type of damage.
+  name: changeling-ability-fleshmend
+  description: changeling-ability-fleshmend-desc
   noSpawn: true
   components:
     - type: InstantAction
@@ -175,8 +175,8 @@
 
 - type: entity
   id: ActionArmblade
-  name: Arm Blade
-  description: Reforms one of the changeling's arms into a grotesque blade made out of bone and flesh.
+  name: changeling-ability-changeling-armblade
+  description: changeling-ability-changeling-armblade-desc
   noSpawn: true
   components:
     - type: InstantAction
@@ -188,8 +188,8 @@
 
 - type: entity
   id: ActionShield
-  name: Organic Shield
-  description: Reforms one of the changeling's arms into a large, fleshy shield.
+  name: changeling-ability-changeling-shield
+  description: changeling-ability-changeling-shield-desc
   noSpawn: true
   components:
     - type: InstantAction
@@ -201,8 +201,8 @@
 
 - type: entity
   id: ActionArmor
-  name: Chitinous Armor
-  description: Inflates the changeling's body into an all-consuming chitinous mass of armor.
+  name: changeling-ability-changeling-armor
+  description: changeling-ability-changeling-armor-desc
   noSpawn: true
   components:
     - type: InstantAction
@@ -214,8 +214,8 @@
 
 - type: entity
   id: ActionTentacleArm
-  name: Tentacle Arm
-  description: Reforms one of the arms into a tentacle. Can grab items or humans depending on mode.
+  name: changeling-ability-tentacle-arm
+  description: changeling-ability-tentacle-arm-desc
   noSpawn: true
   components:
     - type: InstantAction
@@ -227,8 +227,8 @@
 
 - type: entity
   id: ActionBiodegrade
-  name: changeling-shop-biodegrade
-  description: changeling-shop-biodegrade-desc
+  name: changeling-ability-biodegrade
+  description: changeling-ability-biodegrade-desc
   noSpawn: true
   components:
   - type: InstantAction

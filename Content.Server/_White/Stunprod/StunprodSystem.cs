@@ -4,6 +4,7 @@ using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Damage.Events;
 using Content.Shared.Examine;
+using Content.Shared.Item;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Toggleable;
@@ -18,6 +19,7 @@ public sealed class StunprodSystem : EntitySystem
     [Dependency] private readonly BatterySystem _battery = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedItemToggleSystem _itemToggle = default!;
+    [Dependency] private readonly SharedItemSystem _item = default!;
 
     private const string CellSlot = "cell_slot";
 
@@ -59,7 +61,8 @@ public sealed class StunprodSystem : EntitySystem
             _itemToggle.TryDeactivate(uid, predicted: false);
     }
 
-    private void OnStaminaHitAttempt(EntityUid uid, StunprodComponent component, ref StaminaDamageOnHitAttemptEvent args)
+    private void OnStaminaHitAttempt(EntityUid uid, StunprodComponent component,
+        ref StaminaDamageOnHitAttemptEvent args)
     {
         if (!_itemToggle.IsActivated(uid) || !TryGetBatteryComponent(uid, out var battery, out var batteryUid) ||
             !_battery.TryUseCharge(batteryUid.Value, component.EnergyPerUse, battery))
@@ -84,6 +87,9 @@ public sealed class StunprodSystem : EntitySystem
 
     private void ToggleDone(Entity<StunprodComponent> entity, ref ItemToggledEvent args)
     {
+        if (entity.Comp.HasHeldPrefix && TryComp<ItemComponent>(entity, out var item))
+            _item.SetHeldPrefix(entity.Owner, args.Activated ? "on" : "off", component: item);
+
         if (TryGetBatteryComponent(entity, out _, out _) || !TryComp<AppearanceComponent>(entity, out var appearance))
             return;
 

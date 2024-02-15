@@ -71,6 +71,7 @@
       cell_slot: !type:ContainerSlot {}
   - type: Snatcherprod
   - type: Stunprod
+    hasHeldPrefix: false
   - type: Construction
     deconstructionTarget: rod
     graph: StunprodGraph

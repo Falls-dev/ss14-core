@@ -16,7 +16,7 @@ ent-ChangelingMuteSting = Жало безмолвия
 ent-ChangelingBlindSting = Жало слепоты
     .desc = Вводит в кровь цели химикаты, заставляющие цель временно ослепнуть.
 
-ent-ChangelingTransformSting = Жало транформации
+ent-ChangelingTransformSting = Жало трансформации
     .desc = Вводит в кровь цели вирус, заставляющий её превратиться в другое существо.
 
 ent-ChangelingTentacleArm = Рука-щупальце

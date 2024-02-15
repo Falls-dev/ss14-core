@@ -194,20 +194,18 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         readyChangeling.HiveName = _nameGenerator.GetName();
         Dirty(entity, readyChangeling);
 
-        if (giveObjectives)
-        {
-            var maxDifficulty = ChangelingMaxDifficulty;
-            var maxPicks = ChangelingMaxPicks;
-            var difficulty = 0f;
-            for (var pick = 0; pick < maxPicks && maxDifficulty > difficulty; pick++)
-            {
-                var objective = _objectives.GetRandomObjective(mindId, mind, "ChangelingObjectiveGroups");
-                if (objective == null)
-                    continue;
+        if (!giveObjectives)
+            return true;
 
-                _mindSystem.AddObjective(mindId, mind, objective.Value);
-                difficulty += Comp<ObjectiveComponent>(objective.Value).Difficulty;
-            }
+        var difficulty = 0f;
+        for (var pick = 0; pick < ChangelingMaxPicks && ChangelingMaxDifficulty > difficulty; pick++)
+        {
+            var objective = _objectives.GetRandomObjective(mindId, mind, "ChangelingObjectiveGroups");
+            if (objective == null)
+                continue;
+
+            _mindSystem.AddObjective(mindId, mind, objective.Value);
+            difficulty += Comp<ObjectiveComponent>(objective.Value).Difficulty;
         }
 
         return true;
@@ -261,7 +259,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
             }
             else
             {
-                chance *= ((ev.JoinOrder + 1) - target);
+                chance *= ev.JoinOrder + 1 - target;
             }
 
             if (chance > 1)

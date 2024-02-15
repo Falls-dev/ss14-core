@@ -65,7 +65,6 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly BloodstreamSystem _blood = default!;
 
-
     private void InitializeAbilities()
     {
         SubscribeLocalEvent<ChangelingComponent, AbsorbDnaActionEvent>(OnAbsorb);
@@ -95,7 +94,7 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, ListViewItemSelectedMessage>(OnTransformUiMessage);
     }
 
-    #region Data
+#region Data
 
     private const string ChangelingAbsorb = "ActionChangelingAbsorb";
     private const string ChangelingTransform = "ActionChangelingTransform";
@@ -113,62 +112,61 @@ public sealed partial class ChangelingSystem
     private const string ChangelingArmor = "ActionArmor";
     private const string ChangelingTentacleArm = "ActionTentacleArm";
 
-    #endregion
+#endregion
 
-
-    #region Handlers
+#region Handlers
 
     private void OnAbsorb(EntityUid uid, ChangelingComponent component, AbsorbDnaActionEvent args)
     {
         if (!HasComp<HumanoidAppearanceComponent>(args.Target))
         {
-            _popup.PopupEntity("You can't absorb not humans!", args.Performer, args.Performer);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-absorb-not-human"), args.Performer, args.Performer);
             return;
         }
 
         if (HasComp<AbsorbedComponent>(args.Target))
         {
-            _popup.PopupEntity("This person already absorbed!", args.Performer, args.Performer);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-already-absorbed"), args.Performer, args.Performer);
             return;
         }
 
         if (!TryComp<DnaComponent>(args.Target, out var dnaComponent))
         {
-            _popup.PopupEntity("Unknown creature!", uid, uid);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-absorb-unknown"), uid, uid);
             return;
         }
 
         if (component.AbsorbedEntities.ContainsKey(dnaComponent.DNA))
         {
-            _popup.PopupEntity("This DNA already absorbed!", uid, uid);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-already-absorbed"), uid, uid);
             return;
         }
 
         if (!_stateSystem.IsDown(args.Target))
         {
-            _popup.PopupEntity("Target must be down!", args.Performer, args.Performer);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-absorb-down"), args.Performer, args.Performer);
             return;
         }
 
         if (!TryComp<SharedPullableComponent>(args.Target, out var pulled))
         {
-            _popup.PopupEntity("You must pull target!", args.Performer, args.Performer);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-absorb-pull"), args.Performer, args.Performer);
             return;
         }
 
         if (!pulled.BeingPulled)
         {
-            _popup.PopupEntity("You must pull target!", args.Performer, args.Performer);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-absorb-pull"), args.Performer, args.Performer);
             return;
         }
 
-        _doAfterSystem.TryStartDoAfter(
-            new DoAfterArgs(EntityManager, args.Performer, component.AbsorbDnaDelay, new AbsorbDnaDoAfterEvent(), uid,
-                args.Target, uid)
+        _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.Performer, component.AbsorbDnaDelay,
+                new AbsorbDnaDoAfterEvent(), uid, args.Target, uid)
             {
                 BreakOnTargetMove = true,
                 BreakOnUserMove = true
-            });
+            }
+        );
     }
 
     private void OnTransform(EntityUid uid, ChangelingComponent component, TransformActionEvent args)
@@ -178,7 +176,7 @@ public sealed partial class ChangelingSystem
 
         if (component.AbsorbedEntities.Count <= 1 && !component.IsLesserForm)
         {
-            _popup.PopupEntity("You don't have any persons to transform!", uid, uid);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-transform-no-dna"), uid, uid);
             return;
         }
 
@@ -211,11 +209,11 @@ public sealed partial class ChangelingSystem
 
         _doAfterSystem.TryStartDoAfter(
             new DoAfterArgs(EntityManager, user, component.TransformDelay,
-                new TransformDoAfterEvent { SelectedDna = selectedDna }, user,
-                user, user)
+                new TransformDoAfterEvent { SelectedDna = selectedDna }, user, user, user)
             {
                 BreakOnUserMove = true
-            });
+            }
+        );
 
         if (!TryComp<ActorComponent>(uid, out var actorComponent))
             return;
@@ -233,7 +231,7 @@ public sealed partial class ChangelingSystem
 
         if (component.ChemicalsBalance < 15)
         {
-            _popup.PopupEntity("We're lacking of chemicals!", uid, uid);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-lack-chemicals"), uid, uid);
             return;
         }
 
@@ -242,7 +240,7 @@ public sealed partial class ChangelingSystem
             KillUser(uid, "Cellular");
         }
 
-        _popup.PopupEntity("We beginning our regeneration.", uid, uid);
+        _popup.PopupEntity(Loc.GetString("changeling-popup-start-regeneration"), uid, uid);
 
         _doAfterSystem.TryStartDoAfter(
             new DoAfterArgs(EntityManager, args.Performer, component.RegenerateDelay,
@@ -259,13 +257,13 @@ public sealed partial class ChangelingSystem
     {
         if (_mobStateSystem.IsDead(uid) || component.IsRegenerating)
         {
-            _popup.PopupEntity("We can do this right now!", uid, uid);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-cant-perform"), uid, uid);
             return;
         }
 
         if (component.IsLesserForm)
         {
-            _popup.PopupEntity("We're already in the lesser form!", uid, uid);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-already-lesser-form"), uid, uid);
             return;
         }
 
@@ -280,7 +278,9 @@ public sealed partial class ChangelingSystem
     {
         if (!HasComp<HumanoidAppearanceComponent>(args.Target))
         {
-            _popup.PopupEntity("We can't transform that!", args.Performer, args.Performer);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-cant-transform-someone"), args.Performer,
+                args.Performer);
+
             return;
         }
 
@@ -289,7 +289,7 @@ public sealed partial class ChangelingSystem
 
         if (component.AbsorbedEntities.Count < 1)
         {
-            _popup.PopupEntity("You don't have any persons to transform!", uid, uid);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-transform-no-dna"), uid, uid);
             return;
         }
 
@@ -306,7 +306,9 @@ public sealed partial class ChangelingSystem
         _ui.OpenUi(bui, actorComponent.PlayerSession);
     }
 
-    private void OnTransformStingMessage(EntityUid uid, ChangelingComponent component,
+    private void OnTransformStingMessage(
+        EntityUid uid,
+        ChangelingComponent component,
         TransformStingItemSelectedMessage args)
     {
         var selectedDna = args.SelectedItem;
@@ -322,7 +324,7 @@ public sealed partial class ChangelingSystem
 
         if (HasComp<ChangelingComponent>(target))
         {
-            _popup.PopupEntity("Transform virus was ineffective!", user, user);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-transform-not-effective"), user, user);
             return;
         }
 
@@ -331,7 +333,9 @@ public sealed partial class ChangelingSystem
 
         if (TryComp(target, out SharedPullerComponent? puller) && puller.Pulling is { } pulled &&
             TryComp(pulled, out SharedPullableComponent? pullable))
+        {
             _pullingSystem.TryStopPull(pullable);
+        }
 
         TransformPerson(target, humanData);
 
@@ -345,7 +349,7 @@ public sealed partial class ChangelingSystem
         if (!HasComp<HumanoidAppearanceComponent>(args.Target) ||
             !HasComp<BlindableComponent>(args.Target))
         {
-            _popup.PopupEntity("We cannot sting that!", uid, uid);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-cant-sting"), uid, uid);
             return;
         }
 
@@ -363,7 +367,7 @@ public sealed partial class ChangelingSystem
     {
         if (!HasComp<HumanoidAppearanceComponent>(args.Target))
         {
-            _popup.PopupEntity("We cannot sting that!", uid, uid);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-cant-sting"), uid, uid);
             return;
         }
 
@@ -371,8 +375,7 @@ public sealed partial class ChangelingSystem
             return;
 
         var statusTimeSpan = TimeSpan.FromSeconds(30);
-        _statusEffectsSystem.TryAddStatusEffect(args.Target, "Muted",
-            statusTimeSpan, false, "Muted");
+        _statusEffectsSystem.TryAddStatusEffect(args.Target, "Muted", statusTimeSpan, false, "Muted");
 
         args.Handled = true;
     }
@@ -381,7 +384,7 @@ public sealed partial class ChangelingSystem
     {
         if (!HasComp<HumanoidAppearanceComponent>(args.Target))
         {
-            _popup.PopupEntity("We cannot sting that!", uid, uid);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-cant-sting"), uid, uid);
             return;
         }
 
@@ -389,8 +392,7 @@ public sealed partial class ChangelingSystem
             return;
 
         var statusTimeSpan = TimeSpan.FromSeconds(30);
-        _statusEffectsSystem.TryAddStatusEffect(args.Target, "BlurryVision",
-            statusTimeSpan, false, "BlurryVision");
+        _statusEffectsSystem.TryAddStatusEffect(args.Target, "BlurryVision", statusTimeSpan, false, "BlurryVision");
 
         args.Handled = true;
     }
@@ -399,7 +401,7 @@ public sealed partial class ChangelingSystem
     {
         if (!HasComp<HumanoidAppearanceComponent>(args.Target))
         {
-            _popup.PopupEntity("We cannot sting that!", uid, uid);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-cant-sting"), uid, uid);
             return;
         }
 
@@ -407,8 +409,7 @@ public sealed partial class ChangelingSystem
             return;
 
         var statusTimeSpan = TimeSpan.FromSeconds(30);
-        _statusEffectsSystem.TryAddStatusEffect(args.Target, "SlowedDown",
-            statusTimeSpan, false, "SlowedDown");
+        _statusEffectsSystem.TryAddStatusEffect(args.Target, "SlowedDown", statusTimeSpan, false, "SlowedDown");
 
         _temperatureSystem.ForceChangeTemperature(args.Target, 100);
 
@@ -444,7 +445,9 @@ public sealed partial class ChangelingSystem
 
         _solutionContainer.TryAddReagent(injectable.Value, "Omnizine", 25);
         if (TryComp(uid, out BloodstreamComponent? bloodstream))
+        {
             _blood.TryModifyBleedAmount(uid, -bloodstream.BleedAmount, bloodstream);
+        }
 
         args.Handled = true;
     }
@@ -507,9 +510,9 @@ public sealed partial class ChangelingSystem
         args.Handled = true;
     }
 
-    #endregion
+#endregion
 
-    #region DoAfters
+#region DoAfters
 
     private void OnTransformDoAfter(EntityUid uid, ChangelingComponent component, TransformDoAfterEvent args)
     {
@@ -535,7 +538,7 @@ public sealed partial class ChangelingSystem
             return;
         }
 
-        if(!_mindSystem.TryGetMind(uid, out var mindId, out _))
+        if (!_mindSystem.TryGetMind(uid, out var mindId, out _))
             return;
 
         if (TryComp(uid, out SharedPullerComponent? puller) && puller.Pulling is { } pulled &&
@@ -547,6 +550,7 @@ public sealed partial class ChangelingSystem
             var total = component.AbsorbedEntities
                 .Concat(changelingComponent.AbsorbedEntities)
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
+
             component.AbsorbedEntities = total;
         }
         else
@@ -578,7 +582,7 @@ public sealed partial class ChangelingSystem
 
         if (HasComp<AbsorbedComponent>(args.Target))
         {
-            _popup.PopupEntity("You're lost.", args.Target.Value, args.Target.Value);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-was-absorbed"), args.Target.Value, args.Target.Value);
             component.IsRegenerating = false;
             return;
         }
@@ -588,7 +592,7 @@ public sealed partial class ChangelingSystem
 
         _rejuvenate.PerformRejuvenate(args.Target.Value);
 
-        _popup.PopupEntity("We're fully regenerated!", args.Target.Value, args.Target.Value);
+        _popup.PopupEntity(Loc.GetString("changeling-popup-fully-regenerated"), args.Target.Value, args.Target.Value);
 
         component.IsRegenerating = false;
 
@@ -632,9 +636,9 @@ public sealed partial class ChangelingSystem
         args.Handled = true;
     }
 
-    #endregion
+#endregion
 
-    #region Helpers
+#region Helpers
 
     private void RemoveLesserFormActions(EntityUid uid)
     {
@@ -680,12 +684,16 @@ public sealed partial class ChangelingSystem
     {
         if (!TryComp<MetaDataComponent>(target, out var targetMeta))
             return;
+
         if (!TryComp<HumanoidAppearanceComponent>(target, out var targetAppearance))
             return;
+
         if (!TryComp<DnaComponent>(target, out var targetDna))
             return;
+
         if (!TryPrototype(target, out var prototype, targetMeta))
             return;
+
         if (component.AbsorbedEntities.ContainsKey(targetDna.DNA))
             return;
 
@@ -778,7 +786,7 @@ public sealed partial class ChangelingSystem
 
         _implantSystem.TransferImplants(uid, reverted.Value);
         _actionContainerSystem.TransferAllActionsFiltered(uid, reverted.Value);
-        _action.GrantContainedActions(reverted.Value,reverted.Value);
+        _action.GrantContainedActions(reverted.Value, reverted.Value);
 
         if (component.IsLesserForm)
         {
@@ -797,7 +805,9 @@ public sealed partial class ChangelingSystem
     /// <param name="target">Acceptor</param>
     /// <param name="sourceHumanoid">Source appearance</param>
     /// <param name="targetHumanoid">Acceptor appearance component</param>
-    private void ClonePerson(EntityUid target, HumanoidAppearanceComponent sourceHumanoid,
+    private void ClonePerson(
+        EntityUid target,
+        HumanoidAppearanceComponent sourceHumanoid,
         HumanoidAppearanceComponent targetHumanoid)
     {
         targetHumanoid.Species = sourceHumanoid.Species;
@@ -808,6 +818,7 @@ public sealed partial class ChangelingSystem
         _humanoidAppearance.SetSpecies(target, sourceHumanoid.Species);
         targetHumanoid.CustomBaseLayers = new Dictionary<HumanoidVisualLayers,
             CustomBaseLayerInfo>(sourceHumanoid.CustomBaseLayers);
+
         targetHumanoid.MarkingSet = new MarkingSet(sourceHumanoid.MarkingSet);
 
         targetHumanoid.Gender = sourceHumanoid.Gender;
@@ -835,7 +846,7 @@ public sealed partial class ChangelingSystem
 
         if (!_handsSystem.TryGetEmptyHand(target, out var hand))
         {
-            _popup.PopupEntity("We need to have at least one empty hand!", target, target);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-need-hand"), target, target);
             return;
         }
 
@@ -851,11 +862,11 @@ public sealed partial class ChangelingSystem
     {
         if (!_chemicalsSystem.RemoveChemicals(uid, component, quantity))
         {
-            _popup.PopupEntity("We're lacking of chemicals!", uid, uid);
+            _popup.PopupEntity(Loc.GetString("changeling-popup-lack-chemicals"), uid, uid);
             return false;
         }
 
-        _popup.PopupEntity($"Used {quantity} of chemicals.", uid, uid);
+        _popup.PopupEntity(Loc.GetString("changeling-popup-used-chemicals", ("quantity", quantity)), uid, uid);
 
         return true;
     }
@@ -887,5 +898,5 @@ public sealed partial class ChangelingSystem
         }
     }
 
-    #endregion
+#endregion
 }

@@ -33,7 +33,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
     [Dependency] private readonly ChangelingNameGenerator _nameGenerator = default!;
 
     private const int PlayersPerChangeling = 15;
-    private const int MaxChangelings = 5;
+    private const int MaxChangelings = 4;
 
     private const float ChangelingStartDelay = 3f * 60;
     private const float ChangelingStartDelayVariance = 3f * 60;

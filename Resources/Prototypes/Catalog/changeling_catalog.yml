@@ -137,7 +137,7 @@
   description: Allows to make use of additional adrenaline to instantly recover from knockdown.
   productAction: ActionAdrenalineSacs
   cost:
-    ChangelingPoint: 3
+    ChangelingPoint: 2
   categories:
     - ChangelingBoosters
   conditions:

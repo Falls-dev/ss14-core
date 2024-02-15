@@ -34,7 +34,6 @@ using Content.Shared.StatusEffect;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects.Components.Localization;
 using Robust.Shared.Player;
-using Robust.Shared.Random;
 using Robust.Shared.Serialization.Manager;
 
 namespace Content.Server.Changeling;
@@ -59,7 +58,6 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
     [Dependency] private readonly InventorySystem _inventorySystem = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ActionContainerSystem _actionContainerSystem = default!;
     [Dependency] private readonly SharedPullingSystem _pullingSystem = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
@@ -558,7 +556,10 @@ public sealed partial class ChangelingSystem
             CopyHumanoidData(uid, args.Target.Value, component);
         }
 
-        AddCurrency(uid, args.Target.Value);
+        if (TryComp<ChangelingComponent>(args.Target.Value, out _))
+        {
+            AbsorbLing(uid, component);
+        }
 
         KillUser(args.Target.Value, "Cellular");
 
@@ -871,8 +872,10 @@ public sealed partial class ChangelingSystem
         return true;
     }
 
-    private void AddCurrency(EntityUid uid, EntityUid absorbed)
+    private void AbsorbLing(EntityUid uid, ChangelingComponent changelingComponent)
     {
+        changelingComponent.ChemicalCapacity += 40;
+
         if (!TryComp<ImplantedComponent>(uid, out var implant))
             return;
 
@@ -881,18 +884,8 @@ public sealed partial class ChangelingSystem
             if (!TryComp<StoreComponent>(entity, out var store))
                 continue;
 
-            if (_mobStateSystem.IsDead(absorbed))
-            {
-                var points = _random.Next(1, 3);
-                var toAdd = new Dictionary<string, FixedPoint2> { { "ChangelingPoint", points } };
-                _storeSystem.TryAddCurrency(toAdd, entity, store);
-            }
-            else
-            {
-                var points = _random.Next(2, 4);
-                var toAdd = new Dictionary<string, FixedPoint2> { { "ChangelingPoint", points } };
-                _storeSystem.TryAddCurrency(toAdd, entity, store);
-            }
+            var toAdd = new Dictionary<string, FixedPoint2> { { "ChangelingPoint", 5 } };
+            _storeSystem.TryAddCurrency(toAdd, entity, store);
 
             return;
         }

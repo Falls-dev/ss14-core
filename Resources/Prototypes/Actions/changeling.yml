@@ -224,3 +224,16 @@
       event: !type:TentacleArmActionEvent
       useDelay: 10
     - type: LesserFormRestricted
+
+- type: entity
+  id: ActionBiodegrade
+  name: changeling-shop-biodegrade
+  description: changeling-shop-biodegrade-desc
+  noSpawn: true
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    icon: White/Actions/changeling/biodegrade.png
+    event: !type:BiodegradeActionEvent
+    useDelay: 120

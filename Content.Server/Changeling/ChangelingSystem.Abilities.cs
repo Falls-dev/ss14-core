@@ -2,6 +2,7 @@
 using Content.Server.Administration.Systems;
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
+using Content.Server.Cuffs;
 using Content.Server.DoAfter;
 using Content.Server.Forensics;
 using Content.Server.Humanoid;
@@ -14,6 +15,7 @@ using Content.Server.Temperature.Systems;
 using Content.Shared.Actions;
 using Content.Shared.Changeling;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Cuffs.Components;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Eye.Blinding.Components;
@@ -62,6 +64,7 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly SharedPullingSystem _pullingSystem = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly BloodstreamSystem _blood = default!;
+    [Dependency] private readonly CuffableSystem _cuffable = default!;
 
     private void InitializeAbilities()
     {
@@ -80,6 +83,8 @@ public sealed partial class ChangelingSystem
 
         SubscribeLocalEvent<ChangelingComponent, AdrenalineSacsActionEvent>(OnAdrenalineSacs);
         SubscribeLocalEvent<ChangelingComponent, FleshmendActionEvent>(OnFleshMend);
+        SubscribeLocalEvent<ChangelingComponent, BiodegradeActionEvent>(OnBiodegrade);
+
         SubscribeLocalEvent<ChangelingComponent, ArmbladeActionEvent>(OnArmBlade);
         SubscribeLocalEvent<ChangelingComponent, OrganicShieldActionEvent>(OnShield);
         SubscribeLocalEvent<ChangelingComponent, ChitinousArmorActionEvent>(OnArmor);
@@ -475,6 +480,28 @@ public sealed partial class ChangelingSystem
         {
             _blood.TryModifyBleedAmount(uid, -bloodstream.BleedAmount, bloodstream);
         }
+
+        args.Handled = true;
+    }
+
+    private void OnBiodegrade(EntityUid uid, ChangelingComponent component, BiodegradeActionEvent args)
+    {
+        if (_mobStateSystem.IsDead(uid))
+            return;
+
+        if (!TryComp(uid, out CuffableComponent? cuffs) || cuffs.Container.ContainedEntities.Count < 1)
+            return;
+
+        if (!TakeChemicals(uid, component, 30))
+            return;
+
+        var lastAddedCuffs = cuffs.LastAddedCuffs;
+
+        _cuffable.Uncuff(uid, lastAddedCuffs, lastAddedCuffs);
+
+        Del(lastAddedCuffs);
+
+        _popup.PopupEntity(Loc.GetString("changeling-popup-biodegrade"), uid);
 
         args.Handled = true;
     }

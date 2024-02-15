@@ -28,6 +28,8 @@ changeling-popup-start-regeneration = Мы начинаем регенераци
 changeling-popup-was-absorbed = Мы... проиграли
 changeling-popup-fully-regenerated = Мы полностью восстановились!
 
+changeling-popup-biodegrade = Наручники растворяются и опадают на пол!
+
 changeling-popup-need-hand = Нам нужна хотя бы одна свободная рука
 
 changeling-popup-used-chemicals = Использовано {$quantity} химикатов

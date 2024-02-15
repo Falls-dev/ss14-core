@@ -169,3 +169,16 @@
   conditions:
     - !type:ListingLimitedStockCondition
       stock: 1
+
+- type: listing
+  id: ChangelingBiodegrade
+  name: changeling-shop-biodegrade
+  description: changeling-shop-biodegrade-desc
+  productAction: ActionBiodegrade
+  cost:
+    ChangelingPoint: 2
+  categories:
+  - ChangelingBoosters
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1

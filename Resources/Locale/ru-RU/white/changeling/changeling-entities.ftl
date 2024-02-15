@@ -1,6 +1,9 @@
 ﻿changeling-shop-fleshmed = Восстановление тканей
 changeling-shop-fleshmed-desc = Быстро вылечить большую часть повреждений
 
+changeling-shop-biodegrade = Биоразложение
+changeling-shop-biodegrade-desc = Растворяет наручники и прочие сдерживающие элементы.
+
 changeling-shop-adrelanine-sacks = Мешки с адреналином
 changeling-shop-adrelanine-sacks-desc = Дает кратковременный прилив адреналина в крови.
 

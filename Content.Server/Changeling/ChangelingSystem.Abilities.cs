@@ -491,7 +491,7 @@ public sealed partial class ChangelingSystem
 
         if (meta.EntityPrototype.ID == protoName)
         {
-            _inventorySystem.TryUnequip(uid, outerName, out var removedItem);
+            _inventorySystem.TryUnequip(uid, outerName, out var removedItem, force: true);
             QueueDel(removedItem);
             return;
         }

@@ -18,7 +18,7 @@
   components:
   - type: EntityTargetAction
     itemIconStyle: NoItem
-    icon: Interface/Actions/ling_absorb.png
+    icon: White/Actions/changeling/absorb.png
     event: !type:AbsorbDnaActionEvent
     canTargetSelf: false
     useDelay: 10
@@ -32,7 +32,7 @@
   components:
     - type: InstantAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/transform.png
+      icon: White/Actions/changeling/transform.png
       event: !type:TransformActionEvent
       useDelay: 30
 
@@ -44,7 +44,7 @@
   components:
     - type: InstantAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/reviving_stasis.png
+      icon: White/Actions/changeling/reviving_stasis.png
       event: !type:RegenerateActionEvent
       checkCanInteract: false
       useDelay: 120
@@ -58,7 +58,7 @@
   components:
     - type: InstantAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/lesser_form.png
+      icon: White/Actions/changeling/lesser_form.png
       event: !type:LesserFormActionEvent
       useDelay: 90
     - type: LesserFormRestricted
@@ -71,7 +71,7 @@
   components:
   - type: EntityTargetAction
     itemIconStyle: NoItem
-    icon: Interface/Actions/sting_extract.png
+    icon: White/Actions/changeling/sting_extract.png
     event: !type:ExtractionStingActionEvent
     canTargetSelf: false
     useDelay: 40
@@ -85,7 +85,7 @@
   components:
     - type: EntityTargetAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/sting_transform.png
+      icon: White/Actions/changeling/sting_transform.png
       event: !type:TransformStingActionEvent
       canTargetSelf: false
       useDelay: 120
@@ -99,7 +99,7 @@
   components:
     - type: EntityTargetAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/sting_blind.png
+      icon: White/Actions/changeling/sting_blind.png
       event: !type:BlindStingActionEvent
       canTargetSelf: false
       useDelay: 30
@@ -113,7 +113,7 @@
   components:
     - type: EntityTargetAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/sting_mute.png
+      icon: White/Actions/changeling/sting_mute.png
       event: !type:MuteStingActionEvent
       canTargetSelf: false
       useDelay: 30
@@ -127,7 +127,7 @@
   components:
     - type: EntityTargetAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/sting_hallucination.png
+      icon: White/Actions/changeling/sting_hallucination.png
       event: !type:HallucinationStingActionEvent
       canTargetSelf: false
       useDelay: 30
@@ -141,7 +141,7 @@
   components:
     - type: EntityTargetAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/sting_cryo.png
+      icon: White/Actions/changeling/sting_cryo.png
       event: !type:CryoStingActionEvent
       canTargetSelf: false
       useDelay: 30
@@ -155,7 +155,7 @@
   components:
     - type: InstantAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/adrenaline_sacs.png
+      icon: White/Actions/changeling/adrenaline_sacs.png
       event: !type:AdrenalineSacsActionEvent
       useDelay: 60
     - type: LesserFormRestricted
@@ -168,7 +168,7 @@
   components:
     - type: InstantAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/fleshmend.png
+      icon: White/Actions/changeling/fleshmend.png
       event: !type:FleshmendActionEvent
       useDelay: 60
     - type: LesserFormRestricted
@@ -181,7 +181,7 @@
   components:
     - type: InstantAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/arm_blade.png
+      icon: White/Actions/changeling/arm_blade.png
       event: !type:ArmbladeActionEvent
       useDelay: 10
     - type: LesserFormRestricted
@@ -194,7 +194,7 @@
   components:
     - type: InstantAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/changeling_shield.png
+      icon: White/Actions/changeling/shield.png
       event: !type:OrganicShieldActionEvent
       useDelay: 10
     - type: LesserFormRestricted
@@ -207,7 +207,7 @@
   components:
     - type: InstantAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/changeling_armor.png
+      icon: White/Actions/changeling/armor.png
       event: !type:ChitinousArmorActionEvent
       useDelay: 10
     - type: LesserFormRestricted
@@ -220,7 +220,7 @@
   components:
     - type: InstantAction
       itemIconStyle: NoItem
-      icon: Interface/Actions/tentacle_arm.png
+      icon: White/Actions/changeling/tentacle_arm.png
       event: !type:TentacleArmActionEvent
       useDelay: 10
     - type: LesserFormRestricted

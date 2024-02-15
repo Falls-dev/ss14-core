@@ -69,7 +69,7 @@ public sealed partial class AdminVerbSystem
         {
             Text = Loc.GetString("admin-verb-text-make-changeling"),
             Category = VerbCategory.Antag,
-            Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/Actions/ling_absorb.png")),
+            Icon = new SpriteSpecifier.Texture(new ("/Textures/White/Actions/changeling/absorb.png")),
             Act = () =>
             {
                 if (!_minds.TryGetSession(targetMindComp.Mind, out var session))

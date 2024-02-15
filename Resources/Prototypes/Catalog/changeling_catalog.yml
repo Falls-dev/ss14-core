@@ -66,6 +66,19 @@
 
 # Stings
 - type: listing
+  id: ChangelingExtractionString
+  name: changeling-shop-extraction-sting
+  description: changeling-shop-extraction-sting-desc
+  productAction: ActionExtractionSting
+  cost:
+    ChangelingPoint: 0
+  categories:
+  - ChangelingStings
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
   id: ChangelingTransformSting
   name: changeling-shop-transform-sting
   description: changeling-shop-transform-sting-desc

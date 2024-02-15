@@ -70,6 +70,7 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, RegenerateActionEvent>(OnRegenerate);
         SubscribeLocalEvent<ChangelingComponent, LesserFormActionEvent>(OnLesserForm);
 
+        SubscribeLocalEvent<ChangelingComponent, ExtractionStingActionEvent>(OnExtractionSting);
         SubscribeLocalEvent<ChangelingComponent, TransformStingActionEvent>(OnTransformSting);
         SubscribeLocalEvent<ChangelingComponent, TransformStingItemSelectedMessage>(OnTransformStingMessage);
         SubscribeLocalEvent<ChangelingComponent, BlindStingActionEvent>(OnBlindSting);
@@ -128,15 +129,9 @@ public sealed partial class ChangelingSystem
             return;
         }
 
-        if (!TryComp<DnaComponent>(args.Target, out var dnaComponent))
+        if (!TryComp<DnaComponent>(args.Target, out _))
         {
             _popup.PopupEntity(Loc.GetString("changeling-popup-absorb-unknown"), uid, uid);
-            return;
-        }
-
-        if (component.AbsorbedEntities.ContainsKey(dnaComponent.DNA))
-        {
-            _popup.PopupEntity(Loc.GetString("changeling-popup-already-absorbed"), uid, uid);
             return;
         }
 
@@ -270,6 +265,40 @@ public sealed partial class ChangelingSystem
         {
             BreakOnUserMove = true
         });
+    }
+
+    private void OnExtractionSting(EntityUid uid, ChangelingComponent component, ExtractionStingActionEvent args)
+    {
+        if (!HasComp<HumanoidAppearanceComponent>(args.Target))
+        {
+            _popup.PopupEntity(Loc.GetString("changeling-popup-absorb-not-human"), args.Performer, args.Performer);
+            return;
+        }
+
+        if (HasComp<AbsorbedComponent>(args.Target))
+        {
+            _popup.PopupEntity(Loc.GetString("changeling-popup-already-absorbed"), args.Performer, args.Performer);
+            return;
+        }
+
+        if (!TryComp<DnaComponent>(args.Target, out var dnaComponent))
+        {
+            _popup.PopupEntity(Loc.GetString("changeling-popup-absorb-unknown"), uid, uid);
+            return;
+        }
+
+        if (component.AbsorbedEntities.ContainsKey(dnaComponent.DNA))
+        {
+            _popup.PopupEntity(Loc.GetString("changeling-popup-already-absorbed"), uid, uid);
+            return;
+        }
+
+        if (!TakeChemicals(uid, component, 25))
+            return;
+
+        _popup.PopupEntity(Loc.GetString("changeling-popup-dna-taken"), uid, uid);
+        CopyHumanoidData(uid, args.Target, component);
+        args.Handled = true;
     }
 
     private void OnTransformSting(EntityUid uid, ChangelingComponent component, TransformStingActionEvent args)
@@ -541,7 +570,9 @@ public sealed partial class ChangelingSystem
 
         if (TryComp(uid, out SharedPullerComponent? puller) && puller.Pulling is { } pulled &&
             TryComp(pulled, out SharedPullableComponent? pullable))
+        {
             _pullingSystem.TryStopPull(pullable);
+        }
 
         if (TryComp<ChangelingComponent>(args.Target.Value, out var changelingComponent))
         {
@@ -698,11 +729,16 @@ public sealed partial class ChangelingSystem
         if (component.AbsorbedEntities.ContainsKey(targetDna.DNA))
             return;
 
+        if (component.AbsorbedEntities.Count == 7)
+        {
+            component.AbsorbedEntities.Remove(component.AbsorbedEntities.ElementAt(2).Key);
+        }
+
         var appearance = _serializationManager.CreateCopy(targetAppearance, notNullableOverride: true);
         var meta = _serializationManager.CreateCopy(targetMeta, notNullableOverride: true);
 
         var name = string.IsNullOrEmpty(meta.EntityName)
-            ? "Unknown Creature"
+            ? Loc.GetString("changeling-unknown-creature")
             : meta.EntityName;
 
         component.AbsorbedEntities.Add(targetDna.DNA, new HumanoidData

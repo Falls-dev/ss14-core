@@ -4,6 +4,8 @@ chat-manager-send-changeling-chat-wrap-message = [bold]\[УЛЕЙ\][/bold] [font
 
 changeling-juices-sucked-up = [color=#A30000]Все его соки были высосаны![/color]
 
+changeling-unknown-creature = Неизвестное существо
+
 changeling-popup-lack-chemicals = Нам не хватает химикатов!
 changeling-popup-cant-perform = Мы не можем сделать это сейчас!
 
@@ -12,6 +14,7 @@ changeling-popup-already-absorbed = Оно уже поглощено!
 changeling-popup-absorb-unknown = Мы не можем поглотить это!
 changeling-popup-absorb-pull = Мы должны тянуть его за собой!
 changeling-popup-absorb-down = Оно должно лежать на земле!
+changeling-popup-dna-taken = Мы успешно взяли образец ДНК!
 
 changeling-popup-cant-sting = Мы не можем ужалить это!
 

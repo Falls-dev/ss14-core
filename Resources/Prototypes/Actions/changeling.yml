@@ -64,6 +64,20 @@
     - type: LesserFormRestricted
 
 - type: entity
+  id: ActionExtractionSting
+  name: Extraction String
+  description: Safely extracts DNA from a target.
+  noSpawn: true
+  components:
+  - type: EntityTargetAction
+    itemIconStyle: NoItem
+    icon: Interface/Actions/sting_extract.png
+    event: !type:ExtractionStingActionEvent
+    canTargetSelf: false
+    useDelay: 40
+  - type: LesserFormRestricted
+
+- type: entity
   id: ActionTransformSting
   name: Transform Sting
   description: Injects a retrovirus that forces human victim to transform into another.

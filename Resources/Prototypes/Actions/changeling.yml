@@ -183,6 +183,7 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/arm_blade.png
       event: !type:ArmbladeActionEvent
+      useDelay: 10
     - type: LesserFormRestricted
 
 - type: entity
@@ -195,6 +196,7 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/changeling_shield.png
       event: !type:OrganicShieldActionEvent
+      useDelay: 10
     - type: LesserFormRestricted
 
 - type: entity
@@ -207,6 +209,7 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/changeling_armor.png
       event: !type:ChitinousArmorActionEvent
+      useDelay: 10
     - type: LesserFormRestricted
 
 - type: entity
@@ -219,4 +222,5 @@
       itemIconStyle: NoItem
       icon: Interface/Actions/tentacle_arm.png
       event: !type:TentacleArmActionEvent
+      useDelay: 10
     - type: LesserFormRestricted

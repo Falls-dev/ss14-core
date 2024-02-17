@@ -10,6 +10,7 @@ using Content.Server.Mind;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Popups;
 using Content.Server.Store.Components;
+using Content.Server.Temperature.Components;
 using Content.Server.Temperature.Systems;
 using Content.Shared.Actions;
 using Content.Shared.Changeling;
@@ -397,7 +398,8 @@ public sealed partial class ChangelingSystem
 
     private void OnCryoSting(EntityUid uid, ChangelingComponent component, CryoStingActionEvent args)
     {
-        if (!HasComp<HumanoidAppearanceComponent>(args.Target))
+        if (!HasComp<HumanoidAppearanceComponent>(args.Target) ||
+            !TryComp(args.Target, out TemperatureComponent? temperature))
         {
             _popup.PopupEntity("We cannot sting that!", uid, uid);
             return;
@@ -406,11 +408,8 @@ public sealed partial class ChangelingSystem
         if (!TakeChemicals(uid, component, 15))
             return;
 
-        var statusTimeSpan = TimeSpan.FromSeconds(30);
-        _statusEffectsSystem.TryAddStatusEffect(args.Target, "SlowedDown",
-            statusTimeSpan, false, "SlowedDown");
-
-        _temperatureSystem.ForceChangeTemperature(args.Target, 100);
+        _temperatureSystem.ForceChangeTemperature(args.Target, MathF.Min(70, temperature.CurrentTemperature),
+            temperature);
 
         args.Handled = true;
     }

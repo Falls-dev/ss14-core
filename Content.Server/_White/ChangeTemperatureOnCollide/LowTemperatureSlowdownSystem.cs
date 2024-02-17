@@ -39,15 +39,14 @@ public sealed class LowTemperatureSlowdownSystem : EntitySystem
         return temperature switch
         {
             > 290f => 1f,
-            > 270f => 0.9f,
-            > 150f => 0.8f,
-            > 130f => 0.7f,
-            > 110f => 0.6f,
-            > 90f => 0.5f,
-            > 70f => 0.4f,
+            > 280f => 0.9f,
+            > 260f => 0.8f,
+            > 230f => 0.7f,
+            > 200f => 0.6f,
+            > 160f => 0.5f,
+            > 110f => 0.4f,
             > 50f => 0.3f,
-            > 30f => 0.2f,
-            _ => 0.1f
+            _ => 0.2f
         };
     }
 }

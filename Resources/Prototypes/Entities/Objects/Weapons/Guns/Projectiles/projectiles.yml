@@ -1355,13 +1355,13 @@
   - type: Ammo
     muzzleFlash: null
   - type: ChangeTemperatureOnCollide
-    temperature: 25
+    temperature: 20
   - type: Projectile
     damage:
       types:
         Heat: 0
     soundHit:
-      path: "/Audio/Weapons/tap.ogg"
+      collection: WeakHit
     soundForce: true
 
 - type: entity
@@ -1376,4 +1376,4 @@
     - state: cold
       shader: unshaded
   - type: ChangeTemperatureOnCollide
-    temperature: -25
+    temperature: -20

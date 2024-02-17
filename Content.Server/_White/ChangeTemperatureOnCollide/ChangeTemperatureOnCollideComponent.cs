@@ -1,11 +1,11 @@
 namespace Content.Server._White.ChangeTemperatureOnCollide;
 
 [RegisterComponent]
-public sealed class ChangeTemperatureOnCollideComponent : Component
+public sealed partial class ChangeTemperatureOnCollideComponent : Component
 {
-    [DataField("temperature"), ViewVariables(VVAccess.ReadWrite)]
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
     public float Temperature;
 
-    [DataField("fixture")]
+    [DataField]
     public string FixtureID = "projectile";
 }

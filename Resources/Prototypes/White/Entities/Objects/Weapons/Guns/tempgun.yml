@@ -9,13 +9,14 @@
     - type: Gun
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/laser.ogg
-      projectileSpeed: 25
     - type: TwoModeEnergyAmmoProvider
-      projProto: BulletCold
-      fireCost: 65
-      projFireCost: 65
-      hitscanProto: BulletHeat
-      hitscanFireCost: 65
+      stunPrototype: BulletCold
+      fireCost: 64
+      stunFireCost: 64
+      laserPrototype: BulletHeat
+      laserFireCost: 64
+      stunProjectileSpeed: 48
+      laserProjectileSpeed: 48
       projSound: "/Audio/Weapons/Guns/Gunshots/laser.ogg"
       hitscanSound: "/Audio/Weapons/Guns/Gunshots/laser.ogg"
       modeNames:

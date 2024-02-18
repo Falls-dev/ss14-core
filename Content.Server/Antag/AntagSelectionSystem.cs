@@ -15,6 +15,7 @@ using Content.Server.Storage.EntitySystems;
 using Robust.Shared.Audio;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
+using Content.Server.Revolutionary.Components;
 using Content.Server.Roles;
 using Robust.Shared.Containers;
 using Content.Shared.Mobs.Components;
@@ -102,6 +103,12 @@ public sealed class AntagSelectionSystem : GameRuleSystem<GameRuleComponent>
         {
             if (includeHeads == false)
             {
+                // WD START
+                if (!_mindSystem.TryGetMind(player, out _, out var mind) ||
+                   mind.OwnedEntity is not { } ownedEntity || HasComp<CommandStaffComponent>(ownedEntity))
+                    continue;
+                // WD END
+
                 if (!_jobs.CanBeAntag(player))
                     continue;
             }

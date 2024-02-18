@@ -431,6 +431,13 @@
   sponsorOnly: true
   whitelistJobs: [ Detective ]
 
+# Pr0fixxx
+- type: loadout
+  id: Pr0fixxxWebbing
+  entity: ClothingBeltWebbingPr0fixxx
+  sponsorOnly: true
+  whitelistJobs: [ HeadOfSecurity, SecurityCadet, SecurityOfficer, Warden  ]
+
 # qwertymen
 - type: loadout
   id: QwertymenSecurityBelt

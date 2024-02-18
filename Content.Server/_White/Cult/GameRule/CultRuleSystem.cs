@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Content.Server._Miracle.Components;
 using Content.Server.Actions;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
@@ -324,6 +325,11 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         {
             // Role prevents antag.
             if (!_jobSystem.CanBeAntag(player))
+                continue;
+
+            // Gulag
+            if (!_mindSystem.TryGetMind(player, out _, out var mind) ||
+                mind.OwnedEntity is not { } ownedEntity || HasComp<GulagBoundComponent>(ownedEntity))
                 continue;
 
             // Latejoin

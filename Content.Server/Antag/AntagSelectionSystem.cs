@@ -10,6 +10,7 @@ using Content.Server.Mind;
 using Robust.Shared.Random;
 using Robust.Shared.Map;
 using System.Numerics;
+using Content.Server._Miracle.Components;
 using Content.Shared.Inventory;
 using Content.Server.Storage.EntitySystems;
 using Robust.Shared.Audio;
@@ -105,7 +106,8 @@ public sealed class AntagSelectionSystem : GameRuleSystem<GameRuleComponent>
             {
                 // WD START
                 if (!_mindSystem.TryGetMind(player, out _, out var mind) ||
-                   mind.OwnedEntity is not { } ownedEntity || HasComp<CommandStaffComponent>(ownedEntity))
+                    mind.OwnedEntity is not { } ownedEntity || HasComp<CommandStaffComponent>(ownedEntity) ||
+                    HasComp<GulagBoundComponent>(ownedEntity))
                     continue;
                 // WD END
 
@@ -178,6 +180,11 @@ public sealed class AntagSelectionSystem : GameRuleSystem<GameRuleComponent>
 
             // Role prevents antag.
             if (!_jobs.CanBeAntag(player))
+                continue;
+
+            // Gulag
+            if (!_mindSystem.TryGetMind(player, out _, out var mind) ||
+                mind.OwnedEntity is not { } ownedEntity || HasComp<GulagBoundComponent>(ownedEntity))
                 continue;
 
             // Latejoin

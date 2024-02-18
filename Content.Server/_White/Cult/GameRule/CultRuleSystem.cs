@@ -355,6 +355,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         {
             _sawmill.Info("Insufficient preferred cultists, picking at random.");
             prefList = list;
+            return prefList;
         }
 
         if (prefList.Count >= _minimalCultists)

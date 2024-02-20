@@ -5,7 +5,7 @@ using Content.Shared.Ghost;
 
 namespace Content.Server._White.Chaplain;
 
-public sealed class HolyWeaponSystem : EntitySystem
+public sealed class NullRodSystem : EntitySystem
 {
     [Dependency] private readonly HandsSystem _hands = default!;
     [Dependency] private readonly PopupSystem _popup = default!;

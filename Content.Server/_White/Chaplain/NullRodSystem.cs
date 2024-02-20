@@ -1,11 +1,14 @@
 using Content.Server.Hands.Systems;
+using Content.Server.Popups;
 using Content.Shared._White.Chaplain;
+using Content.Shared.Ghost;
 
 namespace Content.Server._White.Chaplain;
 
 public sealed class HolyWeaponSystem : EntitySystem
 {
     [Dependency] private readonly HandsSystem _hands = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
 
     public override void Initialize()
     {
@@ -20,6 +23,12 @@ public sealed class HolyWeaponSystem : EntitySystem
 
         if (args.SelectedWeapon == string.Empty || entity == null)
             return;
+
+        if (!HasComp<HolyComponent>(entity.Value) && !HasComp<GhostComponent>(entity.Value))
+        {
+            _popup.PopupEntity($"Вам не хватает веры, чтобы использовать {Name(ent)}", entity.Value, entity.Value);
+            return;
+        }
 
         var weapon = Spawn(args.SelectedWeapon, Transform(entity.Value).Coordinates);
         EnsureComp<HolyWeaponComponent>(weapon);

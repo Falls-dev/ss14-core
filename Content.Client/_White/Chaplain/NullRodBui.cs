@@ -49,6 +49,7 @@ public sealed class NullRodBui : BoundUserInterface
                 _selected = true;
                 SendMessage(new WeaponSelectedEvent(weapon));
                 _weaponSelector.Close();
+                Close();
             };
         }
 

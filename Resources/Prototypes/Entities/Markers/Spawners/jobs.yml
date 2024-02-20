@@ -364,18 +364,6 @@
       - state: seniorengineer
 
 - type: entity
-  id: SpawnPointSeniorSalvageSpecialist
-  parent: SpawnPointJobBase
-  name: seniorsalvagespecialist
-  components:
-  - type: SpawnPoint
-    job_id: SeniorSalvageSpecialist
-  - type: Sprite
-    layers:
-      - state: green
-      - state: miner
-
-- type: entity
   id: SpawnPointStationEngineer
   parent: SpawnPointJobBase
   name: stationengineer

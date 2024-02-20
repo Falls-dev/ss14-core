@@ -128,9 +128,6 @@
   id: JobSeniorOfficer
 
 - type: playTimeTracker
-  id: JobSeniorSalvageSpecialist
-
-- type: playTimeTracker
   id: JobSeniorPhysician
 
 - type: playTimeTracker

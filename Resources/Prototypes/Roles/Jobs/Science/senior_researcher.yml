@@ -30,6 +30,9 @@
     ears: ClothingHeadsetScience
     gloves: ClothingHandsGlovesColorYellow
     belt: ClothingBeltUtilityFilled
+    underwearb: ClothingUnderwearBottomBoxersWhite # White-Underwear
+  underweart: ClothingUnderwearTopBraWhite # White-Underwear
+  underwearb: ClothingUnderwearBottomPantiesWhite # White-Underwear
   innerClothingSkirt: ClothingUniformJumpskirtSeniorResearcher
   satchel: ClothingBackpackSatchelScienceFilled
   duffelbag: ClothingBackpackDuffelScienceFilled

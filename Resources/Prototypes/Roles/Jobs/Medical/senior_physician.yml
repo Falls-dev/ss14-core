@@ -28,7 +28,7 @@
 - type: startingGear
   id: SeniorPhysicianGear
   equipment:
-    head: ClothingHeadHatBeretSeniorPhysician
+    head: ClothingHeadHatBeretBrigmedic
     jumpsuit: ClothingUniformJumpsuitSeniorPhysician
     back: ClothingBackpackMedicalFilled
     shoes: ClothingShoesColorBlack
@@ -38,6 +38,9 @@
     belt: ClothingBeltSeniorPhysicianFilled
     mask: ClothingMaskSterile
     gloves: ClothingHandsGlovesLatex
+    underwearb: ClothingUnderwearBottomBoxersWhite # White-Underwear
+  underweart: ClothingUnderwearTopBraWhite # White-Underwear
+  underwearb: ClothingUnderwearBottomPantiesWhite # White-Underwear
   inhand:
     - ExpandedMedkit
   innerClothingSkirt: ClothingUniformJumpskirtSeniorPhysician

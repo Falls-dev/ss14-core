@@ -79,7 +79,7 @@ public sealed class RunicDoorSystem : EntitySystem
 
         _doorSystem.Deny(airlock);
 
-        if (!HasComp<HumanoidAppearanceComponent>(user))
+        if (!HasComp<HumanoidAppearanceComponent>(user) || HasComp<HolyComponent>(user))
             return false;
 
         var direction = Transform(user).MapPosition.Position - Transform(airlock).MapPosition.Position;

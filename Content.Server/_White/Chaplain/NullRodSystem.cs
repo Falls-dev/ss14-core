@@ -22,6 +22,7 @@ public sealed class HolyWeaponSystem : EntitySystem
             return;
 
         var weapon = Spawn(args.SelectedWeapon, Transform(entity.Value).Coordinates);
+        EnsureComp<HolyWeaponComponent>(weapon);
 
         Del(ent);
 

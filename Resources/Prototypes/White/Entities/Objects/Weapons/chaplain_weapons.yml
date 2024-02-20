@@ -71,7 +71,6 @@
     sprite: White/Objects/Weapons/Chaplain/godhand.rsi
   - type: Unremoveable
     deleteOnDrop: true
-  - type: HolyWeapon
 
 - type: entity
   name: священный клеймор
@@ -92,7 +91,6 @@
     - belt
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/claymore.rsi
-  - type: HolyWeapon
 
 - type: entity
   name: цепной меч
@@ -146,7 +144,6 @@
     - belt
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/katana.rsi
-  - type: HolyWeapon
 
 - type: entity
   name: внепространственный клинок
@@ -286,7 +283,6 @@
     qualities:
       - Sawing
     speed: 0.5
-  - type: HolyWeapon
 
 - type: entity
   name: священная плеть
@@ -312,7 +308,6 @@
     slots:
     - belt
   - type: DisarmMalus
-  - type: HolyWeapon
 
 - type: entity
   name: посох монаха
@@ -343,7 +338,6 @@
   - type: UseDelay
   - type: DisarmMalus
   - type: MeleeBlock
-  - type: HolyWeapon
 
 - type: entity
   name: нечестивые вилы
@@ -401,7 +395,6 @@
         Piercing: 10
   - type: UseDelay
   - type: DisarmMalus
-  - type: HolyWeapon
 
 - type: entity
   name: реликтовый боевой молот
@@ -427,7 +420,6 @@
     slots:
     - belt
   - type: DisarmMalus
-  - type: HolyWeapon
 
 - type: entity
   name: гиперинструмент
@@ -455,4 +447,3 @@
     slots:
     - belt
   - type: DisarmMalus
-  - type: HolyWeapon

@@ -1,6 +1,8 @@
+using Robust.Shared.GameStates;
+
 namespace Content.Shared._White.Chaplain;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class HolyWeaponComponent : Component
 {
 }

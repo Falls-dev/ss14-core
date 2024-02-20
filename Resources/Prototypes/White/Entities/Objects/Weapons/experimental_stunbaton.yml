@@ -21,7 +21,5 @@
   - type: Battery
     maxCharge: 2000
     startingCharge: 2000
-  - type: Item
-    size: 15
   - type: StaticPrice
     price: 1000

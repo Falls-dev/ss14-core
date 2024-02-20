@@ -7,7 +7,7 @@
     - type: StorageFill
       contents:
         - id: GrenadeFlashBang
-        - id: TearSmokeGrenade
+        - id: TearGasGrenade
         - id: ExperimentalStunbaton
         - id: Handcuffs
         - id: Handcuffs

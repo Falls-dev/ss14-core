@@ -21,6 +21,7 @@
     - Zombie
     - RampingStationEventScheduler
     - Changeling
+    - Cult
     - BasicRoundstartVariation
 
 - type: gamePreset

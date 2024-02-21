@@ -87,4 +87,4 @@
     layers:
       - state: green
       - sprite: Mobs/Animals/borer.rsi
-        state: icon
+        state: borer

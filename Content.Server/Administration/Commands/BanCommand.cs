@@ -16,6 +16,8 @@ public sealed class BanCommand : LocalizedCommands
     [Dependency] private readonly IPlayerLocator _locator = default!;
     [Dependency] private readonly IBanManager _bans = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly ILogManager _logManager = default!;
     [Dependency] private readonly PandaWebManager _pandaWeb = default!; // WD
     [Dependency] private readonly IEntityManager _entMan = default!; // WD
 
@@ -30,9 +32,8 @@ public sealed class BanCommand : LocalizedCommands
 
         if (!Enum.TryParse(_cfg.GetCVar(CCVars.ServerBanDefaultSeverity), out NoteSeverity severity))
         {
-            Logger.WarningS("admin.server_ban",
-                "Server ban severity could not be parsed from config! Defaulting to high.");
-
+            _logManager.GetSawmill("admin.server_ban")
+                .Warning("Server ban severity could not be parsed from config! Defaulting to high.");
             severity = NoteSeverity.High;
         }
 

@@ -494,19 +494,19 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         // Sawmill.Debug($"Melee damage is {damage.Total} out of {component.Damage.Total}");
 
-        // Raise event before doing damage so we can cancel damage if the event is handled
-        var hitEvent = new MeleeHitEvent(new List<EntityUid> { target.Value }, user, meleeUid, damage, null);
-        RaiseLocalEvent(meleeUid, hitEvent);
-
-        if (hitEvent.Handled)
-            return;
-
         // WD START
         var blockEvent = new MeleeBlockAttemptEvent(user);
         RaiseLocalEvent(target.Value, ref blockEvent);
         if (blockEvent.Blocked)
             return;
         // WD END
+
+        // Raise event before doing damage so we can cancel damage if the event is handled
+        var hitEvent = new MeleeHitEvent(new List<EntityUid> { target.Value }, user, meleeUid, damage, null);
+        RaiseLocalEvent(meleeUid, hitEvent);
+
+        if (hitEvent.Handled)
+            return;
 
         var targets = new List<EntityUid>(1)
         {
@@ -635,6 +635,19 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         // Sawmill.Debug($"Melee damage is {damage.Total} out of {component.Damage.Total}");
 
+        // WD START
+        foreach (var target in new List<EntityUid>(targets))
+        {
+            var blockEvent = new MeleeBlockAttemptEvent(user);
+            RaiseLocalEvent(target, ref blockEvent);
+            if (blockEvent.Blocked)
+                targets.Remove(target);
+        }
+
+        if (targets.Count == 0)
+            return true;
+        // WD END
+
         // Raise event before doing damage so we can cancel damage if the event is handled
         var hitEvent = new MeleeHitEvent(targets, user, meleeUid, damage, direction);
         RaiseLocalEvent(meleeUid, hitEvent);
@@ -666,13 +679,6 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             // In that case, just continue.
             if (!Blocker.CanAttack(user, entity, (weapon, component)))
                 continue;
-
-            // WD START
-            var blockEvent = new MeleeBlockAttemptEvent(user);
-            RaiseLocalEvent(entity, ref blockEvent);
-            if (blockEvent.Blocked)
-                continue;
-            // WD END
 
             var attackedEvent = new AttackedEvent(meleeUid, user, GetCoordinates(ev.Coordinates));
             RaiseLocalEvent(entity, attackedEvent);

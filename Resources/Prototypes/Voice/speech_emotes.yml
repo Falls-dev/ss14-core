@@ -245,17 +245,16 @@
 - type: emote
   id: Chirp
   category: Vocal
-  chatMessages: [chirps!]
+  chatMessages: [чирикает]
   chatTriggers:
-    - chirp
-    - chirp!
-    - chirp.
-    - chirps
-    - churps.
-    - chirps!
-    - chirped
-    - chirped.
-    - chirped!
-    - chirping
-    - chirping.
-    - chirping!
+  - чирик
+  - чирик.
+  - чирикает.
+  - чирикает
+  - чик-чирикает
+  - чик-чирикает.
+  - chirps.
+  - chirp.
+  - chirp!
+  - chirping.
+  - chirped.

@@ -135,22 +135,22 @@ public sealed class InteractionOutlineSystem : EntitySystem
         if (localSession.AttachedEntity != null && !Deleted(entityToClick))
         {
             // WD START
-            if (_combatMode.IsInCombatMode(localPlayer.ControlledEntity) &&
-                (_meleeWeapon.TryGetWeapon(localPlayer.ControlledEntity.Value, out _, out var weapon) ||
-                 TryComp(localPlayer.ControlledEntity, out weapon)))
+            if (_combatMode.IsInCombatMode(localSession.AttachedEntity) &&
+                (_meleeWeapon.TryGetWeapon(localSession.AttachedEntity.Value, out _, out var weapon) ||
+                 TryComp(localSession.AttachedEntity, out weapon)))
             {
-                inRange = _interactionSystem.InRangeUnobstructed(localPlayer.ControlledEntity.Value,
+                inRange = _interactionSystem.InRangeUnobstructed(localSession.AttachedEntity.Value,
                     entityToClick.Value, weapon.Range);
 
                 var mousePos = _eyeManager.ScreenToMap(_inputManager.MouseScreenPosition);
-                var userPos = Transform(localPlayer.ControlledEntity.Value).MapPosition;
+                var userPos = Transform(localSession.AttachedEntity.Value).MapPosition;
 
                 if (mousePos.MapId != userPos.MapId || (userPos.Position - mousePos.Position).Length() > weapon.Range)
                     inRange = false;
             }
             else
             {
-                inRange = _interactionSystem.InRangeUnobstructed(localPlayer.ControlledEntity.Value, entityToClick.Value);
+                inRange = _interactionSystem.InRangeUnobstructed(localSession.AttachedEntity.Value, entityToClick.Value);
             }
              // WD END
         }

@@ -1,3 +1,4 @@
+using Content.Server._White.Items.Tricorder;
 using Robust.Shared.Audio;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -7,7 +8,7 @@ namespace Content.Server.Medical.Components;
 /// After scanning, retrieves the target Uid to use with its related UI.
 /// </summary>
 [RegisterComponent]
-[Access(typeof(HealthAnalyzerSystem))]
+[Access(typeof(HealthAnalyzerSystem), typeof(TricorderSystem))]
 public sealed partial class HealthAnalyzerComponent : Component
 {
     /// <summary>

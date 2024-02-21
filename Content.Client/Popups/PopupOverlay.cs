@@ -45,9 +45,6 @@ public sealed class PopupOverlay : Overlay
         _controller = controller;
 
         _shader = protoManager.Index<ShaderPrototype>("unshaded").Instance();
-        _smallFont = new VectorFont(cache.GetResource<FontResource>("/Fonts/IBMPlexMono/IBMPlexMono-Italic.ttf"), 10);
-        _mediumFont = new VectorFont(cache.GetResource<FontResource>("/Fonts/IBMPlexMono/IBMPlexMono-Italic.ttf"), 12);
-        _largeFont = new VectorFont(cache.GetResource<FontResource>("/Fonts/IBMPlexMono/IBMPlexMono-BoldItalic.ttf"), 14);
     }
 
     protected override void Draw(in OverlayDrawArgs args)

@@ -11,9 +11,6 @@
     noRot: true
     layers:
     - state: nuclearbomb_base
-    - state: nukefestive
-      map: ["christmas"]
-      visible: false
   - type: Appearance
   - type: HolidayVisuals
     holidays:

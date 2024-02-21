@@ -374,3 +374,13 @@
   ghostName: Ветеранка СБ
   ghostDescription: Вы нарушили правила действующего закона.... "перечисление статей"
   size: 0.6, 0.6
+
+#FjorLofgren
+- type: customGhost
+  id: fjorlofgren-ghost
+  ckey: FjorLofgren
+  sprite: White/Ghosts/fjor-ghost.rsi
+  alpha: 0.9
+  ghostName: Bun Witch
+  ghostDescription: Не бойся, маленький кролик
+  size: 0.9, 0.9

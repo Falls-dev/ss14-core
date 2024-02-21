@@ -69,6 +69,12 @@ public sealed partial class MeleeWeaponComponent : Component
 
     [ViewVariables(VVAccess.ReadWrite), DataField]
     public float HeavyAttackStaminaCost = 8;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField]
+    public EntProtoId MissAnimation = "WeaponArcPunch";
+
+    [ViewVariables(VVAccess.ReadWrite), DataField]
+    public EntProtoId DisarmAnimation = "WeaponArcDisarm";
     // WD END
 
     /// <summary>
@@ -108,7 +114,7 @@ public sealed partial class MeleeWeaponComponent : Component
     public Angle Angle = Angle.FromDegrees(60);
 
     [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
-    public EntProtoId Animation = "WeaponArcPunch";
+    public EntProtoId Animation = "WeaponArcThrust"; // WD EDIT
 
     [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
     public EntProtoId WideAnimation = "WeaponArcSlash";

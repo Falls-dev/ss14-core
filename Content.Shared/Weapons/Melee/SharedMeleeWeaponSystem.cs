@@ -579,7 +579,8 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         var entities = GetEntityList(ev.Entities);
 
         // WD EDIT
-        _stamina.TakeStaminaDamage(user, 7);
+        if (component.HeavyAttackStaminaCost > 0)
+            _stamina.TakeStaminaDamage(user, component.HeavyAttackStaminaCost);
         // WD EDIT END
 
         if (entities.Count == 0)

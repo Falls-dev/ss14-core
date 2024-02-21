@@ -66,6 +66,9 @@ public sealed partial class MeleeWeaponComponent : Component
 
     [ViewVariables(VVAccess.ReadWrite), DataField]
     public bool IgnoreResistances;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField]
+    public float HeavyAttackStaminaCost = 8;
     // WD END
 
     /// <summary>

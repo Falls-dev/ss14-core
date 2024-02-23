@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._White.Keyhole.Components;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Damage;
@@ -6,6 +7,7 @@ using Content.Shared.Doors.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Physics;
+using Content.Shared.Popups;
 using Content.Shared.Prying.Components;
 using Content.Shared.Stunnable;
 using Content.Shared.Tag;
@@ -31,6 +33,7 @@ public abstract class SharedDoorSystem : EntitySystem
     [Dependency] protected readonly SharedAppearanceSystem AppearanceSystem = default!;
     [Dependency] private readonly OccluderSystem _occluder = default!;
     [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
+    [Dependency] private readonly SharedPopupSystem _popupSystem = default!; //WD edit
 
     /// <summary>
     ///     A body must have an intersection percentage larger than this in order to be considered as colliding with a
@@ -211,6 +214,19 @@ public abstract class SharedDoorSystem : EntitySystem
     {
         if (!Resolve(uid, ref door))
             return false;
+
+        // WD edit start
+        if (TryComp<KeyholeComponent>(uid, out var keyholeComponent))
+        {
+            if (keyholeComponent.Locked)
+            {
+                PlaySound(uid, keyholeComponent.DoorLockedSound, AudioParams.Default.WithVolume(-3), uid, true);
+                _popupSystem.PopupEntity(Loc.GetString("door-locked-via-key", ("door", uid)), uid);
+                return false;
+            }
+
+        }
+        // WD edit end
 
         if (door.State == DoorState.Closed)
         {

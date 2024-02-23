@@ -1,0 +1,9 @@
+- type: gameMapPool
+  id: WhiteMapPool
+  maps:
+    - WonderBox
+    - Polaris
+    - Scoupidia
+    - Void
+    - Triumph
+    - Atom

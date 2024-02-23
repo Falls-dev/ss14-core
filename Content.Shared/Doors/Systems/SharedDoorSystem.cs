@@ -16,7 +16,6 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
-using Content.Shared.Prying.Components;
 using Robust.Shared.Audio.Systems;
 
 namespace Content.Shared.Doors.Systems;
@@ -228,9 +227,9 @@ public abstract class SharedDoorSystem : EntitySystem
         }
         // WD edit end
 
-        if (door.State == DoorState.Closed)
+        if (door.State is DoorState.Closed or DoorState.Denying)
         {
-            return TryOpen(uid, door, user, predicted);
+            return TryOpen(uid, door, user, predicted, quiet: door.State == DoorState.Denying);
         }
         else if (door.State == DoorState.Open)
         {

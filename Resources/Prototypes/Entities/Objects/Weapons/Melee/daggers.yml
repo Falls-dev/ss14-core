@@ -47,7 +47,7 @@
       soundHit:
         path: /Audio/Weapons/bladeslice.ogg
     - type: Item
-      size: Normal
+      size: Small
     - type: DisarmMalus
     - type: Backstab
     - type: Blink

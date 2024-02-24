@@ -32,6 +32,10 @@
         "directions": 4
       },
       {
+        "name": "bald",
+        "directions": 4
+      },
+      {
         "name": "baldfade",
         "directions": 4
       },
@@ -153,42 +157,6 @@
       },
       {
         "name": "c",
-        "directions": 4
-      },
-      {
-        "name": "classicafro",
-        "directions": 4
-      },
-      {
-        "name": "classicbigafro",
-        "directions": 4
-      },
-      {
-        "name": "classicbusiness",
-        "directions": 4
-      },
-      {
-        "name": "classiccia",
-        "directions": 4
-      },
-	  {
-        "name": "classiccornrows2",
-        "directions": 4
-      },
-      {
-        "name": "classicfloorlength_bedhead",
-        "directions": 4
-      },
-      {
-        "name": "classicmodern",
-        "directions": 4
-      },
-      {
-        "name": "classicmulder",
-        "directions": 4
-      },
-      {
-        "name": "classicwisp",
         "directions": 4
       },
       {
@@ -749,10 +717,6 @@
       },
       {
         "name": "wisp",
-        "directions": 4
-      },
-      {
-        "name": "bald",
         "directions": 4
       },
       {

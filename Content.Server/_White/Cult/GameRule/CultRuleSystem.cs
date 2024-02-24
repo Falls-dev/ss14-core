@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Server._Miracle.Components;
 using Content.Server.Actions;
 using Content.Server.Chat.Managers;
@@ -22,6 +22,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Content.Shared._White;
+using Content.Shared._White.Chaplain;
 using Content.Shared._White.Cult.Components;
 using Content.Shared.Mind;
 using Robust.Shared.Audio.Systems;
@@ -327,9 +328,10 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
             if (!_jobSystem.CanBeAntag(player))
                 continue;
 
-            // Gulag
+            // Gulag & chaplain
             if (!_mindSystem.TryGetMind(player, out _, out var mind) ||
-                mind.OwnedEntity is not { } ownedEntity || HasComp<GulagBoundComponent>(ownedEntity))
+                mind.OwnedEntity is not { } ownedEntity || HasComp<GulagBoundComponent>(ownedEntity) ||
+                HasComp<HolyComponent>(ownedEntity))
                 continue;
 
             // Latejoin
@@ -383,16 +385,15 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     {
         var result = new List<ICommonSession>();
 
-        var minCultists = _cfg.GetCVar(WhiteCVars.CultMinPlayers);
         var maxCultists = _cfg.GetCVar(WhiteCVars.CultMaxStartingPlayers);
 
-        if (prefList.Count < minCultists)
+        if (prefList.Count < _minimalCultists)
         {
             _sawmill.Info("Insufficient ready players to fill up with cultists, stopping the selection.");
             return result;
         }
 
-        var actualCultistCount = prefList.Count > maxCultists ? maxCultists : minCultists;
+        var actualCultistCount = prefList.Count > maxCultists ? maxCultists : _minimalCultists;
 
         for (var i = 0; i < actualCultistCount; i++)
         {
@@ -414,7 +415,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         if (!_mindSystem.TryGetMind(cultist, out var mindId, out var mind))
         {
-            Log.Info("Failed getting mind for picked thief.");
+            Log.Info("Failed getting mind for picked cultist.");
             return false;
         }
 

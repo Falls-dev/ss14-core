@@ -219,7 +219,17 @@ namespace Content.Shared.Preferences
                 .Where(o => CanHaveVoice(o, sex)).ToArray()
             ).ID;
 
-            var gender = sex == Sex.Male ? Gender.Male : Gender.Female;
+            var gender = Gender.Epicene;
+
+            switch (sex)
+            {
+                case Sex.Male:
+                    gender = Gender.Male;
+                    break;
+                case Sex.Female:
+                    gender = Gender.Female;
+                    break;
+            }
 
             var name = GetName(species, gender);
             var clownName = GetClownName();

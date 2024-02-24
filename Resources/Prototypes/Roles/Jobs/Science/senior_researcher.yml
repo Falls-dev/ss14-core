@@ -10,10 +10,6 @@
   startingGear: SeniorResearcherGear
   icon: "JobIconSeniorResearcher"
   supervisors: job-supervisors-rd
-  canBeAntag: false
-  special:
-    - !type:AddImplantSpecial
-      implants: [ MindShieldImplant ]
   access:
   - Research
   - Maintenance

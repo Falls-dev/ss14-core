@@ -99,6 +99,27 @@
     Telecrystal: 3
   categories:
   - UplinkArmor
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkNightGogglesNukie
+  name: ПНВ [Хамелеон]
+  description: Теперь ты видишь во тьме!
+  productEntity: ClothingEyesNightVisionGogglesNukie
+  icon: { sprite: White/Clothing/Head/nightvision.rsi, state: icon }
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkArmor
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
 
 #- type: listing
 #  id: UplinkBattleAxe

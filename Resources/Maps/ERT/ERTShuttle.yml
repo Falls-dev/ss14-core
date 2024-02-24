@@ -6705,24 +6705,6 @@ entities:
       type: Transform
     - canCollide: False
       type: Physics
-- proto: HandheldHealthAnalyzer
-  entities:
-  - uid: 472
-    components:
-    - flags: InContainer
-      type: MetaData
-    - parent: 290
-      type: Transform
-    - canCollide: False
-      type: Physics
-  - uid: 507
-    components:
-    - flags: InContainer
-      type: MetaData
-    - parent: 474
-      type: Transform
-    - canCollide: False
-      type: Physics
 - proto: HighSecCaptainLocked
   entities:
   - uid: 19

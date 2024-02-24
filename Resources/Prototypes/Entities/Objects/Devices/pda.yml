@@ -109,11 +109,11 @@
 - type: entity
   parent: BasePDA
   id: BaseMedicalPDA
-  components:
-  - type: HealthAnalyzer
-    scanDelay: 1
-    scanningEndSound:
-      path: "/Audio/Items/Medical/healthscanner.ogg"
+#  components:
+#  - type: HealthAnalyzer
+#    scanDelay: 1
+#    scanningEndSound:
+#      path: "/Audio/Items/Medical/healthscanner.ogg"
 
 - type: entity
   parent: BasePDA
@@ -524,6 +524,10 @@
     accentVColor: "#447987"
   - type: Icon
     state: pda-cmo
+  - type: HealthAnalyzer
+    scanDelay: 1
+    scanningEndSound:
+      path: "/Audio/Items/Medical/healthscanner.ogg"
 
 - type: entity
   parent: BaseMedicalPDA

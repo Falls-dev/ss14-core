@@ -849,7 +849,7 @@
       - Gauze
       - HandLabeler
       - Defibrillator
-      - HandheldHealthAnalyzer
+#      - HandheldHealthAnalyzer
       - ClothingHandsGlovesLatex
       - ClothingHandsGlovesNitrile
       - ClothingMaskSterile

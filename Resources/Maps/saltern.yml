@@ -48267,13 +48267,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 21.750116,-4.5862775
       parent: 31
-- proto: HandheldHealthAnalyzerUnpowered
-  entities:
-  - uid: 10030
-    components:
-    - type: Transform
-      pos: 17.362448,-18.309433
-      parent: 31
 - proto: HandheldStationMap
   entities:
   - uid: 5924

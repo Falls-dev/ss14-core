@@ -43,8 +43,8 @@
   components:
   - type: StorageFill
     contents:
-      - id: HandheldHealthAnalyzer
-        prob: 0.6
+#      - id: HandheldHealthAnalyzer
+#        prob: 0.6
       - id: ClothingHandsGlovesLatex
       - id: ClothingHeadsetMedical
       - id: ClothingEyesHudMedical
@@ -77,8 +77,8 @@
   components:
   - type: StorageFill
     contents:
-      - id: HandheldHealthAnalyzer
-        prob: 0.6
+#      - id: HandheldHealthAnalyzer
+#        prob: 0.6
       - id: ClothingHandsGlovesLatex
       - id: ClothingHeadsetMedical
       - id: ClothingEyesHudMedical

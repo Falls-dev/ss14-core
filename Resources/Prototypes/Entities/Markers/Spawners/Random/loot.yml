@@ -168,7 +168,7 @@
       rareChance: 0.15
       prototypes:
         - ClothingEyesHudMedical
-        - HandheldHealthAnalyzer
+#        - HandheldHealthAnalyzer
         - ClothingMaskSterile
         - ClothingHandsGlovesLatex
         - ClothingBackpackDuffelSurgeryFilled

@@ -16,6 +16,7 @@ namespace Content.Client._White.Medical.BodyScanner
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
         public event Action? OnScanButtonPressed;
+
         public event Action? OnPrintButtonPressed;
 
         public BodyScannerConsoleWindow()
@@ -30,9 +31,15 @@ namespace Content.Client._White.Medical.BodyScanner
 
         public void UpdateUserInterface(BodyScannerConsoleBoundUserInterfaceState state)
         {
+            if (state is null)
+            {
+                return;
+            }
+
             MainContainer.Visible = state.TargetEntityUid != null && !state.Scanning;
             NoDataContainer.Visible = !MainContainer.Visible;
-            NoDataStatusLabel.Text = state.Scanning ? Loc.GetString("body-scanner-console-window-status-scanning") : " ";
+            NoDataStatusLabel.Text =
+                state.Scanning ? Loc.GetString("body-scanner-console-window-status-scanning") : " ";
 
             ScanButton.Disabled = !state.CanScan;
             PrintButton.Disabled = !state.CanPrint;
@@ -52,9 +59,12 @@ namespace Content.Client._White.Medical.BodyScanner
 
             AliveStatusLabel.Text = state.CurrentState switch
             {
-                Shared.Mobs.MobState.Alive => Loc.GetString("body-scanner-console-window-current-alive-status-alive-text"),
-                Shared.Mobs.MobState.Critical => Loc.GetString("body-scanner-console-window-current-alive-status-critical-text"),
-                Shared.Mobs.MobState.Dead => Loc.GetString("body-scanner-console-window-current-alive-status-dead-text"),
+                Shared.Mobs.MobState.Alive => Loc.GetString(
+                    "body-scanner-console-window-current-alive-status-alive-text"),
+                Shared.Mobs.MobState.Critical => Loc.GetString(
+                    "body-scanner-console-window-current-alive-status-critical-text"),
+                Shared.Mobs.MobState.Dead =>
+                    Loc.GetString("body-scanner-console-window-current-alive-status-dead-text"),
                 _ => Loc.GetString("body-scanner-console-window-no-data")
             };
 
@@ -70,35 +80,49 @@ namespace Content.Client._White.Medical.BodyScanner
             // Show the total damage and type breakdown for each damage group.
             foreach (var (damageGroupId, damageAmount) in damagePerGroup)
             {
-                var damageGroupTitle = Loc.GetString("health-analyzer-window-damage-group-" + damageGroupId, ("amount", damageAmount));
+                var damageGroupTitle = Loc.GetString("health-analyzer-window-damage-group-" + damageGroupId,
+                    ("amount", damageAmount));
 
-                DamageGroupsContainer.AddChild(new GroupDamageCardComponent(damageGroupTitle, damageGroupId, damagePerType));
+                DamageGroupsContainer.AddChild(new GroupDamageCardComponent(damageGroupTitle, damageGroupId,
+                    damagePerType));
             }
 
             // Second column.
             CurrentTemperature.Text = Loc.GetString("body-scanner-console-window-temperature-current-temperature-text",
                 ("amount", $"{state.CurrentTemperature - 273:f1}"));
-            HeatDamageThreshold.Text = Loc.GetString("body-scanner-console-window-temperature-heat-damage-threshold-temperature-text",
+
+            HeatDamageThreshold.Text = Loc.GetString(
+                "body-scanner-console-window-temperature-heat-damage-threshold-temperature-text",
                 ("amount", $"{state.HeatDamageThreshold - 273:f1}"));
-            ColdDamageThreshold.Text = Loc.GetString("body-scanner-console-window-temperature-cold-damage-threshold-temperature-text",
+
+            ColdDamageThreshold.Text = Loc.GetString(
+                "body-scanner-console-window-temperature-cold-damage-threshold-temperature-text",
                 ("amount", $"{state.ColdDamageThreshold - 273:f1}"));
 
             CurrentSaturation.Text = Loc.GetString("body-scanner-console-window-saturation-current-saturation-text",
                 ("amount", $"{state.Saturation:f1}"));
+
             MinimumSaturation.Text = Loc.GetString("body-scanner-console-window-saturation-maximum-saturation-text",
                 ("amount", $"{state.MinSaturation:f1}"));
+
             MaximumSaturation.Text = Loc.GetString("body-scanner-console-window-saturation-minimum-saturation-text",
                 ("amount", $"{state.MaxSaturation:f1}"));
 
             CurrentThirst.Text = Loc.GetString("body-scanner-console-window-thirst-current-thirst-text",
                 ("amount", $"{state.CurrentThirst:f1}"));
+
             CurrentThirstStatus.Text = Loc.GetString("body-scanner-console-window-thirst-current-thirst-status-text",
-                ("status", Loc.GetString("body-scanner-console-window-hunger-current-hunger-status-" + state.CurrentThirstThreshold)));
+                ("status",
+                    Loc.GetString("body-scanner-console-window-hunger-current-hunger-status-" +
+                        state.CurrentThirstThreshold)));
 
             CurrentHunger.Text = Loc.GetString("body-scanner-console-window-hunger-current-hunger-text",
                 ("amount", $"{state.CurrentHunger:f1}"));
+
             CurrentHungerStatus.Text = Loc.GetString("body-scanner-console-window-hunger-current-hunger-status-text",
-                ("status", Loc.GetString("body-scanner-console-window-thirst-current-thirst-status-" + state.CurrentHungerThreshold)));
+                ("status",
+                    Loc.GetString("body-scanner-console-window-thirst-current-thirst-status-" +
+                        state.CurrentHungerThreshold)));
 
             BloodSolutionVolume.Text = Loc.GetString("body-scanner-console-window-blood-solutions-volume-group-text",
                 ("amount", $"{state.BloodSolution.Volume.Float():f1}"),
@@ -110,10 +134,12 @@ namespace Content.Client._White.Medical.BodyScanner
             {
                 _prototypeManager.TryIndex(x.Reagent.Prototype, out ReagentPrototype? proto);
                 var name = proto?.LocalizedName ?? Loc.GetString("chem-master-window-unknown-reagent-text");
-                BloodSolutionElements.AddChild(new Label() { Text = $"{name}: {x.Quantity}", FontColorOverride = Color.LightGray });
+                BloodSolutionElements.AddChild(new Label()
+                    { Text = $"{name}: {x.Quantity}", FontColorOverride = Color.LightGray });
             });
 
-            ChemicalSolutionVolume.Text = Loc.GetString("body-scanner-console-window-chemical-solutions-volume-group-text",
+            ChemicalSolutionVolume.Text = Loc.GetString(
+                "body-scanner-console-window-chemical-solutions-volume-group-text",
                 ("amount", $"{state.ChemicalSolution.Volume.Float():f1}"),
                 ("maxAmount", $"{state.ChemicalSolution.MaxVolume.Float():f1}"),
                 ("temperature", $"{state.ChemicalSolution.Temperature - 271:f1}"));
@@ -123,17 +149,20 @@ namespace Content.Client._White.Medical.BodyScanner
             {
                 _prototypeManager.TryIndex(x.Reagent.Prototype, out ReagentPrototype? proto);
                 var name = proto?.LocalizedName ?? Loc.GetString("chem-master-window-unknown-reagent-text");
-                ChemicalSolutionElements.AddChild(new Label() { Text = $"{name}: {x.Quantity}", FontColorOverride = Color.LightGray });
+                ChemicalSolutionElements.AddChild(new Label()
+                    { Text = $"{name}: {x.Quantity}", FontColorOverride = Color.LightGray });
             });
 
+            var deathThreshold = state.DeadThreshold != 0 ? state.DeadThreshold : 100;
+
             // Third column.
-            HealthBar.Value = 1 - (state.TotalDamage / state.DeadThreshold).Float();
+            HealthBar.Value = 1 - (state.TotalDamage / deathThreshold).Float();
 
             HealthBar.ForegroundStyleBoxOverride = new StyleBoxFlat()
             {
-                BackgroundColor = HealthBar.Value >= 0.5f ?
-                    GetColorLerp(Color.Yellow, Color.Green, (HealthBar.Value - 0.5f) * 2) :
-                    GetColorLerp(Color.Red, Color.Yellow, HealthBar.Value * 2)
+                BackgroundColor = HealthBar.Value >= 0.5f
+                    ? GetColorLerp(Color.Yellow, Color.Green, (HealthBar.Value - 0.5f) * 2)
+                    : GetColorLerp(Color.Red, Color.Yellow, HealthBar.Value * 2)
             };
 
             if (state.TargetEntityUid != null)
@@ -141,10 +170,14 @@ namespace Content.Client._White.Medical.BodyScanner
 
             // Bottom row.
             Mind.Text = Loc.GetString("body-scanner-console-window-mind-text",
-                ("value", state.HasMind ? Loc.GetString("body-scanner-console-window-mind-present-text") :
-                                          Loc.GetString("body-scanner-console-window-mind-absent-text")));
+                ("value",
+                    state.HasMind
+                        ? Loc.GetString("body-scanner-console-window-mind-present-text")
+                        : Loc.GetString("body-scanner-console-window-mind-absent-text")));
+
             DNA.Text = Loc.GetString("body-scanner-console-window-dna-text",
                 ("value", $"{state.DNA}"));
+
             Fingerprint.Text = Loc.GetString("body-scanner-console-window-fingerprint-text",
                 ("value", $"{state.Fingerprint}"));
         }

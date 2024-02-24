@@ -10,7 +10,7 @@ Right now, medbay is divided into two different sets of care:
 <GuideEntityEmbed Entity="Bloodpack"/>
 <GuideEntityEmbed Entity="Ointment"/>
 <GuideEntityEmbed Entity="Gauze"/>
-<GuideEntityEmbed Entity="HandheldHealthAnalyzer"/>
+<!--<GuideEntityEmbed Entity="HandheldHealthAnalyzer"/>-->
 </Box>
 ## Chemical Production
 <Box>

@@ -36122,15 +36122,6 @@ entities:
       parent: 30
     - type: Physics
       canCollide: False
-- proto: HandheldHealthAnalyzer
-  entities:
-  - uid: 2942
-    components:
-    - type: Transform
-      pos: -1.5512757,-15.574924
-      parent: 30
-    - type: Physics
-      canCollide: False
 - proto: HandheldStationMap
   entities:
   - uid: 1728

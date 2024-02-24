@@ -55839,13 +55839,6 @@ entities:
     - type: Transform
       pos: 20.632698,-20.552984
       parent: 1
-- proto: HandheldHealthAnalyzer
-  entities:
-  - uid: 12428
-    components:
-    - type: Transform
-      pos: -12.421777,-11.625296
-      parent: 1
 - proto: HandLabeler
   entities:
   - uid: 5093

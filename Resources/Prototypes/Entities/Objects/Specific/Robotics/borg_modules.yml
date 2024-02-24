@@ -238,7 +238,7 @@
     - WelderExperimental
     - NetworkConfigurator
     - RemoteSignaller
-    - GasAnalyzer   
+    - GasAnalyzer
     - GeigerCounter
 
 - type: entity
@@ -329,7 +329,7 @@
     - state: icon-diagnosis
   - type: ItemBorgModule
     items:
-    - HandheldHealthAnalyzerUnpowered
+#    - HandheldHealthAnalyzerUnpowered
     - ClothingNeckStethoscope
 
 - type: entity
@@ -374,7 +374,7 @@
     - state: icon-chemist
   - type: ItemBorgModule
     items:
-    - HandheldHealthAnalyzerUnpowered
+#    - HandheldHealthAnalyzerUnpowered
     - Beaker
     - Beaker
     - BorgDropper

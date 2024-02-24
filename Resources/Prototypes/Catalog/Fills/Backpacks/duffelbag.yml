@@ -317,7 +317,7 @@
       - id: CombatKnife
       - id: WeaponPistolViper
       - id: PinpointerSyndicateNuclear
-      - id: HandheldHealthAnalyzer
+#      - id: HandheldHealthAnalyzer
       - id: CombatMedipen
       - id: DeathAcidifierImplanter
 

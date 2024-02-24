@@ -11765,18 +11765,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: 0.5,-13.5
       parent: 1
-- proto: HandheldHealthAnalyzer
-  entities:
-  - uid: 2078
-    components:
-    - type: Transform
-      pos: 16.994957,-6.488491
-      parent: 1
-  - uid: 2079
-    components:
-    - type: Transform
-      pos: 16.994957,-6.238491
-      parent: 1
 - proto: HolofanProjector
   entities:
   - uid: 1869

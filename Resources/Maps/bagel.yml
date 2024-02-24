@@ -107209,23 +107209,6 @@ entities:
     - type: Transform
       pos: 41.539692,-1.4414581
       parent: 60
-- proto: HandheldHealthAnalyzer
-  entities:
-  - uid: 9616
-    components:
-    - type: Transform
-      pos: -42.483322,14.749073
-      parent: 60
-  - uid: 16906
-    components:
-    - type: Transform
-      pos: 47.477646,-11.308374
-      parent: 60
-  - uid: 19190
-    components:
-    - type: Transform
-      pos: 24.45261,20.352545
-      parent: 60
 - proto: HandLabeler
   entities:
   - uid: 438

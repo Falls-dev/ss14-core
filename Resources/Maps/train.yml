@@ -75239,13 +75239,6 @@ entities:
     - type: Transform
       pos: -1.713614,-166.57089
       parent: 2
-- proto: HandheldHealthAnalyzerUnpowered
-  entities:
-  - uid: 3890
-    components:
-    - type: Transform
-      pos: -5.5934877,-206.55833
-      parent: 2
 - proto: HandheldStationMap
   entities:
   - uid: 8420

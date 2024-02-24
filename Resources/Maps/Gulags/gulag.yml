@@ -3029,13 +3029,6 @@ entities:
     - type: Transform
       pos: -4.3996463,-10.41842
       parent: 818
-- proto: HandheldHealthAnalyzer
-  entities:
-  - uid: 439
-    components:
-    - type: Transform
-      pos: -11.504655,-1.4878067
-      parent: 818
 - proto: HolofanProjector
   entities:
   - uid: 563

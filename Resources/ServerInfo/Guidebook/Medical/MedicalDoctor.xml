@@ -12,7 +12,7 @@ It's best to do both, if possible, as some things (such as poison, or radiation)
 <GuideEntityEmbed Entity="SignExamroom" Caption="examine patient"/>
 <GuideEntityEmbed Entity="MedicalPDA"/>
 <GuideEntityEmbed Entity="MedicalInternPDA" Caption="intern PDA"/>
-<GuideEntityEmbed Entity="HandheldHealthAnalyzer"/>
+<!--<GuideEntityEmbed Entity="HandheldHealthAnalyzer"/>-->
 </Box>
 
 ## Medication and Treatment Options

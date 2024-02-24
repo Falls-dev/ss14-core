@@ -3094,15 +3094,6 @@ entities:
     - type: Transform
       pos: -3.5,-5.5
       parent: 1
-- proto: HandheldHealthAnalyzer
-  entities:
-  - uid: 462
-    components:
-    - type: Transform
-      pos: 3.4609303,5.7205043
-      parent: 1
-    - type: Physics
-      canCollide: False
 - proto: Lighter
   entities:
   - uid: 463

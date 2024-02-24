@@ -57670,25 +57670,6 @@ entities:
     - type: Transform
       pos: -18.546284,12.521154
       parent: 4812
-- proto: HandheldHealthAnalyzer
-  entities:
-  - uid: 6246
-    components:
-    - type: Transform
-      pos: 13.5409565,-28.418493
-      parent: 4812
-  - uid: 9027
-    components:
-    - type: Transform
-      pos: -39.497536,-35.530823
-      parent: 4812
-- proto: HandheldHealthAnalyzerEmpty
-  entities:
-  - uid: 3390
-    components:
-    - type: Transform
-      pos: 22.465052,3.7311544
-      parent: 4812
 - proto: HandheldStationMap
   entities:
   - uid: 7295

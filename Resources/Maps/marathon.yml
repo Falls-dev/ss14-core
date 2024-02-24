@@ -97302,18 +97302,6 @@ entities:
     - type: Transform
       pos: -22.512821,-47.59407
       parent: 30
-- proto: HandheldHealthAnalyzer
-  entities:
-  - uid: 6857
-    components:
-    - type: Transform
-      pos: -5.5029783,-1.3990064
-      parent: 30
-  - uid: 21004
-    components:
-    - type: Transform
-      pos: -7.5315413,-7.0166345
-      parent: 30
 - proto: HandheldStationMap
   entities:
   - uid: 10974

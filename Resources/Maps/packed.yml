@@ -57808,18 +57808,6 @@ entities:
     - type: Transform
       pos: 25.512451,48.501656
       parent: 2
-- proto: HandheldHealthAnalyzer
-  entities:
-  - uid: 12160
-    components:
-    - type: Transform
-      pos: 82.45164,-4.4459476
-      parent: 2
-  - uid: 12368
-    components:
-    - type: Transform
-      pos: 38.482082,-17.438766
-      parent: 2
 - proto: HandheldStationMap
   entities:
   - uid: 9400

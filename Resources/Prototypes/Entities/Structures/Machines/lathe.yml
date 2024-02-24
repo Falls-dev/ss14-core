@@ -85,6 +85,8 @@
     runningState: building
     staticRecipes:
       - Wirecutter
+      - Igniter
+      - Signaller
       - Screwdriver
       - Welder
       - Wrench
@@ -98,6 +100,7 @@
       - CableHVStack
       - HandheldGPSBasic
       - TRayScanner
+      - AirTank
       - GasAnalyzer
       - UtilityBelt
       - Fulton
@@ -155,21 +158,38 @@
       - CellRechargerCircuitboard
       - BorgChargerCircuitboard
       - WeaponCapacitorRechargerCircuitboard
+      - OxygenTank
+      - PlasmaTank
   - type: EmagLatheRecipes
     emagStaticRecipes:
+       - MagazinePistol
+       - MagazinePistolSubMachineGun
+       - MagazinePistolSubMachineGunTopMounted
+       - MagazineRifle
+       - MagazineLightRifle
+       - SpeedLoaderMagnum
+       - MagazineShotgun
+       - MagazineShotgunSlug
+       - MagazineLightRifleBox
+       - MagazinePistolCaselessRifle
        - CartridgePistol
        - CartridgeMagnum
        - ShellShotgun
+       - ShellShotgunSlug
        - ShellShotgunFlare
        - ShellTranquilizer
        - CartridgeLightRifle
        - CartridgeRifle
+       - CartridgeMagnumAP
+       - CartridgeAntiMateriel
+       - CartridgeCaselessRifle
+       - MagazineBoxMagnumAP
+       - MagazineBoxAntiMateriel
+       - MagazineBoxCaselessRifle
        - MagazineBoxPistol
        - MagazineBoxMagnum
        - MagazineBoxRifle
        - MagazineBoxLightRifle
-       - OxygenTank
-       - PlasmaTank
        - GrenadeBlast
     emagDynamicRecipes:
       - CartridgePistolRubber
@@ -288,6 +308,7 @@
       - ChemicalPayload
       - FlashPayload
       - Signaller
+      - SignallerAdvanced
       - SignalTrigger
       - VoiceTrigger
       - Igniter
@@ -382,6 +403,11 @@
     - UniformPrinterMachineCircuitboard
     - FloorGreenCircuit
     - FloorBlueCircuit
+    - MicrowaveMachineCircuitboard
+    - ReagentGrinderMachineCircuitboard
+    - ElectricGrillMachineCircuitboard
+    - BoozeDispenserMachineCircuitboard
+    - SodaDispenserMachineCircuitboard
     dynamicRecipes:
       - ThermomachineFreezerMachineCircuitBoard
       - HellfireFreezerMachineCircuitBoard
@@ -407,9 +433,6 @@
       - PowerComputerCircuitboard
       - AutolatheHyperConvectionMachineCircuitboard
       - ProtolatheHyperConvectionMachineCircuitboard
-      - ReagentGrinderMachineCircuitboard
-      - MicrowaveMachineCircuitboard
-      - ElectricGrillMachineCircuitboard
       - FatExtractorMachineCircuitboard
       - FlatpackerMachineCircuitboard
       - SheetifierMachineCircuitboard
@@ -451,8 +474,6 @@
       - ArtifactAnalyzerMachineCircuitboard
       - TraversalDistorterMachineCircuitboard
       - ArtifactCrusherMachineCircuitboard
-      - BoozeDispenserMachineCircuitboard
-      - SodaDispenserMachineCircuitboard
       - TelecomServerCircuitboard
       - MassMediaCircuitboard
   - type: MaterialStorage
@@ -537,7 +558,6 @@
     - BorgModuleAdvancedCleaning
     - BorgModuleMining
     - BorgModuleGrapplingGun
-    - BorgModuleGasAnalyzer
     - BorgModuleAdvancedTool
     - BorgModuleRCD
     - BorgModuleArtifact
@@ -667,6 +687,8 @@
       - MagazineBoxRifle
       - MagazineBoxLightRifle
       - SpeedLoaderMagnum
+      - MagazineShotgun # WD EDIT
+      - MagazineShotgunSlug # WD EDIT
       - TargetHuman
       - TargetSyndicate
       - TargetClown
@@ -732,6 +754,16 @@
       - ShuttleGunPerforatorCircuitboard
       - ShuttleGunFriendshipCircuitboard
       - ShuttleGunDusterCircuitboard
+  - type: EmagLatheRecipes
+    emagStaticRecipes:
+     - MagazineLightRifleBox
+     - MagazinePistolCaselessRifle
+     - CartridgeMagnumAP
+     - CartridgeAntiMateriel
+     - CartridgeCaselessRifle
+     - MagazineBoxMagnumAP
+     - MagazineBoxAntiMateriel
+     - MagazineBoxCaselessRifle
   - type: MaterialStorage
     whitelist:
       tags:
@@ -776,6 +808,14 @@
         - MagazineBoxMagnum
         - MagazineBoxRifle
         - MagazineBoxLightRifle
+    - type: EmagLatheRecipes
+      emagStaticRecipes:
+        - CartridgeMagnumAP
+        - CartridgeAntiMateriel
+        - CartridgeCaselessRifle
+        - MagazineBoxMagnumAP
+        - MagazineBoxAntiMateriel
+        - MagazineBoxCaselessRifle
     - type: MaterialStorage
       whitelist:
         tags:
@@ -940,10 +980,12 @@
       - ClothingUniformJumpsuitPrisoner
       - ClothingUniformJumpskirtPrisoner
       - ClothingHeadHatQMsoft
+      - ClothingHeadHatBeretQM
       - ClothingUniformJumpsuitQM
       - ClothingUniformJumpskirtQM
       - ClothingUniformJumpsuitQMTurtleneck
       - ClothingUniformJumpskirtQMTurtleneck
+      - ClothingUniformJumpsuitQMFormal
       - ClothingHeadHatBeretRND
       - ClothingUniformJumpsuitResearchDirector
       - ClothingUniformJumpskirtResearchDirector

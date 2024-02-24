@@ -18,7 +18,7 @@
   description: changeling-ability-changeling-armblade-desc
   productAction: ActionArmblade
   cost:
-    ChangelingPoint: 3
+    ChangelingPoint: 2
   categories:
     - ChangelingAbilities
   conditions:
@@ -31,7 +31,7 @@
   description: changeling-ability-changeling-shield-desc
   productAction: ActionShield
   cost:
-    ChangelingPoint: 3
+    ChangelingPoint: 1
   categories:
     - ChangelingAbilities
   conditions:
@@ -57,7 +57,7 @@
   description: changeling-ability-tentacle-arm-desc
   productAction: ActionTentacleArm
   cost:
-    ChangelingPoint: 4
+    ChangelingPoint: 2
   categories:
     - ChangelingAbilities
   conditions:

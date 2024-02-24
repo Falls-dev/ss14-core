@@ -9,6 +9,7 @@ reagent-dispenser-bound-user-interface-title = Reagent dispenser
 
 ## UI
 
+reagent-dispenser-window-charge = Charge:
 reagent-dispenser-window-amount-to-dispense-label = Amount
 reagent-dispenser-window-container-label = Container:
 reagent-dispenser-window-clear-button = Clear

@@ -24,6 +24,7 @@
         layer:
         - TabletopMachineLayer
   - type: ApcPowerReceiver
+    powerLoad: 500
   - type: ExtensionCableReceiver
   - type: ActivatableUI
     key: enum.ReagentDispenserUiKey.Key

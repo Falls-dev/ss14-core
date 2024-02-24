@@ -9,6 +9,7 @@ reagent-dispenser-bound-user-interface-title = Раздатчик реагент
 
 ## UI
 
+reagent-dispenser-window-charge = Заряд:
 reagent-dispenser-window-amount-to-dispense-label = Кол-во
 reagent-dispenser-window-container-label = Контейнер:
 reagent-dispenser-window-clear-button = Очистить

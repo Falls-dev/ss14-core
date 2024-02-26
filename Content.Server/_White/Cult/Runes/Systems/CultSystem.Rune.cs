@@ -668,17 +668,7 @@ public sealed partial class CultSystem : EntitySystem
 
         foreach (var target in targets)
         {
-            // break pulls before portal enter so we dont break shit
-            if (TryComp<SharedPullableComponent>(target, out var pullable) && pullable.BeingPulled)
-            {
-                _pulling.TryStopPull(pullable);
-            }
-
-            if (TryComp<SharedPullerComponent>(target, out var pulling)
-                && pulling.Pulling != null && TryComp<SharedPullableComponent>(pulling.Pulling.Value, out var subjectPulling))
-            {
-                _pulling.TryStopPull(subjectPulling);
-            }
+            StopPulling(target);
 
             _xform.SetCoordinates(target, xFormSelected.Coordinates);
         }
@@ -978,6 +968,8 @@ public sealed partial class CultSystem : EntitySystem
             return;
         }
 
+        StopPulling(target, false);
+
         _xform.SetCoordinates(target, xFormBase.Coordinates);
 
         _audio.PlayPvs(_teleportInSound, xFormBase.Coordinates);
@@ -1036,19 +1028,27 @@ public sealed partial class CultSystem : EntitySystem
 
         _random.Shuffle(list);
 
-        var bloodCost = -120 / cultists.Count;
+        var bloodCost = 120 / cultists.Count;
 
         foreach (var cultist in cultists)
         {
-            if (!TryComp<BloodstreamComponent>(cultist, out var bloodstreamComponent))
+            if (!TryComp<BloodstreamComponent>(cultist, out var bloodstreamComponent) ||
+                bloodstreamComponent.BloodSolution is null)
+            {
                 return false;
+            }
 
-            _bloodstreamSystem.TryModifyBloodLevel(cultist, bloodCost, bloodstreamComponent);
+            if (bloodstreamComponent.BloodSolution.Value.Comp.Solution.Volume < bloodCost)
+            {
+                _popupSystem.PopupEntity(Loc.GetString("cult-blood-boil-rune-no-blood"), user, user);
+                return false;
+            }
+
+            _bloodstreamSystem.TryModifyBloodLevel(cultist, -bloodCost, bloodstreamComponent);
         }
 
         var projectileCount =
             (int) MathF.Round(MathHelper.Lerp(component.MinProjectiles, component.MaxProjectiles, severity));
-
 
         while (projectileCount > 0)
         {
@@ -1059,7 +1059,7 @@ public sealed partial class CultSystem : EntitySystem
             if (!flammable.TryGetComponent(target, out var fl))
                 continue;
 
-            fl.FireStacks += _random.Next(1, 3);
+            fl.FireStacks += 1;
 
             _flammableSystem.Ignite(target, target);
 
@@ -1309,6 +1309,22 @@ public sealed partial class CultSystem : EntitySystem
 
         _damageableSystem.TryChangeDamage(player, new DamageSpecifier(damageSpecifier, -40));
         _damageableSystem.TryChangeDamage(player, new DamageSpecifier(damageSpecifier2, -40));
+    }
+
+    private void StopPulling(EntityUid target, bool checkPullable = true)
+    {
+        // break pulls before portal enter so we dont break shit
+        if (checkPullable && TryComp<SharedPullableComponent>(target, out var pullable) && pullable.BeingPulled)
+        {
+            _pulling.TryStopPull(pullable);
+        }
+
+        if (TryComp<SharedPullerComponent>(target, out var pulling)
+            && pulling.Pulling != null &&
+            TryComp<SharedPullableComponent>(pulling.Pulling.Value, out var subjectPulling))
+        {
+            _pulling.TryStopPull(subjectPulling);
+        }
     }
 
     /*

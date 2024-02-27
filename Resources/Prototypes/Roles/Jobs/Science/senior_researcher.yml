@@ -10,6 +10,8 @@
   startingGear: SeniorResearcherGear
   icon: "JobIconSeniorResearcher"
   supervisors: job-supervisors-rd
+  whitelistedSpecies:
+  - Human
   canBeAntag: false
   special:
     - !type:AddImplantSpecial

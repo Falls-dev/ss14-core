@@ -2,48 +2,55 @@
 using Content.Shared._White.Implants.Mindslave.Components;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
+using Robust.Client.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client._White.Overlays;
 
-public sealed class ShowMindslaveIconsSystem : EquipmentHudSystem<MindslaveComponent>
+public sealed class ShowMindslaveIconsSystem : EquipmentHudSystem<MindSlaveComponent>
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<MindslaveComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent);
+        SubscribeLocalEvent<MindSlaveComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent);
     }
 
     private void OnGetStatusIconsEvent(
         EntityUid uid,
-        MindslaveComponent mindslaveComponent,
+        MindSlaveComponent mindSlaveComponent,
         ref GetStatusIconsEvent args)
     {
         if (!IsActive || args.InContainer)
         {
             return;
         }
+        var localEnt = _player.LocalEntity;
+        if (!TryComp(localEnt, out MindSlaveComponent? ownerMindSlave))
+        {
+            return;
+        }
 
-        var mindSlaveIcon = MindslaveIcon(uid, mindslaveComponent);
+        var mindSlaveIcon = MindslaveIcon(uid, ownerMindSlave);
 
         args.StatusIcons.AddRange(mindSlaveIcon);
     }
 
-    private IEnumerable<StatusIconPrototype> MindslaveIcon(EntityUid uid, MindslaveComponent mindslave)
+    private IEnumerable<StatusIconPrototype> MindslaveIcon(EntityUid uid, MindSlaveComponent mindSlave)
     {
         var result = new List<StatusIconPrototype>();
 
         string? iconType;
-        if (GetEntity(mindslave.Master) == uid)
+        if (GetEntity(mindSlave.Master) == uid)
         {
-            iconType = mindslave.MasterStatusIcon;
+            iconType = mindSlave.MasterStatusIcon;
         }
-        else if (mindslave.Slaves.Contains(GetNetEntity(uid)))
+        else if (mindSlave.Slaves.Contains(GetNetEntity(uid)))
         {
-            iconType = mindslave.SlaveStatusIcon;
+            iconType = mindSlave.SlaveStatusIcon;
         }
         else
         {

@@ -5,7 +5,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Shared._White.Implants.Mindslave.Components;
 
 [RegisterComponent, AutoGenerateComponentState, NetworkedComponent]
-public sealed partial class MindslaveComponent : Component
+public sealed partial class MindSlaveComponent : Component
 {
     [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
     public List<NetEntity> Slaves = new();
@@ -13,15 +13,9 @@ public sealed partial class MindslaveComponent : Component
     [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
     public NetEntity Master;
 
-    /// <summary>
-    ///
-    /// </summary>
     [DataField("slaveStatusIcon", customTypeSerializer: typeof(PrototypeIdSerializer<StatusIconPrototype>))]
-    public string SlaveStatusIcon = "SyndicateFaction";
+    public string SlaveStatusIcon = "SlaveMindslaveIcon";
 
-    /// <summary>
-    ///
-    /// </summary>
     [DataField("masterStatusIcon", customTypeSerializer: typeof(PrototypeIdSerializer<StatusIconPrototype>))]
-    public string MasterStatusIcon = "SyndicateFaction";
+    public string MasterStatusIcon = "MasterMindslaveIcon";
 }

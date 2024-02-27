@@ -13,7 +13,6 @@
   whitelistedSpecies:
     - Human
     - Dwarf
-    - Felinid
   canBeAntag: false
   access:
   - Security

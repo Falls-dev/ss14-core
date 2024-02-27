@@ -4,6 +4,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Sandboxing;
 using Robust.Client.UserInterface;
+using System.Linq;
 
 namespace Content.Client.UserInterface.Controls;
 
@@ -77,12 +78,13 @@ public sealed partial class DialogWindow : FancyWindow
             //      item 2 is a Func<string>, a """generic""" function that returns whatever user has done with the control
             (ControlConstructor, Func<string, bool>?, string) notapairanymore = entry.Type switch 
             {
-                QuickDialogEntryType.Integer => (SetupLineEdit, VerifyInt, "integer"),
-                QuickDialogEntryType.Float => (SetupLineEdit, VerifyFloat, "float"),
+                QuickDialogEntryType.Integer => (SetupLineEditNumber, VerifyInt, "integer"),
+                QuickDialogEntryType.Float => (SetupLineEditNumber, VerifyFloat, "float"),
                 QuickDialogEntryType.ShortText => (SetupLineEdit, VerifyShortText, "short-text"),
                 QuickDialogEntryType.LongText => (SetupLineEdit, VerifyLongText, "long-text"),
                 QuickDialogEntryType.Hex16 => (SetupLineEditHex, VerifyHex16, "hex16"),
                 QuickDialogEntryType.Boolean => (SetupCheckBox, null, "boolean"),
+                QuickDialogEntryType.Void => (SetupVoid, null, "void"),
 
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -94,6 +96,7 @@ public sealed partial class DialogWindow : FancyWindow
                                                                                                                                                    // yes, i am just going to ignore that
                                                                                                                                                    // go fuck yourself
             _promptLines.Add((entry.FieldId, returner));
+
             box.AddChild(control);
             Prompts.AddChild(box);
         }
@@ -161,6 +164,7 @@ public sealed partial class DialogWindow : FancyWindow
 
 
 
+
     private (Control, Func<string>) SetupLineEdit(Func<string, bool> valid, string name, QuickDialogEntry entry, bool last) // oh shit i'm feeling it
     {
         var edit = new LineEdit() { HorizontalExpand = true };
@@ -174,20 +178,35 @@ public sealed partial class DialogWindow : FancyWindow
 
         return (edit, () => {return edit.Text;} );
     }
-    private (Control, Func<string>) SetupLineEditHex(Func<string, bool> valid, string name, QuickDialogEntry entry, bool last)
+    private (Control, Func<string>) SetupLineEditNumber(Func<string, bool> valid, string name, QuickDialogEntry entry, bool last)
     {
         var (control, returner) = SetupLineEdit(valid, name, entry, last);
+        var le = (LineEdit) control;
+        le.Text = "0";
+        return (control, ()=> le.Text.Length > 0 ? le.Text : "0"); // Otherwise you'll get kicked for malformed data
+    }
+    private (Control, Func<string>) SetupLineEditHex(Func<string, bool> valid, string name, QuickDialogEntry entry, bool last)
+    {
+        var (control, returner) = SetupLineEditNumber(valid, name, entry, last);
         ((LineEdit) control).OnTextChanged += e => { e.Control.Text = e.Text.ToUpper(); };
         return (control, returner);
     }
 
     private (Control, Func<string>) SetupCheckBox(Func<string, bool> _, string name, QuickDialogEntry entry, bool last)
     {
-        var check = new CheckBox() { HorizontalExpand = true };
+        var check = new CheckBox() { HorizontalExpand = true, HorizontalAlignment = HAlignment.Right };
         check.Text = name;
 
         return (check, () => { return check.Pressed ? "true" : "false"; });
     }
+
+    private (Control, Func<string>) SetupVoid(Func<string, bool> _, string __, QuickDialogEntry ___, bool ____)
+    {
+        var control = new Control();
+        control.Visible = false;
+        return (control, () => "" );
+    }
+
 
 
     #endregion

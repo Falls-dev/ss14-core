@@ -1,11 +1,14 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Administration;
+using Content.Shared.Chemistry;
 using Robust.Server.Player;
 using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 
 namespace Content.Server.Administration;
+
+
 
 /// <summary>
 /// This handles the server portion of quick dialogs, including opening them.
@@ -161,10 +164,17 @@ public sealed partial class QuickDialogSystem : EntitySystem
             }
             case QuickDialogEntryType.Hex16:
             {
-                output = default;
-                bool ret = input.Length <= 4 && input == input.ToUpper() && int.TryParse(input, System.Globalization.NumberStyles.HexNumber, null, out var res);
-                if(ret) output = (T?) (object?) res;
+                bool ret = int.TryParse(input, System.Globalization.NumberStyles.HexNumber, null, out var res) && input.Length <= 4 && input == input.ToUpper();
+                if (ret)
+                    output = (T?) (object?) (Hex16) res;
+                else
+                    output = default;
                 return ret;
+            }
+            case QuickDialogEntryType.Void:
+            {
+                output = default;
+                return input == "";
             }
             default:
                 throw new ArgumentOutOfRangeException(nameof(entryType), entryType, null);
@@ -191,6 +201,9 @@ public sealed partial class QuickDialogSystem : EntitySystem
 
         if (T == typeof(bool))
             return QuickDialogEntryType.Boolean;
+
+        if (T == typeof(VoidOption))
+            return QuickDialogEntryType.Void;
 
 
 
@@ -232,3 +245,10 @@ public record struct Hex16(int number)
     }
 }
 
+/// <summary>
+/// A type used with quick dialogs for putting only a label, without any controls.
+/// </summary>
+public record struct VoidOption()
+{
+
+}

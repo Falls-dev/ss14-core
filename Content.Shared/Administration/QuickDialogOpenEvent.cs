@@ -139,5 +139,9 @@ public enum QuickDialogEntryType
     /// <summary>
     /// You'll never guess this one.
     /// </summary>
-    Boolean
+    Boolean,
+    /// <summary>
+    /// No control will be shown, only the prompt label.
+    /// </summary>
+    Void
 }

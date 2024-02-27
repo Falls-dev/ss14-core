@@ -144,6 +144,28 @@ public sealed partial class QuickDialogSystem : EntitySystem
                 output = (T?) (object?) longString;
                 return output is not null;
             }
+            case QuickDialogEntryType.Boolean:
+            {
+                switch (input)
+                {
+                    case "true":
+                        output = (T)(object)true;
+                        return true;
+                    case "false":
+                        output = (T)(object)false;
+                        return true;
+                    default:
+                        output = default;
+                        return false;
+                }
+            }
+            case QuickDialogEntryType.Hex16:
+            {
+                output = default;
+                bool ret = input.Length <= 4 && input == input.ToUpper() && int.TryParse(input, System.Globalization.NumberStyles.HexNumber, null, out var res);
+                if(ret) output = (T?) (object?) res;
+                return ret;
+            }
             default:
                 throw new ArgumentOutOfRangeException(nameof(entryType), entryType, null);
         }
@@ -151,6 +173,7 @@ public sealed partial class QuickDialogSystem : EntitySystem
 
     private QuickDialogEntryType TypeToEntryType(Type T)
     {
+        // yandere station much?
         if (T == typeof(int) || T == typeof(uint) || T == typeof(long) || T == typeof(ulong))
             return QuickDialogEntryType.Integer;
 
@@ -162,6 +185,16 @@ public sealed partial class QuickDialogSystem : EntitySystem
 
         if (T == typeof(LongString))
             return QuickDialogEntryType.LongText;
+
+        if (T == typeof(Hex16))
+            return QuickDialogEntryType.Hex16;
+
+        if (T == typeof(bool))
+            return QuickDialogEntryType.Boolean;
+
+
+
+
 
         throw new ArgumentException($"Tried to open a dialog with unsupported type {T}.");
     }
@@ -182,3 +215,20 @@ public record struct LongString(string String)
         return new(s);
     }
 }
+
+/// <summary>
+/// A type used with quick dialogs to indicate you want the user to enter a 0-65535 int as a hexadecimal value,..
+/// </summary>
+/// <param name="int">The int retrieved.</param>
+public record struct Hex16(int number)
+{
+    public static implicit operator int(Hex16 hex16)
+    {
+        return hex16.number;
+    }
+    public static explicit operator Hex16(int num)
+    {
+        return new(num);
+    }
+}
+

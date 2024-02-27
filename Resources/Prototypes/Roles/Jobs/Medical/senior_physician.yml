@@ -18,6 +18,7 @@
   supervisors: job-supervisors-cmo
   whitelistedSpecies:
   - Human
+  - Dwarf
   canBeAntag: false
   special:
     - !type:AddImplantSpecial

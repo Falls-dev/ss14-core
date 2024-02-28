@@ -352,9 +352,7 @@ namespace Content.Server.VendingMachines
             if (entry == null)
             {
                 if (sender.HasValue)
-                {
                     Popup.PopupClient(Loc.GetString("vending-machine-component-try-eject-invalid-item"), uid, sender.Value);
-                }
 
 
                 Deny(uid, vendComponent);

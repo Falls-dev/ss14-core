@@ -10,9 +10,6 @@
   startingGear: SeniorResearcherGear
   icon: "JobIconSeniorResearcher"
   supervisors: job-supervisors-rd
-  whitelistedSpecies:
-  - Human
-  - Dwarf
   canBeAntag: false
   special:
     - !type:AddImplantSpecial

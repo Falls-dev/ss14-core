@@ -1,7 +1,7 @@
 - type: entity
   save: false
   name: Urist McSkrell
-  parent: BaseMobOrganic
+  parent: BaseMobSpeciesOrganic
   id: BaseMobSkrell
   abstract: true
   components:
@@ -32,7 +32,7 @@
   save: false
   name: Urist McHands
   id: MobSkrellDummy
-  parent: BaseMobOrganicDummy
+  parent: BaseSpeciesDummy
   description: A dummy skrell meant to be used in character setup.
   noSpawn: true
   components:

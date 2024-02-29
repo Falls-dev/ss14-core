@@ -3,11 +3,13 @@ using Content.Server.Administration.Logs;
 using Content.Server.Construction.Components;
 using Content.Server.Temperature.Components;
 using Content.Server.Temperature.Systems;
+using Content.Shared._White.Cult.Components;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Components;
 using Content.Shared.Construction.EntitySystems;
 using Content.Shared.Construction.Steps;
 using Content.Shared.DoAfter;
+using Content.Shared.Ghost;
 using Content.Shared.Interaction;
 using Content.Shared.Prying.Systems;
 using Content.Shared.Radio.EntitySystems;
@@ -151,7 +153,7 @@ namespace Content.Server.Construction
 
             if (step == null)
             {
-                _sawmill.Warning($"Called {nameof(HandleEdge)} on entity {ToPrettyString(uid)} but the current state is not valid for that!");
+                Log.Warning($"Called {nameof(HandleEdge)} on entity {ToPrettyString(uid)} but the current state is not valid for that!");
                 return HandleResult.False;
             }
 
@@ -206,6 +208,10 @@ namespace Content.Server.Construction
             // Let HandleInteraction actually handle the event for this step.
             // We can only perform the rest of our logic if it returns true.
             var handle = HandleInteraction(uid, ev, step, validation, out user, construction);
+
+            if (step.CultistOnly && !(HasComp<CultistComponent>(user) || HasComp<GhostComponent>(user))) // WD
+                return HandleResult.False;
+
             if (handle is not HandleResult.True)
                 return handle;
 
@@ -517,10 +523,10 @@ namespace Content.Server.Construction
                 {
                     if (construction.Deleted)
                     {
-                        _sawmill.Error($"Construction component was deleted while still processing interactions." +
-                            $"Entity {ToPrettyString(uid)}, graph: {construction.Graph}, " +
-                            $"Next: {interaction.GetType().Name}, " +
-                            $"Remaining Queue: {string.Join(", ", construction.InteractionQueue.Select(x => x.GetType().Name))}");
+                        Log.Error($"Construction component was deleted while still processing interactions." +
+                                  $"Entity {ToPrettyString(uid)}, graph: {construction.Graph}, " +
+                                  $"Next: {interaction.GetType().Name}, " +
+                                  $"Remaining Queue: {string.Join(", ", construction.InteractionQueue.Select(x => x.GetType().Name))}");
                         break;
                     }
 
@@ -531,7 +537,7 @@ namespace Content.Server.Construction
                 }
                 catch (Exception e)
                 {
-                    _sawmill.Error($"Caught exception while processing construction queue. Entity {ToPrettyString(uid)}, graph: {construction.Graph}");
+                    Log.Error($"Caught exception while processing construction queue. Entity {ToPrettyString(uid)}, graph: {construction.Graph}");
                     _runtimeLog.LogException(e, $"{nameof(ConstructionSystem)}.{nameof(UpdateInteractions)}");
                     Del(uid);
                 }

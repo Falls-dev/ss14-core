@@ -85,6 +85,8 @@
     runningState: building
     staticRecipes:
       - Wirecutter
+      - Igniter
+      - Signaller
       - Screwdriver
       - Welder
       - Wrench
@@ -98,6 +100,7 @@
       - CableHVStack
       - HandheldGPSBasic
       - TRayScanner
+      - AirTank
       - GasAnalyzer
       - UtilityBelt
       - Fulton
@@ -134,7 +137,6 @@
       - TrashBag
       - PowerCellSmall
       - PowerCellMedium
-      - VehicleWheelchairFolded
       - RollerBedSpawnFolded
       - CheapRollerBedSpawnFolded
       - EmergencyRollerBedSpawnFolded
@@ -156,21 +158,38 @@
       - CellRechargerCircuitboard
       - BorgChargerCircuitboard
       - WeaponCapacitorRechargerCircuitboard
+      - OxygenTank
+      - PlasmaTank
   - type: EmagLatheRecipes
     emagStaticRecipes:
+       - MagazinePistol
+       - MagazinePistolSubMachineGun
+       - MagazinePistolSubMachineGunTopMounted
+       - MagazineRifle
+       - MagazineLightRifle
+       - SpeedLoaderMagnum
+       - MagazineShotgun
+       - MagazineShotgunSlug
+       - MagazineLightRifleBox
+       - MagazinePistolCaselessRifle
        - CartridgePistol
        - CartridgeMagnum
        - ShellShotgun
+       - ShellShotgunSlug
        - ShellShotgunFlare
        - ShellTranquilizer
        - CartridgeLightRifle
        - CartridgeRifle
+       - CartridgeMagnumAP
+       - CartridgeAntiMateriel
+       - CartridgeCaselessRifle
+       - MagazineBoxMagnumAP
+       - MagazineBoxAntiMateriel
+       - MagazineBoxCaselessRifle
        - MagazineBoxPistol
        - MagazineBoxMagnum
        - MagazineBoxRifle
        - MagazineBoxLightRifle
-       - OxygenTank
-       - PlasmaTank
        - GrenadeBlast
     emagDynamicRecipes:
       - CartridgePistolRubber
@@ -255,6 +274,10 @@
   - type: Lathe
     idleState: icon
     runningState: building
+    staticRecipes:
+    - LargeBeaker
+    - Dropper
+    - ClothingEyesGlassesChemical
     dynamicRecipes:
       - PowerDrill
       - MiningDrill
@@ -270,11 +293,8 @@
       - HoloprojectorField
       - Saw
       - Hemostat
-      - Beaker
-      - LargeBeaker
       - CryostasisBeaker
       - SyringeCryostasis
-      - Dropper
       - Syringe
       - Implanter
       - PillCanister
@@ -288,6 +308,7 @@
       - ChemicalPayload
       - FlashPayload
       - Signaller
+      - SignallerAdvanced
       - SignalTrigger
       - VoiceTrigger
       - Igniter
@@ -313,13 +334,13 @@
       - ClothingBackpackDuffelHolding
       - WelderExperimental
       - JawsOfLife
-      - ClothingEyesGlassesChemical
       - FauxTileAstroGrass
       - FauxTileAstroIce
       - OreBagOfHolding
       - ClothingEyesNightVisionGoggles # WD EDIT
       - KitchenKnife # WD EDIT
       - ButchCleaver # WD EDIT
+      - WeaponTempGun # WD EDIT
       - DeviceQuantumSpinInverter
       - ClothingHandsGlovesMagnetic
       - ClothingHandsGlovesMagneticAdvanced
@@ -377,10 +398,18 @@
     - MaterialReclaimerMachineCircuitboard
     - ElectrolysisUnitMachineCircuitboard
     - CentrifugeMachineCircuitboard
+    - ChemDispenserMachineCircuitboard
+    - ChemMasterMachineCircuitboard
     - CondenserMachineCircuitBoard
+    - HotplateMachineCircuitboard
     - UniformPrinterMachineCircuitboard
     - FloorGreenCircuit
     - FloorBlueCircuit
+    - MicrowaveMachineCircuitboard
+    - ReagentGrinderMachineCircuitboard
+    - ElectricGrillMachineCircuitboard
+    - BoozeDispenserMachineCircuitboard
+    - SodaDispenserMachineCircuitboard
     dynamicRecipes:
       - ThermomachineFreezerMachineCircuitBoard
       - HellfireFreezerMachineCircuitBoard
@@ -390,8 +419,6 @@
       - CryoPodMachineCircuitboard
       - VaccinatorMachineCircuitboard
       - DiagnoserMachineCircuitboard
-      - ChemMasterMachineCircuitboard
-      - ChemDispenserMachineCircuitboard
       - BiomassReclaimerMachineCircuitboard
       - BiofabricatorMachineCircuitboard
       - SurveillanceCameraRouterCircuitboard
@@ -408,10 +435,6 @@
       - PowerComputerCircuitboard
       - AutolatheHyperConvectionMachineCircuitboard
       - ProtolatheHyperConvectionMachineCircuitboard
-      - ReagentGrinderMachineCircuitboard
-      - HotplateMachineCircuitboard
-      - MicrowaveMachineCircuitboard
-      - ElectricGrillMachineCircuitboard
       - FatExtractorMachineCircuitboard
       - FlatpackerMachineCircuitboard
       - SheetifierMachineCircuitboard
@@ -453,11 +476,8 @@
       - ArtifactAnalyzerMachineCircuitboard
       - TraversalDistorterMachineCircuitboard
       - ArtifactCrusherMachineCircuitboard
-      - BoozeDispenserMachineCircuitboard
-      - SodaDispenserMachineCircuitboard
       - TelecomServerCircuitboard
       - MassMediaCircuitboard
-      - CriminalRecordsServerCircuitboard # WD-EDIT
   - type: MaterialStorage
     whitelist:
       tags:
@@ -540,7 +560,6 @@
     - BorgModuleAdvancedCleaning
     - BorgModuleMining
     - BorgModuleGrapplingGun
-    - BorgModuleGasAnalyzer
     - BorgModuleAdvancedTool
     - BorgModuleRCD
     - BorgModuleArtifact
@@ -670,6 +689,8 @@
       - MagazineBoxRifle
       - MagazineBoxLightRifle
       - SpeedLoaderMagnum
+      - MagazineShotgun # WD EDIT
+      - MagazineShotgunSlug # WD EDIT
       - TargetHuman
       - TargetSyndicate
       - TargetClown
@@ -727,6 +748,7 @@
       - WeaponLaserCannon
       - WeaponLaserCarbine
       - WeaponXrayCannon
+      - WeaponTempGun # WD EDIT
       - PowerCageSmall
       - PowerCageMedium
       - PowerCageHigh
@@ -734,6 +756,16 @@
       - ShuttleGunPerforatorCircuitboard
       - ShuttleGunFriendshipCircuitboard
       - ShuttleGunDusterCircuitboard
+  - type: EmagLatheRecipes
+    emagStaticRecipes:
+     - MagazineLightRifleBox
+     - MagazinePistolCaselessRifle
+     - CartridgeMagnumAP
+     - CartridgeAntiMateriel
+     - CartridgeCaselessRifle
+     - MagazineBoxMagnumAP
+     - MagazineBoxAntiMateriel
+     - MagazineBoxCaselessRifle
   - type: MaterialStorage
     whitelist:
       tags:
@@ -778,6 +810,14 @@
         - MagazineBoxMagnum
         - MagazineBoxRifle
         - MagazineBoxLightRifle
+    - type: EmagLatheRecipes
+      emagStaticRecipes:
+        - CartridgeMagnumAP
+        - CartridgeAntiMateriel
+        - CartridgeCaselessRifle
+        - MagazineBoxMagnumAP
+        - MagazineBoxAntiMateriel
+        - MagazineBoxCaselessRifle
     - type: MaterialStorage
       whitelist:
         tags:
@@ -813,15 +853,18 @@
       - Defibrillator
       - HandheldHealthAnalyzer
       - ClothingHandsGlovesLatex
+      - ClothingHandsGlovesNitrile
       - ClothingMaskSterile
       - DiseaseSwab
       - Beaker
+      - LargeBeaker
+      - Dropper
+      - Jug
       - Syringe
       - Implanter
       - PillCanister
       - BodyBag
       - ChemistryEmptyBottle01
-      - VehicleWheelchairFolded
       - RollerBedSpawnFolded
       - CheapRollerBedSpawnFolded
       - EmergencyRollerBedSpawnFolded
@@ -833,22 +876,19 @@
       - MedkitAdvanced
       - MedkitRadiation
       - MedkitCombat
-      - ClothingEyesHudMedical
-    dynamicRecipes:
-      - HandheldCrewMonitor
-      - ClothingHandsGlovesNitrile
-      - CryostasisBeaker
-      - LargeBeaker
-      - Dropper
       - Scalpel
       - Retractor
       - Cautery
       - Drill
       - Saw
       - Hemostat
+      - ClothingEyesGlassesChemical
+    dynamicRecipes:
+      - HandheldCrewMonitor
+      - ChemicalPayload
+      - CryostasisBeaker
       - BluespaceBeaker
       - SyringeBluespace
-      - Jug
       - SyringeCryostasis
       - ClothingEyesHudMedical
   - type: Machine
@@ -942,10 +982,12 @@
       - ClothingUniformJumpsuitPrisoner
       - ClothingUniformJumpskirtPrisoner
       - ClothingHeadHatQMsoft
+      - ClothingHeadHatBeretQM
       - ClothingUniformJumpsuitQM
       - ClothingUniformJumpskirtQM
       - ClothingUniformJumpsuitQMTurtleneck
       - ClothingUniformJumpskirtQMTurtleneck
+      - ClothingUniformJumpsuitQMFormal
       - ClothingHeadHatBeretRND
       - ClothingUniformJumpsuitResearchDirector
       - ClothingUniformJumpskirtResearchDirector
@@ -1000,6 +1042,15 @@
       - ClothingNeckTieRed
       - ClothingNeckTieDet
       - ClothingNeckTieSci
+      # Scarfs - All scarfs avaible in winterdrobe
+      - ClothingNeckScarfStripedGreen
+      - ClothingNeckScarfStripedBlue
+      - ClothingNeckScarfStripedRed
+      - ClothingNeckScarfStripedBrown
+      - ClothingNeckScarfStripedLightBlue
+      - ClothingNeckScarfStripedOrange
+      - ClothingNeckScarfStripedBlack
+      - ClothingNeckScarfStripedPurple
   - type: EmagLatheRecipes
     emagStaticRecipes:
       - ClothingHeadHatCentcomcap

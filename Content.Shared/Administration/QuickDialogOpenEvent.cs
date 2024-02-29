@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Serialization;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.Administration;
 
@@ -26,7 +26,7 @@ public sealed class QuickDialogOpenEvent : EntityEventArgs
     /// <summary>
     /// The buttons presented for the user.
     /// </summary>
-    public QuickDialogButtonFlag Buttons = QuickDialogButtonFlag.OkButton;
+    public QuickDialogButtonFlag Buttons = QuickDialogButtonFlag.OkButton | QuickDialogButtonFlag.CancelButton;
 
     public QuickDialogOpenEvent(string title, List<QuickDialogEntry> prompts, int dialogId, QuickDialogButtonFlag buttons)
     {
@@ -87,11 +87,17 @@ public sealed class QuickDialogEntry
     /// </summary>
     public string Prompt;
 
-    public QuickDialogEntry(string fieldId, QuickDialogEntryType type, string prompt)
+    /// <summary>
+    /// String to replace the type-specific placeholder with.
+    /// </summary>
+    public string? Placeholder;
+
+    public QuickDialogEntry(string fieldId, QuickDialogEntryType type, string prompt, string? placeholder = null)
     {
         FieldId = fieldId;
         Type = type;
         Prompt = prompt;
+        Placeholder = placeholder;
     }
 }
 
@@ -119,6 +125,10 @@ public enum QuickDialogEntryType
     /// </summary>
     Float,
     /// <summary>
+    /// Any integer from 0 to 65535, but the user has to enter it in a hexadecimal format.
+    /// </summary>
+    Hex16,
+    /// <summary>
     /// Maximum of 100 characters string.
     /// </summary>
     ShortText,
@@ -126,4 +136,12 @@ public enum QuickDialogEntryType
     /// Maximum of 2,000 characters string.
     /// </summary>
     LongText,
+    /// <summary>
+    /// You'll never guess this one.
+    /// </summary>
+    Boolean,
+    /// <summary>
+    /// No control will be shown, only the prompt label.
+    /// </summary>
+    Void
 }

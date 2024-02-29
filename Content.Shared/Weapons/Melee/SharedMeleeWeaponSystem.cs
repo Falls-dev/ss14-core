@@ -23,6 +23,7 @@ using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared._White;
 using Content.Shared._White.MagGloves;
+using Content.Shared._White.Chaplain;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -386,6 +387,12 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         // Windup time checked elsewhere.
         var fireRate = TimeSpan.FromSeconds(1f / GetAttackRate(weaponUid, user, weapon));
+
+        if (attack is LightAttackEvent _)
+        {
+            fireRate *= 0.8f;
+        }
+
         var swings = 0;
 
         // TODO: If we get autoattacks then probably need a shotcounter like guns so we can do timing properly.
@@ -401,7 +408,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         Dirty(weaponUid, weapon);
 
         // Do this AFTER attack so it doesn't spam every tick
-        var ev = new AttemptMeleeEvent();
+        var ev = new AttemptMeleeEvent {User = user}; // WD EDIT
         RaiseLocalEvent(weaponUid, ref ev);
 
         if (ev.Cancelled)
@@ -422,14 +429,20 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             switch (attack)
             {
                 case LightAttackEvent light:
-                    DoLightAttack(user, light, weaponUid, weapon, session);
-                    animation = weapon.Animation;
+                    DoLightAttack(user, light, weaponUid, weapon, session, out var miss); // WD EDIT
+                    // WD EDIT START
+                    animation = miss && weapon.Animation == "WeaponArcThrust"
+                        ? weapon.MissAnimation
+                        : weapon.Animation;
+                    if (miss)
+                        weapon.NextAttack -= fireRate / 2f;
+                    // WD EDIT END
                     break;
                 case DisarmAttackEvent disarm:
                     if (!DoDisarm(user, disarm, weaponUid, weapon, session))
                         return false;
 
-                    animation = weapon.Animation;
+                    animation = weapon.DisarmAnimation; // WD EDIT
                     break;
                 case HeavyAttackEvent heavy:
                     if (!DoHeavyAttack(user, heavy, weaponUid, weapon, session))
@@ -453,8 +466,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
     protected abstract bool InRange(EntityUid user, EntityUid target, float range, ICommonSession? session);
 
-    protected virtual void DoLightAttack(EntityUid user, LightAttackEvent ev, EntityUid meleeUid, MeleeWeaponComponent component, ICommonSession? session)
+    protected virtual void DoLightAttack(EntityUid user, LightAttackEvent ev, EntityUid meleeUid, MeleeWeaponComponent component, ICommonSession? session, out bool miss) // WD EDIT
     {
+        miss = false; // WD EDIT
         // If I do not come back later to fix Light Attacks being Heavy Attacks you can throw me in the spider pit -Errant
         var damage = GetDamage(meleeUid, user, component) * GetHeavyDamageModifier(meleeUid, user, component);
         var target = GetEntity(ev.Target);
@@ -483,10 +497,18 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             var missEvent = new MeleeHitEvent(new List<EntityUid>(), user, meleeUid, damage, null);
             RaiseLocalEvent(meleeUid, missEvent);
             Audio.PlayPredicted(component.SwingSound, meleeUid, user);
+            miss = true; // WD EDIT
             return;
         }
 
         // Sawmill.Debug($"Melee damage is {damage.Total} out of {component.Damage.Total}");
+
+        // WD START
+        var blockEvent = new MeleeBlockAttemptEvent(user);
+        RaiseLocalEvent(target.Value, ref blockEvent);
+        if (blockEvent.Blocked)
+            return;
+        // WD END
 
         // Raise event before doing damage so we can cancel damage if the event is handled
         var hitEvent = new MeleeHitEvent(new List<EntityUid> { target.Value }, user, meleeUid, damage, null);
@@ -514,7 +536,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         RaiseLocalEvent(target.Value, attackedEvent);
 
         var modifiedDamage = DamageSpecifier.ApplyModifierSets(damage + hitEvent.BonusDamage + attackedEvent.BonusDamage, hitEvent.ModifiersList);
-        var damageResult = Damageable.TryChangeDamage(target, modifiedDamage, origin:user);
+        var damageResult = Damageable.TryChangeDamage(target, modifiedDamage, component.IgnoreResistances || hitEvent.PenetrateArmor, origin:user); // WD EDIT
 
         if (damageResult != null && damageResult.Any())
         {
@@ -535,23 +557,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
                     $"{ToPrettyString(user):actor} melee attacked (light) {ToPrettyString(target.Value):subject} using {ToPrettyString(meleeUid):tool} and dealt {damageResult.GetTotal():damage} damage");
             }
 
-            PlayHitSound(target.Value, user, GetHighestDamageSound(modifiedDamage, _protoManager), hitEvent.HitSoundOverride, component.HitSound);
         }
-        else
-        {
-            if (hitEvent.HitSoundOverride != null)
-            {
-                Audio.PlayPredicted(hitEvent.HitSoundOverride, meleeUid, user);
-            }
-            else if (!GetDamage(meleeUid, user, component).Any() && component.HitSound != null)
-            {
-                Audio.PlayPredicted(component.HitSound, meleeUid, user);
-            }
-            else
-            {
-                Audio.PlayPredicted(component.NoDamageSound, meleeUid, user);
-            }
-        }
+
+        PlayHitSound(target.Value, user, GetHighestDamageSound(modifiedDamage, _protoManager), hitEvent.HitSoundOverride, component.HitSound, component.NoDamageSound);
 
         if (damageResult?.GetTotal() > FixedPoint2.Zero)
         {
@@ -576,8 +584,13 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         var direction = targetMap.Position - userPos;
         var distance = Math.Min(component.Range, direction.Length());
 
-        var damage = GetDamage(meleeUid, user, component);
+        var damage = GetDamage(meleeUid, user, component) * 0.70f;
         var entities = GetEntityList(ev.Entities);
+
+        // WD EDIT
+        if (component.HeavyAttackStaminaCost > 0)
+            _stamina.TakeStaminaDamage(user, component.HeavyAttackStaminaCost);
+        // WD EDIT END
 
         if (entities.Count == 0)
         {
@@ -631,6 +644,19 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         // Sawmill.Debug($"Melee damage is {damage.Total} out of {component.Damage.Total}");
 
+        // WD START
+        foreach (var target in new List<EntityUid>(targets))
+        {
+            var blockEvent = new MeleeBlockAttemptEvent(user);
+            RaiseLocalEvent(target, ref blockEvent);
+            if (blockEvent.Blocked)
+                targets.Remove(target);
+        }
+
+        if (targets.Count == 0)
+            return true;
+        // WD END
+
         // Raise event before doing damage so we can cancel damage if the event is handled
         var hitEvent = new MeleeHitEvent(targets, user, meleeUid, damage, direction);
         RaiseLocalEvent(meleeUid, hitEvent);
@@ -667,7 +693,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             RaiseLocalEvent(entity, attackedEvent);
             var modifiedDamage = DamageSpecifier.ApplyModifierSets(damage + hitEvent.BonusDamage + attackedEvent.BonusDamage, hitEvent.ModifiersList);
 
-            var damageResult = Damageable.TryChangeDamage(entity, modifiedDamage, origin:user);
+            var damageResult = Damageable.TryChangeDamage(entity, modifiedDamage, component.IgnoreResistances || hitEvent.PenetrateArmor, origin:user); // WD EDIT
 
             if (damageResult != null && damageResult.GetTotal() > FixedPoint2.Zero)
             {
@@ -688,22 +714,8 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         if (entities.Count != 0)
         {
-            if (appliedDamage.GetTotal() > FixedPoint2.Zero)
-            {
-                var target = entities.First();
-                PlayHitSound(target, user, GetHighestDamageSound(appliedDamage, _protoManager), hitEvent.HitSoundOverride, component.HitSound);
-            }
-            else
-            {
-                if (hitEvent.HitSoundOverride != null)
-                {
-                    Audio.PlayPredicted(hitEvent.HitSoundOverride, meleeUid, user);
-                }
-                else
-                {
-                    Audio.PlayPredicted(component.NoDamageSound, meleeUid, user);
-                }
-            }
+            var target = entities.First();
+            PlayHitSound(target, user, GetHighestDamageSound(appliedDamage, _protoManager), hitEvent.HitSoundOverride, component.HitSound, component.NoDamageSound);
         }
 
         if (appliedDamage.GetTotal() > FixedPoint2.Zero)
@@ -747,7 +759,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         return true;
     }
 
-    public void PlayHitSound(EntityUid target, EntityUid? user, string? type, SoundSpecifier? hitSoundOverride, SoundSpecifier? hitSound)
+    public void PlayHitSound(EntityUid target, EntityUid? user, string? type, SoundSpecifier? hitSoundOverride, SoundSpecifier? hitSound, SoundSpecifier? noDamageSound)
     {
         var playedSound = false;
 
@@ -787,6 +799,11 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             else if (hitSound != null)
             {
                 Audio.PlayPredicted(hitSound, coords, user, AudioParams.Default.WithVariation(DamagePitchVariation));
+                playedSound = true;
+            }
+            else if (noDamageSound != null)
+            {
+                Audio.PlayPredicted(noDamageSound, coords, user, AudioParams.Default.WithVariation(DamagePitchVariation));
                 playedSound = true;
             }
         }

@@ -30,6 +30,7 @@
     whitelist:
       tags:
       - CartridgeLightRifle
+    autoCycle: false
   - type: ContainerContainer
     containers:
       ballistic-ammo: !type:Container

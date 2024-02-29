@@ -10,6 +10,7 @@ using Content.Server.Hands.Systems;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Server._White.Cult.GameRule;
 using Content.Server._White.Cult.Runes.Comps;
+using Content.Shared._White.Chaplain;
 using Content.Shared.Actions;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Cuffs.Components;
@@ -32,6 +33,8 @@ using Content.Shared._White.Cult;
 using Content.Shared._White.Cult.Components;
 using Content.Shared._White.Cult.Runes;
 using Content.Shared._White.Cult.UI;
+using Content.Shared.Mindshield.Components;
+using Content.Shared.Pulling;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Components;
@@ -61,7 +64,7 @@ public sealed partial class CultSystem : EntitySystem
     [Dependency] private readonly GunSystem _gunSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly FlammableSystem _flammableSystem = default!;
-    [Dependency] private readonly SharedJobSystem _jobSystem = default!;
+    [Dependency] private readonly SharedPullingSystem _pulling = default!;
 
 
     public override void Initialize()
@@ -419,15 +422,10 @@ public sealed partial class CultSystem : EntitySystem
             // Проверка, является ли жертва целью
             _entityManager.TryGetComponent<MindContainerComponent>(target?.CurrentEntity, out var targetMind);
             var isTarget = mind!.Mind!.Value == targetMind?.Mind!.Value;
-            var jobAllowConvert = true;
-
-            if(_jobSystem.MindTryGetJob(mind.Mind!.Value, out var _, out var prototype))
-            {
-                jobAllowConvert = prototype.CanBeAntag;
-            }
 
             // Выполнение действия в зависимости от условий
-            if (canBeConverted && jobAllowConvert && !isTarget)
+            if (canBeConverted && !HasComp<HolyComponent>(victim.Value) &&
+                !HasComp<MindShieldComponent>(victim.Value) && !isTarget)
             {
                 result = Convert(uid, victim.Value, args.User, args.Cultists);
             }
@@ -670,6 +668,8 @@ public sealed partial class CultSystem : EntitySystem
 
         foreach (var target in targets)
         {
+            StopPulling(target);
+
             _xform.SetCoordinates(target, xFormSelected.Coordinates);
         }
 
@@ -968,6 +968,8 @@ public sealed partial class CultSystem : EntitySystem
             return;
         }
 
+        StopPulling(target, false);
+
         _xform.SetCoordinates(target, xFormBase.Coordinates);
 
         _audio.PlayPvs(_teleportInSound, xFormBase.Coordinates);
@@ -1026,19 +1028,27 @@ public sealed partial class CultSystem : EntitySystem
 
         _random.Shuffle(list);
 
-        var bloodCost = -120 / cultists.Count;
+        var bloodCost = 120 / cultists.Count;
 
         foreach (var cultist in cultists)
         {
-            if (!TryComp<BloodstreamComponent>(cultist, out var bloodstreamComponent))
+            if (!TryComp<BloodstreamComponent>(cultist, out var bloodstreamComponent) ||
+                bloodstreamComponent.BloodSolution is null)
+            {
                 return false;
+            }
 
-            _bloodstreamSystem.TryModifyBloodLevel(cultist, bloodCost, bloodstreamComponent);
+            if (bloodstreamComponent.BloodSolution.Value.Comp.Solution.Volume < bloodCost)
+            {
+                _popupSystem.PopupEntity(Loc.GetString("cult-blood-boil-rune-no-blood"), user, user);
+                return false;
+            }
+
+            _bloodstreamSystem.TryModifyBloodLevel(cultist, -bloodCost, bloodstreamComponent);
         }
 
         var projectileCount =
             (int) MathF.Round(MathHelper.Lerp(component.MinProjectiles, component.MaxProjectiles, severity));
-
 
         while (projectileCount > 0)
         {
@@ -1049,7 +1059,7 @@ public sealed partial class CultSystem : EntitySystem
             if (!flammable.TryGetComponent(target, out var fl))
                 continue;
 
-            fl.FireStacks += _random.Next(1, 3);
+            fl.FireStacks += 1;
 
             _flammableSystem.Ignite(target, target);
 
@@ -1123,38 +1133,27 @@ public sealed partial class CultSystem : EntitySystem
     {
         var playerEntity = args.Session.AttachedEntity;
 
-        if (!playerEntity.HasValue || !TryComp<CultistComponent>(playerEntity, out var comp) ||
-            !TryComp<ActionsComponent>(playerEntity, out var actionsComponent))
+        if (!playerEntity.HasValue || !TryComp<CultistComponent>(playerEntity, out var comp))
             return;
-
-        var cultistsActions = 0;
-
-        foreach (var userAction in actionsComponent.Actions)
-        {
-            var entityPrototypeId = MetaData(userAction).EntityPrototype?.ID;
-            if (entityPrototypeId != null && CultistComponent.CultistActions.Contains(entityPrototypeId))
-                cultistsActions++;
-        }
 
         var action = CultistComponent.CultistActions.FirstOrDefault(x => x.Equals(args.ActionType));
 
         if (action == null)
             return;
 
-        EntityUid? actionId = null;
         if (component.IsRune)
         {
-            if (cultistsActions > component.MaxAllowedCultistActions)
+            if (comp.SelectedEmpowers.Count > component.MaxAllowedCultistActions)
             {
                 _popupSystem.PopupEntity(Loc.GetString("cult-too-much-empowers"), uid);
                 return;
             }
 
-            _actionsSystem.AddAction(playerEntity.Value, ref actionId, action);
+            comp.SelectedEmpowers.Add(_actionsSystem.AddAction(playerEntity.Value, action));
         }
-        else if (cultistsActions < component.MinRequiredCultistActions)
+        else if (comp.SelectedEmpowers.Count < component.MinRequiredCultistActions)
         {
-            _actionsSystem.AddAction(playerEntity.Value, ref actionId, action);
+            comp.SelectedEmpowers.Add(_actionsSystem.AddAction(playerEntity.Value, action));
         }
     }
 
@@ -1310,6 +1309,22 @@ public sealed partial class CultSystem : EntitySystem
 
         _damageableSystem.TryChangeDamage(player, new DamageSpecifier(damageSpecifier, -40));
         _damageableSystem.TryChangeDamage(player, new DamageSpecifier(damageSpecifier2, -40));
+    }
+
+    private void StopPulling(EntityUid target, bool checkPullable = true)
+    {
+        // break pulls before portal enter so we dont break shit
+        if (checkPullable && TryComp<SharedPullableComponent>(target, out var pullable) && pullable.BeingPulled)
+        {
+            _pulling.TryStopPull(pullable);
+        }
+
+        if (TryComp<SharedPullerComponent>(target, out var pulling)
+            && pulling.Pulling != null &&
+            TryComp<SharedPullableComponent>(pulling.Pulling.Value, out var subjectPulling))
+        {
+            _pulling.TryStopPull(subjectPulling);
+        }
     }
 
     /*

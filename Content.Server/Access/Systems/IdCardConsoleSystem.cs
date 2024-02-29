@@ -1,4 +1,3 @@
-using Content.Server.Station.Systems;
 using Content.Server.StationRecords.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
@@ -21,7 +20,6 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly StationRecordsSystem _record = default!;
-    [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly UserInterfaceSystem _userInterface = default!;
     [Dependency] private readonly AccessReaderSystem _accessReader = default!;
     [Dependency] private readonly AccessSystem _access = default!;
@@ -87,15 +85,13 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
             var targetAccessComponent = EntityManager.GetComponent<AccessComponent>(targetId);
 
             var jobProto = string.Empty;
-            var jobIcon = string.Empty; //WD-EDIT
+            var jobIcon = targetIdComponent.JobIcon; //WD-EDIT
 
-            if (_station.GetOwningStation(uid) is { } station
-                && EntityManager.TryGetComponent<StationRecordKeyStorageComponent>(targetId, out var keyStorage)
-                && keyStorage.Key != null
-                && _record.TryGetRecord<GeneralStationRecord>(station, keyStorage.Key.Value, out var record))
+            if (TryComp<StationRecordKeyStorageComponent>(targetId, out var keyStorage)
+                && keyStorage.Key is {} key
+                && _record.TryGetRecord<GeneralStationRecord>(key, out var record))
             {
                 jobProto = record.JobPrototype;
-                jobIcon = record.JobIcon;
                 Dirty(targetId, targetIdComponent);
             }
 
@@ -109,7 +105,7 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
                 possibleAccess,
                 jobProto,
                 privilegedIdName,
-                EntityManager.GetComponent<MetaDataComponent>(targetId).EntityName,
+                Name(targetId),
                 jobIcon
             );
         }
@@ -138,20 +134,17 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         if (component.TargetIdSlot.Item is not { Valid: true } targetId || !PrivilegedIdIsAuthorized(uid, component))
             return;
 
-        //WD-EDIT
-        if (TryComp<IdCardComponent>(targetId, out var idCardComponent) && newJobIcon != null)
-        {
-            idCardComponent.JobIcon = newJobIcon;
-        }
-        //WD-EDIT
-
         _idCard.TryChangeFullName(targetId, newFullName, player: player);
         _idCard.TryChangeJobTitle(targetId, newJobTitle, player: player);
 
-        if (_prototype.TryIndex<JobPrototype>(newJobProto, out var job)
-            && _prototype.TryIndex<StatusIconPrototype>(job.Icon, out var jobIcon))
+        // WD EDIT START
+        if (_prototype.TryIndex<JobPrototype>(newJobProto, out var job))
+            newJobIcon ??= job.Icon;
+
+        if (newJobIcon != null && _prototype.TryIndex<StatusIconPrototype>(newJobIcon, out var jobIcon)) // WD EDIT END
         {
             _idCard.TryChangeJobIcon(targetId, jobIcon, player: player);
+            _idCard.TryChangeJobDepartment(targetId, job!);
         }
 
         if (!newAccessList.TrueForAll(x => component.AccessLevels.Contains(x)))
@@ -205,7 +198,7 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         if (!Resolve(uid, ref component))
             return true;
 
-        if (!EntityManager.TryGetComponent<AccessReaderComponent>(uid, out var reader))
+        if (!TryComp<AccessReaderComponent>(uid, out var reader))
             return true;
 
         var privilegedId = component.PrivilegedIdSlot.Item;
@@ -220,10 +213,9 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         JobPrototype? newJobProto,
         string? newJobIcon) // WD EDIT
     {
-        if (_station.GetOwningStation(uid) is not { } station
-            || !EntityManager.TryGetComponent<StationRecordKeyStorageComponent>(targetId, out var keyStorage)
+        if (!TryComp<StationRecordKeyStorageComponent>(targetId, out var keyStorage)
             || keyStorage.Key is not { } key
-            || !_record.TryGetRecord<GeneralStationRecord>(station, key, out var record))
+            || !_record.TryGetRecord<GeneralStationRecord>(key, out var record))
         {
             return;
         }
@@ -240,6 +232,6 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         if (!string.IsNullOrWhiteSpace(newJobIcon))
             record.JobIcon = newJobIcon;
 
-        _record.Synchronize(station);
+        _record.Synchronize(key);
     }
 }

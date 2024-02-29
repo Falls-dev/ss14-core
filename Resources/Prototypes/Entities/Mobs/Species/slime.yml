@@ -5,9 +5,6 @@
   abstract: true
   components:
   - type: Hunger
-    starvationDamage:
-      types:
-        Bloodloss: 0.5
   - type: Thirst
   - type: Icon
     sprite: Mobs/Species/Slime/parts.rsi
@@ -17,6 +14,7 @@
     requiredLegs: 2
   - type: HumanoidAppearance
     species: SlimePerson
+    bodyType: SlimeNormal
   - type: Speech
     speechVerb: Slime
     speechSounds: Slime
@@ -79,3 +77,4 @@
   components:
     - type: HumanoidAppearance
       species: SlimePerson
+      bodyType: SlimeNormal

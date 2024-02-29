@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Net;
 using System.Threading.Tasks;
 using Content.Server._White.PandaSocket.Interfaces;
+using Content.Server.Database;
 using Content.Shared.Database;
 using Content.Shared.Roles;
 using Robust.Shared.Network;
@@ -27,6 +28,10 @@ public interface IBanManager
     public void CreateServerBan(NetUserId? target, string? targetUsername, NetUserId? banningAdmin, (IPAddress, int)? addressRange, ImmutableArray<byte>? hwid, uint? minutes, NoteSeverity severity, string reason, bool isGlobalBan);
     public HashSet<string>? GetRoleBans(NetUserId playerUserId);
     public HashSet<string>? GetJobBans(NetUserId playerUserId);
+
+    public HashSet<ServerBanDef> GetServerBans(NetUserId userId); // Miracle edit
+    public void RemoveCachedServerBan(NetUserId userId, int? id); // Miracle edit
+    public void AddCachedServerBan(ServerBanDef banDef); // Miracle edit
 
     /// <summary>
     /// Creates a job ban for the specified target, username or GUID

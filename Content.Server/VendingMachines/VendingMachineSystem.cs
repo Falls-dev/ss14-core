@@ -26,6 +26,7 @@ using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Content.Shared.Tag;
 using Content.Shared.Throwing;
+using Content.Shared.UserInterface;
 using Content.Shared.VendingMachines;
 using Content.Shared._White.Economy;
 using Robust.Server.GameObjects;
@@ -322,7 +323,7 @@ namespace Content.Server.VendingMachines
             if (_accessReader.IsAllowed(sender, uid, accessReader) || HasComp<EmaggedComponent>(uid))
                 return true;
 
-            Popup.PopupEntity(Loc.GetString("vending-machine-component-try-eject-access-denied"), uid);
+            Popup.PopupClient(Loc.GetString("vending-machine-component-try-eject-access-denied"), uid, sender);
             Deny(uid, vendComponent);
             return false;
         }
@@ -350,14 +351,19 @@ namespace Content.Server.VendingMachines
 
             if (entry == null)
             {
-                Popup.PopupEntity(Loc.GetString("vending-machine-component-try-eject-invalid-item"), uid);
+                if (sender.HasValue)
+                    Popup.PopupClient(Loc.GetString("vending-machine-component-try-eject-invalid-item"), uid, sender.Value);
+
+
                 Deny(uid, vendComponent);
                 return;
             }
 
             if (entry.Amount <= 0)
             {
-                Popup.PopupEntity(Loc.GetString("vending-machine-component-try-eject-out-of-stock"), uid);
+                if (sender.HasValue)
+                    Popup.PopupClient(Loc.GetString("vending-machine-component-try-eject-out-of-stock"), uid, sender.Value);
+
                 Deny(uid, vendComponent);
                 return;
             }

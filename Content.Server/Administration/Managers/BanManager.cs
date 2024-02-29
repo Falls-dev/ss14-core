@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Content.Server._Miracle.GulagSystem;
 using Content.Server.Chat.Managers;
 using Content.Server.Database;
 using Content.Server.GameTicking;
@@ -47,6 +48,7 @@ public sealed class BanManager : IBanManager, IPostInjectInit
     public const string UnknownServer = "unknown";
 
     private readonly Dictionary<NetUserId, HashSet<ServerRoleBanDef>> _cachedRoleBans = new();
+    private readonly Dictionary<NetUserId, HashSet<ServerBanDef>> _cachedServerBans = new(); // Miracle edit
 
     public void Initialize()
     {
@@ -63,6 +65,7 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         var netChannel = e.Session.Channel;
         ImmutableArray<byte>? hwId = netChannel.UserData.HWId.Length == 0 ? null : netChannel.UserData.HWId;
         await CacheDbRoleBans(e.Session.UserId, netChannel.RemoteEndPoint.Address, hwId);
+        await CacheDbServerBans(e.Session.UserId, netChannel.RemoteEndPoint.Address, hwId); //Miracle edit
 
         SendRoleBans(e.Session);
     }
@@ -97,11 +100,22 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         _cachedRoleBans[userId] = userRoleBans;
     }
 
+    //Miracle edit start
+    private async Task CacheDbServerBans(NetUserId userId, IPAddress? address = null, ImmutableArray<byte>? hwId = null)
+    {
+        var serverBans = await _db.GetServerBansAsync(address, userId, hwId, false, _cfg.GetCVar(CCVars.AdminLogsServerName));
+
+        var userServerBans = new HashSet<ServerBanDef>(serverBans);
+
+        _cachedServerBans[userId] = userServerBans;
+    }
+    //Miracle edit end
+
     public void Restart()
     {
         // Clear out players that have disconnected.
         var toRemove = new List<NetUserId>();
-        foreach (var player in _cachedRoleBans.Keys)
+        foreach (var player in _cachedRoleBans.Keys.Concat(_cachedServerBans.Keys)) // Miracle edit
         {
             if (!_playerManager.TryGetSessionById(player, out _))
                 toRemove.Add(player);
@@ -110,6 +124,7 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         foreach (var player in toRemove)
         {
             _cachedRoleBans.Remove(player);
+            _cachedServerBans.Remove(player); //Miracle edit
         }
 
         // Check for expired bans
@@ -117,6 +132,13 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         {
             roleBans.RemoveWhere(ban => DateTimeOffset.Now > ban.ExpirationTime);
         }
+
+        //Miracle edit start
+        foreach (var serverBan in _cachedServerBans.Values)
+        {
+            serverBan.RemoveWhere(ban => DateTimeOffset.Now > ban.ExpirationTime);
+        }
+        //Miracle edit end
     }
 
     #region Server Bans
@@ -182,6 +204,31 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         _sawmill.Info(logMessage);
         _chat.SendAdminAlert(logMessage);
 
+
+        if (banDef.UserId.HasValue)
+        {
+            var banlist = await _db.GetServerBansAsync(addressRange?.Item1, target, hwid, false);
+            if (banlist.Count > 0 && banlist[^1].Id.HasValue)
+            {
+                var banDefWithId = new ServerBanDef(
+                    banlist[^1].Id,
+                    banDef.UserId,
+                    banDef.Address,
+                    banDef.HWId,
+                    banDef.BanTime,
+                    banDef.ExpirationTime,
+                    banDef.RoundId,
+                    banDef.PlaytimeAtNote,
+                    banDef.Reason,
+                    banDef.Severity,
+                    banDef.BanningAdmin,
+                    banDef.Unban,
+                    banDef.ServerName);
+
+                _cachedServerBans.GetOrNew(banDef.UserId.Value).Add(banDefWithId);
+            }
+        }
+
         // If we're not banning a player we don't care about disconnecting people
         if (target == null)
             return;
@@ -189,11 +236,47 @@ public sealed class BanManager : IBanManager, IPostInjectInit
         // Is the player connected?
         if (!_playerManager.TryGetSessionById(target.Value, out var targetPlayer))
             return;
-        // If they are, kick them
-        var message = banDef.FormatBanMessage(_cfg, _localizationManager);
-        targetPlayer.Channel.Disconnect(message);
+        // Kick when perma
+        if (banDef.ExpirationTime == null)
+        {
+            var message = banDef.FormatBanMessage(_cfg, _localizationManager);
+            targetPlayer.Channel.Disconnect(message);
+        }
+        else // Teleport to gulag
+        {
+            var gulag = _systems.GetEntitySystem<GulagSystem>();
+            gulag.SendToGulag(targetPlayer);
+        }
     }
     #endregion
+
+    //Miracle edit start
+    public HashSet<ServerBanDef> GetServerBans(NetUserId userId)
+    {
+        if (_cachedServerBans.TryGetValue(userId, out var bans))
+        {
+            return bans;
+        }
+
+        return new HashSet<ServerBanDef>();
+    }
+
+    public void RemoveCachedServerBan(NetUserId userId, int? id)
+    {
+        if (_cachedServerBans.TryGetValue(userId, out var bans))
+        {
+            bans.RemoveWhere(ban => ban.Id == id);
+        }
+    }
+
+    public void AddCachedServerBan(ServerBanDef banDef)
+    {
+        if (banDef.UserId == null)
+            return;
+
+        _cachedServerBans.GetOrNew(banDef.UserId.Value).Add(banDef);
+    }
+    //Miracle edit end
 
     #region Job Bans
     // If you are trying to remove timeOfBan, please don't. It's there because the note system groups role bans by time, reason and banning admin.

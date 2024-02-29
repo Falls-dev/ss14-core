@@ -8,16 +8,17 @@ using Content.Server.DeviceNetwork;
 using Content.Server.DeviceNetwork.Components;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.GameTicking;
+using Content.Server.Screens.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server._White.PandaSocket.Main;
 using Content.Shared.Database;
+using Content.Shared.DeviceNetwork;
 using Content.Shared.GameTicking;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
-using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -35,14 +36,11 @@ namespace Content.Server.RoundEnd
         [Dependency] private readonly IConfigurationManager _cfg = default!;
         [Dependency] private readonly IChatManager _chatManager = default!;
         [Dependency] private readonly IGameTiming _gameTiming = default!;
-        [Dependency] private readonly IMapManager _mapManager = default!;
-
         [Dependency] private readonly IPrototypeManager _protoManager = default!;
         [Dependency] private readonly ChatSystem _chatSystem = default!;
         [Dependency] private readonly GameTicker _gameTicker = default!;
         [Dependency] private readonly DeviceNetworkSystem _deviceNetworkSystem = default!;
         [Dependency] private readonly EmergencyShuttleSystem _shuttle = default!;
-        [Dependency] private readonly ShuttleTimerSystem _shuttleTimerSystem = default!;
         [Dependency] private readonly SharedAudioSystem _audio = default!;
         [Dependency] private readonly StationSystem _stationSystem = default!;
 
@@ -124,9 +122,9 @@ namespace Content.Server.RoundEnd
         /// </summary>
         public EntityUid? GetCentcomm()
         {
-            return AllEntityQuery<StationCentcommComponent, TransformComponent>().MoveNext(out _, out var xform)
-                ? xform.MapUid
-                : null;
+            AllEntityQuery<StationCentcommComponent>().MoveNext(out var centcomm);
+
+            return centcomm == null ? null : centcomm.MapEntity;
         }
 
         public bool CanCallOrRecall()
@@ -279,7 +277,7 @@ namespace Content.Server.RoundEnd
             SendRoundStatus("shuttle_recalled");
             //WD-EDIT
 
-            // remove all active shuttle timers
+            // remove active clientside evac shuttle timers by zeroing the target time
             var zero = TimeSpan.Zero;
             var shuttle = _shuttle.GetShuttle();
             if (shuttle != null && TryComp<DeviceNetworkComponent>(shuttle, out var net))
@@ -292,7 +290,6 @@ namespace Content.Server.RoundEnd
                     [ShuttleTimerMasks.ShuttleTime] = zero,
                     [ShuttleTimerMasks.SourceTime] = zero,
                     [ShuttleTimerMasks.DestTime] = zero,
-                    [ShuttleTimerMasks.Text] = new[] { string.Empty, string.Empty }
                 };
 
                 _deviceNetworkSystem.QueuePacket(shuttle.Value, null, payload, net.TransmitFrequency);

@@ -12,7 +12,10 @@ public sealed partial class GunSystem
         SubscribeLocalEvent<BallisticAmmoProviderComponent, UpdateAmmoCounterEvent>(OnBallisticAmmoCount);
     }
 
-    private void OnBallisticAmmoCount(EntityUid uid, BallisticAmmoProviderComponent component, UpdateAmmoCounterEvent args)
+    private void OnBallisticAmmoCount(
+        EntityUid uid,
+        BallisticAmmoProviderComponent component,
+        UpdateAmmoCounterEvent args)
     {
         if (args.Control is DefaultStatusControl control)
         {
@@ -33,8 +36,11 @@ public sealed partial class GunSystem
             var existing = component.Entities[^1];
             component.Entities.RemoveAt(component.Entities.Count - 1);
 
-            Containers.Remove(existing, component.Container);
-            EnsureShootable(existing);
+            if (Containers.CanRemove(existing, component.Container)) // WD EDIT
+            {
+                Containers.Remove(existing, component.Container);
+                EnsureShootable(existing);
+            }
         }
         else if (component.UnspawnedCount > 0)
         {

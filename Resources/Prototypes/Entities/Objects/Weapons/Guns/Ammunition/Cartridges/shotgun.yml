@@ -10,7 +10,7 @@
     - ShellShotgun
   - type: CartridgeAmmo
     count: 6
-    spread: 15
+    spread: 22
     soundEject:
       collection: ShellEject
   - type: Sprite
@@ -145,7 +145,7 @@
         map: [ "enum.AmmoVisualLayers.Base" ]
   - type: CartridgeAmmo
     count: 10
-    spread: 45 #deadly if you can get up close... otherwise, good luck doing any kind of real damage
+    spread: 35 #deadly if you can get up close... otherwise, good luck doing any kind of real damage
     proto: PelletShotgunImprovised
   - type: SpentAmmoVisuals
     state: "improvised"
@@ -159,14 +159,11 @@
   name: uranium shotgun shell
   parent: BaseShellShotgun
   components:
-  - type: Sprite
-    layers:
-      - state: depleted-uranium
-        map: [ "enum.AmmoVisualLayers.Base" ]
-  - type: CartridgeAmmo
-    count: 5
-    spread: 6
-    proto: PelletShotgunUranium
-  - type: SpentAmmoVisuals
-    state: "depleted-uranium"
-
+    - type: Sprite
+      layers:
+        - state: depleted-uranium
+          map: [ "enum.AmmoVisualLayers.Base" ]
+    - type: CartridgeAmmo
+      proto: PelletShotgunUranium
+    - type: SpentAmmoVisuals
+      state: "depleted-uranium"

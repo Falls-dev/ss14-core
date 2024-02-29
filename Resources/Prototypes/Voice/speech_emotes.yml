@@ -1,4 +1,4 @@
-﻿# vocal emotes
+# vocal emotes
 - type: emote
   id: Scream
   category: Vocal
@@ -76,7 +76,7 @@
   id: Crying
   category: Vocal
   buttonText: Плакать
-  chatMessages: [ плакать ]
+  chatMessages: [ плачет ]
   chatTriggers:
   - плачет
   - заплакал
@@ -97,14 +97,14 @@
 - type: emote
   id: Chitter
   category: Vocal
-  chatMessages: [ тарахтит ]
+  chatMessages: [ стрекочет ]
   chatTriggers:
+  - стрекочет
+  - стрекочет.
+  - стрекочет!
   - щебечет
   - щебечет.
   - щебечет!
-  - тарахтит
-  - тарахтит.
-  - тарахтит!
 
 - type: emote
   id: Squeak
@@ -220,3 +220,41 @@
   chatMessages: [ "emote-deathgasp" ]
   chatTriggers:
   - задыхается
+
+- type: emote
+  id: Buzz
+  category: Vocal
+  chatMessages: [жужжит]
+  chatTriggers:
+    - жужжит
+    - жужжит.
+    - жужжит!
+    - buzzing
+    - buzzing!
+    - buzzing.
+    - buzz
+    - buzz.
+    - buzz!
+    - buzzed
+    - buzzed.
+    - buzzed!
+    - buzzes
+    - buzzes.
+    - buzzes!
+
+- type: emote
+  id: Chirp
+  category: Vocal
+  chatMessages: [чирикает]
+  chatTriggers:
+  - чирик
+  - чирик.
+  - чирикает.
+  - чирикает
+  - чик-чирикает
+  - чик-чирикает.
+  - chirps.
+  - chirp.
+  - chirp!
+  - chirping.
+  - chirped.

@@ -760,6 +760,11 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("backpack");
 
+                    b.Property<string>("BodyType")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("body_type");
+
                     b.Property<string>("BorgName")
                         .IsRequired()
                         .HasColumnType("text")
@@ -845,6 +850,10 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Property<int>("Slot")
                         .HasColumnType("integer")
                         .HasColumnName("slot");
+
+                    b.Property<int>("SpawnPriority")
+                        .HasColumnType("integer")
+                        .HasColumnName("spawn_priority");
 
                     b.Property<string>("Species")
                         .IsRequired()

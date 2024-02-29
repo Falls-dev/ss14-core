@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   id: BaseWindoor
   parent: BaseStructure
   abstract: true
@@ -59,8 +59,10 @@
   - type: DeviceLinkSource
     ports:
     - DoorStatus
+    lastSignals:
+      DoorStatus: false
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: Glass
   - type: ExaminableDamage
     messages: WindowMessages
@@ -139,7 +141,6 @@
   - type: StaticPrice
     price: 100
   - type: PryUnpowered
-  - type: ReflectAspectMark
 
 - type: entity
   id: BaseSecureWindoor

@@ -711,6 +711,11 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("backpack");
 
+                    b.Property<string>("BodyType")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("body_type");
+
                     b.Property<string>("BorgName")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -796,6 +801,10 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Property<int>("Slot")
                         .HasColumnType("INTEGER")
                         .HasColumnName("slot");
+
+                    b.Property<int>("SpawnPriority")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("spawn_priority");
 
                     b.Property<string>("Species")
                         .IsRequired()

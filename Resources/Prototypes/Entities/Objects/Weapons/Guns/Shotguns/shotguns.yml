@@ -36,6 +36,7 @@
     proto: ShellShotgun
     soundInsert:
       path: /Audio/Weapons/Guns/MagIn/shotgun_insert.ogg
+    autoCycle: false
   - type: ContainerContainer
     containers:
       ballistic-ammo: !type:Container
@@ -117,6 +118,7 @@
     fireRate: 2
   - type: BallisticAmmoProvider
     capacity: 2
+    autoCycle: true
   - type: Construction
     graph: ShotgunSawn
     node: start
@@ -195,6 +197,7 @@
     fireRate: 4
   - type: BallisticAmmoProvider
     capacity: 2
+    autoCycle: true
   - type: Construction
     graph: ShotgunSawn
     node: shotgunsawn

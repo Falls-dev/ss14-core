@@ -375,6 +375,25 @@
       prob: 0.05
 
 - type: entity
+  id: BorerSpawn
+  parent: BaseGameRule
+  noSpawn: true
+  components:
+  - type: StationEvent
+    earliestStart: 20
+    minimumPlayers: 15
+    weight: 5
+    duration: 60
+    startDelay: 30
+    startAnnouncement: borer-event-announcement
+    startAudio:
+      path: /Audio/Announcements/attention.ogg
+  - type: VentCrittersRule
+    specialEntries:
+    - id: SpawnPointGhostBorer
+      prob: 0.03
+
+- type: entity
   id: SpiderClownSpawn
   parent: BaseGameRule
   noSpawn: true
@@ -460,9 +479,9 @@
   id: IonStorm
   components:
   - type: StationEvent
-    weight: 5
+    weight: 10
     earliestStart: 20
-    reoccurrenceDelay: 60
+    reoccurrenceDelay: 20
     duration: 1
   - type: IonStormRule
 

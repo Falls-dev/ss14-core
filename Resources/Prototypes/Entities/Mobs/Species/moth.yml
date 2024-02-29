@@ -7,11 +7,8 @@
   components:
   - type: HumanoidAppearance
     species: Moth
+    bodyType: MothNormal
   - type: Hunger
-    starvationDamage:
-      types:
-        Cold: 0.5
-        Bloodloss: 0.5
   - type: Thirst
   - type: Icon
     sprite: Mobs/Species/Moth/parts.rsi
@@ -130,3 +127,4 @@
   components:
   - type: HumanoidAppearance
     species: Moth
+    bodyType: MothNormal

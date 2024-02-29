@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Server.GameTicking;
@@ -169,8 +170,8 @@ namespace Content.Server.Connection
             }
             //WD-EDIT
 
-            var bans = await _db.GetServerBansAsync(addr, userId, hwId, includeUnbanned: false);
-            if (bans.Count > 0)
+            var bans = await _db.GetServerBansAsync(addr, userId, hwId, includeUnbanned: false, _cfg.GetCVar(CCVars.AdminLogsServerName));
+            if (bans.Count > 0 && bans.Any(x=> x.ExpirationTime == null)) //Miracle edit
             {
                 var firstBan = bans[0];
                 var message = firstBan.FormatBanMessage(_cfg, _loc);

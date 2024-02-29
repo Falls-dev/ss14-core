@@ -10,7 +10,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 28
+        Piercing: 34
 
 - type: entity
   id: PelletShotgunBeanbag
@@ -26,7 +26,7 @@
       types:
         Blunt: 10
   - type: StaminaDamageOnCollide
-    damage: 55 # 2 hits to stun
+    damage: 40 # 3 hits to stun
 
 - type: entity
   id: PelletShotgun
@@ -40,7 +40,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 10
+        Piercing: 13
 
 - type: entity
   id: PelletShotgunIncendiary
@@ -54,7 +54,7 @@
   - type: Projectile
     damage:
       types:
-        Blunt: 3
+        Blunt: 6
         Heat: 7
   - type: IgnitionSource
     ignited: true
@@ -132,10 +132,7 @@
           !type:PhysShapeAabb
           bounds: "-0.1,-0.1,0.1,0.1"
         mask:
-        - BulletImpassable
-  - type: Tag
-    tags:
-    - PelletShotgunFlare
+          - BulletImpassable
   - type: Sprite
     sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
     state: buckshot-flare
@@ -177,8 +174,8 @@
   - type: Projectile
     damage:
       types:
-        Radiation: 5
-        Piercing: 5
+        Radiation: 6
+        Piercing: 7
 
 - type: entity
   id: PelletGrapeshot #tally fucking ho

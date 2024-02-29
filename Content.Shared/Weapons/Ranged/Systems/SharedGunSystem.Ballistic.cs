@@ -195,10 +195,10 @@ public abstract partial class SharedGunSystem
 
         // Reset shotting for cycling
         if (Resolve(uid, ref gunComp, false) &&
-            gunComp is { FireRate: > 0f } &&
+            gunComp is { FireRateModified: > 0f } &&
             !Paused(uid))
         {
-            gunComp.NextFire = Timing.CurTime + TimeSpan.FromSeconds(1 / gunComp.FireRate);
+            gunComp.NextFire = Timing.CurTime + TimeSpan.FromSeconds(1 / gunComp.FireRateModified);
         }
 
         Dirty(uid, component);
@@ -206,6 +206,7 @@ public abstract partial class SharedGunSystem
 
         var shots = GetBallisticShots(component);
         Cycle(uid, component, coordinates);
+        component.Cycled = true;
 
         var text = Loc.GetString(shots == 0 ? "gun-ballistic-cycled-empty" : "gun-ballistic-cycled");
 
@@ -243,6 +244,9 @@ public abstract partial class SharedGunSystem
 
     private void OnBallisticTakeAmmo(EntityUid uid, BallisticAmmoProviderComponent component, TakeAmmoEvent args)
     {
+        if (!component.IsCycled)
+            return;
+
         for (var i = 0; i < args.Shots; i++)
         {
             EntityUid entity;
@@ -252,16 +256,28 @@ public abstract partial class SharedGunSystem
                 entity = component.Entities[^1];
 
                 args.Ammo.Add((entity, EnsureShootable(entity)));
-                component.Entities.RemoveAt(component.Entities.Count - 1);
-                Containers.Remove(entity, component.Container);
+                if (component.AutoCycle && (!TryComp(entity, out CartridgeAmmoComponent? cartridge) || !cartridge.Spent)) // WD EDIT
+                {
+                    component.Entities.RemoveAt(component.Entities.Count - 1);
+                    Containers.Remove(entity, component.Container);
+                }
             }
             else if (component.UnspawnedCount > 0)
             {
                 component.UnspawnedCount--;
                 entity = Spawn(component.Proto, args.Coordinates);
                 args.Ammo.Add((entity, EnsureShootable(entity)));
+                if (!component.AutoCycle && HasComp<CartridgeAmmoComponent>(entity)) // WD EDIT
+                {
+                    component.Entities.Add(entity);
+                    Containers.Insert(entity, component.Container);
+                }
             }
         }
+
+        //un-cycle the firearm
+        if (!component.AutoCycle)
+            component.Cycled = false;
 
         UpdateBallisticAppearance(uid, component);
         Dirty(uid, component);

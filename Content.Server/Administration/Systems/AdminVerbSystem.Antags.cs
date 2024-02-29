@@ -69,7 +69,7 @@ public sealed partial class AdminVerbSystem
         {
             Text = Loc.GetString("admin-verb-text-make-changeling"),
             Category = VerbCategory.Antag,
-            Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/Actions/ling_absorb.png")),
+            Icon = new SpriteSpecifier.Texture(new ("/Textures/White/Actions/changeling.rsi/absorb.png")),
             Act = () =>
             {
                 if (!_minds.TryGetSession(targetMindComp.Mind, out var session))
@@ -160,7 +160,7 @@ public sealed partial class AdminVerbSystem
                 if (!_minds.TryGetSession(targetMindComp.Mind, out var session))
                     return;
 
-                _thief.AdminMakeThief(session, false); //Midround add pacific is bad
+                _thief.AdminMakeThief(session); //Midround add pacific is bad
             },
             Impact = LogImpact.High,
             Message = Loc.GetString("admin-verb-make-thief"),
@@ -172,14 +172,13 @@ public sealed partial class AdminVerbSystem
         {
             Text = "Сделать культистом.",
             Category = VerbCategory.Antag,
-            Icon = new SpriteSpecifier.Texture(new("/Textures//White/Cult/interface.rsi/icon.png")),
+            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/White/Cult/interface.rsi"), "icon"),
             Act = () =>
             {
                 if (!_minds.TryGetSession(targetMindComp.Mind, out var session))
                     return;
 
-                var playerSession = session;
-                _cultRule.MakeCultist(playerSession!);
+                _cultRule.MakeCultist(session);
             }
         };
         args.Verbs.Add(cultist);

@@ -17,9 +17,15 @@ public sealed partial class MagneticGlovesComponent : Component
     [DataField("action")]
     public EntProtoId ToggleAction = "ActionToggleMagneticGloves";
 
-    [DataField("wattage"), ViewVariables(VVAccess.ReadWrite)]
-    public float Wattage = 16.5f;
+    [ViewVariables(VVAccess.ReadOnly)]
+    public TimeSpan GlovesReadyAt = TimeSpan.Zero;
 
-    [DataField]
-    public string Debugger = "";
+    [ViewVariables(VVAccess.ReadOnly)]
+    public TimeSpan GlovesLastActivation = TimeSpan.Zero;
+
+    [DataField("glovesCooldown")]
+    public TimeSpan GlovesCooldown = TimeSpan.FromSeconds(60);
+
+    [DataField("glovesActiveTime")]
+    public TimeSpan GlovesActiveTime = TimeSpan.FromSeconds(60);
 }

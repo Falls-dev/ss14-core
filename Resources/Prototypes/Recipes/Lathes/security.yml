@@ -612,7 +612,7 @@
     Steel: 1000
     Glass: 500
     Plastic: 500
-     
+
 - type: latheRecipe
   id: MagazineGrenadeEmpty
   result: MagazineGrenadeEmpty
@@ -620,7 +620,7 @@
   materials:
      Steel: 150
      Plastic: 50
-     
+
 - type: latheRecipe
   id: GrenadeEMP
   result: GrenadeEMP
@@ -629,7 +629,7 @@
      Steel: 150
      Plastic: 100
      Glass: 20
-     
+
 - type: latheRecipe
   id: GrenadeBlast
   result: GrenadeBlast
@@ -638,7 +638,7 @@
      Steel: 150
      Plastic: 100
      Gold: 50
-     
+
 - type: latheRecipe
   id: GrenadeFlash
   result: GrenadeFlash
@@ -647,4 +647,22 @@
      Steel: 150
      Plastic: 100
      Glass: 20
-     
+
+- type: latheRecipe
+  id: ClothingHandsGlovesMagnetic
+  result: ClothingHandsGlovesMagnetic
+  completetime: 3
+  materials:
+    Cloth: 200
+    Steel: 100
+    Plastic: 50
+
+- type: latheRecipe
+  id: ClothingHandsGlovesMagneticAdvanced
+  result: ClothingHandsGlovesMagneticAdvanced
+  completetime: 3
+  materials:
+    Cloth: 200
+    Steel: 100
+    Plastic: 50
+    Silver: 50

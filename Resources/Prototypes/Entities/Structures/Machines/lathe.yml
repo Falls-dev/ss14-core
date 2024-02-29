@@ -321,6 +321,8 @@
       - KitchenKnife # WD EDIT
       - ButchCleaver # WD EDIT
       - DeviceQuantumSpinInverter
+      - ClothingHandsGlovesMagnetic
+      - ClothingHandsGlovesMagneticAdvanced
   - type: EmagLatheRecipes
     emagDynamicRecipes:
       - ExplosivePayload

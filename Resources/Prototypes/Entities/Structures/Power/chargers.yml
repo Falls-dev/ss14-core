@@ -166,6 +166,7 @@
           - ProjectileBatteryAmmoProvider
           - Stunbaton
           - TwoModeEnergyAmmoProvider
+          - MagneticGloves
 
 - type: entity
   parent: BaseItemRecharger

@@ -1,6 +1,6 @@
 ﻿- type: statusIcon
   id: MasterMindslaveIcon
-  priority: 0
+  priority: 3
   locationPreference: Left
   icon:
     sprite: /Textures/White/Overlays/mindslave.rsi
@@ -8,7 +8,7 @@
 
 - type: statusIcon
   id: SlaveMindslaveIcon
-  priority: 0
+  priority: 3
   locationPreference: Left
   icon:
     sprite: /Textures/White/Overlays/mindslave.rsi

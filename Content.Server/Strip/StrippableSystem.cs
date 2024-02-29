@@ -74,7 +74,7 @@ namespace Content.Server.Strip
 
             if ((args.Slot == "gloves" || args.IsHand) && TryComp(strippable, out PreventStrippingFromHandsAndGlovesComponent? mag))
             {
-                var message = Loc.GetString("mag-gloves-cant-strip");
+                var message = Loc.GetString("maggloves-cant-strip");
                 _popup.PopupEntity(message, user, user);
                 return;
             }

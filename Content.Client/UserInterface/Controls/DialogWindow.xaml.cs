@@ -189,7 +189,12 @@ public sealed partial class DialogWindow : FancyWindow
     private (Control, Func<string>) SetupLineEditHex(Func<string, bool> valid, string name, QuickDialogEntry entry, bool last, object? value)
     {
         var (control, returner) = SetupLineEditNumber(valid, name, entry, last, value);
-        ((LineEdit) control).OnTextChanged += e => { e.Control.Text = e.Text.ToUpper(); };
+        var le = (LineEdit) control;
+        if(value is int)
+        {
+            le.Text = ((int)value).ToString("X");
+        }
+        le.OnTextChanged += e => { e.Control.Text = e.Text.ToUpper(); };
         return (control, returner);
     }
 

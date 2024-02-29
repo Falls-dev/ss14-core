@@ -7,7 +7,7 @@ namespace Content.Shared._White.Cult.Components;
 /// <summary>
 /// This is used for tagging a mob as a cultist.
 /// </summary>
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CultistComponent : Component
 {
     [DataField("greetSound", customTypeSerializer: typeof(SoundSpecifierTypeSerializer))]
@@ -18,8 +18,8 @@ public sealed partial class CultistComponent : Component
 
     public CancellationTokenSource? HolyConvertToken;
 
-    [NonSerialized]
-    public List<EntityUid?> SelectedEmpowers = new();
+    [AutoNetworkedField]
+    public List<NetEntity?> SelectedEmpowers = new();
 
     public static string SummonCultDaggerAction = "InstantActionSummonCultDagger";
 

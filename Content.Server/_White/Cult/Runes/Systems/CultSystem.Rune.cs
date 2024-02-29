@@ -110,6 +110,7 @@ public sealed partial class CultSystem : EntitySystem
         InitializeBarrierSystem();
         InitializeConstructsAbilities();
         InitializeActions();
+        InitializeVerb();
     }
 
     private float _timeToDraw;
@@ -1143,17 +1144,19 @@ public sealed partial class CultSystem : EntitySystem
 
         if (component.IsRune)
         {
-            if (comp.SelectedEmpowers.Count > component.MaxAllowedCultistActions)
+            if (comp.SelectedEmpowers.Count >= component.MaxAllowedCultistActions)
             {
                 _popupSystem.PopupEntity(Loc.GetString("cult-too-much-empowers"), uid);
                 return;
             }
 
-            comp.SelectedEmpowers.Add(_actionsSystem.AddAction(playerEntity.Value, action));
+            comp.SelectedEmpowers.Add(GetNetEntity(_actionsSystem.AddAction(playerEntity.Value, action)));
+            Dirty(playerEntity.Value, comp);
         }
         else if (comp.SelectedEmpowers.Count < component.MinRequiredCultistActions)
         {
-            comp.SelectedEmpowers.Add(_actionsSystem.AddAction(playerEntity.Value, action));
+            comp.SelectedEmpowers.Add(GetNetEntity(_actionsSystem.AddAction(playerEntity.Value, action)));
+            Dirty(playerEntity.Value, comp);
         }
     }
 

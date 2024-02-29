@@ -281,7 +281,7 @@ public sealed partial class ExplosionSystem
             var alertMinExplosionIntensity = _cfg.GetCVar(CCVars.AdminAlertExplosionMinIntensity);
             if (alertMinExplosionIntensity > -1 && totalIntensity >= alertMinExplosionIntensity)
                 _chatManager.SendAdminAnnouncement(Loc.GetString("admin-chatalert-explosion-player",
-                    ("user", $"{ToPrettyString(user.Value):user}"),("entity", ToPrettyString(uid)), ("coordinates", entPos), ("intensity", totalIntensity), ("slope", slope)));
+                    ("player", $"{ToPrettyString(user.Value):user}"),("entity", ToPrettyString(uid)), ("coordinates", entPos), ("intensity", totalIntensity), ("slope", slope)));
         }
     }
 

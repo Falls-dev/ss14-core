@@ -5,13 +5,15 @@
   noSpawn: true
   components:
     - type: EntityTargetAction
-      useDelay: 50
       canTargetSelf: false
       icon:
         sprite: /Textures/Objects/Materials/Sheets/metal.rsi
         state: steel
       event: !type:CultTwistedConstructionActionEvent
       itemIconStyle: BigAction
+      charges: 1
+      temporary: true
+      removeOnNoCharges: true
 
 - type: entity
   id: ActionCultTeleport
@@ -20,7 +22,6 @@
   noSpawn: true
   components:
     - type: EntityTargetAction
-      useDelay: 30
       whitelist:
         components:
           - HumanoidAppearance
@@ -33,6 +34,9 @@
         state: teleport
       event: !type:CultTeleportTargetActionEvent
       itemIconStyle: BigAction
+      charges: 1
+      temporary: true
+      removeOnNoCharges: true
 
 - type: entity
   id: ActionCultSummonCombatEquipment
@@ -41,7 +45,6 @@
   noSpawn: true
   components:
     - type: EntityTargetAction
-      useDelay: 300
       whitelist:
         components:
           - HumanoidAppearance
@@ -54,6 +57,9 @@
         state: armor
       event: !type:CultSummonCombatEquipmentTargetActionEvent
       itemIconStyle: BigAction
+      charges: 1
+      temporary: true
+      removeOnNoCharges: true
 
 - type: entity
   id: InstantActionSummonCultDagger
@@ -66,7 +72,9 @@
         sprite: /Textures/White/Cult/interface.rsi
         state: icon
       event: !type:CultSummonDaggerActionEvent
-      useDelay: 200
+      charges: 1
+      temporary: true
+      removeOnNoCharges: true
 
 - type: entity
   id: InstantActionBloodRites
@@ -79,4 +87,6 @@
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: blood_rites
       event: !type:CultBloodRitesInstantActionEvent
-      useDelay: 35
+      charges: 4
+      temporary: true
+      removeOnNoCharges: true

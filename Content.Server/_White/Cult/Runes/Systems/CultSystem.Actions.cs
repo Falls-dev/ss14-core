@@ -17,6 +17,7 @@ using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
 using Content.Shared._White.Cult;
 using Content.Shared._White.Cult.Actions;
+using Content.Shared.Actions;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
@@ -44,6 +45,13 @@ public partial class CultSystem
         SubscribeLocalEvent<CultistComponent, CultBloodRitesInstantActionEvent>(OnBloodRites);
         SubscribeLocalEvent<CultistComponent, CultTeleportTargetActionEvent>(OnTeleport);
         SubscribeLocalEvent<CultistComponent, CultStunTargetActionEvent>(OnStunTarget);
+        SubscribeLocalEvent<CultistComponent, ActionGettingRemovedEvent>(OnActionRemoved);
+    }
+
+    private void OnActionRemoved(Entity<CultistComponent> ent, ref ActionGettingRemovedEvent args)
+    {
+        ent.Comp.SelectedEmpowers.Remove(GetNetEntity(args.Action));
+        Dirty(ent);
     }
 
     private void OnStunTarget(EntityUid uid, CultistComponent component, CultStunTargetActionEvent args)

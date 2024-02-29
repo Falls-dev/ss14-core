@@ -1,0 +1,43 @@
+﻿- type: entity
+  id: BaseScroll
+  parent: BaseItem
+  name: "Magic Scroll"
+  description: "A relic of arcane lore, this ancient parchment bears witness to countless mystical incantations and forgotten spells."
+  noSpawn: true
+  components:
+    - type: Sprite
+      sprite: White/Misc/scrolls.rsi
+      layers:
+        - state: scroll
+    - type: Scroll
+      useSound:
+        path: /Audio/White/Items/scroll/use.ogg
+      afterUseSound:
+        path: /Audio/White/Items/scroll/after_use.ogg
+
+- type: entity
+  id: ScrollFireball
+  parent: BaseScroll
+  name: "Fireball scroll"
+  components:
+    - type: Scroll
+      actionId: ActionFireball
+      learnPopup: fireball
+
+- type: entity
+  id: ScrollForcewall
+  parent: BaseScroll
+  name: "Forcewall scroll"
+  components:
+    - type: Scroll
+      actionId: ActionForceWall
+      learnPopup: forcewall
+
+- type: entity
+  id: ScrollKnock
+  parent: BaseScroll
+  name: "Knock scroll"
+  components:
+    - type: Scroll
+      actionId: ActionKnock
+      learnPopup: knock-knock

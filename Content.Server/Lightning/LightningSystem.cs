@@ -3,6 +3,7 @@ using Content.Server.Beam;
 using Content.Server.Beam.Components;
 using Content.Server.Lightning.Components;
 using Content.Shared.Lightning;
+using Robust.Shared.Map;
 using Robust.Shared.Random;
 
 namespace Content.Server.Lightning;
@@ -57,6 +58,22 @@ public sealed class LightningSystem : SharedLightningSystem
         }
     }
 
+    /// <summary>
+    /// Shoots lightning from the specified user to the target coordinates.
+    /// </summary>
+    /// <param name="user">The entity shooting the lightning.</param>
+    /// <param name="targetCoordinates">The coordinates where the lightning will strike.</param>
+    /// <param name="lightningPrototype">The prototype of the lightning entity.</param>
+    /// <param name="triggerLightningEvents">Whether to trigger lightning events.</param>
+    public void ShootLightningToCoordinates(EntityUid user, MapCoordinates targetCoordinates, string lightningPrototype = "Lightning", bool triggerLightningEvents = true)
+    {
+        var targetEntities = _lookup.GetEntitiesInRange(targetCoordinates, 5f);
+
+        foreach (var targetEntity in targetEntities)
+        {
+            ShootLightning(user, targetEntity, lightningPrototype, triggerLightningEvents);
+        }
+    }
 
     /// <summary>
     /// Looks for objects with a LightningTarget component in the radius, prioritizes them, and hits the highest priority targets with lightning.

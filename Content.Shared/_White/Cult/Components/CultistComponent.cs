@@ -25,15 +25,21 @@ public sealed partial class CultistComponent : Component
 
     public static string BloodRitesAction = "InstantActionBloodRites";
 
+    public static string EmpPulseAction = "InstantActionEmpPulse";
+
     public static string CultTwistedConstructionAction = "ActionCultTwistedConstruction";
 
     public static string CultTeleportAction = "ActionCultTeleport";
 
     public static string CultSummonCombatEquipmentAction = "ActionCultSummonCombatEquipment";
 
+    public static string CultStunAction = "ActionCultStun";
+
+    public static string CultShadowShacklesAction = "ActionCultShadowShackles";
+
     public static List<string> CultistActions = new()
     {
         SummonCultDaggerAction, BloodRitesAction, CultTwistedConstructionAction, CultTeleportAction,
-        CultSummonCombatEquipmentAction
+        CultSummonCombatEquipmentAction, CultStunAction, EmpPulseAction, CultShadowShacklesAction
     };
 }

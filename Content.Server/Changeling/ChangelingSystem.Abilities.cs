@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server._White.Cult;
 using Content.Server.Administration.Systems;
 using Content.Server.Bible.Components;
 using Content.Server.Body.Components;
@@ -32,6 +33,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Miracle.UI;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.NukeOps;
 using Content.Shared.Pulling;
 using Content.Shared.Pulling.Components;
 using Content.Shared.Standing;
@@ -836,6 +838,12 @@ public sealed partial class ChangelingSystem
             EntityManager.AddComponent(polymorphEntity.Value, toAdd);
             _chemicalsSystem.UpdateAlert(polymorphEntity.Value, toAdd);
         }
+
+        if (HasComp<NukeOperativeComponent>(target))
+            EnsureComp<NukeOperativeComponent>(polymorphEntity.Value);
+
+        if (HasComp<PentagramComponent>(target))
+            EnsureComp<PentagramComponent>(polymorphEntity.Value);
 
         _implantSystem.TransferImplants(target, polymorphEntity.Value);
         _actionContainerSystem.TransferAllActionsFiltered(target, polymorphEntity.Value, polymorphEntity.Value);

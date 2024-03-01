@@ -25,6 +25,8 @@ public sealed class ChargeActionSystem : EntitySystem
 
     private ActionUIController? _controller;
 
+    public event Action<bool>? ChargingUpdated;
+
     private bool _charging;
     private float _chargeTime;
     private int _chargeLevel;
@@ -50,12 +52,14 @@ public sealed class ChargeActionSystem : EntitySystem
         {
             case BoundKeyState.Down:
                 _charging = true;
+                ChargingUpdated?.Invoke(_charging);
                 _chargeTime += frameTime;
                 _chargeLevel = (int)(_chargeTime / LevelChargeTime) + 1;
                 _chargeLevel = Math.Clamp(_chargeLevel, 1, 4);
                 break;
             case BoundKeyState.Up when _charging:
                 _charging = false;
+                ChargingUpdated?.Invoke(_charging);
                 _chargeTime = 0f;
                 HandleAction(actionId);
                 break;

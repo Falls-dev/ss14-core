@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.Administration.Systems;
+using Content.Server.Bible.Components;
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
 using Content.Server.Cuffs;
@@ -13,6 +14,7 @@ using Content.Server.Popups;
 using Content.Server.Store.Components;
 using Content.Server.Temperature.Components;
 using Content.Server.Temperature.Systems;
+using Content.Shared._White.Chaplain;
 using Content.Shared.Actions;
 using Content.Shared.Changeling;
 using Content.Shared.Chemistry.EntitySystems;
@@ -815,6 +817,30 @@ public sealed partial class ChangelingSystem
 
         _identity.QueueIdentityUpdate(polymorphEntity.Value);
 
+        if (HasComp<BibleUserComponent>(target))
+            EnsureComp<BibleUserComponent>(polymorphEntity.Value);
+
+        if (HasComp<HolyComponent>(target))
+            EnsureComp<HolyComponent>(polymorphEntity.Value);
+
+        if (TryComp(target, out ChangelingComponent? lingComp))
+        {
+            var toAdd = new ChangelingComponent
+            {
+                HiveName = lingComp.HiveName,
+                ChemicalsBalance = lingComp.ChemicalsBalance,
+                AbsorbedEntities = lingComp.AbsorbedEntities,
+                IsInited = lingComp.IsInited
+            };
+
+            EntityManager.AddComponent(polymorphEntity.Value, toAdd);
+            _chemicalsSystem.UpdateAlert(polymorphEntity.Value, toAdd);
+        }
+
+        _implantSystem.TransferImplants(target, polymorphEntity.Value);
+        _actionContainerSystem.TransferAllActionsFiltered(target, polymorphEntity.Value, polymorphEntity.Value);
+        _action.GrantContainedActions(polymorphEntity.Value, polymorphEntity.Value);
+
         return polymorphEntity;
     }
 
@@ -840,27 +866,11 @@ public sealed partial class ChangelingSystem
         if (reverted == null)
             return;
 
-        var toAdd = new ChangelingComponent
-        {
-            HiveName = component.HiveName,
-            ChemicalsBalance = component.ChemicalsBalance,
-            AbsorbedEntities = component.AbsorbedEntities,
-            IsInited = component.IsInited
-        };
-
-        EntityManager.AddComponent(reverted.Value, toAdd);
-
-        _implantSystem.TransferImplants(uid, reverted.Value);
-        _actionContainerSystem.TransferAllActionsFiltered(uid, reverted.Value, reverted.Value);
-        _action.GrantContainedActions(reverted.Value, reverted.Value);
-
         if (component.IsLesserForm)
         {
             //Don't copy IsLesserForm bool, because transferred component, in fact, new. Bool default value if false.
             StartUseDelayById(reverted.Value, ChangelingLesserForm);
         }
-
-        _chemicalsSystem.UpdateAlert(reverted.Value, component);
 
         StartUseDelayById(reverted.Value, ChangelingTransform);
     }

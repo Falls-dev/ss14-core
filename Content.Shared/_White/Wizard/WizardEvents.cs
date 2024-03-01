@@ -11,6 +11,12 @@ public sealed partial class ScrollDoAfterEvent : SimpleDoAfterEvent
 [Serializable, NetSerializable]
 public sealed partial class AddWizardChargeEvent : EntityEventArgs
 {
+    public string ChargeProto;
+
+    public AddWizardChargeEvent(string chargeProto)
+    {
+        ChargeProto = chargeProto;
+    }
 }
 
 [Serializable, NetSerializable]

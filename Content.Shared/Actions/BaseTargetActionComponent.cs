@@ -46,4 +46,7 @@ public abstract partial class BaseTargetActionComponent : BaseActionComponent
 
     [DataField]
     public bool IsChargeEnabled;
+
+    [DataField]
+    public string ChargeProto;
 }

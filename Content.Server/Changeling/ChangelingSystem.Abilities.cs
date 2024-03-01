@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server._White.Cult;
+using Content.Server._White.Cult.GameRule;
 using Content.Server.Administration.Systems;
 using Content.Server.Bible.Components;
 using Content.Server.Body.Components;
@@ -7,6 +8,7 @@ using Content.Server.Body.Systems;
 using Content.Server.Cuffs;
 using Content.Server.DoAfter;
 using Content.Server.Forensics;
+using Content.Server.GameTicking.Rules;
 using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
 using Content.Server.Mind;
@@ -16,6 +18,7 @@ using Content.Server.Store.Components;
 using Content.Server.Temperature.Components;
 using Content.Server.Temperature.Systems;
 using Content.Shared._White.Chaplain;
+using Content.Shared._White.Cult.Components;
 using Content.Shared.Actions;
 using Content.Shared.Changeling;
 using Content.Shared.Chemistry.EntitySystems;
@@ -33,7 +36,6 @@ using Content.Shared.Inventory;
 using Content.Shared.Miracle.UI;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.NukeOps;
 using Content.Shared.Pulling;
 using Content.Shared.Pulling.Components;
 using Content.Shared.Standing;
@@ -70,6 +72,8 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly BloodstreamSystem _blood = default!;
     [Dependency] private readonly CuffableSystem _cuffable = default!;
+    [Dependency] private readonly NukeopsRuleSystem _nukeOps = default!;
+    [Dependency] private readonly CultRuleSystem _cult = default!;
 
     private void InitializeAbilities()
     {
@@ -839,11 +843,9 @@ public sealed partial class ChangelingSystem
             _chemicalsSystem.UpdateAlert(polymorphEntity.Value, toAdd);
         }
 
-        if (HasComp<NukeOperativeComponent>(target))
-            EnsureComp<NukeOperativeComponent>(polymorphEntity.Value);
+        _nukeOps.TransferRole(target, polymorphEntity.Value);
 
-        if (HasComp<PentagramComponent>(target))
-            EnsureComp<PentagramComponent>(polymorphEntity.Value);
+        _cult.TransferRole(target, polymorphEntity.Value);
 
         _implantSystem.TransferImplants(target, polymorphEntity.Value);
         _actionContainerSystem.TransferAllActionsFiltered(target, polymorphEntity.Value, polymorphEntity.Value);

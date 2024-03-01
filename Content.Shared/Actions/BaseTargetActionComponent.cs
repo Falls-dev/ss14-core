@@ -1,4 +1,5 @@
 ﻿using Content.Shared.Interaction;
+using Robust.Shared.Audio;
 
 namespace Content.Shared.Actions;
 
@@ -52,4 +53,16 @@ public abstract partial class BaseTargetActionComponent : BaseActionComponent
 
     [DataField]
     public int MaxChargeLevel = 4;
+
+    [DataField]
+    public SoundSpecifier ChargingSound;
+
+    [DataField]
+    public bool LoopCharging;
+
+    [DataField]
+    public SoundSpecifier MaxChargedSound;
+
+    [DataField]
+    public bool LoopMaxCharged;
 }

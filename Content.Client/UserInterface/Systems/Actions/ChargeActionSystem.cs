@@ -36,6 +36,9 @@ public sealed class ChargeActionSystem : SharedChargingSystem
     private int _chargeLevel;
     private int _prevChargeLevel;
 
+    private bool _isChargingPlaying;
+    private bool _isChargedPlaying;
+
     private const float LevelChargeTime = 1.5f;
 
     public override void Initialize()
@@ -59,6 +62,13 @@ public sealed class ChargeActionSystem : SharedChargingSystem
             baseAction is not BaseTargetActionComponent action || !action.IsChargeEnabled)
             return;
 
+        if (!action.Enabled
+            || action is { Charges: 0, RenewCharges: false }
+            || action.Cooldown.HasValue && action.Cooldown.Value.End > _timing.CurTime)
+        {
+            return;
+        }
+
         var altDown = _inputSystem.CmdStates.GetState(EngineKeyFunctions.UseSecondary);
         switch (altDown)
         {
@@ -73,7 +83,10 @@ public sealed class ChargeActionSystem : SharedChargingSystem
                 _prevCharging = _charging;
                 _charging = false;
                 _chargeTime = 0f;
+                _isChargingPlaying = false;
+                _isChargedPlaying = false;
                 HandleAction(actionId, action, user);
+                RaiseNetworkEvent(new RequestAudioSpellStop());
                 RaiseNetworkEvent(new RemoveWizardChargeEvent());
                 break;
         }
@@ -81,6 +94,18 @@ public sealed class ChargeActionSystem : SharedChargingSystem
         if (_prevCharging != _charging)
         {
             ChargingUpdated?.Invoke(_charging);
+        }
+
+        if (_charging && !_isChargingPlaying)
+        {
+            _isChargingPlaying = true;
+            RaiseNetworkEvent(new RequestSpellChargingAudio(action.ChargingSound, action.LoopCharging));
+        }
+
+        if (_chargeLevel >= action.MaxChargeLevel && !_isChargedPlaying && _charging)
+        {
+            _isChargedPlaying = true;
+            RaiseNetworkEvent(new RequestSpellChargedAudio(action.MaxChargedSound, action.LoopMaxCharged));
         }
 
         if (_chargeLevel != _prevChargeLevel)
@@ -102,13 +127,6 @@ public sealed class ChargeActionSystem : SharedChargingSystem
 
         if (!EntityManager.TryGetComponent(user, out ActionsComponent? comp))
             return;
-
-        if (!action.Enabled
-            || action is { Charges: 0, RenewCharges: false }
-            || action.Cooldown.HasValue && action.Cooldown.Value.End > _timing.CurTime)
-        {
-            return;
-        }
 
         switch (action)
         {

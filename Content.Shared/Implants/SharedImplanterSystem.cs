@@ -191,8 +191,8 @@ public abstract class SharedImplanterSystem : EntitySystem
                 continue;
             }
 
-            _container.Remove(implant, implantContainer);
             RaiseLocalEvent(implant, new SubdermalImplantRemoved(user, target, implantComp)); // WD EDIT
+            _container.Remove(implant, implantContainer);
 
             implantComp.ImplantedEntity = null;
             _container.Insert(implant, implanterContainer);

@@ -52,6 +52,7 @@ public sealed class MindslaveSystem : SharedMindslaveSystem
         _chatManager.ChatMessageToOne(ChatChannel.Server, message, wrappedMessage, default, false,
             targetMind.Session.Channel, Color.FromHex("#5e9cff"));
 
+        // add briefing in character menu
         if (TryComp<RoleBriefingComponent>(targetMindId, out var roleBriefing))
         {
             roleBriefing.Briefing += Loc.GetString("mindslave-briefing", ("player", args.User), ("role", jobName));
@@ -59,7 +60,6 @@ public sealed class MindslaveSystem : SharedMindslaveSystem
         }
         else
         {
-            // add briefing in character menu
             _role.MindAddRole(targetMindId, new RoleBriefingComponent
             {
                 Briefing = Loc.GetString("mindslave-briefing", ("player", args.User), ("role", jobName))
@@ -74,9 +74,12 @@ public sealed class MindslaveSystem : SharedMindslaveSystem
             return;
         }
 
-        _role.MindRemoveRole<RoleBriefingComponent>(args.Target);
+        if (Mind.TryGetMind(args.Target, out var mindId, out _))
+        {
+            _role.MindTryRemoveRole<RoleBriefingComponent>(mindId);
+            Popup.PopupEntity(Loc.GetString("mindslave-freed", ("player", mindslave.Master)), args.Target, args.Target);
+        }
 
-        Popup.PopupEntity(Loc.GetString("mindslave-freed", ("player", mindslave.Master)), args.Target, args.Target);
         RemComp<MindSlaveComponent>(args.Target);
     }
 }

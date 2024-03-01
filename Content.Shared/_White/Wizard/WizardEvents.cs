@@ -8,5 +8,12 @@ public sealed partial class ScrollDoAfterEvent : SimpleDoAfterEvent
 {
 }
 
+[Serializable, NetSerializable]
+public sealed partial class AddWizardChargeEvent : EntityEventArgs
+{
+}
 
-
+[Serializable, NetSerializable]
+public sealed partial class RemoveWizardChargeEvent : EntityEventArgs
+{
+}

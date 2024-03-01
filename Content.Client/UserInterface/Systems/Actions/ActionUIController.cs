@@ -146,7 +146,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
             return false;
 
         if (!_actionsSystem.TryGetActionData(actionId, out var baseAction) ||
-            baseAction is not BaseTargetActionComponent action)
+            baseAction is not BaseTargetActionComponent action || !action.IsAltEnabled)
         {
             return false;
         }

@@ -1,0 +1,26 @@
+﻿- type: entity
+  id: MagicFollowerEntity
+  name: magic
+  components:
+    - type: Physics
+      bodyType: Dynamic
+      fixedRotation: false
+    - type: Sprite
+      sprite: Structures/Specific/Anomalies/Cores/bluespace_core.rsi
+      noRot: true
+      layers:
+        - state: core
+        - state: pulse
+          map: ["decay"]
+    - type: Appearance
+    - type: GenericVisualizer
+      visuals:
+        enum.AnomalyCoreVisuals.Decaying:
+          decay:
+            True: { visible: true }
+            False: { visible: false }
+    - type: PointLight
+      radius: 1.5
+      energy: 3.5
+      color: "#00ccff"
+      castShadows: false

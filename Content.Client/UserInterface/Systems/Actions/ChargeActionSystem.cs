@@ -1,4 +1,6 @@
 ﻿using Content.Client.Actions;
+using Content.Shared._White.Wizard;
+using Content.Shared._White.Wizard.Charging;
 using Content.Shared.Actions;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -11,7 +13,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.UserInterface.Systems.Actions;
 
-public sealed class ChargeActionSystem : EntitySystem
+public sealed class ChargeActionSystem : SharedChargingSystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
@@ -28,8 +30,11 @@ public sealed class ChargeActionSystem : EntitySystem
     public event Action<bool>? ChargingUpdated;
 
     private bool _charging;
+    private bool _prevCharging;
+
     private float _chargeTime;
     private int _chargeLevel;
+    private int _prevChargeLevel;
 
     private const float LevelChargeTime = 1.5f;
 
@@ -44,29 +49,48 @@ public sealed class ChargeActionSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        if (_playerManager.LocalEntity is not { } user)
+            return;
+
         if (!_timing.IsFirstTimePredicted || _controller == null || _controller.SelectingTargetFor is not { } actionId)
+            return;
+
+        if (!_actionsSystem.TryGetActionData(actionId, out var baseAction) ||
+            baseAction is not BaseTargetActionComponent action || !action.IsChargeEnabled)
             return;
 
         var altDown = _inputSystem.CmdStates.GetState(EngineKeyFunctions.UseSecondary);
         switch (altDown)
         {
             case BoundKeyState.Down:
+                _prevCharging = _charging;
                 _charging = true;
-                ChargingUpdated?.Invoke(_charging);
                 _chargeTime += frameTime;
-                _chargeLevel = (int)(_chargeTime / LevelChargeTime) + 1;
+                _chargeLevel = (int) (_chargeTime / LevelChargeTime) + 1;
                 _chargeLevel = Math.Clamp(_chargeLevel, 1, 4);
                 break;
             case BoundKeyState.Up when _charging:
+                _prevCharging = _charging;
                 _charging = false;
-                ChargingUpdated?.Invoke(_charging);
                 _chargeTime = 0f;
-                HandleAction(actionId);
+                HandleAction(actionId, action, user);
+                RaiseNetworkEvent(new RemoveWizardChargeEvent());
                 break;
+        }
+
+        if (_prevCharging != _charging)
+        {
+            ChargingUpdated?.Invoke(_charging);
+        }
+
+        if (_chargeLevel != _prevChargeLevel)
+        {
+            RaiseNetworkEvent(new AddWizardChargeEvent());
+            _prevChargeLevel = _chargeLevel;
         }
     }
 
-    private void HandleAction(EntityUid actionId)
+    private void HandleAction(EntityUid actionId, BaseTargetActionComponent action, EntityUid user)
     {
         var mousePos = _eyeManager.PixelToMap(_inputManager.MouseScreenPosition);
         if (mousePos.MapId == MapId.Nullspace)
@@ -76,17 +100,8 @@ public sealed class ChargeActionSystem : EntitySystem
             ? gridUid
             : _mapManager.GetMapEntityId(mousePos.MapId), mousePos, _transformSystem, EntityManager);
 
-        if (_playerManager.LocalEntity is not { } user)
-            return;
-
         if (!EntityManager.TryGetComponent(user, out ActionsComponent? comp))
             return;
-
-        if (!_actionsSystem.TryGetActionData(actionId, out var baseAction) ||
-            baseAction is not BaseTargetActionComponent action)
-        {
-            return;
-        }
 
         if (!action.Enabled
             || action is { Charges: 0, RenewCharges: false }

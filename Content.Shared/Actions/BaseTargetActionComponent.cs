@@ -40,4 +40,10 @@ public abstract partial class BaseTargetActionComponent : BaseActionComponent
     ///     over lay in place of the currently held item "held item".
     /// </summary>
     [DataField("targetingIndicator")] public bool TargetingIndicator = true;
+
+    [DataField]
+    public bool IsAltEnabled;
+
+    [DataField]
+    public bool IsChargeEnabled;
 }

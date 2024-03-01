@@ -4,11 +4,10 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
-using Robust.Shared.Spawners;
 
 namespace Content.Shared._White.Wizard.ScrollSystem;
 
-public sealed class SharedScrollSystem : EntitySystem
+public abstract class SharedScrollSystem : EntitySystem
 {
     #region Dependencies
 
@@ -17,7 +16,6 @@ public sealed class SharedScrollSystem : EntitySystem
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-
 
     #endregion
 
@@ -83,13 +81,7 @@ public sealed class SharedScrollSystem : EntitySystem
 
     #region Helpers
 
-    private void BurnScroll(EntityUid uid)
-    {
-        if (_net.IsServer)
-        {
-            Del(uid);
-        }
-    }
+    protected virtual void BurnScroll(EntityUid uid) {}
 
     #endregion
 }

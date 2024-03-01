@@ -49,19 +49,19 @@ public abstract partial class BaseTargetActionComponent : BaseActionComponent
     public bool IsChargeEnabled;
 
     [DataField]
-    public string ChargeProto;
+    public string ChargeProto = "MagicFollowerEntity";
 
     [DataField]
     public int MaxChargeLevel = 4;
 
     [DataField]
-    public SoundSpecifier ChargingSound;
+    public SoundSpecifier ChargingSound = new SoundPathSpecifier("/Audio/White/Magic/chargingfallback.ogg");
 
     [DataField]
-    public bool LoopCharging;
+    public bool LoopCharging = true;
 
     [DataField]
-    public SoundSpecifier MaxChargedSound;
+    public SoundSpecifier MaxChargedSound = new SoundPathSpecifier("/Audio/White/Magic/maxchargefallback.ogg");
 
     [DataField]
     public bool LoopMaxCharged;

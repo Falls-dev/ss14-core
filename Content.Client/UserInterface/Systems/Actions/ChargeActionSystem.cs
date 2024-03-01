@@ -135,4 +135,19 @@ public sealed class ChargeActionSystem : SharedChargingSystem
                 break;
         }
     }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+
+        _controller = null;
+
+        _charging = false;
+        _prevCharging = false;
+        _chargeTime = 0f;
+        _chargeLevel = 0;
+        _prevChargeLevel = 0;
+        _isChargingPlaying = false;
+        _isChargedPlaying = false;
+    }
 }

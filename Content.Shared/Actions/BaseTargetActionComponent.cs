@@ -49,4 +49,7 @@ public abstract partial class BaseTargetActionComponent : BaseActionComponent
 
     [DataField]
     public string ChargeProto;
+
+    [DataField]
+    public int MaxChargeLevel = 4;
 }

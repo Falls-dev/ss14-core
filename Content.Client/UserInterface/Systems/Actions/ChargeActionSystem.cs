@@ -67,7 +67,7 @@ public sealed class ChargeActionSystem : SharedChargingSystem
                 _charging = true;
                 _chargeTime += frameTime;
                 _chargeLevel = (int) (_chargeTime / LevelChargeTime) + 1;
-                _chargeLevel = Math.Clamp(_chargeLevel, 1, 4);
+                _chargeLevel = Math.Clamp(_chargeLevel, 1, action.MaxChargeLevel);
                 break;
             case BoundKeyState.Up when _charging:
                 _prevCharging = _charging;

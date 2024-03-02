@@ -1,3 +1,4 @@
+using Content.Server._White.Cult.Runes.Comps;
 using Content.Server.Bible.Components;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Events;
@@ -102,10 +103,28 @@ namespace Content.Server.Bible
             if (!TryComp(uid, out UseDelayComponent? useDelay) || _delay.IsDelayed((uid, useDelay)))
                 return;
 
-            if (args.Target == null || args.Target == args.User || !_mobStateSystem.IsAlive(args.Target.Value))
+            if (args.Target == null || args.Target == args.User)
             {
                 return;
             }
+
+            // WD-EDIT
+
+            if (HasComp<CultRuneBaseComponent>(args.Target))
+            {
+                if (HasComp<BibleUserComponent>(args.User))
+                {
+                    _popupSystem.PopupEntity("Вы стерли руну!", args.User, args.User);
+                    _audio.PlayPvs(component.HealSoundPath, args.User);
+                    EntityManager.DeleteEntity(args.Target.Value);
+                    return;
+                }
+            }
+
+            if (!_mobStateSystem.IsAlive(args.Target.Value))
+                return;
+
+            // WD-EDIT
 
             if (!HasComp<BibleUserComponent>(args.User))
             {

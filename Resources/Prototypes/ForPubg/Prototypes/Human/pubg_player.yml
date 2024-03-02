@@ -4,6 +4,9 @@
   name: DeathPlayer
   roundStart: true
   prototype: MobHumanPubg
+  bodyTypes:
+  - HumanNormal
+  - HumanSlim
   sprites: MobHumanSprites
   markingLimits: MobHumanMarkingLimits
   dollPrototype: MobHumanDummy

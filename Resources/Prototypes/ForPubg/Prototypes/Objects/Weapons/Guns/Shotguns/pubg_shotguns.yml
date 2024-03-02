@@ -44,7 +44,7 @@
         ballistic-ammo: !type:Container
     - type: StaticPrice
       price: 500
-      
+
 # Baikal MP153
 - type: entity
   name: WeaponShotgunMP153
@@ -68,7 +68,6 @@
     - type: AmmoCounter
     - type: Wieldable
       wieldTime: 0
-      forceTwoHanded: True
     - type: Gun
       fireRate: 1
       projectileSpeed: 25 # Standart 25f
@@ -92,7 +91,7 @@
         ballistic-ammo: !type:Container
     - type: StaticPrice
       price: 500
-      
+
 # Chazer
 - type: entity
   name: WeaponShotgunChazer
@@ -116,7 +115,6 @@
     - type: AmmoCounter
     - type: Wieldable
       wieldTime: 0
-      forceTwoHanded: True
     - type: Gun
       fireRate: 2
       projectileSpeed: 25 # Standart 25f

@@ -248,3 +248,6 @@ ent-PubgWindow = Окно
 
 ent-PubgFireplace = Потухший камин
 .desc = Сюда давно не подкидывали дров...
+
+ent-PubgLockerClothing = Старый шкаф
+.desc = Что-то здесь есть?

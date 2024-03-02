@@ -51,7 +51,7 @@
         path: /Audio/Weapons/Guns/MagIn/revolver_magin.ogg
     - type: StaticPrice
       price: 500
-      
+
 # Rex
 - type: entity
   name: RevolverRex
@@ -79,7 +79,7 @@
     - type: AmmoCounter
     - type: Gun
       selectedMode: SemiAuto
-      fireRate: 2.0
+      fireRate: 1.5
       projectileSpeed: 30
       availableModes:
         - SemiAuto

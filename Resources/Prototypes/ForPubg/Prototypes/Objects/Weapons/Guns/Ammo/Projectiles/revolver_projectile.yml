@@ -10,7 +10,8 @@
         types:
           Piercing: 25
           Blunt: 15
-          
+      ignoreResistances: true
+
 # Rex
 - type: entity
   id: BulletRevolverMag357
@@ -23,3 +24,4 @@
         types:
           Piercing: 20
           Blunt: 5
+      ignoreResistances: true

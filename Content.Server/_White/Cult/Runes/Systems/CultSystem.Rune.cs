@@ -10,6 +10,7 @@ using Content.Server.Hands.Systems;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Server._White.Cult.GameRule;
 using Content.Server._White.Cult.Runes.Comps;
+using Content.Server.Bible.Components;
 using Content.Server.Chemistry.Components;
 using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Fluids.Components;
@@ -263,6 +264,14 @@ public sealed partial class CultSystem : EntitySystem
 
     private void TryErase(EntityUid uid, CultRuneBaseComponent component, InteractUsingEvent args)
     {
+        if (TryComp<BibleComponent>(args.Used, out var bible) && HasComp<BibleUserComponent>(args.User))
+        {
+            _popupSystem.PopupEntity(Loc.GetString("cult-erased-rune"), args.User, args.User);
+            _audio.PlayPvs(bible.HealSoundPath, args.User);
+            EntityManager.DeleteEntity(args.Target);
+            return;
+        }
+
         var entityPrototype = _entityManager.GetComponent<MetaDataComponent>(args.Used).EntityPrototype;
 
         if (entityPrototype == null)
@@ -297,7 +306,7 @@ public sealed partial class CultSystem : EntitySystem
 
         if (_doAfterSystem.TryStartDoAfter(argsDoAfterEvent))
         {
-            _popupSystem.PopupEntity(Loc.GetString("cult-started-erasing-rune"), target);
+            _popupSystem.PopupEntity(Loc.GetString("cult-started-erasing-rune"), args.User, args.User);
         }
     }
 
@@ -309,7 +318,7 @@ public sealed partial class CultSystem : EntitySystem
         var target = GetEntity(args.TargetEntityId);
 
         _entityManager.DeleteEntity(target);
-        _popupSystem.PopupEntity(Loc.GetString("cult-erased-rune"), args.User);
+        _popupSystem.PopupEntity(Loc.GetString("cult-erased-rune"), args.User, args.User);
     }
 
     private void HandleCollision(EntityUid uid, CultRuneBaseComponent component, ref StartCollideEvent args)

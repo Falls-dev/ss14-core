@@ -81,14 +81,33 @@ public sealed class ChargeActionSystem : SharedChargingSystem
                 break;
             case BoundKeyState.Up when _charging:
                 _prevCharging = _charging;
+                _chargeLevel = 0;
                 _charging = false;
                 _chargeTime = 0f;
                 _isChargingPlaying = false;
                 _isChargedPlaying = false;
+
                 HandleAction(actionId, action, user);
                 RaiseNetworkEvent(new RequestAudioSpellStop());
                 RaiseNetworkEvent(new RemoveWizardChargeEvent());
                 break;
+            case BoundKeyState.Up:
+                _prevCharging = _charging;
+                _chargeLevel = 0;
+                _charging = false;
+                _chargeTime = 0f;
+                _isChargingPlaying = false;
+                _isChargedPlaying = false;
+
+                RaiseNetworkEvent(new RequestAudioSpellStop());
+                RaiseNetworkEvent(new RemoveWizardChargeEvent());
+                break;
+        }
+
+        if (_chargeLevel != _prevChargeLevel)
+        {
+            RaiseNetworkEvent(new AddWizardChargeEvent(action.ChargeProto));
+            _prevChargeLevel = _chargeLevel;
         }
 
         if (_prevCharging != _charging)
@@ -106,12 +125,6 @@ public sealed class ChargeActionSystem : SharedChargingSystem
         {
             _isChargedPlaying = true;
             RaiseNetworkEvent(new RequestSpellChargedAudio(action.MaxChargedSound, action.LoopMaxCharged));
-        }
-
-        if (_chargeLevel != _prevChargeLevel)
-        {
-            RaiseNetworkEvent(new AddWizardChargeEvent(action.ChargeProto));
-            _prevChargeLevel = _chargeLevel;
         }
     }
 

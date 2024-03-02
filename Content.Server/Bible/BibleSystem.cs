@@ -1,4 +1,3 @@
-using Content.Server._White.Cult.Runes.Comps;
 using Content.Server.Bible.Components;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Events;

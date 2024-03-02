@@ -1,0 +1,17 @@
+# Само ебучее создание
+- type: species
+  id: DeathPlayer
+  name: DeathPlayer
+  roundStart: true
+  prototype: MobHumanPubg
+  sprites: MobHumanSprites
+  markingLimits: MobHumanMarkingLimits
+  dollPrototype: MobHumanDummy
+  skinColoration: HumanToned
+
+# Для того чтобы спавнило и не жаловалось что прототипа не существует
+- type: entity
+  save: false
+  name: Pubg Player
+  parent: PubgMobHuman
+  id: MobHumanPubg

@@ -1,0 +1,176 @@
+# Metal Rack - для ангаров со своими предметами
+- type: entity
+  id: PubgMetalRack
+  parent: BaseStructure
+  name: "Metal Rack"
+  description: Old world rack with some scrap...
+  components:
+    - type: Sprite
+      sprite: ForPubg/Textures/Structures/pubg_rack.rsi
+      snapCardinals: true
+      layers:
+        - state: base
+        - state: scrap-0
+        - map: ["enum.StorageFillLayers.Fill"]
+    - type: Appearance
+    - type: StorageFillVisualizer
+      maxFillLevels: 14
+      fillBaseName: scrap
+    - type: Damageable
+      damageModifierSet: Metallic
+      damageContainer: Inorganic
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 50
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound:
+                collection: MetalBreak
+            - !type:DoActsBehavior
+              acts: ["Destruction"]
+    - type: Tag
+      tags:
+        - Structure
+        - Metal
+    - type: Transform
+      anchored: true
+      noRot: true
+    - type: Physics
+      bodyType: Static
+    - type: Anchorable
+    - type: Pullable
+    - type: Occluder
+    - type: Storage
+      grid:
+        - 0,0,4,8
+      maxItemSize: Huge
+    - type: UserInterface
+      interfaces:
+        - key: enum.StorageUiKey.Key
+          type: StorageBoundUserInterface
+    - type: InteractionOutline
+    - type: ContainerContainer
+      containers:
+        storagebase: !type:Container
+    - type: Construction
+      graph: Bookshelf
+      node: bookshelf
+
+# Окно для домов
+- type: entity
+  id: PubgWindow
+  parent: BaseStructure
+  name: Dark Window
+  description: Old and aesthetic window.
+  placement:
+    mode: SnapgridCenter
+    snap:
+      - Window
+  components:
+    - type: MeleeSound
+      soundGroups:
+        Brute:
+          collection: GlassSmack
+    - type: WallMount
+      arc: 360 # interact despite grilles
+    - type: Tag
+      tags:
+        - RCDDeconstructWhitelist
+        - ForceFixRotations
+        - Window
+    - type: Sprite
+      drawdepth: WallTops
+      sprite: ForPubg/Textures/Structures/pubg_window.rsi
+    - type: Icon
+      sprite: ForPubg/Textures/Structures/pubg_window.rsi
+      state: full
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb {}
+          mask:
+            - FullTileMask
+          layer:
+            - GlassLayer
+    - type: Damageable
+      damageContainer: StructuralInorganic
+      damageModifierSet: Glass
+    - type: ExaminableDamage
+      messages: WindowMessages
+    - type: Repairable
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 100
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound:
+                collection: WindowShatter
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+        - trigger:
+            !type:DamageTrigger
+            damage: 50
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound:
+                collection: WindowShatter
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                ShardGlass:
+                  min: 1
+                  max: 2
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: Airtight
+    - type: IconSmooth
+      key: windows
+      base: window
+    - type: InteractionPopup
+      interactSuccessString: comp-window-knock
+      messagePerceivedByOthers: comp-window-knock
+      interactSuccessSound:
+        path: /Audio/Effects/glass_knock.ogg
+    - type: Construction
+      graph: Window
+      node: window
+    - type: Appearance
+    - type: DamageVisuals
+      thresholds: [4, 8, 12]
+      damageDivisor: 3.333
+      trackAllDamage: true
+      damageOverlay:
+        sprite: Structures/Windows/cracks.rsi
+    - type: StaticPrice
+      price: 100
+      
+# Fireplace - потухший камин
+- type: entity
+  id: PubgFireplace
+  parent: BaseStructure
+  name: PubgFireplace
+  suffix: NoLight
+  description: A place that has fire. Cozy!
+  components:
+    - type: Sprite
+      sprite: ForPubg/Textures/Structures/pubg_fireplace.rsi
+      layers:
+        - state: fireplace
+    - type: Appearance
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 200
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]

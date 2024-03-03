@@ -293,6 +293,7 @@
     - Muted
     - Pacified
     - StaminaModifier
+    - Incorporeal
   - type: Blindable
   # Other
   - type: Temperature

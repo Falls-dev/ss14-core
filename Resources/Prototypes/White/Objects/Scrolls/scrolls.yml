@@ -77,3 +77,12 @@
     - type: Scroll
       actionId: ActionBlinkSpell
       learnPopup: blink
+
+- type: entity
+  id: ScrollEtherealJaunt
+  parent: BaseScroll
+  name: "Ethereal Jaunt scroll"
+  components:
+    - type: Scroll
+      actionId: ActionEtherealJaunt
+      learnPopup: jaunt

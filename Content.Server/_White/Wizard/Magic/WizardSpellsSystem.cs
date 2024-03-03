@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Numerics;
+using Content.Server._White.IncorporealSystem;
 using Content.Server._White.Wizard.Magic.Amaterasu;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
@@ -17,6 +18,8 @@ using Content.Shared.Magic;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
+using Content.Shared.Popups;
+using Content.Shared.StatusEffect;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -43,6 +46,8 @@ public sealed class WizardSpellsSystem : EntitySystem
     [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
+    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
 
     #endregion
 
@@ -50,6 +55,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<EtherealJauntSpellEvent>(OnJauntSpell);
         SubscribeLocalEvent<BlinkSpellEvent>(OnBlinkSpell);
         SubscribeLocalEvent<ForceWallSpellEvent>(OnForcewallSpell);
         SubscribeLocalEvent<CardsSpellEvent>(OnCardsSpell);
@@ -58,14 +64,37 @@ public sealed class WizardSpellsSystem : EntitySystem
         SubscribeLocalEvent<ArcSpellEvent>(OnArcSpell);
     }
 
-    #region Blink
+    #region Ethereal Jaunt
 
-    private void OnBlinkSpell(BlinkSpellEvent ev)
+    private void OnJauntSpell(EtherealJauntSpellEvent msg)
     {
-        if (ev.Handled)
+        if (msg.Handled)
             return;
 
-        var transform = Transform(ev.Performer);
+        if (_statusEffectsSystem.HasStatusEffect(msg.Performer, "Incorporeal"))
+        {
+            _popupSystem.PopupEntity("Вы уже в потустороннем мире", msg.Performer, msg.Performer);
+            return;
+        }
+
+        Spawn("AdminInstantEffectSmoke10", Transform(msg.Performer).Coordinates);
+
+        _statusEffectsSystem.TryAddStatusEffect<IncorporealComponent>(msg.Performer, "Incorporeal", TimeSpan.FromSeconds(10), false);
+
+        msg.Handled = true;
+        Speak(msg);
+    }
+
+    #endregion
+
+    #region Blink
+
+    private void OnBlinkSpell(BlinkSpellEvent msg)
+    {
+        if (msg.Handled)
+            return;
+
+        var transform = Transform(msg.Performer);
 
         var oldCoords = transform.Coordinates;
 
@@ -95,8 +124,8 @@ public sealed class WizardSpellsSystem : EntitySystem
         if (!foundTeleportPos)
             return;
 
-        _transformSystem.SetCoordinates(ev.Performer, coords);
-        _transformSystem.AttachToGridOrMap(ev.Performer);
+        _transformSystem.SetCoordinates(msg.Performer, coords);
+        _transformSystem.AttachToGridOrMap(msg.Performer);
 
         _audio.PlayPvs("/Audio/White/Cult/veilin.ogg", coords);
         _audio.PlayPvs("/Audio/White/Cult/veilout.ogg", oldCoords);
@@ -104,8 +133,8 @@ public sealed class WizardSpellsSystem : EntitySystem
         Spawn("AdminInstantEffectSmoke10", oldCoords);
         Spawn("AdminInstantEffectSmoke10", coords);
 
-        ev.Handled = true;
-        Speak(ev);
+        msg.Handled = true;
+        Speak(msg);
     }
 
     #endregion

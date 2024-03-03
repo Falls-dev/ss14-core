@@ -116,3 +116,9 @@ public sealed partial class BlinkSpellEvent : InstantActionEvent, ISpeakSpell
     [DataField("speech")]
     public string? Speech { get; private set; }
 }
+
+public sealed partial class EtherealJauntSpellEvent : InstantActionEvent, ISpeakSpell
+{
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}

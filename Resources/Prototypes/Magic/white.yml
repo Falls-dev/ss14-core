@@ -139,3 +139,17 @@
         state: blink
       event: !type:BlinkSpellEvent
         speech: "SYCAR TYN"
+
+- type: entity
+  id: ActionEtherealJaunt
+  name: Ethereal Jaunt
+  noSpawn: true
+  components:
+    - type: InstantAction
+      useDelay: 60
+      itemIconStyle: BigAction
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: blink
+      event: !type:EtherealJauntSpellEvent
+        speech: "SCYAR NILA"

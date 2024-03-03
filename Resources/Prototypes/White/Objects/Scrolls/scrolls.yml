@@ -21,7 +21,7 @@
   name: "Fireball scroll"
   components:
     - type: Scroll
-      actionId: ActionFireball
+      actionId: ActionFireballSpell
       learnPopup: fireball
 
 - type: entity

@@ -1,5 +1,8 @@
 ﻿using System.Linq;
 using System.Numerics;
+using Content.Server._White.Wizard.Magic.Amaterasu;
+using Content.Server.Atmos.Components;
+using Content.Server.Atmos.EntitySystems;
 using Content.Server.Chat.Systems;
 using Content.Server.Lightning;
 using Content.Server.Magic;
@@ -26,6 +29,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     [Dependency] private readonly LightningSystem _lightning = default!;
     [Dependency] private readonly MagicSystem _magicSystem = default!;
     [Dependency] private readonly GravityWellSystem _gravityWell = default!;
+    [Dependency] private readonly FlammableSystem _flammableSystem = default!;
 
     #endregion
 
@@ -33,9 +37,83 @@ public sealed class WizardSpellsSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<FireballSpellEvent>(OnFireballSpell);
         SubscribeLocalEvent<ForceSpellEvent>(OnForceSpell);
         SubscribeLocalEvent<ArcSpellEvent>(OnArcSpell);
     }
+
+    #region Fireball
+
+    private void OnFireballSpell(FireballSpellEvent msg)
+    {
+        if (msg.Handled)
+            return;
+
+        switch (msg.ActionUseType)
+        {
+            case ActionUseType.Default:
+                FireballSpellDefault(msg);
+                break;
+            case ActionUseType.Charge:
+                FireballSpellCharge(msg);
+                break;
+            case ActionUseType.AltUse:
+                FireballSpellAlt(msg);
+                break;
+        }
+
+        msg.Handled = true;
+        Speak(msg);
+    }
+
+    private void FireballSpellDefault(FireballSpellEvent msg)
+    {
+        var xform = Transform(msg.Performer);
+
+        foreach (var pos in _magicSystem.GetSpawnPositions(xform, msg.Pos))
+        {
+            var mapPos = _transformSystem.ToMapCoordinates(pos);
+            var spawnCoords = _mapManager.TryFindGridAt(mapPos, out var gridUid, out var grid)
+                ? pos.WithEntityId(gridUid, EntityManager)
+                : new EntityCoordinates(_mapManager.GetMapEntityId(mapPos.MapId), mapPos.Position);
+
+            var userVelocity = Vector2.Zero;
+
+            if (grid != null && TryComp(gridUid, out PhysicsComponent? physics))
+                userVelocity = physics.LinearVelocity;
+
+            var ent = Spawn(msg.Prototype, spawnCoords);
+            var direction = msg.Target.ToMapPos(EntityManager, _transformSystem) - spawnCoords.ToMapPos(EntityManager, _transformSystem);
+            _gunSystem.ShootProjectile(ent, direction, userVelocity, msg.Performer, msg.Performer);
+        }
+    }
+
+    private void FireballSpellCharge(FireballSpellEvent msg)
+    {
+        var coords = Transform(msg.Performer).Coordinates;
+
+        var targets = _lookup.GetEntitiesInRange<FlammableComponent>(coords, 2 * msg.ChargeLevel);
+
+        foreach (var target in targets.Where(target => target.Owner != msg.Performer))
+        {
+            target.Comp.FireStacks += 3;
+            _flammableSystem.Ignite(target, msg.Performer);
+        }
+    }
+
+    private void FireballSpellAlt(FireballSpellEvent msg)
+    {
+        if (!TryComp<FlammableComponent>(msg.TargetUid, out var flammableComponent))
+            return;
+
+        flammableComponent.FireStacks += 3;
+
+        _flammableSystem.Ignite(msg.TargetUid, msg.Performer);
+
+        EnsureComp<AmaterasuComponent>(msg.TargetUid);
+    }
+
+    #endregion
 
     #region Force
 
@@ -102,29 +180,29 @@ public sealed class WizardSpellsSystem : EntitySystem
         Speak(msg);
     }
 
-    private void ArcSpellDefault(ArcSpellEvent args)
+    private void ArcSpellDefault(ArcSpellEvent msg)
     {
         const int possibleEntitiesCount = 2;
 
-        var entitiesInRange = _lookup.GetEntitiesInRange(args.Target, 1);
+        var entitiesInRange = _lookup.GetEntitiesInRange(msg.Target, 1);
         var entitiesToHit = entitiesInRange.Where(HasComp<MobStateComponent>).Take(possibleEntitiesCount);
 
         foreach (var entity in entitiesToHit)
         {
-            _lightning.ShootLightning(args.Performer, entity);
+            _lightning.ShootLightning(msg.Performer, entity);
         }
     }
 
-    private void ArcSpellCharge(ArcSpellEvent args)
+    private void ArcSpellCharge(ArcSpellEvent msg)
     {
-        _lightning.ShootRandomLightnings(args.Performer, 2 * args.ChargeLevel, args.ChargeLevel * 2, arcDepth: 2);
+        _lightning.ShootRandomLightnings(msg.Performer, 2 * msg.ChargeLevel, msg.ChargeLevel * 2, arcDepth: 2);
     }
 
-    private void ArcSpellAlt(ArcSpellEvent args)
+    private void ArcSpellAlt(ArcSpellEvent msg)
     {
-        var xform = Transform(args.Performer);
+        var xform = Transform(msg.Performer);
 
-        foreach (var pos in _magicSystem.GetSpawnPositions(xform, args.Pos))
+        foreach (var pos in _magicSystem.GetSpawnPositions(xform, msg.Pos))
         {
             var mapPos = _transformSystem.ToMapCoordinates(pos);
             var spawnCoords = _mapManager.TryFindGridAt(mapPos, out var gridUid, out var grid)
@@ -136,9 +214,9 @@ public sealed class WizardSpellsSystem : EntitySystem
             if (grid != null && TryComp(gridUid, out PhysicsComponent? physics))
                 userVelocity = physics.LinearVelocity;
 
-            var ent = Spawn(args.Prototype, spawnCoords);
-            var direction = args.Target.ToMapPos(EntityManager, _transformSystem) - spawnCoords.ToMapPos(EntityManager, _transformSystem);
-            _gunSystem.ShootProjectile(ent, direction, userVelocity, args.Performer, args.Performer);
+            var ent = Spawn(msg.Prototype, spawnCoords);
+            var direction = msg.Target.ToMapPos(EntityManager, _transformSystem) - spawnCoords.ToMapPos(EntityManager, _transformSystem);
+            _gunSystem.ShootProjectile(ent, direction, userVelocity, msg.Performer, msg.Performer);
         }
     }
 

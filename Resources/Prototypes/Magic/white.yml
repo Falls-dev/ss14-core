@@ -31,7 +31,7 @@
   noSpawn: true
   components:
     - type: WorldTargetAction
-      useDelay: 15
+      useDelay: 60
       itemIconStyle: BigAction
       checkCanAccess: false
       range: 10
@@ -49,3 +49,26 @@
       isAltEnabled: true
       event: !type:ForceSpellEvent
         speech: "EL DRITCH!"
+
+- type: entity
+  id: ActionFireballSpell
+  name: Fireball
+  noSpawn: true
+  components:
+    - type: WorldTargetAction
+      useDelay: 15
+      itemIconStyle: BigAction
+      checkCanAccess: false
+      range: 45
+      isChargeEnabled: true
+      chargeProto: MagicFollowerFireEntity
+      isAltEnabled: true
+      sound: !type:SoundPathSpecifier
+        path: /Audio/Magic/fireball.ogg
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: fireball
+      event: !type:FireballSpellEvent
+        prototype: ProjectileFireball
+        posData: !type:TargetCasterPos
+        speech: action-speech-spell-fireball

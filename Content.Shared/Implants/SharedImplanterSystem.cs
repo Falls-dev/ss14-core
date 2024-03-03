@@ -205,7 +205,8 @@ public abstract class SharedImplanterSystem : EntitySystem
             break;
         }
 
-        if (component.CurrentMode == ImplanterToggleMode.Draw && !component.ImplantOnly && !permanentFound)
+        if (component.CurrentMode == ImplanterToggleMode.Draw && !component.ImplantOnly && !permanentFound &&
+            implanterContainer.Count > 0) // WD EDIT
             ImplantMode(implanter, component);
 
         Dirty(implanter, component);

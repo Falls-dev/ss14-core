@@ -119,6 +119,9 @@
           implantOnly:
             True: {state: broken}
             False: {state: implanter1}
+    - type: Implanter
+      implantTime: 2
+      drawTime: 2
 
 #Fun implanters
 

@@ -1,6 +1,5 @@
 ﻿using Content.Server.Lightning;
 using Content.Shared.Projectiles;
-using Robust.Shared.Physics.Events;
 
 namespace Content.Server._White.Wizard.Magic.TeslaProjectile;
 
@@ -17,6 +16,6 @@ public sealed class TeslaProjectileSystem : EntitySystem
 
     private void OnStartCollide(Entity<TeslaProjectileComponent> ent, ref ProjectileHitEvent args)
     {
-       _lightning.ShootRandomLightnings(ent, 4, 8, arcDepth:4);
+       _lightning.ShootRandomLightnings(ent, 2, 4, arcDepth:2);
     }
 }

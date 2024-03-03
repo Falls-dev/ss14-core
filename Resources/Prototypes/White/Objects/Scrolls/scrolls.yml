@@ -48,5 +48,14 @@
   name: "Electric Arc scroll"
   components:
     - type: Scroll
-      actionId: ActionElectricArc
+      actionId: ActionElectricArcSpell
       learnPopup: lightning
+
+- type: entity
+  id: ScrollForce
+  parent: BaseScroll
+  name: "Force scroll"
+  components:
+    - type: Scroll
+      actionId: ActionForceSpell
+      learnPopup: force

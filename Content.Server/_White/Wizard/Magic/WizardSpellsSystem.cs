@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server.Lightning;
 using Content.Server.Magic;
+using Content.Server.Singularity.EntitySystems;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared._White.Wizard;
 using Content.Shared.Actions;
@@ -24,6 +25,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly LightningSystem _lightning = default!;
     [Dependency] private readonly MagicSystem _magicSystem = default!;
+    [Dependency] private readonly GravityWellSystem _gravityWell = default!;
 
     #endregion
 
@@ -31,8 +33,50 @@ public sealed class WizardSpellsSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<ForceSpellEvent>(OnForceSpell);
         SubscribeLocalEvent<ArcSpellEvent>(OnArcSpell);
     }
+
+    #region Force
+
+    private void OnForceSpell(ForceSpellEvent msg)
+    {
+        if (msg.Handled)
+            return;
+
+        switch (msg.ActionUseType)
+        {
+            case ActionUseType.Default:
+                ForceSpellDefault(msg);
+                break;
+            case ActionUseType.Charge:
+                ForceSpellCharge(msg);
+                break;
+            case ActionUseType.AltUse:
+                ForceSpellAlt(msg);
+                break;
+        }
+
+        msg.Handled = true;
+        Speak(msg);
+    }
+
+    private void ForceSpellDefault(ForceSpellEvent msg)
+    {
+        Spawn("AdminInstantEffectMinusGravityWell", msg.Target);
+    }
+
+    private void ForceSpellCharge(ForceSpellEvent msg)
+    {
+        _gravityWell.GravPulse(msg.Performer, 15, 0, -80 * msg.ChargeLevel, -2 * msg.ChargeLevel);
+    }
+
+    private void ForceSpellAlt(ForceSpellEvent msg)
+    {
+        _gravityWell.GravPulse(msg.Target, 10, 0, 200, 10);
+    }
+
+    #endregion
 
     #region Arc
 
@@ -73,7 +117,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void ArcSpellCharge(ArcSpellEvent args)
     {
-        _lightning.ShootRandomLightnings(args.Performer, 2 * args.ChargeLevel, args.ChargeLevel * 2, arcDepth: args.ChargeLevel * 2);
+        _lightning.ShootRandomLightnings(args.Performer, 2 * args.ChargeLevel, args.ChargeLevel * 2, arcDepth: 2);
     }
 
     private void ArcSpellAlt(ArcSpellEvent args)

@@ -1,6 +1,6 @@
 ﻿- type: entity
-  id: ActionElectricArc
-  name: Силовая дуга
+  id: ActionElectricArcSpell
+  name: Electric arc
   noSpawn: true
   components:
     - type: WorldTargetAction
@@ -12,15 +12,40 @@
         path: /Audio/White/Magic/Arc/cast.ogg
       icon:
         sprite: Objects/Magic/magicactions.rsi
-        state: spell_default
+        state: thunder
       isChargeEnabled: true
       chargingSound:
         path: /Audio/White/Magic/Arc/charge.ogg
+      chargeProto: MagicFollowerArcEntity
       maxChargedSound:
-        path: /Audio/White/Magic/Arc/charge.ogg
-      loopMaxCharged: true
+        path: /Audio/White/Magic/Arc/max.ogg
       isAltEnabled: true
       event: !type:ArcSpellEvent
         speech: "KUH, ABAH'RAH"
         prototype: ProjectileTeslaBall
         posData: !type:TargetCasterPos
+
+- type: entity
+  id: ActionForceSpell
+  name: Force
+  noSpawn: true
+  components:
+    - type: WorldTargetAction
+      useDelay: 15
+      itemIconStyle: BigAction
+      checkCanAccess: false
+      range: 10
+      sound: !type:SoundPathSpecifier
+        path: /Audio/White/Magic/Force/cast.ogg
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: push
+      isChargeEnabled: true
+      chargingSound:
+        path: /Audio/White/Magic/Force/charge.ogg
+      chargeProto: MagicFollowerForceEntity
+      maxChargedSound:
+        path: /Audio/White/Magic/Force/max.ogg
+      isAltEnabled: true
+      event: !type:ForceSpellEvent
+        speech: "EL DRITCH!"

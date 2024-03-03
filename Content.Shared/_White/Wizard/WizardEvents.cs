@@ -76,3 +76,9 @@ public sealed partial class ArcSpellEvent : WorldTargetActionEvent, ISpeakSpell
     [DataField("speech")]
     public string? Speech { get; private set; }
 }
+
+public sealed partial class ForceSpellEvent : WorldTargetActionEvent, ISpeakSpell
+{
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}

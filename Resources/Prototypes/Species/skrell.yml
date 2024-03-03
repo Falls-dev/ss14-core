@@ -1,7 +1,7 @@
 - type: species
   id: Skrell
   name: species-name-skrell
-  roundStart: true
+  roundStart: false
   prototype: MobSkrell
   bodyTypes:
     - SkrellNormal

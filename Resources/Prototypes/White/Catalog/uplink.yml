@@ -214,3 +214,19 @@
     Telecrystal: 6
   categories:
   - UplinkImplants
+
+- type: listing
+  id: UplinkHisGrace
+  name: uplink-his-grace
+  description: uplink-his-grace-desc
+  productEntity: HisGrace
+  cost: 
+    Telecrystal: 20
+  categories:
+  - UplinkJob
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 1
+    - !type:BuyerJobCondition
+      whitelist:
+        - Chaplain

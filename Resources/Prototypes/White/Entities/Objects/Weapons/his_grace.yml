@@ -1,0 +1,58 @@
+﻿- type: entity
+  id: HisGrace
+  parent: BaseItem
+  name: artistic toolbox
+  description: A toolbox painted bright green. Looking at it makes you feel uneasy.
+  suffix: His Grace
+  components:
+    - type: EmitSoundOnPickup
+      sound:
+        path: /Audio/White/Items/handling/toolbox_pickup.ogg
+    - type: EmitSoundOnLand
+      sound:
+        path: /Audio/Items/toolbox_drop.ogg
+    - type: EmitSoundOnDrop
+      sound:
+        path: /Audio/Items/toolbox_drop.ogg
+    - type: Sprite
+      sprite: Objects/Tools/Toolboxes/toolbox_green.rsi
+      state: icon
+    - type: Item
+      sprite: Objects/Tools/Toolboxes/toolbox_green.rsi
+      size: Ginormous
+    - type: MeleeWeapon
+      damage:
+        types:
+          Blunt: 20
+      soundHit:
+        path: "/Audio/Weapons/smash.ogg"
+    - type: Damageable
+      damageContainer: Inorganic
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 500
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: ContainerContainer
+      containers:
+        victims: !type:Container
+    - type: CombatMode
+    - type: NpcFactionMember
+      factions:
+        - HisGrace
+    - type: MovementSpeedModifier
+      baseWalkSpeed: 0
+      baseSprintSpeed: 0
+      weightlessModifier: 1.5
+    - type: HisGrace
+          
+- type: entity
+  id: HisGraceAscended
+  parent: HisGrace
+  suffix: His Grace, Ascended
+  components:
+    - type: HisGrace
+      ascended: true

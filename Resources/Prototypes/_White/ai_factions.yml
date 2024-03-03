@@ -1,0 +1,11 @@
+﻿- type: npcFaction
+  id: HisGrace
+  hostile:
+    - Dragon
+    - NanoTrasen
+    - Syndicate
+    - Xeno
+    - PetsNT
+    - Zombie
+    - Revolutionary
+    - Cultist

@@ -241,6 +241,21 @@ ent-PubgStandartMedicine2 = { ent-PubgStandartMedicine }
 ent-PubgStandartMedicineBandage = Перевязочный пакет
 .desc = Позволяет быстро устранить простые повреждения.
 
+#Pens
+ent-PubgBruteMedipen = Телесный инжектор V1
+.desc = Способен своевременно остановить кровотечение и потеряное здоровье.
+ent-PubgSuperBruteMedipen = Телесный инжектор V2
+.desc = Способен намного лучше восстановить утерянное здоровье.
+ent-PubgRegeneratorMedipen = Телесный инжектор Регенератор.
+.desc = Сразу и со временем восстанавливает утерянное здоровье.
+
+ent-PubgSpeedMedipen = Телесный инжектор S1
+.desc = Повышает мобильность на короткое время.
+ent-PubgSuperSpeedMedipen = Телесный инжектор S2
+.desc = Повышает мобильность на продолжительное время.
+
+ent-PubgObdalbosMedipen = Обдолбыш
+.desc = *Этикетка о составе отсутствует*
 
 ### PUBG Structures PubgWindow
 ent-PubgWindow = Окно

@@ -68,3 +68,12 @@
     - type: Scroll
       actionId: ActionCardSpell
       learnPopup: cards
+
+- type: entity
+  id: ScrollBlink
+  parent: BaseScroll
+  name: "Blink scroll"
+  components:
+    - type: Scroll
+      actionId: ActionBlinkSpell
+      learnPopup: blink

@@ -110,3 +110,9 @@ public sealed partial class ForceWallSpellEvent : WorldTargetActionEvent, ISpeak
     [DataField("speech")]
     public string? Speech { get; private set; }
 }
+
+public sealed partial class BlinkSpellEvent : InstantActionEvent, ISpeakSpell
+{
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}

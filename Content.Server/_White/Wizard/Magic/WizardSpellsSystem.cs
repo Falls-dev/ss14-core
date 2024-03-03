@@ -14,9 +14,11 @@ using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Item;
 using Content.Shared.Magic;
+using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Content.Shared.Throwing;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Random;
@@ -39,6 +41,8 @@ public sealed class WizardSpellsSystem : EntitySystem
     [Dependency] private readonly FlammableSystem _flammableSystem = default!;
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
     [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
+    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     #endregion
 
@@ -46,12 +50,65 @@ public sealed class WizardSpellsSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<BlinkSpellEvent>(OnBlinkSpell);
         SubscribeLocalEvent<ForceWallSpellEvent>(OnForcewallSpell);
         SubscribeLocalEvent<CardsSpellEvent>(OnCardsSpell);
         SubscribeLocalEvent<FireballSpellEvent>(OnFireballSpell);
         SubscribeLocalEvent<ForceSpellEvent>(OnForceSpell);
         SubscribeLocalEvent<ArcSpellEvent>(OnArcSpell);
     }
+
+    #region Blink
+
+    private void OnBlinkSpell(BlinkSpellEvent ev)
+    {
+        if (ev.Handled)
+            return;
+
+        var transform = Transform(ev.Performer);
+
+        var oldCoords = transform.Coordinates;
+
+        EntityCoordinates coords = default;
+        var foundTeleportPos = false;
+        var attempts = 10;
+
+        while (attempts > 0)
+        {
+            attempts--;
+
+            var random = new Random().Next(10, 20);
+            var offset = transform.LocalRotation.ToWorldVec().Normalized();
+            var direction = transform.LocalRotation.GetDir().ToVec();
+            var newOffset = offset + direction * random;
+            coords = transform.Coordinates.Offset(newOffset).SnapToGrid(EntityManager);
+
+            var tile = coords.GetTileRef();
+
+            if (tile != null && _turf.IsTileBlocked(tile.Value, CollisionGroup.AllMask))
+                continue;
+
+            foundTeleportPos = true;
+            break;
+        }
+
+        if (!foundTeleportPos)
+            return;
+
+        _transformSystem.SetCoordinates(ev.Performer, coords);
+        _transformSystem.AttachToGridOrMap(ev.Performer);
+
+        _audio.PlayPvs("/Audio/White/Cult/veilin.ogg", coords);
+        _audio.PlayPvs("/Audio/White/Cult/veilout.ogg", oldCoords);
+
+        Spawn("AdminInstantEffectSmoke10", oldCoords);
+        Spawn("AdminInstantEffectSmoke10", coords);
+
+        ev.Handled = true;
+        Speak(ev);
+    }
+
+    #endregion
 
     #region Forcewall
 

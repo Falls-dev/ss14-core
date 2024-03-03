@@ -72,3 +72,30 @@
         prototype: ProjectileFireball
         posData: !type:TargetCasterPos
         speech: action-speech-spell-fireball
+
+- type: entity
+  id: ActionCardSpell
+  name: Cards
+  noSpawn: true
+  components:
+    - type: WorldTargetAction
+      useDelay: 60
+      itemIconStyle: BigAction
+      checkCanAccess: false
+      range: 45
+      isChargeEnabled: true
+      chargingSound:
+        path: /Audio/White/Magic/Cards/charge.ogg
+      chargeProto: MagicFollowerCardEntity
+      maxChargedSound:
+        path: /Audio/White/Magic/Cards/max.ogg
+      isAltEnabled: true
+      sound: !type:SoundPathSpecifier
+        path: /Audio/White/Magic/Cards/cast.ogg
+      icon:
+        sprite: Objects/Magic/card.rsi
+        state: icon
+      event: !type:CardsSpellEvent
+        prototype: ThrowingCard
+        posData: !type:TargetCasterPos
+        speech: "Yebanyy rot etogo kazino blyat!"

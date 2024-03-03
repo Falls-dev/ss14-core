@@ -89,3 +89,15 @@ public sealed partial class FireballSpellEvent : WorldTargetActionEvent, ISpeakS
     [DataField("speech")]
     public string? Speech { get; private set; }
 }
+
+public sealed partial class CardsSpellEvent : WorldTargetActionEvent, ISpeakSpell
+{
+    [DataField("prototype", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    public string Prototype = default!;
+
+    [DataField("posData")]
+    public MagicSpawnData Pos = new TargetCasterPos();
+
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}

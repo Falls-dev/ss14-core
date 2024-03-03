@@ -59,3 +59,12 @@
     - type: Scroll
       actionId: ActionForceSpell
       learnPopup: force
+
+- type: entity
+  id: ScrollCards
+  parent: BaseScroll
+  name: "Cards scroll"
+  components:
+    - type: Scroll
+      actionId: ActionCardSpell
+      learnPopup: cards

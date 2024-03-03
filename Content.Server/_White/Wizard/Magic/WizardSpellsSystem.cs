@@ -10,10 +10,14 @@ using Content.Server.Singularity.EntitySystems;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared._White.Wizard;
 using Content.Shared.Actions;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Item;
 using Content.Shared.Magic;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Throwing;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Random;
 
 namespace Content.Server._White.Wizard.Magic;
 
@@ -22,6 +26,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     #region Dependencies
 
     [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly GunSystem _gunSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
@@ -30,6 +35,8 @@ public sealed class WizardSpellsSystem : EntitySystem
     [Dependency] private readonly MagicSystem _magicSystem = default!;
     [Dependency] private readonly GravityWellSystem _gravityWell = default!;
     [Dependency] private readonly FlammableSystem _flammableSystem = default!;
+    [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
+    [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
 
     #endregion
 
@@ -37,10 +44,98 @@ public sealed class WizardSpellsSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<CardsSpellEvent>(OnCardsSpell);
         SubscribeLocalEvent<FireballSpellEvent>(OnFireballSpell);
         SubscribeLocalEvent<ForceSpellEvent>(OnForceSpell);
         SubscribeLocalEvent<ArcSpellEvent>(OnArcSpell);
     }
+
+    #region Cards
+
+    private void OnCardsSpell(CardsSpellEvent msg)
+    {
+        if (msg.Handled)
+            return;
+
+        switch (msg.ActionUseType)
+        {
+            case ActionUseType.Default:
+                CardsSpellDefault(msg);
+                break;
+            case ActionUseType.Charge:
+                CardsSpellCharge(msg);
+                break;
+            case ActionUseType.AltUse:
+                CardsSpellAlt(msg);
+                break;
+        }
+
+        msg.Handled = true;
+        Speak(msg);
+    }
+
+    private void CardsSpellDefault(CardsSpellEvent msg)
+    {
+        var xform = Transform(msg.Performer);
+
+        for (var i = 0; i < 10; i++)
+        {
+            foreach (var pos in _magicSystem.GetSpawnPositions(xform, msg.Pos))
+            {
+                var mapPos = _transformSystem.ToMapCoordinates(pos);
+                var spawnCoords = _mapManager.TryFindGridAt(mapPos, out var gridUid, out _)
+                    ? pos.WithEntityId(gridUid, EntityManager)
+                    : new EntityCoordinates(_mapManager.GetMapEntityId(mapPos.MapId), mapPos.Position);
+
+                var ent = Spawn(msg.Prototype, spawnCoords);
+
+                var direction = msg.Target.ToMapPos(EntityManager, _transformSystem) - spawnCoords.ToMapPos(EntityManager, _transformSystem);
+                var randomizedDirection = direction + new Vector2(_random.Next(-2, 2), _random.Next(-2, 2));
+
+                _throwingSystem.TryThrow(ent, randomizedDirection, 60, msg.Performer);
+            }
+        }
+    }
+
+    private void CardsSpellCharge(CardsSpellEvent msg)
+    {
+        var xform = Transform(msg.Performer);
+
+        var count = 5 * msg.ChargeLevel;
+        var angleStep = 360f / count;
+
+        for (var i = 0; i < count; i++)
+        {
+            var angle = i * angleStep;
+
+            var direction = new Vector2(MathF.Cos(MathHelper.DegreesToRadians(angle)), MathF.Sin(MathHelper.DegreesToRadians(angle)));
+
+            foreach (var pos in _magicSystem.GetSpawnPositions(xform, msg.Pos))
+            {
+                var mapPos = _transformSystem.ToMapCoordinates(pos);
+
+                var spawnCoords = _mapManager.TryFindGridAt(mapPos, out var gridUid, out _)
+                    ? pos.WithEntityId(gridUid, EntityManager)
+                    : new EntityCoordinates(_mapManager.GetMapEntityId(mapPos.MapId), mapPos.Position);
+
+                var ent = Spawn(msg.Prototype, spawnCoords);
+
+                _throwingSystem.TryThrow(ent, direction, 60, msg.Performer);
+            }
+        }
+    }
+
+    private void CardsSpellAlt(CardsSpellEvent msg)
+    {
+        if (!HasComp<ItemComponent>(msg.TargetUid))
+            return;
+
+        Del(msg.TargetUid);
+        var item = Spawn(msg.Prototype);
+        _handsSystem.TryPickupAnyHand(msg.Performer, item);
+    }
+
+    #endregion
 
     #region Fireball
 

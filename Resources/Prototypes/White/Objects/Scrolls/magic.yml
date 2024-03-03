@@ -105,3 +105,15 @@
       energy: 3.5
       color: "#e5682d"
       castShadows: false
+
+- type: entity
+  id: MagicFollowerCardEntity
+  name: magic
+  components:
+    - type: Physics
+      bodyType: Dynamic
+      fixedRotation: false
+    - type: Sprite
+      sprite: Objects/Magic/card.rsi
+      layers:
+        - state: icon

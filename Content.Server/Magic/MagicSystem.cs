@@ -224,7 +224,7 @@ public sealed class MagicSystem : EntitySystem
 
     #region Helpers
 
-    private List<EntityCoordinates> GetSpawnPositions(TransformComponent casterXform, MagicSpawnData data)
+    public List<EntityCoordinates> GetSpawnPositions(TransformComponent casterXform, MagicSpawnData data)
     {
         return data switch
         {
@@ -234,12 +234,12 @@ public sealed class MagicSystem : EntitySystem
         };
     }
 
-    private List<EntityCoordinates> GetCasterPosition(TransformComponent casterXform)
+    public List<EntityCoordinates> GetCasterPosition(TransformComponent casterXform)
     {
         return new List<EntityCoordinates>(1) { casterXform.Coordinates };
     }
 
-    private List<EntityCoordinates> GetPositionsInFront(TransformComponent casterXform)
+    public List<EntityCoordinates> GetPositionsInFront(TransformComponent casterXform)
     {
         var directionPos = casterXform.Coordinates.Offset(casterXform.LocalRotation.ToWorldVec().Normalized());
 
@@ -266,7 +266,7 @@ public sealed class MagicSystem : EntitySystem
         return spawnPositions;
     }
 
-    private IEnumerable<Direction> GetCardinalDirections(Direction dir)
+    public IEnumerable<Direction> GetCardinalDirections(Direction dir)
     {
         switch (dir)
         {
@@ -281,7 +281,7 @@ public sealed class MagicSystem : EntitySystem
         }
     }
 
-    private (int, int) GetOffsetForDirection(Direction direction)
+    public (int, int) GetOffsetForDirection(Direction direction)
     {
         return direction switch
         {
@@ -293,7 +293,7 @@ public sealed class MagicSystem : EntitySystem
         };
     }
 
-    private void SpawnSpellHelper(List<EntitySpawnEntry> entityEntries, EntityCoordinates entityCoords, float? lifetime, Vector2 offsetVector2)
+    public void SpawnSpellHelper(List<EntitySpawnEntry> entityEntries, EntityCoordinates entityCoords, float? lifetime, Vector2 offsetVector2)
     {
         var getPrototypes = EntitySpawnCollection.GetSpawns(entityEntries, _random);
 

@@ -81,13 +81,14 @@ public sealed class ChargeActionSystem : SharedChargingSystem
                 break;
             case BoundKeyState.Up when _charging:
                 _prevCharging = _charging;
-                _chargeLevel = 0;
                 _charging = false;
                 _chargeTime = 0f;
                 _isChargingPlaying = false;
                 _isChargedPlaying = false;
 
-                HandleAction(actionId, action, user);
+                HandleAction(actionId, action, user, _chargeLevel);
+                _chargeLevel = 0;
+
                 RaiseNetworkEvent(new RequestAudioSpellStop());
                 RaiseNetworkEvent(new RemoveWizardChargeEvent());
                 break;
@@ -128,7 +129,7 @@ public sealed class ChargeActionSystem : SharedChargingSystem
         }
     }
 
-    private void HandleAction(EntityUid actionId, BaseTargetActionComponent action, EntityUid user)
+    private void HandleAction(EntityUid actionId, BaseTargetActionComponent action, EntityUid user, int chargeLevel)
     {
         var mousePos = _eyeManager.PixelToMap(_inputManager.MouseScreenPosition);
         if (mousePos.MapId == MapId.Nullspace)
@@ -144,9 +145,12 @@ public sealed class ChargeActionSystem : SharedChargingSystem
         switch (action)
         {
             case WorldTargetActionComponent mapTarget:
-                _controller?.TryTargetWorld(coordinates, actionId, mapTarget, user, comp, ActionUseType.Charge, _chargeLevel);
+                _controller?.TryTargetWorld(coordinates, actionId, mapTarget, user, comp, ActionUseType.Charge, chargeLevel);
                 break;
         }
+
+        RaiseNetworkEvent(new RequestAudioSpellStop());
+        RaiseNetworkEvent(new RemoveWizardChargeEvent());
     }
 
     public override void Shutdown()

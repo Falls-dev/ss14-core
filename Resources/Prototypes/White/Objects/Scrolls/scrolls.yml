@@ -14,28 +14,6 @@
         path: /Audio/White/Items/scroll/use.ogg
       afterUseSound:
         path: /Audio/White/Items/scroll/after_use.ogg
-    - type: Appearance
-    - type: Flammable
-      fireSpread: true
-      canResistFire: false
-      alwaysCombustible: true
-      canExtinguish: false
-      damage:
-        types:
-          Heat: 1
-    - type: FireVisuals
-      sprite: Effects/fire.rsi
-      normalState: fire
-    - type: Damageable
-      damageModifierSet: Wood
-    - type: Destructible
-      thresholds:
-        - trigger:
-            !type:DamageTrigger
-            damage: 15
-          behaviors:
-            - !type:DoActsBehavior
-              acts: [ "Destruction" ]
 
 - type: entity
   id: ScrollFireball
@@ -63,3 +41,12 @@
     - type: Scroll
       actionId: ActionKnock
       learnPopup: knock-knock
+
+- type: entity
+  id: ScrollArc
+  parent: BaseScroll
+  name: "Electric Arc scroll"
+  components:
+    - type: Scroll
+      actionId: ActionElectricArc
+      learnPopup: lightning

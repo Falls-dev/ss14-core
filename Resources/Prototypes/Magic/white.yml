@@ -1,0 +1,26 @@
+﻿- type: entity
+  id: ActionElectricArc
+  name: Силовая дуга
+  noSpawn: true
+  components:
+    - type: WorldTargetAction
+      useDelay: 60
+      itemIconStyle: BigAction
+      checkCanAccess: false
+      range: 10
+      sound: !type:SoundPathSpecifier
+        path: /Audio/White/Magic/Arc/cast.ogg
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: spell_default
+      isChargeEnabled: true
+      chargingSound:
+        path: /Audio/White/Magic/Arc/charge.ogg
+      maxChargedSound:
+        path: /Audio/White/Magic/Arc/charge.ogg
+      loopMaxCharged: true
+      isAltEnabled: true
+      event: !type:ArcSpellEvent
+        speech: "KUH, ABAH'RAH"
+        prototype: ProjectileTeslaBall
+        posData: !type:TargetCasterPos

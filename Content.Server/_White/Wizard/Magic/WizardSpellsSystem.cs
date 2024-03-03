@@ -273,7 +273,7 @@ public sealed class WizardSpellsSystem : EntitySystem
         if (!TryComp<FlammableComponent>(msg.TargetUid, out var flammableComponent))
             return;
 
-        flammableComponent.FireStacks += 3;
+        flammableComponent.FireStacks += 4;
 
         _flammableSystem.Ignite(msg.TargetUid, msg.Performer);
 

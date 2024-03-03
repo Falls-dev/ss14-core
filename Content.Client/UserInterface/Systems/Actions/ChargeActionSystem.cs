@@ -107,7 +107,10 @@ public sealed class ChargeActionSystem : SharedChargingSystem
 
         if (_chargeLevel != _prevChargeLevel)
         {
-            RaiseNetworkEvent(new AddWizardChargeEvent(action.ChargeProto));
+            if (_chargeLevel > 0 && _charging)
+            {
+                RaiseNetworkEvent(new AddWizardChargeEvent(action.ChargeProto));
+            }
             _prevChargeLevel = _chargeLevel;
         }
 

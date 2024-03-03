@@ -266,33 +266,16 @@ public sealed class MagicSystem : EntitySystem
         return spawnPositions;
     }
 
-    public EntityCoordinates GetPositionInFront(TransformComponent casterXform)
-    {
-        var directionPos = casterXform.Coordinates.Offset(casterXform.LocalRotation.ToWorldVec().Normalized());
-
-        if (!TryComp<MapGridComponent>(casterXform.GridUid, out var mapGrid) ||
-            !directionPos.TryGetTileRef(out var tileReference, EntityManager, _mapManager))
-        {
-            return EntityCoordinates.Invalid;
-        }
-
-        var tileIndex = tileReference.Value.GridIndices;
-        var offset = GetOffsetForDirection(casterXform.LocalRotation.GetCardinalDir());
-        var coordinates = _mapSystem.GridTileToLocal(casterXform.GridUid.Value, mapGrid, tileIndex + offset);
-
-        return coordinates;
-    }
-
     public IEnumerable<Direction> GetCardinalDirections(Direction dir)
     {
         switch (dir)
         {
             case Direction.North:
             case Direction.South:
-                return new[] { Direction.North, Direction.South, Direction.Invalid };
+                return new[] { Direction.North, Direction.South };
             case Direction.East:
             case Direction.West:
-                return new[] { Direction.East, Direction.West, Direction.Invalid };
+                return new[] { Direction.East, Direction.West };
             default:
                 return Array.Empty<Direction>();
         }

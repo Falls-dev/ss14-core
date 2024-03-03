@@ -10,10 +10,12 @@ using Content.Server.Singularity.EntitySystems;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared._White.Wizard;
 using Content.Shared.Actions;
+using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Item;
 using Content.Shared.Magic;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Physics;
 using Content.Shared.Throwing;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
@@ -44,11 +46,81 @@ public sealed class WizardSpellsSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<ForceWallSpellEvent>(OnForcewallSpell);
         SubscribeLocalEvent<CardsSpellEvent>(OnCardsSpell);
         SubscribeLocalEvent<FireballSpellEvent>(OnFireballSpell);
         SubscribeLocalEvent<ForceSpellEvent>(OnForceSpell);
         SubscribeLocalEvent<ArcSpellEvent>(OnArcSpell);
     }
+
+    #region Forcewall
+
+    private void OnForcewallSpell(ForceWallSpellEvent msg)
+    {
+        if (msg.Handled)
+            return;
+
+        switch (msg.ActionUseType)
+        {
+            case ActionUseType.Default:
+                ForcewallSpellDefault(msg);
+                break;
+            case ActionUseType.Charge:
+                ForcewallSpellCharge(msg);
+                break;
+            case ActionUseType.AltUse:
+                ForcewallSpellAlt(msg);
+                break;
+        }
+
+        msg.Handled = true;
+        Speak(msg);
+    }
+
+    private void ForcewallSpellDefault(ForceWallSpellEvent msg)
+    {
+        var transform = Transform(msg.Performer);
+
+        foreach (var position in _magicSystem.GetPositionsInFront(transform))
+        {
+            var ent = Spawn(msg.Prototype, position.SnapToGrid(EntityManager, _mapManager));
+
+            var comp = EnsureComp<PreventCollideComponent>(ent);
+            comp.Uid = msg.Performer;
+        }
+    }
+
+    private void ForcewallSpellCharge(ForceWallSpellEvent msg)
+    {
+        var xform = Transform(msg.Performer);
+
+        var positions = GetArenaPositions(xform, msg.ChargeLevel);
+
+        foreach (var position in positions)
+        {
+            var ent = Spawn(msg.Prototype, position);
+
+            var comp = EnsureComp<PreventCollideComponent>(ent);
+            comp.Uid = msg.Performer;
+        }
+    }
+
+    private void ForcewallSpellAlt(ForceWallSpellEvent msg)
+    {
+        var xform = Transform(msg.TargetUid);
+
+        var positions = GetArenaPositions(xform, 2);
+
+        foreach (var direction in positions)
+        {
+            var ent = Spawn(msg.Prototype, direction);
+
+            var comp = EnsureComp<PreventCollideComponent>(ent);
+            comp.Uid = msg.Performer;
+        }
+    }
+
+    #endregion
 
     #region Cards
 
@@ -327,6 +399,26 @@ public sealed class WizardSpellsSystem : EntitySystem
         _chat.TrySendInGameICMessage(args.Performer, Loc.GetString(speak.Speech),
             InGameICChatType.Speak, false);
     }
+
+    private List<EntityCoordinates> GetArenaPositions(TransformComponent casterXform, int arenaSize)
+    {
+        var positions = new List<EntityCoordinates>();
+
+        arenaSize--;
+
+        for (var i = -arenaSize; i <= arenaSize; i++)
+        {
+            for (var j = -arenaSize; j <= arenaSize; j++)
+            {
+                var position = new Vector2(i, j);
+                var coordinates = casterXform.Coordinates.Offset(position);
+                positions.Add(coordinates);
+            }
+        }
+
+        return positions;
+    }
+
 
     #endregion
 }

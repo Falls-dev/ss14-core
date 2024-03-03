@@ -101,3 +101,12 @@ public sealed partial class CardsSpellEvent : WorldTargetActionEvent, ISpeakSpel
     [DataField("speech")]
     public string? Speech { get; private set; }
 }
+
+public sealed partial class ForceWallSpellEvent : WorldTargetActionEvent, ISpeakSpell
+{
+    [DataField("prototype", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    public string Prototype = default!;
+
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}

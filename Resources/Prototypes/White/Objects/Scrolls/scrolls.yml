@@ -30,7 +30,7 @@
   name: "Forcewall scroll"
   components:
     - type: Scroll
-      actionId: ActionForceWall
+      actionId: ActionForcewallSpell
       learnPopup: forcewall
 
 - type: entity

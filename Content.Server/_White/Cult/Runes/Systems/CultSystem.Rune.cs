@@ -10,8 +10,11 @@ using Content.Server.Hands.Systems;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Server._White.Cult.GameRule;
 using Content.Server._White.Cult.Runes.Comps;
+using Content.Server.Bible.Components;
+using Content.Server.Chemistry.Components;
+using Content.Server.Chemistry.Containers.EntitySystems;
+using Content.Server.Fluids.Components;
 using Content.Shared._White.Chaplain;
-using Content.Shared.Actions;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Damage;
@@ -28,16 +31,15 @@ using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Pulling.Components;
 using Content.Shared.Rejuvenate;
-using Content.Shared.Roles.Jobs;
 using Content.Shared._White.Cult;
 using Content.Shared._White.Cult.Components;
 using Content.Shared._White.Cult.Runes;
 using Content.Shared._White.Cult.UI;
+using Content.Shared.Cuffs;
 using Content.Shared.Mindshield.Components;
 using Content.Shared.Pulling;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
-using Robust.Shared.Audio.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Events;
@@ -65,6 +67,8 @@ public sealed partial class CultSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly FlammableSystem _flammableSystem = default!;
     [Dependency] private readonly SharedPullingSystem _pulling = default!;
+    [Dependency] private readonly SharedCuffableSystem _cuffable = default!;
+    [Dependency] private readonly SolutionContainerSystem _solutionContainerSystem = default!;
 
 
     public override void Initialize()
@@ -110,6 +114,7 @@ public sealed partial class CultSystem : EntitySystem
         InitializeBarrierSystem();
         InitializeConstructsAbilities();
         InitializeActions();
+        InitializeVerb();
     }
 
     private float _timeToDraw;
@@ -259,6 +264,14 @@ public sealed partial class CultSystem : EntitySystem
 
     private void TryErase(EntityUid uid, CultRuneBaseComponent component, InteractUsingEvent args)
     {
+        if (TryComp<BibleComponent>(args.Used, out var bible) && HasComp<BibleUserComponent>(args.User))
+        {
+            _popupSystem.PopupEntity(Loc.GetString("cult-erased-rune"), args.User, args.User);
+            _audio.PlayPvs(bible.HealSoundPath, args.User);
+            EntityManager.DeleteEntity(args.Target);
+            return;
+        }
+
         var entityPrototype = _entityManager.GetComponent<MetaDataComponent>(args.Used).EntityPrototype;
 
         if (entityPrototype == null)
@@ -293,7 +306,7 @@ public sealed partial class CultSystem : EntitySystem
 
         if (_doAfterSystem.TryStartDoAfter(argsDoAfterEvent))
         {
-            _popupSystem.PopupEntity(Loc.GetString("cult-started-erasing-rune"), target);
+            _popupSystem.PopupEntity(Loc.GetString("cult-started-erasing-rune"), args.User, args.User);
         }
     }
 
@@ -305,18 +318,20 @@ public sealed partial class CultSystem : EntitySystem
         var target = GetEntity(args.TargetEntityId);
 
         _entityManager.DeleteEntity(target);
-        _popupSystem.PopupEntity(Loc.GetString("cult-erased-rune"), args.User);
+        _popupSystem.PopupEntity(Loc.GetString("cult-erased-rune"), args.User, args.User);
     }
 
     private void HandleCollision(EntityUid uid, CultRuneBaseComponent component, ref StartCollideEvent args)
     {
-        if (!TryComp<SolutionContainerManagerComponent>(args.OtherEntity, out var solution) || solution.Solutions == null)
+        if (!TryComp<SolutionContainerManagerComponent>(args.OtherEntity, out var solution) ||
+            !HasComp<VaporComponent>(args.OtherEntity) && !HasComp<SprayComponent>(args.OtherEntity))
         {
             return;
         }
 
-        if (solution.Solutions.TryGetValue("vapor", out var vapor) &&
-            vapor.Contents.Any(x => x.Reagent.Prototype == CultRuleComponent.HolyWaterReagent))
+        var solutions = _solutionContainerSystem.EnumerateSolutions((args.OtherEntity, solution));
+
+        if (solutions.Any(x => x.Solution.Comp.Solution.ContainsPrototype(CultRuleComponent.HolyWaterReagent)))
         {
             Del(uid);
         }
@@ -517,6 +532,14 @@ public sealed partial class CultSystem : EntitySystem
         _ruleSystem.MakeCultist(actorComponent.PlayerSession);
         _stunSystem.TryStun(target, TimeSpan.FromSeconds(2f), false);
         HealCultist(target);
+
+        if (TryComp(target, out CuffableComponent? cuffs) && cuffs.Container.ContainedEntities.Count >= 1)
+        {
+            var lastAddedCuffs = cuffs.LastAddedCuffs;
+            _cuffable.Uncuff(target, user, lastAddedCuffs);
+        }
+
+        _statusEffectsSystem.TryRemoveStatusEffect(target, "Muted");
 
         return true;
     }
@@ -1143,17 +1166,19 @@ public sealed partial class CultSystem : EntitySystem
 
         if (component.IsRune)
         {
-            if (comp.SelectedEmpowers.Count > component.MaxAllowedCultistActions)
+            if (comp.SelectedEmpowers.Count >= component.MaxAllowedCultistActions)
             {
                 _popupSystem.PopupEntity(Loc.GetString("cult-too-much-empowers"), uid);
                 return;
             }
 
-            comp.SelectedEmpowers.Add(_actionsSystem.AddAction(playerEntity.Value, action));
+            comp.SelectedEmpowers.Add(GetNetEntity(_actionsSystem.AddAction(playerEntity.Value, action)));
+            Dirty(playerEntity.Value, comp);
         }
         else if (comp.SelectedEmpowers.Count < component.MinRequiredCultistActions)
         {
-            comp.SelectedEmpowers.Add(_actionsSystem.AddAction(playerEntity.Value, action));
+            comp.SelectedEmpowers.Add(GetNetEntity(_actionsSystem.AddAction(playerEntity.Value, action)));
+            Dirty(playerEntity.Value, comp);
         }
     }
 

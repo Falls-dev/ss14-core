@@ -3,6 +3,7 @@ using Content.Shared.Actions;
 using Content.Shared.Implants.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Mindshield.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Tag;
 using JetBrains.Annotations;
@@ -72,6 +73,16 @@ public abstract class SharedSubdermalImplantSystem : EntitySystem
         if (component.ImplantAction != null)
             _actionsSystem.RemoveProvidedActions(component.ImplantedEntity.Value, uid);
 
+        // WD EDIT START
+        if (_tag.HasTag(uid, "MindShield") &&
+            _container.TryGetContainer(component.ImplantedEntity.Value, ImplanterComponent.ImplantSlotId,
+                out var implantContainer) &&
+            implantContainer.ContainedEntities.All(x => !_tag.HasTag(x, "MindShield")))
+        {
+            RemCompDeferred<MindShieldComponent>(component.ImplantedEntity.Value);
+        }
+        // WD EDIT END
+
         if (!_container.TryGetContainer(uid, BaseStorageId, out var storageImplant))
             return;
 
@@ -125,7 +136,7 @@ public abstract class SharedSubdermalImplantSystem : EntitySystem
         var implantContainer = implantedComp.ImplantContainer;
 
         component.ImplantedEntity = target;
-        RaiseLocalEvent(new SubdermalImplantInserted(target, component));
+        RaiseLocalEvent(implant, new SubdermalImplantInserted(target, target, component));
         _container.Insert(implant, implantContainer);
     }
 

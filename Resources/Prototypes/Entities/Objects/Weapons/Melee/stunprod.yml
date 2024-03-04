@@ -72,6 +72,6 @@
     containers:
       cell_slot: !type:ContainerSlot {}
   - type: Construction
-    deconstructionTarget: rod
+    deconstructionTarget: cuffs
     graph: StunprodGraph
     node: stunprod

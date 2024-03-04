@@ -72,7 +72,7 @@
   - type: Stunprod
     hasHeldPrefix: false
   - type: Construction
-    deconstructionTarget: rod
+    deconstructionTarget: cuffs
     graph: StunprodGraph
     node: snatcherprod
 
@@ -88,6 +88,6 @@
   - type: Item
     size: Normal
   - type: Construction
-    deconstructionTarget: rod
+    deconstructionTarget: cuffs
     graph: StunprodGraph
     node: unfinished

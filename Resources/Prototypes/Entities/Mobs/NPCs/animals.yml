@@ -2186,6 +2186,7 @@
       makeSentient: true
       name: ghost-role-information-giant-spider-name
       description: ghost-role-information-giant-spider-description
+      rules: ghost-role-information-giant-spider-rules
     - type: GhostTakeoverAvailable
 
 - type: entity
@@ -3205,4 +3206,4 @@
   components:
   - type: ReplacementAccent
     accent: nymph
-    
+

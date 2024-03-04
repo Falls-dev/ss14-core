@@ -11,7 +11,8 @@ ghost-role-information-mothroach-name = Таракамоль
 ghost-role-information-mothroach-description = Милая озорная таракамоль.
 
 ghost-role-information-giant-spider-name = Гигантский паук
-ghost-role-information-giant-spider-description = Устройте хаос обитателям станции!
+ghost-role-information-giant-spider-description = Обитатели этой станции выглядят весьма аппетитно. Устройте им хаос и заманите в свою паутину!
+ghost-role-information-giant-spider-rules = Вы - злой и голодный чужеродный разум. Найдите источник пропитания, создайте гнездо и защищайте его от непрошенных гостей.
 
 ghost-role-information-cognizine-description = Приобрело сознание с помощью магии когнизина.
 
@@ -20,6 +21,7 @@ ghost-role-information-hamster-description = Маленький ворчливы
 
 ghost-role-information-hamlet-name = Хомяк Гамлет
 ghost-role-information-hamlet-description = Живёт на капитанском мостике, немного вспыльчив и всегда голоден.
+ghost-role-information-hamlet-rules = Вы - пушистая сообственность капитана. Найдите рычаги давления на экипаж и отдавайте приказы, которые утолят ваш вечный голод.
 
 ghost-role-information-slimes-name = Слайм
 ghost-role-information-slimes-description = Обычный слайм без особых потребностей или интересов. Он просто живет.

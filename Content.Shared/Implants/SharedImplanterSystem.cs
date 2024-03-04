@@ -117,6 +117,9 @@ public abstract class SharedImplanterSystem : EntitySystem
         _container.Insert(implant.Value, implantContainer);
         RaiseLocalEvent(implant.Value, new SubdermalImplantInserted(user, target, implantComp)); //WD EDIT
 
+        if (component.CurrentMode == ImplanterToggleMode.Inject && component.SingleUse) // WD EDIT
+            component.ImplantOnly = true;
+
         if (component.CurrentMode == ImplanterToggleMode.Inject && !component.ImplantOnly)
             DrawMode(implanter, component);
         else

@@ -51,7 +51,7 @@ public sealed class BackstabSystem : EntitySystem
         if (!_net.IsServer)
             return;
 
-        var message = Loc.GetString("critical-damage-betrayal-dagger", ("damage", damage));
+        var message = Loc.GetString("backstab-damage-betrayal-dagger", ("damage", damage));
         _popup.PopupClient(message, args.User, args.User, PopupType.MediumCaution);
     }
 }

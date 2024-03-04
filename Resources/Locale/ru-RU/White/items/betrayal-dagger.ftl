@@ -1,1 +1,1 @@
-﻿critical-damage-betrayal-dagger = Удар в спину: {$damage}!
+﻿backstab-damage-betrayal-dagger = Удар в спину: {$damage}!

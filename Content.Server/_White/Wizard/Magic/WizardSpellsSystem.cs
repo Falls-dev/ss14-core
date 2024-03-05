@@ -10,9 +10,11 @@ using Content.Server.Magic;
 using Content.Server.Singularity.EntitySystems;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared._White.Wizard;
+using Content.Shared._White.Wizard.Magic;
 using Content.Shared.Actions;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
 using Content.Shared.Item;
 using Content.Shared.Magic;
 using Content.Shared.Maps;
@@ -48,6 +50,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
 
     #endregion
 
@@ -62,13 +65,14 @@ public sealed class WizardSpellsSystem : EntitySystem
         SubscribeLocalEvent<FireballSpellEvent>(OnFireballSpell);
         SubscribeLocalEvent<ForceSpellEvent>(OnForceSpell);
         SubscribeLocalEvent<ArcSpellEvent>(OnArcSpell);
+        SubscribeLocalEvent<MagicComponent, BeforeCastSpellEvent>(OnBeforeCastSpell);
     }
 
     #region Ethereal Jaunt
 
     private void OnJauntSpell(EtherealJauntSpellEvent msg)
     {
-        if (msg.Handled)
+        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
             return;
 
         if (_statusEffectsSystem.HasStatusEffect(msg.Performer, "Incorporeal"))
@@ -91,7 +95,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnBlinkSpell(BlinkSpellEvent msg)
     {
-        if (msg.Handled)
+        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
             return;
 
         var transform = Transform(msg.Performer);
@@ -143,7 +147,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnForcewallSpell(ForceWallSpellEvent msg)
     {
-        if (msg.Handled)
+        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
             return;
 
         switch (msg.ActionUseType)
@@ -212,7 +216,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnCardsSpell(CardsSpellEvent msg)
     {
-        if (msg.Handled)
+        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
             return;
 
         switch (msg.ActionUseType)
@@ -299,7 +303,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnFireballSpell(FireballSpellEvent msg)
     {
-        if (msg.Handled)
+        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
             return;
 
         switch (msg.ActionUseType)
@@ -372,7 +376,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnForceSpell(ForceSpellEvent msg)
     {
-        if (msg.Handled)
+        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
             return;
 
         switch (msg.ActionUseType)
@@ -413,7 +417,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnArcSpell(ArcSpellEvent msg)
     {
-        if (msg.Handled)
+        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
             return;
 
         switch (msg.ActionUseType)
@@ -505,6 +509,39 @@ public sealed class WizardSpellsSystem : EntitySystem
         return positions;
     }
 
+    private bool CheckRequirements(EntityUid spell, EntityUid performer)
+    {
+        var ev = new BeforeCastSpellEvent(performer);
+        RaiseLocalEvent(spell, ref ev);
+        return !ev.Cancelled;
+    }
+
+    private void OnBeforeCastSpell(Entity<MagicComponent> ent, ref BeforeCastSpellEvent args)
+    {
+        var comp = ent.Comp;
+        var hasReqs = false;
+
+        if (comp.RequiresClothes)
+        {
+            var enumerator = _inventory.GetSlotEnumerator(args.Performer, SlotFlags.OUTERCLOTHING | SlotFlags.HEAD);
+            while (enumerator.MoveNext(out var containerSlot))
+            {
+                if (containerSlot.ContainedEntity is { } item)
+                    hasReqs = HasComp<WizardClothesComponent>(item);
+                else
+                    hasReqs = false;
+
+                if (!hasReqs)
+                    break;
+            }
+        }
+
+        if (!hasReqs)
+        {
+            args.Cancelled = true;
+            _popupSystem.PopupEntity("Missing Requirements! You need to wear your robe and hat!", args.Performer, args.Performer);
+        }
+    }
 
     #endregion
 }

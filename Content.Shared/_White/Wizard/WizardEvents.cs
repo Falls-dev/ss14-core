@@ -13,6 +13,19 @@ public sealed partial class ScrollDoAfterEvent : SimpleDoAfterEvent
 {
 }
 
+[ByRefEvent]
+public struct BeforeCastSpellEvent
+{
+    public EntityUid Performer;
+
+    public bool Cancelled;
+
+    public BeforeCastSpellEvent(EntityUid performer)
+    {
+        Performer = performer;
+    }
+}
+
 [Serializable, NetSerializable]
 public sealed partial class AddWizardChargeEvent : EntityEventArgs
 {

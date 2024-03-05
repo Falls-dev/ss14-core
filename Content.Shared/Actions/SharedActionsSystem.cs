@@ -432,6 +432,7 @@ public abstract class SharedActionsSystem : EntitySystem
         if (performEvent != null)
         {
             performEvent.Performer = user;
+            performEvent.Action = actionEnt;
             performEvent.ActionUseType = ev.ActionUseType;
             performEvent.ChargeLevel = ev.ChargeLevel;
         }

@@ -159,6 +159,8 @@ public abstract partial class BaseActionEvent : HandledEntityEventArgs
     /// </summary>
     public EntityUid Performer;
 
+    public EntityUid Action;
+
     public ActionUseType ActionUseType = ActionUseType.Default;
 
     public int ChargeLevel;

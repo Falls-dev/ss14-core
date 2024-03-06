@@ -24,6 +24,8 @@
       fiberMaterial: fibers-nanomachines
     - type: FingerprintMask
     - type: MagneticGloves
+      glovesActiveTime: 60
+      glovesCooldown: 60
 
 - type: entity
   id: ClothingHandsGlovesMagneticAdvanced

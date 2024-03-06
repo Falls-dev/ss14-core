@@ -3,6 +3,7 @@ using Content.Server.Power.Components;
 using Content.Shared.Examine;
 using Content.Shared.Inventory.Events;
 using Content.Shared._White.MagGloves;
+using Content.Shared.Popups;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 
@@ -16,6 +17,7 @@ public sealed class MagneticGlovesSystem : EntitySystem
 
     [Dependency] private readonly SharedContainerSystem _sharedContainer = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -30,16 +32,9 @@ public sealed class MagneticGlovesSystem : EntitySystem
         var query = EntityQueryEnumerator<MagneticGlovesComponent>();
         while (query.MoveNext(out var uid, out var gloves))
         {
-
-            if (!TryComp(uid, out MagneticGlovesComponent? magcomp))
-                continue;
-
-            if (!magcomp.Enabled)
-                return;
-
-            if (_gameTiming.CurTime.CompareTo(magcomp.GlovesLastActivation.Add(magcomp.GlovesActiveTime)) == 1)
+            if (_gameTiming.CurTime > gloves.GlovesLastActivation + gloves.GlovesActiveTime && gloves.Enabled)
             {
-                RaiseLocalEvent(uid, new DeactivateMagneticGlovesEvent());
+                RaiseLocalEvent(uid, new ToggleMagneticGlovesEvent());
             }
 
         }
@@ -49,7 +44,7 @@ public sealed class MagneticGlovesSystem : EntitySystem
     {
         if (component.Enabled)
         {
-            RaiseLocalEvent(uid, new DeactivateMagneticGlovesEvent());
+            RaiseLocalEvent(uid, new ToggleMagneticGlovesEvent());
         }
     }
 
@@ -57,7 +52,13 @@ public sealed class MagneticGlovesSystem : EntitySystem
     {
         if (args.Slot == "gloves")
         {
-            ToggleGloves(args.Equipee, component, false);
+            ToggleGloves(args.Equipee, component, false, uid);
+        }
+
+        if (component.Enabled)
+        {
+            _popup.PopupEntity(Loc.GetString("maggloves-deactivated"), uid, args.Equipee);
+            RaiseLocalEvent(uid, new ToggleMagneticGlovesEvent());
         }
     }
 
@@ -65,16 +66,16 @@ public sealed class MagneticGlovesSystem : EntitySystem
     {
         if (args.Slot == "gloves")
         {
-            ToggleGloves(args.Equipee, component, true);
+            ToggleGloves(args.Equipee, component, true, uid);
         }
     }
 
-    public void ToggleGloves(EntityUid owner, MagneticGlovesComponent component, bool active)
+    public void ToggleGloves(EntityUid owner, MagneticGlovesComponent component, bool active, EntityUid uid)
     {
         if (!active)
         {
             RemComp<KeepItemsOnFallComponent>(owner);
-            if (TryComp<MagneticGlovesAdvancedComponent>(owner, out var adv))
+            if (TryComp<MagneticGlovesAdvancedComponent>(uid, out var adv))
             {
                 RemComp<PreventDisarmComponent>(owner);
                 RemComp<PreventStrippingFromHandsAndGlovesComponent>(owner);
@@ -83,7 +84,7 @@ public sealed class MagneticGlovesSystem : EntitySystem
         else if (component.Enabled)
         {
             EnsureComp<KeepItemsOnFallComponent>(owner);
-            if (TryComp<MagneticGlovesAdvancedComponent>(owner, out var adv))
+            if (TryComp<MagneticGlovesAdvancedComponent>(uid, out var adv))
             {
                 EnsureComp<PreventDisarmComponent>(owner);
                 EnsureComp<PreventStrippingFromHandsAndGlovesComponent>(owner);

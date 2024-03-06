@@ -34,7 +34,7 @@ public sealed class StandingStateSystem : EntitySystem
 
             if (!HasComp<KeepItemsOnFallComponent>(uid))
             {
-                if (!_handsSystem.TryDrop(uid, hand, null, checkActionBlocker: false, handsComp: handsComp) && HasComp<KeepItemsOnFallComponent>(uid))
+                if (!_handsSystem.TryDrop(uid, hand, null, checkActionBlocker: false, handsComp: handsComp))
                     continue;
             }
 

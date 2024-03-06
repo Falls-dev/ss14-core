@@ -867,11 +867,6 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         // Play a sound to give instant feedback; same with playing the animations
         Audio.PlayPredicted(component.SwingSound, meleeUid, user);
-
-        if (HasComp<PreventDisarmComponent>(target)) // Can't disarm entity with prevent disarm component
-        {
-            return false;
-        }
         return true;
     }
 

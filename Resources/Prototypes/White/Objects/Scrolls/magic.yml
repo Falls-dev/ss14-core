@@ -103,7 +103,7 @@
     - type: PointLight
       radius: 1.5
       energy: 3.5
-      color: "#e5682d"
+      color: "#ce5a25"
       castShadows: false
 
 - type: entity

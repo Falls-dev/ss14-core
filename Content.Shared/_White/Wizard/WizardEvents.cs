@@ -8,6 +8,8 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 
 namespace Content.Shared._White.Wizard;
 
+#region HelperEvents
+
 [Serializable, NetSerializable]
 public sealed partial class ScrollDoAfterEvent : SimpleDoAfterEvent
 {
@@ -73,6 +75,10 @@ public sealed partial class RequestAudioSpellStop : EntityEventArgs
 {
 }
 
+#endregion
+
+#region Spells
+
 public sealed partial class ArcSpellEvent : WorldTargetActionEvent, ISpeakSpell
 {
     [DataField("prototype", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
@@ -135,3 +141,35 @@ public sealed partial class EtherealJauntSpellEvent : InstantActionEvent, ISpeak
     [DataField("speech")]
     public string? Speech { get; private set; }
 }
+
+public sealed partial class EmpSpellEvent : InstantActionEvent, ISpeakSpell
+{
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}
+
+public sealed partial class CluwneCurseSpellEvent : EntityTargetActionEvent, ISpeakSpell
+{
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}
+
+public sealed partial class BananaTouchSpellEvent : EntityTargetActionEvent, ISpeakSpell
+{
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}
+
+public sealed partial class MimeTouchSpellEvent : EntityTargetActionEvent, ISpeakSpell
+{
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}
+
+public sealed partial class InstantRecallSpellEvent : InstantActionEvent, ISpeakSpell
+{
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}
+
+#endregion

@@ -106,7 +106,7 @@
       event: !type:CardsSpellEvent
         prototype: ThrowingCard
         posData: !type:TargetCasterPos
-        speech: "Yebanyy rot etogo kazino blyat!"
+        speech: "SHIZO NERO!"
 
 - type: entity
   id: ActionForcewallSpell
@@ -148,10 +148,10 @@
         sprite: Objects/Magic/magicactions.rsi
         state: blink
       event: !type:BlinkSpellEvent
-        speech: "SYCAR TYN"
+        speech: "SYCAR TYN!"
 
 - type: entity
-  id: ActionEtherealJaunt
+  id: ActionEtherealJauntSpell
   name: Ethereal Jaunt
   noSpawn: true
   components:
@@ -164,4 +164,90 @@
         sprite: Objects/Magic/magicactions.rsi
         state: blink
       event: !type:EtherealJauntSpellEvent
-        speech: "SCYAR NILA"
+        speech: "SCYAR NILA!"
+
+- type: entity
+  id: ActionEmpSpell
+  name: Emp
+  noSpawn: true
+  components:
+    - type: Magic
+      requiresClothes: true
+    - type: InstantAction
+      useDelay: 60
+      itemIconStyle: BigAction
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: spell_default
+      event: !type:EmpSpellEvent
+        speech: "OCYAR TRINA!"
+
+- type: entity
+  id: ActionCluwneCurseSpell
+  name: Cluwne Curse
+  noSpawn: true
+  components:
+    - type: Magic
+      requiresClothes: true
+    - type: EntityTargetAction
+      canTargetSelf: false
+      range: 2
+      useDelay: 300
+      itemIconStyle: BigAction
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: spell_default
+      event: !type:CluwneCurseSpellEvent
+        speech: "CLUWNE FOR ME!"
+
+- type: entity
+  id: ActionBananaTouchSpell
+  name: Banana Touch
+  noSpawn: true
+  components:
+    - type: Magic
+      requiresClothes: true
+    - type: EntityTargetAction
+      canTargetSelf: false
+      range: 2
+      useDelay: 300
+      itemIconStyle: BigAction
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: spell_default
+      event: !type:BananaTouchSpellEvent
+        speech: "HONK FOR ME!"
+
+- type: entity
+  id: ActionMimeTouchSpell
+  name: Mime Touch
+  noSpawn: true
+  components:
+    - type: Magic
+      requiresClothes: true
+    - type: EntityTargetAction
+      canTargetSelf: false
+      range: 2
+      useDelay: 300
+      itemIconStyle: BigAction
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: spell_default
+      event: !type:MimeTouchSpellEvent
+        speech: "SILENCE!"
+
+- type: entity
+  id: ActionInstantRecallSpell
+  name: Instant Recall
+  noSpawn: true
+  components:
+    - type: InstantRecall
+    - type: Magic
+      requiresClothes: true
+    - type: InstantAction
+      useDelay: 10
+      itemIconStyle: BigAction
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: spell_default
+      event: !type:InstantRecallSpellEvent

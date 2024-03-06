@@ -2,9 +2,13 @@
 using System.Numerics;
 using Content.Server._White.IncorporealSystem;
 using Content.Server._White.Wizard.Magic.Amaterasu;
+using Content.Server._White.Wizard.Magic.Other;
+using Content.Server.Abilities.Mime;
+using Content.Server.Administration.Commands;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Chat.Systems;
+using Content.Server.Emp;
 using Content.Server.Lightning;
 using Content.Server.Magic;
 using Content.Server.Singularity.EntitySystems;
@@ -12,9 +16,14 @@ using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared._White.Wizard;
 using Content.Shared._White.Wizard.Magic;
 using Content.Shared.Actions;
+using Content.Shared.Cluwne;
 using Content.Shared.Coordinates.Helpers;
+using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Humanoid;
+using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
+using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Item;
 using Content.Shared.Magic;
 using Content.Shared.Maps;
@@ -51,6 +60,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly EmpSystem _empSystem = default!;
 
     #endregion
 
@@ -58,6 +68,11 @@ public sealed class WizardSpellsSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<InstantRecallSpellEvent>(OnInstantRecallSpell);
+        SubscribeLocalEvent<MimeTouchSpellEvent>(OnMimeTouchSpell);
+        SubscribeLocalEvent<BananaTouchSpellEvent>(OnBananaTouchSpell);
+        SubscribeLocalEvent<CluwneCurseSpellEvent>(OnCluwneCurseSpell);
+        SubscribeLocalEvent<EmpSpellEvent>(OnEmpSpell);
         SubscribeLocalEvent<EtherealJauntSpellEvent>(OnJauntSpell);
         SubscribeLocalEvent<BlinkSpellEvent>(OnBlinkSpell);
         SubscribeLocalEvent<ForceWallSpellEvent>(OnForcewallSpell);
@@ -68,6 +83,144 @@ public sealed class WizardSpellsSystem : EntitySystem
 
         SubscribeLocalEvent<MagicComponent, BeforeCastSpellEvent>(OnBeforeCastSpell);
     }
+
+    #region Instant Recall
+
+    private void OnInstantRecallSpell(InstantRecallSpellEvent msg)
+    {
+        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+            return;
+
+        if (!TryComp<HandsComponent>(msg.Performer, out var handsComponent))
+            return;
+
+        if (!TryComp<InstantRecallComponent>(msg.Action, out var recallComponent))
+        {
+            _popupSystem.PopupEntity("Что-то поломалось!", msg.Performer, msg.Performer);
+            return;
+        }
+
+        if (handsComponent.ActiveHandEntity != null)
+        {
+            if (HasComp<VirtualItemComponent>(handsComponent.ActiveHandEntity.Value))
+            {
+                _popupSystem.PopupEntity("Не могу работать с этим!", msg.Performer, msg.Performer);
+                return;
+            }
+
+            recallComponent.Item = handsComponent.ActiveHandEntity.Value;
+            _popupSystem.PopupEntity($"Сопряжено с {MetaData(handsComponent.ActiveHandEntity.Value).EntityName}", msg.Performer, msg.Performer);
+            return;
+        }
+
+        if (handsComponent.ActiveHandEntity == null && recallComponent.Item != null)
+        {
+            var coordsItem = Transform(recallComponent.Item.Value).Coordinates;
+            var coordsPerformer = Transform(msg.Performer).Coordinates;
+
+            Spawn("EffectEmpPulse", coordsItem);
+
+            _transformSystem.SetCoordinates(recallComponent.Item.Value, coordsPerformer);
+            _transformSystem.AttachToGridOrMap(recallComponent.Item.Value);
+
+            _handsSystem.TryForcePickupAnyHand(msg.Performer, recallComponent.Item.Value);
+
+            msg.Handled = true;
+            return;
+        }
+
+        _popupSystem.PopupEntity("Нет привязки.", msg.Performer, msg.Performer);
+    }
+
+    #endregion
+
+    #region Mime Touch
+
+    private void OnMimeTouchSpell(MimeTouchSpellEvent msg)
+    {
+        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+            return;
+
+        if (!HasComp<HumanoidAppearanceComponent>(msg.Target))
+        {
+           _popupSystem.PopupEntity("Работает только на людях!", msg.Performer, msg.Performer);
+            return;
+        }
+
+        SetOutfitCommand.SetOutfit(msg.Target, "MimeGear", EntityManager);
+        EnsureComp<MimePowersComponent>(msg.Target);
+
+        Spawn("AdminInstantEffectSmoke3", Transform(msg.Target).Coordinates);
+
+        msg.Handled = true;
+        Speak(msg);
+    }
+
+    #endregion
+
+    #region Banana Touch
+
+    private void OnBananaTouchSpell(BananaTouchSpellEvent msg)
+    {
+        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+            return;
+
+        if (!HasComp<HumanoidAppearanceComponent>(msg.Target))
+        {
+            _popupSystem.PopupEntity("Работает только на людях!", msg.Performer, msg.Performer);
+            return;
+        }
+
+        SetOutfitCommand.SetOutfit(msg.Target, "ClownGear", EntityManager);
+        EnsureComp<ClumsyComponent>(msg.Target);
+
+        Spawn("AdminInstantEffectSmoke3", Transform(msg.Target).Coordinates);
+
+        msg.Handled = true;
+        Speak(msg);
+    }
+
+    #endregion
+
+    #region Cluwne Curse
+
+    private void OnCluwneCurseSpell(CluwneCurseSpellEvent msg)
+    {
+        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+            return;
+
+        if (!HasComp<HumanoidAppearanceComponent>(msg.Target))
+        {
+            _popupSystem.PopupEntity("Работает только на людях!", msg.Performer, msg.Performer);
+            return;
+        }
+
+        EnsureComp<CluwneComponent>(msg.Target);
+
+        Spawn("AdminInstantEffectSmoke3", Transform(msg.Target).Coordinates);
+
+        msg.Handled = true;
+        Speak(msg);
+    }
+
+    #endregion
+
+    #region EMP
+
+    private void OnEmpSpell(EmpSpellEvent msg)
+    {
+        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+            return;
+
+        var coords = _transformSystem.ToMapCoordinates(Transform(msg.Performer).Coordinates);
+
+        _empSystem.EmpPulse(coords, 15, 1000000, 60f);
+
+        msg.Handled = true;
+        Speak(msg);
+    }
+
+    #endregion
 
     #region Ethereal Jaunt
 

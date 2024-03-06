@@ -84,5 +84,50 @@
   name: "Ethereal Jaunt scroll"
   components:
     - type: Scroll
-      actionId: ActionEtherealJaunt
+      actionId: ActionEtherealJauntSpell
       learnPopup: jaunt
+
+- type: entity
+  id: ScrollEmp
+  parent: BaseScroll
+  name: "Emp scroll"
+  components:
+    - type: Scroll
+      actionId: ActionEmpSpell
+      learnPopup: emp
+
+- type: entity
+  id: ScrollCluwneCurse
+  parent: BaseScroll
+  name: "Cluwne curse scroll"
+  components:
+    - type: Scroll
+      actionId: ActionCluwneCurseSpell
+      learnPopup: curse
+
+- type: entity
+  id: ScrollBananaTouch
+  parent: BaseScroll
+  name: "Banana touch scroll"
+  components:
+    - type: Scroll
+      actionId: ActionBananaTouchSpell
+      learnPopup: banana
+
+- type: entity
+  id: ScrollMimeTouch
+  parent: BaseScroll
+  name: "Mime touch scroll"
+  components:
+    - type: Scroll
+      actionId: ActionMimeTouchSpell
+      learnPopup: silence
+
+- type: entity
+  id: ScrollInstantRecall
+  parent: BaseScroll
+  name: "Instant recall scroll"
+  components:
+    - type: Scroll
+      actionId: ActionInstantRecallSpell
+      learnPopup: recall

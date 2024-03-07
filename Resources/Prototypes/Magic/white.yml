@@ -162,7 +162,7 @@
       itemIconStyle: BigAction
       icon:
         sprite: Objects/Magic/magicactions.rsi
-        state: blink
+        state: jaunt
       event: !type:EtherealJauntSpellEvent
         speech: "SCYAR NILA!"
 
@@ -178,7 +178,7 @@
       itemIconStyle: BigAction
       icon:
         sprite: Objects/Magic/magicactions.rsi
-        state: spell_default
+        state: emp_new
       event: !type:EmpSpellEvent
         speech: "OCYAR TRINA!"
 
@@ -196,7 +196,7 @@
       itemIconStyle: BigAction
       icon:
         sprite: Objects/Magic/magicactions.rsi
-        state: spell_default
+        state: cluwne
       event: !type:CluwneCurseSpellEvent
         speech: "CLUWNE FOR ME!"
 
@@ -214,7 +214,7 @@
       itemIconStyle: BigAction
       icon:
         sprite: Objects/Magic/magicactions.rsi
-        state: spell_default
+        state: clown
       event: !type:BananaTouchSpellEvent
         speech: "HONK FOR ME!"
 
@@ -232,7 +232,7 @@
       itemIconStyle: BigAction
       icon:
         sprite: Objects/Magic/magicactions.rsi
-        state: spell_default
+        state: mime_curse
       event: !type:MimeTouchSpellEvent
         speech: "SILENCE!"
 
@@ -249,5 +249,5 @@
       itemIconStyle: BigAction
       icon:
         sprite: Objects/Magic/magicactions.rsi
-        state: spell_default
+        state: summons
       event: !type:InstantRecallSpellEvent

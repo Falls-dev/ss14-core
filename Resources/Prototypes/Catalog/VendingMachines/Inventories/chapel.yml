@@ -3,7 +3,6 @@
   startingInventory:
     ClothingUniformJumpsuitChaplain: 2
     ClothingUniformJumpskirtChaplain: 2
-    #WD edit start
     ClothingUniformJumpsuitMonasticRobeDark: 2
     ClothingUniformJumpsuitMonasticRobeLight: 2
     ClothingOuterHoodieChaplain: 2
@@ -17,7 +16,6 @@
     ClothingHeadHatWitch1: 2
     ClothingOuterPlagueSuit: 2
     ClothingMaskPlague: 2
-    #WD edit end
     ClothingHeadsetService: 2
     ClothingNeckNecklaceSilver: 2
     ClothingNeckNecklaceGold: 1
@@ -27,7 +25,6 @@
     BoxCandleSmall: 2
     Urn: 5
   emaggedInventory:
-    #WD edit - Deleted cult armor
     BedsheetCult: 4
     BibleNecronomicon: 1
     ClothingNeckScarfStripedBlack: 3

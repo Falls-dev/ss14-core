@@ -1,12 +1,11 @@
 - type: vendingMachineInventory
   id: LawDrobeInventory
   startingInventory:
-    ClothingBackpack: 2 #WD edit
+    ClothingBackpack: 2
     ClothingHeadsetService: 2
-    ClothingEyesGlassesSunglasses: 2 #WD edit
-    ClothingEyesGlasses: 2 #WD edit
+    ClothingEyesGlassesSunglasses: 2
+    ClothingEyesGlasses: 2
     ClothingNeckLawyerbadge: 2
-    #WD edit start
     ClothingUniformJumpsuitLawyerBlue: 2
     ClothingUniformJumpskirtLawyerBlue: 2
     ClothingUniformJumpsuitLawyerPurple: 2
@@ -19,7 +18,6 @@
     ClothingUniformJumpskirtLawyerGood: 2
     ClothingHandsGlovesColorWhite: 2
     ClothingShoesBootsLaceup: 2
-    #WD edit end
     RubberStampLawyer: 1
     Eftpos: 3
   emaggedInventory:

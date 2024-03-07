@@ -1,7 +1,6 @@
 - type: vendingMachineInventory
   id: RobustSoftdrinksInventory
   startingInventory:
-    #WD edit start
     DrinkColaCan: 6
     DrinkGrapeCan: 4
     DrinkRootBeerCan: 4
@@ -10,6 +9,5 @@
     DrinkDrGibbCan: 4
     DrinkFourteenLokoCan: 4
     DrinkColaBottleFull: 2
-    #WD edit end
   emaggedInventory:
     DrinkNukieCan: 2

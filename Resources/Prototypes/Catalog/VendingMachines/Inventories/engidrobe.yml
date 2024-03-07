@@ -1,7 +1,6 @@
 - type: vendingMachineInventory
   id: EngiDrobeInventory
   startingInventory:
-    #WD edit start
     ClothingBackpackDuffelEngineering: 5
     ClothingBackpackSatchelEngineering: 5
     ClothingBackpackEngineering: 5
@@ -19,4 +18,3 @@
     ClothingShoesColorBlack: 5
     ClothingShoesBootsWork: 5
     ClothingShoesBootsWinterEngi: 2
-    #WD edit end

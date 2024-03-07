@@ -2,12 +2,12 @@
   id: SecTechInventory
   startingInventory:
     Handcuffs: 8
-    Zipties: 12 #WD edit
+    Zipties: 12
     GrenadeFlashBang: 4
     TearSmokeGrenade: 4
-    SmokeGrenade: 6 #WD edit
-    Flash: 7 #WD edit
-    Bola: 7 #WD edit
+    SmokeGrenade: 6
+    Flash: 7
+    Bola: 7
     FlashlightSeclite: 5
     ClothingEyesGlassesSunglasses: 2
     ClothingBeltSecurityWebbing: 5
@@ -24,6 +24,6 @@
     FoodDonutHomer: 12
     FoodBoxDonut: 2
 
-  emaggedInventory: #WD edit
-    ExGrenade: 1 #WD edit
-    Truncheon: 1 #WD edit
+  emaggedInventory:
+    ExGrenade: 1
+    Truncheon: 1

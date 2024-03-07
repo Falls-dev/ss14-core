@@ -4,26 +4,26 @@
     ClothingBackpackDuffelMedical: 4
     ClothingBackpackMedical: 4
     ClothingBackpackSatchelMedical: 4
-    ClothingHeadHelmetVoidParamed: 2 #WD edit
-    ClothingOuterHardsuitVoidParamed: 2 #WD edit
-    ClothingHeadHatBeretBrigmedic: 4 #WD edit
+    ClothingHeadHelmetVoidParamed: 2
+    ClothingOuterHardsuitVoidParamed: 2
+    ClothingHeadHatBeretBrigmedic: 4
     ClothingHeadNurseHat: 4
-    ClothingHeadHatParamedicsoft: 4 #WD edit
-    ClothingHeadsetMedical: 4 #WD edit
-    ClothingEyesHudMedical: 5 #WD edit
-    ClothingMaskSterile: 4 #WD edit
-    ClothingOuterWinterMed: 4 #WD edit
-    ClothingOuterWinterPara: 4 #WD edit
-    ClothingOuterCoatParamedicWB: 4 #WD edit
+    ClothingHeadHatParamedicsoft: 4
+    ClothingHeadsetMedical: 4
+    ClothingEyesHudMedical: 5
+    ClothingMaskSterile: 4
+    ClothingOuterWinterMed: 4
+    ClothingOuterWinterPara: 4
+    ClothingOuterCoatParamedicWB: 4
     ClothingOuterCoatLab: 4
-    ClothingUniformJumpsuitParamedic: 4 #WD edit
-    ClothingUniformJumpskirtParamedic: 4 #WD edit
+    ClothingUniformJumpsuitParamedic: 4
+    ClothingUniformJumpskirtParamedic: 4
     ClothingHandsGlovesLatex: 4
-    ClothingShoesColorWhite: 9 #WD edit
+    ClothingShoesColorWhite: 9
     ClothingOuterHospitalGown: 5
-    UniformScrubsColorGreen: 5 #WD edit
-    UniformScrubsColorBlue: 5 #WD edit
-    UniformScrubsColorPurple: 5 #WD edit
+    UniformScrubsColorGreen: 5
+    UniformScrubsColorBlue: 5
+    UniformScrubsColorPurple: 5
     ClothingUniformJumpsuitMedicalDoctor: 4
     ClothingUniformJumpskirtMedicalDoctor: 4
     ClothingEyesEyepatchHudMedical: 1

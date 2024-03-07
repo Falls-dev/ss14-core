@@ -1,7 +1,6 @@
 - type: vendingMachineInventory
   id: AtmosDrobeInventory
   startingInventory:
-    #WD edit start
     ClothingBackpackDuffelAtmospherics: 3
     ClothingBackpackSatchelAtmospherics: 3
     ClothingBackpackAtmospherics: 3
@@ -10,14 +9,11 @@
     ClothingNeckScarfStripedLightBlue: 3
     ClothingMaskGasAtmos: 3
     ClothingOuterWinterAtmos: 2
-    #WD edit end
     ClothingUniformJumpsuitAtmos: 3
     ClothingUniformJumpskirtAtmos: 3
     ClothingUniformJumpsuitAtmosCasual: 3
     ClothingShoesColorWhite: 3
     ClothingHeadHelmetFire: 2
     ClothingOuterSuitFire: 2
-    #WD edit start
     ClothingOuterSuitAtmosFire: 1
     ClothingHeadHelmetAtmosFire: 1
-    #WD edit end

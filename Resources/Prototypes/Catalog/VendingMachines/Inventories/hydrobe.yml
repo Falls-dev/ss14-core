@@ -1,13 +1,10 @@
 - type: vendingMachineInventory
   id: HyDrobeInventory
   startingInventory:
-    #WD edit start
     ClothingBackpackHydroponics: 3
     ClothingBackpackSatchelHydroponics: 3
     ClothingBackpackDuffelHydroponics: 3
-    #WD edit end
     ClothingHeadBandBotany: 3
-    #WD edit start
     ClothingHeadsetService: 3
     ClothingOuterWinterHydro: 3
     ClothingOuterApronBotanist: 3

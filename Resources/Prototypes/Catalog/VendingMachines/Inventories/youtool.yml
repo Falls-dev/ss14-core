@@ -3,7 +3,6 @@
   startingInventory:
     CableApcStack: 5
     Crowbar: 5
-    #WD edit start
     Welder: 5
     Wirecutter: 5
     Wrench: 5
@@ -11,11 +10,10 @@
     trayScanner: 5
     NetworkConfigurator: 5
     GasAnalyzer: 5
-    #WD edit end
     FlashlightLantern: 5
-    ClothingHandsGlovesColorYellowBudget: 5 #WD edit
-    AirlockPainter: 5 #WD edit
-    Multitool: 5 #WD edit
+    ClothingHandsGlovesColorYellowBudget: 5
+    AirlockPainter: 5
+    Multitool: 5
 
   contrabandInventory:
     ClothingHandsGlovesColorYellow: 2

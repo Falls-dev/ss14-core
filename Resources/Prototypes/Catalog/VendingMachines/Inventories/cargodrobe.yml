@@ -2,7 +2,6 @@
   id: CargoDrobeInventory
   startingInventory:
     ClothingBackpackCargo: 4
-    #WD edit start
     ClothingBackpackSatchelCargo: 4
     ClothingBackpackDuffelCargo: 4
     ClothingUniformJumpsuitCargo: 4

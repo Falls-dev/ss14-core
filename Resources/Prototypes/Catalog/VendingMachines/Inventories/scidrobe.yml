@@ -1,7 +1,6 @@
 - type: vendingMachineInventory
   id: SciDrobeInventory
   startingInventory:
-    #WD edit start
     ClothingBackpackScience: 6
     ClothingBackpackSatchelScience: 6
     ClothingBackpackDuffelScience: 6

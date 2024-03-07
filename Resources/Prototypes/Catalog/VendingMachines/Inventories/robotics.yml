@@ -1,12 +1,12 @@
 - type: vendingMachineInventory
   id: RoboticsInventory
   startingInventory:
-    CableApcStack: 10 #WD edit
-    ProximitySensor: 10 #WD edit
-    RemoteSignaller: 10 #WD edit
+    CableApcStack: 10
+    ProximitySensor: 10
+    RemoteSignaller: 10
     SciFlash: 4
     ClothingEyesHudDiagnostic: 2
-    Igniter: 3 # its more ordnance but yeah
+    Igniter: 3
     HandheldHealthAnalyzer: 3
     Scalpel: 2
     SawElectric: 2

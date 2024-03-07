@@ -1,7 +1,6 @@
 - type: vendingMachineInventory
   id: PTechInventory
   startingInventory:
-    #WD edit start
     PassengerPDA: 7
     ClearPDA: 7
     PassengerIDCard: 7
@@ -11,7 +10,6 @@
     Paper: 13
     EncryptionKeyCargo: 3
     EncryptionKeyEngineering: 3
-    #WD edit end
     EncryptionKeyMedical: 3
     EncryptionKeyScience: 3
     EncryptionKeySecurity: 3

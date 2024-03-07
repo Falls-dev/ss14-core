@@ -1,7 +1,6 @@
 ﻿- type: vendingMachineInventory
   id: SalvageEquipmentInventory
   startingInventory:
-    #WD edit start
     WeaponProtoKineticAccelerator: 4
     WeaponCrusher: 4
     WeaponCrusherDagger: 4
@@ -14,12 +13,11 @@
     OreBag: 6
     Flare: 20
     FlashlightLantern: 6
-    #WD edit end
     Floodlight: 2
-    RadioHandheld: 10 #WD edit
-    StackHolderHealingItem: 2 #WD edit
-    InflatableWallStack1: 40 #WD edit
-    InflatableDoorStack1: 10 #WD edit
+    RadioHandheld: 10
+    StackHolderHealingItem: 2
+    InflatableWallStack1: 40
+    InflatableDoorStack1: 10
     SeismicCharge: 3
     FultonBeacon: 2
     Fulton: 3

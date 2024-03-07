@@ -1,6 +1,6 @@
 - type: vendingMachineInventory
   id: BodaInventory
   startingInventory:
-    DrinkSodaWaterCan: 20 #WD edit
+    DrinkSodaWaterCan: 20
   contrabandInventory:
-    DrinkColaCan: 10 #WD edit
+    DrinkColaCan: 10

@@ -3,7 +3,6 @@
   startingInventory:
     ClothingBackpack: 5
     ClothingBackpackDuffel: 5
-    #WD edit start
     ClothingBackpackSatchel: 5
     ClothingBackpackSatchelLeather: 5
     ClothingBeltStorageWaistbag: 5
@@ -12,12 +11,10 @@
     ClothingHeadBandGreen: 3
     ClothingHeadBandRed: 3
     ClothingHeadBandSkull: 3
-    #WD edit end
     ClothingUniformJumpsuitColorGrey: 8
     ClothingUniformJumpskirtColorGrey: 8
     ClothingUniformJumpsuitColorWhite: 3
     ClothingUniformJumpskirtColorWhite: 3
-    #WD edit start
     ClothingUniformJumpsuitColorBlue: 3
     ClothingUniformJumpskirtColorBlue: 3
     ClothingUniformJumpsuitColorYellow: 3
@@ -62,7 +59,6 @@
     ClothingNeckScarfStripedPurple: 2
     ClothingNeckScarfStripedBlack: 2
     ClothingMaskNeckGaiter: 1
-    #WD edit end
     ClothingUniformJumpsuitHawaiBlack: 2
     ClothingUniformJumpsuitHawaiBlue: 2
     ClothingUniformJumpsuitHawaiRed: 2
@@ -117,7 +113,6 @@
     ClothingHandsGlovesColorOrange: 2
     ClothingHandsGlovesColorPurple: 2
 
-    #WD edit end
     #White bra start
     ClothingUnderwearTopBraWhite: 5
     ClothingUnderwearTopBraSports: 5

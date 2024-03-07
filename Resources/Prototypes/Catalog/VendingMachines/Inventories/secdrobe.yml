@@ -1,7 +1,6 @@
 - type: vendingMachineInventory
   id: SecDrobeInventory
   startingInventory:
-    #WD edit start
     ClothingBackpackSecurity: 4
     ClothingBackpackSatchelSecurity: 4
     ClothingBackpackDuffelSecurity: 4
@@ -11,9 +10,7 @@
     ClothingHeadsetSecurity: 4
     ClothingEyesGlassesSecurity: 4
     ClothingOuterWinterSec: 4
-    #WD edit end
     ClothingOuterArmorBasic: 4
-    #WD edit start
     ClothingUniformJumpsuitSec: 4
     ClothingUniformJumpskirtSec: 4
     ClothingUniformJumpsuitSecGrey: 4
@@ -28,4 +25,3 @@
     ClothingShoesBootsWinterSec: 3
     ClothingShoesBootsCowboyBlack: 3
     ClothingHeadHatCowboyBlack: 3
-    #WD edit end

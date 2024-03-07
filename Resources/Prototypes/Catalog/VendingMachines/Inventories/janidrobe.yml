@@ -1,7 +1,6 @@
 - type: vendingMachineInventory
   id: JaniDrobeInventory
   startingInventory:
-    #WD edit start
     ClothingBackpack: 4
     ClothingHeadHatPurplesoft: 4
     ClothingHeadsetService: 4

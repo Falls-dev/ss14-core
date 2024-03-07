@@ -2,7 +2,7 @@
   id: HappyHonkDispenserInventory
   startingInventory:
     HappyHonk: 10
-    HappyHonkMime: 10 #WD edit
+    HappyHonkMime: 10
   emaggedInventory:
-    HappyHonkCluwne: 3 #WD edit
-    HappyHonkNukie: 3 #WD edit
+    HappyHonkCluwne: 3
+    HappyHonkNukie: 3

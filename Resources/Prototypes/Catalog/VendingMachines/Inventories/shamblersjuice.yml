@@ -1,7 +1,6 @@
 - type: vendingMachineInventory
   id: ShamblersJuiceInventory
   startingInventory:
-    #WD edit start
     DrinkShamblersJuiceCan: 4
     DrinkGrapeCan: 4
     DrinkRootBeerCan: 4

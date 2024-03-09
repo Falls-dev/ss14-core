@@ -173,6 +173,7 @@
       damageCoefficient: 0.9
     - type: Unremoveable
       deleteOnDrop: true
+    - type: ClothingModifyChemicalRegen
 
 - type: entity
   parent: ClothingOuterArmorHeavy

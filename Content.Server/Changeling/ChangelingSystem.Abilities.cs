@@ -532,14 +532,14 @@ public sealed partial class ChangelingSystem
 
     private void OnArmBlade(EntityUid uid, ChangelingComponent component, ArmbladeActionEvent args)
     {
-        SpawnOrDeleteItem(uid, "ArmBlade");
+        SpawnOrDeleteItem(uid, component, "ArmBlade", 20);
 
         args.Handled = true;
     }
 
     private void OnShield(EntityUid uid, ChangelingComponent component, OrganicShieldActionEvent args)
     {
-        SpawnOrDeleteItem(uid, "OrganicShield");
+        SpawnOrDeleteItem(uid, component, "OrganicShield", 20);
 
         args.Handled = true;
     }
@@ -551,19 +551,19 @@ public sealed partial class ChangelingSystem
 
         if (!_inventorySystem.TryGetSlotEntity(uid, outerName, out var outerEnt))
         {
-            _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
+            EquipClothing(uid, component, outerName, protoName, 20);
             return;
         }
 
         if (!TryComp<MetaDataComponent>(outerEnt, out var meta))
         {
-            _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
+            EquipClothing(uid, component, outerName, protoName, 20);
             return;
         }
 
         if (meta.EntityPrototype == null)
         {
-            _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
+            EquipClothing(uid, component, outerName, protoName, 20);
             return;
         }
 
@@ -574,16 +574,27 @@ public sealed partial class ChangelingSystem
             return;
         }
 
-        _inventorySystem.TryUnequip(uid, outerName, out _);
+        if (!EquipClothing(uid, component, outerName, protoName, 20))
+            return;
 
-        _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
+        _inventorySystem.TryUnequip(uid, outerName, out _);
 
         args.Handled = true;
     }
 
+    private bool EquipClothing(EntityUid uid, ChangelingComponent component, string slot, string proto, int chemicals)
+    {
+        if (!TakeChemicals(uid, component, chemicals))
+            return false;
+
+        _inventorySystem.SpawnItemInSlot(uid, slot, proto, silent: true);
+
+        return true;
+    }
+
     private void OnTentacleArm(EntityUid uid, ChangelingComponent component, TentacleArmActionEvent args)
     {
-        SpawnOrDeleteItem(uid, "TentacleArmGun");
+        SpawnOrDeleteItem(uid, component, "TentacleArmGun", 10);
 
         args.Handled = true;
     }
@@ -999,7 +1010,7 @@ public sealed partial class ChangelingSystem
         Dirty(target, targetHumanoid);
     }
 
-    private void SpawnOrDeleteItem(EntityUid target, string prototypeName)
+    private void SpawnOrDeleteItem(EntityUid target, ChangelingComponent component, string prototypeName, int chemicals)
     {
         foreach (var eHand in _handsSystem.EnumerateHands(target))
         {
@@ -1018,6 +1029,9 @@ public sealed partial class ChangelingSystem
             _popup.PopupEntity(Loc.GetString("changeling-popup-need-hand"), target, target);
             return;
         }
+
+        if (!TakeChemicals(target, component, chemicals))
+            return;
 
         var item = Spawn(prototypeName, Transform(target).Coordinates);
 

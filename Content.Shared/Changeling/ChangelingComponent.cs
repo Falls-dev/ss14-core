@@ -9,7 +9,7 @@ namespace Content.Shared.Changeling;
 public sealed partial class ChangelingComponent : Component
 {
     [DataField("chemRegenRate")]
-    public int ChemicalRegenRate = 2;
+    public int ChemicalRegenRate = 4;
 
     [DataField("chemicalCap")]
     public int ChemicalCapacity = 75;
@@ -24,7 +24,7 @@ public sealed partial class ChangelingComponent : Component
     public float Accumulator;
 
     [ViewVariables(VVAccess.ReadOnly)]
-    public float UpdateDelay = 6f;
+    public float UpdateDelay = 4f;
 
     [ViewVariables(VVAccess.ReadOnly)]
     public bool IsRegenerating;

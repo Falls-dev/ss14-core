@@ -1,4 +1,4 @@
-﻿using Content.Shared.Alert;
+using Content.Shared.Alert;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Network;
@@ -17,6 +17,13 @@ public sealed class ChemicalsSystem : EntitySystem
 
         SubscribeLocalEvent<ClothingModifyChemicalRegenComponent, InventoryRelayedEvent<ChemRegenModifyEvent>>(
             OnChemRegenModify);
+        SubscribeLocalEvent<VoidAdaptationComponent, ChemRegenModifyEvent>(OnVoidAdaptationChemRegenModify);
+    }
+
+    private void OnVoidAdaptationChemRegenModify(Entity<VoidAdaptationComponent> ent, ref ChemRegenModifyEvent args)
+    {
+        args.Multiplier *= ent.Comp.ChemMultiplier;
+        ent.Comp.ChemMultiplier = 1f;
     }
 
     private void OnChemRegenModify(Entity<ClothingModifyChemicalRegenComponent> ent,

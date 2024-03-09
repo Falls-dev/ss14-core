@@ -109,3 +109,8 @@ public sealed class AugmentedEyesightPurchasedEvent : EntityEventArgs
 public sealed partial class DissonantShriekActionEvent : InstantActionEvent
 {
 }
+
+[Serializable, NetSerializable]
+public sealed class VoidAdaptationPurchasedEvent : EntityEventArgs
+{
+}

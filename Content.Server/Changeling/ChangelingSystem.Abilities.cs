@@ -118,6 +118,7 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, ListViewItemSelectedMessage>(OnTransformUiMessage);
 
         SubscribeLocalEvent<ChangelingComponent, AugmentedEyesightPurchasedEvent>(OnEyesightPurchased);
+        SubscribeLocalEvent<ChangelingComponent, VoidAdaptationPurchasedEvent>(OnVoidAdaptationPurchased);
     }
 
 #region Data
@@ -590,6 +591,11 @@ public sealed partial class ChangelingSystem
         EnsureComp<EyeProtectionComponent>(ent);
     }
 
+    private void OnVoidAdaptationPurchased(Entity<ChangelingComponent> ent, ref VoidAdaptationPurchasedEvent args)
+    {
+        EnsureComp<VoidAdaptationComponent>(ent);
+    }
+
     private void OnEyesight(Entity<ChangelingComponent> ent, ref AugmentedEyesightActionEvent args)
     {
         if (!_mobStateSystem.IsAlive(ent))
@@ -899,6 +905,9 @@ public sealed partial class ChangelingSystem
 
         if (HasComp<EyeProtectionComponent>(target))
             EnsureComp<EyeProtectionComponent>(polymorphEntity.Value);
+
+        if (HasComp<VoidAdaptationComponent>(target))
+            EnsureComp<VoidAdaptationComponent>(polymorphEntity.Value);
 
         if (TryComp(target, out TemporaryNightVisionComponent? nvComp))
         {

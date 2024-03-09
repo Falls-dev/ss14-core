@@ -64,6 +64,20 @@
     - !type:ListingLimitedStockCondition
       stock: 1
 
+- type: listing
+  id: ChangelingVoidAdaptation
+  name: changeling-ability-void-adaptation
+  description: changeling-ability-void-adaptation-desc
+  icon: { sprite: /Textures/White/Actions/changeling.rsi, state: organic_suit }
+  productEvent: !type:VoidAdaptationPurchasedEvent
+  cost:
+    ChangelingPoint: 2
+  categories:
+    - ChangelingAbilities
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 1
+
 # Stings
 - type: listing
   id: ChangelingExtractionString

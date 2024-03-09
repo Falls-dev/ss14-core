@@ -77,9 +77,6 @@ public sealed class ChemicalsSystem : EntitySystem
             if(component.Accumulator < component.UpdateDelay)
                 continue;
 
-            if (component.IsRegenerating)
-                continue;
-
             component.Accumulator = 0;
             var ev = new ChemRegenModifyEvent();
             RaiseLocalEvent(uid, ev);

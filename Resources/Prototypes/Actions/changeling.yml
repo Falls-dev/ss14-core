@@ -237,3 +237,15 @@
     icon: White/Actions/changeling.rsi/biodegrade.png
     event: !type:BiodegradeActionEvent
     useDelay: 120
+
+- type: entity
+  id: ActionAugmentedEyesight
+  name: changeling-ability-eyesight
+  description: changeling-ability-eyesight-desc
+  noSpawn: true
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    icon: White/Actions/changeling.rsi/augmented_eyesight.png
+    event: !type:AugmentedEyesightActionEvent

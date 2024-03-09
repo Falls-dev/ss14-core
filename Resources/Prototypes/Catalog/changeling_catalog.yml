@@ -182,3 +182,17 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
+
+- type: listing
+  id: ChangelingAugmentedEyesight
+  name: changeling-ability-eyesight
+  description: changeling-ability-eyesight-desc
+  productAction: ActionAugmentedEyesight
+  productEvent: !type:AugmentedEyesightPurchasedEvent
+  cost:
+    ChangelingPoint: 2
+  categories:
+  - ChangelingBoosters
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1

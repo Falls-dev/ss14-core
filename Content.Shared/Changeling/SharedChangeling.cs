@@ -1,4 +1,4 @@
-﻿using Content.Shared.Actions;
+using Content.Shared.Actions;
 using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 
@@ -94,6 +94,15 @@ public sealed partial class ChangelingShopActionEvent : InstantActionEvent
 }
 
 public sealed partial class BiodegradeActionEvent : InstantActionEvent
+{
+}
+
+public sealed partial class AugmentedEyesightActionEvent : InstantActionEvent
+{
+}
+
+[Serializable, NetSerializable]
+public sealed class AugmentedEyesightPurchasedEvent : EntityEventArgs
 {
 }
 

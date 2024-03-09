@@ -6,6 +6,7 @@ using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
 using Content.Server.Cuffs;
 using Content.Server.DoAfter;
+using Content.Server.Flash.Components;
 using Content.Server.Forensics;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Humanoid;
@@ -19,6 +20,7 @@ using Content.Server.Store.Components;
 using Content.Server.Temperature.Components;
 using Content.Server.Temperature.Systems;
 using Content.Shared._White.Chaplain;
+using Content.Shared._White.Overlays;
 using Content.Shared.Actions;
 using Content.Shared.Changeling;
 using Content.Shared.Chemistry.EntitySystems;
@@ -97,6 +99,7 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, AdrenalineSacsActionEvent>(OnAdrenalineSacs);
         SubscribeLocalEvent<ChangelingComponent, FleshmendActionEvent>(OnFleshMend);
         SubscribeLocalEvent<ChangelingComponent, BiodegradeActionEvent>(OnBiodegrade);
+        SubscribeLocalEvent<ChangelingComponent, AugmentedEyesightActionEvent>(OnEyesight);
 
         SubscribeLocalEvent<ChangelingComponent, ArmbladeActionEvent>(OnArmBlade);
         SubscribeLocalEvent<ChangelingComponent, OrganicShieldActionEvent>(OnShield);
@@ -109,6 +112,8 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, LesserFormDoAfterEvent>(OnLesserFormDoAfter);
 
         SubscribeLocalEvent<ChangelingComponent, ListViewItemSelectedMessage>(OnTransformUiMessage);
+
+        SubscribeLocalEvent<ChangelingComponent, AugmentedEyesightPurchasedEvent>(OnEyesightPurchased);
     }
 
 #region Data
@@ -579,6 +584,29 @@ public sealed partial class ChangelingSystem
         args.Handled = true;
     }
 
+    private void OnEyesightPurchased(Entity<ChangelingComponent> ent, ref AugmentedEyesightPurchasedEvent args)
+    {
+        EnsureComp<FlashImmunityComponent>(ent);
+        EnsureComp<EyeProtectionComponent>(ent);
+    }
+
+    private void OnEyesight(Entity<ChangelingComponent> ent, ref AugmentedEyesightActionEvent args)
+    {
+        args.Handled = true;
+
+        if (HasComp<TemporaryNightVisionComponent>(ent))
+        {
+            RemComp<TemporaryNightVisionComponent>(ent);
+            EnsureComp<FlashImmunityComponent>(ent);
+            EnsureComp<EyeProtectionComponent>(ent);
+            return;
+        }
+
+        EnsureComp<TemporaryNightVisionComponent>(ent);
+        RemComp<FlashImmunityComponent>(ent);
+        RemComp<EyeProtectionComponent>(ent);
+    }
+
 #endregion
 
 #region DoAfters
@@ -848,6 +876,25 @@ public sealed partial class ChangelingSystem
 
             EntityManager.AddComponent(polymorphEntity.Value, toAdd);
             _chemicalsSystem.UpdateAlert(polymorphEntity.Value, toAdd);
+        }
+
+        if (HasComp<FlashImmunityComponent>(target))
+            EnsureComp<FlashImmunityComponent>(polymorphEntity.Value);
+
+        if (HasComp<EyeProtectionComponent>(target))
+            EnsureComp<EyeProtectionComponent>(polymorphEntity.Value);
+
+        if (TryComp(target, out TemporaryNightVisionComponent? nvComp))
+        {
+            var toAdd = new TemporaryNightVisionComponent
+            {
+                Color = nvComp.Color,
+                Tint = nvComp.Tint,
+                Strength = nvComp.Strength,
+                Noise = nvComp.Noise
+            };
+
+            EntityManager.AddComponent(polymorphEntity.Value, toAdd);
         }
 
         if (TryComp(target, out NpcFactionMemberComponent? factionMember))

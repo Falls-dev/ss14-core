@@ -7,6 +7,9 @@ changeling-ability-biodegrade-desc = Растворяет наручники и 
 changeling-ability-eyesight = Аугментация Зрения
 changeling-ability-eyesight-desc = Развивает переключаемое ночное зрение. Когда способность неактивна, защищает вас от флешек и яркого света, например от сварки.
 
+changeling-ability-dissonant-shriek = Диссонирующий Вопль
+changeling-ability-dissonant-shriek-desc = Испускает заряд ЭМИ, который нарушает работу всего оборудования вокруг.
+
 changeling-ability-adrenaline-sacks = Мешки с адреналином
 changeling-ability-adrenaline-sacks-desc = Дает кратковременный прилив адреналина в крови.
 

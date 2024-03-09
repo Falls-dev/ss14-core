@@ -106,3 +106,6 @@ public sealed class AugmentedEyesightPurchasedEvent : EntityEventArgs
 {
 }
 
+public sealed partial class DissonantShriekActionEvent : InstantActionEvent
+{
+}

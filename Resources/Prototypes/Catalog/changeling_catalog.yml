@@ -196,3 +196,16 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
+
+- type: listing
+  id: ChangelingDissonantShriek
+  name: changeling-ability-dissonant-shriek
+  description: changeling-ability-dissonant-shriek-desc
+  productAction: ActionDissonantShriek
+  cost:
+    ChangelingPoint: 1
+  categories:
+  - ChangelingBoosters
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1

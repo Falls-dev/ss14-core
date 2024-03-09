@@ -249,3 +249,16 @@
     checkCanInteract: false
     icon: White/Actions/changeling.rsi/augmented_eyesight.png
     event: !type:AugmentedEyesightActionEvent
+
+- type: entity
+  id: ActionDissonantShriek
+  name: changeling-ability-dissonant-shriek
+  description: changeling-ability-dissonant-shriek-desc
+  noSpawn: true
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    icon: White/Actions/changeling.rsi/dissonant_shriek.png
+    event: !type:DissonantShriekActionEvent
+    useDelay: 1

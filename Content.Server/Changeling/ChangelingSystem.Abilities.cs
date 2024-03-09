@@ -6,6 +6,7 @@ using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
 using Content.Server.Cuffs;
 using Content.Server.DoAfter;
+using Content.Server.Emp;
 using Content.Server.Flash.Components;
 using Content.Server.Forensics;
 using Content.Server.GameTicking.Rules;
@@ -80,6 +81,8 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly CultRuleSystem _cult = default!;
     [Dependency] private readonly NpcFactionSystem _faction = default!;
     [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly EmpSystem _empSystem = default!;
+    [Dependency] private readonly TransformSystem _transform = default!;
 
     private void InitializeAbilities()
     {
@@ -100,6 +103,7 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, FleshmendActionEvent>(OnFleshMend);
         SubscribeLocalEvent<ChangelingComponent, BiodegradeActionEvent>(OnBiodegrade);
         SubscribeLocalEvent<ChangelingComponent, AugmentedEyesightActionEvent>(OnEyesight);
+        SubscribeLocalEvent<ChangelingComponent, DissonantShriekActionEvent>(OnDissonantShriek);
 
         SubscribeLocalEvent<ChangelingComponent, ArmbladeActionEvent>(OnArmBlade);
         SubscribeLocalEvent<ChangelingComponent, OrganicShieldActionEvent>(OnShield);
@@ -506,7 +510,7 @@ public sealed partial class ChangelingSystem
 
     private void OnBiodegrade(EntityUid uid, ChangelingComponent component, BiodegradeActionEvent args)
     {
-        if (_mobStateSystem.IsDead(uid))
+        if (!_mobStateSystem.IsAlive(uid))
             return;
 
         if (!TryComp(uid, out CuffableComponent? cuffs) || cuffs.Container.ContainedEntities.Count < 1)
@@ -517,7 +521,7 @@ public sealed partial class ChangelingSystem
 
         var lastAddedCuffs = cuffs.LastAddedCuffs;
 
-        _cuffable.Uncuff(uid, lastAddedCuffs, lastAddedCuffs);
+        _cuffable.Uncuff(uid, null, lastAddedCuffs);
 
         Del(lastAddedCuffs);
 
@@ -592,6 +596,9 @@ public sealed partial class ChangelingSystem
 
     private void OnEyesight(Entity<ChangelingComponent> ent, ref AugmentedEyesightActionEvent args)
     {
+        if (!_mobStateSystem.IsAlive(ent))
+            return;
+
         args.Handled = true;
 
         if (HasComp<TemporaryNightVisionComponent>(ent))
@@ -605,6 +612,19 @@ public sealed partial class ChangelingSystem
         EnsureComp<TemporaryNightVisionComponent>(ent);
         RemComp<FlashImmunityComponent>(ent);
         RemComp<EyeProtectionComponent>(ent);
+    }
+
+    private void OnDissonantShriek(Entity<ChangelingComponent> ent, ref DissonantShriekActionEvent args)
+    {
+        if (!_mobStateSystem.IsAlive(ent))
+            return;
+
+        if (!TakeChemicals(ent, ent.Comp, 20))
+            return;
+
+        _empSystem.EmpPulse(_transform.GetMapCoordinates(ent), 5, 100000, 10f);
+
+        args.Handled = true;
     }
 
 #endregion

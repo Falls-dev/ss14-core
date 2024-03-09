@@ -547,49 +547,34 @@ public sealed partial class ChangelingSystem
     private void OnArmor(EntityUid uid, ChangelingComponent component, ChitinousArmorActionEvent args)
     {
         const string outerName = "outerClothing";
-        const string protoName = "ClothingOuterChangeling";
+        const string headName = "head";
+        const string armorName = "ClothingOuterChangeling";
+        const string helmetName = "ClothingHeadHelmetLing";
 
-        if (!_inventorySystem.TryGetSlotEntity(uid, outerName, out var outerEnt))
+        _inventorySystem.TryUnequip(uid, outerName, out var outer, true, true);
+        _inventorySystem.TryUnequip(uid, headName, out var helmet, true, true);
+
+        if (TryComp(outer, out MetaDataComponent? metaData) && metaData.EntityPrototype is {ID: armorName})
         {
-            EquipClothing(uid, component, outerName, protoName, 20);
+            args.Handled = true;
             return;
         }
 
-        if (!TryComp<MetaDataComponent>(outerEnt, out var meta))
+        if (!TakeChemicals(uid, component, 20))
         {
-            EquipClothing(uid, component, outerName, protoName, 20);
+            if (outer != null)
+                _inventorySystem.TryEquip(uid, outer.Value, outerName, true, true);
+
+            if (helmet != null)
+                _inventorySystem.TryEquip(uid, helmet.Value, headName, true, true);
+
             return;
         }
 
-        if (meta.EntityPrototype == null)
-        {
-            EquipClothing(uid, component, outerName, protoName, 20);
-            return;
-        }
-
-        if (meta.EntityPrototype.ID == protoName)
-        {
-            _inventorySystem.TryUnequip(uid, outerName, out var removedItem, force: true);
-            QueueDel(removedItem);
-            return;
-        }
-
-        if (!EquipClothing(uid, component, outerName, protoName, 20))
-            return;
-
-        _inventorySystem.TryUnequip(uid, outerName, out _);
+        _inventorySystem.SpawnItemInSlot(uid, outerName, armorName, true, true);
+        _inventorySystem.SpawnItemInSlot(uid, headName, helmetName, true, true);
 
         args.Handled = true;
-    }
-
-    private bool EquipClothing(EntityUid uid, ChangelingComponent component, string slot, string proto, int chemicals)
-    {
-        if (!TakeChemicals(uid, component, chemicals))
-            return false;
-
-        _inventorySystem.SpawnItemInSlot(uid, slot, proto, silent: true);
-
-        return true;
     }
 
     private void OnTentacleArm(EntityUid uid, ChangelingComponent component, TentacleArmActionEvent args)

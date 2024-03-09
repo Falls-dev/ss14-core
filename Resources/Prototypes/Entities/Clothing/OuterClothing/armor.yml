@@ -171,6 +171,7 @@
           Heat: 0.5
     - type: ExplosionResistance
       damageCoefficient: 0.9
+    - type: GroupExamine
     - type: Unremoveable
       deleteOnDrop: true
     - type: ClothingModifyChemicalRegen

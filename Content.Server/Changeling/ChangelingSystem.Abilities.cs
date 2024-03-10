@@ -269,7 +269,8 @@ public sealed partial class ChangelingSystem
                 new RegenerateDoAfterEvent(), args.Performer,
                 args.Performer, args.Performer)
             {
-                RequireCanInteract = false
+                RequireCanInteract = false,
+                Hidden = true
             });
 
         component.IsRegenerating = true;
@@ -704,6 +705,7 @@ public sealed partial class ChangelingSystem
     {
         if (args.Handled || args.Cancelled || args.Target == null)
         {
+            component.IsRegenerating = false;
             return;
         }
 
@@ -715,7 +717,10 @@ public sealed partial class ChangelingSystem
         }
 
         if (!TakeChemicals(uid, component, 15))
+        {
+            component.IsRegenerating = false;
             return;
+        }
 
         _rejuvenate.PerformRejuvenate(args.Target.Value);
 

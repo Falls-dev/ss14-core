@@ -1,4 +1,4 @@
-﻿using Content.Shared.Humanoid;
+using Content.Shared.Humanoid;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -48,7 +48,7 @@ public sealed partial class ChangelingComponent : Component
     public float AbsorbDnaDelay = 10f;
 
     [ViewVariables(VVAccess.ReadWrite), DataField("TransformDelay")]
-    public float TransformDelay = 2f;
+    public float TransformDelay;
 
     [ViewVariables(VVAccess.ReadWrite), DataField("RegenerateDelay")]
     public float RegenerateDelay = 60f;

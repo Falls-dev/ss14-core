@@ -277,7 +277,7 @@ public sealed partial class ChangelingSystem
 
     private void OnLesserForm(EntityUid uid, ChangelingComponent component, LesserFormActionEvent args)
     {
-        if (_mobStateSystem.IsDead(uid) || component.IsRegenerating)
+        if (!_mobStateSystem.IsAlive(uid))
         {
             _popup.PopupEntity(Loc.GetString("changeling-popup-cant-perform"), uid, uid);
             return;
@@ -292,7 +292,8 @@ public sealed partial class ChangelingSystem
         _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.Performer, component.LesserFormDelay,
             new LesserFormDoAfterEvent(), args.Performer, args.Performer)
         {
-            BreakOnUserMove = true
+            BreakOnUserMove = true,
+            RequireCanInteract = false
         });
     }
 
@@ -732,12 +733,12 @@ public sealed partial class ChangelingSystem
         if (args.Handled || args.Cancelled)
             return;
 
+        if (!TakeChemicals(uid, component, 5))
+            return;
+
         var polymorphEntity = _polymorph.PolymorphEntity(args.User, "MonkeyChangeling");
 
         if (polymorphEntity == null)
-            return;
-
-        if (!TakeChemicals(uid, component, 5))
             return;
 
         var toAdd = new ChangelingComponent
@@ -750,6 +751,8 @@ public sealed partial class ChangelingSystem
         };
 
         EntityManager.AddComponent(polymorphEntity.Value, toAdd);
+
+        TransferComponents(uid, polymorphEntity.Value);
 
         _implantSystem.TransferImplants(uid, polymorphEntity.Value);
         _actionContainerSystem.TransferAllActionsFiltered(uid, polymorphEntity.Value, polymorphEntity.Value);
@@ -880,12 +883,6 @@ public sealed partial class ChangelingSystem
 
         _identity.QueueIdentityUpdate(polymorphEntity.Value);
 
-        if (HasComp<BibleUserComponent>(target))
-            EnsureComp<BibleUserComponent>(polymorphEntity.Value);
-
-        if (HasComp<HolyComponent>(target))
-            EnsureComp<HolyComponent>(polymorphEntity.Value);
-
         if (TryComp(target, out ChangelingComponent? lingComp))
         {
             var toAdd = new ChangelingComponent
@@ -900,16 +897,33 @@ public sealed partial class ChangelingSystem
             _chemicalsSystem.UpdateAlert(polymorphEntity.Value, toAdd);
         }
 
-        if (HasComp<FlashImmunityComponent>(target))
-            EnsureComp<FlashImmunityComponent>(polymorphEntity.Value);
+        TransferComponents(target, polymorphEntity.Value);
 
-        if (HasComp<EyeProtectionComponent>(target))
-            EnsureComp<EyeProtectionComponent>(polymorphEntity.Value);
+        _implantSystem.TransferImplants(target, polymorphEntity.Value);
+        _actionContainerSystem.TransferAllActionsFiltered(target, polymorphEntity.Value, polymorphEntity.Value);
+        _action.GrantContainedActions(polymorphEntity.Value, polymorphEntity.Value);
 
-        if (HasComp<VoidAdaptationComponent>(target))
-            EnsureComp<VoidAdaptationComponent>(polymorphEntity.Value);
+        return polymorphEntity;
+    }
 
-        if (TryComp(target, out TemporaryNightVisionComponent? nvComp))
+    private void TransferComponents(EntityUid from, EntityUid to)
+    {
+        if (HasComp<BibleUserComponent>(from))
+            EnsureComp<BibleUserComponent>(to);
+
+        if (HasComp<HolyComponent>(from))
+            EnsureComp<HolyComponent>(to);
+
+        if (HasComp<FlashImmunityComponent>(from))
+            EnsureComp<FlashImmunityComponent>(to);
+
+        if (HasComp<EyeProtectionComponent>(from))
+            EnsureComp<EyeProtectionComponent>(to);
+
+        if (HasComp<VoidAdaptationComponent>(from))
+            EnsureComp<VoidAdaptationComponent>(to);
+
+        if (TryComp(from, out TemporaryNightVisionComponent? nvComp))
         {
             var toAdd = new TemporaryNightVisionComponent
             {
@@ -919,27 +933,21 @@ public sealed partial class ChangelingSystem
                 Noise = nvComp.Noise
             };
 
-            EntityManager.AddComponent(polymorphEntity.Value, toAdd);
+            EntityManager.AddComponent(to, toAdd);
         }
 
-        if (TryComp(target, out NpcFactionMemberComponent? factionMember))
+        if (TryComp(from, out NpcFactionMemberComponent? factionMember))
         {
-            _faction.ClearFactions(polymorphEntity.Value);
+            _faction.ClearFactions(to);
             foreach (var faction in factionMember.Factions)
             {
-                _faction.AddFaction(polymorphEntity.Value, faction);
+                _faction.AddFaction(to, faction);
             }
         }
 
-        _nukeOps.TransferRole(target, polymorphEntity.Value);
+        _nukeOps.TransferRole(from, to);
 
-        _cult.TransferRole(target, polymorphEntity.Value);
-
-        _implantSystem.TransferImplants(target, polymorphEntity.Value);
-        _actionContainerSystem.TransferAllActionsFiltered(target, polymorphEntity.Value, polymorphEntity.Value);
-        _action.GrantContainedActions(polymorphEntity.Value, polymorphEntity.Value);
-
-        return polymorphEntity;
+        _cult.TransferRole(from, to);
     }
 
     private void TransferDna(EntityUid target, string dna)

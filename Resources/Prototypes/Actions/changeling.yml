@@ -48,7 +48,6 @@
       event: !type:RegenerateActionEvent
       checkCanInteract: false
       useDelay: 1
-    - type: LesserFormRestricted
 
 - type: entity
   id: ActionChangelingLesserForm
@@ -61,6 +60,7 @@
       icon: White/Actions/changeling.rsi/lesser_form.png
       event: !type:LesserFormActionEvent
       useDelay: 1
+      checkCanInteract: false
     - type: LesserFormRestricted
 
 - type: entity
@@ -75,7 +75,6 @@
     event: !type:ExtractionStingActionEvent
     canTargetSelf: false
     useDelay: 1
-  - type: LesserFormRestricted
 
 - type: entity
   id: ActionTransformSting
@@ -89,7 +88,6 @@
       event: !type:TransformStingActionEvent
       canTargetSelf: false
       useDelay: 1
-    - type: LesserFormRestricted
 
 - type: entity
   id: ActionBlindSting
@@ -103,7 +101,6 @@
       event: !type:BlindStingActionEvent
       canTargetSelf: false
       useDelay: 1
-    - type: LesserFormRestricted
 
 - type: entity
   id: ActionMuteSting
@@ -117,7 +114,6 @@
       event: !type:MuteStingActionEvent
       canTargetSelf: false
       useDelay: 1
-    - type: LesserFormRestricted
 
 - type: entity
   id: ActionHallucinationSting
@@ -131,7 +127,6 @@
       event: !type:HallucinationStingActionEvent
       canTargetSelf: false
       useDelay: 1
-    - type: LesserFormRestricted
 
 - type: entity
   id: ActionCryoSting
@@ -145,7 +140,6 @@
       event: !type:CryoStingActionEvent
       canTargetSelf: false
       useDelay: 1
-    - type: LesserFormRestricted
 
 - type: entity
   id: ActionAdrenalineSacs
@@ -262,3 +256,4 @@
     icon: White/Actions/changeling.rsi/dissonant_shriek.png
     event: !type:DissonantShriekActionEvent
     useDelay: 1
+  - type: LesserFormRestricted

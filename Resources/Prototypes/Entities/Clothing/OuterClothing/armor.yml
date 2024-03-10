@@ -175,6 +175,7 @@
     - type: Unremoveable
       deleteOnDrop: true
     - type: ClothingModifyChemicalRegen
+    - type: DeleteOnChangelingRefund
 
 - type: entity
   parent: ClothingOuterArmorHeavy

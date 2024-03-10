@@ -294,6 +294,7 @@
         Heat: 0.8
   - type: Unremoveable
     deleteOnDrop: true
+  - type: DeleteOnChangelingRefund
 
 #ERT HELMETS
 #ERT Leader Helmet

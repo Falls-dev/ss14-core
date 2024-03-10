@@ -45,6 +45,7 @@ using Content.Shared.Pulling.Components;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffect;
 using Content.Shared.Tag;
+using Robust.Server.Containers;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects.Components.Localization;
 using Robust.Shared.Player;
@@ -83,6 +84,7 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly EmpSystem _empSystem = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly ContainerSystem _container = default!;
 
     private void InitializeAbilities()
     {
@@ -663,6 +665,20 @@ public sealed partial class ChangelingSystem
             return;
 
         component.AbsorbedCount++;
+
+        _chemicalsSystem.AddChemicals(uid, component, 50);
+
+        if (_container.TryGetContainer(uid, ImplanterComponent.ImplantSlotId, out var implantContainer))
+        {
+            foreach (var implant in implantContainer.ContainedEntities)
+            {
+                if (!TryComp<StoreComponent>(implant, out var store) || store.Preset != "StorePresetChangeling")
+                    continue;
+
+                store.Refunds = true;
+                store.RefundAllowed = true;
+            }
+        }
 
         if (TryComp(uid, out SharedPullerComponent? puller) && puller.Pulling is { } pulled &&
             TryComp(pulled, out SharedPullableComponent? pullable))

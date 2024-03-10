@@ -1,5 +1,6 @@
 using Content.Shared.Actions;
 using Content.Shared.DoAfter;
+using Content.Shared.Inventory;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Changeling;
@@ -113,4 +114,18 @@ public sealed partial class DissonantShriekActionEvent : InstantActionEvent
 [Serializable, NetSerializable]
 public sealed class VoidAdaptationPurchasedEvent : EntityEventArgs
 {
+}
+
+public sealed class ChemRegenModifyEvent : EntityEventArgs, IInventoryRelayEvent
+{
+    public SlotFlags TargetSlots => ~SlotFlags.POCKET;
+
+    public float Multiplier = 1f;
+}
+
+public sealed class ChangelingRefundEvent : EntityEventArgs, IInventoryRelayEvent
+{
+    public SlotFlags TargetSlots => SlotFlags.All;
+
+    public EntityUid Store;
 }

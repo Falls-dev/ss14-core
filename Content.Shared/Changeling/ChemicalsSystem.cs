@@ -101,10 +101,3 @@ public sealed class ChemicalsSystem : EntitySystem
         }
     }
 }
-
-public sealed class ChemRegenModifyEvent : EntityEventArgs, IInventoryRelayEvent
-{
-    public SlotFlags TargetSlots => ~SlotFlags.POCKET;
-
-    public float Multiplier = 1f;
-}

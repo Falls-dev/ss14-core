@@ -31,6 +31,7 @@ public partial class InventorySystem
         SubscribeLocalEvent<InventoryComponent, AdjustTemperatureEvent>(RelayInventoryEvent); // WD
         SubscribeLocalEvent<InventoryComponent, StaminaDamageModifyEvent>(RelayInventoryEvent); // WD
         SubscribeLocalEvent<InventoryComponent, ChemRegenModifyEvent>(RelayInventoryEvent); // WD
+        SubscribeLocalEvent<InventoryComponent, ChangelingRefundEvent>(RelayInventoryEvent); // WD
         SubscribeLocalEvent<InventoryComponent, GetDefaultRadioChannelEvent>(RelayInventoryEvent);
 
         // by-ref events

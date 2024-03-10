@@ -1,0 +1,10 @@
+﻿- type: sinkPort
+  id: MaterialHub
+  name: signal-port-name-hub
+  description: signal-port-description-hub
+
+- type: sinkPort
+  id: MaterialLocalStorage
+  name: signal-port-name-local-storage
+  description: signal-port-description-local-storage
+

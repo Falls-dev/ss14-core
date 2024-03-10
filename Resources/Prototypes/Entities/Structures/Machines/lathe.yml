@@ -52,6 +52,15 @@
     price: 800
   - type: ResearchClient
   - type: TechnologyDatabase
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+    receiveFrequencyId: BasicDevice
+  - type: WirelessNetworkConnection
+    range: 2000
+  - type: DeviceLinkSink
+    ports:
+    - MaterialLocalStorage
+  - type: BluespaceMaterialStorageComponent
 
 - type: entity
   id: Autolathe

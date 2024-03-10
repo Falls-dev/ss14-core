@@ -6,6 +6,7 @@
     GrenadeFlashBang: 4
     TearSmokeGrenade: 4
     SmokeGrenade: 6
+    GrenadeStinger: 4
     Flash: 7
     Bola: 7
     FlashlightSeclite: 5
@@ -17,7 +18,6 @@
     SecurityWhistle: 5
     TearGasGrenade: 4
     ClusterBangFull: 2
-    GrenadeStinger: 4
     Tourniquet: 5
 
   contrabandInventory:

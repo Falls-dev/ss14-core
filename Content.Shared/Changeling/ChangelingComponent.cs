@@ -54,7 +54,7 @@ public sealed partial class ChangelingComponent : Component
     public float RegenerateDelay = 60f;
 
     [ViewVariables(VVAccess.ReadWrite), DataField("LesserFormDelay")]
-    public float LesserFormDelay = 5f;
+    public float LesserFormDelay;
 
     public bool IsInited;
 }

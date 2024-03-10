@@ -504,7 +504,7 @@ public sealed partial class ChangelingSystem
         if (!TakeChemicals(uid, component, 20))
             return;
 
-        _solutionContainer.TryAddReagent(injectable.Value, "Ichor", 20);
+        _solutionContainer.TryAddReagent(injectable.Value, "Ichor", 10);
         if (TryComp(uid, out BloodstreamComponent? bloodstream))
         {
             _blood.TryModifyBleedAmount(uid, -bloodstream.BleedAmount, bloodstream);

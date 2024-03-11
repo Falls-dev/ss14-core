@@ -19,7 +19,6 @@
     enabled: false
   - type: Door
     occludes: false
-    bumpOpen: true
     crushDamage:
       types:
         Blunt: 15

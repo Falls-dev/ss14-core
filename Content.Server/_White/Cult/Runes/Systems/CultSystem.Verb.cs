@@ -28,7 +28,7 @@ public sealed partial class CultSystem
 
     private void OnSpellCreated(EntityUid ent, CultistComponent comp, SpellCreatedEvent args)
     {
-        if (args.Cancelled || comp.SelectedEmpowers.Count >= 1)
+        if (args.Cancelled || comp.SelectedEmpowers.Count >= 2)
             return;
 
         var action = CultistComponent.CultistActions.FirstOrDefault(x => x.Equals(args.Spell));

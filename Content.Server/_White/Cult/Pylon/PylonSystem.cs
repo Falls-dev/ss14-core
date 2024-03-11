@@ -172,7 +172,7 @@ public sealed class PylonSystem : EntitySystem
             if (player.AttachedEntity is not { Valid: true } playerEntity)
                 continue;
 
-            if (!EntityManager.TryGetComponent<CultistComponent>(playerEntity, out _))
+            if (!HasComp<CultistComponent>(playerEntity) && !HasComp<ConstructComponent>(playerEntity))
                 continue;
 
             if (_mobStateSystem.IsDead(playerEntity))

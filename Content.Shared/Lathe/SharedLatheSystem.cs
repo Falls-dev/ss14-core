@@ -44,9 +44,14 @@ public abstract class SharedLatheSystem : EntitySystem
         {
             var adjustedAmount = AdjustMaterial(needed, recipe.ApplyMaterialDiscount, component.MaterialUseMultiplier);
 
-            if (_materialStorage.GetMaterialAmount(uid, material) < adjustedAmount * amount)
+            var rightUid =
+                TryComp<TransformComponent>(uid, out var transformComponent) &&
+                transformComponent.GridUid.HasValue ? transformComponent.GridUid.Value : uid;
+
+            if (_materialStorage.GetMaterialAmount(rightUid, material) < adjustedAmount * amount)
                 return false;
         }
+
         return true;
     }
 

@@ -164,7 +164,13 @@ namespace Content.Server.Lathe
                     ? (int) (-amount * component.MaterialUseMultiplier)
                     : -amount;
 
-                _materialStorage.TryChangeMaterialAmount(uid, mat, adjustedAmount);
+                // ShitSilo realization
+                var rightUid =
+                    TryComp<TransformComponent>(uid, out var transformComponent) &&
+                    transformComponent.GridUid.HasValue ? transformComponent.GridUid.Value : uid;
+
+                _materialStorage.TryChangeMaterialAmount(rightUid, mat, adjustedAmount);
+
             }
             component.Queue.Add(recipe);
 
@@ -279,7 +285,11 @@ namespace Content.Server.Lathe
             _appearance.SetData(uid, LatheVisuals.IsInserting, false);
             _appearance.SetData(uid, LatheVisuals.IsRunning, false);
 
-            _materialStorage.UpdateMaterialWhitelist(uid);
+            var rightUid =
+                TryComp<TransformComponent>(uid, out var transformComponent) &&
+                transformComponent.GridUid.HasValue ? transformComponent.GridUid.Value : uid;
+
+            _materialStorage.UpdateMaterialWhitelist(rightUid);
         }
 
         /// <summary>

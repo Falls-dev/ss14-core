@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
+using Content.Shared.Lathe;
 using Content.Shared.Stacks;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
@@ -247,6 +248,15 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
 
         if (storage.Whitelist?.IsValid(toInsert) == false)
             return false;
+
+        if (HasComp<LatheComponent>(receiver) &&
+            TryComp<TransformComponent>(receiver, out var transformComponent) &&
+            transformComponent.GridUid.HasValue &&
+            TryComp<MaterialStorageComponent>(transformComponent.GridUid.Value,
+                out var materialStorageComponent))
+        {
+            storage = materialStorageComponent ;
+        }
 
         if (HasComp<UnremoveableComponent>(toInsert))
             return false;

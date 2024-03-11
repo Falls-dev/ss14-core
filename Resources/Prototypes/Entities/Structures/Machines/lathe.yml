@@ -60,7 +60,6 @@
   - type: DeviceLinkSink
     ports:
     - MaterialLocalStorage
-  - type: BluespaceMaterialStorageComponent
 
 - type: entity
   id: Autolathe

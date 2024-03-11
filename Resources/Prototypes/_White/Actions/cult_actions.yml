@@ -131,7 +131,7 @@
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: blood_rites
       event: !type:CultBloodRitesInstantActionEvent
-      charges: 4
+      charges: 5
       temporary: true
       removeOnNoCharges: true
 

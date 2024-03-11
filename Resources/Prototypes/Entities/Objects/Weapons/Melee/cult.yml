@@ -35,6 +35,10 @@
                       SummoningRune,
                       BloodBoilRune,
                       ApocalypseRune ]
+  - type: ActivatableUI
+    key: enum.ListViewSelectorUiKey.Key
+    inHandsOnly: true
+    closeOnHandDeselect: true
   - type: UserInterface
     interfaces:
       - key: enum.ListViewSelectorUiKey.Key

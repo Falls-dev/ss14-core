@@ -14,6 +14,7 @@ using Content.Server.Bible.Components;
 using Content.Server.Chemistry.Components;
 using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Fluids.Components;
+using Content.Server.UserInterface;
 using Content.Shared._White.Chaplain;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Cuffs.Components;
@@ -38,6 +39,7 @@ using Content.Shared._White.Cult.UI;
 using Content.Shared.Cuffs;
 using Content.Shared.Mindshield.Components;
 using Content.Shared.Pulling;
+using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Components;
@@ -93,7 +95,8 @@ public sealed partial class CultSystem : EntitySystem
         SubscribeLocalEvent<CultEmpowerComponent, ActivateInWorldEvent>(OnActiveInWorld);
 
         // UI
-        SubscribeLocalEvent<RuneDrawerProviderComponent, UseInHandEvent>(OnRuneDrawerUseInHand);
+        SubscribeLocalEvent<RuneDrawerProviderComponent, ActivatableUIOpenAttemptEvent>(OnRuneDrawAttempt);
+        SubscribeLocalEvent<RuneDrawerProviderComponent, BeforeActivatableUIOpenEvent>(BeforeRuneDraw);
         SubscribeLocalEvent<RuneDrawerProviderComponent, ListViewItemSelectedMessage>(OnRuneSelected);
         SubscribeLocalEvent<CultTeleportRuneProviderComponent, TeleportRunesListWindowItemSelectedMessage>(
             OnTeleportRuneSelected);
@@ -145,22 +148,16 @@ public sealed partial class CultSystem : EntitySystem
     * Rune draw start ----
      */
 
-    private void OnRuneDrawerUseInHand(EntityUid uid, RuneDrawerProviderComponent component, UseInHandEvent args)
+    private void OnRuneDrawAttempt(Entity<RuneDrawerProviderComponent> ent, ref ActivatableUIOpenAttemptEvent args)
     {
-        if (!_ui.TryGetUi(uid, component.UserInterfaceKey, out _))
-            return;
-
-        if (!TryComp<ActorComponent>(args.User, out var actorComponent))
-            return;
-
         if (!HasComp<CultistComponent>(args.User))
-            return;
+            args.Cancel();
+    }
 
-        if (_ui.TryGetUi(uid, ListViewSelectorUiKey.Key, out var bui))
-        {
-            _ui.SetUiState(bui, new ListViewBUIState(component.RunePrototypes, false));
-            _ui.OpenUi(bui, actorComponent.PlayerSession);
-        }
+    private void BeforeRuneDraw(Entity<RuneDrawerProviderComponent> ent, ref BeforeActivatableUIOpenEvent args)
+    {
+        if (_ui.TryGetUi(ent, ListViewSelectorUiKey.Key, out var bui))
+            _ui.SetUiState(bui, new ListViewBUIState(ent.Comp.RunePrototypes, false));
     }
 
     private void OnRuneSelected(EntityUid uid, RuneDrawerProviderComponent component, ListViewItemSelectedMessage args)

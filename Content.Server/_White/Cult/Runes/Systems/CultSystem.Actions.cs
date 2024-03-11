@@ -79,7 +79,7 @@ public partial class CultSystem
 
         if (HasComp<HolyComponent>(args.Target))
         {
-            _popupSystem.PopupEntity("Священная сила препятствует магии", args.Performer, args.Performer);
+            _popupSystem.PopupEntity("Священная сила препятствует магии.", args.Performer, args.Performer);
             return;
         }
 
@@ -106,7 +106,7 @@ public partial class CultSystem
 
         if (HasComp<HolyComponent>(args.Target))
         {
-            _popupSystem.PopupEntity("Священная сила препятствует магии", args.Performer, args.Performer);
+            _popupSystem.PopupEntity("Священная сила препятствует магии.", args.Performer, args.Performer);
             return;
         }
 

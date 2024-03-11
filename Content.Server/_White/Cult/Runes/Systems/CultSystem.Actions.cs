@@ -74,8 +74,14 @@ public partial class CultSystem
     private void OnStunTarget(EntityUid uid, CultistComponent component, CultStunTargetActionEvent args)
     {
         if (args.Target == uid || !TryComp<BloodstreamComponent>(args.Performer, out var bloodstream) ||
-            HasComp<HolyComponent>(args.Target) || !TryComp<StatusEffectsComponent>(args.Target, out var status))
+            !TryComp<StatusEffectsComponent>(args.Target, out var status))
             return;
+
+        if (HasComp<HolyComponent>(args.Target))
+        {
+            _popupSystem.PopupEntity("Священная сила препятствует магии", args.Performer, args.Performer);
+            return;
+        }
 
         if (HasComp<MindShieldComponent>(args.Target))
         {
@@ -97,6 +103,12 @@ public partial class CultSystem
         if (!TryComp<BloodstreamComponent>(args.Performer, out var bloodstream) ||
             !TryComp<ActorComponent>(uid, out var actor))
             return;
+
+        if (HasComp<HolyComponent>(args.Target))
+        {
+            _popupSystem.PopupEntity("Священная сила препятствует магии", args.Performer, args.Performer);
+            return;
+        }
 
         if (!HasComp<CultistComponent>(args.Target) && !HasComp<ConstructComponent>(args.Target) &&
             (!TryComp<MobStateComponent>(args.Target, out var mobStateComponent) ||

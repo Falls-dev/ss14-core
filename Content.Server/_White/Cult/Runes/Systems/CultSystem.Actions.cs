@@ -94,14 +94,17 @@ public partial class CultSystem
 
     private void OnTeleport(EntityUid uid, CultistComponent component, CultTeleportTargetActionEvent args)
     {
-        if (!TryComp<BloodstreamComponent>(args.Performer, out var bloodstream) || !TryComp<ActorComponent>(uid, out var actor))
+        if (!TryComp<BloodstreamComponent>(args.Performer, out var bloodstream) ||
+            !TryComp<ActorComponent>(uid, out var actor))
             return;
 
-        if (!TryComp<CultistComponent>(args.Target, out _) &&
-            !(TryComp<MobStateComponent>(args.Target, out var mobStateComponent) &&
-                mobStateComponent.CurrentState is not MobState.Alive))
+        if (!HasComp<CultistComponent>(args.Target) && !HasComp<ConstructComponent>(args.Target) &&
+            (!TryComp<MobStateComponent>(args.Target, out var mobStateComponent) ||
+             mobStateComponent.CurrentState is MobState.Alive) &&
+            (!TryComp<CuffableComponent>(args.Target, out var cuffable) || cuffable.Container.Count == 0))
         {
-            _popupSystem.PopupEntity("Цель должна быть культистом или лежать.", args.Performer, args.Performer);
+            _popupSystem.PopupEntity("Цель должна быть культистом, быть связанной или лежать.", args.Performer,
+                args.Performer);
             return;
         }
 

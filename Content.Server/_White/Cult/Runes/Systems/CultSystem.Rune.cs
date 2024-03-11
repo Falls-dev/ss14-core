@@ -40,6 +40,7 @@ using Content.Shared.Mindshield.Components;
 using Content.Shared.Pulling;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
+using Robust.Shared.Audio.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Events;
@@ -137,6 +138,8 @@ public sealed partial class CultSystem : EntitySystem
     private readonly SoundPathSpecifier _apocRuneStartDrawing = new("/Audio/White/Cult/startdraw.ogg");
     private readonly SoundPathSpecifier _apocRuneEndDrawing = new("/Audio/White/Cult/finisheddraw.ogg");
     private readonly SoundPathSpecifier _narsie40Sec = new("/Audio/White/Cult/40sec.ogg");
+
+    private Entity<AudioComponent>? _narsieSummonningAudio = null;
 
     /*
     * Rune draw start ----
@@ -769,7 +772,7 @@ public sealed partial class CultSystem : EntitySystem
         _chat.DispatchGlobalAnnouncement(Loc.GetString("cult-ritual-started"), "CULT", false,
             colorOverride: Color.DarkRed);
 
-        _audio.PlayGlobal(_narsie40Sec, Filter.Broadcast(), false, AudioParams.Default.WithLoop(true).WithVolume(0.15f));
+        _narsieSummonningAudio = _audio.PlayGlobal(_narsie40Sec, Filter.Broadcast(), false, AudioParams.Default.WithLoop(true).WithVolume(0.15f));
 
         return true;
     }
@@ -777,6 +780,8 @@ public sealed partial class CultSystem : EntitySystem
     private void NarsieSpawn(EntityUid uid, CultistComponent component, SummonNarsieDoAfterEvent args)
     {
         _doAfterAlreadyStarted = false;
+
+        _audio.Stop(_narsieSummonningAudio?.Owner, _narsieSummonningAudio?.Comp);
 
         if (args.Cancelled)
         {
@@ -792,8 +797,8 @@ public sealed partial class CultSystem : EntitySystem
 
         _entityManager.SpawnEntity(NarsiePrototypeId, transform.Value);
 
-        _chat.DispatchGlobalAnnouncement(Loc.GetString("cult-narsie-summoned"), "CULT", true, _apocRuneEndDrawing,
-            colorOverride: Color.DarkRed);
+        //_chat.DispatchGlobalAnnouncement(Loc.GetString("cult-narsie-summoned"), "CULT", true, _apocRuneEndDrawing,
+        //    colorOverride: Color.DarkRed);
 
         var ev = new CultNarsieSummoned();
         RaiseLocalEvent(ev);

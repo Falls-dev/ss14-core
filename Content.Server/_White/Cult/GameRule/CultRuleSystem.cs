@@ -478,19 +478,27 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         _roundEndSystem.EndRound();
 
-        var query = EntityQueryEnumerator<MobStateComponent, MindContainerComponent, CultistComponent>();
+        var query =
+            EntityQueryEnumerator<MobStateComponent, MindContainerComponent, CultistComponent, TransformComponent>();
 
-        while (query.MoveNext(out var uid, out _, out var mindContainer, out _))
+        List<Entity<MindContainerComponent, TransformComponent>> cultists = new();
+
+        while (query.MoveNext(out var uid, out _, out var mindContainer, out _, out var transform))
         {
-            if (!mindContainer.HasMind || mindContainer.Mind is null)
+            cultists.Add((uid, mindContainer, transform));
+        }
+
+        foreach (var ent in cultists)
+        {
+            if (ent.Comp1.Mind is null)
             {
                 continue;
             }
 
-            var reaper = Spawn(CultRuleComponent.ReaperPrototype, Transform(uid).Coordinates);
-            _mindSystem.TransferTo(mindContainer.Mind.Value, reaper);
+            var reaper = Spawn(CultRuleComponent.ReaperPrototype, ent.Comp2.Coordinates);
+            _mindSystem.TransferTo(ent.Comp1.Mind.Value, reaper);
 
-            _bodySystem.GibBody(uid);
+            _bodySystem.GibBody(ent);
         }
     }
 

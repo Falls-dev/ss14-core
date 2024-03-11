@@ -120,18 +120,20 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     /// <param name="volume"></param>
     /// <param name="component"></param>
     /// <returns>If the amount can be changed</returns>
-    public bool CanChangeMaterialAmount(EntityUid uid, string materialId, int volume, MaterialStorageComponent? component = null)
+    public bool CanChangeMaterialAmount(EntityUid uid, string materialId, int volume, MaterialStorageComponent? component, EntityUid? gridUid = null, MaterialStorageComponent? gridStorage = null)
     {
         if (!Resolve(uid, ref component))
             return false;
 
-        if (!CanTakeVolume(uid, volume, component))
+        if (!CanTakeVolume(gridUid ??= uid, volume, gridStorage ??= component))
             return false;
 
         if (component.MaterialWhiteList != null && !component.MaterialWhiteList.Contains(materialId))
             return false;
 
+        component ??= gridStorage;
         var amount = component.Storage.GetValueOrDefault(materialId);
+
         return amount + volume >= 0;
     }
 
@@ -249,14 +251,6 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (storage.Whitelist?.IsValid(toInsert) == false)
             return false;
 
-        if (HasComp<LatheComponent>(receiver) &&
-            TryComp<TransformComponent>(receiver, out var transformComponent) &&
-            transformComponent.GridUid.HasValue &&
-            TryComp<MaterialStorageComponent>(transformComponent.GridUid.Value,
-                out var materialStorageComponent))
-        {
-            storage = materialStorageComponent ;
-        }
 
         if (HasComp<UnremoveableComponent>(toInsert))
             return false;
@@ -265,20 +259,50 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
 
         var multiplier = TryComp<StackComponent>(toInsert, out var stackComponent) ? stackComponent.Count : 1;
         var totalVolume = 0;
-        foreach (var (mat, vol) in composition.MaterialComposition)
+
+        if (HasComp<LatheComponent>(receiver) &&
+            TryComp<TransformComponent>(receiver, out var transformComponent) &&
+            transformComponent.GridUid.HasValue &&
+            TryComp<MaterialStorageComponent>(transformComponent.GridUid.Value,
+                out var materialStorageComponent))
         {
-            if (!CanChangeMaterialAmount(receiver, mat, vol * multiplier, storage))
+            var gridUid = transformComponent.GridUid.Value;
+            var gridStorage = materialStorageComponent;
+
+            foreach (var (mat, vol) in composition.MaterialComposition)
+            {
+                if (!CanChangeMaterialAmount(receiver, mat, vol * multiplier, storage, gridUid, gridStorage))
+                    return false;
+                totalVolume += vol * multiplier;
+            }
+
+            if (!CanTakeVolume(gridUid, totalVolume, gridStorage))
                 return false;
-            totalVolume += vol * multiplier;
+
+            foreach (var (mat, vol) in composition.MaterialComposition)
+            {
+                TryChangeMaterialAmount(gridUid, mat, vol * multiplier, gridStorage);
+            }
         }
 
-        if (!CanTakeVolume(receiver, totalVolume, storage))
-            return false;
-
-        foreach (var (mat, vol) in composition.MaterialComposition)
+        else
         {
-            TryChangeMaterialAmount(receiver, mat, vol * multiplier, storage);
+            foreach (var (mat, vol) in composition.MaterialComposition)
+            {
+                if (!CanChangeMaterialAmount(receiver, mat, vol * multiplier, storage))
+                    return false;
+                totalVolume += vol * multiplier;
+            }
+
+            if (!CanTakeVolume(receiver, totalVolume, storage))
+                return false;
+
+            foreach (var (mat, vol) in composition.MaterialComposition)
+            {
+                TryChangeMaterialAmount(receiver, mat, vol * multiplier, storage);
+            }
         }
+
 
         var insertingComp = EnsureComp<InsertingMaterialStorageComponent>(receiver);
         insertingComp.EndTime = _timing.CurTime + storage.InsertionTime;

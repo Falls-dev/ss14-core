@@ -55,7 +55,7 @@ public sealed partial class CultSystem
         if (action == null)
             return;
 
-        if (comp.SelectedEmpowers.Count >= 1)
+        if (comp.SelectedEmpowers.Count >= 2)
         {
             _popupSystem.PopupEntity(Loc.GetString("verb-spell-create-too-much"), ent, ent);
             return;

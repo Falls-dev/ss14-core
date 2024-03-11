@@ -20,8 +20,10 @@
     size: Normal
   - type: Clothing
     sprite: Objects/Weapons/Melee/cult_dagger.rsi
+    quickEquip: false
     slots:
     - back
+    - suitStorage
   - type: DisarmMalus
   - type: RuneDrawerProvider
     runePrototypes: [ OfferingRune,
@@ -64,8 +66,10 @@
     size: Huge
   - type: Clothing
     sprite: Objects/Weapons/Melee/cult_blade.rsi
+    quickEquip: false
     slots:
     - back
+    - suitStorage
   - type: DisarmMalus
   - type: CultItem
 

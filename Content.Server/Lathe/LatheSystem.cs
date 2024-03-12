@@ -287,11 +287,7 @@ namespace Content.Server.Lathe
             _appearance.SetData(uid, LatheVisuals.IsInserting, false);
             _appearance.SetData(uid, LatheVisuals.IsRunning, false);
 
-            var rightUid =
-                TryComp<TransformComponent>(uid, out var transformComponent) &&
-                transformComponent.GridUid.HasValue ? transformComponent.GridUid.Value : uid;
-
-            _materialStorage.UpdateMaterialWhitelist(rightUid);
+            _materialStorage.UpdateMaterialWhitelist(uid);
         }
 
         /// <summary>

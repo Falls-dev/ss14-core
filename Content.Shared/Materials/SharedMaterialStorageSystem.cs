@@ -78,10 +78,17 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     /// <param name="material"></param>
     /// <param name="component"></param>
     /// <returns>The volume of the material</returns>
-    public int GetMaterialAmount(EntityUid uid, string material, MaterialStorageComponent? component = null)
+    public int GetMaterialAmount(EntityUid uid, string material, MaterialStorageComponent? component = null, EntityUid? gridUid = null, MaterialStorageComponent? gridStorage = null)
     {
+        if (gridUid.HasValue && gridStorage != null)
+        {
+            if (!Resolve(gridUid.Value, ref gridStorage))
+                return 0; //you have nothing
+        }
+
         if (!Resolve(uid, ref component))
             return 0; //you have nothing
+
         return component.Storage.GetValueOrDefault(material, 0);
     }
 

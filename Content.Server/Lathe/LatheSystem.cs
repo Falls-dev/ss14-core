@@ -169,7 +169,7 @@ namespace Content.Server.Lathe
                     transformComponent.GridUid.HasValue ? transformComponent.GridUid.Value : null;
 
                 MaterialStorageComponent? gridStorage =
-                    TryComp<MaterialStorageComponent>(uid, out var materialStorageComponent) ? materialStorageComponent : null;
+                    TryComp<MaterialStorageComponent>(gridUid, out var materialStorageComponent) ? materialStorageComponent : null;
 
                 _materialStorage.TryChangeMaterialAmount(uid, mat, adjustedAmount, gridUid: gridUid, gridStorage: gridStorage);
 

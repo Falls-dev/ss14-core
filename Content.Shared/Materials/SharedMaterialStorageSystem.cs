@@ -109,6 +109,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     {
         if (!Resolve(uid, ref component))
             return false;
+
         return component.StorageLimit == null || GetTotalMaterialAmount(uid, component) + volume <= component.StorageLimit;
     }
 
@@ -125,14 +126,24 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return false;
 
-        if (!CanTakeVolume(gridUid ??= uid, volume, gridStorage ??= component))
-            return false;
+        if (gridUid.HasValue && gridStorage != null)
+        {
+            if (!CanTakeVolume(gridUid.Value, volume, gridStorage))
+                return false;
+        }
+        else
+        {
+            if (!CanTakeVolume(uid, volume, component))
+                return false;
+        }
+
 
         if (component.MaterialWhiteList != null && !component.MaterialWhiteList.Contains(materialId))
             return false;
 
-        component ??= gridStorage;
-        var amount = component.Storage.GetValueOrDefault(materialId);
+        var amount = gridStorage != null
+            ? gridStorage.Storage.GetValueOrDefault(materialId)
+            : component.Storage.GetValueOrDefault(materialId);
 
         return amount + volume >= 0;
     }
@@ -172,20 +183,38 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return false;
 
-        if (!CanChangeMaterialAmount(uid, materialId, volume, component, gridUid, gridStorage))
+        if (!CanChangeMaterialAmount(uid, materialId, volume, component, gridUid:gridUid, gridStorage:gridStorage))
             return false;
 
-        component = gridStorage ?? component;
-
-        component.Storage.TryAdd(materialId, 0);
-        component.Storage[materialId] += volume;
+        if (gridStorage != null)
+        {
+            gridStorage.Storage.TryAdd(materialId, 0);
+            gridStorage.Storage[materialId] += volume;
+        }
+        else
+        {
+            component.Storage.TryAdd(materialId, 0);
+            component.Storage[materialId] += volume;
+        }
 
         var ev = new MaterialAmountChangedEvent();
         RaiseLocalEvent(uid, ref ev);
 
         if (dirty)
             Dirty(uid, component);
+
+        // ShitSilo
+        if (!gridUid.HasValue || gridStorage == null)
+            return true; // Early return if conditions aren't met
+
+        var eventGrid = new MaterialAmountChangedEvent();
+        RaiseLocalEvent(gridUid.Value, ref eventGrid);
+
+        if (dirty)
+            Dirty(gridUid.Value, gridStorage);
+
         return true;
+
     }
 
     /// <summary>
@@ -285,7 +314,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
 
             foreach (var (mat, vol) in composition.MaterialComposition)
             {
-                TryChangeMaterialAmount(gridUid, mat, vol * multiplier, gridStorage);
+                TryChangeMaterialAmount(receiver, mat, vol * multiplier, gridUid:gridUid, gridStorage:gridStorage);
             }
         }
 

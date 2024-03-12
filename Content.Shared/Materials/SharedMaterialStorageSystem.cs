@@ -167,12 +167,16 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     /// <param name="component"></param>
     /// <param name="dirty"></param>
     /// <returns>If it was successful</returns>
-    public bool TryChangeMaterialAmount(EntityUid uid, string materialId, int volume, MaterialStorageComponent? component = null, bool dirty = true)
+    public bool TryChangeMaterialAmount(EntityUid uid, string materialId, int volume, MaterialStorageComponent? component = null, bool dirty = true, EntityUid? gridUid = null, MaterialStorageComponent? gridStorage = null)
     {
         if (!Resolve(uid, ref component))
             return false;
-        if (!CanChangeMaterialAmount(uid, materialId, volume, component))
+
+        if (!CanChangeMaterialAmount(uid, materialId, volume, component, gridUid, gridStorage))
             return false;
+
+        component = gridStorage ?? component;
+
         component.Storage.TryAdd(materialId, 0);
         component.Storage[materialId] += volume;
 

@@ -14,6 +14,7 @@ using Content.Server.Bible.Components;
 using Content.Server.Chemistry.Components;
 using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Fluids.Components;
+using Content.Server.Ghost;
 using Content.Server.UserInterface;
 using Content.Shared._White.Chaplain;
 using Content.Shared.Chemistry.Components.SolutionManager;
@@ -854,6 +855,16 @@ public sealed partial class CultSystem : EntitySystem
         CultRuneReviveComponent.ChargesLeft--;
 
         _entityManager.EventBus.RaiseLocalEvent(target, new RejuvenateEvent());
+
+        if (!_mindSystem.TryGetMind(target, out _, out var mind) ||
+            mind.Session is not { } playerSession)
+            return true;
+
+        // notify them they're being revived.
+        if (mind.CurrentEntity != target)
+        {
+            _euiManager.OpenEui(new ReturnToBodyEui(mind, _mindSystem), playerSession);
+        }
         return true;
     }
 

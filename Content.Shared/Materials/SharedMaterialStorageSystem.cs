@@ -300,7 +300,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
             ? transformComponent.GridUid
             : null;
 
-        var gridStorage = gridUid.HasValue && TryComp<MaterialStorageComponent>(gridUid.Value,
+        var gridStorage = gridUid.HasValue && TryComp<MaterialStorageComponent>(gridUid,
             out var materialStorageComponent)
             ? materialStorageComponent
             : null;

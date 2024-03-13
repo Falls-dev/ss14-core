@@ -45,10 +45,12 @@ public abstract class SharedLatheSystem : EntitySystem
             var adjustedAmount = AdjustMaterial(needed, recipe.ApplyMaterialDiscount, component.MaterialUseMultiplier);
 
             var gridUid =
-                TryComp<TransformComponent>(uid, out var transformComponent) ? transformComponent.GridUid : null;
+                TryComp<TransformComponent>(uid, out var transformComponent)
+                    ? transformComponent.GridUid
+                    : null;
 
             var gridStorage = gridUid.HasValue &&
-                              TryComp<MaterialStorageComponent>(gridUid.Value, out var materialStorageComponent)
+                              TryComp<MaterialStorageComponent>(gridUid, out var materialStorageComponent)
                 ? materialStorageComponent
                 : null;
 

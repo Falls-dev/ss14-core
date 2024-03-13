@@ -84,6 +84,8 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         {
             if (!Resolve(gridUid.Value, ref gridStorage))
                 return 0; //you have nothing
+
+            return gridStorage.Storage.GetValueOrDefault(material, 0);
         }
 
         if (!Resolve(uid, ref component))
@@ -112,10 +114,18 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     /// <param name="volume"></param>
     /// <param name="component"></param>
     /// <returns>If the specified volume will fit</returns>
-    public bool CanTakeVolume(EntityUid uid, int volume, MaterialStorageComponent? component = null)
+    public bool CanTakeVolume(EntityUid uid, int volume, MaterialStorageComponent? component = null, EntityUid? gridUid = null, MaterialStorageComponent? gridStorage = null)
     {
+        if (gridUid.HasValue && gridStorage != null)
+        {
+            if (!Resolve(gridUid.Value, ref gridStorage))
+                return false;
+
+            return gridStorage.StorageLimit == null || GetTotalMaterialAmount(gridUid.Value, gridStorage) + volume <= gridStorage.StorageLimit;
+        }
+
         if (!Resolve(uid, ref component))
-            return false;
+                return false;
 
         return component.StorageLimit == null || GetTotalMaterialAmount(uid, component) + volume <= component.StorageLimit;
     }
@@ -133,17 +143,8 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return false;
 
-        if (gridUid.HasValue && gridStorage != null)
-        {
-            if (!CanTakeVolume(gridUid.Value, volume, gridStorage))
-                return false;
-        }
-        else
-        {
-            if (!CanTakeVolume(uid, volume, component))
-                return false;
-        }
-
+        if (!CanTakeVolume(uid, volume, component, gridUid:gridUid, gridStorage:gridStorage))
+            return false;
 
         if (component.MaterialWhiteList != null && !component.MaterialWhiteList.Contains(materialId))
             return false;
@@ -193,16 +194,10 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (!CanChangeMaterialAmount(uid, materialId, volume, component, gridUid:gridUid, gridStorage:gridStorage))
             return false;
 
-        if (gridStorage != null)
-        {
-            gridStorage.Storage.TryAdd(materialId, 0);
-            gridStorage.Storage[materialId] += volume;
-        }
-        else
-        {
-            component.Storage.TryAdd(materialId, 0);
-            component.Storage[materialId] += volume;
-        }
+        var rightStorage = gridStorage ?? component;
+
+        rightStorage.Storage.TryAdd(materialId, 0);
+        rightStorage.Storage[materialId] += volume;
 
         var ev = new MaterialAmountChangedEvent();
         RaiseLocalEvent(uid, ref ev);
@@ -300,47 +295,30 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         var multiplier = TryComp<StackComponent>(toInsert, out var stackComponent) ? stackComponent.Count : 1;
         var totalVolume = 0;
 
-        if (HasComp<LatheComponent>(receiver) &&
-            TryComp<TransformComponent>(receiver, out var transformComponent) &&
-            transformComponent.GridUid.HasValue &&
-            TryComp<MaterialStorageComponent>(transformComponent.GridUid.Value,
-                out var materialStorageComponent))
+        var gridUid = HasComp<LatheComponent>(receiver) &&
+                      TryComp<TransformComponent>(receiver, out var transformComponent)
+            ? transformComponent.GridUid
+            : null;
+
+        var gridStorage = gridUid.HasValue && TryComp<MaterialStorageComponent>(gridUid.Value,
+            out var materialStorageComponent)
+            ? materialStorageComponent
+            : null;
+
+
+        foreach (var (mat, vol) in composition.MaterialComposition)
         {
-            var gridUid = transformComponent.GridUid.Value;
-            var gridStorage = materialStorageComponent;
-
-            foreach (var (mat, vol) in composition.MaterialComposition)
-            {
-                if (!CanChangeMaterialAmount(receiver, mat, vol * multiplier, storage, gridUid, gridStorage))
-                    return false;
-                totalVolume += vol * multiplier;
-            }
-
-            if (!CanTakeVolume(gridUid, totalVolume, gridStorage))
+            if (!CanChangeMaterialAmount(receiver, mat, vol * multiplier, storage, gridUid:gridUid, gridStorage:gridStorage))
                 return false;
-
-            foreach (var (mat, vol) in composition.MaterialComposition)
-            {
-                TryChangeMaterialAmount(receiver, mat, vol * multiplier, gridUid:gridUid, gridStorage:gridStorage);
-            }
+            totalVolume += vol * multiplier;
         }
 
-        else
+        if (!CanTakeVolume(receiver, totalVolume, storage, gridUid:gridUid, gridStorage: gridStorage))
+            return false;
+
+        foreach (var (mat, vol) in composition.MaterialComposition)
         {
-            foreach (var (mat, vol) in composition.MaterialComposition)
-            {
-                if (!CanChangeMaterialAmount(receiver, mat, vol * multiplier, storage))
-                    return false;
-                totalVolume += vol * multiplier;
-            }
-
-            if (!CanTakeVolume(receiver, totalVolume, storage))
-                return false;
-
-            foreach (var (mat, vol) in composition.MaterialComposition)
-            {
-                TryChangeMaterialAmount(receiver, mat, vol * multiplier, storage);
-            }
+            TryChangeMaterialAmount(receiver, mat, vol * multiplier, gridUid:gridUid, gridStorage:gridStorage);
         }
 
 

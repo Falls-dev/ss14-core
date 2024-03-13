@@ -164,12 +164,12 @@ namespace Content.Server.Lathe
                     ? (int) (-amount * component.MaterialUseMultiplier)
                     : -amount;
 
-                EntityUid? gridUid =
-                    TryComp<TransformComponent>(uid, out var transformComponent) &&
-                    transformComponent.GridUid.HasValue ? transformComponent.GridUid.Value : null;
+                var gridUid =
+                    TryComp<TransformComponent>(uid, out var transformComponent) ? transformComponent.GridUid : null;
 
-                MaterialStorageComponent? gridStorage =
-                    TryComp<MaterialStorageComponent>(gridUid, out var materialStorageComponent) ? materialStorageComponent : null;
+                var gridStorage =
+                    gridUid.HasValue &&
+                    TryComp<MaterialStorageComponent>(gridUid.Value, out var materialStorageComponent) ? materialStorageComponent : null;
 
                 _materialStorage.TryChangeMaterialAmount(uid, mat, adjustedAmount, gridUid: gridUid, gridStorage: gridStorage);
 

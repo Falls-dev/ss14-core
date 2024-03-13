@@ -59,6 +59,8 @@
       - id: ClothingHeadHatSurgcapBlue
         prob: 0.90
         orGroup: Surgcaps
+      - id: ClothingUniformJumpsuitMedicalDoctor
+      - id: ClothingUniformJumpskirtMedicalDoctor
       - id: UniformScrubsColorBlue
         prob: 0.5
         orGroup: Surgshrubs
@@ -79,7 +81,6 @@
   - type: StorageFill
     contents:
       - id: HandheldHealthAnalyzer
-        prob: 0.6
       - id: ClothingHandsGlovesLatex
       - id: ClothingHeadsetMedical
       - id: ClothingEyesHudMedical
@@ -93,6 +94,8 @@
       - id: ClothingHeadHatSurgcapBlue
         prob: 0.90
         orGroup: Surgcaps
+      - id: ClothingUniformJumpsuitMedicalDoctor
+      - id: ClothingUniformJumpskirtMedicalDoctor
       - id: UniformScrubsColorBlue
         prob: 0.5
         orGroup: Surgshrubs

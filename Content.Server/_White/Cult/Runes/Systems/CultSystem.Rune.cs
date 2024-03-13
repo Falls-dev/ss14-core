@@ -10,12 +10,12 @@ using Content.Server.Hands.Systems;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Server._White.Cult.GameRule;
 using Content.Server._White.Cult.Runes.Comps;
+using Content.Server._White.Cult.UI;
 using Content.Server.Bible.Components;
 using Content.Server.Chemistry.Components;
 using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Fluids.Components;
 using Content.Server.Ghost;
-using Content.Server.UserInterface;
 using Content.Shared._White.Chaplain;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Cuffs.Components;
@@ -139,7 +139,6 @@ public sealed partial class CultSystem : EntitySystem
 
     private readonly SoundPathSpecifier _magic = new("/Audio/White/Cult/magic.ogg");
 
-    private readonly SoundPathSpecifier _apocRuneStartDrawing = new("/Audio/White/Cult/startdraw.ogg");
     private readonly SoundPathSpecifier _apocRuneEndDrawing = new("/Audio/White/Cult/finisheddraw.ogg");
     private readonly SoundPathSpecifier _narsie40Sec = new("/Audio/White/Cult/40sec.ogg");
 
@@ -186,15 +185,19 @@ public sealed partial class CultSystem : EntitySystem
         if (HasComp<CultBuffComponent>(whoCalled))
             _timeToDraw /= 2;
 
-        if (runePrototype == ApocalypseRunePrototypeId)
-        {
-            _timeToDraw = 120.0f;
-            _chat.DispatchGlobalAnnouncement(Loc.GetString("cult-started-drawing-rune-end"), "CULT", true,
-                _apocRuneStartDrawing, colorOverride: Color.DarkRed);
-        }
-
         if (!IsAllowedToDraw(whoCalled))
             return false;
+
+        if (runePrototype == ApocalypseRunePrototypeId)
+        {
+            if (!_mindSystem.TryGetMind(whoCalled, out _, out var mind) ||
+                mind.Session is not { } playerSession)
+                return false;
+
+            _euiManager.OpenEui(new ApocalypseRuneEui(whoCalled, _entityManager), playerSession);
+
+            return true;
+        }
 
         var ev = new CultDrawEvent
         {
@@ -1271,6 +1274,8 @@ public sealed partial class CultSystem : EntitySystem
             return;
         }
 
+        var damage = 10;
+
         if (rune == ApocalypseRunePrototypeId)
         {
             if (!_entityManager.TryGetComponent(uid, out TransformComponent? transComp))
@@ -1278,6 +1283,7 @@ public sealed partial class CultSystem : EntitySystem
                 return;
             }
 
+            damage = 40;
             var pos = transComp.MapPosition;
             var x = (int) pos.X;
             var y = (int) pos.Y;
@@ -1286,7 +1292,7 @@ public sealed partial class CultSystem : EntitySystem
                 "CULT", true, _apocRuneEndDrawing, colorOverride: Color.DarkRed);
         }
 
-        var damageSpecifier = new DamageSpecifier(_prototypeManager.Index<DamageTypePrototype>("Slash"), 10);
+        var damageSpecifier = new DamageSpecifier(_prototypeManager.Index<DamageTypePrototype>("Slash"), damage);
         _damageableSystem.TryChangeDamage(uid, damageSpecifier, true, false);
 
         _xform.AttachToGridOrMap(_entityManager.SpawnEntity(rune, transform.Value));

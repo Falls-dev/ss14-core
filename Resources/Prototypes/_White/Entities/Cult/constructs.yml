@@ -62,6 +62,7 @@
     - type: Actions
     - type: Hands
     - type: ShowCultHud
+    - type: IsDeadIC
     - type: NightVision
       toggleSound: null
       color: White

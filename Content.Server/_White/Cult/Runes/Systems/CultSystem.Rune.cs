@@ -796,13 +796,13 @@ public sealed partial class CultSystem : EntitySystem
         if (transform == null)
             return;
 
+        var ev = new CultNarsieSummoned();
+        RaiseLocalEvent(ev);
+
         _entityManager.SpawnEntity(NarsiePrototypeId, transform.Value);
 
         //_chat.DispatchGlobalAnnouncement(Loc.GetString("cult-narsie-summoned"), "CULT", true, _apocRuneEndDrawing,
         //    colorOverride: Color.DarkRed);
-
-        var ev = new CultNarsieSummoned();
-        RaiseLocalEvent(ev);
     }
 
     /*

@@ -382,7 +382,7 @@
   parent: GasThermoMachineFreezer
   id: GasThermoMachineHellfireFreezer
   name: улучшенный охладитель
-  description: Улучшенный версия всеми привычного охладителя. Помимо газа в трубе, охлаждает окружающую его среду. Адски холодно!
+  description: Улучшенная версия всеми привычного охладителя. Помимо газа в трубе, охлаждает окружающую его среду. Адски холодно!
   components:
   - type: Sprite
     sprite: Structures/Piping/Atmospherics/hellfirethermomachine.rsi
@@ -397,7 +397,7 @@
   parent: GasThermoMachineHeater
   id: GasThermoMachineHellfireHeater
   name: улучшенный нагреватель
-  description: Улучшенный версия всеми привычного нагревателя. Помимо газа в трубе, нагревает окружающую его среду. Адски жарко!
+  description: Улучшенная версия всеми привычного нагревателя. Помимо газа в трубе, нагревает окружающую его среду. Адски жарко!
   components:
   - type: Sprite
     sprite: Structures/Piping/Atmospherics/hellfirethermomachine.rsi

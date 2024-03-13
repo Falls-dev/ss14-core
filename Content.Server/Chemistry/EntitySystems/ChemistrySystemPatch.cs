@@ -37,9 +37,7 @@ namespace Content.Server.Chemistry.EntitySystems
                 ? new PatchComponentState(solution.Volume, solution.MaxVolume)
                 : new PatchComponentState(FixedPoint2.Zero, FixedPoint2.Zero);
         }
-
-        // fucking doafter fucking doafter fucking doafterfucking doafterfucking doafterfucking doafterfucking doafterfucking doafterfucking doafter
-        // i ll trigger method which ll trigger event which ll trigger method which ll trigger big fat cock in hairy fat ass wizden dev
+        
         private void OnPatchDoAfter(Entity<PatchComponent> entity, ref PatchDoAfterEvent args)
         {
             if (args.Cancelled || args.Handled || args.Args.Target == null)

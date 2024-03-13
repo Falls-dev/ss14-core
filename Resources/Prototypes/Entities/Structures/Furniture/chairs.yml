@@ -34,7 +34,7 @@
     buckleOffset: "0,-0.05"
   - type: Pullable
   - type: Damageable
-    damageContainer: StructuralInorganic
+    damageContainer: Inorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:
@@ -128,7 +128,7 @@
 - type: entity
   name: stool
   id: Stool
-  parent: UnanchoredChairBase
+  parent: ChairBase
   description: Apply butt.
   components:
   - type: Sprite
@@ -253,7 +253,7 @@
 
 - type: entity
   id: ChairMeat
-  parent: UnanchoredChairBase
+  parent: ChairBase
   name: meat chair
   description: Uncomfortably sweaty.
   components:
@@ -298,7 +298,7 @@
   name: web chair
   id: ChairWeb
   description: For true web developers.
-  parent: UnanchoredChairBase
+  parent: ChairBase
   components:
   - type: Sprite
     sprite: Structures/Web/chair.rsi
@@ -362,6 +362,8 @@
   parent: ChairFolding
   id: ChairFoldingSpawnFolded
   suffix: folded
+  placement:
+    mode: PlaceFree
   components:
   - type: Foldable
     folded: true
@@ -427,6 +429,9 @@
   - type: Sprite
     sprite: Structures/Furniture/padded_stool.rsi
     state: pufi-blue
+  - type: Construction
+    graph: Seat
+    node: bluePaddedStool
 
 - type: entity
   name: green padded stool
@@ -437,6 +442,9 @@
   - type: Sprite
     sprite: Structures/Furniture/padded_stool.rsi
     state: pufi-green
+  - type: Construction
+    graph: Seat
+    node: greenPaddedStool
 
 - type: entity
   name: orange padded stool
@@ -447,6 +455,9 @@
   - type: Sprite
     sprite: Structures/Furniture/padded_stool.rsi
     state: pufi-orange
+  - type: Construction
+    graph: Seat
+    node: orangePaddedStool
 
 - type: entity
   name: pink padded stool
@@ -457,6 +468,10 @@
   - type: Sprite
     sprite: Structures/Furniture/padded_stool.rsi
     state: pufi-pink
+  - type: Construction
+    graph: Seat
+    node: pinkPaddedStool
+
 - type: entity
   name: purple padded stool
   id: PurplePaddedStool
@@ -466,6 +481,9 @@
   - type: Sprite
     sprite: Structures/Furniture/padded_stool.rsi
     state: pufi-purple
+  - type: Construction
+    graph: Seat
+    node: purplePaddedStool
 
 - type: entity
   name: red padded stool
@@ -476,6 +494,9 @@
   - type: Sprite
     sprite: Structures/Furniture/padded_stool.rsi
     state: pufi-red
+  - type: Construction
+    graph: Seat
+    node: redPaddedStool
 
 - type: entity
   name: white padded stool
@@ -486,3 +507,6 @@
   - type: Sprite
     sprite: Structures/Furniture/padded_stool.rsi
     state: pufi-white
+  - type: Construction
+    graph: Seat
+    node: whitePaddedStool

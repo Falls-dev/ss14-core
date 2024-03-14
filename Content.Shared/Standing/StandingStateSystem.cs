@@ -3,7 +3,9 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Input;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Physics;
+using Content.Shared.Projectiles;
 using Content.Shared.Rotation;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Physics;
@@ -33,6 +35,8 @@ public sealed class StandingStateSystem : EntitySystem
 
         SubscribeLocalEvent<StandingStateComponent, StandingUpDoAfterEvent>(OnStandingUpDoAfter);
         SubscribeLocalEvent<StandingStateComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeed);
+        SubscribeLocalEvent<StandingStateComponent, ProjectileCollideAttemptEvent>(OnProjectileCollideAttempt);
+        SubscribeLocalEvent<StandingStateComponent, HitscanHitAttemptEvent>(OnHitscanHitAttempt);
 
         SubscribeNetworkEvent<ChangeStandingStateEvent>(OnChangeState);
 
@@ -40,6 +44,7 @@ public sealed class StandingStateSystem : EntitySystem
             .Bind(ContentKeyFunctions.LieDown, InputCmdHandler.FromDelegate(ChangeLyingState))
             .Register<StandingStateSystem>();
     }
+
 
     private void OnRefreshMovementSpeed(
         EntityUid uid,
@@ -50,6 +55,32 @@ public sealed class StandingStateSystem : EntitySystem
             args.ModifySpeed(0.4f, 0.4f);
         else
             args.ModifySpeed(1f, 1f);
+    }
+
+    private void OnProjectileCollideAttempt(EntityUid uid, StandingStateComponent component, ref ProjectileCollideAttemptEvent args)
+    {
+        if (component.CurrentState is StandingState.Standing)
+        {
+            return;
+        }
+        
+        if (!args.Component.Target.HasValue || args.Component.Target != uid)
+        {
+            args.Cancelled = true;
+        }
+    }
+    
+    private void OnHitscanHitAttempt(EntityUid uid, StandingStateComponent component, ref HitscanHitAttemptEvent args)
+    {
+        if (component.CurrentState is StandingState.Standing)
+        {
+            return;
+        }
+        
+        if (!args.Target.HasValue || args.Target != uid)
+        {
+            args.Cancelled = true;
+        }
     }
 
     private void OnStandingUpDoAfter(EntityUid uid, StandingStateComponent component, StandingUpDoAfterEvent args)

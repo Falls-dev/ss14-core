@@ -170,8 +170,8 @@
 - type: entity
   parent: BaseItemRecharger
   id: TurboItemRecharger
-  name: многофункциональный зарядник
-  description: Многофункциональный зарядник. Может заряжать батерейки и оружие, повышенная мощность.
+  name: turbo recharger
+  description: An overclocked recharger that's been adapted with a global port.
   components:
   - type: Sprite
     sprite: Structures/Power/turbo_recharger.rsi

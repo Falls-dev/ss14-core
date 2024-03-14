@@ -381,8 +381,8 @@
 - type: entity
   parent: GasThermoMachineFreezer
   id: GasThermoMachineHellfireFreezer
-  name: улучшенный охладитель
-  description: Улучшенная версия всеми привычного охладителя. Помимо газа в трубе, охлаждает окружающую его среду. Адски холодно!
+  name: hellfire freezer
+  description: An advanced machine that cools gas in connected pipes. Has the side effect of chilling the surrounding area. Cold as Hell!
   components:
   - type: Sprite
     sprite: Structures/Piping/Atmospherics/hellfirethermomachine.rsi
@@ -396,8 +396,8 @@
 - type: entity
   parent: GasThermoMachineHeater
   id: GasThermoMachineHellfireHeater
-  name: улучшенный нагреватель
-  description: Улучшенная версия всеми привычного нагревателя. Помимо газа в трубе, нагревает окружающую его среду. Адски жарко!
+  name: hellfire heater
+  description: An advanced machine that heats gas in connected pipes. Has the side effect of leaking heat into the surrounding area. Hot as Hell!
   components:
   - type: Sprite
     sprite: Structures/Piping/Atmospherics/hellfirethermomachine.rsi

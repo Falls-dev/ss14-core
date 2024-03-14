@@ -2,8 +2,8 @@
   abstract: true
   parent: BaseItem
   id: BaseWhistle
-  name: свисток
-  description: Кто-то явно забыл выключить чайник!
+  name: whistle
+  description: Someone forgot to turn off kettle?
   components:
   - type: Item
     size: Tiny

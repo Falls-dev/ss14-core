@@ -37,8 +37,8 @@
           Unprimed: { state: icon }
 
 - type: entity
-  name: граната
-  description: Создает небольшой, но разрушительный взрыв.
+  name: explosive grenade
+  description: Grenade that creates a small but devastating explosion
   parent: GrenadeBase
   id: ExGrenade
   components:
@@ -58,8 +58,8 @@
     beepInterval: 2 # 2 beeps total (at 0 and 2)
 
 - type: entity
-  name: светошумовая граната
-  description: При активации ослепляет. Не забудьте надеть очки!
+  name: flashbang
+  description: Eeeeeeeeeeeeeeeeeeeeee
   parent: GrenadeBase
   id: GrenadeFlashBang
   components:
@@ -98,8 +98,8 @@
 #The explosive values for these are pretty god damn mediocre, but SS14's explosion system is hard to understand - this is a good enough approximation of how it was in SS13.
 #Ideally, there should be a weak radius around the bomb outside of its gibbing / spacing range capable of dealing fair damage to players / structures.
 - type: entity
-  name: минибомба синдиката
-  description: Взрывчатка, изготовленная синдикатом. Создает море разрушений после активации.
+  name: syndicate minibomb
+  description: A syndicate-manufactured explosive used to stow destruction and cause chaos.
   parent: GrenadeBase
   id: SyndieMiniBomb
   components:
@@ -121,8 +121,8 @@
         volume: 20
 
 - type: entity
-  name: граната суперматерии
-  description: Имитирует взрыв суперматерии, притягивает к себе. Через некоторое время взрывается.
+  name: supermatter grenade
+  description: Grenade that simulates delamination of the supermatter engine, pulling things in a heap and exploding after some time.
   parent: GrenadeBase
   id: SupermatterGrenade
   components:
@@ -184,8 +184,8 @@
       - type: ExplodeOnTrigger
 
 - type: entity
-  name: граната белой дыры
-  description: После активации отталкивает все, что к ней приближается.
+  name: whitehole grenade
+  description: Grenade that repulses everything around for some time.
   parent: SupermatterGrenade
   id: WhiteholeGrenade
   components:
@@ -261,8 +261,8 @@
       path: /Audio/Effects/countdown.ogg
 
 - type: entity
-  name: модульная граната
-  description: Самодельная граната. Необходим триггер для активации.
+  name: modular grenade
+  description: A grenade casing. Requires a trigger and a payload.
   parent: BaseItem
   id: ModularGrenade
   components:
@@ -305,8 +305,8 @@
     price: 25
 
 - type: entity
-  name: ЭМИ граната
-  description: При активации издает электро-магнитный импульс, способный отключить АПЦ и разрядить электроприборы.
+  name: EMP grenade
+  description: A grenade designed to wreak havoc on electronic systems.
   parent: GrenadeBase
   id: EmpGrenade
   components:
@@ -349,8 +349,8 @@
 - type: entity
   parent: GrenadeBase
   id: SmokeGrenade
-  name: дымовая граната
-  description: Выпускает дым, способный продолжительное время держатся в воздухе. 
+  name: smoke grenade
+  description: A tactical grenade that releases a large, long-lasting cloud of smoke when used. 
   components:
   - type: Sprite
     sprite: Objects/Weapons/Grenades/smoke.rsi
@@ -367,8 +367,8 @@
 - type: entity
   parent: SmokeGrenade
   id: TearGasGrenade
-  name: граната со слезоточивым газом
-  description: Сжигает ваши глаза.
+  name: tear gas grenade
+  description: A riot control tear gas grenade. Causes irritation, pain and makes you cry your eyes out.
   components:
   - type: Sprite
     sprite: Objects/Weapons/Grenades/tear_gas.rsi

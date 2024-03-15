@@ -1,4 +1,4 @@
-﻿- type: bodyType
+- type: bodyType
   id: HumanNormal
   name: body-normal
   sprites:
@@ -90,6 +90,23 @@
     RFoot: MobVoxRFoot
 
 - type: bodyType
+  id: SkrellNormal
+  name: body-normal
+  sprites:
+    Head: MobSkrellHead
+    Hair: MobHumanoidAnyMarking
+    Chest: MobSkrellTorso
+    Eyes: MobSkrellEyes
+    LArm: MobSkrellLArm
+    RArm: MobSkrellRArm
+    LHand: MobSkrellLHand
+    RHand: MobSkrellRHand
+    LLeg: MobSkrellLLeg
+    RLeg: MobSkrellRLeg
+    LFoot: MobSkrellLFoot
+    RFoot: MobSkrellRFoot
+
+- type: bodyType
   id: DionaNormal
   name: body-normal
   sprites:
@@ -116,7 +133,7 @@
     HeadTop: MobHumanoidAnyMarking
     HeadSide: MobHumanoidAnyMarking
     Tail: MobHumanoidAnyMarking
-    Eyes: MobArachnidEyes
+    Eyes: MobHumanoidAnyMarking
     LArm: MobArachnidLArm
     RArm: MobArachnidRArm
     LHand: MobArachnidLHand

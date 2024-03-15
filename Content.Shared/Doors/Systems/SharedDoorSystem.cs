@@ -178,10 +178,13 @@ public abstract class SharedDoorSystem : EntitySystem
         args.BaseTime = door.PryTime;
     }
 
-    private void OnBeforePry(EntityUid uid, DoorComponent door, ref BeforePryEvent args)
+    private void OnBeforePry(EntityUid uid, DoorComponent door, ref BeforePryEvent args) // WD edit
     {
-        if (door.State == DoorState.Welded || !door.CanPry)
+        if (door.State == DoorState.Welded || !door.CanPry ||
+            TryComp<KeyholeComponent>(uid, out var keyholeComponent) && keyholeComponent.Locked)
+        {
             args.Cancelled = true;
+        }
     }
 
     /// <summary>

@@ -438,7 +438,7 @@ public sealed partial class GunSystem
             }));
         }
 
-        public void Update(int currentIndex, bool?[] bullets)
+        public void Update(bool?[] bullets)
         {
             _bulletsList.RemoveAllChildren();
             var capacity = bullets.Length;
@@ -460,10 +460,10 @@ public sealed partial class GunSystem
             var texture = StaticIoC.ResC.GetTexture(texturePath);
             var spentTexture = StaticIoC.ResC.GetTexture("/Textures/Interface/ItemStatus/Bullets/empty.png");
 
-            FillBulletRow(currentIndex, bullets, _bulletsList, texture, spentTexture);
+            FillBulletRow(bullets, _bulletsList, texture, spentTexture);
         }
 
-        private void FillBulletRow(int currentIndex, bool?[] bullets, Control container, Texture texture, Texture emptyTexture)
+        private void FillBulletRow(bool?[] bullets, Control container, Texture texture, Texture emptyTexture)
         {
             var capacity = bullets.Length;
             var colorA = Color.FromHex("#b68f0e");
@@ -471,7 +471,6 @@ public sealed partial class GunSystem
             var colorSpentA = Color.FromHex("#b50e25");
             var colorSpentB = Color.FromHex("#d3745f");
             var colorGoneA = Color.FromHex("#000000");
-            var colorGoneB = Color.FromHex("#222222");
 
             var altColor = false;
             var scale = 1.3f;
@@ -484,16 +483,6 @@ public sealed partial class GunSystem
                 {
                     MinSize = texture.Size * scale,
                 };
-                if (i == currentIndex)
-                {
-                    box.AddChild(new TextureRect
-                    {
-                        Texture = texture,
-                        TextureScale = new Vector2(scale, scale),
-                        ModulateSelfOverride = Color.LimeGreen,
-                        Margin = new(0, 0, -8, 0)
-                    });
-                }
                 Color color;
                 Texture bulletTexture = texture;
 
@@ -511,7 +500,7 @@ public sealed partial class GunSystem
                 }
                 else
                 {
-                    color = altColor ? colorGoneA : colorGoneB;
+                    color = colorGoneA;
                 }
 
                 box.AddChild(new TextureRect

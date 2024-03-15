@@ -1,18 +1,27 @@
 using System.Linq;
+using Content.Server._White.Cult.GameRule;
 using Content.Server.Administration.Systems;
+using Content.Server.Bible.Components;
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
 using Content.Server.Cuffs;
 using Content.Server.DoAfter;
+using Content.Server.Emp;
+using Content.Server.Flash.Components;
 using Content.Server.Forensics;
+using Content.Server.GameTicking.Rules;
 using Content.Server.Humanoid;
 using Content.Server.IdentityManagement;
 using Content.Server.Mind;
+using Content.Server.NPC.Components;
+using Content.Server.NPC.Systems;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Popups;
 using Content.Server.Store.Components;
 using Content.Server.Temperature.Components;
 using Content.Server.Temperature.Systems;
+using Content.Shared._White.Chaplain;
+using Content.Shared._White.Overlays;
 using Content.Shared.Actions;
 using Content.Shared.Changeling;
 using Content.Shared.Chemistry.EntitySystems;
@@ -30,10 +39,13 @@ using Content.Shared.Inventory;
 using Content.Shared.Miracle.UI;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Ninja.Components;
 using Content.Shared.Pulling;
 using Content.Shared.Pulling.Components;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffect;
+using Content.Shared.Tag;
+using Robust.Server.Containers;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects.Components.Localization;
 using Robust.Shared.Player;
@@ -66,6 +78,13 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly BloodstreamSystem _blood = default!;
     [Dependency] private readonly CuffableSystem _cuffable = default!;
+    [Dependency] private readonly NukeopsRuleSystem _nukeOps = default!;
+    [Dependency] private readonly CultRuleSystem _cult = default!;
+    [Dependency] private readonly NpcFactionSystem _faction = default!;
+    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly EmpSystem _empSystem = default!;
+    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly ContainerSystem _container = default!;
 
     private void InitializeAbilities()
     {
@@ -85,6 +104,8 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, AdrenalineSacsActionEvent>(OnAdrenalineSacs);
         SubscribeLocalEvent<ChangelingComponent, FleshmendActionEvent>(OnFleshMend);
         SubscribeLocalEvent<ChangelingComponent, BiodegradeActionEvent>(OnBiodegrade);
+        SubscribeLocalEvent<ChangelingComponent, AugmentedEyesightActionEvent>(OnEyesight);
+        SubscribeLocalEvent<ChangelingComponent, DissonantShriekActionEvent>(OnDissonantShriek);
 
         SubscribeLocalEvent<ChangelingComponent, ArmbladeActionEvent>(OnArmBlade);
         SubscribeLocalEvent<ChangelingComponent, OrganicShieldActionEvent>(OnShield);
@@ -97,6 +118,9 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, LesserFormDoAfterEvent>(OnLesserFormDoAfter);
 
         SubscribeLocalEvent<ChangelingComponent, ListViewItemSelectedMessage>(OnTransformUiMessage);
+
+        SubscribeLocalEvent<ChangelingComponent, AugmentedEyesightPurchasedEvent>(OnEyesightPurchased);
+        SubscribeLocalEvent<ChangelingComponent, VoidAdaptationPurchasedEvent>(OnVoidAdaptationPurchased);
     }
 
 #region Data
@@ -135,7 +159,8 @@ public sealed partial class ChangelingSystem
             return;
         }
 
-        if (!TryComp<DnaComponent>(args.Target, out _))
+        if (!TryComp<DnaComponent>(args.Target, out _) ||
+            _tag.HasTag(args.Target, "Unimplantable")) // Terminator check
         {
             _popup.PopupEntity(Loc.GetString("changeling-popup-absorb-unknown"), uid, uid);
             return;
@@ -246,7 +271,8 @@ public sealed partial class ChangelingSystem
                 new RegenerateDoAfterEvent(), args.Performer,
                 args.Performer, args.Performer)
             {
-                RequireCanInteract = false
+                RequireCanInteract = false,
+                Hidden = true
             });
 
         component.IsRegenerating = true;
@@ -254,7 +280,7 @@ public sealed partial class ChangelingSystem
 
     private void OnLesserForm(EntityUid uid, ChangelingComponent component, LesserFormActionEvent args)
     {
-        if (_mobStateSystem.IsDead(uid) || component.IsRegenerating)
+        if (!_mobStateSystem.IsAlive(uid))
         {
             _popup.PopupEntity(Loc.GetString("changeling-popup-cant-perform"), uid, uid);
             return;
@@ -269,7 +295,8 @@ public sealed partial class ChangelingSystem
         _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.Performer, component.LesserFormDelay,
             new LesserFormDoAfterEvent(), args.Performer, args.Performer)
         {
-            BreakOnUserMove = true
+            BreakOnUserMove = true,
+            RequireCanInteract = false
         });
     }
 
@@ -287,7 +314,8 @@ public sealed partial class ChangelingSystem
             return;
         }
 
-        if (!TryComp<DnaComponent>(args.Target, out var dnaComponent))
+        if (!TryComp<DnaComponent>(args.Target, out var dnaComponent) ||
+            _tag.HasTag(args.Target, "Unimplantable")) // Terminator check
         {
             _popup.PopupEntity(Loc.GetString("changeling-popup-absorb-unknown"), uid, uid);
             return;
@@ -355,7 +383,8 @@ public sealed partial class ChangelingSystem
         if (!_ui.TryGetUi(user, TransformStingSelectorUiKey.Key, out var bui))
             return;
 
-        if (HasComp<ChangelingComponent>(target))
+        if (HasComp<ChangelingComponent>(target) || HasComp<SpaceNinjaComponent>(target) ||
+            _tag.HasTag(target, "Unimplantable")) // Terminator check
         {
             _popup.PopupEntity(Loc.GetString("changeling-popup-transform-not-effective"), user, user);
             return;
@@ -475,7 +504,7 @@ public sealed partial class ChangelingSystem
         if (!TakeChemicals(uid, component, 20))
             return;
 
-        _solutionContainer.TryAddReagent(injectable.Value, "Omnizine", 25);
+        _solutionContainer.TryAddReagent(injectable.Value, "Ichor", 10);
         if (TryComp(uid, out BloodstreamComponent? bloodstream))
         {
             _blood.TryModifyBleedAmount(uid, -bloodstream.BleedAmount, bloodstream);
@@ -486,7 +515,7 @@ public sealed partial class ChangelingSystem
 
     private void OnBiodegrade(EntityUid uid, ChangelingComponent component, BiodegradeActionEvent args)
     {
-        if (_mobStateSystem.IsDead(uid))
+        if (!_mobStateSystem.IsAlive(uid))
             return;
 
         if (!TryComp(uid, out CuffableComponent? cuffs) || cuffs.Container.ContainedEntities.Count < 1)
@@ -497,7 +526,7 @@ public sealed partial class ChangelingSystem
 
         var lastAddedCuffs = cuffs.LastAddedCuffs;
 
-        _cuffable.Uncuff(uid, lastAddedCuffs, lastAddedCuffs);
+        _cuffable.Uncuff(uid, null, lastAddedCuffs);
 
         Del(lastAddedCuffs);
 
@@ -508,14 +537,14 @@ public sealed partial class ChangelingSystem
 
     private void OnArmBlade(EntityUid uid, ChangelingComponent component, ArmbladeActionEvent args)
     {
-        SpawnOrDeleteItem(uid, "ArmBlade");
+        SpawnOrDeleteItem(uid, component, "ArmBlade", 20);
 
         args.Handled = true;
     }
 
     private void OnShield(EntityUid uid, ChangelingComponent component, OrganicShieldActionEvent args)
     {
-        SpawnOrDeleteItem(uid, "OrganicShield");
+        SpawnOrDeleteItem(uid, component, "OrganicShield", 20);
 
         args.Handled = true;
     }
@@ -523,43 +552,83 @@ public sealed partial class ChangelingSystem
     private void OnArmor(EntityUid uid, ChangelingComponent component, ChitinousArmorActionEvent args)
     {
         const string outerName = "outerClothing";
-        const string protoName = "ClothingOuterChangeling";
+        const string headName = "head";
+        const string armorName = "ClothingOuterChangeling";
+        const string helmetName = "ClothingHeadHelmetLing";
 
-        if (!_inventorySystem.TryGetSlotEntity(uid, outerName, out var outerEnt))
+        _inventorySystem.TryUnequip(uid, outerName, out var outer, true, true);
+        _inventorySystem.TryUnequip(uid, headName, out var helmet, true, true);
+
+        if (TryComp(outer, out MetaDataComponent? metaData) && metaData.EntityPrototype is {ID: armorName})
         {
-            _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
+            args.Handled = true;
             return;
         }
 
-        if (!TryComp<MetaDataComponent>(outerEnt, out var meta))
+        if (!TakeChemicals(uid, component, 20))
         {
-            _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
+            if (outer != null)
+                _inventorySystem.TryEquip(uid, outer.Value, outerName, true, true);
+
+            if (helmet != null)
+                _inventorySystem.TryEquip(uid, helmet.Value, headName, true, true);
+
             return;
         }
 
-        if (meta.EntityPrototype == null)
-        {
-            _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
-            return;
-        }
-
-        if (meta.EntityPrototype.ID == protoName)
-        {
-            _inventorySystem.TryUnequip(uid, outerName, out var removedItem, force: true);
-            QueueDel(removedItem);
-            return;
-        }
-
-        _inventorySystem.TryUnequip(uid, outerName, out _);
-
-        _inventorySystem.SpawnItemInSlot(uid, outerName, protoName, silent: true);
+        _inventorySystem.SpawnItemInSlot(uid, outerName, armorName, true, true);
+        _inventorySystem.SpawnItemInSlot(uid, headName, helmetName, true, true);
 
         args.Handled = true;
     }
 
     private void OnTentacleArm(EntityUid uid, ChangelingComponent component, TentacleArmActionEvent args)
     {
-        SpawnOrDeleteItem(uid, "TentacleArmGun");
+        SpawnOrDeleteItem(uid, component, "TentacleArmGun", 10);
+
+        args.Handled = true;
+    }
+
+    private void OnEyesightPurchased(Entity<ChangelingComponent> ent, ref AugmentedEyesightPurchasedEvent args)
+    {
+        EnsureComp<FlashImmunityComponent>(ent);
+        EnsureComp<EyeProtectionComponent>(ent);
+    }
+
+    private void OnVoidAdaptationPurchased(Entity<ChangelingComponent> ent, ref VoidAdaptationPurchasedEvent args)
+    {
+        EnsureComp<VoidAdaptationComponent>(ent);
+    }
+
+    private void OnEyesight(Entity<ChangelingComponent> ent, ref AugmentedEyesightActionEvent args)
+    {
+        if (!_mobStateSystem.IsAlive(ent))
+            return;
+
+        args.Handled = true;
+
+        if (HasComp<TemporaryNightVisionComponent>(ent))
+        {
+            RemComp<TemporaryNightVisionComponent>(ent);
+            EnsureComp<FlashImmunityComponent>(ent);
+            EnsureComp<EyeProtectionComponent>(ent);
+            return;
+        }
+
+        EnsureComp<TemporaryNightVisionComponent>(ent);
+        RemComp<FlashImmunityComponent>(ent);
+        RemComp<EyeProtectionComponent>(ent);
+    }
+
+    private void OnDissonantShriek(Entity<ChangelingComponent> ent, ref DissonantShriekActionEvent args)
+    {
+        if (!_mobStateSystem.IsAlive(ent))
+            return;
+
+        if (!TakeChemicals(ent, ent.Comp, 20))
+            return;
+
+        _empSystem.EmpPulse(_transform.GetMapCoordinates(ent), 5, 100000, 10f);
 
         args.Handled = true;
     }
@@ -596,6 +665,20 @@ public sealed partial class ChangelingSystem
             return;
 
         component.AbsorbedCount++;
+
+        _chemicalsSystem.AddChemicals(uid, component, 50);
+
+        if (_container.TryGetContainer(uid, ImplanterComponent.ImplantSlotId, out var implantContainer))
+        {
+            foreach (var implant in implantContainer.ContainedEntities)
+            {
+                if (!TryComp<StoreComponent>(implant, out var store) || store.Preset != "StorePresetChangeling")
+                    continue;
+
+                store.Refunds = true;
+                store.RefundAllowed = true;
+            }
+        }
 
         if (TryComp(uid, out SharedPullerComponent? puller) && puller.Pulling is { } pulled &&
             TryComp(pulled, out SharedPullableComponent? pullable))
@@ -638,6 +721,7 @@ public sealed partial class ChangelingSystem
     {
         if (args.Handled || args.Cancelled || args.Target == null)
         {
+            component.IsRegenerating = false;
             return;
         }
 
@@ -649,7 +733,10 @@ public sealed partial class ChangelingSystem
         }
 
         if (!TakeChemicals(uid, component, 15))
+        {
+            component.IsRegenerating = false;
             return;
+        }
 
         _rejuvenate.PerformRejuvenate(args.Target.Value);
 
@@ -667,12 +754,12 @@ public sealed partial class ChangelingSystem
         if (args.Handled || args.Cancelled)
             return;
 
+        if (!TakeChemicals(uid, component, 5))
+            return;
+
         var polymorphEntity = _polymorph.PolymorphEntity(args.User, "MonkeyChangeling");
 
         if (polymorphEntity == null)
-            return;
-
-        if (!TakeChemicals(uid, component, 5))
             return;
 
         var toAdd = new ChangelingComponent
@@ -686,8 +773,10 @@ public sealed partial class ChangelingSystem
 
         EntityManager.AddComponent(polymorphEntity.Value, toAdd);
 
+        TransferComponents(uid, polymorphEntity.Value);
+
         _implantSystem.TransferImplants(uid, polymorphEntity.Value);
-        _actionContainerSystem.TransferAllActionsFiltered(uid, polymorphEntity.Value);
+        _actionContainerSystem.TransferAllActionsFiltered(uid, polymorphEntity.Value, polymorphEntity.Value);
         _action.GrantContainedActions(polymorphEntity.Value, polymorphEntity.Value);
 
         RemoveLesserFormActions(polymorphEntity.Value);
@@ -815,7 +904,71 @@ public sealed partial class ChangelingSystem
 
         _identity.QueueIdentityUpdate(polymorphEntity.Value);
 
+        if (TryComp(target, out ChangelingComponent? lingComp))
+        {
+            var toAdd = new ChangelingComponent
+            {
+                HiveName = lingComp.HiveName,
+                ChemicalsBalance = lingComp.ChemicalsBalance,
+                AbsorbedEntities = lingComp.AbsorbedEntities,
+                IsInited = lingComp.IsInited
+            };
+
+            EntityManager.AddComponent(polymorphEntity.Value, toAdd);
+            _chemicalsSystem.UpdateAlert(polymorphEntity.Value, toAdd);
+        }
+
+        TransferComponents(target, polymorphEntity.Value);
+
+        _implantSystem.TransferImplants(target, polymorphEntity.Value);
+        _actionContainerSystem.TransferAllActionsFiltered(target, polymorphEntity.Value, polymorphEntity.Value);
+        _action.GrantContainedActions(polymorphEntity.Value, polymorphEntity.Value);
+
         return polymorphEntity;
+    }
+
+    private void TransferComponents(EntityUid from, EntityUid to)
+    {
+        if (HasComp<BibleUserComponent>(from))
+            EnsureComp<BibleUserComponent>(to);
+
+        if (HasComp<HolyComponent>(from))
+            EnsureComp<HolyComponent>(to);
+
+        if (HasComp<FlashImmunityComponent>(from))
+            EnsureComp<FlashImmunityComponent>(to);
+
+        if (HasComp<EyeProtectionComponent>(from))
+            EnsureComp<EyeProtectionComponent>(to);
+
+        if (HasComp<VoidAdaptationComponent>(from))
+            EnsureComp<VoidAdaptationComponent>(to);
+
+        if (TryComp(from, out TemporaryNightVisionComponent? nvComp))
+        {
+            var toAdd = new TemporaryNightVisionComponent
+            {
+                Color = nvComp.Color,
+                Tint = nvComp.Tint,
+                Strength = nvComp.Strength,
+                Noise = nvComp.Noise
+            };
+
+            EntityManager.AddComponent(to, toAdd);
+        }
+
+        if (TryComp(from, out NpcFactionMemberComponent? factionMember))
+        {
+            _faction.ClearFactions(to);
+            foreach (var faction in factionMember.Factions)
+            {
+                _faction.AddFaction(to, faction);
+            }
+        }
+
+        _nukeOps.TransferRole(from, to);
+
+        _cult.TransferRole(from, to);
     }
 
     private void TransferDna(EntityUid target, string dna)
@@ -840,27 +993,11 @@ public sealed partial class ChangelingSystem
         if (reverted == null)
             return;
 
-        var toAdd = new ChangelingComponent
-        {
-            HiveName = component.HiveName,
-            ChemicalsBalance = component.ChemicalsBalance,
-            AbsorbedEntities = component.AbsorbedEntities,
-            IsInited = component.IsInited
-        };
-
-        EntityManager.AddComponent(reverted.Value, toAdd);
-
-        _implantSystem.TransferImplants(uid, reverted.Value);
-        _actionContainerSystem.TransferAllActionsFiltered(uid, reverted.Value);
-        _action.GrantContainedActions(reverted.Value, reverted.Value);
-
         if (component.IsLesserForm)
         {
             //Don't copy IsLesserForm bool, because transferred component, in fact, new. Bool default value if false.
             StartUseDelayById(reverted.Value, ChangelingLesserForm);
         }
-
-        _chemicalsSystem.UpdateAlert(reverted.Value, component);
 
         StartUseDelayById(reverted.Value, ChangelingTransform);
     }
@@ -896,7 +1033,7 @@ public sealed partial class ChangelingSystem
         Dirty(target, targetHumanoid);
     }
 
-    private void SpawnOrDeleteItem(EntityUid target, string prototypeName)
+    private void SpawnOrDeleteItem(EntityUid target, ChangelingComponent component, string prototypeName, int chemicals)
     {
         foreach (var eHand in _handsSystem.EnumerateHands(target))
         {
@@ -915,6 +1052,9 @@ public sealed partial class ChangelingSystem
             _popup.PopupEntity(Loc.GetString("changeling-popup-need-hand"), target, target);
             return;
         }
+
+        if (!TakeChemicals(target, component, chemicals))
+            return;
 
         var item = Spawn(prototypeName, Transform(target).Coordinates);
 

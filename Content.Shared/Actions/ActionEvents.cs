@@ -81,8 +81,10 @@ public sealed class GetItemActionsEvent : EntityEventArgs
 public sealed class RequestPerformActionEvent : EntityEventArgs
 {
     public readonly NetEntity Action;
-    public readonly NetEntity? EntityTarget;
+    public NetEntity? EntityTarget;
     public readonly NetCoordinates? EntityCoordinatesTarget;
+    public ActionUseType ActionUseType = ActionUseType.Default;
+    public int ChargeLevel;
 
     public RequestPerformActionEvent(NetEntity action)
     {
@@ -101,6 +103,13 @@ public sealed class RequestPerformActionEvent : EntityEventArgs
         EntityCoordinatesTarget = entityCoordinatesTarget;
     }
 }
+
+// WD START
+public sealed partial class ActionGettingRemovedEvent : EntityEventArgs
+{
+    public EntityUid Action;
+}
+// WD END
 
 /// <summary>
 ///     This is the type of event that gets raised when an <see cref="InstantAction"/> is performed. The <see
@@ -141,6 +150,8 @@ public abstract partial class WorldTargetActionEvent : BaseActionEvent
     ///     The coordinates of the location that the user targeted.
     /// </summary>
     public EntityCoordinates Target;
+
+    public EntityUid TargetUid;
 }
 
 /// <summary>
@@ -154,4 +165,18 @@ public abstract partial class BaseActionEvent : HandledEntityEventArgs
     ///     The user performing the action.
     /// </summary>
     public EntityUid Performer;
+
+    public EntityUid Action;
+
+    public ActionUseType ActionUseType = ActionUseType.Default;
+
+    public int ChargeLevel;
+}
+
+[Serializable, NetSerializable]
+public enum ActionUseType
+{
+    Default, // left mouse click.
+    Charge, // Holding right mouse click(has 4 charges).
+    AltUse // Alt + left mouse click.
 }

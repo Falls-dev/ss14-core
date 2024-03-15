@@ -31,12 +31,20 @@
       - key: enum.StrippingUiKey.Key
         type: StrippableBoundUserInterface
       # WD-EDIT
+      - key: enum.ListViewSelectorUiKeyChangeling.Key
+        type: ListViewSelectorBui
+      - key: enum.TransformStingSelectorUiKey.Key
+        type: TransformStingSelectorBui
       - key: enum.NameSelectorUIKey.Key
         type: NameSelectorBUI
       - key: enum.RuneTeleporterUiKey.Key
         type: TeleportRunesListWindowBUI
       - key: enum.SummonCultistUiKey.Key
         type: SummonCultistListWindowBUI
+      - key: enum.CultEmpowerUiKey.Key
+        type: SpellSelectorBUI
+      - key: enum.CultEmpowerRemoveUiKey.Key
+        type: SpellRemoverBUI
       # WD-EDIT END
   - type: Sprite
     scale: 0.9, 0.9

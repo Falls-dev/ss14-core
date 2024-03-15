@@ -1,0 +1,51 @@
+- type: sourcePort
+  id: MechCompStandardOutput
+  name: mechcomp-standart-output-port
+  description: mechcomp-standart-output-port-description
+  defaultLinks: [ MechcompStandardInput ]
+
+- type: sourcePort
+  id: MechCompNumericOutput
+  name: mechcomp-numeric-output-port
+  description: mechcomp-numeric-output-port-description
+
+- type: sourcePort
+  id: MechCompChemLogicOutputTrue
+  name: mechcomp-logic-output-true
+  description: mechcomp-logic-output-port-description
+   
+- type: sourcePort
+  id: MechCompChemLogicOutputFalse
+  name: mechcomp-logic-output-false
+  description: mechcomp-logic-output-port-description
+
+
+
+- type: sinkPort
+  id: MechCompStandardInput
+  name: mechcomp-standart-input-port
+  description: mechcomp-standart-input-port-description
+
+- type: sinkPort
+  id: MechCompTeleIDInput
+  name: mechcomp-teleid-input-port
+  description: mechcomp-teleid-input-port-description
+
+- type: sinkPort
+  id: MechCompNumericInputA
+  name: mechcomp-numeric-input-A
+  description: mechcomp-numeric-input-port-description
+
+- type: sinkPort
+  id: MechCompNumericInputB
+  name: mechcomp-numeric-input-B
+  description: mechcomp-numeric-input-port-description
+
+- type: sinkPort
+  id: MechCompChemDispenserInput
+  name: mechcomp-chem-dispenser-input
+  description: mechcomp-chem-dispenser-input-port-description
+  
+
+  
+  

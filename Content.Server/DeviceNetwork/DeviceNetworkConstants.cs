@@ -11,7 +11,7 @@ namespace Content.Server.DeviceNetwork
         /// <summary>
         /// Used by logic gates to transmit the state of their ports
         /// </summary>
-        public const string LogicState = "logic_state";
+        public const string LogicState = "logic_state"; //If you, for whatever reason, going to change this, do a ctrl+shift+F on the entire solution to make sure there aren't any other strings you should change. Like in Content.Shared.DeviceNetwork.NetworkPayload.
 
         #region Commands
 

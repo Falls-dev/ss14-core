@@ -21,6 +21,8 @@ using Robust.Shared.Prototypes;
 using System.Linq;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.FixedPoint;
+using Content.Server.DeviceLinking.Events;
+using System.Text.RegularExpressions;
 
 namespace Content.Server.Chemistry.EntitySystems
 {
@@ -54,6 +56,7 @@ namespace Content.Server.Chemistry.EntitySystems
             SubscribeLocalEvent<ReagentDispenserComponent, ComponentInit>(OnInit);
             SubscribeLocalEvent<ReagentDispenserComponent, MapInitEvent>(OnMapInit);
             SubscribeLocalEvent<ReagentDispenserComponent, NewLinkEvent>(OnNewLink);
+            SubscribeLocalEvent<ReagentDispenserComponent, SignalReceivedEvent>(OnSignalReceived);
             SubscribeLocalEvent<ReagentDispenserComponent, PortDisconnectedEvent>(OnPortDisconnected);
             SubscribeLocalEvent<ReagentDispenserComponent, AnchorStateChangedEvent>(OnAnchorChanged);
             // WD END
@@ -69,6 +72,7 @@ namespace Content.Server.Chemistry.EntitySystems
         private void OnInit(EntityUid uid, ReagentDispenserComponent component, ComponentInit args)
         {
             _signalSystem.EnsureSourcePorts(uid, ReagentDispenserComponent.ChemMasterPort);
+            _signalSystem.EnsureSinkPorts(uid, "MechCompChemDispenserInput");
         }
 
         private void OnMapInit(EntityUid uid, ReagentDispenserComponent component, MapInitEvent args)
@@ -91,6 +95,19 @@ namespace Content.Server.Chemistry.EntitySystems
             if (TryComp<ChemMasterComponent>(args.Sink, out var master) && args.SourcePort == ReagentDispenserComponent.ChemMasterPort)
                 UpdateConnection(uid, args.Sink, component, master);
         }
+
+        private void OnSignalReceived(EntityUid uid, ReagentDispenserComponent component, ref SignalReceivedEvent args)
+        {
+            //if (args.Data != null && args.Data.TryGetValue("mechcomp_data", out string? signal))
+            //{
+            //    string[] arr = signal!.Split('='); // expecting signal of format reagentname=volume
+            //    if (arr.Length != 2) return;
+            //    if (!GetInventory((uid, component)).Contains(arr[0])) return;
+            //    if (!int.TryParse(arr[1], out var num) || num <= 0) return;
+            //    // todo: how the fuck do i make it piss out potassium???
+            //}
+        }
+
 
         private void OnPortDisconnected(EntityUid uid, ReagentDispenserComponent component, PortDisconnectedEvent args)
         {

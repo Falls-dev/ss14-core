@@ -36,7 +36,7 @@ public sealed partial class DialogWindow : FancyWindow
 
     private List<(string, Func<string>)> _promptLines;
 
-    private delegate (Control, Func<string>) ControlConstructor(Func<string, bool> verifier, string name, QuickDialogEntry entry, bool last, object? value);// are you feeling it now mr krabs?
+    private delegate (Control, Func<string>) ControlConstructor(Func<string, bool> verifier, string name, QuickDialogEntry entry, bool last, object? value, object? info);// are you feeling it now mr krabs?
 
     /// <summary>
     /// Create and open a new dialog with some prompts.
@@ -63,6 +63,7 @@ public sealed partial class DialogWindow : FancyWindow
         {
             var entry = entries[i];
             var value = entry.Value;
+            var info = entry.Info;
             var box = new BoxContainer();
             box.AddChild(new Label() { Text = entry.Prompt, HorizontalExpand = true, SizeFlagsStretchRatio = 0.5f });
 
@@ -72,7 +73,7 @@ public sealed partial class DialogWindow : FancyWindow
             //  walkthrough:
             //  second item in this tuple is a verifier function for controls who have that option
             //  third item is a backup name in case we have not been provided with one from the server
-            //  first item is a function that takes the other two, the QuickDialogEntry for it, a bool of whether it's the last control in the window, the default value for the control
+            //  first item is a function that takes the other two, the QuickDialogEntry for it, a bool of whether it's the last control in the window, the default value for the control, and additional info (which is used only for 1 or 2 controls)
             // and returns another tuple:
             //      item 1 is the control itself
             //      item 2 is a Func<string>, a """generic""" function that returns whatever user has done with the control
@@ -85,16 +86,17 @@ public sealed partial class DialogWindow : FancyWindow
                 QuickDialogEntryType.Hex16 => (SetupLineEditHex, VerifyHex16, "hex16"),
                 QuickDialogEntryType.Boolean => (SetupCheckBox, null, "boolean"),
                 QuickDialogEntryType.Void => (SetupVoid, null, "void"),
+                QuickDialogEntryType.OptionList => (SetupRadio, null, "radio"),
 
                 _ => throw new ArgumentOutOfRangeException()
             };
             var (setup, valid, name) = notapairanymore;
 
             // try use placeholder from the caller, fall back to the generic one for whatever type is being validated.
-            var (control, returner) = setup(valid!, entry.Placeholder ?? Loc.GetString($"quick-dialog-ui-{name}"), entry, i == entries.Count - 1, value);   // ARE YOU FEELING IT NOW MR KRABS?
-                                                                                                                                                            // yes, valid can be null
-                                                                                                                                                            // yes, i am just going to ignore that
-                                                                                                                                                            // go fuck yourself
+            var (control, returner) = setup(valid!, entry.Placeholder ?? Loc.GetString($"quick-dialog-ui-{name}"), entry, i == entries.Count - 1, value, info); // ARE YOU FEELING IT NOW MR KRABS?
+                                                                                                                                                                // yes, valid can be null
+                                                                                                                                                                // yes, i am just going to ignore that
+                                                                                                                                                                // go fuck yourself
             _promptLines.Add((entry.FieldId, returner));
 
             box.AddChild(control);
@@ -165,7 +167,7 @@ public sealed partial class DialogWindow : FancyWindow
 
 
 
-    private (Control, Func<string>) SetupLineEdit(Func<string, bool> valid, string name, QuickDialogEntry entry, bool last, object? value) // oh shit i'm feeling it
+    private (Control, Func<string>) SetupLineEdit(Func<string, bool> valid, string name, QuickDialogEntry entry, bool last, object? value, object? _) // oh shit i'm feeling it
     {
         var edit = new LineEdit() { HorizontalExpand = true };
         edit.IsValid += valid;
@@ -180,15 +182,15 @@ public sealed partial class DialogWindow : FancyWindow
 
         return (edit, () => {return edit.Text;} );
     }
-    private (Control, Func<string>) SetupLineEditNumber(Func<string, bool> valid, string name, QuickDialogEntry entry, bool last, object? value)
+    private (Control, Func<string>) SetupLineEditNumber(Func<string, bool> valid, string name, QuickDialogEntry entry, bool last, object? value, object? _)
     {
-        var (control, returner) = SetupLineEdit(valid, name, entry, last, value);
+        var (control, returner) = SetupLineEdit(valid, name, entry, last, value, _);
         var le = (LineEdit) control;
         return (control, ()=> le.Text.Length > 0 ? le.Text : "0"); // Otherwise you'll get kicked for malformed data
     }
-    private (Control, Func<string>) SetupLineEditHex(Func<string, bool> valid, string name, QuickDialogEntry entry, bool last, object? value)
+    private (Control, Func<string>) SetupLineEditHex(Func<string, bool> valid, string name, QuickDialogEntry entry, bool last, object? value, object? _)
     {
-        var (control, returner) = SetupLineEditNumber(valid, name, entry, last, value);
+        var (control, returner) = SetupLineEditNumber(valid, name, entry, last, value, _);
         var le = (LineEdit) control;
         if(value is int)
         {
@@ -198,20 +200,32 @@ public sealed partial class DialogWindow : FancyWindow
         return (control, returner);
     }
 
-    private (Control, Func<string>) SetupCheckBox(Func<string, bool> _, string name, QuickDialogEntry entry, bool last, object? value)
+    private (Control, Func<string>) SetupCheckBox(Func<string, bool> _, string name, QuickDialogEntry entry, bool last, object? value, object? info)
     {
         var check = new CheckBox() { HorizontalExpand = true, HorizontalAlignment = HAlignment.Right };
-        check.Text = name;
+        //check.Text = name;
         value ??= false;
         check.Pressed = (bool)value;
         return (check, () => { return check.Pressed ? "true" : "false"; });
     }
 
-    private (Control, Func<string>) SetupVoid(Func<string, bool> _, string __, QuickDialogEntry ___, bool ____, object? _____)
+    private (Control, Func<string>) SetupVoid(Func<string, bool> _, string __, QuickDialogEntry ___, bool ____, object? _____, object? ______)
     {
         var control = new Control();
         control.Visible = false;
-        return (control, () => "" );
+        return (control, () => "");
+    }
+
+    private (Control, Func<string>) SetupRadio(Func<string, bool> valid, string name, QuickDialogEntry entry, bool last, object? value, object? info)
+    {
+        var control = new RadioOptions<string>(RadioOptionsLayout.Vertical);
+        string val = ((string?) value) ?? "";
+        foreach(var option in (IEnumerable<string>) info!)
+        {
+            control.AddItem(option, option, (args) => control.Select(args.Id));
+        }
+        control.SelectByValue(val);
+        return (control, () => control.SelectedValue);
     }
 
 

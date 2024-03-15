@@ -1,0 +1,132 @@
+#- type: entity
+#  name: MechComp Connection Utility Mechanism
+#  parent: BaseItem
+#  id: MechCompTool
+#  description: Used to connect MechComp devices together.
+#  components:
+#  - type: MechCompTool
+#  - type: EmitSoundOnPickup
+#    sound:
+#      path: /Audio/White/Items/handling/multitool_pickup.ogg
+#  - type: EmitSoundOnDrop
+#    sound:
+#      path: /Audio/Items/multitool_drop.ogg
+#  - type: EmitSoundOnLand
+#    sound:
+#      path: /Audio/Items/multitool_drop.ogg
+#  - type: Sprite
+#    sprite: White/MechComp/mechcomptool.rsi
+#    layers:
+#    - state: icon
+#    - state: green-unlit
+#      shader: unshaded
+#  - type: Item
+#    size: Small
+#    quickEquip: false
+#    slots:
+#    - Belt
+
+
+
+- type: entity
+  name: MechComp Component
+  parent: BaseItem
+  id: MechCompBase
+  description: You aren't sure what it actually does. Only one way to find out!
+  abstract: true
+  components:
+    - type: Appearance
+    - type: MechCompAnchoredVisualizer
+    - type: Anchorable
+      snap: false
+    - type: Item
+      size: Large
+    - type: Sprite
+      sprite: White/MechComp/base.rsi
+      layers:
+        - state: icon
+          map: [ "enum.MechCompDeviceVisualLayers.Base" ]
+        - map: [ "enum.MechCompDeviceVisualLayers.Effect1" ]
+          shader: unshaded
+          visible: false
+        - map: [ "enum.MechCompDeviceVisualLayers.Effect2" ]
+          shader: unshaded
+          visible: false
+        - map: [ "enum.MechCompDeviceVisualLayers.Effect3" ]
+          shader: unshaded
+          visible: false
+        - map: [ "enum.MechCompDeviceVisualLayers.Effect4" ]
+          shader: unshaded
+          visible: false
+        - map: [ "enum.MechCompDeviceVisualLayers.Effect5" ]
+          shader: unshaded
+          visible: false
+        - map: [ "enum.MechCompDeviceVisualLayers.Effect6" ]
+          shader: unshaded
+          visible: false
+
+- type: entity
+  name: MechComp Button
+  id: MechCompButton
+  parent: MechCompBase
+  description: A comically large button, for use with MechComp devices.
+  components:
+    - type: MechCompButton
+    - type: MechCompAnchoredVisualizer
+      anchoredState: icon
+    - type: Sprite
+      sprite: White/MechComp/button.rsi
+
+          
+- type: entity
+  name: MechComp Speaker
+  id: MechCompSpeaker
+  parent: MechCompBase
+  description: An oversized speaker with a voice synthesizer.
+  components:
+    - type: MechCompSpeaker
+    - type: Speech
+    - type: Sprite
+      sprite: White/MechComp/speaker.rsi
+
+
+- type: entity
+  name: MechComp Teleport
+  id: MechCompTeleport
+  parent: MechCompBase
+  description: A teleport, able to move everything on it instantaneously to another teleport!
+  components:
+    - type: MechCompTeleport
+    - type: Sprite
+      sprite: White/MechComp/teleport.rsi
+
+  
+- type: entity
+  name: MechComp Calculator
+  id: MechCompMath
+  parent: MechCompBase
+  description: A general-purspose math component, able to perform a number of operations on two values.
+  components:
+    - type: MechCompMath
+    - type: Sprite
+      sprite: White/MechComp/math.rsi
+
+- type: entity
+  name: MechComp Pressure Pad
+  id: MechCompPressurePad
+  parent: MechCompBase
+  description: Sends a signal when stepped on.
+  components:
+    - type: MechCompPressurePad
+    - type: Sprite
+      sprite: White/MechComp/pressurepad.rsi
+
+- type: entity
+  name: MechComp Comparer
+  id: MechCompComparer
+  parent: MechCompBase
+  description: Compares signals. Has a very judgemental aura about it.
+  components:
+    - type: MechCompComparer
+    - type: Sprite
+      sprite: White/MechComp/comparer.rsi

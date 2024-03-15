@@ -20,6 +20,7 @@ namespace Content.Server.Entry
             "LightFade",
             "HolidayRsiSwap",
             "OptionsVisualizer",
+            "MechCompAnchoredVisualizer" // Almost every day i discover a new thing about this game, and i cherish the days when i don't
         };
     }
 }

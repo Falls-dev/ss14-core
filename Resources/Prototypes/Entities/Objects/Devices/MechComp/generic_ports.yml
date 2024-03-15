@@ -1,0 +1,277 @@
+#For when you only have one input/output
+- type: sinkPort
+  id: MechCompInput
+  name: mechcomp-generic-input
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompOutput
+  name: mechcomp-generic-output
+  description: mechcomp-generic-output-port-description
+
+
+
+#For when you're about to get funky
+- type: sinkPort
+  id: MechCompInputA
+  name: mechcomp-generic-input-A
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputB
+  name: mechcomp-generic-input-B
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputC
+  name: mechcomp-generic-input-C
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputD
+  name: mechcomp-generic-input-D
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputE
+  name: mechcomp-generic-input-E
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputF
+  name: mechcomp-generic-input-F
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputG
+  name: mechcomp-generic-input-G
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputH
+  name: mechcomp-generic-input-H
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputI
+  name: mechcomp-generic-input-I
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputJ
+  name: mechcomp-generic-input-J
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputK
+  name: mechcomp-generic-input-K
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputL
+  name: mechcomp-generic-input-L
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputM
+  name: mechcomp-generic-input-M
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputN
+  name: mechcomp-generic-input-N
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputO
+  name: mechcomp-generic-input-O
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputP
+  name: mechcomp-generic-input-P
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputQ
+  name: mechcomp-generic-input-Q
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputR
+  name: mechcomp-generic-input-R
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputS
+  name: mechcomp-generic-input-S
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputT
+  name: mechcomp-generic-input-T
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputU
+  name: mechcomp-generic-input-U
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputV
+  name: mechcomp-generic-input-V
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputW
+  name: mechcomp-generic-input-W
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputX
+  name: mechcomp-generic-input-X
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputY
+  name: mechcomp-generic-input-Y
+  description: mechcomp-generic-input-port-description
+
+- type: sinkPort
+  id: MechCompInputZ
+  name: mechcomp-generic-input-Z
+  description: mechcomp-generic-input-port-description
+
+
+
+
+
+- type: sinkPort
+  id: MechCompOutputA
+  name: mechcomp-generic-output-A
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputB
+  name: mechcomp-generic-output-B
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputC
+  name: mechcomp-generic-output-C
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputD
+  name: mechcomp-generic-output-D
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputE
+  name: mechcomp-generic-output-E
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputF
+  name: mechcomp-generic-output-F
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputG
+  name: mechcomp-generic-output-G
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputH
+  name: mechcomp-generic-output-H
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputI
+  name: mechcomp-generic-output-I
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputJ
+  name: mechcomp-generic-output-J
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputK
+  name: mechcomp-generic-output-K
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputL
+  name: mechcomp-generic-output-L
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputM
+  name: mechcomp-generic-output-M
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputN
+  name: mechcomp-generic-output-N
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputO
+  name: mechcomp-generic-output-O
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputP
+  name: mechcomp-generic-output-P
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputQ
+  name: mechcomp-generic-output-Q
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputR
+  name: mechcomp-generic-output-R
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputS
+  name: mechcomp-generic-output-S
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputT
+  name: mechcomp-generic-output-T
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputU
+  name: mechcomp-generic-output-U
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputV
+  name: mechcomp-generic-output-V
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputW
+  name: mechcomp-generic-output-W
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputX
+  name: mechcomp-generic-output-X
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputY
+  name: mechcomp-generic-output-Y
+  description: mechcomp-generic-output-port-description
+
+- type: sinkPort
+  id: MechCompOutputZ
+  name: mechcomp-generic-output-Z
+  description: mechcomp-generic-output-port-description

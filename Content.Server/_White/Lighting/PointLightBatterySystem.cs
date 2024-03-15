@@ -2,7 +2,7 @@
 using Content.Shared.PowerCell;
 using Content.Shared.PowerCell.Components;
 
-namespace Content.Shared._White.Lighting;
+namespace Content.Server._White.Lighting;
 
 public sealed class PointLightBatterySystem : SharedLightningSystem
 {
@@ -19,7 +19,12 @@ public sealed class PointLightBatterySystem : SharedLightningSystem
         if (!component.RequireBattery)
             return;
 
+        if (!_pointLightSystem.TryGetLight(uid, out var pointLightComponent))
+            return;
+
         var isBatteryCharged = _cell.HasDrawCharge(uid);
-        _pointLightSystem.SetEnabled(uid, isBatteryCharged && !args.Ejected, component);
+        _pointLightSystem.SetEnabled(uid, isBatteryCharged && !args.Ejected, pointLightComponent);
+
+        RaiseLocalEvent(uid, new PointLightToggleEvent(isBatteryCharged && !args.Ejected), true);
     }
 }

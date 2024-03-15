@@ -8,7 +8,7 @@ namespace Content.Shared._White.Cult.Pylon;
 public sealed partial class SharedPylonComponent : Component
 {
     [ViewVariables(VVAccess.ReadWrite), DataField("healingAuraRange")]
-    public float HealingAuraRange = 3f;
+    public float HealingAuraRange = 5f;
 
     [ViewVariables(VVAccess.ReadOnly), DataField("healingAuraDamage", required: true)]
     public DamageSpecifier HealingAuraDamage = default!;

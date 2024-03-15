@@ -49,7 +49,7 @@ public sealed class CultPylonPlacementHijack : PlacementHijack
     private bool CheckForStructure(EntityCoordinates coordinates)
     {
         var lookupSystem = _entMan.System<EntityLookupSystem>();
-        var entities = lookupSystem.GetEntitiesInRange(coordinates, 6f);
+        var entities = lookupSystem.GetEntitiesInRange(coordinates, 10f);
         foreach (var ent in entities)
         {
             if (!_entMan.TryGetComponent<MetaDataComponent>(ent, out var metadata))

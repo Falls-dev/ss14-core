@@ -1,3 +1,4 @@
+using Content.Server._Amour.Gif.Background;
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
@@ -78,6 +79,7 @@ namespace Content.Server.IoC
             IoCManager.Register<ReputationManager>();
             IoCManager.Register<PandaStatusHost>();
             IoCManager.Register<PandaWebManager>();
+            IoCManager.Register<LobbyBackgroundManager>();
             // WD-EDIT
         }
     }

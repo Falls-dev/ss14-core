@@ -1,3 +1,5 @@
+using Content.Client._Amour.Gif;
+using Content.Client._Amour.Gif.Background;
 using Content.Client._White.JoinQueue;
 using Content.Client._White.Jukebox;
 using Content.Client._White.Reputation;
@@ -61,6 +63,8 @@ namespace Content.Client.IoC
             IoCManager.Register<TTSManager>();
             IoCManager.Register<ITrailLineManager, TrailSplineManager>();
             IoCManager.Register<ReputationManager>();
+            IoCManager.Register<GifManager>();
+            IoCManager.Register<LobbyBackgroundManager>();
             //WD-EDIT
         }
     }

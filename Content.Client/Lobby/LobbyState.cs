@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client._Amour.Gif;
 using Content.Client._Ohio.Buttons;
 using Content.Client.Changelog;
 using Content.Client.GameTicking.Managers;
@@ -95,9 +96,7 @@ namespace Content.Client.Lobby
             _gameTicker.LobbyLateJoinStatusUpdated += LobbyLateJoinStatusUpdated;
 
             _preferencesManager.OnServerDataLoaded += PreferencesDataLoaded;
-            _lobby.Background.RandomizeBackground();
 
-            //_lobby.CharacterPreview.UpdateUI();
             PopulateChangelog();
         }
 

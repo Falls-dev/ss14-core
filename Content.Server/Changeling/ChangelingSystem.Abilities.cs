@@ -4,6 +4,7 @@ using Content.Server.Administration.Systems;
 using Content.Server.Bible.Components;
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
+using Content.Server.Borer;
 using Content.Server.Cuffs;
 using Content.Server.DoAfter;
 using Content.Server.Emp;
@@ -23,6 +24,7 @@ using Content.Server.Temperature.Systems;
 using Content.Shared._White.Chaplain;
 using Content.Shared._White.Overlays;
 using Content.Shared.Actions;
+using Content.Shared.Borer;
 using Content.Shared.Changeling;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Cuffs.Components;
@@ -85,6 +87,7 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly EmpSystem _empSystem = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly ContainerSystem _container = default!;
+    [Dependency] private readonly ServerBorerSystem _borer = default!;
 
     private void InitializeAbilities()
     {
@@ -882,6 +885,9 @@ public sealed partial class ChangelingSystem
     {
         if (!HasComp<HumanoidAppearanceComponent>(target) && !humanoidOverride)
             return null;
+
+        if (TryComp(target, out BorerHostComponent? host) && host.BorerContainer.Count > 0)
+            _borer.GetOut(host.BorerContainer.ContainedEntities[0]);
 
         var polymorphEntity = _polymorph.PolymorphEntity(target, transformData.EntityPrototype.ID);
 

@@ -22,4 +22,4 @@
     - 0,0,1,0
   - type: Sprite
     sprite: Objects/Storage/ziplocks.rsi
-    state: decziplock
+    state: icon

@@ -170,7 +170,7 @@
           Piercing: 0.5
           Heat: 0.4
     - type: ExplosionResistance
-      damageCoefficient: 0.9
+      damageCoefficient: 0.5
     - type: GroupExamine
     - type: Unremoveable
       deleteOnDrop: true

@@ -88,8 +88,7 @@
             "directions": 4
         },
         {
-            "name": "pufi-greyscale",
-            "directions": 4
+            "name": "pufi-box-greyscale"
         },
         {
             "name": "comfy-greyscale",

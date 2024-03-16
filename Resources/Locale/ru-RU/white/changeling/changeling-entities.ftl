@@ -38,7 +38,7 @@ changeling-ability-tentacle-arm = Рука-щупальце
 changeling-ability-tentacle-arm-desc = Превращает одну из рук в щупальце, способное притягивать людей или забирать вещи из их рук.
 
 changeling-ability-changeling-armor = Хитиновая броня
-changeling-ability-changeling-armor-desc = Надувает тело, превращая его в крепкую хитиновую броню.
+changeling-ability-changeling-armor-desc = Надувает тело, превращая его в крепкую хитиновую броню. При использовании замедляет регенерацию химикатов на 25%.
 
 changeling-ability-changeling-shield = Органический щит
 changeling-ability-changeling-shield-desc = Превращает одну из рук в крепкий органический щит.

@@ -18,7 +18,7 @@
         layer:
           - MachineLayer
   - type: Lathe
-  - type: BluespaceSilo
+  - type: BluespaceStorage
   - type: MaterialStorage
   - type: Destructible
     thresholds:
@@ -226,7 +226,7 @@
       - MagazineGrenadeEmpty
       - GrenadeEMP
       - GrenadeFlash
-  - type: BluespaceSilo
+  - type: BluespaceStorage
 
 - type: entity
   id: AutolatheHyperConvection
@@ -239,7 +239,7 @@
   - type: Lathe
     materialUseMultiplier: 0.5
     timeMultiplier: 1.5
-  - type: BluespaceSilo
+  - type: BluespaceStorage
   - type: LatheHeatProducing
   - type: Machine
     board: AutolatheHyperConvectionMachineCircuitboard
@@ -352,7 +352,7 @@
       - WeaponAdvancedLaser
       - WeaponLaserCannon
       - WeaponXrayCannon
-  - type: BluespaceSilo
+  - type: BluespaceStorage
 
 - type: entity
   id: ProtolatheHyperConvection
@@ -365,7 +365,7 @@
   - type: Lathe
     materialUseMultiplier: 0.5
     timeMultiplier: 1.5
-  - type: BluespaceSilo
+  - type: BluespaceStorage
   - type: LatheHeatProducing
   - type: Machine
     board: ProtolatheHyperConvectionMachineCircuitboard
@@ -481,7 +481,7 @@
       - ArtifactCrusherMachineCircuitboard
       - TelecomServerCircuitboard
       - MassMediaCircuitboard
-  - type: BluespaceSilo
+  - type: BluespaceStorage
   - type: MaterialStorage
     whitelist:
       tags:
@@ -594,7 +594,7 @@
     - HamtrLLeg
     - HamtrRLeg
     - VimHarness
-  - type: BluespaceSilo
+  - type: BluespaceStorage
   - type: MaterialStorage
     whitelist:
       tags:
@@ -647,7 +647,7 @@
     - AbominationCube
     - SpaceCarpCube
     - SpaceTickCube
-  - type: BluespaceSilo
+  - type: BluespaceStorage
 
 - type: entity
   id: SecurityTechFab
@@ -778,7 +778,7 @@
         - Sheet
         - RawMaterial
         - Ingot
-  - type: BluespaceSilo
+  - type: BluespaceStorage
 
 - type: entity
   id: AmmoTechFab
@@ -825,7 +825,7 @@
         - MagazineBoxMagnumAP
         - MagazineBoxAntiMateriel
         - MagazineBoxCaselessRifle
-    - type: BluespaceSilo
+    - type: BluespaceStorage
     - type: MaterialStorage
       whitelist:
         tags:
@@ -899,7 +899,7 @@
       - SyringeBluespace
       - SyringeCryostasis
       - ClothingEyesHudMedical
-  - type: BluespaceSilo
+  - type: BluespaceStorage
   - type: Machine
     board: MedicalTechFabCircuitboard
   - type: StealTarget
@@ -1084,7 +1084,7 @@
       - ClothingOuterWinterCentcom
       - ClothingOuterWinterSyndie
       - ClothingOuterWinterSyndieCap
-  - type: BluespaceSilo
+  - type: BluespaceStorage
   - type: MaterialStorage
     whitelist:
       tags:
@@ -1131,7 +1131,7 @@
         - IngotGold30
         - IngotSilver30
         - MaterialBananium10
-    - type: BluespaceSilo
+    - type: BluespaceStorage
 
 - type: entity
   parent: OreProcessor
@@ -1160,7 +1160,7 @@
       - IngotGold30
       - IngotSilver30
       - MaterialBananium10
-  - type: BluespaceSilo
+  - type: BluespaceStorage
 
 - type: entity
   parent: BaseLathe
@@ -1192,4 +1192,4 @@
     staticRecipes:
     - MaterialSheetMeat
     - SheetPaper
-  - type: BluespaceSilo
+  - type: BluespaceStorage

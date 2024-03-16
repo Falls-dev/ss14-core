@@ -79,7 +79,7 @@ public sealed class MaterialStorageSystem : SharedMaterialStorageSystem
             volume = sheetsToExtract * volumePerSheet;
         }
 
-        var gridUid = HasComp<BluespaceSiloComponent>(uid) &&
+        var gridUid = HasComp<BluespaceStorageComponent>(uid) &&
                       TryComp<TransformComponent>(uid, out var transformComponent)
             ? transformComponent.GridUid
             : null;

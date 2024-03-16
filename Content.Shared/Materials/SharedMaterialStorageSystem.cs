@@ -296,7 +296,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         var multiplier = TryComp<StackComponent>(toInsert, out var stackComponent) ? stackComponent.Count : 1;
         var totalVolume = 0;
 
-        var gridUid = HasComp<BluespaceSiloComponent>(receiver) &&
+        var gridUid = HasComp<BluespaceStorageComponent>(receiver) &&
                       TryComp<TransformComponent>(receiver, out var transformComponent)
             ? transformComponent.GridUid
             : null;

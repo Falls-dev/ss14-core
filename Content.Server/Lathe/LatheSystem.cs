@@ -165,7 +165,7 @@ namespace Content.Server.Lathe
                     ? (int) (-amount * component.MaterialUseMultiplier)
                     : -amount;
 
-                var gridUid = HasComp<BluespaceSiloComponent>(uid) &&
+                var gridUid = HasComp<BluespaceStorageComponent>(uid) &&
                     TryComp<TransformComponent>(uid, out var transformComponent) ? transformComponent.GridUid : null;
 
                 var gridStorage =

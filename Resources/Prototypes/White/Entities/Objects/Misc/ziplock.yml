@@ -17,9 +17,9 @@
   description: Designed for storing evidence.
   components:
   - type: Item
-    sprite: Objects/Storage/ziplocks.rsi
+    sprite: White/Objects/Storage/ziplocks.rsi
     shape:
     - 0,0,1,0
   - type: Sprite
-    sprite: Objects/Storage/ziplocks.rsi
+    sprite: White/Objects/Storage/ziplocks.rsi
     state: icon

@@ -37,6 +37,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Implants.Components;
+using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Miracle.UI;
 using Content.Shared.Mobs;
@@ -379,6 +380,13 @@ public sealed partial class ChangelingSystem
         var humanData = component.AbsorbedEntities[selectedDna];
         var target = GetEntity(args.Target);
         var user = GetEntity(args.Entity);
+
+        if (!Transform(user).Coordinates.InRange(EntityManager, _transform, Transform(target).Coordinates,
+                SharedInteractionSystem.InteractionRange))
+        {
+            _popup.PopupEntity(Loc.GetString("changeling-popup-transform-too-far"), user, user);
+            return;
+        }
 
         if (!TryComp<ActorComponent>(uid, out var actorComponent))
             return;

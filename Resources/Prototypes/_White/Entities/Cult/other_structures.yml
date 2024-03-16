@@ -9,7 +9,7 @@
       Brute:
         collection: GlassSmash
   - type: Sprite
-    sprite: /Textures/White/Cult/Structures/cult_airlock.rsi
+    sprite: White/Cult/Structures/cult_airlock.rsi
     layers:
     - state: closed
       map: ["enum.DoorVisualLayers.Base"]
@@ -26,8 +26,6 @@
       path: /Audio/Effects/stonedoor_openclose.ogg
     closeSound:
       path: /Audio/Effects/stonedoor_openclose.ogg
-    denySound:
-      path: /Audio/Machines/airlock_deny.ogg
   - type: Airtight
     fixVacuum: true
     noAirWhenFullyAirBlocked: false
@@ -47,6 +45,16 @@
     node: airlock
   - type: PlacementReplacement
     key: walls
+  - type: Appearance
+  - type: Concealable
+    examinableWhileConcealed: true
+    iconSmooth: true
+    concealedSprite: White/Cult/Structures/Concealed/cult_airlock.rsi
+    revealedSprite: White/Cult/Structures/cult_airlock.rsi
+  - type: IconSmooth
+    enabled: false
+    key: walls
+    mode: NoSprite
   placement:
     mode: SnapgridCenter
 
@@ -74,7 +82,7 @@
             - GlassAirlockLayer
     - type: InteractionOutline
     - type: Sprite
-      sprite: /Textures/White/Cult/Structures/cult_girder.rsi
+      sprite: White/Cult/Structures/cult_girder.rsi
       state: cultgirder
     - type: Damageable
       damageContainer: Inorganic
@@ -103,3 +111,8 @@
     - type: Construction
       graph: CultGirder
       node: girder
+    - type: Appearance
+    - type: Concealable
+      examinableWhileConcealed: true
+      concealedSprite: White/Cult/Structures/Concealed/cult_girder.rsi
+      revealedSprite: White/Cult/Structures/cult_girder.rsi

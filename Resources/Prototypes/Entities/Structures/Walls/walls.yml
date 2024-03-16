@@ -221,6 +221,11 @@
   - type: Construction
     graph: CultGirder
     node: wall
+  - type: Appearance
+  - type: Concealable
+    examinableWhileConcealed: true
+    concealedSprite: White/Cult/Structures/Concealed/cult.rsi
+    revealedSprite: Structures/Walls/cult.rsi
 
 - type: entity
   parent: BaseWall

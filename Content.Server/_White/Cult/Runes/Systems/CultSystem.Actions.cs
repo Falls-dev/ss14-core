@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using Content.Server.Body.Components;
 using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Emp;
@@ -17,12 +18,16 @@ using Content.Shared.Stacks;
 using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
 using Content.Shared._White.Cult.Actions;
+using Content.Shared._White.Cult.Components;
+using Content.Shared._White.Cult.Systems;
 using Content.Shared.Actions;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.DoAfter;
+using Content.Shared.Maps;
 using Content.Shared.Mindshield.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using CultistComponent = Content.Shared._White.Cult.Components.CultistComponent;
 
@@ -36,6 +41,11 @@ public partial class CultSystem
     [Dependency] private readonly EuiManager _euiManager = default!;
     [Dependency] private readonly InventorySystem _inventorySystem = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly MapSystem _mapSystem = default!;
+    [Dependency] private readonly TileSystem _tile = default!;
+
+    private const string TileId = "CultFloor";
+    private const string ConcealedTileId = "CultFloorConcealed";
 
     public void InitializeActions()
     {
@@ -44,7 +54,8 @@ public partial class CultSystem
         SubscribeLocalEvent<CultistComponent, CultShadowShacklesTargetActionEvent>(OnShadowShackles);
         SubscribeLocalEvent<CultistComponent, CultElectromagneticPulseInstantActionEvent>(OnElectromagneticPulse);
         SubscribeLocalEvent<CultistComponent, CultSummonCombatEquipmentTargetActionEvent>(OnSummonCombatEquipment);
-        SubscribeLocalEvent<CultistComponent, CultConcealPresenceWorldActionEvent>(OnConcealPresence);
+        SubscribeLocalEvent<CultistComponent, CultConcealInstantActionEvent>(OnConcealPresence);
+        SubscribeLocalEvent<CultistComponent, CultRevealInstantActionEvent>(OnConcealPresence);
         SubscribeLocalEvent<CultistComponent, CultBloodRitesInstantActionEvent>(OnBloodRites);
         SubscribeLocalEvent<CultistComponent, CultTeleportTargetActionEvent>(OnTeleport);
         SubscribeLocalEvent<CultistComponent, CultStunTargetActionEvent>(OnStunTarget);
@@ -189,10 +200,120 @@ public partial class CultSystem
         return bloodstreamComponent.BloodMaxVolume - bloodstreamComponent.BloodSolution!.Value.Comp.Solution.Volume;
     }
 
-    private void OnConcealPresence(EntityUid uid, CultistComponent component, CultConcealPresenceWorldActionEvent args)
+    private void OnConcealPresence(EntityUid uid, CultistComponent component, CultConcealPresenceInstantActionEvent args)
     {
-        if (!TryComp<BloodstreamComponent>(args.Performer, out _))
+        if (!TryComp<BloodstreamComponent>(args.Performer, out var bloodstream) ||
+            !TryComp<TransformComponent>(args.Performer, out var xform))
             return;
+
+        var conceal = args is CultConcealInstantActionEvent;
+
+        var concealableQuery = GetEntityQuery<ConcealableComponent>();
+        var appearanceQuery = GetEntityQuery<AppearanceComponent>();
+
+        const float radius = 5f;
+
+        var entitiesInRange = _lookup.GetEntitiesInRange(_transform.GetMapCoordinates(xform), radius);
+
+        var success = false;
+
+        // Conceal/Reveal runes and structures
+        foreach (var ent in entitiesInRange)
+        {
+            if (!concealableQuery.TryGetComponent(ent, out var concealable) ||
+                !appearanceQuery.TryGetComponent(ent, out var appearance))
+                continue;
+
+            if (concealable.Concealed == conceal)
+                continue;
+
+            _appearanceSystem.SetData(ent, ConcealableAppearance.Concealed, conceal, appearance);
+
+            concealable.Concealed = conceal;
+
+            RaiseLocalEvent(ent, new ConcealEvent(conceal));
+
+            Dirty(ent, concealable);
+
+            success = true;
+        }
+
+        var gridUid = xform.GridUid;
+        var pos = xform.Coordinates;
+
+        var cultTileDef = (ContentTileDefinition) _tileDefinition[TileId];
+        var concealedTileDef = (ContentTileDefinition) _tileDefinition[ConcealedTileId];
+
+        // Conceal/Reveal tiles
+        if (TryComp(gridUid, out MapGridComponent? mapGrid))
+        {
+            var tileRefs = _mapSystem.GetLocalTilesIntersecting(gridUid.Value, mapGrid,
+                new Box2(pos.Position + new Vector2(-radius, -radius), pos.Position + new Vector2(radius, radius)));
+
+            foreach (var tile in tileRefs)
+            {
+                var tilePos = _turf.GetTileCenter(tile);
+
+                if (!pos.InRange(EntityManager, _transform, tilePos, radius))
+                    continue;
+
+                if (conceal)
+                {
+                    if (tile.Tile.TypeId != cultTileDef.TileId)
+                        continue;
+
+                    _tile.ReplaceTile(tile, concealedTileDef);
+                    success = true;
+                }
+                else
+                {
+                    if (tile.Tile.TypeId != concealedTileDef.TileId)
+                        continue;
+
+                    _tile.ReplaceTile(tile, cultTileDef);
+                    success = true;
+                }
+            }
+        }
+
+        if (success)
+        {
+            _audio.PlayPvs(conceal ? "/Audio/White/Cult/smoke.ogg" : "/Audio/White/Cult/enter_blood.ogg", uid,
+                AudioParams.Default.WithMaxDistance(2f));
+            _bloodstreamSystem.TryModifyBloodLevel(uid, -2, bloodstream, createPuddle: false);
+            args.Handled = true;
+        }
+
+        var spellQuery = GetEntityQuery<ConcealPresenceSpellComponent>();
+        var actionQuery = GetEntityQuery<InstantActionComponent>();
+
+        // Alter spell concealing/revealing state
+        foreach (var empower in component.SelectedEmpowers)
+        {
+            if (empower == null)
+                continue;
+
+            var ent = GetEntity(empower.Value);
+
+            if (!spellQuery.TryGetComponent(ent, out var spell) ||
+                !actionQuery.TryGetComponent(ent, out var action))
+                continue;
+
+            if (conceal)
+            {
+                spell.Revealing = true;
+                action.Icon = spell.RevealIcon;
+                action.Event = spell.RevealEvent;
+            }
+            else
+            {
+                spell.Revealing = false;
+                action.Icon = spell.ConcealIcon;
+                action.Event = spell.ConcealEvent;
+            }
+
+            Dirty(ent, action);
+        }
     }
 
     private void OnSummonCombatEquipment(

@@ -27,6 +27,8 @@ public sealed partial class CultistComponent : ShowCultHudComponent
 
     public static string EmpPulseAction = "InstantActionEmpPulse";
 
+    public static string ConcealPresenceAction = "InstantActionConcealPresence";
+
     public static string CultTwistedConstructionAction = "ActionCultTwistedConstruction";
 
     public static string CultTeleportAction = "ActionCultTeleport";
@@ -40,6 +42,6 @@ public sealed partial class CultistComponent : ShowCultHudComponent
     public static List<string> CultistActions = new()
     {
         SummonCultDaggerAction, BloodRitesAction, CultTwistedConstructionAction, CultTeleportAction,
-        CultSummonCombatEquipmentAction, CultStunAction, EmpPulseAction, CultShadowShacklesAction
+        CultSummonCombatEquipmentAction, CultStunAction, EmpPulseAction, ConcealPresenceAction, CultShadowShacklesAction
     };
 }

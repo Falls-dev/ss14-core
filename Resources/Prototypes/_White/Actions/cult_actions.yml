@@ -149,3 +149,27 @@
       charges: 1
       temporary: true
       removeOnNoCharges: true
+
+- type: entity
+  id: InstantActionConcealPresence
+  name: Conceal Presence
+  description: A multi-function spell that alternates between hiding and revealing nearby runes and cult structures.
+  noSpawn: true
+  components:
+    - type: InstantAction
+      icon:
+        sprite: /Textures/White/Cult/actions_cult.rsi
+        state: gone
+      event: !type:CultConcealInstantActionEvent
+      charges: 10
+      temporary: true
+      removeOnNoCharges: true
+    - type: ConcealPresenceSpell
+      concealEvent: !type:CultConcealInstantActionEvent
+      revealEvent: !type:CultRevealInstantActionEvent
+      concealIcon:
+        sprite: /Textures/White/Cult/actions_cult.rsi
+        state: gone
+      revealIcon:
+        sprite: /Textures/White/Cult/actions_cult.rsi
+        state: telerune

@@ -15,7 +15,7 @@ public sealed class InjectorSystem : SharedInjectorSystem
         Subs.ItemStatus<InjectorComponent>(ent => new InjectorStatusControl(ent, SolutionContainers));
         SubscribeLocalEvent<HyposprayComponent, ComponentHandleState>(OnHandleHyposprayState);
         Subs.ItemStatus<HyposprayComponent>(ent => new HyposprayStatusControl(ent));
-        SubscribeLocalEvent<PatchComponent, ComponentHandleState>(OnHandlePatchState);
+        //SubscribeLocalEvent<PatchComponent, ComponentHandleState>(OnHandlePatchState);
     }
 
     private void OnHandleHyposprayState(EntityUid uid, HyposprayComponent component, ref ComponentHandleState args)
@@ -28,12 +28,12 @@ public sealed class InjectorSystem : SharedInjectorSystem
         component.UiUpdateNeeded = true;
     }
 
-    private void OnHandlePatchState(EntityUid uid, PatchComponent component, ref ComponentHandleState args)
+    /*private void OnHandlePatchState(EntityUid uid, PatchComponent component, ref ComponentHandleState args)
     {
         if (args.Current is not PatchComponentState cState)
             return;
 
         component.CurrentVolume = cState.CurVolume;
         component.TotalVolume = cState.MaxVolume;
-    }
+    }*/
 }

@@ -1,5 +1,4 @@
-﻿using Content.Shared.Chemistry.EntitySystems;
-using Content.Shared.DoAfter;
+﻿using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
@@ -20,26 +19,24 @@ public sealed partial class PatchDoAfterEvent : SimpleDoAfterEvent
 /// containers, and can directly inject into a mobs bloodstream.
 /// </remarks>
 
-[NetworkedComponent()]
-public abstract partial class SharedPatchComponent : Component
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class PatchComponent : Component
 {
+
+    [ViewVariables, AutoNetworkedField]
+    public FixedPoint2 CurrentVolume;
+
+    [ViewVariables, AutoNetworkedField]
+    public FixedPoint2 TotalVolume;
+
     [DataField("solutionName")]
     public string SolutionName = "patch";
+
+    [DataField("onlyMobs")]
+    public bool OnlyMobs = true;
 
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField("delay")]
     public TimeSpan Delay = TimeSpan.FromSeconds(5);
-}
 
-[Serializable, NetSerializable]
-public sealed class PatchComponentState : ComponentState
-{
-    public FixedPoint2 CurVolume { get; }
-    public FixedPoint2 MaxVolume { get; }
-
-    public PatchComponentState(FixedPoint2 curVolume, FixedPoint2 maxVolume)
-    {
-        CurVolume = curVolume;
-        MaxVolume = maxVolume;
-    }
 }

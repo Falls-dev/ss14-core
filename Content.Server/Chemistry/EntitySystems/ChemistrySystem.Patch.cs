@@ -1,16 +1,13 @@
-﻿using Content.Server.Chemistry.Components;
-using Content.Server.Chemistry.Containers.EntitySystems;
+﻿using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Database;
-using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Components;
-using Robust.Shared.GameStates;
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Chemistry;
 using Content.Shared.DoAfter;
@@ -27,17 +24,9 @@ namespace Content.Server.Chemistry.EntitySystems
             SubscribeLocalEvent<PatchComponent, PatchDoAfterEvent>(OnPatchDoAfter);
             SubscribeLocalEvent<PatchComponent, AfterInteractEvent>(OnAfterInteract);
             SubscribeLocalEvent<PatchComponent, UseInHandEvent>(OnUseInHand);
-            SubscribeLocalEvent<PatchComponent, ComponentGetState>(OnPatchGetState);
             SubscribeLocalEvent<PatchComponent, SolutionContainerChangedEvent>(OnSolutionChange);
         }
 
-        private void OnPatchGetState(Entity<PatchComponent> entity, ref ComponentGetState args)
-        {
-            args.State = _solutionContainers.TryGetSolution(entity.Owner, entity.Comp.SolutionName, out _, out var solution)
-                ? new PatchComponentState(solution.Volume, solution.MaxVolume)
-                : new PatchComponentState(FixedPoint2.Zero, FixedPoint2.Zero);
-        }
-        
         private void OnPatchDoAfter(Entity<PatchComponent> entity, ref PatchDoAfterEvent args)
         {
             if (args.Cancelled || args.Handled || args.Args.Target == null)
@@ -49,13 +38,32 @@ namespace Content.Server.Chemistry.EntitySystems
 
         private void PatchDoAfter(Entity<PatchComponent> patch, EntityUid target, EntityUid user)
         {
-            // Create a pop-up for the user
-            _popup.PopupEntity(Loc.GetString("patch-component-injecting-user", ("target", target)), target, user);
+            var (uid, component) = patch;
 
-            // Create a pop-up for the target
-            _popup.PopupEntity(Loc.GetString("patch-component-target-getting-injected"), target, target);
+            // Dont need to start DoAfter if patch is empty
+            if (!_solutionContainers.TryGetSolution(uid, component.SolutionName, out var _, out var patchSolution) || patchSolution.Volume == 0)
+            {
+                _popup.PopupCursor(Loc.GetString("patch-component-empty-message"), user);
+                return;
+            }
+
+            // Create a pop-up for the user
+            _popup.PopupEntity(Loc.GetString("patch-component-injecting-user"), target, user);
+
+            var isTarget = user != target;
+
+            if (isTarget)
+            {
+                // Create a pop-up for the target
+                var userName = Identity.Entity(user, EntityManager);
+                _popup.PopupEntity(Loc.GetString("injector-component-injecting-target",
+                    ("user", userName)), user, target);
+            }
 
             var actualDelay = MathHelper.Max(patch.Comp.Delay, TimeSpan.FromSeconds(1));
+
+            // Injections take 0.5 seconds longer per additional 5u
+            actualDelay += TimeSpan.FromSeconds(patchSolution.Volume.Float() / component.Delay.TotalSeconds - 0.5f);
 
             _adminLogger.Add(LogType.ForceFeed, $"{_entMan.ToPrettyString(user):user} is attempting to put a patch on {_entMan.ToPrettyString(target):target}");
 
@@ -108,7 +116,7 @@ namespace Content.Server.Chemistry.EntitySystems
             Dirty(entity);
         }
 
-        public bool TryDoInject(Entity<PatchComponent> patch, EntityUid? target, EntityUid user)
+        private bool TryDoInject(Entity<PatchComponent> patch, EntityUid? target, EntityUid user)
         {
             var (uid, component) = patch;
 
@@ -144,6 +152,8 @@ namespace Content.Server.Chemistry.EntitySystems
                 return true;
 
             _reactive.DoEntityReaction(target.Value, removedSolution, ReactionMethod.Touch);
+            // Transfering only half of the solution via Injection method
+            removedSolution.ScaleSolution(0.5f);
             _reactive.DoEntityReaction(target.Value, removedSolution, ReactionMethod.Injection);
             _solutionContainers.TryAddSolution(targetSoln.Value, removedSolution);
             QueueDel(patch);

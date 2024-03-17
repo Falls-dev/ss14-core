@@ -5,6 +5,7 @@ using Content.Server.Bible.Components;
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
 using Content.Server.Borer;
+using Content.Server.Carrying;
 using Content.Server.Cuffs;
 using Content.Server.DoAfter;
 using Content.Server.Emp;
@@ -89,6 +90,7 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly ContainerSystem _container = default!;
     [Dependency] private readonly ServerBorerSystem _borer = default!;
+    [Dependency] private readonly CarryingSystem _carrying = default!;
 
     private void InitializeAbilities()
     {
@@ -896,6 +898,9 @@ public sealed partial class ChangelingSystem
 
         if (TryComp(target, out BorerHostComponent? host) && host.BorerContainer.Count > 0)
             _borer.GetOut(host.BorerContainer.ContainedEntities[0]);
+
+        if (TryComp(target, out BeingCarriedComponent? beingCarried))
+            _carrying.DropCarried(beingCarried.Carrier, target);
 
         var polymorphEntity = _polymorph.PolymorphEntity(target, transformData.EntityPrototype.ID);
 

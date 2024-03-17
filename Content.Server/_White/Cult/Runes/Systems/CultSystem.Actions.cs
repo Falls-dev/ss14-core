@@ -436,7 +436,7 @@ public partial class CultSystem
         var xform = Transform(args.Performer).Coordinates;
         var dagger = _entityManager.SpawnEntity(RitualDaggerPrototypeId, xform);
 
-        _bloodstreamSystem.TryModifyBloodLevel(args.Performer, -20, bloodstreamComponent, false);
+        _bloodstreamSystem.TryModifyBloodLevel(args.Performer, -10, bloodstreamComponent, false);
         _handsSystem.TryPickupAnyHand(args.Performer, dagger);
         args.Handled = true;
     }

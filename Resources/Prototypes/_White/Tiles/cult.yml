@@ -14,10 +14,9 @@
 - type: tile
   id: CultFloorConcealed
   name: tiles-steel-floor
-  sprite: /Textures/Tiles/steel.png
-  variants: 4
+  sprite: /Textures/White/Cult/Tiles/concealed.png
+  variants: 3
   placementVariants:
-  - 1.0
   - 1.0
   - 1.0
   - 1.0

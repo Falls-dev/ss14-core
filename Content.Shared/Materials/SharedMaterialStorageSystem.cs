@@ -348,8 +348,10 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     {
         if (!Resolve(uid, ref component, false))
             return;
+
         var ev = new GetMaterialWhitelistEvent(uid);
         RaiseLocalEvent(uid, ref ev);
+
         component.MaterialWhiteList = ev.Whitelist;
         Dirty(uid, component);
     }

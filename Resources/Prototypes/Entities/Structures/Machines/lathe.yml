@@ -18,8 +18,12 @@
         layer:
           - MachineLayer
   - type: Lathe
-  - type: BluespaceStorage
   - type: MaterialStorage
+    whitelist:
+      tags:
+      - Sheet
+      - RawMaterial
+      - Ingot
   - type: Destructible
     thresholds:
     - trigger:
@@ -75,12 +79,6 @@
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: Machine
     board: AutolatheMachineCircuitboard
-  - type: MaterialStorage
-    whitelist:
-      tags:
-        - Sheet
-        - RawMaterial
-        - Ingot
   - type: Lathe
     idleState: icon
     runningState: building
@@ -268,12 +266,6 @@
   - type: Wires
     boardName: wires-board-name-protolathe
     layoutId: Protolathe
-  - type: MaterialStorage
-    whitelist:
-      tags:
-        - Sheet
-        - RawMaterial
-        - Ingot
   - type: Lathe
     idleState: icon
     runningState: building
@@ -647,7 +639,6 @@
     - AbominationCube
     - SpaceCarpCube
     - SpaceTickCube
-  - type: BluespaceStorage
 
 - type: entity
   id: SecurityTechFab
@@ -772,12 +763,6 @@
      - MagazineBoxMagnumAP
      - MagazineBoxAntiMateriel
      - MagazineBoxCaselessRifle
-  - type: MaterialStorage
-    whitelist:
-      tags:
-        - Sheet
-        - RawMaterial
-        - Ingot
   - type: BluespaceStorage
 
 - type: entity
@@ -826,11 +811,7 @@
         - MagazineBoxAntiMateriel
         - MagazineBoxCaselessRifle
     - type: BluespaceStorage
-    - type: MaterialStorage
-      whitelist:
-        tags:
-          - Sheet
-          -
+
 - type: entity
   id: MedicalTechFab
   parent: BaseLathe
@@ -1131,7 +1112,6 @@
         - IngotGold30
         - IngotSilver30
         - MaterialBananium10
-    - type: BluespaceStorage
 
 - type: entity
   parent: OreProcessor
@@ -1160,7 +1140,6 @@
       - IngotGold30
       - IngotSilver30
       - MaterialBananium10
-  - type: BluespaceStorage
 
 - type: entity
   parent: BaseLathe
@@ -1192,4 +1171,3 @@
     staticRecipes:
     - MaterialSheetMeat
     - SheetPaper
-  - type: BluespaceStorage

@@ -113,7 +113,9 @@ public sealed class StandingStateSystem : EntitySystem
     /// </summary>
     private void ChangeLyingState(ICommonSession? session)
     {
-        if (session?.AttachedEntity == null)
+        if (session?.AttachedEntity == null || 
+            !TryComp(session.AttachedEntity, out StandingStateComponent? standing) ||
+            !standing.CanLieDown)
         {
             return;
         }

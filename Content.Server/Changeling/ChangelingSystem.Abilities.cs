@@ -770,6 +770,8 @@ public sealed partial class ChangelingSystem
         if (!TakeChemicals(uid, component, 5))
             return;
 
+        BeforeTransform(args.User);
+
         var polymorphEntity = _polymorph.PolymorphEntity(args.User, "MonkeyChangeling");
 
         if (polymorphEntity == null)
@@ -896,11 +898,7 @@ public sealed partial class ChangelingSystem
         if (!HasComp<HumanoidAppearanceComponent>(target) && !humanoidOverride)
             return null;
 
-        if (TryComp(target, out BorerHostComponent? host) && host.BorerContainer.Count > 0)
-            _borer.GetOut(host.BorerContainer.ContainedEntities[0]);
-
-        if (TryComp(target, out BeingCarriedComponent? beingCarried))
-            _carrying.DropCarried(beingCarried.Carrier, target);
+        BeforeTransform(target);
 
         var polymorphEntity = _polymorph.PolymorphEntity(target, transformData.EntityPrototype.ID);
 
@@ -944,6 +942,15 @@ public sealed partial class ChangelingSystem
         _action.GrantContainedActions(polymorphEntity.Value, polymorphEntity.Value);
 
         return polymorphEntity;
+    }
+
+    private void BeforeTransform(EntityUid target)
+    {
+        if (TryComp(target, out BorerHostComponent? host) && host.BorerContainer.Count > 0)
+            _borer.GetOut(host.BorerContainer.ContainedEntities[0]);
+
+        if (TryComp(target, out BeingCarriedComponent? beingCarried))
+            _carrying.DropCarried(beingCarried.Carrier, target);
     }
 
     private void TransferComponents(EntityUid from, EntityUid to)

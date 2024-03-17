@@ -91,6 +91,8 @@ public sealed partial class GunSystem : SharedGunSystem
                     Audio.PlayPvs(clumsy.ClumsySound, gunUid);
 
                     PopupSystem.PopupEntity(Loc.GetString("gun-clumsy"), user.Value);
+                    _adminLogger.Add(LogType.EntityDelete, LogImpact.Medium, $"В следствии неуклюжести во время стрельбы от {ToPrettyString(user.Value)}, было удалено {ToPrettyString(gunUid)}");
+                    Del(gunUid);
                     userImpulse = false;
                     return;
                 }

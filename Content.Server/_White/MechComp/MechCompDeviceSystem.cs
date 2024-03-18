@@ -26,7 +26,6 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.StepTrigger.Systems;
 using Content.Shared.Verbs;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
@@ -60,8 +59,24 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
     [Dependency] private readonly IRobustRandom _rng = default!;
 
     Dictionary<(EntityUid, string), (TimeSpan, Action?)> _timeSpans = new();
-#region Helper functions
-#region mechcomp config get/set functions
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<BaseMechCompComponent, GetVerbsEvent<InteractionVerb>>(GetInteractionVerb);     // todo: currently BaseMechCompComponent handles config and
+        SubscribeLocalEvent<BaseMechCompComponent, AnchorStateChangedEvent>(OnAnchorStateChanged);          //       unanchoring stuff. Functional mechcomp components
+        SubscribeLocalEvent<BaseMechCompComponent, DeviceLinkTryConnectingAttemptEvent>(OnConnectUIAttempt);  //       still process SignalReceivedEvents directly. Perhaps
+        SubscribeLocalEvent<BaseMechCompComponent, LinkAttemptEvent>(OnConnectAttempt);  //       I should make some MechCompSignalReceived event and
+                                                                                         //       have them process that?
+        InitButton();
+        InitSpeaker();
+        InitTeleport();
+        InitComparer();
+        InitCalculator();
+        InitPressurePad();
+    }
+
+    #region Helper functions
+    #region mechcomp config
     private MechCompConfig GetConfig(EntityUid uid) { return Comp<BaseMechCompComponent>(uid).config;}
     private int GetConfigInt(EntityUid uid, string key) { return GetConfig(uid).GetInt(key); }
     private float GetConfigFloat(EntityUid uid, string key) { return GetConfig(uid).GetFloat(key); }
@@ -72,7 +87,6 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
     private void SetConfigString(EntityUid uid, string key, string value) { GetConfig(uid).SetString(key, value); }
     private void SetConfigBool(EntityUid uid, string key, bool value) { GetConfig(uid).SetBool(key, value);  }
 
-#endregion
         /// <summary>
         /// A helper function for use in ComponentInit event handlers.
         /// Ensures a BaseMechCompComponent exists and returns its config.
@@ -85,6 +99,29 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
     {
         return TryComp<TransformComponent>(uid, out var comp) && comp.Anchored;
     }
+    private void OpenMechCompConfigDialog(EntityUid deviceUid, EntityUid playerUid, BaseMechCompComponent comp)
+    {
+        if(!Exists(deviceUid) || !Exists(playerUid))
+        {
+            return;
+        }
+        if(!_playerManager.TryGetSessionByEntity(playerUid, out var player))
+        {
+            return;
+        }
+
+        var config = comp!.config;
+        var entries = config.GetOrdered();
+        _dialog.OpenDialog(
+            player,
+            Name(deviceUid) + " configuration",
+            entries, (results) => {
+                config.SetFromObjectArray(results);
+                RaiseLocalEvent(deviceUid, new MechCompConfigUpdateEvent());
+            }
+        );
+    }
+#endregion
     #region cooldown shite
     /// <summary>
     /// Convenience function for managing cooldowns for all devices.
@@ -156,29 +193,8 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
         }
         return _timeSpans.Remove(tuple);
     }
-#endregion
-    private void OpenMechCompConfigDialog(EntityUid deviceUid, EntityUid playerUid, BaseMechCompComponent comp)
-    {
-        if(!Exists(deviceUid) || !Exists(playerUid))
-        {
-            return;
-        }
-        if(!_playerManager.TryGetSessionByEntity(playerUid, out var player))
-        {
-            return;
-        }
-
-        var config = comp!.config;
-        var entries = config.GetOrdered();
-        _dialog.OpenDialog(
-            player,
-            Name(deviceUid) + " configuration",
-            entries, (results) => {
-                config.SetFromObjectArray(results);
-                RaiseLocalEvent(deviceUid, new MechCompConfigUpdateEvent());
-            }
-        );
-    }
+    #endregion
+    #region device signals
     private void SendMechCompSignal(EntityUid uid, string port, string signal, DeviceLinkSourceComponent? comp = null)
     {
         if (!Resolve(uid, ref comp))
@@ -207,6 +223,7 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
             return false;
         }
     }
+    #endregion
     /// <summary>
     /// <see cref="SharedAppearanceSystem.SetData(EntityUid, Enum, object, AppearanceComponent?)"/>, but it forces
     /// the update by first setting the key value to a placeholder, and then to actual value. Used by stuff that hijacks
@@ -222,35 +239,8 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
 
     }
     #endregion
-    public override void Initialize()
-    {
-        SubscribeLocalEvent<BaseMechCompComponent, GetVerbsEvent<InteractionVerb>>(GetInteractionVerb);     // todo: currently BaseMechCompComponent handles config and
-        SubscribeLocalEvent<BaseMechCompComponent, AnchorStateChangedEvent>(OnAnchorStateChanged);          //       unanchoring stuff. Functional mechcomp components
-        SubscribeLocalEvent<BaseMechCompComponent, DeviceLinkTryConnectingAttemptEvent>(OnConnectUIAttempt);  //       still process SignalReceivedEvents directly. Perhaps
-        SubscribeLocalEvent<BaseMechCompComponent, LinkAttemptEvent>(OnConnectAttempt);  //       I should make some MechCompSignalReceived event and
-                                                                                                                                                                                                              //       have them process that?
-        SubscribeLocalEvent<MechCompButtonComponent, ComponentInit>(OnButtonInit);
-        SubscribeLocalEvent<MechCompButtonComponent, InteractHandEvent>(OnButtonHandInteract);
-        SubscribeLocalEvent<MechCompButtonComponent, ActivateInWorldEvent>(OnButtonActivation);
-        
 
-        SubscribeLocalEvent<MechCompSpeakerComponent, ComponentInit>(OnSpeakerInit);
-        SubscribeLocalEvent<MechCompSpeakerComponent, MechCompConfigUpdateEvent>(OnSpeakerConfigUpdate);
-        SubscribeLocalEvent<MechCompSpeakerComponent, SignalReceivedEvent>(OnSpeakerSignal);
 
-        SubscribeLocalEvent<MechCompTeleportComponent, ComponentInit>(OnTeleportInit);
-        SubscribeLocalEvent<MechCompTeleportComponent, SignalReceivedEvent>(OnTeleportSignal);
-
-        SubscribeLocalEvent<MechCompMathComponent, ComponentInit>(OnMathInit);
-        SubscribeLocalEvent<MechCompMathComponent, SignalReceivedEvent>(OnMathSignal);
-
-        SubscribeLocalEvent<MechCompPressurePadComponent, ComponentInit>(OnPressurePadInit);
-        SubscribeLocalEvent<MechCompPressurePadComponent, StepTriggeredEvent>(OnPressurePadStep);
-
-        SubscribeLocalEvent<MechCompComparerComponent, ComponentInit>(OnComparerInit);
-        SubscribeLocalEvent<MechCompComparerComponent, SignalReceivedEvent>(OnComparerSignal);
-
-    }
     public override void Update(float frameTime)
     {
         List<(EntityUid, string)> keysToRemove = new();
@@ -322,285 +312,8 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
         });
     }
 
-    private void OnButtonInit(EntityUid uid, MechCompButtonComponent comp, ComponentInit args)
-    {
-        EnsureConfig(uid).Build(
-            ("outsignal", (typeof(string), "Сигнал на выходе", "1"))
-            );
-        _link.EnsureSourcePorts(uid, "MechCompStandardOutput");
-        
-    }
-    private void OnButtonHandInteract(EntityUid uid, MechCompButtonComponent comp, InteractHandEvent args)
-    {
-        ButtonClick(uid, comp);
-    }
-    private void OnButtonActivation(EntityUid uid, MechCompButtonComponent comp, ActivateInWorldEvent args)
-    {
-        ButtonClick(uid, comp);
-    }
-    private void ButtonClick(EntityUid uid, MechCompButtonComponent comp)
-    {
-        if (isAnchored(uid) && Cooldown(uid, "pressed", 1f))
-        {
-            _audio.PlayPvs(comp.ClickSound, uid, AudioParams.Default.WithVariation(0.125f).WithVolume(8f));
-            SendMechCompSignal(uid, "MechCompStandardOutput", GetConfigString(uid, "outsignal"));
-            ForceSetData(uid, MechCompDeviceVisuals.Mode, "activated"); // the data will be discarded anyways
-        }
-    }
 
-
-    private void OnSpeakerInit(EntityUid uid, MechCompSpeakerComponent comp, ComponentInit args)
-    {
-        _link.EnsureSinkPorts(uid, "MechCompStandardInput");
-
-        EnsureConfig(uid).Build(
-            ("inradio", (typeof(bool), "Голосить в радио (;)", false )),
-            ("name", (typeof(string), "Имя", Name(uid) ))
-        );
-        EnsureComp<VoiceMaskComponent>(uid, out var maskcomp);
-        maskcomp.VoiceName = Name(uid); // better safe than █████ ███ ██████
-    }
-    private void OnSpeakerConfigUpdate(EntityUid uid, MechCompSpeakerComponent comp, MechCompConfigUpdateEvent args)
-    {
-        Comp<VoiceMaskComponent>(uid).VoiceName = GetConfigString(uid, "name");
-    }
-    private void OnSpeakerSignal(EntityUid uid, MechCompSpeakerComponent comp, ref SignalReceivedEvent args)
-    {
-
-        //Logger.Debug($"MechComp speaker received signal ({args.ToString()}) ({args.Data?.ToString()}) ({ToPrettyString(uid)})");
-        if (isAnchored(uid) && TryGetMechCompSignal(args.Data, out string msg))
-        {
-            msg = msg.ToUpper();
-            ForceSetData(uid, MechCompDeviceVisuals.Mode, "activated");
-            //Logger.Debug($"MechComp speaker spoke ({msg}) ({ToPrettyString(uid)})");
-            if (GetConfigBool(uid, "inradio") && Cooldown(uid, "speech", 5f))
-            {
-                
-                _chat.TrySendInGameICMessage(uid, msg, InGameICChatType.Speak, true, checkRadioPrefix: false, nameOverride: GetConfigString(uid, "name"));
-                _radio.SendRadioMessage(uid, msg, "Common", uid);
-            }
-            else if (Cooldown(uid, "speech", 1f)) {
-                _chat.TrySendInGameICMessage(uid, msg, InGameICChatType.Speak, true, checkRadioPrefix: false, nameOverride: GetConfigString(uid, "name"));
-            }
-        }
-    }
-
-
-
-    private void OnTeleportInit(EntityUid uid, MechCompTeleportComponent comp, ComponentInit args)
-    {
-        EnsureConfig(uid).Build(
-            ("TeleID", (typeof(Hex16), "ID этого телепорта", _rng.Next(65536))),
-            ("_", (null, "Установите ID на 0000, чтобы отключить приём."))
-        );
-        _link.EnsureSinkPorts(uid, "MechCompTeleIDInput");
-    }
-
-
-    private void OnTeleportSignal(EntityUid uid, MechCompTeleportComponent comp, ref SignalReceivedEvent args)
-    {
-        if (IsOnCooldown(uid, "teleport")) {
-            //_audio.PlayPvs("/Audio/White/MechComp/generic_energy_dryfire.ogg", uid);
-            //return;
-        }
-        if (!TryGetMechCompSignal(args.Data, out string _sig) ||
-            !int.TryParse(_sig, System.Globalization.NumberStyles.HexNumber, null, out int targetId) ||
-            targetId == 0)
-        {
-            return;
-        }
-        
-
-        TransformComponent? target = null;
-        if (!TryComp<TransformComponent>(uid, out var telexform)) return;
-        foreach(var (othercomp, otherbase, otherxform) in EntityQuery<MechCompTeleportComponent, BaseMechCompComponent, TransformComponent>())
-        {
-            var otherUid = othercomp.Owner;
-            var distance = (_xform.GetWorldPosition(uid) - _xform.GetWorldPosition(otherUid)).Length();
-            if (otherxform.Anchored && targetId == GetConfigInt(otherUid, "TeleID"))
-            {
-                if (distance <= comp.MaxDistance && distance <= othercomp.MaxDistance) // huh
-                {
-                    target = otherxform;
-                    break;
-                }
-            }
-        }
-        if (target == null) {
-            _audio.PlayPvs("/Audio/White/MechComp/generic_energy_dryfire.ogg", uid);
-            Cooldown(uid, "teleport", 0.7f);
-            return;
-        }
-
-        var targetUid = target.Owner;
-        _appearance.SetData(uid, MechCompDeviceVisuals.Mode, "firing");
-        _appearance.SetData(target.Owner, MechCompDeviceVisuals.Mode, "charging");
-
-        // because the target tele has a cooldown of a second, it can be used to quickly move
-        // back and make the original tele and reset it's cooldown down to a second.
-        // i decided it would be fun to abuse, and thus, it will be left as is
-        // if it turns out to be not fun, add check that newCooldown > currentCooldown
-        ForceCooldown(uid, "teleport", 7f, () => { _appearance.SetData(uid, MechCompDeviceVisuals.Mode, "ready"); });
-        ForceCooldown(targetUid, "teleport", 1f, () => { _appearance.SetData(target.Owner, MechCompDeviceVisuals.Mode, "ready"); });
-        
-        Spawn("EffectSparks", Transform(uid).Coordinates);
-        Spawn("EffectSparks", Transform(targetUid).Coordinates);
-        _audio.PlayPvs("/Audio/White/MechComp/emitter2.ogg", uid);
-        _audio.PlayPvs("/Audio/White/MechComp/emitter2.ogg", targetUid);
-        // var sol = new Solution();
-        // sol.AddReagent("Water", 500f); // hue hue hue
-        // _smoke.StartSmoke(uid, sol, 6f, 1);
-        // sol = new Solution();
-        // sol.AddReagent("Water", 500f); // hue hue hue
-        // _smoke.StartSmoke(uid, sol, 6f, 1);
-
-        foreach (EntityUid u in TurfHelpers.GetEntitiesInTile(telexform.Coordinates, LookupFlags.Uncontained))
-        {
-            if (TryComp<TransformComponent>(u, out var uxform) && !uxform.Anchored) {
-                _xform.SetCoordinates(u, target.Coordinates);
-            }
-        }
-    }
-
-    private Dictionary<string, Func<float, float, float?>> _mathFuncs = new()
-    {
-        ["A+B"] = (a, b) => { return a + b; },
-        ["A-B"] = (a, b) => { return a - b; },
-        ["A*B"] = (a, b) => { return a * b; },
-        ["A/B"] = (a, b) => { if (b == 0) return null; return a / b; },
-        ["A^B"] = (a, b) => { return MathF.Pow(a, b); },
-        ["A//B"] = (a, b) => { return (float) (int) (a / b); },
-        ["A%B"] = (a, b) => { return a % b; },
-        ["sin(A)^B"] = (a, b) => { return MathF.Pow(MathF.Sin(a), b); },
-        ["cos(A)^B"] = (a, b) => { return MathF.Pow(MathF.Cos(a), b); }
-    };
-    public void OnMathInit(EntityUid uid, MechCompMathComponent comp, ComponentInit args)
-    {
-        EnsureConfig(uid).Build(
-            ("mode", (typeof(List<string>), "Операция", _mathFuncs.Keys.First(), _mathFuncs.Keys.ToArray()) ),
-            ("numberA", (typeof(float), "Число A", "0") ),
-            ("numberB", (typeof(float), "Число B", "0") )
-        );
-        _link.EnsureSinkPorts(uid, "MechCompNumericInputA", "MechCompNumericInputB", "Trigger");
-        _link.EnsureSourcePorts(uid, "MechCompNumericOutput");
-    }
-
-    public void OnMathSignal(EntityUid uid, MechCompMathComponent comp, ref SignalReceivedEvent args)
-    {
-        string sig; float num; // hurr durr
-        var cfg = GetConfig(uid);
-        switch (args.Port)
-        {
-            case "MechCompNumericInputA":
-                if(TryGetMechCompSignal(args.Data, out sig) && float.TryParse(sig, out num))
-                {
-                    SetConfigFloat(uid, "numberA", num);
-                }
-                break;
-            case "MechCompNumericInputB":
-                if (TryGetMechCompSignal(args.Data, out sig) && float.TryParse(sig, out num))
-                {
-                    SetConfigFloat(uid, "numberB", num);
-                }
-                break;
-            case "Trigger":
-                float numA = GetConfigFloat(uid, "numberA");
-                float numB = GetConfigFloat(uid, "numberB");
-                float? result = _mathFuncs[GetConfigString(uid, "mode")](numA, numB);
-                if (result != null)
-                {
-                    SendMechCompSignal(uid, "MechCompNumericOutput", result.ToString()!);
-                }
-                break;
-        }
-    }
-
-    public void OnPressurePadInit(EntityUid uid, MechCompPressurePadComponent comp, ComponentInit args)
-    {
-        EnsureConfig(uid).Build(
-            ("triggered_by_mobs", (typeof(bool), "Реагировать на существ", true) ),
-            ("triggered_by_items", (typeof(bool), "Реагировать на предметы", false))
-            );
-        _link.EnsureSourcePorts(uid, "MechCompStandardOutput");
-    }
-    public void OnPressurePadStep(EntityUid uid, MechCompPressurePadComponent comp, ref StepTriggeredEvent args)
-    {
-        if (HasComp<MobStateComponent>(args.Tripper) && GetConfig(uid).GetBool("triggered_by_mobs"))
-        {
-            SendMechCompSignal(uid, "MechCompStandardOutput", Comp<MetaDataComponent>(args.Tripper).EntityName);
-            return;
-        }
-        if (HasComp<ItemComponent>(args.Tripper) && GetConfig(uid).GetBool("triggered_by_items"))
-        {
-            SendMechCompSignal(uid, "MechCompStandardOutput", Comp<MetaDataComponent>(args.Tripper).EntityName);
-            return;
-        }
-    }
-
-    private Dictionary<string, Func<string, string, bool?>> _compareFuncs = new()
-    {
-        ["A==B"] = (a, b) => { return a == b; },
-        ["A!=B"] = (a, b) => { return a != b; },
-        ["A>B"] = (a, b) => { if (float.TryParse(a, out var numA) && float.TryParse(b, out var numB)) return numA > numB; else return null; },
-        ["A<B"] = (a, b) => { if (float.TryParse(a, out var numA) && float.TryParse(b, out var numB)) return numA < numB; else return null; },
-        ["A>=B"] = (a, b) => { if (float.TryParse(a, out var numA) && float.TryParse(b, out var numB)) return numA >= numB; else return null; },
-        ["A<=B"] = (a, b) => { if (float.TryParse(a, out var numA) && float.TryParse(b, out var numB)) return numA <= numB; else return null; },
-    };
-    public void OnComparerInit(EntityUid uid, MechCompComparerComponent comp, ComponentInit args)
-    {
-        EnsureConfig(uid).Build(
-            ("valueA", (typeof(string), "Значение A", "0")),
-            ("valueB", (typeof(string), "Значение B", "0")),
-            ("outputTrue", (typeof(string), "Значение на выходе в случае истины", "1")),
-            ("outputFalse", (typeof(string), "Значение на выходи в случае лжи", "1")),
-
-            ("mode", (typeof(string), "Режим", _compareFuncs.Keys.First(), _compareFuncs.Keys)),
-            ("_", (null,    "Режимы сравнения >, <, >=, <=")), // todo: check if newlines work
-            ("__", (null,   "работают только с числовыми значениями."))
-        );
-        _link.EnsureSinkPorts(uid, "MechCompInputA", "MechCompInputB");
-        _link.EnsureSourcePorts(uid, "MechCompLogicOutputA", "MechCompLogicOutputB");
-
-    }
-
-    public void OnComparerSignal(EntityUid uid, MechCompComparerComponent comp, ref SignalReceivedEvent args)
-    {
-        string sig;
-        var cfg = GetConfig(uid);
-        switch (args.Port)
-        {
-            case "MechCompNumericInputA":
-                if (TryGetMechCompSignal(args.Data, out sig))
-                {
-                    SetConfigString(uid, "valueA", sig);
-                }
-                break;
-            case "MechCompNumericInputB":
-                if (TryGetMechCompSignal(args.Data, out sig))
-                {
-                    SetConfigString(uid, "valueB", sig);
-                }
-                break;
-            case "Trigger":
-                string valA = GetConfigString(uid, "ValueA");
-                string valB = GetConfigString(uid, "ValueB");
-                bool? result = _compareFuncs[GetConfigString(uid, "mode")](valA, valB);
-                switch (result)
-                {
-                    case true:
-                        SendMechCompSignal(uid, "MechCompLogicOutputTrue", GetConfigString(uid, "outputTrue"));
-                        break;
-                    case false:
-                        SendMechCompSignal(uid, "MechCompLogicOutputFalse", GetConfigString(uid, "outputFalse"));
-                        break;
-                    case null:
-                        break;
-
-                }
-                break;
-        }
-    }
-
+  
 
 }
 [RegisterComponent]

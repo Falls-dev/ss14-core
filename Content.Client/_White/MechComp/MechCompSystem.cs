@@ -21,56 +21,11 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
     [Dependency] private readonly AppearanceSystem _appearance = default!;
 
     Dictionary<(EntityUid, TimeSpan, RSI.StateId, string, object), Animation> _cachedAnims = new();
-    //private void _flick(EntityUid uid, TimeSpan duration, RSI.StateId iconstate, string key, object layerKey) // I really think it should be a standard part of SpriteSystem, i really do not want to create an anim track myself for a simple iconstate flick
-    //{
-    //    if (_cachedAnims.TryGetValue((uid, duration, iconstate, key, layerKey), out var anim))  // So it's *almost* the same as creating all the anims in the ComponentInit and playing them as needed
-    //    {                                                                                       // expect it looks more compact and nicer (as long as you just hide this method lol)
-    //        _anim.Play(uid, anim, key);                                                         // and except it's not GC'd, so it leaks memory, althrough this should only be a problem if you're triggering _flick() on a dozen new uids every second.
-    //        return;
-    //    }
-    //
-    //    anim = new()
-    //    {
-    //        Length = duration,
-    //        AnimationTracks =
-    //        {
-    //            new AnimationTrackSpriteFlick
-    //            {
-    //                LayerKey = layerKey,
-    //                KeyFrames =
-    //                {
-    //                    new AnimationTrackSpriteFlick.KeyFrame(iconstate, 0f),
-    //                }
-    //            }
-    //        }
-    //    };
-    //    _cachedAnims.Add((uid, duration, iconstate, key, layerKey), anim);
-    //    _anim.Play(uid, anim, key);
-    //}
-    //private void _flick(EntityUid uid, float seconds, RSI.StateId iconstate, string key, object? layerKey = null)
-    //{ _flick(uid, TimeSpan.FromSeconds(seconds), iconstate, key, layerKey); }
-    //private void _handleAnchored(AppearanceChangeEvent args, string anchoredState = "anchored", string unanchoredState = "icon", bool hideOrShowEffectsLayer = true)
-    //{
-    //
-    //    if (args.Sprite != null)
-    //    {
-    //        var uid = args.Sprite.Owner;
-    //        var layer = args.Sprite.LayerMapGet(MechCompDeviceVisualLayers.Base);
-    //
-    //        if (_appearance.TryGetData(uid, MechCompDeviceVisuals.Anchored, out bool value))
-    //        {
-    //            Logger.Debug($"[ASS BLAST USA] OOOOOO {value}");
-    //
-    //            args.Sprite.LayerSetState(layer, value ? anchoredState : unanchoredState);
-    //            args.Sprite.DrawDepth = (int) (value ? DrawDepth.FloorObjects : DrawDepth.SmallObjects);
-    //            if (hideOrShowEffectsLayer)
-    //            {
-    //                var effectslayer = args.Sprite.LayerMapGet(MechCompDeviceVisualLayers.Effect);
-    //                args.Sprite.LayerSetVisible(effectslayer, value);
-    //            }
-    //        }
-    //    }
-    //}
+    /// <summary>
+    ///     Start playing an animation. If an animation under given key is already playing, replace it instead of the default behaviour (Shit pants and die)
+    /// </summary>
+    [Obsolete("This was added in a fit of rage: may be removed later.")]
+
 
     private bool GetMode<T>(EntityUid uid, out T val)
     {
@@ -219,5 +174,32 @@ public sealed class MechCompAnchoredVisualizerSystem : VisualizerSystem<MechComp
 
             }
         }
+    }
+}
+
+/// <summary>
+/// Move up from this namespace as needed
+/// </summary>
+public static class SafePlayExt
+{
+    /// <summary>
+    ///     Start playing an animation. If an animation under given key is already playing, replace it instead of the default behaviour (Shit pants and die)
+    /// </summary>
+    [Obsolete("This was added in a fit of rage: may be removed later.")]
+    public void SafePlay(this AnimationPlayerSystem anim, EntityUid uid, Animation animation, string key)
+    {
+        var component = EnsureComp<AnimationPlayerComponent>(uid);
+        anim.Stop(component, key);
+        anim.Play(new Entity<AnimationPlayerComponent>(uid, component), animation, key);
+    }
+    /// <summary>
+    ///     Start playing an animation. If an animation under given key is already playing, replace it instead of the default behaviour (Shit pants and die)
+    /// </summary>
+    [Obsolete("This was added in a fit of rage: may be removed later.")]
+    public void SafePlay(this AnimationPlayerSystem anim, EntityUid uid, AnimationPlayerComponent? component, Animation animation, string key)
+    {
+        component ??= EntityManager.EnsureComponent<AnimationPlayerComponent>(uid);
+        anim.Stop(component, key);
+        anim.Play(new Entity<AnimationPlayerComponent>(uid, component), animation, key);
     }
 }

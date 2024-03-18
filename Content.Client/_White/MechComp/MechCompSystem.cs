@@ -186,9 +186,9 @@ public static class SafePlayExt
     ///     Start playing an animation. If an animation under given key is already playing, replace it instead of the default behaviour (Shit pants and die)
     /// </summary>
     [Obsolete("This was added in a fit of rage: may be removed later.")]
-    public void SafePlay(this AnimationPlayerSystem anim, EntityUid uid, Animation animation, string key)
+    public static void SafePlay(this AnimationPlayerSystem anim, EntityUid uid, Animation animation, string key)
     {
-        var component = EnsureComp<AnimationPlayerComponent>(uid);
+        var component = IoCManager.Resolve<EntityManager>().EnsureComponent<AnimationPlayerComponent>(uid);
         anim.Stop(component, key);
         anim.Play(new Entity<AnimationPlayerComponent>(uid, component), animation, key);
     }
@@ -196,9 +196,9 @@ public static class SafePlayExt
     ///     Start playing an animation. If an animation under given key is already playing, replace it instead of the default behaviour (Shit pants and die)
     /// </summary>
     [Obsolete("This was added in a fit of rage: may be removed later.")]
-    public void SafePlay(this AnimationPlayerSystem anim, EntityUid uid, AnimationPlayerComponent? component, Animation animation, string key)
+    public static void SafePlay(this AnimationPlayerSystem anim, EntityUid uid, AnimationPlayerComponent? component, Animation animation, string key)
     {
-        component ??= EntityManager.EnsureComponent<AnimationPlayerComponent>(uid);
+        component ??= IoCManager.Resolve<EntityManager>().EnsureComponent<AnimationPlayerComponent>(uid);
         anim.Stop(component, key);
         anim.Play(new Entity<AnimationPlayerComponent>(uid, component), animation, key);
     }

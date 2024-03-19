@@ -39,7 +39,7 @@ public sealed partial class MechCompDeviceSystem
         if (IsOnCooldown(uid, "teleport"))
         {
             //_audio.PlayPvs("/Audio/White/MechComp/generic_energy_dryfire.ogg", uid);
-            //return;
+            return;
         }
         if (!TryGetMechCompSignal(args.Data, out string _sig) ||
             !int.TryParse(_sig, System.Globalization.NumberStyles.HexNumber, null, out int targetId) ||

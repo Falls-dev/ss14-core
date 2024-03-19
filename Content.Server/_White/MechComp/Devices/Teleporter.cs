@@ -11,19 +11,28 @@ public sealed partial class MechCompDeviceSystem
     private void InitTeleport()
     {
         SubscribeLocalEvent<MechCompTeleportComponent, ComponentInit>(OnTeleportInit);
+        SubscribeLocalEvent<MechCompTeleportComponent, MechCompConfigAttemptEvent>(OnTeleportConfigAttempt);
+        SubscribeLocalEvent<MechCompTeleportComponent, MechCompConfigUpdateEvent>(OnTeleportConfigUpdate);
         SubscribeLocalEvent<MechCompTeleportComponent, SignalReceivedEvent>(OnTeleportSignal);
     }
 
 
     private void OnTeleportInit(EntityUid uid, MechCompTeleportComponent comp, ComponentInit args)
     {
-        EnsureConfig(uid).Build(
-            ("TeleID", (typeof(Hex16), "ID этого телепорта", _rng.Next(65536))),
-            ("_", (null, "Установите ID на 0000, чтобы отключить приём."))
-        );
+        if (comp.teleId < 0 || comp.teleId > 65535)
+            comp.teleId = _rng.Next(65536);
         _link.EnsureSinkPorts(uid, "MechCompTeleIDInput");
     }
 
+    private void OnTeleportConfigAttempt(EntityUid uid, MechCompTeleportComponent comp, MechCompConfigAttemptEvent args)
+    {
+        args.entries.Add((typeof(Hex16), "ID этого телепорта", comp.teleId));
+        args.entries.Add((null, "Установите ID на 0000, чтобы отключить приём."));
+    }
+    private void OnTeleportConfigUpdate(EntityUid uid, MechCompTeleportComponent comp, MechCompConfigUpdateEvent args)
+    {
+        comp.teleId = (int) args.results[0];
+    }
 
     private void OnTeleportSignal(EntityUid uid, MechCompTeleportComponent comp, ref SignalReceivedEvent args)
     {
@@ -40,15 +49,16 @@ public sealed partial class MechCompDeviceSystem
         }
 
 
+        var xform = Comp<TransformComponent>(uid);
         TransformComponent? target = null;
         if (!TryComp<TransformComponent>(uid, out var telexform)) return;
         foreach (var (othercomp, otherbase, otherxform) in EntityQuery<MechCompTeleportComponent, BaseMechCompComponent, TransformComponent>())
         {
             var otherUid = othercomp.Owner;
             var distance = (_xform.GetWorldPosition(uid) - _xform.GetWorldPosition(otherUid)).Length();
-            if (otherxform.Anchored && targetId == GetConfigInt(otherUid, "TeleID"))
+            if (otherxform.Anchored && targetId == othercomp.teleId)
             {
-                if (distance <= comp.MaxDistance && distance <= othercomp.MaxDistance) // huh
+                if (distance <= comp.MaxDistance && distance <= othercomp.MaxDistance && xform.MapID == otherxform.MapID) // huh
                 {
                     target = otherxform;
                     break;
@@ -64,7 +74,7 @@ public sealed partial class MechCompDeviceSystem
 
         var targetUid = target.Owner;
         _appearance.SetData(uid, MechCompDeviceVisuals.Mode, "firing");
-        _appearance.SetData(target.Owner, MechCompDeviceVisuals.Mode, "charging");
+        _appearance.SetData(targetUid, MechCompDeviceVisuals.Mode, "charging");
 
         // because the target tele has a cooldown of a second, it can be used to quickly move
         // back and make the original tele and reset it's cooldown down to a second.

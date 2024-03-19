@@ -11,6 +11,7 @@ using Content.Server.Fluids.EntitySystems;
 using Content.Server.Radio.EntitySystems;
 using Content.Server.VoiceMask;
 using Content.Shared._White.MechComp;
+using Content.Shared.Administration;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Construction.Components;
 using Content.Shared.Construction.EntitySystems;
@@ -38,9 +39,14 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._White.MechComp;
 
+public sealed class MechCompConfigAttemptEvent : EntityEventArgs
+{
+    public List<QDEntry> entries = new();
+}
 public sealed class MechCompConfigUpdateEvent : EntityEventArgs
 {
-
+    public object[] results;
+    public MechCompConfigUpdateEvent(object[] results) { this.results = results; }
 }
 
 public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
@@ -76,25 +82,7 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
     }
 
     #region Helper functions
-    #region mechcomp config
-    private MechCompConfig GetConfig(EntityUid uid) { return Comp<BaseMechCompComponent>(uid).config;}
-    private int GetConfigInt(EntityUid uid, string key) { return GetConfig(uid).GetInt(key); }
-    private float GetConfigFloat(EntityUid uid, string key) { return GetConfig(uid).GetFloat(key); }
-    private string GetConfigString(EntityUid uid, string key) { return GetConfig(uid).GetString(key); }
-    private bool GetConfigBool(EntityUid uid, string key) { return GetConfig(uid).GetBool(key); }
-    private void SetConfigInt(EntityUid uid, string key, int value) { GetConfig(uid).SetInt(key, value); }
-    private void SetConfigFloat(EntityUid uid, string key, float value) { GetConfig(uid).SetFloat(key, value); }
-    private void SetConfigString(EntityUid uid, string key, string value) { GetConfig(uid).SetString(key, value); }
-    private void SetConfigBool(EntityUid uid, string key, bool value) { GetConfig(uid).SetBool(key, value);  }
 
-        /// <summary>
-        /// A helper function for use in ComponentInit event handlers.
-        /// Ensures a BaseMechCompComponent exists and returns its config.
-        /// </summary>
-    private MechCompConfig EnsureConfig(EntityUid uid)
-    {
-        return EnsureComp<BaseMechCompComponent>(uid).config;
-    }
     private bool isAnchored(EntityUid uid)  // perhaps i'm reinventing the wheel here
     {
         return TryComp<TransformComponent>(uid, out var comp) && comp.Anchored;
@@ -110,18 +98,27 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
             return;
         }
 
-        var config = comp!.config;
-        var entries = config.GetOrdered();
+        var ev = new MechCompConfigAttemptEvent();
+        RaiseLocalEvent(deviceUid, ev);
+        var entries = ev.entries;
         _dialog.OpenDialog(
             player,
             Name(deviceUid) + " configuration",
-            entries, (results) => {
-                config.SetFromObjectArray(results);
-                RaiseLocalEvent(deviceUid, new MechCompConfigUpdateEvent());
+            entries,
+            (results) => {
+                //config.SetFromObjectArray(results);
+                RaiseLocalEvent(deviceUid, new MechCompConfigUpdateEvent(results));
+                // The mechcompconfig holds the relevant config values, while the device components
+                // hold the "default" values, which immediately get written into the config and then never used again
+                // Other options i have involve redesigning this whole swamp and moving part of config handling to events,
+                // to be handled by each device component separately.
+                //
+                // All of this to say, this is fucking retarded.
+                // That's what i get for overengineering.
             }
         );
     }
-#endregion
+
     #region cooldown shite
     /// <summary>
     /// Convenience function for managing cooldowns for all devices.
@@ -297,9 +294,11 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
         }
         _appearance.SetData(uid, MechCompDeviceVisuals.Anchored, args.Anchored);
     }
+
+    // todo: move this to client to get rid of annoying "waiting for server" shite
     private void GetInteractionVerb(EntityUid uid, BaseMechCompComponent comp, GetVerbsEvent<InteractionVerb> args)
     {
-        if (!HasComp<NetworkConfiguratorComponent>(args.Using))
+        if (!HasComp<NetworkConfiguratorComponent>(args.Using) || !comp.hasConfig)
         {
             return;
         }
@@ -311,15 +310,5 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
             Act = () => { OpenMechCompConfigDialog(uid, args.User, comp); }
         });
     }
-
-
-  
-
 }
-[RegisterComponent]
-public partial class BaseMechCompComponent : Component
-{
-    public MechCompConfig config = new();
 
-
-}

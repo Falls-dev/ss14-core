@@ -10,18 +10,24 @@ public sealed partial class MechCompDeviceSystem
     private void InitButton()
     {
         SubscribeLocalEvent<MechCompButtonComponent, ComponentInit>(OnButtonInit);
+        SubscribeLocalEvent<MechCompButtonComponent, MechCompConfigAttemptEvent>(OnButtonConfigAttempt);
+        SubscribeLocalEvent<MechCompButtonComponent, MechCompConfigUpdateEvent>(OnButtonConfigUpdate);
         SubscribeLocalEvent<MechCompButtonComponent, InteractHandEvent>(OnButtonHandInteract);
         SubscribeLocalEvent<MechCompButtonComponent, ActivateInWorldEvent>(OnButtonActivation);
-
     }
 
     private void OnButtonInit(EntityUid uid, MechCompButtonComponent comp, ComponentInit args)
     {
-        EnsureConfig(uid).Build(
-            ("outsignal", (typeof(string), "Сигнал на выходе", "1"))
-            );
         _link.EnsureSourcePorts(uid, "MechCompStandardOutput");
+    }
 
+    private void OnButtonConfigAttempt(EntityUid uid, MechCompButtonComponent comp, MechCompConfigAttemptEvent args)
+    {
+        args.entries.Add((typeof(string), "Сигнал на выходе", comp.outSignal));
+    }
+    private void OnButtonConfigUpdate(EntityUid uid, MechCompButtonComponent comp, MechCompConfigUpdateEvent args)
+    {
+        comp.outSignal = (string) args.results[0];
     }
     private void OnButtonHandInteract(EntityUid uid, MechCompButtonComponent comp, InteractHandEvent args)
     {
@@ -36,7 +42,7 @@ public sealed partial class MechCompDeviceSystem
         if (isAnchored(uid) && Cooldown(uid, "pressed", 1f))
         {
             _audio.PlayPvs(comp.ClickSound, uid, AudioParams.Default.WithVariation(0.125f).WithVolume(8f));
-            SendMechCompSignal(uid, "MechCompStandardOutput", GetConfigString(uid, "outsignal"));
+            SendMechCompSignal(uid, "MechCompStandardOutput", comp.outSignal);
             ForceSetData(uid, MechCompDeviceVisuals.Mode, "activated"); // the data will be discarded anyways
         }
     }

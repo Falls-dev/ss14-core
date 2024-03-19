@@ -36,11 +36,14 @@
   abstract: true
   components:
     - type: Appearance
+    - type: BaseMechComp
     - type: MechCompAnchoredVisualizer
     - type: Anchorable
       snap: false
     - type: Item
       size: Large
+    - type: DeviceLinkSource
+      range: 7
     - type: Sprite
       sprite: White/MechComp/base.rsi
       layers:
@@ -105,7 +108,7 @@
   name: MechComp Calculator
   id: MechCompMath
   parent: MechCompBase
-  description: A general-purspose math component, able to perform a number of operations on two values.
+  description: A general-purspose component, able to perform a number of operations on two values.
   components:
     - type: MechCompMath
     - type: Sprite
@@ -115,7 +118,7 @@
   name: MechComp Pressure Pad
   id: MechCompPressurePad
   parent: MechCompBase
-  description: Sends a signal when stepped on.
+  description: Sends a signal when threaded on.
   components:
     - type: MechCompPressurePad
     - type: Sprite
@@ -152,3 +155,13 @@
     - type: MechCompComparer
     - type: Sprite
       sprite: White/MechComp/comparer.rsi
+
+- type: entity
+  name: MechComp Transeiver
+  id: MechCompTranseiver
+  parent: MechCompBase
+  description: A self-sufficient transeiver. Utilizes *legally-distinct* Cyanspace™®© technology to instantly transmit data packets over great distances.
+  components:
+    - type: MechCompTranseiver
+    - type: Sprite
+      sprite: White/MechComp/transeiver.rsi

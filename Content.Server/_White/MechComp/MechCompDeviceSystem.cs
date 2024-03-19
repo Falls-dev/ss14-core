@@ -79,6 +79,7 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
         InitComparer();
         InitCalculator();
         InitPressurePad();
+        InitTranseiver();
     }
 
     #region Helper functions

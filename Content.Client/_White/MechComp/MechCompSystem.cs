@@ -59,7 +59,8 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
         SubscribeLocalEvent<MechCompSpeakerComponent, ComponentInit>(OnSpeakerInit);
         SubscribeLocalEvent<MechCompSpeakerComponent, AppearanceChangeEvent>(OnSpeakerAppearanceChange);
 
-
+        SubscribeLocalEvent<MechCompTranseiverComponent, ComponentInit>(OnTranseiverInit);
+        SubscribeLocalEvent<MechCompTranseiverComponent, AppearanceChangeEvent>(OnTranseiverAppearanceChange);
     }
     private void OnButtonInit(EntityUid uid, MechCompButtonComponent comp, ComponentInit args)
     {
@@ -71,7 +72,6 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
         if (GetMode(uid, out string _)) // not expecting any specific value, only the fact that it's under the MechCompVisuals.Mode key.
         {
             _anim.SafePlay(uid, (Animation) comp.pressedAnimation, "button");
-            args.Sprite?.LayerSetAnimationTime(MechCompDeviceVisualLayers.Base, 0); // hack: Stop()ing and immediately Play()ing an animation does not seem to restart it
         }
     }
 
@@ -85,7 +85,6 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
         if (GetMode(uid, out string _)) // not expecting any specific value, only the fact that it's under the MechCompVisuals.Mode key.
         {
             _anim.SafePlay(uid, (Animation) comp.speakAnimation, "speaker");
-            args.Sprite?.LayerSetAnimationTime(MechCompDeviceVisualLayers.Effect1, 0); // hack: Stop()ing and immediately Play()ing an animation does not seem to restart it
         }
     }
 
@@ -120,6 +119,19 @@ public sealed partial class MechCompDeviceSystem : SharedMechCompDeviceSystem
                     args.Sprite?.LayerSetState(effectlayer1, "charging");
                     break;
             }
+        }
+    }
+
+    private void OnTranseiverInit(EntityUid uid, MechCompTranseiverComponent comp, ComponentInit args)
+    {
+        comp.blinkAnimation = _prepFlickAnim("blink", 0.2f, MechCompDeviceVisualLayers.Effect1);
+    }
+
+    private void OnTranseiverAppearanceChange(EntityUid uid, MechCompTranseiverComponent comp, ref AppearanceChangeEvent args)
+    {
+        if (GetMode(uid, out string _)) // not expecting any specific value, only the fact that it's under the MechCompVisuals.Mode key.
+        {
+            _anim.SafePlay(uid, (Animation) comp.blinkAnimation, "blink");
         }
     }
 }

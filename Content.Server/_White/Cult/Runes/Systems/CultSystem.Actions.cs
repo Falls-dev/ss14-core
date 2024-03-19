@@ -6,6 +6,7 @@ using Content.Server.Emp;
 using Content.Server.EUI;
 using Content.Server._White.Cult.UI;
 using Content.Shared._White.Chaplain;
+using Content.Shared._White.Cult;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -20,6 +21,7 @@ using Content.Shared.Stunnable;
 using Content.Shared._White.Cult.Actions;
 using Content.Shared._White.Cult.Components;
 using Content.Shared._White.Cult.Systems;
+using Content.Shared._White.Cult.UI;
 using Content.Shared.Actions;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.DoAfter;
@@ -28,6 +30,8 @@ using Content.Shared.Mindshield.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using CultistComponent = Content.Shared._White.Cult.Components.CultistComponent;
 
@@ -43,6 +47,8 @@ public partial class CultSystem
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly MapSystem _mapSystem = default!;
     [Dependency] private readonly TileSystem _tile = default!;
+    [Dependency] private readonly BloodSpearSystem _bloodSpear = default!;
+    [Dependency] private readonly PhysicsSystem _physics = default!;
 
     private const string TileId = "CultFloor";
     private const string ConcealedTileId = "CultFloorConcealed";
@@ -57,6 +63,8 @@ public partial class CultSystem
         SubscribeLocalEvent<CultistComponent, CultConcealInstantActionEvent>(OnConcealPresence);
         SubscribeLocalEvent<CultistComponent, CultRevealInstantActionEvent>(OnConcealPresence);
         SubscribeLocalEvent<CultistComponent, CultBloodRitesInstantActionEvent>(OnBloodRites);
+        SubscribeLocalEvent<CultistComponent, CultBloodSpearRecallInstantActionEvent>(OnBloodSpearRecall);
+        SubscribeLocalEvent<CultistComponent, CultistFactoryItemSelectedMessage>(OnBloodRitesSelected);
         SubscribeLocalEvent<CultistComponent, CultTeleportTargetActionEvent>(OnTeleport);
         SubscribeLocalEvent<CultistComponent, CultStunTargetActionEvent>(OnStunTarget);
         SubscribeLocalEvent<CultistComponent, ActionGettingRemovedEvent>(OnActionRemoved);
@@ -173,31 +181,92 @@ public partial class CultSystem
 
                 totalBloodAmount += solutionContent.Quantity;
 
-                _bloodstreamSystem.TryModifyBloodLevel(uid, solutionContent.Quantity / 6f);
+                _bloodstreamSystem.TryModifyBloodLevel(uid, solutionContent.Quantity / 6f, bloodstreamComponent);
                 _solutionSystem.RemoveReagent((Entity<SolutionComponent>) solution, "Blood", FixedPoint2.MaxValue);
 
-                if (GetMissingBloodValue(bloodstreamComponent) == 0)
+                /*if (GetMissingBloodValue(bloodstreamComponent) == 0)
                 {
                     breakLoop = true;
-                }
+                }*/
             }
         }
 
-        if (totalBloodAmount == 0f)
+        if (totalBloodAmount != 0f)
         {
-            return;
+            component.RitesBloodAmount += totalBloodAmount;
+
+            _audio.PlayPvs("/Audio/White/Cult/enter_blood.ogg", uid, AudioParams.Default);
+            _damageableSystem.TryChangeDamage(uid, new DamageSpecifier(bruteDamageGroup, -20));
+            _damageableSystem.TryChangeDamage(uid, new DamageSpecifier(burnDamageGroup, -20));
+
+            args.Handled = true;
         }
 
-        _audio.PlayPvs("/Audio/White/Cult/enter_blood.ogg", uid, AudioParams.Default);
-        _damageableSystem.TryChangeDamage(uid, new DamageSpecifier(bruteDamageGroup, -20));
-        _damageableSystem.TryChangeDamage(uid, new DamageSpecifier(burnDamageGroup, -20));
+        if (!TryComp<ActorComponent>(uid, out var actor))
+            return;
 
-        args.Handled = true;
+        var rites = component.BloodRites.Where(x =>
+                _prototypeManager.Index<CultistFactoryProductionPrototype>(x).BloodCost <= component.RitesBloodAmount)
+            .ToList();
+
+        if (rites.Count == 0)
+            return;
+
+        if (!_ui.TryGetUi(uid, BloodRitesUi.Key, out var bui))
+            return;
+
+        _ui.SetUiState(bui, new CultistFactoryBUIState(rites));
+        _ui.OpenUi(bui, actor.PlayerSession);
     }
 
     private static FixedPoint2 GetMissingBloodValue(BloodstreamComponent bloodstreamComponent)
     {
         return bloodstreamComponent.BloodMaxVolume - bloodstreamComponent.BloodSolution!.Value.Comp.Solution.Volume;
+    }
+
+    private void OnBloodRitesSelected(Entity<CultistComponent> ent, ref CultistFactoryItemSelectedMessage args)
+    {
+        if (!_prototypeManager.TryIndex<CultistFactoryProductionPrototype>(args.Item, out var prototype))
+            return;
+
+        if (ent.Comp.RitesBloodAmount < prototype.BloodCost)
+            return;
+
+        ent.Comp.RitesBloodAmount -= prototype.BloodCost;
+
+        foreach (var item in prototype.Item)
+        {
+            var entity = Spawn(item, Transform(ent).Coordinates);
+            _handsSystem.TryPickupAnyHand(ent, entity);
+        }
+    }
+
+    private void OnBloodSpearRecall(Entity<CultistComponent> ent, ref CultBloodSpearRecallInstantActionEvent args)
+    {
+        if (ent.Comp.BloodSpear == null)
+        {
+            _bloodSpear.DetachSpearFromUser(ent);
+            return;
+        }
+
+        var spear = ent.Comp.BloodSpear.Value;
+        var xform = Transform(spear);
+        var coords = _transform.GetWorldPosition(xform);
+        var userCoords = _transform.GetWorldPosition(ent);
+        var distance = (userCoords - coords).Length();
+        if (distance > 10f)
+        {
+            _popupSystem.PopupEntity("Копьё слишком далеко!", ent, ent);
+            return;
+        }
+
+        TryComp<PhysicsComponent>(spear, out var physics);
+        _physics.SetBodyType(spear, BodyType.Dynamic, body: physics, xform: xform);
+        _transform.AttachToGridOrMap(spear, xform);
+        _transform.SetWorldPosition(xform, userCoords);
+        _handsSystem.TryPickupAnyHand(ent, spear, animate: false);
+
+        args.Handled = true;
     }
 
     private void OnConcealPresence(EntityUid uid, CultistComponent component, CultConcealPresenceInstantActionEvent args)

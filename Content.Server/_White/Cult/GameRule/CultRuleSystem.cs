@@ -25,6 +25,7 @@ using Robust.Shared.Random;
 using Content.Shared._White;
 using Content.Shared._White.Chaplain;
 using Content.Shared._White.Cult.Components;
+using Content.Shared._White.Cult.Systems;
 using Content.Shared.Mind;
 using Robust.Shared.Audio.Systems;
 
@@ -47,6 +48,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     [Dependency] private readonly SharedMindSystem _mindSystem = default!;
     [Dependency] private readonly ActionsSystem _actions = default!;
     [Dependency] private readonly GulagSystem _gulag = default!;
+    [Dependency] private readonly BloodSpearSystem _bloodSpear = default!;
 
     private ISawmill _sawmill = default!;
 
@@ -176,6 +178,8 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         }
 
         cultistsRule.CurrentCultists.Remove(component);
+
+        _bloodSpear.DetachSpearFromUser((uid, component));
 
         foreach (var empower in component.SelectedEmpowers)
         {

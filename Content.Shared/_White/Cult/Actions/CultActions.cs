@@ -46,3 +46,7 @@ public sealed partial class CultRevealInstantActionEvent : CultConcealPresenceIn
 public sealed partial class CultBloodRitesInstantActionEvent : InstantActionEvent
 {
 }
+
+public sealed partial class CultBloodSpearRecallInstantActionEvent : InstantActionEvent
+{
+}

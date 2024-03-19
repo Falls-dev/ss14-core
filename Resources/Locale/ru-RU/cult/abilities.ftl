@@ -38,3 +38,6 @@ ent-InstantActionEmpPulse = Электромагнитный Импульс
 
 ent-InstantActionConcealPresence = Сокрытие Присутствия
     .desc = Многофункциональное заклинание, чередующееся между скрытием и обнаружением ближайших рун и структур культа.
+
+ent-InstantActionRecallBloodSpear = Призвать Кровавое Копьё
+    .desc = Призывает кровавое копье в вашу руку.

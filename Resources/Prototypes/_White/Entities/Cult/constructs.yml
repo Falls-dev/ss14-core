@@ -127,6 +127,7 @@
     - type: MovementSpeedModifier
       baseWalkSpeed: 3
       baseSprintSpeed: 3
+    - type: MovementIgnoreGravity
     - type: Puller
       needsHands: false
     - type: MeleeWeapon

@@ -61,7 +61,7 @@
 
 - type: cultistFactoryProduction
   id: FactoryCultBloodSpear
-  name: Кровавое копьё
+  name: Кровавое Копьё (150 крови)
   icon: "/Textures/White/Cult/Entities/blood_spear.rsi/icon.png"
   bloodCost: 150
   item:

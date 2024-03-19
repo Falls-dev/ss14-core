@@ -53,7 +53,8 @@ public sealed partial class CultistComponent : ShowCultHudComponent
     [DataField("bloodRites", customTypeSerializer: typeof(PrototypeIdListSerializer<CultistFactoryProductionPrototype>))]
     public List<string> BloodRites = new ()
     {
-        "FactoryCultBloodSpear"
+        "FactoryCultBloodSpear",
+        "FactoryCultBloodBarrage"
     };
 
     [ViewVariables, NonSerialized]

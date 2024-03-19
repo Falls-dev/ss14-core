@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Content.Shared._White.Cult.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Physics;
@@ -123,10 +124,13 @@ public abstract class SharedTentacleGun : EntitySystem
         foreach (var activeItem in _handsSystem.EnumerateHeld(args.Embedded))
         {
             if(!TryComp<PhysicsComponent>(activeItem, out var physicsComponent))
-                return;
+                continue;
+
+            if (HasComp<BoltBarrageComponent>(activeItem))
+                continue;
 
             var coords = Transform(args.Embedded).Coordinates;
-            _handsSystem.TryDrop(args.Embedded, coords);
+            _handsSystem.TryDrop(args.Embedded, activeItem, coords);
 
             var force = physicsComponent.Mass * 2.5f / 2;
 

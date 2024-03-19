@@ -199,6 +199,8 @@ public partial class CultSystem
             _damageableSystem.TryChangeDamage(uid, new DamageSpecifier(bruteDamageGroup, -20));
             _damageableSystem.TryChangeDamage(uid, new DamageSpecifier(burnDamageGroup, -20));
 
+            _popupSystem.PopupEntity($"Всего высосано крови: {component.RitesBloodAmount}.", uid, uid);
+
             args.Handled = true;
         }
 
@@ -232,12 +234,24 @@ public partial class CultSystem
         if (ent.Comp.RitesBloodAmount < prototype.BloodCost)
             return;
 
-        ent.Comp.RitesBloodAmount -= prototype.BloodCost;
-
+        var success = false;
         foreach (var item in prototype.Item)
         {
             var entity = Spawn(item, Transform(ent).Coordinates);
-            _handsSystem.TryPickupAnyHand(ent, entity);
+            if (_handsSystem.TryPickupAnyHand(ent, entity))
+            {
+                success = true;
+                continue;
+            }
+
+            _popupSystem.PopupEntity("Вам нужна свободная рука для обряда.", ent, ent);
+            QueueDel(entity);
+            break;
+        }
+
+        if (success)
+        {
+            ent.Comp.RitesBloodAmount -= prototype.BloodCost;
         }
     }
 

@@ -7,7 +7,6 @@
   - type: Sprite
     sprite: White/Cult/Entities/arcane_barrage.rsi
     state: icon
-    color: "#ff0000"
   - type: Item
     size: Ginormous
     sprite: White/Cult/Entities/arcane_barrage.rsi

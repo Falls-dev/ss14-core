@@ -18,6 +18,7 @@
   - type: Occluder
     enabled: false
   - type: Door
+    bumpOpen: true
     occludes: false
     crushDamage:
       types:

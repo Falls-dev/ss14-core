@@ -1,12 +1,14 @@
-﻿using Content.Server.Doors.Systems;
+﻿using Content.Server.Cuffs;
+using Content.Server.Doors.Systems;
 using Content.Shared._White.Chaplain;
 using Content.Shared.Doors;
 using Content.Shared.Humanoid;
 using Content.Shared.Stunnable;
-using Content.Shared._White.Cult;
 using Content.Shared._White.Cult.Components;
 using Content.Shared._White.Cult.Systems;
+using Content.Shared.Cuffs.Components;
 using Content.Shared.Doors.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Weapons.Melee.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio;
@@ -24,6 +26,8 @@ public sealed class RunicDoorSystem : EntitySystem
     [Dependency] private readonly SharedStunSystem _stunSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly OccluderSystem _occluder = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly CuffableSystem _cuffable = default!;
 
     public override void Initialize()
     {
@@ -120,5 +124,12 @@ public sealed class RunicDoorSystem : EntitySystem
 
         _stunSystem.TryParalyze(user, TimeSpan.FromSeconds(3), true);
         return false;
+    }
+
+    public bool CanBumpOpen(EntityUid uid, EntityUid otherUid)
+    {
+        return !HasComp<RunicDoorComponent>(uid) || !HasComp<ConstructComponent>(otherUid) &&
+            (!HasComp<CultistComponent>(otherUid) || !_mobState.IsAlive(otherUid) ||
+             TryComp(otherUid, out CuffableComponent? cuffable) && _cuffable.GetAllCuffs(cuffable).Count > 0);
     }
 }

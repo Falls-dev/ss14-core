@@ -24,6 +24,13 @@
       - Sheet
       - RawMaterial
       - Ingot
+      entities:
+      - SheetSteel
+      - SheetGlass
+      - IngotGold
+      - SheetPlasma
+      - SheetUranium
+      - SheetPlastic
   - type: Destructible
     thresholds:
     - trigger:

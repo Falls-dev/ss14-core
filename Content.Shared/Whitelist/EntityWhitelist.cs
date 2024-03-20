@@ -32,7 +32,7 @@ namespace Content.Shared.Whitelist
         [NonSerialized]
         private List<ComponentRegistration>? _registrations = null;
 
-        [DataField("tags", customTypeSerializer:typeof(PrototypeIdListSerializer<EntityPrototype>))]
+        [DataField(customTypeSerializer:typeof(PrototypeIdListSerializer<EntityPrototype>))]
         public List<string>? Entities;
 
         /// <summary>

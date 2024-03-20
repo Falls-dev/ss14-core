@@ -109,6 +109,7 @@ namespace Content.Server.Lathe
                 return;
             var materialWhitelist = new List<ProtoId<MaterialPrototype>>();
             var recipes = GetAvailableRecipes(uid, component, true);
+
             foreach (var id in recipes)
             {
                 if (!_proto.TryIndex(id, out var proto))
@@ -118,6 +119,19 @@ namespace Content.Server.Lathe
                     if (!materialWhitelist.Contains(mat))
                     {
                         materialWhitelist.Add(mat);
+                    }
+                }
+            }
+
+            if (TryComp<MaterialStorageComponent>(args.Storage, out var materialStorageComponent) &&
+                materialStorageComponent.Whitelist != null &&
+                materialStorageComponent.Whitelist.Entities != null)
+            {
+                foreach (var id in materialStorageComponent.Whitelist.Entities)
+                {
+                    if (!materialWhitelist.Contains(id))
+                    {
+                        materialWhitelist.Add(id);
                     }
                 }
             }

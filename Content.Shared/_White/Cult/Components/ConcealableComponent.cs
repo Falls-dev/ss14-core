@@ -17,6 +17,9 @@ public sealed partial class ConcealableComponent : Component
     public bool IconSmooth;
 
     [DataField]
+    public bool InteractionOutline;
+
+    [DataField]
     public ResPath? ConcealedSprite;
 
     [DataField]

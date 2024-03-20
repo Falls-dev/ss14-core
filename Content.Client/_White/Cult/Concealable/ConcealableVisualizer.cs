@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.IconSmoothing;
+using Content.Client.Interactable.Components;
 using Content.Shared._White.Cult.Components;
 using Robust.Client.GameObjects;
 
@@ -21,6 +22,20 @@ public sealed class ConcealableVisualizer : VisualizerSystem<ConcealableComponen
 
         if (component.IconSmooth)
             _smooth.SetEnabled(uid, concealed);
+
+        if (component.InteractionOutline)
+        {
+            if (concealed)
+            {
+                if (TryComp(uid, out InteractionOutlineComponent? outline))
+                {
+                    outline.OnMouseLeave(uid);
+                    RemComp<InteractionOutlineComponent>(uid);
+                }
+            }
+            else
+                EnsureComp<InteractionOutlineComponent>(uid);
+        }
 
         if (concealed)
         {

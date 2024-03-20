@@ -50,6 +50,7 @@
   - type: Concealable
     examinableWhileConcealed: true
     iconSmooth: true
+    interactionOutline: true
     concealedSprite: White/Cult/Structures/Concealed/cult_airlock.rsi
     revealedSprite: White/Cult/Structures/cult_airlock.rsi
   - type: IconSmooth

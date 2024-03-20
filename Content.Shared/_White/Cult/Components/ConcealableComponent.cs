@@ -24,6 +24,21 @@ public sealed partial class ConcealableComponent : Component
 
     [DataField]
     public ResPath? RevealedSprite;
+
+    [DataField]
+    public bool ChangeMeta;
+
+    [DataField]
+    public string ConcealedName = string.Empty;
+
+    [DataField]
+    public string ConcealedDesc = string.Empty;
+
+    [DataField]
+    public string RevealedName = string.Empty;
+
+    [DataField]
+    public string RevealedDesc = string.Empty;
 }
 
 [Serializable, NetSerializable]

@@ -226,6 +226,11 @@
     examinableWhileConcealed: true
     concealedSprite: White/Cult/Structures/Concealed/cult.rsi
     revealedSprite: Structures/Walls/cult.rsi
+    changeMeta: true
+    concealedName: обычная стена
+    concealedDesc: Удерживает воздух внутри, а ассистентов снаружи.
+    revealedName: стена культа
+    revealedDesc: Удерживает воздух внутри, а ассистентов снаружи.
 
 - type: entity
   parent: BaseWall

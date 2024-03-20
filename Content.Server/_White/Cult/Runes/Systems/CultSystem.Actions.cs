@@ -304,7 +304,8 @@ public partial class CultSystem
         foreach (var ent in entitiesInRange)
         {
             if (!concealableQuery.TryGetComponent(ent, out var concealable) ||
-                !appearanceQuery.TryGetComponent(ent, out var appearance))
+                !appearanceQuery.TryGetComponent(ent, out var appearance) ||
+                !EntityManager.MetaQuery.TryGetComponent(ent, out var meta))
                 continue;
 
             if (concealable.Concealed == conceal)
@@ -316,7 +317,21 @@ public partial class CultSystem
 
             RaiseLocalEvent(ent, new ConcealEvent(conceal));
 
-            Dirty(ent, concealable);
+            if (concealable.ChangeMeta)
+            {
+                if (conceal)
+                {
+                    _metaDataSystem.SetEntityName(ent, concealable.ConcealedName, meta);
+                    _metaDataSystem.SetEntityDescription(ent, concealable.ConcealedDesc, meta);
+                }
+                else
+                {
+                    _metaDataSystem.SetEntityName(ent, concealable.RevealedName, meta);
+                    _metaDataSystem.SetEntityDescription(ent, concealable.RevealedDesc, meta);
+                }
+            }
+
+            Dirty(ent, concealable, meta);
 
             success = true;
         }

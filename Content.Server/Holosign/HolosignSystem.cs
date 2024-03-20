@@ -2,6 +2,7 @@ using Content.Server.Popups;
 using Content.Shared.Examine;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Interaction;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 
 namespace Content.Server.Holosign;
@@ -18,6 +19,7 @@ public sealed class HolosignSystem : EntitySystem
         SubscribeLocalEvent<HolosignProjectorComponent, BeforeRangedInteractEvent>(OnBeforeInteract);
         SubscribeLocalEvent<HolosignProjectorComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<HolosignProjectorComponent, ComponentRemove>(OnComponentRemove);
+        SubscribeLocalEvent<HolosignProjectorComponent, UseInHandEvent>(OnUse);
     }
 
     private void OnExamine(EntityUid uid, HolosignProjectorComponent component, ExaminedEvent args)
@@ -36,6 +38,16 @@ public sealed class HolosignSystem : EntitySystem
                 args.PushMarkup(Loc.GetString("limited-charges-max-charges"));
             }
         }
+    }
+
+    private void OnUse(EntityUid uid, HolosignProjectorComponent comp, UseInHandEvent args)
+    {
+        foreach (var sign in comp.Signs)
+        {
+            comp.Signs.Remove(sign);
+            QueueDel(sign);
+        }
+        _popupSystem.PopupEntity(Loc.GetString("holoprojector-delete-signs"), args.User, args.User, PopupType.Medium);
     }
 
     private void OnBeforeInteract(EntityUid uid, HolosignProjectorComponent component, BeforeRangedInteractEvent args)

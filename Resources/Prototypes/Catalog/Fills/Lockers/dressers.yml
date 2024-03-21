@@ -130,6 +130,10 @@
       - id: ClothingHeadHatBeretRND
       - id: ClothingHandsGlovesColorPurple
       - id: ClothingHeadsetAltScience
+      - id: ClothingUniformJumpskirtResearchDirector
+      - id: ClothingUniformJumpsuitResearchDirector
+      - id: ClothingOuterWinterRD
+      - id: ClothingOuterCoatRD
 
 - type: entity
   id: DresserWardenFilled

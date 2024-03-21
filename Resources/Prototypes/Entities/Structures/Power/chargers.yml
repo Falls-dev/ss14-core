@@ -166,6 +166,7 @@
           - ProjectileBatteryAmmoProvider
           - Stunbaton
           - TwoModeEnergyAmmoProvider
+          - MagneticGloves
 
 - type: entity
   parent: BaseItemRecharger
@@ -188,7 +189,9 @@
           - HitscanBatteryAmmoProvider
           - ProjectileBatteryAmmoProvider
           - Stunbaton
+          - TwoModeEnergyAmmoProvider
           - PowerCell
+          - MagneticGloves
         blacklist:
           tags:
           - PotatoBattery

@@ -6,6 +6,7 @@ using Content.Server.Pulling;
 using Content.Server.Stack;
 using Content.Server.Stunnable;
 using Content.Shared._White.Cult.Systems;
+using Content.Shared._White.MagGloves;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Body.Part;
 using Content.Shared.CombatMode;
@@ -94,6 +95,9 @@ namespace Content.Server.Hands.Systems
         private void OnDisarmed(EntityUid uid, HandsComponent component, DisarmedEvent args)
         {
             if (args.Handled)
+                return;
+
+            if (HasComp<PreventDisarmComponent>(uid))
                 return;
 
             // Break any pulls

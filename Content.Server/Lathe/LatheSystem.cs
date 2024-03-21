@@ -124,8 +124,7 @@ namespace Content.Server.Lathe
             }
 
             if (TryComp<MaterialStorageComponent>(args.Storage, out var materialStorageComponent) &&
-                materialStorageComponent.Whitelist != null &&
-                materialStorageComponent.Whitelist.Entities != null)
+                materialStorageComponent.Whitelist?.Entities != null)
             {
                 foreach (var id in materialStorageComponent.Whitelist.Entities)
                 {

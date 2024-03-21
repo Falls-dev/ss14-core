@@ -7,23 +7,16 @@
     contents:
       - id: FlashlightSeclite
       - id: WeaponDisabler
-        prob: 0.3
       - id: ClothingBeltSecurityFilled
       - id: Flash
-      - id: ClothingEyesGlassesSecurity
-      - id: ClothingHeadsetAltSecurity
-      - id: ClothingHandsGlovesCombat
-      - id: ClothingShoesBootsJack
-      - id: ClothingOuterCoatWarden
-      - id: ClothingHeadHatWarden
-      - id: ClothingOuterWinterWarden
       - id: RubberStampWarden
       - id: DoorRemoteArmory
-      - id: ClothingOuterHardsuitWarden
       - id: HoloprojectorSecurity
       - id: BoxBodyCamera
       - id: WeaponPistolMk58Nonlethal
       - id: MagazinePistol
+      - id: ClothingOuterHardsuitWarden
+      - id: OxygenTankFilled
 
 - type: entity
   id: LockerWardenFilled

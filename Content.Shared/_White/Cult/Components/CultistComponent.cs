@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using Content.Shared.FixedPoint;
+using Content.Shared.Mind;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
@@ -62,4 +63,7 @@ public sealed partial class CultistComponent : ShowCultHudComponent
 
     [ViewVariables, NonSerialized]
     public EntityUid? BloodSpearActionEntity;
+
+    [ViewVariables, NonSerialized]
+    public Entity<MindComponent>? OriginalMind;
 }

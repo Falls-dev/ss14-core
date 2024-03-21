@@ -38,6 +38,7 @@ using Content.Shared._White.Cult.Components;
 using Content.Shared._White.Cult.Runes;
 using Content.Shared._White.Cult.UI;
 using Content.Shared.Cuffs;
+using Content.Shared.GameTicking;
 using Content.Shared.Mindshield.Components;
 using Content.Shared.Pulling;
 using Content.Shared.UserInterface;
@@ -112,6 +113,8 @@ public sealed partial class CultSystem : EntitySystem
         SubscribeLocalEvent<CultRuneBaseComponent, CultEraseEvent>(OnErase);
         SubscribeLocalEvent<CultRuneBaseComponent, StartCollideEvent>(HandleCollision);
 
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+
         InitializeBuffSystem();
         InitializeNarsie();
         InitializeSoulShard();
@@ -143,6 +146,11 @@ public sealed partial class CultSystem : EntitySystem
     private readonly SoundPathSpecifier _narsie40Sec = new("/Audio/White/Cult/40sec.ogg");
 
     private Entity<AudioComponent>? _narsieSummonningAudio = null;
+
+    private void OnRoundRestart(RoundRestartCleanupEvent ev)
+    {
+        CultRuneReviveComponent.ChargesLeft = 3;
+    }
 
     /*
     * Rune draw start ----
@@ -859,14 +867,25 @@ public sealed partial class CultSystem : EntitySystem
 
         _entityManager.EventBus.RaiseLocalEvent(target, new RejuvenateEvent());
 
-        if (!_mindSystem.TryGetMind(target, out _, out var mind) ||
-            mind.Session is not { } playerSession)
+        EntityUid? transferTo = null;
+
+        if (!_mindSystem.TryGetMind(target, out var mindId, out var mind))
+        {
+            if (!TryComp<CultistComponent>(target, out var cultist) || cultist.OriginalMind == null)
+                return true;
+
+            (mindId, mind) = cultist.OriginalMind.Value;
+
+            transferTo = target;
+        }
+
+        if (mind.Session is not { } playerSession)
             return true;
 
         // notify them they're being revived.
         if (mind.CurrentEntity != target)
         {
-            _euiManager.OpenEui(new ReturnToBodyEui(mind, _mindSystem), playerSession);
+            _euiManager.OpenEui(new ReturnToBodyEui(mind, _mindSystem, mindId, transferTo), playerSession);
         }
         return true;
     }

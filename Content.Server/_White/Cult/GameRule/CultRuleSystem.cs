@@ -167,6 +167,8 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         }
 
         UpdateCultistsAppearance(cultistsRule);
+
+        component.OriginalMind = (mindComponent.Mind.Value, Comp<MindComponent>(mindComponent.Mind.Value));
     }
 
     private void OnCultistComponentRemoved(EntityUid uid, CultistComponent component, ComponentRemove args)

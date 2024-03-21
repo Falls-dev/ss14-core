@@ -103,6 +103,11 @@
       - id: ClothingUniformJumpskirtQMTurtleneck
       - id: ClothingHandsGlovesColorBrown
       - id: ClothingNeckMantleQM
+      - id: ClothingHeadsetAltCargo
+      - id: ClothingOuterWinterQM
+      - id: ClothingUniformJumpsuitQM
+      - id: ClothingUniformJumpskirtQM
+      - id: ClothingHeadHatQMsoft
 
 - type: entity
   id: DresserResearchDirectorFilled

@@ -11,11 +11,8 @@
       - id: CargoShuttleConsoleCircuitboard
       - id: SalvageShuttleConsoleCircuitboard
       - id: CargoBountyComputerCircuitboard
-      - id: CigPackGreen
-        prob: 0.50
       - id: DoorRemoteCargo
       - id: RubberStampQm
-      - id: ClothingHeadsetAltCargo
       - id: BoxEncryptionKeyCargo
 
 - type: entity

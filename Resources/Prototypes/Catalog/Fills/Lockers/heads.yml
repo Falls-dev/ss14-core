@@ -261,28 +261,23 @@
 - type: entity
   id: LockerHeadOfSecurityFilledHardsuit
   suffix: Filled, Hardsuit
-  parent: LockerHeadOfSecurity
+  parent: LockerHeadOfSecurityFilled
   components:
   - type: StorageFill
     contents:
-      - id: WeaponDisabler
-      - id: ClothingOuterCoatHoSTrench
-      - id: ClothingOuterHardsuitSecurityRed
-      - id: ClothingMaskGasSwat
+      - id: WeaponEgun
       - id: ClothingBeltSecurityFilled
-      - id: ClothingHeadsetAltSecurity
-      - id: ClothingEyesGlassesSecurity
-      - id: ClothingShoesBootsJack
-      - id: CigarGoldCase
-        prob: 0.50
       - id: DoorRemoteSecurity
       - id: RubberStampHos
       - id: SecurityTechFabCircuitboard
-      - id: JetpackSecurityFilled
       - id: BoxEncryptionKeySecurity
       - id: HoloprojectorSecurity
       - id: BookSecretDocuments
       - id: WeaponPistolMk58Nonlethal
+      - id: MagazinePistol
+      - id: ClothingOuterHardsuitSecurityRed
+      - id: JetpackSecurityFilled
+      - id: OxygenTankFilled
 
 - type: entity
   id: LockerHeadOfSecurityFilled
@@ -292,16 +287,7 @@
   - type: StorageFill
     contents:
       - id: WeaponEgun
-      - id: ClothingHeadHatBeretHoS
-      - id: ClothingHeadHatHoshat
-      - id: ClothingNeckCloakHos
-      - id: ClothingOuterCoatHoSTrench
       - id: ClothingBeltSecurityFilled
-      - id: ClothingHeadsetAltSecurity
-      - id: ClothingEyesGlassesSecurity
-      - id: ClothingShoesBootsJack
-      - id: CigarGoldCase
-        prob: 0.50
       - id: DoorRemoteSecurity
       - id: RubberStampHos
       - id: SecurityTechFabCircuitboard

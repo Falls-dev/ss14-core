@@ -70,6 +70,10 @@
       - id: ClothingUniformJumpsuitHosFormal
       - id: ClothingMaskNeckGaiter
       - id: ClothingHandsGlovesCombat
+      - id: ClothingShoesBootsJack
+      - id: ClothingEyesGlassesSecurity
+      - id: ClothingHeadsetAltSecurity
+      - id: ClothingMaskGasSwat
 
 - type: entity
   id: DresserQuarterMasterFilled

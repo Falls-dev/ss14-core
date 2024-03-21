@@ -1,5 +1,4 @@
 using System.Numerics;
-using Content.Shared._White.Cult.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Standing;
@@ -30,9 +29,6 @@ public sealed class StandingStateSystem : EntitySystem
         foreach (var hand in handsComp.Hands.Values)
         {
             if (hand.HeldEntity is not EntityUid held)
-                continue;
-
-            if (HasComp<BoltBarrageComponent>(held)) // WD
                 continue;
 
             if (!_handsSystem.TryDrop(uid, hand, null, checkActionBlocker: false, handsComp: handsComp))

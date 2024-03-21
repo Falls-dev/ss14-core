@@ -23,8 +23,7 @@
     proto: BloodBolt
     capacity: 25
   - type: BoltBarrage
-  - type: DisarmMalus
-    malus: 1
+  - type: GiftIgnore
 
 - type: cultistFactoryProduction
   id: FactoryCultBloodBarrage

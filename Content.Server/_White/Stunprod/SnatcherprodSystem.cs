@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Shared._White.Cult.Components;
 using Content.Shared.Damage.Events;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -48,9 +47,6 @@ public sealed class SnatcherprodSystem : EntitySystem
             if (heldEntity == null)
                 return;
         }
-
-        if (HasComp<BoltBarrageComponent>(heldEntity))
-            return;
 
         if (!_hands.TryDrop(entity, heldEntity.Value, null, false, false, handsComp: hands))
             return;

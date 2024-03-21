@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Content.Shared._White.Cult.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Physics;
@@ -124,9 +123,6 @@ public abstract class SharedTentacleGun : EntitySystem
         foreach (var activeItem in _handsSystem.EnumerateHeld(args.Embedded))
         {
             if(!TryComp<PhysicsComponent>(activeItem, out var physicsComponent))
-                continue;
-
-            if (HasComp<BoltBarrageComponent>(activeItem))
                 continue;
 
             var coords = Transform(args.Embedded).Coordinates;

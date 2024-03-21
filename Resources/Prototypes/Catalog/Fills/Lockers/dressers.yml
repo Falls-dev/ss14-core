@@ -27,6 +27,11 @@
       - id: ClothingUniformJumpskirtChiefEngineerTurtle
       - id: ClothingNeckCloakCe
       - id: ClothingHeadHatBeretEngineering
+      - id: ClothingEyesGlassesMeson
+      - id: ClothingHeadsetAltEngineering
+      - id: ClothingHeadHatHardhatWhite
+      - id: ClothingHandsGlovesColorYellow
+      - id: ClothingShoesBootsMagAdv
 
 - type: entity
   id: DresserChiefMedicalOfficerFilled

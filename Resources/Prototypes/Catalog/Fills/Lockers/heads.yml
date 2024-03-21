@@ -207,11 +207,6 @@
   - type: StorageFill
     contents:
       - id: MedkitFilled
-      - id: ClothingHandsGlovesNitrile
-      - id: ClothingEyesHudMedical
-      - id: ClothingHeadsetAltMedical
-      - id: ClothingBackpackDuffelSurgeryFilled
-      - id: ClothingMaskSterile
       - id: Hypospray
       - id: HandheldCrewMonitor
       - id: DoorRemoteMedical
@@ -219,7 +214,7 @@
       - id: MedicalTechFabCircuitboard
       - id: BoxEncryptionKeyMedical
       - id: Eftpos
-      - id: ClothingBeltMedical
+      - id: ClothingBeltMedicalFilled
 
 - type: entity
   id: LockerResearchDirectorFilledHardsuit

@@ -35,10 +35,18 @@
   components:
   - type: StorageFill
     contents:
+      - id: ClothingUniformJumpsuitCMO
+      - id: ClothingUniformJumpskirtCMO
+      - id: ClothingOuterWinterCMO
+      - id: ClothingOuterCoatLabCmo
       - id: ClothingNeckMantleCMO
       - id: ClothingCloakCmo
-      - id: ClothingOuterCoatLabCmo
       - id: ClothingHeadHatBeretCmo
+      - id: ClothingHandsGlovesNitrile
+      - id: ClothingEyesHudMedical
+      - id: ClothingHeadsetAltMedical
+      - id: ClothingMaskSterile
+      - id: ClothingEyesEyepatchHudMedical
 
 - type: entity
   id: DresserHeadOfPersonnelFilled

@@ -14,6 +14,7 @@
       - id: DoorRemoteCargo
       - id: RubberStampQm
       - id: BoxEncryptionKeyCargo
+      - id: BoxFolderClipboard
 
 - type: entity
   id: LockerCaptainFilledHardsuit
@@ -103,18 +104,35 @@
       - id: BoxHeadset
       - id: IDComputerCircuitboard
       - id: WeaponEgun
-      - id: CigarGoldCase
-        prob: 0.25
-        # Fuck the HoP they don't deserve fucking cigars.
-        # Yes they do fuck you.
       - id: DoorRemoteService
       - id: ClothingNeckGoldmedal
       - id: RubberStampHop
       - id: BoxEncryptionKeyPassenger
       - id: BoxEncryptionKeyService
-      - id: ClothingBackpackIan
-        prob: 0.5
-      - id: AccessConfigurator
+      - id: BoxFolderClipboard
+
+- type: entity
+  id: LockerHeadOfPersonnelFilledHardsuit
+  suffix: Filled, Hardsuit
+  parent: LockerHeadOfPersonnel
+  components:
+  - type: StorageFill
+    contents:
+    - id: HoPIDCard
+    - id: ClothingHeadsetCommand
+    - id: BoxPDA
+    - id: BoxID
+    - id: BoxHeadset
+    - id: IDComputerCircuitboard
+    - id: WeaponEgun
+    - id: DoorRemoteService
+    - id: ClothingNeckGoldmedal
+    - id: RubberStampHop
+    - id: BoxEncryptionKeyPassenger
+    - id: BoxEncryptionKeyService
+    - id: BoxFolderClipboard
+    - id: ClothingOuterHardsuitHOP
+    - id: OxygenTankFilled
 
 - type: entity
   id: LockerChiefEngineerFilledHardsuit

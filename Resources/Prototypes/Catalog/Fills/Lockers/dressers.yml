@@ -70,6 +70,10 @@
       - id: ClothingHeadHatHopcap
       - id: ClothingOuterWinterHoP
       - id: ClothingHandsGlovesHop
+      - id: ClothingNeckGoldmedal
+      - id: ClothingShoesLeather
+      - id: ClothingUniformJumpsuitHoP
+      - id: ClothingUniformJumpskirtHoP
 
 - type: entity
   id: DresserHeadOfSecurityFilled

@@ -64,7 +64,6 @@ public partial class CultSystem
         SubscribeLocalEvent<CultistComponent, CultRevealInstantActionEvent>(OnConcealPresence);
         SubscribeLocalEvent<CultistComponent, CultBloodRitesInstantActionEvent>(OnBloodRites);
         SubscribeLocalEvent<CultistComponent, CultBloodSpearRecallInstantActionEvent>(OnBloodSpearRecall);
-        SubscribeLocalEvent<CultistComponent, CultistFactoryItemSelectedMessage>(OnBloodRitesSelected);
         SubscribeLocalEvent<CultistComponent, CultTeleportTargetActionEvent>(OnTeleport);
         SubscribeLocalEvent<CultistComponent, CultStunTargetActionEvent>(OnStunTarget);
         SubscribeLocalEvent<CultistComponent, ActionGettingRemovedEvent>(OnActionRemoved);
@@ -191,68 +190,24 @@ public partial class CultSystem
             }
         }
 
-        if (totalBloodAmount != 0f)
-        {
-            component.RitesBloodAmount += totalBloodAmount;
-
-            _audio.PlayPvs("/Audio/White/Cult/enter_blood.ogg", uid, AudioParams.Default);
-            _damageableSystem.TryChangeDamage(uid, new DamageSpecifier(bruteDamageGroup, -20));
-            _damageableSystem.TryChangeDamage(uid, new DamageSpecifier(burnDamageGroup, -20));
-
-            _popupSystem.PopupEntity($"Всего высосано крови: {component.RitesBloodAmount}.", uid, uid);
-
-            args.Handled = true;
-        }
-
-        if (!TryComp<ActorComponent>(uid, out var actor))
+        if (totalBloodAmount == 0f)
             return;
 
-        var rites = component.BloodRites.Where(x =>
-                _prototypeManager.Index<CultistFactoryProductionPrototype>(x).BloodCost <= component.RitesBloodAmount)
-            .ToList();
+        component.RitesBloodAmount += totalBloodAmount;
 
-        if (rites.Count == 0)
-            return;
+        _audio.PlayPvs("/Audio/White/Cult/enter_blood.ogg", uid, AudioParams.Default);
+        _damageableSystem.TryChangeDamage(uid, new DamageSpecifier(bruteDamageGroup, -20));
+        _damageableSystem.TryChangeDamage(uid, new DamageSpecifier(burnDamageGroup, -20));
 
-        if (!_ui.TryGetUi(uid, BloodRitesUi.Key, out var bui))
-            return;
+        _popupSystem.PopupEntity(Loc.GetString("verb-blood-rites-message", ("blood", component.RitesBloodAmount)), uid,
+            uid);
 
-        _ui.SetUiState(bui, new CultistFactoryBUIState(rites));
-        _ui.OpenUi(bui, actor.PlayerSession);
+        args.Handled = true;
     }
 
     private static FixedPoint2 GetMissingBloodValue(BloodstreamComponent bloodstreamComponent)
     {
         return bloodstreamComponent.BloodMaxVolume - bloodstreamComponent.BloodSolution!.Value.Comp.Solution.Volume;
-    }
-
-    private void OnBloodRitesSelected(Entity<CultistComponent> ent, ref CultistFactoryItemSelectedMessage args)
-    {
-        if (!_prototypeManager.TryIndex<CultistFactoryProductionPrototype>(args.Item, out var prototype))
-            return;
-
-        if (ent.Comp.RitesBloodAmount < prototype.BloodCost)
-            return;
-
-        var success = false;
-        foreach (var item in prototype.Item)
-        {
-            var entity = Spawn(item, Transform(ent).Coordinates);
-            if (_handsSystem.TryPickupAnyHand(ent, entity))
-            {
-                success = true;
-                continue;
-            }
-
-            _popupSystem.PopupEntity("Вам нужна свободная рука для обряда.", ent, ent);
-            QueueDel(entity);
-            break;
-        }
-
-        if (success)
-        {
-            ent.Comp.RitesBloodAmount -= prototype.BloodCost;
-        }
     }
 
     private void OnBloodSpearRecall(Entity<CultistComponent> ent, ref CultBloodSpearRecallInstantActionEvent args)

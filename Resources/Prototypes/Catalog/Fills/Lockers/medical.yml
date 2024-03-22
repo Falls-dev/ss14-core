@@ -154,4 +154,5 @@
       - id: HandheldGPSBasic
       - id: MedkitFilled
       - id: Eftpos
-      - id: ClothingBeltMedicalEMT
+      - id: ClothingBeltMedicalEMTFilled
+      - id: HandheldCrewMonitor

@@ -262,6 +262,7 @@
       - id: BookSecretDocuments
       - id: WeaponPistolMk58Nonlethal
       - id: MagazinePistol
+      - id: BoxMindshield
       - id: ClothingOuterHardsuitSecurityRed
       - id: JetpackSecurityFilled
       - id: OxygenTankFilled
@@ -283,6 +284,7 @@
       - id: BookSecretDocuments
       - id: WeaponPistolMk58Nonlethal
       - id: MagazinePistol
+      - id: BoxMindshield
 
 - type: entity
   id: LockerFreezerVaultFilled

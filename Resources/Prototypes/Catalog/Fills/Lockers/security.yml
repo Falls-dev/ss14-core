@@ -15,6 +15,7 @@
       - id: BoxBodyCamera
       - id: WeaponPistolMk58Nonlethal
       - id: MagazinePistol
+      - id: BoxMindshield
       - id: ClothingOuterHardsuitWarden
       - id: OxygenTankFilled
 
@@ -35,6 +36,7 @@
       - id: BoxBodyCamera
       - id: WeaponPistolMk58Nonlethal
       - id: MagazinePistol
+      - id: BoxMindshield
 
 - type: entity
   id: LockerSecurityFilled

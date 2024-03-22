@@ -452,7 +452,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         var roleBriefingComponent = new RoleBriefingComponent
         {
-            Briefing = Loc.GetString("cultist-role-briefing-short")
+            Briefing = Loc.GetString("cult-role-briefing-short")
         };
 
         _roleSystem.MindAddRole(mindId, roleBriefingComponent, mind, true);

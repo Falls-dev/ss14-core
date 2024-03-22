@@ -165,7 +165,7 @@ public sealed partial class CultSystem : EntitySystem
     private void BeforeRuneDraw(Entity<RuneDrawerProviderComponent> ent, ref BeforeActivatableUIOpenEvent args)
     {
         if (_ui.TryGetUi(ent, ListViewSelectorUiKey.Key, out var bui))
-            _ui.SetUiState(bui, new ListViewBUIState(ent.Comp.RunePrototypes, false));
+            _ui.SetUiState(bui, new ListViewBUIState(ent.Comp.RunePrototypes, true));
     }
 
     private void OnRuneSelected(EntityUid uid, RuneDrawerProviderComponent component, ListViewItemSelectedMessage args)

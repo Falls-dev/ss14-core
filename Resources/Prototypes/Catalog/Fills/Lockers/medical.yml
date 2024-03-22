@@ -16,6 +16,8 @@
         amount: 2
       - id: Gauze
       - id: MedkitFilled
+      - id: BoxPillCanister
+      - id: BoxBottle
 
 - type: entity
   id: LockerWallMedicalFilled

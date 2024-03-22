@@ -1,14 +1,15 @@
 using System.Linq;
-using Content.Server._Miracle.Components;
 using Content.Server._Miracle.GulagSystem;
 using Content.Server.Actions;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.NPC.Systems;
+using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Components;
+using Content.Server.StationEvents.Components;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared.Body.Systems;
 using Content.Shared.Humanoid;
@@ -132,7 +133,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
             if (!TryComp<MobStateComponent>(owner, out var mobState))
                 continue;
 
-            if (_mobStateSystem.IsAlive(owner, mobState))
+            if (!_mobStateSystem.IsDead(owner, mobState))
             {
                 aliveCultists++;
             }
@@ -142,7 +143,10 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
             return;
 
         cultistsRule.WinCondition = CultWinCondition.CultFailure;
-        _roundEndSystem.EndRound();
+
+        // Check for all in once gamemode
+        if (!GameTicker.GetActiveGameRules().Where(HasComp<RampingStationEventSchedulerComponent>).Any())
+            _roundEndSystem.EndRound();
     }
 
     private void OnCultistComponentInit(EntityUid uid, CultistComponent component, ComponentInit args)
@@ -444,7 +448,15 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
             PrototypeId = cultistRule.CultistRolePrototype
         };
 
-        _roleSystem.MindAddRole(mindId, cultistComponent);
+        _roleSystem.MindAddRole(mindId, cultistComponent, mind);
+
+        var roleBriefingComponent = new RoleBriefingComponent
+        {
+            Briefing = Loc.GetString("cultist-role-briefing-short")
+        };
+
+        _roleSystem.MindAddRole(mindId, roleBriefingComponent, mind, true);
+
         EnsureComp<CultistComponent>(playerEntity);
 
         _factionSystem.RemoveFaction(playerEntity, "NanoTrasen", false);

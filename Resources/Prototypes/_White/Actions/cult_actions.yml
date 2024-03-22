@@ -27,8 +27,6 @@
           - HumanoidAppearance
           - Cultist
       canTargetSelf: true
-      deselectOnMiss: true
-      repeat: false
       icon:
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: teleport
@@ -50,8 +48,6 @@
           - HumanoidAppearance
           - Cultist
       canTargetSelf: true
-      deselectOnMiss: true
-      repeat: false
       icon:
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: armor
@@ -72,8 +68,6 @@
         components:
           - HumanoidAppearance
       canTargetSelf: false
-      deselectOnMiss: true
-      repeat: false
       icon:
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: stun
@@ -94,8 +88,6 @@
         components:
           - HumanoidAppearance
       canTargetSelf: false
-      deselectOnMiss: true
-      repeat: false
       icon:
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: shackles

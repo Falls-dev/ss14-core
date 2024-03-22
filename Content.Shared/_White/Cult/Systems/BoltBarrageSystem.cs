@@ -26,15 +26,8 @@ public sealed class BoltBarrageSystem : EntitySystem
         SubscribeLocalEvent<BoltBarrageComponent, AttemptShootEvent>(OnShootAttempt);
         SubscribeLocalEvent<BoltBarrageComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<BoltBarrageComponent, DroppedEvent>(OnDrop);
-        SubscribeLocalEvent<BoltBarrageComponent, UnequippedHandEvent>(OnUnequipHand);
         SubscribeLocalEvent<BoltBarrageComponent, ContainerGettingRemovedAttemptEvent>(OnRemoveAttempt);
         SubscribeLocalEvent<BoltBarrageComponent, OnEmptyGunShotEvent>(OnEmptyShot);
-    }
-
-    private void OnUnequipHand(Entity<BoltBarrageComponent> ent, ref UnequippedHandEvent args)
-    {
-        if (!_net.IsServer && ent.Comp.Unremoveable)
-            QueueDel(ent);
     }
 
     private void OnRemoveAttempt(Entity<BoltBarrageComponent> ent, ref ContainerGettingRemovedAttemptEvent args)

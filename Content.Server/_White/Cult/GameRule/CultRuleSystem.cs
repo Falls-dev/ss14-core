@@ -72,6 +72,13 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         SubscribeLocalEvent<CultistComponent, ComponentInit>(OnCultistComponentInit);
         SubscribeLocalEvent<CultistComponent, ComponentRemove>(OnCultistComponentRemoved);
         SubscribeLocalEvent<CultistComponent, MobStateChangedEvent>(OnCultistsStateChanged);
+
+        SubscribeLocalEvent<CultistRoleComponent, GetBriefingEvent>(OnGetBriefing);
+    }
+
+    private void OnGetBriefing(Entity<CultistRoleComponent> ent, ref GetBriefingEvent args)
+    {
+        args.Append(Loc.GetString("cult-role-briefing-short"));
     }
 
     private void OnCultistsStateChanged(EntityUid uid, CultistComponent component, MobStateChangedEvent ev)
@@ -449,14 +456,6 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         };
 
         _roleSystem.MindAddRole(mindId, cultistComponent, mind);
-
-        var roleBriefingComponent = new RoleBriefingComponent
-        {
-            Briefing = Loc.GetString("cult-role-briefing-short")
-        };
-
-        _roleSystem.MindAddRole(mindId, roleBriefingComponent, mind, true);
-
         EnsureComp<CultistComponent>(playerEntity);
 
         _factionSystem.RemoveFaction(playerEntity, "NanoTrasen", false);

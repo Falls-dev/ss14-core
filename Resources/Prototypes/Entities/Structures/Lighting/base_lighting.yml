@@ -35,7 +35,7 @@
     softness: 1
     offset: "0, -0.5"
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:
@@ -235,7 +235,7 @@
       softness: 1.1
       enabled: true
     - type: Damageable
-      damageContainer: Inorganic
+      damageContainer: StructuralInorganic
     - type: Destructible
       thresholds:
       - trigger:

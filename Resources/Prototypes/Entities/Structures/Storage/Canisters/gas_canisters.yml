@@ -62,7 +62,7 @@
               acts: [ "Destruction" ]
             - !type:DumpCanisterBehavior
     - type: Damageable
-      damageContainer: Inorganic
+      damageContainer: StructuralInorganic
       damageModifierSet: Metallic
     - type: Physics
       bodyType: Dynamic
@@ -1274,7 +1274,7 @@
         - !type:DoActsBehavior
           acts: [ "Destruction" ]
     - type: Damageable
-      damageContainer: Inorganic
+      damageContainer: StructuralInorganic
       damageModifierSet: Metallic
     - type: InteractionOutline
     - type: Sprite

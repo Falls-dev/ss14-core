@@ -26,7 +26,7 @@
         shape:
           !type:PhysShapeAabb {}
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:

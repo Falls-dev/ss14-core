@@ -92,7 +92,7 @@
       sprite: White/Cult/Structures/cult_girder.rsi
       state: cultgirder
     - type: Damageable
-      damageContainer: Inorganic
+      damageContainer: StructuralInorganic
       damageModifierSet: Metallic
     - type: Destructible
       thresholds:

@@ -46,7 +46,7 @@
     sound:
       path: /Audio/Ambience/Objects/vending_machine_hum.ogg
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:

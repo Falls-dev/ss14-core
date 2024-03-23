@@ -43,7 +43,7 @@
     fixVacuum: true
   - type: Damageable
     damageContainer: StructuralInorganic
-    damageModifierSet: Metallic
+    damageModifierSet: StructuralMetallic
   - type: Destructible
     thresholds:
     - trigger:
@@ -145,7 +145,7 @@
       map: ["enum.DoorVisualLayers.Base"]
   - type: Damageable
     damageContainer: StructuralInorganic
-    damageModifierSet: StrongMetallic
+    damageModifierSet: StructuralMetallicStrong
   - type: Destructible
     thresholds:
     - trigger:

@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   id: DebugGenerator
   parent: BaseGenerator
   suffix: DEBUG
@@ -44,8 +44,8 @@
   - type: PowerConsumer
     drawRate: 50
   - type: Damageable
-    damageContainer: StructuralInorganic
-    damageModifierSet: StructuralMetallic
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
   - type: Destructible
     thresholds:
     - trigger:

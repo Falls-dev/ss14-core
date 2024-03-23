@@ -11,8 +11,8 @@
           path:
             "/Audio/Weapons/smash.ogg"
     - type: Damageable
-      damageContainer: StructuralInorganic
-      damageModifierSet: StructuralMetallic
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
     - type: Destructible
       thresholds:
         - trigger:
@@ -104,8 +104,8 @@
     ports:
       - Pressed
   - type: Damageable
-    damageContainer: StructuralInorganic
-    damageModifierSet: StructuralMetallic
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
   - type: Destructible
     thresholds:
       - trigger:

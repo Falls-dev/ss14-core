@@ -29,8 +29,8 @@
       graph: DisposalMachine
       node: frame
     - type: Damageable
-      damageContainer: StructuralInorganic
-      damageModifierSet: StructuralMetallic
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
     - type: Destructible
       thresholds:
         - trigger:

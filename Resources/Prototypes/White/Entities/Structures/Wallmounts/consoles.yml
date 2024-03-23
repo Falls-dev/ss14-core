@@ -1,4 +1,4 @@
-# Base structure
+﻿# Base structure
 - type: entity
   id: BaseStructureWallMountConsole
   parent: BaseStructure
@@ -29,8 +29,8 @@
   - type: Sprite
     drawdepth: Objects
   - type: Damageable
-    damageContainer: StructuralInorganic
-    damageModifierSet: StructuralMetallic
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
   - type: Destructible
     thresholds:
     - trigger:

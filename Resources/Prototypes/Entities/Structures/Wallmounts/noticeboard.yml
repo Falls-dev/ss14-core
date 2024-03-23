@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   id: NoticeBoard
   name: notice board
   description: Is there a job for a witcher?
@@ -20,7 +20,7 @@
     anchored: true
   - type: Damageable
     damageModifierSet: Wood
-    damageContainer: StructuralInorganic
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:

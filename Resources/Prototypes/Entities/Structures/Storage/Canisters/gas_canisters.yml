@@ -62,8 +62,8 @@
               acts: [ "Destruction" ]
             - !type:DumpCanisterBehavior
     - type: Damageable
-      damageContainer: StructuralInorganic
-      damageModifierSet: StructuralMetallic
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
     - type: Physics
       bodyType: Dynamic
     - type: Fixtures
@@ -1274,8 +1274,8 @@
         - !type:DoActsBehavior
           acts: [ "Destruction" ]
     - type: Damageable
-      damageContainer: StructuralInorganic
-      damageModifierSet: StructuralMetallic
+      damageContainer: Inorganic
+      damageModifierSet: Metallic
     - type: InteractionOutline
     - type: Sprite
       sprite: Structures/Storage/canister.rsi

@@ -253,7 +253,7 @@
   - type: StorageFill
     contents:
       - id: WeaponEgun
-      - id: ClothingBeltSecurityFilled
+      - id: ClothingBeltAssaultFilled
       - id: DoorRemoteSecurity
       - id: RubberStampHos
       - id: SecurityTechFabCircuitboard
@@ -275,7 +275,7 @@
   - type: StorageFill
     contents:
       - id: WeaponEgun
-      - id: ClothingBeltSecurityFilled
+      - id: ClothingBeltAssaultFilled
       - id: DoorRemoteSecurity
       - id: RubberStampHos
       - id: SecurityTechFabCircuitboard

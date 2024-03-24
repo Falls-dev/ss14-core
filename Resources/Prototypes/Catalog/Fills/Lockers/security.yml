@@ -64,7 +64,7 @@
         prob: 0.6
       - id: WeaponTempGun
       - id: WeaponPistolMk58Nonlethal
-      - id: BoxBodyCamera
+      - id: SurveillanceBodyCamera
       - id: MagazinePistol
 
 - type: entity

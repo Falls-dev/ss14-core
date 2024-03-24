@@ -2194,6 +2194,21 @@
     - type: GhostTakeoverAvailable
 
 - type: entity
+  name: angry monkey
+  parent: MobMonkey
+  id: MobMonkeyAngry
+  suffix: Angry
+  components:
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: InputMover
+  - type: MobMover
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+
+- type: entity
   name: clown spider
   parent: MobGiantSpiderAngry
   id: MobClownSpider

@@ -23,7 +23,7 @@ public sealed class NarcoticEffect : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<NarcoticEffectComponent, ComponentInit>(OnInit);
-        SubscribeLocalEvent<NarcoticEffectComponent, ComponentRemove>(OnRemove);
+        SubscribeLocalEvent<MovespeedModifierMetabolismComponent, ComponentRemove>(OnRemove);
     }
 
     private void OnInit(EntityUid uid, NarcoticEffectComponent component, ComponentInit args)
@@ -33,26 +33,21 @@ public sealed class NarcoticEffect : EntitySystem
         Effects(uid, component, index);
     }
 
-    private void OnRemove(EntityUid uid, NarcoticEffectComponent component, ComponentRemove args)
+    private void OnRemove(EntityUid uid, MovespeedModifierMetabolismComponent component, ComponentRemove args)
     {
-        if (TryComp<MovespeedModifierMetabolismComponent>(uid, out var movespeedModifierComponent))
-        {
-            if (movespeedModifierComponent.ModifierTimer != TimeSpan.Zero)
-                Timer.Spawn(movespeedModifierComponent.ModifierTimer, () => component.CancelTokenSource.Cancel());
-                return;
-        }
         component.CancelTokenSource.Cancel();
     }
 
     private void Effects(EntityUid uid, NarcoticEffectComponent component, int index)
     {
-        if(!TryComp<StandingStateComponent>(uid, out var standingComp))
+        if(!TryComp<StandingStateComponent>(uid, out var standingComp) || !TryComp<MovespeedModifierMetabolismComponent>(uid, out var movespeedModifierComponent))
             return;
 
-        RaiseLocalEvent(uid, new MoodEffectEvent("Stimulator"));
-        CancellationToken token = component.CancelTokenSource.Token;
-
         TryComp<StatusEffectsComponent>(uid, out var statusEffectsComp);
+
+        RaiseLocalEvent(uid, new MoodEffectEvent("Stimulator"));
+        CancellationToken token = movespeedModifierComponent.CancelTokenSource.Token;
+
 
         int timer = component.TimerInterval[_robustRandom.Next(0, component.TimerInterval.Count)];
         int slur = component.SlurTime[_robustRandom.Next(0, component.SlurTime.Count)];

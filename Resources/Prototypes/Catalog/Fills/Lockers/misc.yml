@@ -318,16 +318,16 @@
           prob: 0.95
           orGroup: angryanimalsmaintloot
         - id: MobCarp
-          prob: 0.05
+          prob: 0.005
           orGroup: angryanimalsmaintloot
         - id: MobGiantSpiderAngry
-          prob: 0.05
+          prob: 0.005
           orGroup: angryanimalsmaintloot
         - id: MobAngryBee
-          prob: 0.05
+          prob: 0.005
           orGroup: angryanimalsmaintloot
         - id: MobMonkeyAngry
-          prob: 0.05
+          prob: 0.005
           orGroup: angryanimalsmaintloot
         # Animals
         - id: null

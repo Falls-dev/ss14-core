@@ -1,3 +1,3 @@
 ﻿ent-MobMonkeyAngry = { ent-MobMonkey }
-.desc = { MobMonkey.desc }
+.desc = { ent-MobMonkey.desc }
 .suffix = Агрессивная

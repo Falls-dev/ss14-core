@@ -1,0 +1,11 @@
+- type: polymorph
+  id: AspectForcedSkeleton
+  configuration:
+    entity: MobSkeletonPerson
+    forced: true
+    inventory: Transfer
+    transferName: true
+    transferDamage: true
+    transferHumanoidAppearance: true
+    revertOnCrit: false
+    revertOnDeath: false

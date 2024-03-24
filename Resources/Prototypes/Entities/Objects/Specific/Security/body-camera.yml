@@ -5,7 +5,7 @@
   description: MP3 player sized pocket camera for security officers.
   components:
     - type: SurveillanceBodyCamera
-    - type: Sprite # Sprites section
+    - type: Sprite
       sprite: Objects/Specific/Security/body-camera.rsi
       layers:
         - state: unpowered
@@ -73,3 +73,8 @@
     - type: Tag
       tags:
         - SurveillanceBodyCamera
+    - type: ItemSlots
+      slots:
+        cell_slot:
+          name: power-cell-slot-component-slot-name-default
+          startingItem: PowerCellMedium

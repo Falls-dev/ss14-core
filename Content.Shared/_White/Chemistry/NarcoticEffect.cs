@@ -55,7 +55,7 @@ public sealed class NarcoticEffect : EntitySystem
         switch (Enum.GetValues(typeof(NarcoticEffects)).GetValue(index))
         {
             case NarcoticEffects.TremorAndShake when _statusEffectsSystem.HasStatusEffect(uid, "Drunk", statusEffectsComp):
-                Timer.SpawnRepeating(timer, () => _stamina.TakeStaminaDamage(uid, 15F), token);
+                Timer.SpawnRepeating(timer, () => _stamina.TakeStaminaDamage(uid, 25F), token);
                 _statusEffectsSystem.TryAddTime(uid, "Drunk", TimeSpan.FromSeconds(slur), statusEffectsComp);
                 break;
 
@@ -73,12 +73,12 @@ public sealed class NarcoticEffect : EntitySystem
                 break;
 
             case NarcoticEffects.TremorAndShake:
-                Timer.SpawnRepeating(timer, () => _stamina.TakeStaminaDamage(uid, 15F), token);
+                Timer.SpawnRepeating(timer, () => _stamina.TakeStaminaDamage(uid, 25F), token);
                 _statusEffectsSystem.TryAddStatusEffect<DrunkComponent>(uid, "Drunk", TimeSpan.FromSeconds(slur), true, statusEffectsComp);
                 break;
 
             case NarcoticEffects.Tremor:
-                Timer.SpawnRepeating(timer, () => _stamina.TakeStaminaDamage(uid, 15F), token);
+                Timer.SpawnRepeating(timer, () => _stamina.TakeStaminaDamage(uid, 25F), token);
                 break;
 
             case NarcoticEffects.Shake:

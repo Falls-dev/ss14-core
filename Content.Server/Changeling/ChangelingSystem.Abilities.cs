@@ -84,6 +84,7 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly CuffableSystem _cuffable = default!;
     [Dependency] private readonly NukeopsRuleSystem _nukeOps = default!;
     [Dependency] private readonly CultRuleSystem _cult = default!;
+    [Dependency] private readonly RevolutionaryRuleSystem _rev = default!;
     [Dependency] private readonly NpcFactionSystem _faction = default!;
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly EmpSystem _empSystem = default!;
@@ -996,6 +997,8 @@ public sealed partial class ChangelingSystem
                 _faction.AddFaction(to, faction);
             }
         }
+
+        _rev.TransferRole(from, to);
 
         _nukeOps.TransferRole(from, to);
 

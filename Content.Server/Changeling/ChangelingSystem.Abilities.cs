@@ -783,6 +783,7 @@ public sealed partial class ChangelingSystem
             ChemicalsBalance = component.ChemicalsBalance,
             AbsorbedEntities = component.AbsorbedEntities,
             IsInited = component.IsInited,
+            AbsorbedCount = component.AbsorbedCount,
             IsLesserForm = true
         };
 
@@ -928,7 +929,8 @@ public sealed partial class ChangelingSystem
                 HiveName = lingComp.HiveName,
                 ChemicalsBalance = lingComp.ChemicalsBalance,
                 AbsorbedEntities = lingComp.AbsorbedEntities,
-                IsInited = lingComp.IsInited
+                IsInited = lingComp.IsInited,
+                AbsorbedCount = lingComp.AbsorbedCount
             };
 
             EntityManager.AddComponent(polymorphEntity.Value, toAdd);

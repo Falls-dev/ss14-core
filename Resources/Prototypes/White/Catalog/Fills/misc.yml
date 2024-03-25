@@ -1,9 +1,0 @@
-﻿- type: entity
-  id: CratePaper
-  name: ящик бумаги
-  parent: CrateGenericSteel
-  components:
-  - type: StorageFill
-    contents:
-    - id: SheetPaper
-      amount: 3

@@ -1,6 +1,0 @@
-﻿- type: entity
-  id: CrateGulag
-  parent: CrateGenericSteel
-  noSpawn: true
-  components:
-    - type: GulagFillContainer

@@ -1,7 +1,0 @@
-﻿- type: entity
-  parent: WindoorSecure
-  id: WindoorSecureQuartermasterLocked
-  suffix: QM, Locked
-  components:
-    - type: AccessReader
-      access: [["Quartermaster"]]

@@ -955,6 +955,9 @@ public sealed partial class ChangelingSystem
 
     private void TransferComponents(EntityUid from, EntityUid to)
     {
+        if (HasComp<AbsorbedComponent>(from))
+            EnsureComp<AbsorbedComponent>(to);
+
         if (HasComp<BibleUserComponent>(from))
             EnsureComp<BibleUserComponent>(to);
 

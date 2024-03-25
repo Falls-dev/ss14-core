@@ -119,6 +119,7 @@ public sealed partial class ChangelingSystem
         SubscribeLocalEvent<ChangelingComponent, ArmbladeActionEvent>(OnArmBlade);
         SubscribeLocalEvent<ChangelingComponent, OrganicShieldActionEvent>(OnShield);
         SubscribeLocalEvent<ChangelingComponent, ChitinousArmorActionEvent>(OnArmor);
+        SubscribeLocalEvent<ChangelingComponent, HiveHeadActionEvent>(OnHiveHead);
         SubscribeLocalEvent<ChangelingComponent, TentacleArmActionEvent>(OnTentacleArm);
 
         SubscribeLocalEvent<ChangelingComponent, TransformDoAfterEvent>(OnTransformDoAfter);
@@ -149,6 +150,13 @@ public sealed partial class ChangelingSystem
     private const string ChangelingShield = "ActionShield";
     private const string ChangelingArmor = "ActionArmor";
     private const string ChangelingTentacleArm = "ActionTentacleArm";
+
+    private const string OuterName = "outerClothing";
+    private const string HeadName = "head";
+
+    private const string ArmorName = "ClothingOuterChangeling";
+    private const string HelmetName = "ClothingHeadHelmetLing";
+    private const string HiveHeadName = "ClothingHeadHelmetLingHive";
 
 #endregion
 
@@ -567,15 +575,10 @@ public sealed partial class ChangelingSystem
 
     private void OnArmor(EntityUid uid, ChangelingComponent component, ChitinousArmorActionEvent args)
     {
-        const string outerName = "outerClothing";
-        const string headName = "head";
-        const string armorName = "ClothingOuterChangeling";
-        const string helmetName = "ClothingHeadHelmetLing";
+        _inventorySystem.TryUnequip(uid, OuterName, out var outer, true, true);
+        _inventorySystem.TryUnequip(uid, HeadName, out var helmet, true, true);
 
-        _inventorySystem.TryUnequip(uid, outerName, out var outer, true, true);
-        _inventorySystem.TryUnequip(uid, headName, out var helmet, true, true);
-
-        if (TryComp(outer, out MetaDataComponent? metaData) && metaData.EntityPrototype is {ID: armorName})
+        if (TryComp(outer, out MetaDataComponent? metaData) && metaData.EntityPrototype is {ID: ArmorName})
         {
             args.Handled = true;
             return;
@@ -584,16 +587,49 @@ public sealed partial class ChangelingSystem
         if (!TakeChemicals(uid, component, 20))
         {
             if (outer != null)
-                _inventorySystem.TryEquip(uid, outer.Value, outerName, true, true);
+                _inventorySystem.TryEquip(uid, outer.Value, OuterName, true, true);
 
             if (helmet != null)
-                _inventorySystem.TryEquip(uid, helmet.Value, headName, true, true);
+                _inventorySystem.TryEquip(uid, helmet.Value, HeadName, true, true);
 
             return;
         }
 
-        _inventorySystem.SpawnItemInSlot(uid, outerName, armorName, true, true);
-        _inventorySystem.SpawnItemInSlot(uid, headName, helmetName, true, true);
+        _inventorySystem.SpawnItemInSlot(uid, OuterName, ArmorName, true, true);
+        _inventorySystem.SpawnItemInSlot(uid, HeadName, HelmetName, true, true);
+
+        args.Handled = true;
+    }
+
+    private void OnHiveHead(EntityUid uid, ChangelingComponent component, HiveHeadActionEvent args)
+    {
+        if (!_mobStateSystem.IsAlive(uid))
+            return;
+
+        _inventorySystem.TryUnequip(uid, HeadName, out var helmet, true, true);
+
+        if (TryComp(helmet, out MetaDataComponent? metaData) && metaData.EntityPrototype != null)
+        {
+            switch (metaData.EntityPrototype.ID)
+            {
+                case HiveHeadName:
+                    args.Handled = true;
+                    return;
+                case HelmetName:
+                    _inventorySystem.TryUnequip(uid, OuterName, out _, true, true);
+                    break;
+            }
+        }
+
+        if (!TakeChemicals(uid, component, 15))
+        {
+            if (helmet != null)
+                _inventorySystem.TryEquip(uid, helmet.Value, HeadName, true, true);
+
+            return;
+        }
+
+        _inventorySystem.SpawnItemInSlot(uid, HeadName, HiveHeadName, true, true);
 
         args.Handled = true;
     }

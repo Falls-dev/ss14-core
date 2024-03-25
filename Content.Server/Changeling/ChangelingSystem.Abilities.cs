@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server._White.Cult.GameRule;
+using Content.Server._White.Mood;
 using Content.Server.Administration.Systems;
 using Content.Server.Bible.Components;
 using Content.Server.Body.Components;
@@ -92,6 +93,7 @@ public sealed partial class ChangelingSystem
     [Dependency] private readonly ContainerSystem _container = default!;
     [Dependency] private readonly ServerBorerSystem _borer = default!;
     [Dependency] private readonly CarryingSystem _carrying = default!;
+    [Dependency] private readonly MoodSystem _mood = default!;
 
     private void InitializeAbilities()
     {
@@ -995,6 +997,20 @@ public sealed partial class ChangelingSystem
             foreach (var faction in factionMember.Factions)
             {
                 _faction.AddFaction(to, faction);
+            }
+        }
+
+        if (TryComp(from, out MoodComponent? mood))
+        {
+            var newMood = EnsureComp<MoodComponent>(to);
+            foreach (var effect in mood.CategorisedEffects)
+            {
+                _mood.ApplyEffect(to, newMood, effect.Value);
+            }
+
+            foreach (var effect in mood.UncategorisedEffects)
+            {
+                _mood.ApplyEffect(to, newMood, effect.Key);
             }
         }
 

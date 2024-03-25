@@ -1,5 +1,4 @@
 using Content.Server.Actions;
-using Content.Server.Popups;
 using Content.Shared.Actions;
 using Content.Shared.Changeling;
 using Content.Shared.Inventory;
@@ -10,7 +9,6 @@ public sealed class HiveHeadSystem : EntitySystem
 {
     [Dependency] private readonly ActionsSystem _actions = default!;
     [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
 
     public override void Initialize()
     {
@@ -32,8 +30,6 @@ public sealed class HiveHeadSystem : EntitySystem
         {
             Spawn(ent.Comp.BeeProto, coords);
         }
-
-        _popup.PopupEntity(Loc.GetString("changeling-ability-bees-popup"), args.Performer, args.Performer);
     }
 
     private void OnGetActions(Entity<HiveHeadComponent> ent, ref GetItemActionsEvent args)

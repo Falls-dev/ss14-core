@@ -54,7 +54,6 @@ changeling-ability-changeling-lesser-form-desc = Превращает в сам�
 
 changeling-ability-bees = Выпустить пчёл
 changeling-ability-bees-desc = Выпускает 4 агрессивных пчелы из улья.
-changeling-ability-bees-popup = Мы выпускаем пчёл.
 
 ent-ActionChangelingShop = Эволюции
     .desc = Эволюционируйте и развивайтесь.

@@ -295,7 +295,7 @@ public sealed class WhiteCVars
     /// <summary>
     ///     Should load a ERT map?
     /// </summary>
-    public static readonly CVarDef<bool> LoadErtMap = CVarDef.Create("white.ert_load", true, CVar.SERVERONLY);
+    public static readonly CVarDef<bool> LoadErtMap = CVarDef.Create("white.ert_load", false, CVar.SERVERONLY);
 
     public static readonly CVarDef<bool> LogChatActions =
         CVarDef.Create("white.log_to_chat", true, CVar.CLIENT | CVar.ARCHIVE | CVar.REPLICATED);

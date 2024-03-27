@@ -229,3 +229,15 @@
     Telecrystal: 1
   categories:
   - UplinkImplants
+
+- type: listing
+  id: UplinkExperimentalSyndicateTeleporter
+  name: Экспериментальный телепортер синдиката
+  description: Телепортер синдиката, при использовании перемещает на 3-8 метров вперед. В случае телепортации в стену, использует экстренную телепортацию. Имеет 12 зарядов.
+  icon: { sprite: /Textures/White/Objects/Devices/experimentalsyndicateteleporter.rsi, state: icon }
+  productEntity: ExperimentalSyndicateTeleporter
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkUtility
+  saleLimit: 2

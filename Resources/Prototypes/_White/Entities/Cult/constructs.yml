@@ -76,6 +76,8 @@
       tags:
         - CannotSuicide
         - DoorBumpOpener
+    - type: NameIdentifier
+      group: Construct
 
 - type: entity
   id: JuggernautConstruct
@@ -237,3 +239,7 @@
       containers:
         Shard: !type:ContainerSlot
     - type: CultItem
+
+- type: nameIdentifierGroup
+  id: Construct
+  prefix: CO

@@ -12,8 +12,3 @@ clumsy-gun-delete-log = В следствии неуклюжести во вре
 holoprojector-active-holo = Активные проекции: [color=fuchsia]{ $activeholo }[/color]
 holoprojector-uses-limit = Было использовано максимальное количество проекций!
 holoprojector-delete-signs = Все проекции были удалены!
-ent-ExperimentalSyndicateTeleporter = экспериментальный телепортер синдиката
-  .desc = Телепортер синдиката, при использовании перемещает на 3-8 метров вперед. В случае телепортации в стену, использует экстренную телепортацию. Имеет 12 зарядов.
-experimental-syndicate-teleporter-examine = Доступные заряды телепортера: [color=fuchsia]{ $uses }[/color].
-experimental-syndicate-teleporter-end-uses = Заряды телепортера закончились!
-experimental-syndicate-teleporter-cooldown = Телепортер перезаряжается!

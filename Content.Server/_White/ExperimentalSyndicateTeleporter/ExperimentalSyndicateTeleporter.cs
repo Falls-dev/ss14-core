@@ -79,10 +79,8 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
 
     private void EmergencyTeleportation(EntityUid uid, TransformComponent xform, ExperimentalSyndicateTeleporterComponent component, EntityCoordinates oldCoords)
     {
-        int randomVector = new Random().Next(0, component.EmergencyVectors.Count);
-
         Vector2 offset = xform.LocalRotation.ToWorldVec().Normalized();
-        Vector2 newOffset = offset + component.EmergencyVectors[randomVector];
+        Vector2 newOffset = offset + GetRandomVector(component, offset);
 
         EntityCoordinates coords = xform.Coordinates.Offset(newOffset).SnapToGrid(EntityManager);
 
@@ -119,5 +117,13 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
         var anchoredEntities = _mapSystem.GetAnchoredEntities(tile.Value.GridUid, mapGridComponent, coords);
 
         return anchoredEntities.Any(HasComp<WallMarkComponent>);
+    }
+
+    private Vector2 GetRandomVector(ExperimentalSyndicateTeleporterComponent component, Vector2 offset)
+    {
+        int randomVector = new Random().Next(0, component.EmergencyVectors.Count);
+        List<Vector2> vectors = new List<Vector2> {offset with { Y = component.EmergencyVectors[randomVector] }, offset with { X = component.EmergencyVectors[randomVector] }};
+
+        return vectors[randomVector];
     }
 }

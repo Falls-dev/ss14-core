@@ -16,7 +16,13 @@ public sealed partial class ExperimentalSyndicateTeleporterComponent : Component
     public int MaxTeleportRange = 8;
 
     [ViewVariables(VVAccess.ReadWrite)]
-    public List<int> EmergencyVectors = new() {3, -3};
+    public int EmergencyLength = 3;
+
+    [ViewVariables(VVAccess.ReadWrite)]
+    public int EmpLength = 6;
+
+    [ViewVariables(VVAccess.ReadWrite)]
+    public List<int> RandomRotations = new() {90, -90};
 
     [ViewVariables(VVAccess.ReadOnly)]
     public string? ExpSyndicateTeleportInEffect = "ExpSyndicateTeleporterInEffect";

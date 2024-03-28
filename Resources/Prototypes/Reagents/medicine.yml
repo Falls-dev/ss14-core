@@ -1183,12 +1183,19 @@
         scaleByQuantity: true
         damage:
           groups:
-            Brute: -2.5
+            Brute: -1.25
           types:
-            Heat: -2.5
-            Shock: -2.5
-            Cold: -2.5
-            Poison: 0.66
+            Heat: -1.25
+            Shock: -1.25
+            Cold: -1.25
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:HealthChange
+        conditions:
+        damage:
+          types:
+            Poison: 1
   slippery: true
 
 - type: reagent

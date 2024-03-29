@@ -3,11 +3,13 @@ using System.Numerics;
 using Content.Server._White.Other;
 using Content.Server.Body.Systems;
 using Content.Server.Popups;
+using Content.Server.Pulling;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
+using Content.Shared.Pulling.Components;
 using Robust.Server.Audio;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
@@ -24,6 +26,7 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
+    [Dependency] private readonly PullingSystem _pullingSystem = default!;
 
     public override void Initialize()
     {
@@ -48,6 +51,18 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
 
         if (!TryComp<TransformComponent>(args.User, out var xform))
             return;
+
+        if (TryComp<SharedPullableComponent>(args.User, out var pullable) && pullable.BeingPulled)
+        {
+            _pullingSystem.TryStopPull(pullable);
+        }
+
+        if (TryComp<SharedPullerComponent>(args.User, out var pulling)
+            && pulling.Pulling != null &&
+            TryComp<SharedPullableComponent>(pulling.Pulling.Value, out var subjectPulling))
+        {
+            _pullingSystem.TryStopPull(subjectPulling);
+        }
 
         var oldCoords = xform.Coordinates;
 

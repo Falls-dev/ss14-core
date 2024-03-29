@@ -10,10 +10,10 @@ public sealed partial class ExperimentalSyndicateTeleporterComponent : Component
     public int Uses = 12;
 
     [ViewVariables(VVAccess.ReadWrite)]
-    public int MinTeleportRange = 3;
+    public int MinTeleportRange = 2;
 
     [ViewVariables(VVAccess.ReadWrite)]
-    public int MaxTeleportRange = 8;
+    public int MaxTeleportRange = 7;
 
     [ViewVariables(VVAccess.ReadWrite)]
     public int EmergencyLength = 3;

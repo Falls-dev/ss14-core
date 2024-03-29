@@ -375,7 +375,7 @@ public sealed class WhiteCVars
      */
 
     public static readonly CVarDef<string> TimeTrackerApiUrl =
-        CVarDef.Create("white.time_tracker_api", "", CVar.SERVERONLY | CVar.CONFIDENTIAL | CVar.ARCHIVE);
+        CVarDef.Create("white.time_tracker_api", "https://ss14.su/api/jobs/", CVar.SERVERONLY | CVar.CONFIDENTIAL | CVar.ARCHIVE);
 
     public static readonly CVarDef<string> TimeTrackerApiKey =
         CVarDef.Create("white.time_tracker_key", "", CVar.SERVERONLY | CVar.CONFIDENTIAL | CVar.ARCHIVE);

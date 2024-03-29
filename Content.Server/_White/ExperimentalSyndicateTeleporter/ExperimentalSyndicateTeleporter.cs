@@ -3,21 +3,15 @@ using System.Numerics;
 using Content.Server._White.Other;
 using Content.Server.Body.Systems;
 using Content.Server.Popups;
-using Content.Server.Stunnable;
 using Content.Shared.Coordinates.Helpers;
-using Content.Shared.Damage;
-using Content.Shared.Damage.Prototypes;
 using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Maps;
-using Content.Shared.Mobs.Components;
-using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Robust.Server.Audio;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server._White.ExperimentalSyndicateTeleporter;
@@ -30,10 +24,6 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly EntityLookupSystem _entityLookupSystem = default!;
-    [Dependency] private readonly StunSystem _stunSystem = default!;
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
     public override void Initialize()
     {
@@ -74,14 +64,6 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
             return;
         }
 
-        if (TryCheckForMob(coords) != default)
-        {
-            EntityUid entity = TryCheckForMob(coords);
-            _stunSystem.TryStun(entity, TimeSpan.FromSeconds(3), true);
-            _damageableSystem.TryChangeDamage(entity,
-                new DamageSpecifier(_prototypeManager.Index<DamageGroupPrototype>("Brute"), -20), true);
-        }
-
         SoundAndEffects(component, coords, oldCoords);
 
         _transform.SetCoordinates(args.User, coords);
@@ -109,14 +91,6 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
         component.Uses--;
         component.NextUse = _timing.CurTime + component.Cooldown;
 
-        if (TryCheckForMob(coords) != default)
-        {
-            EntityUid entity = TryCheckForMob(coords);
-            _stunSystem.TryStun(entity, TimeSpan.FromSeconds(3), true);
-            _damageableSystem.TryChangeDamage(entity,
-                new DamageSpecifier(_prototypeManager.Index<DamageGroupPrototype>("Brute"), -20), true);
-        }
-
         if (TryCheckWall(coords))
         {
             _bodySystem.GibBody(uid, true, splatModifier: 3F);
@@ -143,18 +117,6 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
         var anchoredEntities = _mapSystem.GetAnchoredEntities(tile.Value.GridUid, mapGridComponent, coords);
 
         return anchoredEntities.Any(HasComp<WallMarkComponent>);
-    }
-
-    private EntityUid TryCheckForMob(EntityCoordinates coords)
-    {
-        var entities = _entityLookupSystem.GetEntitiesIntersecting(coords);
-
-        foreach (var entity in entities.Where(HasComp<MobStateComponent>))
-        {
-            return entity;
-        }
-
-        return default;
     }
 
     private Vector2 VectorRandomDirection(ExperimentalSyndicateTeleporterComponent component, Vector2 offset, int length)

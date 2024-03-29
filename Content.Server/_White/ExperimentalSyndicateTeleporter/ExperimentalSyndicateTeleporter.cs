@@ -33,6 +33,29 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<ExperimentalSyndicateTeleporterComponent, UseInHandEvent>(OnUse);
         SubscribeLocalEvent<ExperimentalSyndicateTeleporterComponent, ExaminedEvent>(OnExamine);
+        SubscribeLocalEvent<ExperimentalSyndicateTeleporterComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<ExperimentalSyndicateTeleporterComponent, ComponentRemove>(OnRemove);
+    }
+
+    private void OnInit(EntityUid uid, ExperimentalSyndicateTeleporterComponent comp, ComponentInit args)
+    {
+        var random = new Random();
+
+        Timer.SpawnRepeating(1000, () =>
+        {
+            if (comp.Uses >= 4)
+                return;
+
+            if (random.Next(0, 10) == 0)
+            {
+                comp.Uses++;
+            }
+        }, comp.CancelTokenSource.Token);
+    }
+
+    private void OnRemove(EntityUid uid, ExperimentalSyndicateTeleporterComponent comp, ComponentRemove args)
+    {
+        comp.CancelTokenSource.Cancel();
     }
 
     private void OnUse(EntityUid uid, ExperimentalSyndicateTeleporterComponent component, UseInHandEvent args)

@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Threading;
 using Robust.Shared.Audio;
 
 namespace Content.Server._White.ExperimentalSyndicateTeleporter;
@@ -7,7 +8,7 @@ namespace Content.Server._White.ExperimentalSyndicateTeleporter;
 public sealed partial class ExperimentalSyndicateTeleporterComponent : Component
 {
     [ViewVariables(VVAccess.ReadWrite)]
-    public int Uses = 12;
+    public int Uses = 4;
 
     [ViewVariables(VVAccess.ReadWrite)]
     public int MinTeleportRange = 2;
@@ -17,9 +18,6 @@ public sealed partial class ExperimentalSyndicateTeleporterComponent : Component
 
     [ViewVariables(VVAccess.ReadWrite)]
     public int EmergencyLength = 3;
-
-    [ViewVariables(VVAccess.ReadWrite)]
-    public int EmpLength = 6;
 
     [ViewVariables(VVAccess.ReadWrite)]
     public List<int> RandomRotations = new() {90, -90};
@@ -38,4 +36,7 @@ public sealed partial class ExperimentalSyndicateTeleporterComponent : Component
 
     [ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan NextUse = TimeSpan.Zero;
+
+    [ViewVariables(VVAccess.ReadWrite)]
+    public CancellationTokenSource CancelTokenSource = new();
 }

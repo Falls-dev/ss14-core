@@ -274,7 +274,7 @@
       - !type:HealthChange
         damage:
           types:
-            Cellular: 1
+            Heat: 1
 
 - type: reagent
   id: Silicon

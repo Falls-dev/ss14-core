@@ -11,10 +11,10 @@ public sealed partial class ExperimentalSyndicateTeleporterComponent : Component
     public int Uses = 4;
 
     [ViewVariables(VVAccess.ReadWrite)]
-    public int MinTeleportRange = 2;
+    public int MinTeleportRange = 3;
 
     [ViewVariables(VVAccess.ReadWrite)]
-    public int MaxTeleportRange = 7;
+    public int MaxTeleportRange = 8;
 
     [ViewVariables(VVAccess.ReadWrite)]
     public int EmergencyLength = 3;
@@ -32,7 +32,7 @@ public sealed partial class ExperimentalSyndicateTeleporterComponent : Component
     public SoundSpecifier TeleportSound = new SoundPathSpecifier("/Audio/White/Devices/expsyndicateteleport.ogg");
 
     [ViewVariables(VVAccess.ReadWrite)]
-    public TimeSpan Cooldown = TimeSpan.FromSeconds(10);
+    public TimeSpan Cooldown = TimeSpan.FromSeconds(5);
 
     [ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan NextUse = TimeSpan.Zero;

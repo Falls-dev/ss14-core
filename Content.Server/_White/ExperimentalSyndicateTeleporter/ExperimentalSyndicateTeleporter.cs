@@ -14,6 +14,7 @@ using Robust.Server.Audio;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server._White.ExperimentalSyndicateTeleporter;
@@ -27,6 +28,7 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly PullingSystem _pullingSystem = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -39,17 +41,16 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
 
     private void OnInit(EntityUid uid, ExperimentalSyndicateTeleporterComponent comp, ComponentInit args)
     {
-        var random = new Random();
-
         Timer.SpawnRepeating(1000, () =>
         {
             if (comp.Uses >= 4)
                 return;
 
-            if (random.Next(0, 10) == 0)
+            if (_random.Next(0, 10) == 0)
             {
                 comp.Uses++;
             }
+
         }, comp.CancelTokenSource.Token);
     }
 

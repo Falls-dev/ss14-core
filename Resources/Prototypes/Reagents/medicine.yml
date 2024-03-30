@@ -1213,7 +1213,7 @@
         scaleByQuantity: true
         damage:
           types:
-            Heat: -1
+            Heat: -2
   metabolisms:
     Medicine:
       effects:
@@ -1221,7 +1221,7 @@
         conditions:
         damage:
           types:
-            Heat: -1.0
+            Heat: -2.0
             Poison: 0.5
 
 - type: reagent
@@ -1239,7 +1239,7 @@
         scaleByQuantity: true
         damage:
           groups:
-            Brute: -1
+            Brute: -2
   metabolisms:
     Medicine:
       effects:
@@ -1247,6 +1247,6 @@
         conditions:
         damage:
           groups:
-            Brute: -1
+            Brute: -2
           types:
             Poison: 0.5

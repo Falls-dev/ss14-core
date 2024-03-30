@@ -1,4 +1,5 @@
 ﻿using Content.Shared.FixedPoint;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
@@ -63,5 +64,5 @@ public sealed partial class ViolenceRuleComponent : Component
     /// Dictionary of a players and their teams
     /// </summary>
     [DataField("teamMembers")]
-    public Dictionary<ICommonSession, ushort> TeamMembers { get; private set; } = new Dictionary<ICommonSession, ushort>();
+    public Dictionary<NetUserId, ushort> TeamMembers { get; private set; } = new Dictionary<NetUserId, ushort>();
 }

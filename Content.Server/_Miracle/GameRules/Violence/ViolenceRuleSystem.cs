@@ -1,31 +1,27 @@
 ﻿using Content.Server.GameTicking.Rules;
 using System.Linq;
 using Content.Server._Miracle.Components;
-using Content.Server.Antag;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.RoundEnd;
-using Content.Shared.Mobs.Systems;
-using Robust.Shared.Map;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Timing;
 using Content.Server.Station.Systems;
-using Robust.Server.Player;
 using Robust.Shared.Utility;
 using Content.Server.KillTracking;
 using Content.Server.Mind;
 using Content.Server.Points;
 using Content.Shared.Points;
+using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Random;
 
 namespace Content.Server._Miracle.GameRules;
 
-// TODO: отредачить pointsystem и sharedpointsystem чтобы оно считало очки команд - сделано?
-// TODO: дать экшен или предмет на выход из матча? - удалять человека из RespawnTrackerComponent.Players
-// TODO: инициализация команд (просто добавить в прототип геймрула), функция для смены команды? вставить куда-нибудь EnsureTeam из PointSystem?
-// TODO: прототипы геймрула, аплинка и startingGear, gameMapPool, сама карта
-// TODO: мб дать в startingGear аплинк, который будет не просто давать предметы, но и сразу их надевать на космонавтика
-// TODO: нормальный RoundEndTextAppend и TeamScoreboard
+// TODO: edit pointsystem and sharedpointsystem so that it correctly manages team points - осталось только тестить
+// TODO: give player a button to switch teams
+// TODO: use EnsureTeam from PointSystem?
+// TODO: prototypes of gamerule, uplink and startingGear, gameMapPool, the map itself
+// TODO: maybe include and uplink in startingGear that wont only give items, but equip them instantly
+// TODO: proper RoundEndTextAppend and TeamScoreboard
 
 public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
 {
@@ -44,7 +40,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         //SubscribeLocalEvent<PlayerSpawningEvent>(OnPlayerSpawning);
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnSpawnComplete);
         SubscribeLocalEvent<KillReportedEvent>(OnKillReported);
-        SubscribeLocalEvent<ViolenceRuleComponent, PlayerPointChangedEvent>(OnPointChanged);
+        SubscribeLocalEvent<ViolenceRuleComponent, TeamPointChangedEvent>(OnPointChanged);
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndTextAppend);
     }
 
@@ -60,8 +56,8 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             _mind.SetUserId(newMind, ev.Player.UserId);
 
             // Assign player to a team, if he has none
-            if (!ruleComponent.TeamMembers.TryGetValue(ev.Player, out var team))
-                ruleComponent.TeamMembers.Add(ev.Player, ruleComponent.Teams[_robustRandom.Next(0, ruleComponent.Teams.Count())]);
+            if (!ruleComponent.TeamMembers.TryGetValue(ev.Player.UserId, out var team))
+                ruleComponent.TeamMembers.Add(ev.Player.UserId, ruleComponent.Teams[_robustRandom.Next(0, ruleComponent.Teams.Count())]);
 
             var mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(ev.Station, null, ev.Profile, null, team); // make it spawn on specified team spawnpoints
             DebugTools.AssertNotNull(mobMaybe);
@@ -101,23 +97,35 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             if (!GameTicker.IsGameRuleActive(uid, rule))
                 continue;
 
-
+            var team = GetEntitiesTeam(ev.Entity, ruleComponent);
             // YOU SUICIDED OR GOT THROWN INTO LAVA!
             // WHAT A GIANT FUCKING NERD! LAUGH NOW!
             if (ev.Primary is not KillPlayerSource player)
             {
-                _point.AdjustPointValue(ev.Entity, -1, uid, point);
+                _point.AdjustPointValue(ev.Entity, -1, uid, point); // krill issue penalty
                 // -1 point to the nerd's team?
                 continue;
             }
 
+            if (ev.Primary is KillPlayerSource killer && ruleComponent.TeamMembers.TryGetValue(killer.PlayerId, out var suckersTeam))
+            {
+                if (team != suckersTeam && team != null)
+                {
+                    _point.AdjustTeamPointValue(team.Value, 1, uid, point);
+                    _point.AdjustPointValue(killer.PlayerId, 1, uid, point);
+                }
+            }
 
-            // adjust team points here
-            _point.AdjustPointValue(player.PlayerId, 1, uid, point);
 
+            if (ev.Assist is KillPlayerSource assist && ruleComponent.Victor == null && ruleComponent.TeamMembers.TryGetValue(assist.PlayerId, out var shitTeam))
+            {
+                if (team != shitTeam && team != null)
+                {
+                    _point.AdjustTeamPointValue(team.Value, 0.5, uid, point);
+                    _point.AdjustPointValue(assist.PlayerId, 0.5, uid, point);
+                }
 
-            if (ev.Assist is KillPlayerSource assist && ruleComponent.Victor == null)
-                _point.AdjustPointValue(assist.PlayerId, 0.5, uid, point);
+            }
 
             // I dont know if we will have reward spawns or any direct rewards for players
             //var spawns = EntitySpawnCollection.GetSpawns(ruleComponent.RewardSpawns).Cast<string?>().ToList();
@@ -125,7 +133,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         }
     }
 
-    private void OnPointChanged(EntityUid uid, ViolenceRuleComponent component, ref PlayerPointChangedEvent args)
+    private void OnPointChanged(EntityUid uid, ViolenceRuleComponent component, ref TeamPointChangedEvent args)
     {
         if (component.Victor != null)
             return;
@@ -133,8 +141,46 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         if (args.Points < component.PointCap)
             return;
 
-        //component.Victor = args.Player; // should assign a team as victor probably?
+        component.Victor = args.Team;
         _roundEnd.EndRound(component.RestartDelay);
+    }
+
+    private ushort? GetEntitiesTeam(EntityUid uid, ViolenceRuleComponent comp)
+    {
+        ActorComponent? actor = null;
+        if (!Resolve(uid, ref actor, false))
+            return null;
+
+        if (!comp.TeamMembers.TryGetValue(actor.PlayerSession.UserId, out var team))
+            return null;
+
+        return team;
+    }
+
+    // Do we even need that?
+    public void SwitchTeam(NetUserId playerId, ushort newTeamId)
+    {
+        var query = EntityQueryEnumerator<ViolenceRuleComponent, GameRuleComponent>();
+        while (query.MoveNext(out var uid, out var ruleComponent, out var rule))
+        {
+            if (!GameTicker.IsGameRuleActive(uid, rule))
+                continue;
+
+            if (!ruleComponent.Teams.Contains(newTeamId))
+                continue;
+
+            if (ruleComponent.TeamMembers[playerId] == newTeamId)
+                return;
+
+            var currentTeamId = ruleComponent.TeamMembers[playerId];
+            var currentTeamCount = ruleComponent.TeamMembers.Values.Count(teamId => teamId == currentTeamId);
+            var newTeamCount = ruleComponent.TeamMembers.Values.Count(teamId => teamId == newTeamId);
+
+            if (newTeamCount >= currentTeamCount)
+                return;
+
+            ruleComponent.TeamMembers[playerId] = newTeamId;
+        }
     }
 
     private void OnRoundEndTextAppend(RoundEndTextAppendEvent ev)

@@ -100,7 +100,7 @@ public sealed class PointSystem : SharedPointSystem
             return;
 
         if (!component.TeamPoints.TryGetValue(team, out var current))
-            current = 0;
+            current = FixedPoint2.Zero;
 
         SetTeamPointValue(team, current + value, uid, component);
     }
@@ -139,7 +139,7 @@ public sealed class PointSystem : SharedPointSystem
             : FixedPoint2.Zero;
     }
 
-    /// <inheritdoc/>
+    // Ignore this method, I will finish it later myself.
     public override FormattedMessage GetTeamScoreboard(EntityUid uid, PointManagerComponent? component = null)
     {
         var msg = new FormattedMessage();

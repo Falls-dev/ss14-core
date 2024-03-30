@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Content.Server._Miracle.GameRules;
 using Content.Shared.FixedPoint;
 using Content.Shared.Points;
 using JetBrains.Annotations;
@@ -63,6 +64,83 @@ public sealed class PointSystem : SharedPointSystem
 
     /// <inheritdoc/>
     public override FormattedMessage GetScoreboard(EntityUid uid, PointManagerComponent? component = null)
+    {
+        var msg = new FormattedMessage();
+
+        if (!Resolve(uid, ref component))
+            return msg;
+
+        var orderedPlayers = component.Points.OrderByDescending(p => p.Value).ToList();
+        var place = 1;
+        foreach (var (id, points) in orderedPlayers)
+        {
+            if (!_player.TryGetPlayerData(id, out var data))
+                continue;
+
+            msg.AddMarkup(Loc.GetString("point-scoreboard-list",
+                ("place", place),
+                ("name", data.UserName),
+                ("points", points.Int())));
+            msg.PushNewline();
+            place++;
+        }
+
+        return msg;
+    }
+
+    // WD EDIT START. Violence gamemode team points
+
+    /// <summary>
+    /// Adds the specified point value to a player.
+    /// </summary>
+    [PublicAPI]
+    public void AdjustTeamPointValue(ushort team, FixedPoint2 value, EntityUid uid, PointManagerComponent? component)
+    {
+        if (!Resolve(uid, ref component))
+            return;
+
+        if (!component.TeamPoints.TryGetValue(team, out var current))
+            current = 0;
+
+        SetTeamPointValue(team, current + value, uid, component);
+    }
+
+    /// <summary>
+    /// Sets the amount of points for a player
+    /// </summary>
+    [PublicAPI]
+    public void SetTeamPointValue(ushort team, FixedPoint2 value, EntityUid uid, PointManagerComponent? component)
+    {
+        if (!Resolve(uid, ref component))
+            return;
+
+        if (component.TeamPoints.TryGetValue(team, out var current) && current == value)
+            return;
+
+        component.TeamPoints[team] = value;
+        component.TeamScoreboard = GetTeamScoreboard(uid, component);
+        Dirty(uid, component);
+
+        var ev = new TeamPointChangedEvent(team, value);
+        RaiseLocalEvent(uid, ref ev, true);
+    }
+
+    /// <summary>
+    /// Gets the amount of points for a given player
+    /// </summary>
+    [PublicAPI]
+    public FixedPoint2 GetTeamPointValue(ushort team, EntityUid uid, PointManagerComponent? component)
+    {
+        if (!Resolve(uid, ref component))
+            return FixedPoint2.Zero;
+
+        return component.TeamPoints.TryGetValue(team, out var value)
+            ? value
+            : FixedPoint2.Zero;
+    }
+
+    /// <inheritdoc/>
+    public override FormattedMessage GetTeamScoreboard(EntityUid uid, PointManagerComponent? component = null)
     {
         var msg = new FormattedMessage();
 

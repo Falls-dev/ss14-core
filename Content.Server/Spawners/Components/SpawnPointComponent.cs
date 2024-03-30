@@ -16,6 +16,13 @@ public sealed partial class SpawnPointComponent : Component
     [DataField("spawn_type")]
     public SpawnPointType SpawnType { get; private set; } = SpawnPointType.Unset;
 
+    /// <summary>
+    /// WD EDIT. This is needed for Violence gamemode for team spawners.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField("teamId")]
+    public ushort? TeamId = null;
+
     public JobPrototype? Job => string.IsNullOrEmpty(_jobId) ? null : _prototypeManager.Index<JobPrototype>(_jobId);
 
     public override string ToString()

@@ -34,14 +34,16 @@ public sealed class SpawnPointSystem : EntitySystem
 
             if (_gameTicker.RunLevel == GameRunLevel.InRound && spawnPoint.SpawnType == SpawnPointType.LateJoin)
             {
-                possiblePositions.Add(xform.Coordinates);
+                if (args.Team == spawnPoint.TeamId) // WD EDIT. Violence gamemode spawns needed here
+                    possiblePositions.Add(xform.Coordinates);
             }
 
             if (_gameTicker.RunLevel != GameRunLevel.InRound &&
                 spawnPoint.SpawnType == SpawnPointType.Job &&
                 (args.Job == null || spawnPoint.Job?.ID == args.Job.Prototype))
             {
-                possiblePositions.Add(xform.Coordinates);
+                if (args.Team == spawnPoint.TeamId) // WD EDIT.
+                    possiblePositions.Add(xform.Coordinates);
             }
         }
 

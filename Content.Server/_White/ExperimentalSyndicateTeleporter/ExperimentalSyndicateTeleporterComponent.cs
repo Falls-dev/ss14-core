@@ -37,6 +37,9 @@ public sealed partial class ExperimentalSyndicateTeleporterComponent : Component
     [ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan NextUse = TimeSpan.Zero;
 
-    [ViewVariables(VVAccess.ReadWrite)]
-    public CancellationTokenSource CancelTokenSource = new();
+    [ViewVariables(VVAccess.ReadOnly)]
+    public TimeSpan NextRechargeAttempt = TimeSpan.FromSeconds(1);
+
+    [ViewVariables(VVAccess.ReadOnly)]
+    public TimeSpan ChargeCooldown = TimeSpan.Zero;
 }

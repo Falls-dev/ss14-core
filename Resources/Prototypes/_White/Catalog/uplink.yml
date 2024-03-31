@@ -232,8 +232,8 @@
 
 - type: listing
   id: UplinkExperimentalSyndicateTeleporter
-  name: Экспериментальный телепортер синдиката
-  description: Телепортер синдиката, при использовании перемещает на 3-8 метров вперед. В случае телепортации в стену, использует экстренную телепортацию. Имеет 4 заряда и автоматически заряжается.
+  name: uplink-experimentalsyndicateteleporter
+  description: uplink-experimentalsyndicateteleporter-desc
   icon: { sprite: /Textures/White/Objects/Devices/experimentalsyndicateteleporter.rsi, state: icon }
   productEntity: ExperimentalSyndicateTeleporter
   cost:

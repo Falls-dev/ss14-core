@@ -35,28 +35,31 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<ExperimentalSyndicateTeleporterComponent, UseInHandEvent>(OnUse);
         SubscribeLocalEvent<ExperimentalSyndicateTeleporterComponent, ExaminedEvent>(OnExamine);
-        SubscribeLocalEvent<ExperimentalSyndicateTeleporterComponent, ComponentInit>(OnInit);
-        SubscribeLocalEvent<ExperimentalSyndicateTeleporterComponent, ComponentRemove>(OnRemove);
     }
 
-    private void OnInit(EntityUid uid, ExperimentalSyndicateTeleporterComponent comp, ComponentInit args)
+    public override void Update(float frameTime)
     {
-        Timer.SpawnRepeating(1000, () =>
-        {
-            if (comp.Uses >= 4)
-                return;
+        base.Update(frameTime);
 
-            if (_random.Next(0, 10) == 0)
+        var query = EntityQueryEnumerator<ExperimentalSyndicateTeleporterComponent>();
+        while (query.MoveNext(out var component))
+        {
+            if (component.Uses >= 4)
+                continue;
+
+            component.ChargeCooldown += _timing.FrameTime;
+
+            if (component.ChargeCooldown <= component.NextRechargeAttempt)
+                continue;
+
+            if (_random.Next(0, 10) != 0)
             {
-                comp.Uses++;
+                component.ChargeCooldown = TimeSpan.Zero;
+                continue;
             }
 
-        }, comp.CancelTokenSource.Token);
-    }
-
-    private void OnRemove(EntityUid uid, ExperimentalSyndicateTeleporterComponent comp, ComponentRemove args)
-    {
-        comp.CancelTokenSource.Cancel();
+            component.Uses++;
+        }
     }
 
     private void OnUse(EntityUid uid, ExperimentalSyndicateTeleporterComponent component, UseInHandEvent args)
@@ -90,12 +93,12 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
 
         var oldCoords = xform.Coordinates;
 
-        int random = new Random().Next(component.MinTeleportRange, component.MaxTeleportRange);
-        Vector2 offset = xform.LocalRotation.ToWorldVec().Normalized();
-        Vector2 direction = xform.LocalRotation.GetDir().ToVec();
-        Vector2 newOffset = offset + direction * random;
+        var random = _random.Next(component.MinTeleportRange, component.MaxTeleportRange);
+        var offset = xform.LocalRotation.ToWorldVec().Normalized();
+        var direction = xform.LocalRotation.GetDir().ToVec();
+        var newOffset = offset + direction * random;
 
-        EntityCoordinates coords = xform.Coordinates.Offset(newOffset).SnapToGrid(EntityManager);
+        var coords = xform.Coordinates.Offset(newOffset).SnapToGrid(EntityManager);
 
         if (TryCheckWall(coords))
         {
@@ -118,10 +121,10 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
 
     private void EmergencyTeleportation(EntityUid uid, TransformComponent xform, ExperimentalSyndicateTeleporterComponent component, EntityCoordinates oldCoords)
     {
-        Vector2 offset = xform.LocalRotation.ToWorldVec().Normalized();
-        Vector2 newOffset = offset + VectorRandomDirection(component, offset, component.EmergencyLength);
+        var offset = xform.LocalRotation.ToWorldVec().Normalized();
+        var newOffset = offset + VectorRandomDirection(component, offset, component.EmergencyLength);
 
-        EntityCoordinates coords = xform.Coordinates.Offset(newOffset).SnapToGrid(EntityManager);
+        var coords = xform.Coordinates.Offset(newOffset).SnapToGrid(EntityManager);
 
         SoundAndEffects(component, coords, oldCoords);
 
@@ -160,7 +163,7 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
 
     private Vector2 VectorRandomDirection(ExperimentalSyndicateTeleporterComponent component, Vector2 offset, int length)
     {
-        int randomRotation = new Random().Next(0, component.RandomRotations.Count);
+        var randomRotation = _random.Next(0, component.RandomRotations.Count);
         return Angle.FromDegrees(component.RandomRotations[randomRotation]).RotateVec(offset.Normalized() * length);
     }
 }

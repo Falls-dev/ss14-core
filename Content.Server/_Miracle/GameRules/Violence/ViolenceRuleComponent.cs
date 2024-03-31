@@ -1,4 +1,5 @@
 ﻿using Content.Shared.FixedPoint;
+using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -13,10 +14,16 @@ namespace Content.Server._Miracle.GameRules;
 public sealed partial class ViolenceRuleComponent : Component
 {
     /// <summary>
-    /// Min players needed for Violence gamerule to start.
+    /// Min players needed for Violence round to start.
     /// </summary>
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public int MinPlayers = 2;
+
+    /// <summary>
+    /// Max players needed for Violence round.
+    /// </summary>
+    [DataField("maxPlayers"), ViewVariables(VVAccess.ReadWrite)]
+    public Dictionary<ushort, int> MaxPlayers = new Dictionary<ushort, int>();
 
     /// <summary>
     /// How long until the round restarts
@@ -45,13 +52,13 @@ public sealed partial class ViolenceRuleComponent : Component
     /// <summary>
     /// List of scores in this gamemode.
     /// </summary>
-    [DataField("scores")]
+    [DataField("scores"), ViewVariables(VVAccess.ReadWrite)]
     public Dictionary<ushort, int> Scores { get; private set; } = new Dictionary<ushort, int>();
 
     /// <summary>
     /// Stored, for some reason.
     /// </summary>
-    [DataField("victor")]
+    [DataField("victor"), ViewVariables(VVAccess.ReadWrite)]
     public ushort? Victor;
 
     /// <summary>
@@ -63,6 +70,28 @@ public sealed partial class ViolenceRuleComponent : Component
     /// <summary>
     /// Dictionary of a players and their teams
     /// </summary>
-    [DataField("teamMembers")]
+    [DataField("teamMembers"), ViewVariables(VVAccess.ReadWrite)]
     public Dictionary<NetUserId, ushort> TeamMembers { get; private set; } = new Dictionary<NetUserId, ushort>();
+
+    /// <summary>
+    /// Pool of maps for this set of teams
+    /// </summary>
+    [DataField("mapPool"), ViewVariables(VVAccess.ReadWrite)]
+    public string MapPool;
+
+    /// <summary>
+    /// EntityUid of current map.
+    /// </summary>
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    public MapId? CurrentMap = null;
+
+    [DataField("roundState"), ViewVariables(VVAccess.ReadWrite)]
+    public RoundState RoundState { get; set; } = RoundState.NotInProgress;
+}
+
+public enum RoundState
+{
+    Starting,
+    InProgress,
+    NotInProgress
 }

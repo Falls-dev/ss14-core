@@ -1104,7 +1104,8 @@ public sealed partial class ChangelingSystem
         targetHumanoid.EyeColor = sourceHumanoid.EyeColor;
         targetHumanoid.Age = sourceHumanoid.Age;
         _humanoidAppearance.SetSex(target, sourceHumanoid.Sex, false, targetHumanoid);
-        _humanoidAppearance.SetSpecies(target, sourceHumanoid.Species);
+        _humanoidAppearance.SetBodyType(target, sourceHumanoid.BodyType, false, targetHumanoid);
+        _humanoidAppearance.SetSpecies(target, sourceHumanoid.Species, true, targetHumanoid);
         targetHumanoid.CustomBaseLayers = new Dictionary<HumanoidVisualLayers,
             CustomBaseLayerInfo>(sourceHumanoid.CustomBaseLayers);
 

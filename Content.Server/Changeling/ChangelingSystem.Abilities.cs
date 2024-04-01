@@ -819,6 +819,7 @@ public sealed partial class ChangelingSystem
         var toAdd = new ChangelingComponent
         {
             HiveName = component.HiveName,
+            ChemicalCapacity = component.ChemicalCapacity,
             ChemicalsBalance = component.ChemicalsBalance,
             AbsorbedEntities = component.AbsorbedEntities,
             IsInited = component.IsInited,
@@ -966,6 +967,7 @@ public sealed partial class ChangelingSystem
             var toAdd = new ChangelingComponent
             {
                 HiveName = lingComp.HiveName,
+                ChemicalCapacity = lingComp.ChemicalCapacity,
                 ChemicalsBalance = lingComp.ChemicalsBalance,
                 AbsorbedEntities = lingComp.AbsorbedEntities,
                 IsInited = lingComp.IsInited,

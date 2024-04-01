@@ -25,23 +25,18 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Miracle.GameRules;
 
-// TODO: edit pointsystem and sharedpointsystem so that it correctly manages team points - осталось только тестить
-// TODO: give player a button to switch teams
-// TODO: use EnsureTeam from PointSystem?
-// TODO: prototypes of gamerule, uplink and startingGear, gameMapPool, the map itself
-// TODO: maybe include and uplink in startingGear that wont only give items, but equip them instantly
-// TODO: proper RoundEndTextAppend and TeamScoreboard
-
 // todo to implement round, one gamerule entity - one instance and one active round
-// TODO: make a menu to join the round, switch teams, leave the round - мб сделает валтос
 // TODO: properly start and end the round, make a small delay before the new round starts
 // TODO: catch MobStateChangedEvent and make the round stop, if only one team is alive
 // TODO: make ViolenceRoundStartingEvent
 // TODO: votekick?
 // TODO: make a way to change the map and Teams in the ViolenceGameRuleComponent after victory
 // TODO: respawns may suck
-
-// TODO: maybe add a way to start the match after the round starts, so that it can be used on usual servers.
+// TODO: buying equipment and saving equipment between rounds
+// TODO: scoreboard
+// TODO: prototypes of gamerule, uplink and startingGear, gameMapPool, the map itself
+// TODO: use EnsureTeam from PointSystem?
+// TODO: make a menu to join the round, switch teams, leave the round - мб сделает валтос
 
 public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
 {
@@ -77,7 +72,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         SubscribeLocalEvent<KillReportedEvent>(OnKillReported);
         SubscribeLocalEvent<ViolenceRuleComponent, TeamPointChangedEvent>(OnPointChanged);
         //SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndTextAppend);
-        //SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
     }
 
     protected override void ActiveTick(EntityUid uid, ViolenceRuleComponent comp, GameRuleComponent gameRule,
@@ -114,6 +109,10 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
     /// <param name="ev"></param>
     private void OnBeforeSpawn(PlayerBeforeSpawnEvent ev)
     {
+        /*
+        if (ev.LateJoin) // this will allow this gamerule to be added to usual rounds. maybe
+            return;
+        */
         var query = EntityQueryEnumerator<ViolenceRuleComponent, RespawnTrackerComponent, PointManagerComponent, GameRuleComponent>();
         while (query.MoveNext(out var uid, out var ruleComponent, out var tracker, out var point, out var rule))
         {
@@ -166,6 +165,32 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         }
     }
 
+    private void OnMobStateChanged(MobStateChangedEvent ev)
+    {
+        if (ev.NewMobState != MobState.Dead)
+            return;
+
+        if (!TryComp<ActorComponent>(ev.Target, out var actor))
+            return;
+
+        var query = EntityQueryEnumerator<ViolenceRuleComponent, PointManagerComponent, GameRuleComponent>();
+        while (query.MoveNext(out var uid, out var ruleComponent, out var point, out var rule))
+        {
+            if (!GameTicker.IsGameRuleActive(uid, rule))
+                continue;
+
+            var team = GetEntitiesTeam(ev.Target, ruleComponent);
+            if (team == null)
+                continue;
+
+            var alive = GetAliveTeamMembersCount(team.Value, ruleComponent);
+            if (alive == 0)
+            {
+                //Check for round end
+            }
+        }
+    }
+
     public bool StartRound(ViolenceRuleComponent comp)
     {
         if (comp.RoundState != RoundState.NotInProgress)
@@ -203,6 +228,12 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         // TODO: spawn players and give them gear here
 
         return true;
+    }
+
+    public bool DoRoundEndBehavior(ViolenceRuleComponent comp)
+    {
+        // wait for comp.RoundEndDelay
+        return EndRound(comp);
     }
 
     public bool EndRound(ViolenceRuleComponent comp)
@@ -366,6 +397,32 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         }
 
         return alive;
+    }
+
+    /// <summary>
+    /// Round ends only if players of one single team are alive.
+    /// </summary>
+    /// <param name="comp"></param>
+    /// <returns></returns>
+    public bool CheckForRoundEnd(ViolenceRuleComponent comp)
+    {
+        var aliveTeams = new List<ushort>();
+
+        foreach (var team in comp.Teams)
+        {
+            if (GetAliveTeamMembersCount(team, comp) > 0)
+            {
+                aliveTeams.Add(team);
+            }
+        }
+
+        if (aliveTeams.Count == 1)
+        {
+            comp.Victor = aliveTeams[0];
+            return true;
+        }
+
+        return false;
     }
 
     // Do we even need that?

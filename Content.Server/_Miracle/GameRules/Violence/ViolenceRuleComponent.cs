@@ -65,7 +65,7 @@ public sealed partial class ViolenceRuleComponent : Component
     /// The number of points a player has to get to win.
     /// </summary>
     [DataField("pointCap"), ViewVariables(VVAccess.ReadWrite)]
-    public FixedPoint2 PointCap = 100;
+    public FixedPoint2 PointCap = 5;
 
     /// <summary>
     /// Time when current round ends.

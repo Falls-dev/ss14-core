@@ -3,10 +3,10 @@ using Content.Server.Hands.Systems;
 using Content.Server.Popups;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
-using Content.Shared.Coordinates;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
+using Content.Shared.Tools.Components;
 using Content.Shared.UserInterface;
 using Content.Shared.Wall;
 using Robust.Server.GameObjects;
@@ -35,6 +35,7 @@ public sealed class InteractiveBoardSystem : EntitySystem
         SubscribeLocalEvent<InteractiveBoardComponent, BeforeActivatableUIOpenEvent>(BeforeUIOpen);
         SubscribeLocalEvent<InteractiveBoardComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<InteractiveBoardComponent, InteractiveBoardInputTextMessage>(OnInputTextMessage);
+
         SubscribeLocalEvent<InteractiveBoardComponent, BeforeRangedInteractEvent>(BeforeRangedInteract);
 
         SubscribeLocalEvent<ActivateOnInteractiveBoardOpenedComponent, InteractiveBoardWriteEvent>(OnInteractiveBoardWrite);
@@ -74,42 +75,24 @@ public sealed class InteractiveBoardSystem : EntitySystem
 
         private void BeforeRangedInteract(EntityUid uid, InteractiveBoardComponent component, BeforeRangedInteractEvent args)
         {
-            var user = args.User;
-            var target = args.Target;
-            var usedEntity = args.Used;
-
-            if(!TryComp<TransformComponent>(target, out var transformComponent))
-                return;
-
-            if(!TryComp<TransformComponent>(usedEntity, out var xform))
-                return;
-
-            switch (component.OnWall)
+            if (_tagSystem.HasTag(args.Used, "InteractiveBoard"))
             {
-                case false:
-                    if (!HasComp<WallMarkComponent>(target) && !HasComp<WindowMarkComponent>(target))
-                        break;
+                if (!HasComp<WallMarkComponent>(args.Target) && !HasComp<WindowMarkComponent>(args.Target))
+                    return;
 
-                    _handsSystem.TryDrop(user, usedEntity);
+                if(!TryComp<TransformComponent>(args.Target, out var transformComponent))
+                    return;
 
-                    _transformSystem.SetCoordinates(usedEntity, transformComponent.Coordinates);
-                    _transformSystem.AnchorEntity(usedEntity, xform);
-                    _transformSystem.AttachToGridOrMap(usedEntity, xform);
+                if (!TryComp<TransformComponent>(args.Used, out var xform))
+                    return;
 
-                    AddComp<WallMountComponent>(usedEntity).Arc = new Angle(360);
-                    component.OnWall = true;
-                    break;
+                _handsSystem.TryDrop(args.User, args.Used);
 
-                case true:
-                    if(!_tagSystem.HasTag(usedEntity, "Screwdriver"))
-                        break;
+                _transformSystem.SetCoordinates(args.Used, transformComponent.Coordinates);
+                _transformSystem.AnchorEntity(args.Used, xform);
+                _transformSystem.AttachToGridOrMap(args.Used, xform);
 
-                    _transformSystem.Unanchor(usedEntity, xform);
-                    RemComp<WallMountComponent>(usedEntity);
-
-                    _handsSystem.TryPickup(user, usedEntity);
-                    component.OnWall = false;
-                    break;
+                AddComp<WallMountComponent>(args.Used).Arc = new Angle(360);
             }
         }
 

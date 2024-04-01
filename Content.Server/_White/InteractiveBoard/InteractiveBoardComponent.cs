@@ -8,11 +8,7 @@ public sealed partial class InteractiveBoardComponent : SharedInteractiveBoardCo
 {
     public InteractiveBoardAction Mode;
 
-    public bool OnWall = false;
-
     public string Content { get; set; } = "";
-
-    public string ProtoId = "InteractiveBoard";
 
     public int ContentSize { get; set; } = 6000;
 }

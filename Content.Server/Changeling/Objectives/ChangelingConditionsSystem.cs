@@ -194,7 +194,12 @@ public sealed class ChangelingConditionsSystem : EntitySystem
             return;
         }
 
-        _target.SetTarget(uid, _random.Pick(allHumans), target);
+        var targetMindId = _random.Pick(allHumans);
+
+        if (TryComp(targetMindId, out MindComponent? mind) && TryComp(mind.CurrentEntity, out DnaComponent? dna))
+            component.DNA = dna.DNA;
+
+        _target.SetTarget(uid, targetMindId, target);
     }
 
     private void OnEscapeWithIdentityGetProgress(EntityUid uid, EscapeWithIdentityConditionComponent component, ref ObjectiveGetProgressEvent args)
@@ -202,10 +207,15 @@ public sealed class ChangelingConditionsSystem : EntitySystem
         if (!_target.GetTarget(uid, out var target))
             return;
 
-        args.Progress = GetEscapeWithIdentityProgress(args.Mind, target.Value);
+        var fallbackDNA = string.Empty;
+
+        if (TryComp(uid, out PickRandomIdentityComponent? pickIdentity))
+            fallbackDNA = pickIdentity.DNA;
+
+        args.Progress = GetEscapeWithIdentityProgress(args.Mind, target.Value, fallbackDNA);
     }
 
-    private float GetEscapeWithIdentityProgress(MindComponent mind, EntityUid target)
+    private float GetEscapeWithIdentityProgress(MindComponent mind, EntityUid target, string DNA)
     {
         var progress = 0f;
 
@@ -215,23 +225,20 @@ public sealed class ChangelingConditionsSystem : EntitySystem
         if (!TryComp<MindComponent>(target, out var targetMind))
             return 0f;
 
-        if (!TryComp<DnaComponent>(targetMind.CurrentEntity, out var targetDna))
-            return 0f;
+        if (TryComp<DnaComponent>(targetMind.CurrentEntity, out var targetDna))
+            DNA = targetDna.DNA;
 
         if (!TryComp<ChangelingComponent>(mind.CurrentEntity, out var changeling))
             return 0f;
 
-        if (!changeling.AbsorbedEntities.ContainsKey(targetDna.DNA))
+        if (!changeling.AbsorbedEntities.ContainsKey(DNA))
             return 0f;
 
         //Target absorbed by this changeling, so 50% of work is done
         progress += 0.5f;
 
-        if (_emergencyShuttle.IsTargetEscaping(mind.CurrentEntity.Value) && selfDna.DNA == targetDna.DNA)
+        if (_emergencyShuttle.IsTargetEscaping(mind.CurrentEntity.Value) && selfDna.DNA == DNA)
             progress += 0.5f;
-
-        if (_emergencyShuttle.ShuttlesLeft)
-            return progress;
 
         return progress;
     }

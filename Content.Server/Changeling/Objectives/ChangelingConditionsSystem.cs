@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Content.Server._Miracle.Components;
+using Content.Server._Miracle.GulagSystem;
 using Content.Server.Changeling.Objectives.Components;
 using Content.Server.Forensics;
 using Content.Server.Mind;
@@ -20,6 +21,7 @@ public sealed class ChangelingConditionsSystem : EntitySystem
     [Dependency] private readonly TargetObjectiveSystem _target = default!;
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly EmergencyShuttleSystem _emergencyShuttle = default!;
+    [Dependency] private readonly GulagSystem _gulag = default!;
 
     public override void Initialize()
     {
@@ -185,7 +187,7 @@ public sealed class ChangelingConditionsSystem : EntitySystem
             return;
 
         var allHumans = _mind.GetAliveHumansExcept(args.MindId);
-        allHumans = allHumans.Where(x => !HasComp<GulagBoundComponent>(x)).ToList();
+        allHumans = allHumans.Where(x => !_gulag.IsMindGulagged(x)).ToList();
         if (allHumans.Count == 0)
         {
             args.Cancelled = true;

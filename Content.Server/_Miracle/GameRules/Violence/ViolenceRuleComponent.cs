@@ -68,10 +68,46 @@ public sealed partial class ViolenceRuleComponent : Component
     public FixedPoint2 PointCap = 100;
 
     /// <summary>
+    /// Time when current round ends.
+    /// </summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
+    public TimeSpan RoundEndTime = TimeSpan.FromMinutes(5);
+
+    /// <summary>
+    /// Time between final kill of the round and actual round end.
+    /// </summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
+    public TimeSpan RoundEndDelay = TimeSpan.FromSeconds(10);
+
+    /// <summary>
+    /// Time when new round starts.
+    /// </summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
+    public TimeSpan RoundStartTime = TimeSpan.Zero;
+
+    /// <summary>
+    /// Time between player's spawns and round start.
+    /// </summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
+    public TimeSpan RoundStartDelay = TimeSpan.FromSeconds(10);
+
+    /// <summary>
+    /// The duration of a round.
+    /// </summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
+    public TimeSpan RoundDuration = TimeSpan.FromMinutes(5);
+
+    /// <summary>
     /// Dictionary of a players and their teams
     /// </summary>
     [DataField("teamMembers"), ViewVariables(VVAccess.ReadWrite)]
     public Dictionary<NetUserId, ushort> TeamMembers { get; private set; } = new Dictionary<NetUserId, ushort>();
+
+    /// <summary>
+    /// Dictionary of a players and their money.
+    /// </summary>
+    [DataField("money"), ViewVariables(VVAccess.ReadWrite)]
+    public Dictionary<NetUserId, int> Money { get; private set; } = new Dictionary<NetUserId, int>();
 
     /// <summary>
     /// Pool of maps for this set of teams

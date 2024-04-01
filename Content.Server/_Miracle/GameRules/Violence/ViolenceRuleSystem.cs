@@ -21,6 +21,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
 namespace Content.Server._Miracle.GameRules;
 
@@ -32,11 +33,13 @@ namespace Content.Server._Miracle.GameRules;
 // TODO: proper RoundEndTextAppend and TeamScoreboard
 
 // todo to implement round, one gamerule entity - one instance and one active round
-// TODO: make a menu to join the round, switch teams, leave the round
-// TODO: properly start and end the round, make a small delay before the new round starts, catch MobStateChangedEvent and make the round stop, if only one team is alive
+// TODO: make a menu to join the round, switch teams, leave the round - мб сделает валтос
+// TODO: properly start and end the round, make a small delay before the new round starts
+// TODO: catch MobStateChangedEvent and make the round stop, if only one team is alive
 // TODO: make ViolenceRoundStartingEvent
 // TODO: votekick?
 // TODO: make a way to change the map and Teams in the ViolenceGameRuleComponent after victory
+// TODO: respawns may suck
 
 // TODO: maybe add a way to start the match after the round starts, so that it can be used on usual servers.
 
@@ -53,10 +56,13 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
     [Dependency] private readonly ILogManager _logManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     private ISawmill _sawmill = default!;
 
-    private string _defaultViolenceRule = "Violence";
+    private List<EntityUid> _activeRules = new List<EntityUid>();
+
+    private readonly string _defaultViolenceRule = "Violence";
 
     public override void Initialize()
     {
@@ -70,8 +76,36 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnSpawnComplete);
         SubscribeLocalEvent<KillReportedEvent>(OnKillReported);
         SubscribeLocalEvent<ViolenceRuleComponent, TeamPointChangedEvent>(OnPointChanged);
-        SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndTextAppend);
+        //SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndTextAppend);
         //SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
+    }
+
+    protected override void ActiveTick(EntityUid uid, ViolenceRuleComponent comp, GameRuleComponent gameRule,
+        float frameTime)
+    {
+        base.ActiveTick(uid, comp, gameRule, frameTime);
+
+        switch (comp.RoundState)
+        {
+            case RoundState.InProgress:
+                if (_timing.CurTime >= comp.RoundEndTime)
+                {
+                    EndRound(comp);
+                }
+                break;
+
+            case RoundState.Starting:
+                if (_timing.CurTime >= comp.RoundStartTime)
+                {
+                    StartRound(comp);
+                }
+                break;
+
+            case RoundState.NotInProgress:
+                // dunno
+
+                break;
+        }
     }
 
     /// <summary>
@@ -86,7 +120,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             if (!GameTicker.IsGameRuleActive(uid, rule))
                 continue;
 
-            var teamList = RoundEligibleToJoin(ruleComponent);
+            var teamList = TeamsEligibleToJoin(ruleComponent);
             if (teamList.Count == 0)
             {
                 continue;
@@ -127,6 +161,8 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             if (!GameTicker.IsGameRuleActive(uid, rule))
                 continue;
             _respawn.AddToTracker(ev.Mob, uid, tracker);
+
+            // TODO: add money or equip to the player here
         }
     }
 
@@ -168,6 +204,24 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
 
         return true;
     }
+
+    public bool EndRound(ViolenceRuleComponent comp)
+    {
+        if (comp.RoundState == RoundState.NotInProgress)
+        {
+            // probably assert here?
+            return false;
+        }
+
+        comp.RoundState = RoundState.NotInProgress;
+
+        if (comp.CurrentMap.HasValue)
+            _mapManager.DeleteMap(comp.CurrentMap.Value);
+
+        // TODO: give rewards if appropriate here
+        return true;
+    }
+
 
     private void OnKillReported(ref KillReportedEvent ev)
     {
@@ -222,8 +276,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             return;
 
         component.Victor = args.Team;
-        //somehow end round here?
-        //_roundEnd.EndRound(component.RestartDelay); // since there can be multiple Violence instances, we dont need to end the global round
+        // DoRoundEndBehavior(uid);???
     }
 
     /// <summary>
@@ -242,7 +295,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             return false;
         }
 
-        var eligibleTeams = RoundEligibleToJoin(comp);
+        var eligibleTeams = TeamsEligibleToJoin(comp);
         // If there are no eligible teams, return false
         if (eligibleTeams.Count == 0)
         {
@@ -351,16 +404,16 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         if (ruleId == null)
             ruleId = _defaultViolenceRule;
 
-        var ruleEntity = Spawn(ruleId, MapCoordinates.Nullspace);
+        var ruleEntity = _gameTicker.AddGameRule(ruleId);
+
         if (!TryComp<ViolenceRuleComponent>(ruleEntity, out var comp))
         {
             EntityManager.DeleteEntity(ruleEntity);
             return null;
         }
 
-        _sawmill.Info($"Added game rule {ToPrettyString(ruleEntity)}");
-        var ev = new GameRuleAddedEvent(ruleEntity, ruleId);
-        RaiseLocalEvent(ruleEntity, ref ev, true);
+        _gameTicker.StartGameRule(ruleEntity);
+        _activeRules.Add(ruleEntity);
 
         return comp;
     }
@@ -369,7 +422,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
     /// Delete the instance of the rule entity. TODO: make it automatic, if the rule doesn't have any players
     /// </summary>
     /// <param name="uid"></param>
-    /// <returns></returns>
+    /// <returns>true if was deleted successfully</returns>
     public bool DeleteInstance(EntityUid uid)
     {
         if (!TryComp<ViolenceRuleComponent>(uid, out var comp))
@@ -377,17 +430,22 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             return false;
         }
 
+        comp.RoundState = RoundState.NotInProgress;
+
+        // TODO: maybe delete all players from the round if deleting the map fucks that up?
+
         if (comp.CurrentMap.HasValue)
             _mapManager.DeleteMap(comp.CurrentMap.Value);
 
-        EntityManager.DeleteEntity(uid);
+        _gameTicker.EndGameRule(uid);
+        _activeRules.Remove(uid);
 
         return true;
     }
 
 
 
-    public List<ushort> RoundEligibleToJoin(ViolenceRuleComponent comp)
+    public List<ushort> TeamsEligibleToJoin(ViolenceRuleComponent comp)
     {
         var teamList = new List<ushort>();
 
@@ -407,6 +465,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         return teamList;
     }
 
+    /*
     private void OnRoundEndTextAppend(RoundEndTextAppendEvent ev)
     {
         var query = EntityQueryEnumerator<ViolenceRuleComponent, PointManagerComponent, GameRuleComponent>();
@@ -415,15 +474,16 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             if (!GameTicker.IsGameRuleAdded(uid, rule))
                 continue;
 
-            /*
+
             if (ruleComponent.Victor != null && _player.TryGetPlayerData(ruleComponent.Victor.Value, out var data)) // get the team data here
             {
                 ev.AddLine(Loc.GetString("point-scoreboard-winner", ("player", data.UserName)));
                 ev.AddLine("");
             }
-            */
+
             ev.AddLine(Loc.GetString("point-scoreboard-header")); // edit this, probably
             ev.AddLine(new FormattedMessage(point.Scoreboard).ToMarkup());
         }
     }
+    */
 }

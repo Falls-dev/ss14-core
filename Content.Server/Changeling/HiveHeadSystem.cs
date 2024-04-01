@@ -24,7 +24,7 @@ public sealed class HiveHeadSystem : EntitySystem
 
     private void OnReleaseBees(Entity<HiveHeadComponent> ent, ref ReleaseBeesEvent args)
     {
-        if (!_mobState.IsAlive(ent))
+        if (!_mobState.IsAlive(args.Performer))
             return;
 
         args.Handled = true;

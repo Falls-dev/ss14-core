@@ -306,7 +306,7 @@
   components:
     - type: Aspect
       name: "Cat Ears And Tail"
-      description: "Из-за ошибки в системе клонирования на ЦК все члены экипажа стали походить на кошек."
+      description: "Из-за ошибки в системе клонирования на ЦК все члены экипажа стали походить на фелинидов."
       weight: 3
       startAudio:
         path: /Audio/White/Aspects/accent.ogg

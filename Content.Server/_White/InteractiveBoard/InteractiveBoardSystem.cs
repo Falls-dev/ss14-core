@@ -3,11 +3,12 @@ using Content.Server.Hands.Systems;
 using Content.Server.Popups;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
+using Content.Shared.Coordinates;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
-using Content.Shared.Tools.Components;
 using Content.Shared.UserInterface;
+using Content.Shared.Verbs;
 using Content.Shared.Wall;
 using Robust.Server.GameObjects;
 using Robust.Shared.Player;
@@ -23,7 +24,6 @@ public sealed class InteractiveBoardSystem : EntitySystem
     [Dependency] private readonly TagSystem _tagSystem = default!;
     [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly EntityManager _entityManager = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
     [Dependency] private readonly HandsSystem _handsSystem = default!;
 
@@ -35,22 +35,11 @@ public sealed class InteractiveBoardSystem : EntitySystem
         SubscribeLocalEvent<InteractiveBoardComponent, BeforeActivatableUIOpenEvent>(BeforeUIOpen);
         SubscribeLocalEvent<InteractiveBoardComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<InteractiveBoardComponent, InteractiveBoardInputTextMessage>(OnInputTextMessage);
-
+        SubscribeLocalEvent<InteractiveBoardComponent, GetVerbsEvent<AlternativeVerb>>(OnAltVerb);
         SubscribeLocalEvent<InteractiveBoardComponent, BeforeRangedInteractEvent>(BeforeRangedInteract);
 
-        SubscribeLocalEvent<ActivateOnInteractiveBoardOpenedComponent, InteractiveBoardWriteEvent>(OnInteractiveBoardWrite);
-
-        SubscribeLocalEvent<InteractiveBoardComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<OnInteractiveBoardWriteComponent, InteractiveBoardWriteEvent>(OnInteractiveBoardWrite);
     }
-
-        private void OnMapInit(EntityUid uid, InteractiveBoardComponent component, MapInitEvent args)
-        {
-            if (!string.IsNullOrEmpty(component.Content))
-            {
-                component.Content = Loc.GetString(component.Content);
-            }
-        }
-
         private void OnInit(EntityUid uid, InteractiveBoardComponent component, ComponentInit args)
         {
             component.Mode = InteractiveBoardAction.Read;
@@ -61,6 +50,48 @@ public sealed class InteractiveBoardSystem : EntitySystem
 
             if (component.Content != "")
                 _appearance.SetData(uid, InteractiveBoardVisuals.Status, InteractiveBoardStatus.Written, appearance);
+        }
+
+        private void OnAltVerb(EntityUid uid, InteractiveBoardComponent component, GetVerbsEvent<AlternativeVerb> args)
+        {
+            if (!args.CanAccess || !args.CanInteract)
+                return;
+
+            if(!HasComp<WallMountComponent>(args.Target))
+                return;
+
+            AlternativeVerb verb = new()
+            {
+                Act = () =>
+                {
+                    TakeOffInteractiveBoard(args.User, args.Target);
+                },
+                Disabled = false,
+                Priority = 1,
+                Text = Loc.GetString("interactive-board-take-off"),
+            };
+
+            args.Verbs.Add(verb);
+        }
+
+        private void TakeOffInteractiveBoard(EntityUid uid, EntityUid target)
+        {
+            if(!TryComp<TransformComponent>(target, out var transformComponent))
+                return;
+
+            if(!HasComp<WallMountComponent>(target))
+                return;
+
+            if(!transformComponent.Anchored)
+                return;
+
+            _transformSystem.Unanchor(target, transformComponent);
+            RemComp<WallMountComponent>(target);
+
+            if (!_handsSystem.TryPickupAnyHand(uid, target))
+            {
+                _transformSystem.SetCoordinates(target, uid.ToCoordinates());
+            }
         }
 
         private void BeforeUIOpen(EntityUid uid, InteractiveBoardComponent component, BeforeActivatableUIOpenEvent args)
@@ -126,20 +157,34 @@ public sealed class InteractiveBoardSystem : EntitySystem
         {
             if (args.Text.Length <= component.ContentSize)
             {
-                component.Content = args.Text;
-
-                if (component.Content.Length == 0)
+                if (!TryComp<AppearanceComponent>(uid, out var appearance))
                     return;
 
+                component.Content = args.Text.Replace("[", "(").Replace("]", ")");
+
+                if (string.IsNullOrWhiteSpace(component.Content))
+                {
+                    component.Mode = InteractiveBoardAction.Read;
+                    _appearance.SetData(uid, InteractiveBoardVisuals.Status, InteractiveBoardStatus.Blank, appearance);
+                    return;
+                }
+
+                _appearance.SetData(uid, InteractiveBoardVisuals.Status, InteractiveBoardStatus.Written, appearance);
+            }
+
+            if (args.Text.Length > component.ContentSize)
+            {
+                component.Content = args.Text.Remove(component.ContentSize, (args.Text.Length - component.ContentSize));
+
                 if (TryComp<AppearanceComponent>(uid, out var appearance))
-                    _appearance.SetData(uid, InteractiveBoardVisuals.Status, InteractiveBoardStatus.Written, appearance);
+                _appearance.SetData(uid, InteractiveBoardVisuals.Status, InteractiveBoardStatus.Written, appearance);
             }
 
             component.Mode = InteractiveBoardAction.Read;
             UpdateUserInterface(uid, component);
         }
 
-        private void OnInteractiveBoardWrite(EntityUid uid, ActivateOnInteractiveBoardOpenedComponent comp, ref InteractiveBoardWriteEvent args)
+        private void OnInteractiveBoardWrite(EntityUid uid, OnInteractiveBoardWriteComponent comp, ref InteractiveBoardWriteEvent args)
         {
             _interaction.UseInHandInteraction(args.User, uid);
         }

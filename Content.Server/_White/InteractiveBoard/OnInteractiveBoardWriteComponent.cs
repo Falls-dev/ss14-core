@@ -2,6 +2,6 @@
 
 [RegisterComponent]
 [Access(typeof(InteractiveBoardSystem))]
-public sealed partial class ActivateOnInteractiveBoardOpenedComponent : Component
+public sealed partial class OnInteractiveBoardWriteComponent : Component
 {
 }

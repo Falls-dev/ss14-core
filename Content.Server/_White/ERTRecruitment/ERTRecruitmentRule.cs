@@ -83,7 +83,7 @@ public sealed class ERTRecruitmentRule : StationEventSystem<ERTRecruitmentRuleCo
             return;
         }
 
-        if (_recruitment.GetEventSpawners(ERTRecruitmentRuleComponent.EventName).Count() < component.MinPlayer)
+        if (_recruitment.GetEventSpawners(ERTRecruitmentRuleComponent.EventName).Count() <= component.MinPlayer)
         {
             _logger.Debug("Not enough spawners!");
 
@@ -125,8 +125,11 @@ public sealed class ERTRecruitmentRule : StationEventSystem<ERTRecruitmentRuleCo
         var ev = new ERTRecruitedReasonEvent();
         RaiseLocalEvent(uid,ev);
 
-        _chat.DispatchServerMessage(args.PlayerSession,Loc.GetString("ert-description"));
+        if (args.PlayerSession != null)
+        {
+        _chat.DispatchServerMessage(args.PlayerSession, Loc.GetString("ert-description"));
         _chat.DispatchServerMessage(args.PlayerSession, Loc.GetString("ert-reason", ("reason", ev.Reason)));
+        }
     }
 
     private void OnStartAttempt(RoundStartAttemptEvent ev)
@@ -190,7 +193,7 @@ public sealed class ERTRecruitmentRule : StationEventSystem<ERTRecruitmentRuleCo
             return false;
         }
         */
-        
+
         var ERTMap = EnsureComp<ERTMapComponent>(outpost);
         ERTMap.MapId = mapId;
         //ERTMap.Shuttle = shuttleId;

@@ -11,10 +11,13 @@ using Content.Server.Maps;
 using Content.Server.Mind;
 using Content.Server.Points;
 using Content.Shared.Database;
+using Content.Shared.Hands.Components;
+using Content.Shared.Inventory;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Points;
+using Robust.Server.Player;
 using Robust.Shared.Console;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
@@ -25,7 +28,6 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Miracle.GameRules;
 
-// todo to implement round, one gamerule entity - one instance and one active round
 // TODO: properly start and end the round, make a small delay before the new round starts
 // TODO: catch MobStateChangedEvent and make the round stop, if only one team is alive
 // TODO: make ViolenceRoundStartingEvent
@@ -52,6 +54,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     private ISawmill _sawmill = default!;
 
@@ -90,15 +93,14 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
                 break;
 
             case RoundState.Starting:
+
+                break;
+
+            case RoundState.NotInProgress:
                 if (_timing.CurTime >= comp.RoundStartTime)
                 {
                     StartRound(comp);
                 }
-                break;
-
-            case RoundState.NotInProgress:
-                // dunno
-
                 break;
         }
     }
@@ -186,7 +188,8 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             var alive = GetAliveTeamMembersCount(team.Value, ruleComponent);
             if (alive == 0)
             {
-                //Check for round end
+                if (CheckForRoundEnd(ruleComponent))
+                    DoRoundEndBehavior(ruleComponent);
             }
         }
     }
@@ -232,6 +235,39 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
 
     public bool DoRoundEndBehavior(ViolenceRuleComponent comp)
     {
+        // announce the winner
+        foreach (var (player, team) in comp.TeamMembers)
+        {
+            if (team != comp.Victor)
+                continue;
+
+            if (!_playerManager.SessionsDict.TryGetValue(player, out var session))
+                continue;
+
+            if (session.AttachedEntity != null &&
+                TryComp<MobStateComponent>(session.AttachedEntity, out var mobState) &&
+                mobState.CurrentState == MobState.Alive)
+            {
+                if (TryComp<HandsComponent>(session.AttachedEntity, out var hands))
+                {
+                    foreach (var (name, hand) in hands.Hands)
+                    {
+                        if (hand.HeldEntity != null)
+                        {
+                            // save it
+                        }
+                    }
+                }
+                if (TryComp<InventoryComponent>(session.AttachedEntity, out var inv))
+                {
+                    // save items in inventory
+                }
+
+            }
+
+
+
+        }
         // wait for comp.RoundEndDelay
         return EndRound(comp);
     }
@@ -249,6 +285,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         if (comp.CurrentMap.HasValue)
             _mapManager.DeleteMap(comp.CurrentMap.Value);
 
+        comp.RoundStartTime = _timing.CurTime + comp.RoundStartDelay;
         // TODO: give rewards if appropriate here
         return true;
     }
@@ -303,7 +340,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         if (component.Victor != null)
             return;
 
-        if (args.Points < component.PointCap)
+        if (args.Points <= component.PointCap)
             return;
 
         component.Victor = args.Team;

@@ -83,6 +83,7 @@
     slots:
     - Back
     - Belt
+    - SuitStorage
   - type: Reflect
 
 - type: entity
@@ -138,6 +139,7 @@
     sprite: Objects/Weapons/Melee/claymore.rsi
     slots:
     - back
+    - suitStorage
   - type: DisarmMalus
   - type: Construction
     deconstructionTarget: null

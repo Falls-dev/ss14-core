@@ -90,6 +90,7 @@
     slots:
     - back
     - belt
+    - suitStorage
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/claymore.rsi
   - type: HolyWeapon
@@ -146,6 +147,7 @@
     slots:
     - back
     - belt
+    - suitStorage
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/katana.rsi
   - type: HolyWeapon
@@ -166,6 +168,7 @@
     sprite: White/Objects/Weapons/Chaplain/multiverse.rsi
     slots:
     - back
+    - suitStorage
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/multiverse.rsi
   - type: RandomDamage
@@ -188,6 +191,7 @@
     sprite: White/Objects/Weapons/Chaplain/scythe.rsi
     slots:
     - back
+    - suitStorage
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/scythe-inhands.rsi
   - type: HolyWeapon
@@ -208,6 +212,7 @@
     sprite: White/Objects/Weapons/Chaplain/hfrequency.rsi
     slots:
     - back
+    - suitStorage
   - type: Reflect
     reflectProb: 0.33
   - type: Item
@@ -231,6 +236,7 @@
     sprite: White/Objects/Weapons/Chaplain/spellblade.rsi
     slots:
     - back
+    - suitStorage
   - type: Crit
     critChance: 20
     critMultiplier: 2.5
@@ -252,6 +258,7 @@
     sprite: White/Objects/Weapons/Chaplain/possessed.rsi
     slots:
     - back
+    - suitStorage
   - type: GhostRole
     allowSpeech: true
     name: Одержимый Клинок
@@ -343,6 +350,7 @@
     sprite: White/Objects/Weapons/Chaplain/staff.rsi
     slots:
     - back
+    - suitStorage
   - type: Wieldable
   - type: IncreaseDamageOnWield
     damage:
@@ -402,6 +410,7 @@
     sprite: White/Objects/Weapons/Chaplain/pitchfork.rsi
     slots:
     - back
+    - suitStorage
   - type: Wieldable
   - type: IncreaseDamageOnWield
     damage:
@@ -438,6 +447,8 @@
     sprite: White/Objects/Weapons/Chaplain/hammer.rsi
     slots:
     - belt
+    - back
+    - suitStorage
   - type: DisarmMalus
   - type: HolyWeapon
 

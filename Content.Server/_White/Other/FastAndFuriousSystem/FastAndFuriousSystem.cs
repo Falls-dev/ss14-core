@@ -16,7 +16,7 @@ public sealed class FastAndFuriousSystem : EntitySystem
 
     private void OnRefresh(Entity<FastAndFuriousComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
-        args.ModifySpeed(ent.Comp.SprintModifier, ent.Comp.WalkModifier);
+        args.ModifySpeed(ent.Comp.WalkModifier, ent.Comp.SprintModifier);
     }
 
     private void OnMapInit(Entity<FastAndFuriousComponent> ent, ref MapInitEvent args)

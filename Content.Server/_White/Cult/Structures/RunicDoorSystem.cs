@@ -1,4 +1,5 @@
-﻿using Content.Server.Cuffs;
+﻿using Content.Server.Bible.Components;
+using Content.Server.Cuffs;
 using Content.Server.Doors.Systems;
 using Content.Shared._White.Chaplain;
 using Content.Shared.Doors;
@@ -35,7 +36,7 @@ public sealed class RunicDoorSystem : EntitySystem
 
         SubscribeLocalEvent<RunicDoorComponent, BeforeDoorOpenedEvent>(OnBeforeDoorOpened);
         SubscribeLocalEvent<RunicDoorComponent, BeforeDoorClosedEvent>(OnBeforeDoorClosed);
-        SubscribeLocalEvent<RunicDoorComponent, AttackedEvent>(OnGetAttacked);
+        // SubscribeLocalEvent<RunicDoorComponent, AttackedEvent>(OnGetAttacked);
         SubscribeLocalEvent<RunicDoorComponent, ConcealEvent>(OnConceal);
     }
 
@@ -113,7 +114,7 @@ public sealed class RunicDoorSystem : EntitySystem
 
         _doorSystem.Deny(airlock);
 
-        if (!HasComp<HumanoidAppearanceComponent>(user) || HasComp<HolyComponent>(user) ||
+        if (!HasComp<HumanoidAppearanceComponent>(user) || HasComp<BibleUserComponent>(user) ||
             TryComp(airlock, out ConcealableComponent? concealable) && concealable.Concealed)
             return false;
 

@@ -5,8 +5,7 @@ using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Emp;
 using Content.Server.EUI;
 using Content.Server._White.Cult.UI;
-using Content.Shared._White.Chaplain;
-using Content.Shared._White.Cult;
+using Content.Server.Bible.Components;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -21,7 +20,6 @@ using Content.Shared.Stunnable;
 using Content.Shared._White.Cult.Actions;
 using Content.Shared._White.Cult.Components;
 using Content.Shared._White.Cult.Systems;
-using Content.Shared._White.Cult.UI;
 using Content.Shared.Actions;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.DoAfter;
@@ -95,7 +93,7 @@ public partial class CultSystem
             !TryComp<StatusEffectsComponent>(args.Target, out var status))
             return;
 
-        if (HasComp<HolyComponent>(args.Target))
+        if (HasComp<BibleUserComponent>(args.Target))
         {
             _popupSystem.PopupEntity("Священная сила препятствует магии.", args.Performer, args.Performer);
             return;
@@ -122,7 +120,7 @@ public partial class CultSystem
             !TryComp<ActorComponent>(uid, out var actor))
             return;
 
-        if (HasComp<HolyComponent>(args.Target))
+        if (HasComp<BibleUserComponent>(args.Target))
         {
             _popupSystem.PopupEntity("Священная сила препятствует магии.", args.Performer, args.Performer);
             return;
@@ -422,7 +420,7 @@ public partial class CultSystem
 
         _bloodstreamSystem.TryModifyBloodLevel(uid, -5, bloodstream, createPuddle: false);
 
-        if (!HasComp<HolyComponent>(args.Target) &&
+        if (!HasComp<BibleUserComponent>(args.Target) &&
             _statusEffectsSystem.TryAddStatusEffect(args.Target, "Muted", TimeSpan.FromSeconds(10), true, "Muted"))
         {
             _popupSystem.PopupEntity("Цель обезмолвлена.", args.Performer, args.Performer);

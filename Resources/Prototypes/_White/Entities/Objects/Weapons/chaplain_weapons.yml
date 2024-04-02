@@ -71,6 +71,7 @@
     sprite: White/Objects/Weapons/Chaplain/godhand.rsi
   - type: Unremoveable
     deleteOnDrop: true
+  - type: HolyWeapon
 
 - type: entity
   name: священный клеймор
@@ -91,6 +92,7 @@
     - belt
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/claymore.rsi
+  - type: HolyWeapon
 
 - type: entity
   name: цепной меч
@@ -111,6 +113,7 @@
     qualities:
       - Sawing
     speed: 0.5
+  - type: HolyWeapon
 
 - type: entity
   name: силовой меч
@@ -128,6 +131,7 @@
     color: lightblue
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/forceweapon.rsi
+  - type: HolyWeapon
 
 - type: entity
   name: лезвие ханзо
@@ -144,6 +148,7 @@
     - belt
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/katana.rsi
+  - type: HolyWeapon
 
 - type: entity
   name: внепространственный клинок
@@ -164,6 +169,7 @@
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/multiverse.rsi
   - type: RandomDamage
+  - type: HolyWeapon
 
 - type: entity
   name: коса жнеца
@@ -184,6 +190,7 @@
     - back
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/scythe-inhands.rsi
+  - type: HolyWeapon
 
 - type: entity
   name: высокочастотный клинок
@@ -205,6 +212,7 @@
     reflectProb: 0.33
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/hfrequency.rsi
+  - type: HolyWeapon
 
 - type: entity
   name: клинок заклинаний
@@ -228,6 +236,7 @@
     critMultiplier: 2.5
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/spellblade.rsi
+  - type: HolyWeapon
 
 - type: entity
   name: одержимый клинок
@@ -252,6 +261,7 @@
   - type: Examiner
   - type: Item
     sprite: White/Objects/Weapons/Chaplain/possessed.rsi
+  - type: HolyWeapon
 
 - type: entity
   name: рука-бензопила
@@ -284,6 +294,7 @@
     qualities:
       - Sawing
     speed: 0.5
+  - type: HolyWeapon
 
 - type: entity
   name: священная плеть
@@ -309,6 +320,7 @@
     slots:
     - belt
   - type: DisarmMalus
+  - type: HolyWeapon
 
 - type: entity
   name: посох монаха
@@ -339,6 +351,7 @@
   - type: UseDelay
   - type: DisarmMalus
   - type: MeleeBlock
+  - type: HolyWeapon
 
 - type: entity
   name: нечестивые вилы
@@ -396,6 +409,7 @@
         Piercing: 9
   - type: UseDelay
   - type: DisarmMalus
+  - type: HolyWeapon
 
 - type: entity
   name: реликтовый боевой молот
@@ -425,6 +439,7 @@
     slots:
     - belt
   - type: DisarmMalus
+  - type: HolyWeapon
 
 - type: entity
   name: гиперинструмент
@@ -451,3 +466,4 @@
     slots:
     - belt
   - type: DisarmMalus
+  - type: HolyWeapon

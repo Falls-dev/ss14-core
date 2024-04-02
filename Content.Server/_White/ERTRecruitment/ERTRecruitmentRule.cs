@@ -83,7 +83,7 @@ public sealed class ERTRecruitmentRule : StationEventSystem<ERTRecruitmentRuleCo
             return;
         }
 
-        if (_recruitment.GetEventSpawners(ERTRecruitmentRuleComponent.EventName).Count() <= component.MinPlayer)
+        if (_recruitment.GetEventSpawners(ERTRecruitmentRuleComponent.EventName).Count() < component.MinPlayer)
         {
             _logger.Debug("Not enough spawners!");
 

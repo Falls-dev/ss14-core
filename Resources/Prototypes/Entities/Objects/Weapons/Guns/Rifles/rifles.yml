@@ -86,7 +86,7 @@
         startingItem: MagazineLightRifle
         insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
-        priority: 2
+        priority: 4
         whitelist:
           tags:
           - MagazineLightRifle
@@ -101,7 +101,7 @@
         name: Handguard Module
         insertSound: /Audio/White/Gun/Modules/insertmodule.ogg
         ejectSound: /Audio/White/Gun/Modules/ejectmodule.ogg
-        priority: 3
+        priority: 2
         whitelist:
           tags:
           - BaseHandGuardModule
@@ -204,7 +204,7 @@
         startingItem: MagazineRifle
         insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
-        priority: 2
+        priority: 4
         whitelist:
           tags:
           - MagazineRifle
@@ -219,7 +219,7 @@
         name: Handguard Module
         insertSound: /Audio/White/Gun/Modules/insertmodule.ogg
         ejectSound: /Audio/White/Gun/Modules/ejectmodule.ogg
-        priority: 3
+        priority: 2
         whitelist:
           tags:
           - BaseHandGuardModule
@@ -259,7 +259,7 @@
         startingItem: MagazineRifleRubber
         insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
-        priority: 2
+        priority: 4
         whitelist:
           tags:
             - MagazineRifle
@@ -274,7 +274,7 @@
         name: Handguard Module
         insertSound: /Audio/White/Gun/Modules/insertmodule.ogg
         ejectSound: /Audio/White/Gun/Modules/ejectmodule.ogg
-        priority: 3
+        priority: 2
         whitelist:
           tags:
           - BaseHandGuardModule

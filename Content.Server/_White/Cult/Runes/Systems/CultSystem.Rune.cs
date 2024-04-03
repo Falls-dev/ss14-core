@@ -16,6 +16,7 @@ using Content.Server.Chemistry.Components;
 using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Fluids.Components;
 using Content.Server.Ghost;
+using Content.Server.Revenant.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Damage;
@@ -545,6 +546,8 @@ public sealed partial class CultSystem : EntitySystem
         }
 
         _statusEffectsSystem.TryRemoveStatusEffect(target, "Muted");
+
+        RemCompDeferred<BlightComponent>(target);
 
         return true;
     }

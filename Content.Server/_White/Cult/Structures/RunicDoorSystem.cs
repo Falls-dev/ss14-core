@@ -1,5 +1,4 @@
-﻿using Content.Server.Bible.Components;
-using Content.Server.Cuffs;
+﻿using Content.Server.Cuffs;
 using Content.Server.Doors.Systems;
 using Content.Shared._White.Chaplain;
 using Content.Shared.Doors;
@@ -29,6 +28,7 @@ public sealed class RunicDoorSystem : EntitySystem
     [Dependency] private readonly OccluderSystem _occluder = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly CuffableSystem _cuffable = default!;
+    [Dependency] private readonly HolyWeaponSystem _holyWeapon = default!;
 
     public override void Initialize()
     {
@@ -114,7 +114,7 @@ public sealed class RunicDoorSystem : EntitySystem
 
         _doorSystem.Deny(airlock);
 
-        if (!HasComp<HumanoidAppearanceComponent>(user) || HasComp<BibleUserComponent>(user) ||
+        if (!HasComp<HumanoidAppearanceComponent>(user) || _holyWeapon.IsHoldingHolyWeapon(user) ||
             TryComp(airlock, out ConcealableComponent? concealable) && concealable.Concealed)
             return false;
 

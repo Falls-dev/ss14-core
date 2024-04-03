@@ -117,10 +117,14 @@
           map: ["enum.GunVisualLayers.Base"]
         - state: mag-0
           map: ["enum.GunVisualLayers.Mag"]
-        - state: laser
+        - state: barrel_module
           visible: false
           sprite: White/Objects/Weapons/modulesOnWeapon.rsi
-          map: [ "enum.ModuleVisualState.Module" ]
+          map: [ "enum.ModuleVisualState.BarrelModule" ]
+        - state: handguard_module
+          visible: false
+          sprite: White/Objects/Weapons/modulesOnWeapon.rsi
+          map: [ "enum.ModuleVisualState.HandGuardModule" ]
     - type: Clothing
       sprite: Objects/Weapons/Guns/SMGs/drozd.rsi
     - type: Gun
@@ -149,19 +153,28 @@
           whitelist:
             tags:
               - CartridgePistol
-        gun_modules:
-          name: Modules
+        barrel_module:
+          name: Barrel Module
           insertSound: /Audio/White/Gun/Modules/insertmodule.ogg
           ejectSound: /Audio/White/Gun/Modules/ejectmodule.ogg
-          priority: 2
+          priority: 3
           whitelist:
             tags:
-            - BaseModule
+            - BaseBarrelModule
+        handguard_module:
+          name: Handguard Module
+          insertSound: /Audio/White/Gun/Modules/insertmodule.ogg
+          ejectSound: /Audio/White/Gun/Modules/ejectmodule.ogg
+          priority: 3
+          whitelist:
+            tags:
+            - BaseHandGuardModule
     - type: ContainerContainer
       containers:
         gun_magazine: !type:ContainerSlot
         gun_chamber: !type:ContainerSlot
-        gun_modules: !type:ContainerSlot
+        handguard_module: !type:ContainerSlot
+        barrel_module: !type:ContainerSlot
     - type: MagazineVisuals
       magState: mag
       steps: 1
@@ -237,10 +250,14 @@
       - state: mag-unshaded-0
         map: ["enum.GunVisualLayers.MagUnshaded"]
         shader: unshaded
-      - state: laser
+      - state: barrel_module
         visible: false
         sprite: White/Objects/Weapons/modulesOnWeapon.rsi
-        map: [ "enum.ModuleVisualState.Module" ]
+        map: [ "enum.ModuleVisualState.BarrelModule" ]
+      - state: handguard_module
+        visible: false
+        sprite: White/Objects/Weapons/modulesOnWeapon.rsi
+        map: [ "enum.ModuleVisualState.HandGuardModule" ]
   - type: Clothing
     sprite: Objects/Weapons/Guns/SMGs/wt550.rsi
   - type: ChamberMagazineAmmoProvider
@@ -269,18 +286,28 @@
         whitelist:
           tags:
             - CartridgePistol
-      gun_modules:
-        name: Modules
+      barrel_module:
+        name: Barrel Module
         insertSound: /Audio/White/Gun/Modules/insertmodule.ogg
         ejectSound: /Audio/White/Gun/Modules/ejectmodule.ogg
-        priority: 2
+        priority: 3
         whitelist:
           tags:
-          - BaseModule
+          - BaseBarrelModule
+      handguard_module:
+        name: Handguard Module
+        insertSound: /Audio/White/Gun/Modules/insertmodule.ogg
+        ejectSound: /Audio/White/Gun/Modules/ejectmodule.ogg
+        priority: 3
+        whitelist:
+          tags:
+            - BaseHandGuardModule
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
       gun_chamber: !type:ContainerSlot
+      handguard_module: !type:ContainerSlot
+      barrel_module: !type:ContainerSlot
   - type: MagazineVisuals
     magState: mag
     steps: 6
@@ -315,14 +342,22 @@
           whitelist:
             tags:
               - CartridgePistol
-        gun_modules:
-          name: Modules
+        barrel_module:
+          name: Barrel Module
           insertSound: /Audio/White/Gun/Modules/insertmodule.ogg
           ejectSound: /Audio/White/Gun/Modules/ejectmodule.ogg
-          priority: 2
+          priority: 3
           whitelist:
             tags:
-            - BaseModule
+            - BaseBarrelModule
+        handguard_module:
+          name: Handguard Module
+          insertSound: /Audio/White/Gun/Modules/insertmodule.ogg
+          ejectSound: /Audio/White/Gun/Modules/ejectmodule.ogg
+          priority: 3
+          whitelist:
+            tags:
+            - BaseHandGuardModule
 
 - type: entity
   name: Vector

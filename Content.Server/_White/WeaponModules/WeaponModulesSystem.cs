@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Content.Shared._White.WeaponModules;
 using Content.Shared.Weapons.Ranged.Components;
-using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
-using Linguini.Syntax.Ast;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 
@@ -11,7 +9,7 @@ namespace Content.Server._White.WeaponModules;
 
 public sealed class WeaponModulesSystem : EntitySystem
 {
-    protected const string ModulesSlot = "gun_modules";
+    protected static readonly List<string> Slots = new() {"handguard_module", "barrel_module"};
     [Dependency] private readonly PointLightSystem _lightSystem = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
     [Dependency] private readonly SharedGunSystem _gunSystem = default!;
@@ -40,7 +38,7 @@ public sealed class WeaponModulesSystem : EntitySystem
         string containerId, [NotNullWhen(true)] out WeaponModulesComponent? weaponModulesComponent)
     {
         if (!TryComp(weapon, out weaponModulesComponent) || !TryComp<AppearanceComponent>(weapon, out var appearanceComponent) ||
-            containerId != ModulesSlot)
+            !Slots.Contains(containerId))
         {
             weaponModulesComponent = null;
             appearanceComponent = null;
@@ -49,14 +47,15 @@ public sealed class WeaponModulesSystem : EntitySystem
 
         if(!weaponModulesComponent.Modules.Contains(module))
             weaponModulesComponent.Modules.Add(module);
-        _appearanceSystem.SetData(weapon, ModuleVisualState.Module, component.AppearanceValue, appearanceComponent);
+
+        _appearanceSystem.SetData(weapon, containerId == Slots[0] ? ModuleVisualState.HandGuardModule : ModuleVisualState.BarrelModule, component.AppearanceValue, appearanceComponent);
 
         return true;
     }
 
     private bool TryEjectModule(EntityUid module, EntityUid weapon, string containerId, [NotNullWhen(true)] out WeaponModulesComponent? weaponModulesComponent)
     {
-        if (!TryComp(weapon, out weaponModulesComponent) || !TryComp<AppearanceComponent>(weapon, out var appearanceComponent) || containerId != ModulesSlot)
+        if (!TryComp(weapon, out weaponModulesComponent) || !TryComp<AppearanceComponent>(weapon, out var appearanceComponent) || !Slots.Contains(containerId))
         {
             weaponModulesComponent = null;
             appearanceComponent = null;
@@ -65,7 +64,7 @@ public sealed class WeaponModulesSystem : EntitySystem
 
         if(weaponModulesComponent.Modules.Contains(module))
             weaponModulesComponent.Modules.Remove(module);
-        _appearanceSystem.SetData(weapon, ModuleVisualState.Module, "none", appearanceComponent);
+        _appearanceSystem.SetData(weapon, containerId == Slots[0] ? ModuleVisualState.HandGuardModule : ModuleVisualState.BarrelModule, "none", appearanceComponent);
 
         return true;
     }

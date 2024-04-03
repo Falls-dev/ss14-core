@@ -17,6 +17,7 @@ using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Points;
+using Content.Shared.Preferences;
 using Robust.Server.Player;
 using Robust.Shared.Console;
 using Robust.Shared.Map;
@@ -28,17 +29,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Miracle.GameRules;
 
-// TODO: properly start and end the round, make a small delay before the new round starts
-// TODO: catch MobStateChangedEvent and make the round stop, if only one team is alive
-// TODO: make ViolenceRoundStartingEvent
-// TODO: votekick?
-// TODO: make a way to change the map and Teams in the ViolenceGameRuleComponent after victory
 // TODO: respawns may suck
+// TODO: recheck matchflow and roundflow
+// TODO: finish StartRound and OnSpawnComplete
 // TODO: buying equipment and saving equipment between rounds
-// TODO: scoreboard
 // TODO: prototypes of gamerule, uplink and startingGear, gameMapPool, the map itself
 // TODO: use EnsureTeam from PointSystem?
-// TODO: make a menu to join the round, switch teams, leave the round - мб сделает валтос
+// TODO: make a menu to join the round, switch teams, leave the round, get scoreboard - мб сделает валтос
 
 public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
 {
@@ -99,7 +96,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             case RoundState.NotInProgress:
                 if (_timing.CurTime >= comp.RoundStartTime)
                 {
-                    StartRound(comp);
+                    StartRound(uid, comp);
                 }
                 break;
         }
@@ -153,6 +150,10 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         }
     }
 
+    /// <summary>
+    /// TODO: think about it. i think it is not needed. respawns are handled by StartRound anyway
+    /// </summary>
+    /// <param name="ev"></param>
     private void OnSpawnComplete(PlayerSpawnCompleteEvent ev)
     {
         EnsureComp<KillTrackerComponent>(ev.Mob);
@@ -181,7 +182,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             if (!GameTicker.IsGameRuleActive(uid, rule))
                 continue;
 
-            var team = GetEntitiesTeam(ev.Target, ruleComponent);
+            var team = GetPlayersTeam(actor.PlayerSession.UserId, ruleComponent);
             if (team == null)
                 continue;
 
@@ -194,7 +195,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         }
     }
 
-    public bool StartRound(ViolenceRuleComponent comp)
+    public bool StartRound(EntityUid uid, ViolenceRuleComponent comp)
     {
         if (comp.RoundState != RoundState.NotInProgress)
         {
@@ -228,7 +229,50 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             }
         }
 
-        // TODO: spawn players and give them gear here
+        // TODO: recheck the rest of this code block
+        // spawning players
+        foreach (var (playerId, teamId) in comp.TeamMembers)
+        {
+            var player = _playerManager.GetSessionById(playerId);
+            if (player == null)
+                continue;
+
+            var profile = _gameTicker.GetPlayerProfile(player);
+
+            var newMind = _mind.CreateMind(playerId, profile.Name);
+            _mind.SetUserId(newMind, playerId);
+
+            if (!comp.CurrentMap.HasValue)
+                return false;
+            var station = _mapManager.GetMapEntityId(comp.CurrentMap.Value);
+
+            var mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(station, null, profile, null, teamId);
+            DebugTools.AssertNotNull(mobMaybe);
+            var mob = mobMaybe!.Value;
+
+            _mind.TransferTo(newMind, mob);
+            // Should get startingGear from the client here. Setting default startingGear if none or invalid is passed.
+            // Also different startingGear for different teams. A dictionary of teams and startingGear in ViolenceRuleComponent?
+            //SetOutfitCommand.SetOutfit(mob, ruleComponent.Gear, EntityManager);
+            EnsureComp<KillTrackerComponent>(mob);
+
+            if (TryComp<RespawnTrackerComponent>(uid, out var tracker))
+            {
+                _respawn.AddToTracker(playerId, uid, tracker);
+            }
+            else
+            {
+                _respawn.AddToTracker(playerId, uid);
+            }
+
+            _point.EnsurePlayer(playerId, uid);
+
+            DebugTools.AssertNotNull(mobMaybe);
+        }
+
+        // Set round state and end time
+        comp.RoundState = RoundState.InProgress;
+        comp.RoundEndTime = _timing.CurTime + comp.RoundDuration;
 
         return true;
     }
@@ -238,11 +282,12 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         // announce the winner
         foreach (var (player, team) in comp.TeamMembers)
         {
-            if (team != comp.Victor)
+            if (team != comp.MatchVictor)
                 continue;
 
             if (!_playerManager.SessionsDict.TryGetValue(player, out var session))
                 continue;
+
 
             if (session.AttachedEntity != null &&
                 TryComp<MobStateComponent>(session.AttachedEntity, out var mobState) &&
@@ -263,6 +308,15 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
                     // save items in inventory
                 }
 
+                // ummm TODO: test this
+                if (comp.Money.ContainsKey(session.UserId))
+                {
+                    comp.Money[session.UserId] += comp.AliveReward;
+                }
+                else
+                {
+                    comp.Money.TryAdd(session.UserId, comp.AliveReward);
+                }
             }
 
 
@@ -286,7 +340,6 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             _mapManager.DeleteMap(comp.CurrentMap.Value);
 
         comp.RoundStartTime = _timing.CurTime + comp.RoundStartDelay;
-        // TODO: give rewards if appropriate here
         return true;
     }
 
@@ -299,7 +352,26 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             if (!GameTicker.IsGameRuleActive(uid, rule))
                 continue;
 
-            var team = GetEntitiesTeam(ev.Entity, ruleComponent);
+            ActorComponent? actor = null;
+            if (!Resolve(uid, ref actor, false))
+                return;
+
+            var team = GetPlayersTeam(actor.PlayerSession.UserId, ruleComponent);
+            if (team == null)
+                return;
+
+            if (!ruleComponent.KillDeaths.TryGetValue(actor.PlayerSession.UserId, out var targetKd))
+            {
+                targetKd = new List<int>();
+                targetKd.Add(0);
+                targetKd.Add(0);
+                targetKd.Add(0);
+
+                ruleComponent.KillDeaths.Add(actor.PlayerSession.UserId, targetKd);
+            }
+
+            targetKd[2]++;
+
             // YOU SUICIDED OR GOT THROWN INTO LAVA!
             // WHAT A GIANT FUCKING NERD! LAUGH NOW!
             if (ev.Primary is not KillPlayerSource player)
@@ -309,24 +381,41 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
                 continue;
             }
 
-            if (ev.Primary is KillPlayerSource killer && ruleComponent.TeamMembers.TryGetValue(killer.PlayerId, out var suckersTeam))
+            if (ev.Primary is KillPlayerSource killer && ruleComponent.TeamMembers.TryGetValue(killer.PlayerId, out var killerTeam))
             {
-                if (team != suckersTeam && team != null)
+                if (team != killerTeam)
                 {
-                    _point.AdjustTeamPointValue(team.Value, 1, uid, point);
-                    _point.AdjustPointValue(killer.PlayerId, 1, uid, point);
+                    if (!ruleComponent.KillDeaths.TryGetValue(killer.PlayerId, out var killerKd))
+                    {
+                        killerKd = new List<int>();
+                        killerKd.Add(0);
+                        killerKd.Add(0);
+                        killerKd.Add(0);
+
+                        ruleComponent.KillDeaths.Add(actor.PlayerSession.UserId, killerKd);
+                    }
+
+                    killerKd[0]++;
                 }
             }
 
 
-            if (ev.Assist is KillPlayerSource assist && ruleComponent.Victor == null && ruleComponent.TeamMembers.TryGetValue(assist.PlayerId, out var shitTeam))
+            if (ev.Assist is KillPlayerSource assist && ruleComponent.MatchVictor == null && ruleComponent.TeamMembers.TryGetValue(assist.PlayerId, out var assistTeam))
             {
-                if (team != shitTeam && team != null)
+                if (team != assistTeam)
                 {
-                    _point.AdjustTeamPointValue(team.Value, 0.5, uid, point);
-                    _point.AdjustPointValue(assist.PlayerId, 0.5, uid, point);
-                }
+                    if (!ruleComponent.KillDeaths.TryGetValue(assist.PlayerId, out var assistKd))
+                    {
+                        assistKd = new List<int>();
+                        assistKd.Add(0);
+                        assistKd.Add(0);
+                        assistKd.Add(0);
 
+                        ruleComponent.KillDeaths.Add(actor.PlayerSession.UserId, assistKd);
+                    }
+
+                    assistKd[1]++;
+                }
             }
 
             // I dont know if we will have reward spawns or any direct rewards for players
@@ -337,14 +426,35 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
 
     private void OnPointChanged(EntityUid uid, ViolenceRuleComponent component, ref TeamPointChangedEvent args)
     {
-        if (component.Victor != null)
+        if (component.MatchVictor != null)
             return;
 
         if (args.Points <= component.PointCap)
             return;
 
-        component.Victor = args.Team;
+        DoRoundEndBehavior(component);
+
+        component.MatchVictor = args.Team;
+        _gameTicker.EndGameRule(uid);
+        if (ActiveMatches() == 0)
+        {
+            // maybe wait a bit before ending the round?
+            _roundEnd.DoRoundEndBehavior(RoundEndBehavior.InstantEnd, TimeSpan.FromSeconds(10));
+        }
         // DoRoundEndBehavior(uid);???
+    }
+
+    private int ActiveMatches()
+    {
+        int count = 0;
+        var query = EntityQueryEnumerator<ViolenceRuleComponent, GameRuleComponent>();
+        while (query.MoveNext(out var uid, out var violence, out var rule))
+        {
+            if (GameTicker.IsGameRuleActive(uid, rule))
+                count++;
+        }
+
+        return count;
     }
 
     /// <summary>
@@ -396,13 +506,9 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
     /// <param name="uid"></param>
     /// <param name="comp"></param>
     /// <returns></returns>
-    private ushort? GetEntitiesTeam(EntityUid uid, ViolenceRuleComponent comp)
+    private ushort? GetPlayersTeam(NetUserId userId, ViolenceRuleComponent comp)
     {
-        ActorComponent? actor = null;
-        if (!Resolve(uid, ref actor, false))
-            return null;
-
-        if (!comp.TeamMembers.TryGetValue(actor.PlayerSession.UserId, out var team))
+        if (!comp.TeamMembers.TryGetValue(userId, out var team))
             return null;
 
         return team;
@@ -455,7 +561,12 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
 
         if (aliveTeams.Count == 1)
         {
-            comp.Victor = aliveTeams[0];
+            comp.MatchVictor = aliveTeams[0];
+            return true;
+        }
+
+        if (aliveTeams.Count == 0)
+        {
             return true;
         }
 
@@ -513,7 +624,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
     }
 
     /// <summary>
-    /// Delete the instance of the rule entity. TODO: make it automatic, if the rule doesn't have any players
+    /// Delete the instance of the rule entity.
     /// </summary>
     /// <param name="uid"></param>
     /// <returns>true if was deleted successfully</returns>
@@ -569,7 +680,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
                 continue;
 
 
-            if (ruleComponent.Victor != null && _player.TryGetPlayerData(ruleComponent.Victor.Value, out var data)) // get the team data here
+            if (ruleComponent.MatchVictor != null && _player.TryGetPlayerData(ruleComponent.MatchVictor.Value, out var data)) // get the team data here
             {
                 ev.AddLine(Loc.GetString("point-scoreboard-winner", ("player", data.UserName)));
                 ev.AddLine("");

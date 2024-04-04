@@ -91,6 +91,14 @@
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-0
       map: ["enum.GunVisualLayers.Mag"]
+    - state: barrel_module
+      visible: false
+      sprite: White/Objects/Weapons/modulesOnSMGs.rsi
+      map: [ "enum.ModuleVisualState.BarrelModule" ]
+    - state: handguard_module
+      visible: false
+      sprite: White/Objects/Weapons/modulesOnSMGs.rsi
+      map: [ "enum.ModuleVisualState.HandGuardModule" ]
   - type: Clothing
     sprite: Objects/Weapons/Guns/SMGs/c20r.rsi
   - type: Gun
@@ -98,11 +106,55 @@
       path: /Audio/Weapons/Guns/Gunshots/c-20r.ogg
   - type: ChamberMagazineAmmoProvider
     autoEject: true
+  - type: WeaponModules
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazinePistolSubMachineGun
+        insertSound: /Audio/Weapons/Guns/MagIn/smg_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/smg_magout.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - MagazinePistolSubMachineGun
+      gun_chamber:
+        name: Chamber
+        startingItem: CartridgePistol
+        priority: 1
+        whitelist:
+          tags:
+          - CartridgePistol
+      barrel_module:
+        name: Barrel Module
+        insertSound: /Audio/White/Gun/Modules/insertmodule.ogg
+        ejectSound: /Audio/White/Gun/Modules/ejectmodule.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - BaseBarrelModule
+      handguard_module:
+        name: Handguard Module
+        insertSound: /Audio/White/Gun/Modules/insertmodule.ogg
+        ejectSound: /Audio/White/Gun/Modules/ejectmodule.ogg
+        priority: 3
+        whitelist:
+          tags:
+          - BaseHandGuardModule
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+      handguard_module: !type:ContainerSlot
+      barrel_module: !type:ContainerSlot
   - type: MagazineVisuals
     magState: mag
     steps: 6
     zeroVisible: true
   - type: Appearance
+  - type: PointLight
+    enabled: false
+    autoRot: true
 
 - type: entity
   name: Drozd

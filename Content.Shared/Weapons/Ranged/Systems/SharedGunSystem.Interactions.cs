@@ -31,9 +31,9 @@ public abstract partial class SharedGunSystem
                     return;
                 }
 
-                var moduleNames = weaponModulesComponent.Modules.Select(module => Name(module)).ToList();
+                var moduleNames = weaponModulesComponent.Modules.Select(module => Name(module)).ToArray();
 
-                args.PushMarkup(Loc.GetString("gun-modules", ("modules", string.Join(", ", moduleNames.ToArray()))));
+                args.PushMarkup(Loc.GetString("gun-modules", ("modules", string.Join(", ", moduleNames))));
             }
 
             if (!TryComp<TwoModeEnergyAmmoProviderComponent>(uid, out var comp))

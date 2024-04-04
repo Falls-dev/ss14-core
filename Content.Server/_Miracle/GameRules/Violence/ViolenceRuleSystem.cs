@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Server._Miracle.Components;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules.Components;
+using Content.Server.Inventory;
 using Content.Server.RoundEnd;
 using Content.Server.Station.Systems;
 using Robust.Shared.Utility;
@@ -10,14 +11,17 @@ using Content.Server.KillTracking;
 using Content.Server.Maps;
 using Content.Server.Mind;
 using Content.Server.Points;
+using Content.Server.Polymorph.Systems;
 using Content.Shared.Database;
 using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Points;
 using Content.Shared.Preferences;
+using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Console;
 using Robust.Shared.Map;
@@ -31,10 +35,8 @@ namespace Content.Server._Miracle.GameRules;
 
 // TODO: respawns may suck
 // TODO: recheck matchflow and roundflow
-// TODO: finish StartRound and OnSpawnComplete
-// TODO: buying equipment and saving equipment between rounds
+// TODO: buying equipment
 // TODO: prototypes of gamerule, uplink and startingGear, gameMapPool, the map itself
-// TODO: use EnsureTeam from PointSystem?
 // TODO: make a menu to join the round, switch teams, leave the round, get scoreboard - мб сделает валтос
 
 public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
@@ -52,6 +54,10 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly PolymorphSystem _polymorphSystem = default!;
+    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly ServerInventorySystem _inventory = default!;
 
     private ISawmill _sawmill = default!;
 
@@ -158,13 +164,35 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
     {
         EnsureComp<KillTrackerComponent>(ev.Mob);
         var query = EntityQueryEnumerator<ViolenceRuleComponent, RespawnTrackerComponent, GameRuleComponent>();
-        while (query.MoveNext(out var uid, out _, out var tracker, out var rule))
+        while (query.MoveNext(out var uid, out var violence, out var tracker, out var rule))
         {
             if (!GameTicker.IsGameRuleActive(uid, rule))
                 continue;
-            _respawn.AddToTracker(ev.Mob, uid, tracker);
 
-            // TODO: add money or equip to the player here
+            if (violence.TeamMembers.ContainsKey(ev.Player.UserId))
+                _respawn.AddToTracker(ev.Mob, uid, tracker);
+
+            if (violence.SavedEquip.TryGetValue(ev.Player.UserId, out var equip))
+            {
+                foreach (var equipId in equip)
+                {
+                    if (violence.EquipSlots.TryGetValue(equipId, out var slot))
+                    {
+                        _transform.SetParent(equipId, ev.Station);
+                        // TODO: teleport equipId right under the player
+                        if (slot == "hand")
+                        {
+                            _hands.TryPickupAnyHand(ev.Mob, equipId, checkActionBlocker: false);
+                        }
+                        else
+                        {
+                            _inventory.TryEquip(ev.Mob, equipId, slot);
+                        }
+                    }
+                }
+                equip.Clear();
+            }
+
         }
     }
 
@@ -229,7 +257,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             }
         }
 
-        // TODO: recheck the rest of this code block
+        // TODO: recheck the rest of this method
         // spawning players
         foreach (var (playerId, teamId) in comp.TeamMembers)
         {
@@ -289,23 +317,40 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
                 continue;
 
 
+            _polymorphSystem.EnsurePausedMap();
+
             if (session.AttachedEntity != null &&
                 TryComp<MobStateComponent>(session.AttachedEntity, out var mobState) &&
                 mobState.CurrentState == MobState.Alive)
             {
-                if (TryComp<HandsComponent>(session.AttachedEntity, out var hands))
+                if (_polymorphSystem.PausedMap != null)
                 {
-                    foreach (var (name, hand) in hands.Hands)
+                    if (!comp.SavedEquip.ContainsKey(session.UserId))
                     {
-                        if (hand.HeldEntity != null)
+                        comp.SavedEquip.Add(session.UserId, new List<EntityUid>());
+                    }
+
+                    if (TryComp<HandsComponent>(session.AttachedEntity, out var hands))
+                    {
+                        foreach (var hand in _hands.EnumerateHeld(session.AttachedEntity.Value))
                         {
-                            // save it
+                            _hands.TryDrop(session.AttachedEntity.Value, hand, checkActionBlocker: false);
+                            _transform.SetParent(hand, Transform(hand), _polymorphSystem.PausedMap.Value);
+                            comp.SavedEquip[session.UserId].Add(hand);
+                            comp.EquipSlots.Add(hand, "hand");
                         }
                     }
-                }
-                if (TryComp<InventoryComponent>(session.AttachedEntity, out var inv))
-                {
-                    // save items in inventory
+                    if (TryComp<InventoryComponent>(session.AttachedEntity, out var inv))
+                    {
+                        var enumerator = new InventorySystem.InventorySlotEnumerator(inv);
+                        while (enumerator.NextItem(out var item, out var slot))
+                        {
+                            _inventory.TryUnequip(session.AttachedEntity.Value, slot.Name, true, true);
+                            _transform.SetParent(item, Transform(item), _polymorphSystem.PausedMap.Value);
+                            comp.SavedEquip[session.UserId].Add(item);
+                            comp.EquipSlots.Add(item, slot.Name);
+                        }
+                    }
                 }
 
                 // ummm TODO: test this

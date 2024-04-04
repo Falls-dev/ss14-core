@@ -24,9 +24,9 @@ public sealed partial class PolymorphSystem
 
     /// <summary>
     /// Used internally to ensure a paused map that is
-    /// stores polymorphed entities.
+    /// stores polymorphed entities. WD EDIT to make it public
     /// </summary>
-    private void EnsurePausedMap()
+    public void EnsurePausedMap()
     {
         if (PausedMap != null && Exists(PausedMap))
             return;

@@ -1,4 +1,5 @@
 ﻿using Content.Shared.FixedPoint;
+using Content.Shared.Inventory;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -115,6 +116,18 @@ public sealed partial class ViolenceRuleComponent : Component
     /// </summary>
     [DataField("money"), ViewVariables(VVAccess.ReadWrite)]
     public Dictionary<NetUserId, int> Money { get; private set; } = new Dictionary<NetUserId, int>();
+
+    /// <summary>
+    /// Dictionary of a players and lists of their equipment.
+    /// </summary>
+    [DataField("savedEquip"), ViewVariables(VVAccess.ReadWrite)]
+    public Dictionary<NetUserId, List<EntityUid>> SavedEquip { get; private set; } = new Dictionary<NetUserId, List<EntityUid>>();
+
+    /// <summary>
+    /// This tries to save the slots of player's equip from the last round.
+    /// </summary>
+    [DataField("equipSlots"), ViewVariables(VVAccess.ReadWrite)]
+    public Dictionary<EntityUid, string> EquipSlots { get; private set; } = new Dictionary<EntityUid, string>();
 
     /// <summary>
     /// Reward for remaining alive at the end of the round.

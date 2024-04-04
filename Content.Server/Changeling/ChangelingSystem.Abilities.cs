@@ -1027,6 +1027,9 @@ public sealed partial class ChangelingSystem
         if (HasComp<AbsorbedComponent>(from))
             EnsureComp<AbsorbedComponent>(to);
 
+        if (HasComp<UncloneableComponent>(from))
+            EnsureComp<UncloneableComponent>(to);
+
         if (HasComp<BibleUserComponent>(from))
             EnsureComp<BibleUserComponent>(to);
 

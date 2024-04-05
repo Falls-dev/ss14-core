@@ -17,7 +17,7 @@
   description: uplink-revolver-python-desc
   productEntity: WeaponRevolverPythonAP
   cost:
-    Telecrystal: 8 # Originally was 13 TC but was not used due to high cost
+    Telecrystal: 6 # Originally was 13 TC but was not used due to high cost
   categories:
   - UplinkWeapons
   saleLimit: 1
@@ -421,7 +421,7 @@
   description: uplink-agent-id-card-desc
   productEntity: AgentIDCard
   cost:
-    Telecrystal: 3
+    Telecrystal: 2
   categories:
   - UplinkUtility
 
@@ -1318,7 +1318,7 @@
   description: uplink-clothing-outer-hardsuit-juggernaut-desc
   productEntity: ClothingOuterHardsuitJuggernaut
   cost:
-    Telecrystal: 20
+    Telecrystal: 16
   categories:
   - UplinkArmor
   saleLimit: 1

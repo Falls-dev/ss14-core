@@ -370,9 +370,9 @@
   id: UplinkHristovAmmo
   name: uplink-sniper-ammo-name
   description: uplink-sniper-ammo-desc
-  productEntity: MagazineBoxAntiMateriel
+  productEntity: MagazineBoxAntiMaterielBig
   cost:
-    Telecrystal: 3
+    Telecrystal: 6
   categories:
   - UplinkAmmo
 

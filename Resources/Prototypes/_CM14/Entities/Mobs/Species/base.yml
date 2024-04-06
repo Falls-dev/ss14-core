@@ -1,0 +1,68 @@
+﻿- type: entity
+  save: false
+  parent: BaseMobSpeciesOrganic
+  id: CMBaseMobSpeciesOrganic
+  abstract: true
+  name: Urist C.M. McHands
+  suffix: CM14
+  components:
+  - type: Marine
+  - type: Hunger
+  - type: Thirst
+  - type: Body
+    prototype: Human
+    requiredLegs: 2
+  - type: Damageable
+    damageContainer: Biological
+    damageModifierSet: null
+  - type: Butcherable
+    butcheringType: Spike
+    spawned:
+    - id: FoodMeat
+      amount: 5
+  - type: Bloodstream
+    bloodReagent: Blood
+  - type: Vocal
+    sounds:
+      Male: MaleHuman
+      Female: FemaleHuman
+      Unsexed: MaleHuman
+  - type: Flammable
+    fireSpread: true
+    canResistFire: true
+    damage:
+      types:
+        Heat: 3
+  - type: Temperature
+    heatDamageThreshold: 325
+    coldDamageThreshold: 260
+    currentTemperature: 310.15
+    specificHeat: 42
+    coldDamage:
+      types:
+        Cold: 0.1
+    heatDamage:
+      types:
+        Heat: 1.5
+  - type: MeleeWeapon
+    soundHit:
+      collection: Punch
+    angle: 30
+    animation: WeaponArcFist
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 5
+  - type: CMSurgeryTarget
+  - type: UserInterface
+    interfaces:
+    - key: enum.VoiceMaskUIKey.Key
+      type: VoiceMaskBoundUserInterface
+    - key: enum.HumanoidMarkingModifierKey.Key
+      type: HumanoidMarkingModifierBoundUserInterface
+    - key: enum.StrippingUiKey.Key
+      type: StrippableBoundUserInterface
+    - key: enum.HumanoidMarkingModifierKey.Key
+      type: HumanoidMarkingModifierBoundUserInterface
+    - key: enum.CMSurgeryUIKey.Key
+      type: CMSurgeryBui

@@ -45,3 +45,10 @@
   icon:
     sprite: /Textures/White/Interface/records.rsi
     state: incarcerated
+
+- type: statusIcon
+  parent: CriminalRecordIcon
+  id: CriminalRecordIconRemove
+  icon:
+    sprite: /Textures/White/Interface/records.rsi
+    state: incarcerated

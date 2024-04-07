@@ -1,0 +1,127 @@
+﻿using System.Linq;
+using Content.Client._White.UserInterface.Radial;
+using Content.Shared._White.SecurityHud;
+using Content.Shared.Security;
+using Content.Shared.StatusIcon;
+using Robust.Shared.Prototypes;
+
+namespace Content.Client._White.SecurityHud;
+
+public sealed class SecurityHudBUI : BoundUserInterface
+{
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    private RadialContainer? _radialContainer;
+
+    private bool _updated;
+
+    private readonly Dictionary<string, string> Names = new()
+    {
+        { "CriminalRecordIconReleased", Loc.GetString("criminal-records-status-released")},
+        { "CriminalRecordIconSuspected", Loc.GetString("criminal-records-status-suspected")},
+        { "CriminalRecordIconWanted", Loc.GetString("criminal-records-status-wanted")},
+        { "CriminalRecordIconIncarcerated", Loc.GetString("criminal-records-status-detained")},
+        { "CriminalRecordIconRemove", Loc.GetString("security-hud-remove-status") }
+    };
+
+    private readonly Dictionary<string, string> Icons = new()
+    {
+        { "CriminalRecordIconReleased", "/Textures/White/Interface/securityhud.rsi/released.png" },
+        { "CriminalRecordIconSuspected", "/Textures/White/Interface/securityhud.rsi/suspected.png" },
+        { "CriminalRecordIconWanted", "/Textures/White/Interface/securityhud.rsi/wanted.png" },
+        { "CriminalRecordIconIncarcerated", "/Textures/White/Interface/securityhud.rsi/incarcerated.png" },
+        { "CriminalRecordIconRemove", "/Textures/White/Interface/securityhud.rsi/remove.png" }
+    };
+
+    private readonly Dictionary<string, SecurityStatus> Status = new()
+    {
+        { "CriminalRecordIconReleased", SecurityStatus.Released },
+        { "CriminalRecordIconSuspected", SecurityStatus.Suspected },
+        { "CriminalRecordIconWanted", SecurityStatus.Wanted },
+        { "CriminalRecordIconIncarcerated", SecurityStatus.Detained },
+        { "CriminalRecordIconRemove", SecurityStatus.None }
+    };
+
+
+    public SecurityHudBUI(EntityUid owner, Enum uiKey) : base(owner, uiKey)
+    {
+        IoCManager.InjectDependencies(this);
+    }
+
+    protected override void Open()
+    {
+        base.Open();
+
+        if (_radialContainer != null)
+            UIReset();
+
+        _radialContainer = new RadialContainer();
+
+        _radialContainer.Closed += Close;
+
+        if (State != null)
+            UpdateState(State);
+    }
+
+    private void UIReset()
+    {
+        _radialContainer?.Close();
+        _radialContainer = null;
+        _updated = false;
+    }
+
+    private void PopulateRadial(IReadOnlyCollection<string> ids, NetEntity user, NetEntity target)
+    {
+        foreach (var id in ids)
+        {
+            if (!_prototypeManager.TryIndex<StatusIconPrototype>(id, out var prototype))
+                return;
+
+            if(!prototype.Parents!.Contains("CriminalRecordIcon"))
+                return;
+
+            if (_radialContainer == null)
+                continue;
+
+            if(!Names.TryGetValue(id, out var name) || !Icons.TryGetValue(id, out var icon) || !Status.TryGetValue(id, out var status))
+                return;
+
+            var button = _radialContainer.AddButton(name, icon);
+            button.Controller.OnPressed += _ =>
+            {
+                Select(status, user, target);
+            };
+        }
+    }
+
+    private void Select(SecurityStatus status, NetEntity user, NetEntity target)
+    {
+        SendMessage(new SecurityHudStatusSelectedMessage(status, user, target));
+        UIReset();
+        Close();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        UIReset();
+    }
+
+    protected override void UpdateState(BoundUserInterfaceState state)
+    {
+        base.UpdateState(state);
+
+        if (_updated)
+            return;
+
+        if (state is SecurityHudBUIState newState)
+        {
+            PopulateRadial(newState.Ids, newState.User, newState.Target);
+        }
+
+        if (_radialContainer == null)
+            return;
+
+        _radialContainer?.OpenAttachedLocalPlayer();
+        _updated = true;
+    }
+}

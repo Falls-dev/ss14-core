@@ -95,6 +95,12 @@
             "directions": 4
         },
         {
+            "name": "comfy-random"
+        },
+        {
+            "name": "pufi-box-random"
+        },
+        {
             "name": "wooden-bench",
             "directions": 4
         }

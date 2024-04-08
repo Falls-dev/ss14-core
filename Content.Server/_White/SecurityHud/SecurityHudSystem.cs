@@ -6,6 +6,7 @@ using Content.Server.StationRecords.Systems;
 using Content.Shared._Miracle.Components;
 using Content.Shared._White.SecurityHud;
 using Content.Shared.Access.Components;
+using Content.Shared.Access.Systems;
 using Content.Shared.CriminalRecords;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -27,6 +28,7 @@ public sealed class SecurityHudSystem : EntitySystem
     [Dependency] private readonly RadioSystem _radio = default!;
     [Dependency] private readonly InventorySystem _invSlotsSystem = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
+    [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -45,6 +47,15 @@ public sealed class SecurityHudSystem : EntitySystem
 
         if(!TryComp<SecurityHudComponent>(ent, out var component))
             return;
+
+        if(!TryComp<AccessReaderComponent>(ent, out var accessReaderComponent))
+            return;
+
+        if (!_accessReaderSystem.IsAllowed(args.User, (EntityUid) ent, accessReaderComponent))
+        {
+            _popupSystem.PopupEntity(Loc.GetString("security-hud-not-allowed"), args.User, args.User, PopupType.Medium);
+            return;
+        }
 
         AlternativeVerb verb = new()
         {

@@ -14,7 +14,7 @@ public sealed class SecurityHudBUI : BoundUserInterface
 
     private bool _updated;
 
-    private readonly Dictionary<string, string> Names = new()
+    private readonly Dictionary<string, string> _names = new()
     {
         { "CriminalRecordIconReleased", Loc.GetString("criminal-records-status-released")},
         { "CriminalRecordIconSuspected", Loc.GetString("criminal-records-status-suspected")},
@@ -23,7 +23,7 @@ public sealed class SecurityHudBUI : BoundUserInterface
         { "CriminalRecordIconRemove", Loc.GetString("security-hud-remove-status") }
     };
 
-    private readonly Dictionary<string, string> Icons = new()
+    private readonly Dictionary<string, string> _icons = new()
     {
         { "CriminalRecordIconReleased", "/Textures/White/Interface/securityhud.rsi/released.png" },
         { "CriminalRecordIconSuspected", "/Textures/White/Interface/securityhud.rsi/suspected.png" },
@@ -32,7 +32,7 @@ public sealed class SecurityHudBUI : BoundUserInterface
         { "CriminalRecordIconRemove", "/Textures/White/Interface/securityhud.rsi/remove.png" }
     };
 
-    private readonly Dictionary<string, SecurityStatus> Status = new()
+    private readonly Dictionary<string, SecurityStatus> _status = new()
     {
         { "CriminalRecordIconReleased", SecurityStatus.Released },
         { "CriminalRecordIconSuspected", SecurityStatus.Suspected },
@@ -82,7 +82,7 @@ public sealed class SecurityHudBUI : BoundUserInterface
             if (_radialContainer == null)
                 continue;
 
-            if(!Names.TryGetValue(id, out var name) || !Icons.TryGetValue(id, out var icon) || !Status.TryGetValue(id, out var status))
+            if(!_names.TryGetValue(id, out var name) || !_icons.TryGetValue(id, out var icon) || !_status.TryGetValue(id, out var status))
                 return;
 
             var button = _radialContainer.AddButton(name, icon);

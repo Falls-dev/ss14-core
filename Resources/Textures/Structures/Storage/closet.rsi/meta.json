@@ -399,6 +399,9 @@
       "name": "mixed_door"
     },
     {
+      "name": "n2_door"
+    },
+    {
       "name": "oldcloset"
     },
     {
@@ -549,6 +552,18 @@
     },
     {
       "name": "representative_door"
+    },
+    {
+      "name": "inspector"
+    },
+    {
+      "name": "inspector_door"
+    },
+    {
+      "name": "inspector_open"
+    },
+    {
+      "name": "n2_door"
     },
     {
       "name": "inspector"

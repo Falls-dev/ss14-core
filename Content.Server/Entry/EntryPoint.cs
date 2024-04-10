@@ -110,6 +110,7 @@ namespace Content.Server.Entry
             IoCManager.Resolve<ContentNetworkResourceManager>().Initialize();
             IoCManager.Resolve<GhostKickManager>().Initialize();
             IoCManager.Resolve<ServerInfoManager>().Initialize();
+            IoCManager.Resolve<ServerApi>().Initialize();
 
             //WD-EDIT
             IoCManager.Resolve<SponsorsManager>().Initialize();

@@ -74,6 +74,7 @@ namespace Content.Server.IoC
             IoCManager.Register<PoissonDiskSampler>();
             IoCManager.Register<DiscordWebhook>();
             IoCManager.Register<ServerDbEntryManager>();
+            IoCManager.Register<ServerApi>();
 
             // WD-EDIT
             IoCManager.Register<SponsorsManager>();

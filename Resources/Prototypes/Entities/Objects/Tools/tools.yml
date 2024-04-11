@@ -266,6 +266,7 @@
     tags:
       - Multitool
       - DroneUsable
+      - DoorElectronicsConfigurator
   - type: PhysicalComposition
     materialComposition:
       Steel: 100
@@ -319,6 +320,9 @@
     - type: ActivatableUI
       key: enum.NetworkConfiguratorUiKey.List
       inHandsOnly: true
+    - type: Tag
+      tags:
+        - DoorElectronicsConfigurator
     - type: UserInterface
       interfaces:
         - key: enum.NetworkConfiguratorUiKey.List

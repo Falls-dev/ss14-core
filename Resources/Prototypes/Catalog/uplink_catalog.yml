@@ -1225,6 +1225,21 @@
     - UplinkUtility
   saleLimit: 1
 
+- type: listing
+  id: UplinkE20
+  name: uplink-e20-name
+  description: uplink-e20-desc
+  productEntity: E20Dice
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Librarian
+  saleLimit: 1
+
 # Armor
 
 - type: listing

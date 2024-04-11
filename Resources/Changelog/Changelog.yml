@@ -1,25 +1,4 @@
 ﻿Entries:
-- author: CrigCrag
-  changes:
-  - message: Added a new large salvage wreck.
-    type: Add
-  id: 5829
-  time: '2024-01-30T10:56:38.0000000+00:00'
-  url: https://api.github.com/repos/space-wizards/space-station-14/pulls/24656
-- author: themias
-  changes:
-  - message: Fixed Centcom cargo gifts not being fulfilled
-    type: Fix
-  id: 5830
-  time: '2024-01-30T11:05:20.0000000+00:00'
-  url: https://api.github.com/repos/space-wizards/space-station-14/pulls/24701
-- author: Scribbles0
-  changes:
-  - message: You can now make anomaly cores orbit you.
-    type: Add
-  id: 5831
-  time: '2024-01-30T11:12:24.0000000+00:00'
-  url: https://api.github.com/repos/space-wizards/space-station-14/pulls/24716
 - author: MIXnikita
   changes:
   - message: New sound effects for some shuttle guns
@@ -3832,3 +3811,19 @@
   id: 6329
   time: '2024-04-10T20:06:31.0000000+00:00'
   url: https://github.com/space-wizards/space-station-14/pull/26858
+- author: Flareguy
+  changes:
+  - message: Added emergency nitrogen lockers. You can scarcely find them in public
+      areas, or scattered around in maintenance tunnels.
+    type: Add
+  id: 6330
+  time: '2024-04-10T21:20:05.0000000+00:00'
+  url: https://github.com/space-wizards/space-station-14/pull/26752
+- author: Jark255
+  changes:
+  - message: NT removed developers' configuration device from all doors electronics
+      and patched network configurators to work with them
+    type: Fix
+  id: 6331
+  time: '2024-04-11T12:21:15.0000000+00:00'
+  url: https://github.com/space-wizards/space-station-14/pull/26888

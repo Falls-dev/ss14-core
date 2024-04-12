@@ -336,7 +336,7 @@
     Telecrystal: 11
   categories:
     - UplinkExplosives
-  restockTime: 30
+  restockTime: 1800
   conditions:
   - !type:StoreWhitelistCondition
     blacklist:
@@ -1152,6 +1152,11 @@
     Telecrystal: 4
   categories:
     - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - NukeOpsUplink
 
 - type: listing
   id: UplinkUplinkImplanter # uplink uplink real

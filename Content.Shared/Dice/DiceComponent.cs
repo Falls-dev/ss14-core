@@ -4,9 +4,9 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.Dice;
 
-[RegisterComponent, NetworkedComponent, Access(typeof(SharedDiceSystem))]
+[RegisterComponent, NetworkedComponent]
 [AutoGenerateComponentState(true)]
-public sealed partial class DiceComponent : Component
+public partial class DiceComponent : Component
 {
     [DataField]
     public SoundSpecifier Sound { get; private set; } = new SoundCollectionSpecifier("Dice");

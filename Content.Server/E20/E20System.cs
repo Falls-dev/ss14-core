@@ -33,6 +33,7 @@ public sealed class E20System : SharedE20System
         base.Initialize();
         SubscribeLocalEvent<ActiveTimerTriggerComponent, ComponentRemove>(OnTimerRemove);
     }
+
     private void OnTimerRemove(EntityUid uid, ActiveTimerTriggerComponent comp, ComponentRemove args)
     {
         E20Component e20 = EntityManager.GetComponent<E20Component>(uid);

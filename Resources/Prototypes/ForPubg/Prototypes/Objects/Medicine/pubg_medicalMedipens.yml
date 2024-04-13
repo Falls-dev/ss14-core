@@ -1,0 +1,223 @@
+# Brute Medipen = 75 health
+- type: entity
+  name: injector brute
+  parent: ChemicalMedipen
+  id: PubgBruteMedipen
+  description: For brute injuries.
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Medicine/medipens.rsi
+    layers:
+    - state: brutepen
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 20
+        reagents:
+        - ReagentId: Puncturase
+          Quantity: 10
+        - ReagentId: Omnizine
+          Quantity: 5
+        - ReagentId: Dexalin
+          Quantity: 5
+  - type: Hypospray
+    solutionName: pen
+    transferAmount: 20
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+    emptySpriteName: brutepen-empty
+  - type: StaticPrice
+    price: 100
+  - type: Tag
+    tags: []
+
+# Super Brute Medipen = 115 health
+- type: entity
+  name: injector super brute
+  parent: ChemicalMedipen
+  id: PubgSuperBruteMedipen
+  description: For critical brute injuries.
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Medicine/medipens.rsi
+    layers:
+    - state: superbrutepen
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 30
+        reagents:
+        - ReagentId: Puncturase
+          Quantity: 10
+        - ReagentId: Omnizine
+          Quantity: 15
+        - ReagentId: Dexalin
+          Quantity: 5
+  - type: Hypospray
+    solutionName: pen
+    transferAmount: 30
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+    emptySpriteName: superbrutepen-empty
+  - type: StaticPrice
+    price: 100
+  - type: Tag
+    tags: []
+
+# Regenerator Medipen = ??? health
+- type: entity
+  name: injector regenerator
+  parent: ChemicalMedipen
+  id: PubgRegeneratorMedipen
+  description: For time healing injuries.
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Medicine/medipens.rsi
+    layers:
+    - state: regeneratorpen
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 80
+        reagents:
+        - ReagentId: Puncturase
+          Quantity: 10
+        - ReagentId: Omnizine
+          Quantity: 25
+        - ReagentId: DexalinPlus
+          Quantity: 5
+        - ReagentId: Tricordrazine
+          Quantity: 40
+  - type: Hypospray
+    solutionName: pen
+    transferAmount: 80
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+    emptySpriteName: regeneratorpen-empty
+  - type: StaticPrice
+    price: 100
+  - type: Tag
+    tags: []
+
+# Speed Medipen = 30 seconds 1.25 movement
+- type: entity
+  name: injector speed
+  parent: ChemicalMedipen
+  id: PubgSpeedMedipen
+  description: For extra evacuation.
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Medicine/medipens.rsi
+    layers:
+    - state: speedpen # СПИД, ХАХА
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 20
+        reagents:
+        - ReagentId: Ephedrine
+          Quantity: 10
+        - ReagentId: SpaceDrugs
+          Quantity: 10
+  - type: Hypospray
+    solutionName: pen
+    transferAmount: 20
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+    emptySpriteName: speedpen-empty
+  - type: StaticPrice
+    price: 100
+  - type: Tag
+    tags: []
+
+# Super Speed Medipen = 60 seconds 1.30 movement
+- type: entity
+  name: injector super speed
+  parent: ChemicalMedipen
+  id: PubgSuperSpeedMedipen
+  description: For rush and die.
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Medicine/medipens.rsi
+    layers:
+    - state: superspeedpen
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 50
+        reagents:
+        - ReagentId: Stimulants
+          Quantity: 20
+        - ReagentId: Ephedrine
+          Quantity: 10
+        - ReagentId: SpaceDrugs
+          Quantity: 20
+  - type: Hypospray
+    solutionName: pen
+    transferAmount: 50
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+    emptySpriteName: superspeedpen-empty
+  - type: StaticPrice
+    price: 100
+  - type: Tag
+    tags: []
+
+# Obdalbos Medipen = ???
+- type: entity
+  name: injectorObdalbos
+  parent: ChemicalMedipen
+  id: PubgObdalbosMedipen
+  description: You dont want to use this pen...
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Medicine/medipens.rsi
+    layers:
+    - state: obdalbospen
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 225
+        reagents:
+        - ReagentId: Stimulants
+          Quantity: 15
+        - ReagentId: Ephedrine
+          Quantity: 25
+        - ReagentId: SpaceDrugs
+          Quantity: 60
+        - ReagentId: Bruizine # Razorium moment
+          Quantity: 15
+        - ReagentId: Bicaridine # Razorium moment
+          Quantity: 20
+        - ReagentId: Tricordrazine
+          Quantity: 20
+        - ReagentId: TranexamicAcid
+          Quantity: 20
+        - ReagentId: Barozine
+          Quantity: 40
+        - ReagentId: Dermaline
+          Quantity: 20
+        - ReagentId: Dylovene
+          Quantity: 15
+  - type: Hypospray
+    solutionName: pen
+    transferAmount: 225
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+    emptySpriteName: obdalbospen-empty
+  - type: StaticPrice
+    price: 100
+  - type: Tag
+    tags: []

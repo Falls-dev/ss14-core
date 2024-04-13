@@ -231,6 +231,7 @@ ent-PubgMetalRack = { ent-PubgMetalRackRandom }
 .desc = { ent-PubgMetalRackRandom.desc }
 
 ### PUBG Medicine
+# Standart Medicine
 ent-PubgStandartMedicine = Стандартный медицинский пакет
 .desc = Может это и спасёт твой зад, хотя-бы потому что он реально поможет.
 ent-PubgStandartMedicine5 = { ent-PubgStandartMedicine }
@@ -241,8 +242,23 @@ ent-PubgStandartMedicine2 = { ent-PubgStandartMedicine }
 ent-PubgStandartMedicineBandage = Перевязочный пакет
 .desc = Позволяет быстро устранить простые повреждения.
 
+#Pens
+ent-PubgBruteMedipen = Телесный инжектор V1
+.desc = Способен своевременно остановить кровотечение и потеряное здоровье.
+ent-PubgSuperBruteMedipen = Телесный инжектор V2
+.desc = Способен намного лучше восстановить утерянное здоровье.
+ent-PubgRegeneratorMedipen = Телесный инжектор Регенератор.
+.desc = Сразу и со временем восстанавливает утерянное здоровье.
 
-### PUBG Structures PubgWindow
+ent-PubgSpeedMedipen = Телесный инжектор S1
+.desc = Повышает мобильность на короткое время.
+ent-PubgSuperSpeedMedipen = Телесный инжектор S2
+.desc = Повышает мобильность на продолжительное время.
+
+ent-PubgObdalbosMedipen = Обдолбыш
+.desc = *Этикетка о составе отсутствует*
+
+### PUBG Structures
 ent-PubgWindow = Окно
 .desc = Старое окно, старого мира...
 
@@ -251,3 +267,77 @@ ent-PubgFireplace = Потухший камин
 
 ent-PubgLockerClothing = Старый шкаф
 .desc = Что-то здесь есть?
+
+## Barrels
+# Fuel
+ent-PubgFuelBarrel = Бочка с топливом
+.desc = Она опасна?
+ent-PubgFuelBarrelFull = { ent-PubgFuelBarrel }
+.desc = { ent-PubgFuelBarrel.desc }
+ent-PubgFuelBarrelActive = { ent-PubgFuelBarrel }
+.desc = { ent-PubgFuelBarrel.desc }
+ent-PubgFuelBarrelMini = { ent-PubgFuelBarrel }
+.desc = { ent-PubgFuelBarrel.desc }
+# Water
+ent-PubgWaterBarrel = Бочка с водой
+.desc = Просто вода
+ent-PubgWaterBarrelFull = { ent-PubgWaterBarrel }
+.desc = { ent-PubgWaterBarrel.desc }
+ent-PubgWaterBarrelEmpty2 = { ent-PubgWaterBarrel }
+.desc = { ent-PubgWaterBarrel.desc }
+ent-PubgWaterBarrelMini = { ent-PubgWaterBarrel }
+.desc = { ent-PubgWaterBarrel.desc }
+# Metal barrel
+ent-PubgSteelBarrel = Бочка
+.desc = Кажется она пуста уже давно
+ent-PubgSteelBarrelRust = { ent-PubgSteelBarrel }
+.desc = { ent-PubgSteelBarrel.desc }
+ent-PubgSteelBarrelMini = { ent-PubgSteelBarrel }
+.desc = { ent-PubgSteelBarrel.desc }
+# Rad barrel
+ent-PubgRadBarrel = Бочка с отходами
+.desc = И насколько она опасна?
+ent-PubgRadBarrel2 = { ent-PubgRadBarrel }
+.desc = { ent-PubgRadBarrel.desc }
+ent-PubgRadBarrelEmpty = { ent-PubgRadBarrel }
+.desc = { ent-PubgRadBarrel.desc }
+ent-PubgRadBarrelActive = { ent-PubgRadBarrel }
+.desc = { ent-PubgRadBarrel.desc }
+ent-PubgRadBarrelMini = { ent-PubgRadBarrel }
+.desc = { ent-PubgRadBarrel.desc }
+
+## Lights
+# Высокий одинокий подсвечник
+ent-PubgCandleInfinite1Gold = Золотой подсвечник
+.desc = Блестит
+ent-PubgCandleInfiniteSteel = Металлический подсвечник
+.desc = Блестит
+# Тройной высокий канделябр
+ent-PubgCandleInfinite3GoldV1 = Золотой канделябр
+.desc = Блестит
+ent-PubgCandleInfinite3GoldV2 = { ent-PubgCandleInfinite3GoldV1}
+.desc = { ent-PubgCandleInfinite3GoldV1.desc }
+ent-PubgCandleInfinite3GoldV3 = { ent-PubgCandleInfinite3GoldV1}
+.desc = { ent-PubgCandleInfinite3GoldV1.desc }
+ent-PubgCandleInfinite3Steel = Металлический канделябр
+# Настольный подсвечник
+ent-PubgCandleInfiniteTableGold = Золотой малый подсвечник
+.desc = Блестит
+ent-PubgCandleInfiniteTableGoldV2 = { ent-PubgCandleInfiniteTableGold }
+.desc = { ent-PubgCandleInfiniteTableGold.desc }
+ent-PubgCandleInfiniteTableGoldV3 = { ent-PubgCandleInfiniteTableGold }
+.desc = { ent-PubgCandleInfiniteTableGold.desc }
+ent-PubgCandleInfiniteTableSteel = Металлический малый подсвечник
+.desc = Блестит
+
+# Street Lights
+ent-PubgStreetLights = Фонарь
+.desc = Всегда включен
+ent-PubgStreetLights1Light1 = { ent-PubgStreetLights }
+.desc = { ent-PubgStreetLights.desc }
+ent-PubgStreetLights1Light2 = { ent-PubgStreetLights }
+.desc = { ent-PubgStreetLights.desc }
+ent-PubgStreetLights2Light1 = { ent-PubgStreetLights }
+.desc = { ent-PubgStreetLights.desc }
+ent-PubgStreetLights2Light2 = { ent-PubgStreetLights }
+.desc = { ent-PubgStreetLights.desc }

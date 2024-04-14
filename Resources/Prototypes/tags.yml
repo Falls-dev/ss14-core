@@ -1187,7 +1187,7 @@
 
 - type: Tag
   id: SuitEVA
-  
+
 - type: Tag
   id: Sunglasses
 
@@ -1323,4 +1323,5 @@
 - type: Tag
   id: WriteIgnoreStamps
 
-# ALPHABETICAL
+- type: Tag # tag to make a glue tool use glue on repair
+  id: GlueTool

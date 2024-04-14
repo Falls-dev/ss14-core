@@ -60,18 +60,13 @@ namespace Content.Server.IoC
             IoCManager.Register<GhostKickManager>();
             IoCManager.Register<ISharedAdminLogManager, AdminLogManager>();
             IoCManager.Register<IAdminLogManager, AdminLogManager>();
-
-            #if FULL_RELEASE
-            IoCManager.Register<IPlayTimeTrackingManager, GlobalPlayTimeTrackingManager>();
-            #else
-            IoCManager.Register<IPlayTimeTrackingManager, PlayTimeTrackingManager>();
-            #endif
-
+            IoCManager.Register<PlayTimeTrackingManager>();
             IoCManager.Register<UserDbDataManager>();
             IoCManager.Register<ServerInfoManager>();
             IoCManager.Register<PoissonDiskSampler>();
             IoCManager.Register<DiscordWebhook>();
             IoCManager.Register<ServerDbEntryManager>();
+            IoCManager.Register<ServerApi>();
 
             // WD-EDIT
             IoCManager.Register<SponsorsManager>();

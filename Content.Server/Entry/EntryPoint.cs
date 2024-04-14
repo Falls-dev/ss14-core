@@ -47,7 +47,8 @@ namespace Content.Server.Entry
         private EuiManager _euiManager = default!;
         private IVoteManager _voteManager = default!;
         private ServerUpdateManager _updateManager = default!;
-        private IPlayTimeTrackingManager? _playTimeTracking;
+        private PlayTimeTrackingManager? _playTimeTracking;
+        private IEntitySystemManager? _sysMan;
         private IServerDbManager? _dbManager;
 
         /// <inheritdoc />
@@ -88,43 +89,44 @@ namespace Content.Server.Entry
             var configManager = IoCManager.Resolve<IConfigurationManager>();
             var dest = configManager.GetCVar(CCVars.DestinationFile);
             IoCManager.Resolve<ContentLocalizationManager>().Initialize();
-            if (!string.IsNullOrEmpty(dest)) //hacky but it keeps load times for the generator down.
-                return;
+            if (string.IsNullOrEmpty(dest)) //hacky but it keeps load times for the generator down.
+            {
+                _euiManager = IoCManager.Resolve<EuiManager>();
+                _voteManager = IoCManager.Resolve<IVoteManager>();
+                _updateManager = IoCManager.Resolve<ServerUpdateManager>();
+                _playTimeTracking = IoCManager.Resolve<PlayTimeTrackingManager>();
+                _sysMan = IoCManager.Resolve<IEntitySystemManager>();
+                _dbManager = IoCManager.Resolve<IServerDbManager>();
 
-            _euiManager = IoCManager.Resolve<EuiManager>();
-            _voteManager = IoCManager.Resolve<IVoteManager>();
-            _updateManager = IoCManager.Resolve<ServerUpdateManager>();
-            _playTimeTracking = IoCManager.Resolve<IPlayTimeTrackingManager>();
-            IoCManager.Resolve<IEntitySystemManager>();
-            _dbManager = IoCManager.Resolve<IServerDbManager>();
+                logManager.GetSawmill("Storage").Level = LogLevel.Info;
+                logManager.GetSawmill("db.ef").Level = LogLevel.Info;
 
-            logManager.GetSawmill("Storage").Level = LogLevel.Info;
-            logManager.GetSawmill("db.ef").Level = LogLevel.Info;
+                IoCManager.Resolve<IAdminLogManager>().Initialize();
+                IoCManager.Resolve<IConnectionManager>().Initialize();
+                UnsafePseudoIoC.Initialize(); // WD
+                _dbManager.Init();
+                IoCManager.Resolve<IServerPreferencesManager>().Init();
+                IoCManager.Resolve<INodeGroupFactory>().Initialize();
+                IoCManager.Resolve<ContentNetworkResourceManager>().Initialize();
+                IoCManager.Resolve<GhostKickManager>().Initialize();
+                IoCManager.Resolve<ServerInfoManager>().Initialize();
+                IoCManager.Resolve<ServerApi>().Initialize();
 
-            IoCManager.Resolve<IAdminLogManager>().Initialize();
-            IoCManager.Resolve<IConnectionManager>().Initialize();
-            UnsafePseudoIoC.Initialize(); // WD
-            _dbManager.Init();
-            IoCManager.Resolve<IServerPreferencesManager>().Init();
-            IoCManager.Resolve<INodeGroupFactory>().Initialize();
-            IoCManager.Resolve<ContentNetworkResourceManager>().Initialize();
-            IoCManager.Resolve<GhostKickManager>().Initialize();
-            IoCManager.Resolve<ServerInfoManager>().Initialize();
+                //WD-EDIT
+                IoCManager.Resolve<SponsorsManager>().Initialize();
+                IoCManager.Resolve<JoinQueueManager>().Initialize();
+                IoCManager.Resolve<TTSManager>().Initialize();
+                IoCManager.Resolve<StalinManager>().Initialize();
+                IoCManager.Resolve<ServerJukeboxSongsSyncManager>().Initialize();
+                IoCManager.Resolve<SalusManager>().Initialize();
+                IoCManager.Resolve<PandaStatusHost>().Start();
+                IoCManager.Resolve<PandaWebManager>().Initialize();
+                //WD-EDIT
 
-            //WD-EDIT
-            IoCManager.Resolve<SponsorsManager>().Initialize();
-            IoCManager.Resolve<JoinQueueManager>().Initialize();
-            IoCManager.Resolve<TTSManager>().Initialize();
-            IoCManager.Resolve<StalinManager>().Initialize();
-            IoCManager.Resolve<ServerJukeboxSongsSyncManager>().Initialize();
-            IoCManager.Resolve<SalusManager>().Initialize();
-            IoCManager.Resolve<PandaStatusHost>().Start();
-            IoCManager.Resolve<PandaWebManager>().Initialize();
-            //WD-EDIT
-
-            _voteManager.Initialize();
-            _updateManager.Initialize();
-            _playTimeTracking.Initialize();
+                _voteManager.Initialize();
+                _updateManager.Initialize();
+                _playTimeTracking.Initialize();
+            }
         }
 
         public override void PostInit()
@@ -185,6 +187,7 @@ namespace Content.Server.Entry
         {
             _playTimeTracking?.Shutdown();
             _dbManager?.Shutdown();
+            IoCManager.Resolve<ServerApi>().Shutdown();
         }
 
         private static void LoadConfigPresets(IConfigurationManager cfg, IResourceManager res, ISawmill sawmill)

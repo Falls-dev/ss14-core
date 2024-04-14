@@ -372,6 +372,8 @@
     damage:
       types:
         Piercing: 15
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
   - type: Tool
     qualities:
       - Screwing

@@ -1121,4 +1121,6 @@
     sprite: Clothing/Head/Hats/hat_gnome.rsi
   - type: Seed
     seedId: gnome
+  - type: AddAccentClothing
+    accent: GnomeAccent
 

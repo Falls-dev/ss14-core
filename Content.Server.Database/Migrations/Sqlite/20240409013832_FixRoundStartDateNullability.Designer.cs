@@ -3,6 +3,7 @@ using System;
 using Content.Server.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Content.Server.Database.Migrations.Sqlite
 {
     [DbContext(typeof(SqliteServerDbContext))]
-    partial class SqliteServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240409013832_FixRoundStartDateNullability")]
+    partial class FixRoundStartDateNullability
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -27,10 +30,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Property<int?>("AdminRankId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("admin_rank_id");
-
-                    b.Property<string>("AdminServer")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("admin_server");
 
                     b.Property<string>("Title")
                         .HasColumnType("TEXT")
@@ -652,27 +651,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.ToTable("player", (string)null);
                 });
 
-            modelBuilder.Entity("Content.Server.Database.PlayerReputation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("player_reputations_id");
-
-                    b.Property<float>("Reputation")
-                        .HasColumnType("REAL")
-                        .HasColumnName("reputation");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("PK_player_reputations");
-
-                    b.ToTable("player_reputations", (string)null);
-                });
-
             modelBuilder.Entity("Content.Server.Database.Preference", b =>
                 {
                     b.Property<int>("Id")
@@ -718,16 +696,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("backpack");
 
-                    b.Property<string>("BodyType")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("body_type");
-
-                    b.Property<string>("BorgName")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("borg_name");
-
                     b.Property<string>("CharacterName")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -737,11 +705,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("clothing");
-
-                    b.Property<string>("ClownName")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("clown_name");
 
                     b.Property<string>("EyeColor")
                         .IsRequired()
@@ -782,11 +745,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("jsonb")
                         .HasColumnName("markings");
 
-                    b.Property<string>("MimeName")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("mime_name");
-
                     b.Property<int>("PreferenceId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("preference_id");
@@ -817,11 +775,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("species");
-
-                    b.Property<string>("Voice")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("voice");
 
                     b.HasKey("Id")
                         .HasName("PK_profile");
@@ -942,10 +895,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Property<int?>("RoundId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("round_id");
-
-                    b.Property<string>("ServerName")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("server_name");
 
                     b.Property<int>("Severity")
                         .HasColumnType("INTEGER")
@@ -1079,10 +1028,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Property<int?>("RoundId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("round_id");
-
-                    b.Property<string>("ServerName")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("server_name");
 
                     b.Property<int>("Severity")
                         .HasColumnType("INTEGER")

@@ -118,6 +118,12 @@ public sealed partial class ViolenceRuleComponent : Component
     public Dictionary<NetUserId, int> Money { get; private set; } = new Dictionary<NetUserId, int>();
 
     /// <summary>
+    /// Dictionary of teams and dictionaries of items and their prices. Shop[team][item].Price = price of said item. Shop[team][item].Slot - slot of the said item. Item itself is prototypeID
+    /// </summary>
+    [DataField("shop"), ViewVariables(VVAccess.ReadWrite)]
+    public Dictionary<ushort, Dictionary<string, (int Price, string Slot)>> Shop { get; private set; } = new Dictionary<ushort, Dictionary<string, (int, string)>>();
+
+    /// <summary>
     /// Dictionary of a players and lists of their equipment.
     /// </summary>
     [DataField("savedEquip"), ViewVariables(VVAccess.ReadWrite)]

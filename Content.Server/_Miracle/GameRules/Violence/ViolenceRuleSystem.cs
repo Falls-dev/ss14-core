@@ -35,7 +35,7 @@ namespace Content.Server._Miracle.GameRules;
 
 // TODO: respawns may suck
 // TODO: recheck matchflow and roundflow
-// TODO: buying equipment
+// TODO: test buying equipment
 // TODO: prototypes of gamerule, uplink and startingGear, gameMapPool, the map itself
 // TODO: make a menu to join the round, switch teams, leave the round, get scoreboard - мб сделает валтос
 
@@ -182,7 +182,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
                         // TODO: teleport equipId right under the player
                         if (slot == "hand")
                         {
-                            _hands.TryPickupAnyHand(ev.Mob, equipId, checkActionBlocker: false);
+                            _hands.PickupOrDrop(ev.Mob, equipId);
                         }
                         else
                         {
@@ -192,7 +192,6 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
                 }
                 equip.Clear();
             }
-
         }
     }
 
@@ -489,6 +488,47 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         // DoRoundEndBehavior(uid);???
     }
 
+    public bool TryBuyItem(NetUserId player, ViolenceRuleComponent comp, string item)
+    {
+        if (!comp.TeamMembers.TryGetValue(player, out var team))
+            return false;
+
+        if (!comp.Shop.TryGetValue(team, out var shop))
+            return false;
+
+        if (!shop.TryGetValue(item, out var listing))
+            return false;
+
+        if (!comp.Money.TryGetValue(player, out var money))
+            return false;
+
+
+        if (money >= listing.Price)
+        {
+            if (!_prototypeManager.TryIndex(item, out var proto))
+                return false;
+
+            comp.Money[player] -= listing.Price;
+
+            if (!_playerManager.GetSessionById(player).AttachedEntity.HasValue)
+            {
+
+            }
+
+            _polymorphSystem.EnsurePausedMap();
+            var equip = EntityManager.SpawnEntity(item, new EntityCoordinates(_polymorphSystem.PausedMap!.Value, 0, 0));
+
+            if (!comp.SavedEquip.ContainsKey(player))
+            {
+                comp.SavedEquip.Add(player, new List<EntityUid>());
+            }
+            comp.SavedEquip[player].Add(equip);
+            comp.EquipSlots.Add(equip, listing.Slot);
+        }
+
+        return false;
+    }
+
     private int ActiveMatches()
     {
         int count = 0;
@@ -542,6 +582,15 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         var selectedTeam = eligibleTeams[_robustRandom.Next(0, eligibleTeams.Count)];
         comp.TeamMembers.Add(player, selectedTeam);
 
+        return true;
+    }
+
+    public bool LeaveRound(NetUserId player, ViolenceRuleComponent comp)
+    {
+        if (!comp.TeamMembers.ContainsKey(player))
+            return false;
+
+        comp.TeamMembers.Remove(player);
         return true;
     }
 

@@ -1,18 +1,15 @@
-﻿using Content.Server.GameTicking.Rules;
-using System.Linq;
-using Content.Server._Miracle.Components;
+﻿using System.Linq;
 using Content.Server.GameTicking;
+using Content.Server.GameTicking.Rules;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Inventory;
 using Content.Server.RoundEnd;
 using Content.Server.Station.Systems;
-using Robust.Shared.Utility;
 using Content.Server.KillTracking;
 using Content.Server.Maps;
 using Content.Server.Mind;
 using Content.Server.Points;
 using Content.Server.Polymorph.Systems;
-using Content.Shared.Database;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
@@ -20,9 +17,9 @@ using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Points;
-using Content.Shared.Preferences;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
+using Robust.Shared.Utility;
 using Robust.Shared.Console;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
@@ -31,9 +28,10 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Server._Miracle.GameRules;
+namespace Content.Server._Miracle.GameRules.Violence;
 
 // TODO: respawns may suck
+// TODO: ViolencePreset, that sets mappool, teams, shop, rewards, startinggear, pointcap, RoundDuration and possibly more!
 // TODO: recheck matchflow and roundflow
 // TODO: test buying equipment
 // TODO: prototypes of gamerule, uplink and startingGear, gameMapPool, the map itself
@@ -179,7 +177,6 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
                     if (violence.EquipSlots.TryGetValue(equipId, out var slot))
                     {
                         _transform.SetParent(equipId, ev.Station);
-                        // TODO: teleport equipId right under the player
                         if (slot == "hand")
                         {
                             _hands.PickupOrDrop(ev.Mob, equipId);
@@ -204,7 +201,7 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             return;
 
         var query = EntityQueryEnumerator<ViolenceRuleComponent, PointManagerComponent, GameRuleComponent>();
-        while (query.MoveNext(out var uid, out var ruleComponent, out var point, out var rule))
+        while (query.MoveNext(out var uid, out var ruleComponent, out _, out var rule))
         {
             if (!GameTicker.IsGameRuleActive(uid, rule))
                 continue;
@@ -261,8 +258,6 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         foreach (var (playerId, teamId) in comp.TeamMembers)
         {
             var player = _playerManager.GetSessionById(playerId);
-            if (player == null)
-                continue;
 
             var profile = _gameTicker.GetPlayerProfile(player);
 
@@ -676,8 +671,11 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             if (!GameTicker.IsGameRuleActive(uid, rule))
                 continue;
 
-            if (!ruleComponent.Teams.Contains(newTeamId))
+            if (!ruleComponent.TeamMembers.ContainsKey(playerId))
                 continue;
+
+            if (!ruleComponent.Teams.Contains(newTeamId))
+                return;
 
             if (ruleComponent.TeamMembers[playerId] == newTeamId)
                 return;
@@ -686,10 +684,12 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             var currentTeamCount = ruleComponent.TeamMembers.Values.Count(teamId => teamId == currentTeamId);
             var newTeamCount = ruleComponent.TeamMembers.Values.Count(teamId => teamId == newTeamId);
 
-            if (newTeamCount >= currentTeamCount)
+            if (newTeamCount >= currentTeamCount * 1.2)
                 return;
 
             ruleComponent.TeamMembers[playerId] = newTeamId;
+
+            // TODO: maybe clear equipment and money?
         }
     }
 

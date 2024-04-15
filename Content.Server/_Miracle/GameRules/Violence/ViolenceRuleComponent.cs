@@ -1,14 +1,9 @@
 ﻿using Content.Shared.FixedPoint;
-using Content.Shared.Inventory;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
-using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 
-namespace Content.Server._Miracle.GameRules;
+namespace Content.Server._Miracle.GameRules.Violence;
 
 [RegisterComponent]
 [Access(typeof(ViolenceRuleSystem))]

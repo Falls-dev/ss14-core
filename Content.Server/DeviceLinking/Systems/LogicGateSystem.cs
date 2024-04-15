@@ -98,7 +98,7 @@ public sealed class LogicGateSystem : EntitySystem
         // default to momentary for compatibility with non-logic signals.
         // currently only door status and logic gates have logic signal state.
         var state = SignalState.Momentary;
-        args.Data?.TryGetValue(DeviceNetworkConstants.LogicState, out state);
+        args.Data?.TryGetState(out state);
 
         // update the state for the correct port
         if (args.Port == comp.InputPortA)

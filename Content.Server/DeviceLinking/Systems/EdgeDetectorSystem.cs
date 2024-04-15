@@ -27,7 +27,7 @@ public sealed class EdgeDetectorSystem : EntitySystem
         // only handle signals with edges
         var state = SignalState.Momentary;
         if (args.Data == null ||
-            !args.Data.TryGetValue(DeviceNetworkConstants.LogicState, out state) ||
+            !args.Data.TryGetState(out state) ||
             state == SignalState.Momentary)
             return;
 

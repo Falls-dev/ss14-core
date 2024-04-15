@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.Administration.Logs;
+using Content.Server.DeviceLinking.Events;
 using Content.Server.DeviceLinking.Systems;
 using Content.Server.DeviceNetwork.Components;
 using Content.Shared.Access.Components;
@@ -161,6 +162,14 @@ public sealed class NetworkConfiguratorSystem : SharedNetworkConfiguratorSystem
             configurator.ActiveDeviceLink = null;
             return;
         }
+
+        var checkEvent = new DeviceLinkTryConnectingAttemptEvent(user, configurator.ActiveDeviceLink);
+        RaiseLocalEvent(target.Value, checkEvent);
+        if(configurator.ActiveDeviceLink != null)
+            RaiseLocalEvent(target.Value, checkEvent);
+
+        if (checkEvent.Cancelled)
+            return;
 
         if (configurator.ActiveDeviceLink.HasValue
             && (HasComp<DeviceLinkSourceComponent>(target)

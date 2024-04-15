@@ -564,20 +564,22 @@ public sealed partial class QuickDialogSystem
     /// <param name="cancelAction">The action to execute upon the dialog being cancelled.</param>
     /// <remarks>
     /// Tuple structure for dialogEntries argument:
-    ///     Type - int/float/string/LongString/Hex16/VoidOption/null (VoidOption)
+    ///     Type - int/float/string/LongString/Hex16/VoidOption. Null will default to VoidOption.
     ///     string - prompt text
-    ///     object - default value. No checks are performed whether or not it matches the specified type.
+    ///     object? - default value. No checks are performed whether or not it matches the specified type.
+    ///     object? (optional) - additional info, used by some data types. Check for implementation in Content.Client.Administration.QuickDialogSystem.
+    ///  
     /// </remarks>
 
     [PublicAPI]
-    public void OpenDialog(ICommonSession session, string title, List<(Type, string, object)> dialogEntries, Action<object[]> okAction, Action? cancelAction = null)
+    public void OpenDialog(ICommonSession session, string title, List<QDEntry> dialogEntries, Action<object[]> okAction, Action? cancelAction = null)
     {
         List<QuickDialogEntry> _dialogEntries = new();
 
         for(int i = 0; i < dialogEntries.Count; i++)
         {
-            var (type, prompt, defaultValue) = dialogEntries[i];
-            _dialogEntries.Add(new QuickDialogEntry((i+1).ToString(), TypeToEntryType(type), prompt??" ", null, defaultValue));
+            var (type, prompt, defaultValue, info) = dialogEntries[i];
+            _dialogEntries.Add(new QuickDialogEntry((i+1).ToString(), TypeToEntryType(type), prompt??" ", null, defaultValue, info));
         }                                         // ^^^ these "indexes" start with 1, for some reason
 
 
@@ -602,3 +604,5 @@ public sealed partial class QuickDialogSystem
         );
     }
 }
+
+

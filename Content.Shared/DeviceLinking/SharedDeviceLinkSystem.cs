@@ -362,6 +362,20 @@ public abstract class SharedDeviceLinkSystem : EntitySystem
             RemoveSinkFromSource(sourceUid, sinkUid, null, sinkComponent);
         }
     }
+    /// <summary>
+    /// Removes every link from the given source
+    /// </summary>
+    public void RemoveAllFromSource(EntityUid sourceUid, DeviceLinkSourceComponent? sourceComponent = null)
+    {
+        if (!Resolve(sourceUid, ref sourceComponent))
+            return;
+
+        foreach (var sinkUid in sourceComponent.LinkedPorts.Keys) // fuck you
+        {
+            if (TryComp<DeviceLinkSinkComponent>(sinkUid, out var sinkComponent))
+                RemoveSinkFromSource(sourceUid, sinkUid, null, sinkComponent);
+        }
+    }
 
     /// <summary>
     /// Removes all links between a source and a sink

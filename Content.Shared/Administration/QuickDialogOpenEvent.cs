@@ -93,17 +93,22 @@ public sealed class QuickDialogEntry
     /// </summary>
     public object? Value;
     /// <summary>
+    /// Additional info for creating more complex controls.
+    /// </summary>
+    public object? Info;
+    /// <summary>
     /// String to replace the type-specific placeholder with.
     /// </summary>
     public string? Placeholder;
 
-    public QuickDialogEntry(string fieldId, QuickDialogEntryType type, string prompt, string? placeholder = null, object? defaultValue = null) 
+    public QuickDialogEntry(string fieldId, QuickDialogEntryType type, string prompt, string? placeholder = null, object? defaultValue = null, object? info = null) 
     {
         FieldId = fieldId;
         Type = type;
         Prompt = prompt;
         Placeholder = placeholder;
         Value = defaultValue;
+        Info = info;
     }
 }
 
@@ -146,6 +151,10 @@ public enum QuickDialogEntryType
     /// You'll never guess this one.
     /// </summary>
     Boolean,
+    /// <summary>
+    /// List of options. Only supported in non-generic OpenDialog().
+    /// </summary>
+    OptionList,
     /// <summary>
     /// No control will be shown, only the prompt label.
     /// </summary>

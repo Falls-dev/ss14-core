@@ -82,7 +82,7 @@ public sealed class DeviceLinkSystem : SharedDeviceLinkSystem
         //Just skip using device networking if the source or the sink doesn't support it
         if (!HasComp<DeviceNetworkComponent>(source) || !TryComp<DeviceNetworkComponent>(sink, out var sinkNetwork))
         {
-            var eventArgs = new SignalReceivedEvent(sinkPort, source);
+            var eventArgs = new SignalReceivedEvent(sinkPort, source, data);
             RaiseLocalEvent(sink, ref eventArgs);
             return;
         }

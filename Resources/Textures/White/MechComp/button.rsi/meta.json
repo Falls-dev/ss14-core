@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "contact 88005553535 for details",
+  "copyright": "White Dream",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "pressed",
+      "delays": [
+        [
+          0.3,
+          0.1
+        ]
+      ]
+    }
+  ]
+}

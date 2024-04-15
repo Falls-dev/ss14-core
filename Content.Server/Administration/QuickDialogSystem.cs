@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Shared.Administration;
 using Content.Shared.Chemistry;
 using Robust.Server.Player;
@@ -117,8 +118,9 @@ public sealed partial class QuickDialogSystem : EntitySystem
         for(int i = 0; i < entries.Count; i++)
         {
             var entryType = entries[i].Type;
-            var input = responces[(i+1).ToString()]; //starts with "1"
-            if(!TryParseQuickDialog<object>(entryType, input, out object? o))
+            var info = entries[i].Info;
+            var input = responces[(i+1).ToString()]; // it starts with "1"
+            if(!TryParseQuickDialog<object>(entryType, input, out object? o, info))
             {
                 return false;
             }
@@ -127,7 +129,7 @@ public sealed partial class QuickDialogSystem : EntitySystem
         return true;
     }
 
-    private bool TryParseQuickDialog<T>(QuickDialogEntryType entryType, string input, [NotNullWhen(true)] out T? output)
+    private bool TryParseQuickDialog<T>(QuickDialogEntryType entryType, string input, [NotNullWhen(true)] out T? output, object? info = null)
     {
         switch (entryType)
         {
@@ -163,9 +165,9 @@ public sealed partial class QuickDialogSystem : EntitySystem
                 }
 
                 //It's verrrry likely that this will be longstring
-                var longString = (LongString) input;
+                // var longString = (LongString) input; // see Hex16 case
 
-                output = (T?) (object?) longString;
+                output = (T?) (object?) input;
                 return output is not null;
             }
             case QuickDialogEntryType.Boolean:
@@ -185,10 +187,10 @@ public sealed partial class QuickDialogSystem : EntitySystem
             }
             case QuickDialogEntryType.Hex16:
             {
-                bool ret = int.TryParse(input, System.Globalization.NumberStyles.HexNumber, null, out var res) && input.Length <= 4 && input == input.ToUpper();
+                bool ret = int.TryParse(input, System.Globalization.NumberStyles.HexNumber, null, out var result) && input.Length <= 4 && input == input.ToUpper();
                 if (ret)
-                    output = (T?) (object?) (Hex16) res;
-                else
+                    output = (T?) (object?) result; // with T as Hex16 this will result in retun value of Hex16. BUT if T is object, we will return int as an object! What a fucking clown world, and i have absolutely noone to blame for it except my own hubris.
+                else                                // If i do actually cast to it, like in Longstring, then i will not be able to blindly convert it to int because if Hex16 is under object variable, the implicit-explicit converters just fuck off, apparently.
                     output = default;
                 return ret;
             }
@@ -197,12 +199,25 @@ public sealed partial class QuickDialogSystem : EntitySystem
                 output = default;
                 return input == "";
             }
+            case QuickDialogEntryType.OptionList:
+            {
+                if (info != null && ((IEnumerable<string>)info).Contains<string>(input))
+                {
+                    output = (T) (object) input;
+                    return true;
+                }
+                else
+                {
+                    output = default;
+                    return false;
+                }
+            }
             default:
                 throw new ArgumentOutOfRangeException(nameof(entryType), entryType, null);
         }
     }
 
-    public QuickDialogEntryType TypeToEntryType(Type T)
+    public QuickDialogEntryType TypeToEntryType(Type? T)
     {
         // yandere station much?
         if (T == typeof(int) || T == typeof(uint) || T == typeof(long) || T == typeof(ulong))
@@ -222,6 +237,9 @@ public sealed partial class QuickDialogSystem : EntitySystem
 
         if (T == typeof(bool))
             return QuickDialogEntryType.Boolean;
+
+        if (T == typeof(List<string>))
+            return QuickDialogEntryType.OptionList;
 
         if (T == typeof(VoidOption) || T == null)
             return QuickDialogEntryType.Void;
@@ -260,10 +278,12 @@ public record struct Hex16(int number)
     {
         return hex16.number;
     }
+
     public static explicit operator Hex16(int num)
     {
         return new(num);
     }
+
 }
 
 /// <summary>

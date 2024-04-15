@@ -37,7 +37,7 @@ namespace Content.Server.DeviceLinking.Systems
                 return;
 
             var state = SignalState.Momentary;
-            args.Data?.TryGetValue(DeviceNetworkConstants.LogicState, out state);
+            args.Data?.TryGetState(out state);
 
 
             if (args.Port == component.OpenPort)

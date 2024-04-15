@@ -137,10 +137,20 @@ public sealed partial class ViolenceRuleComponent : Component
     public int AliveReward { get; private set; } = 300;
 
     /// <summary>
-    /// Reward for remaining alive at the end of the round.
+    /// Reward for a kill.
     /// </summary>
     [DataField("killReward"), ViewVariables(VVAccess.ReadWrite)]
     public int KillReward { get; private set; } = 300;
+
+    /// <summary>
+    /// Reward for an assist.
+    /// </summary>
+    [DataField("assistReward"), ViewVariables(VVAccess.ReadWrite)]
+    public int AssistReward { get; private set; } = 100;
+
+
+    [DataField("skillIssuePenalty"), ViewVariables(VVAccess.ReadWrite)]
+    public int SkillIssuePenalty { get; private set; } = 300;
 
 
     /// <summary>

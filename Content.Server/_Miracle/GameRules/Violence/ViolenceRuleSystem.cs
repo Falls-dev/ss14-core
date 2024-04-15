@@ -385,19 +385,19 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
 
     private void OnKillReported(ref KillReportedEvent ev)
     {
+        ActorComponent? actor = null;
+        if (!Resolve(ev.Entity, ref actor, false))
+            return;
+
         var query = EntityQueryEnumerator<ViolenceRuleComponent, PointManagerComponent, GameRuleComponent>();
         while (query.MoveNext(out var uid, out var ruleComponent, out var point, out var rule))
         {
             if (!GameTicker.IsGameRuleActive(uid, rule))
                 continue;
 
-            ActorComponent? actor = null;
-            if (!Resolve(uid, ref actor, false))
-                return;
-
             var team = GetPlayersTeam(actor.PlayerSession.UserId, ruleComponent);
             if (team == null)
-                return;
+                continue;
 
             if (!ruleComponent.KillDeaths.TryGetValue(actor.PlayerSession.UserId, out var targetKd))
             {
@@ -408,15 +408,17 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
 
                 ruleComponent.KillDeaths.Add(actor.PlayerSession.UserId, targetKd);
             }
+            ruleComponent.KillDeaths[actor.PlayerSession.UserId][2]++;
 
-            targetKd[2]++;
 
             // YOU SUICIDED OR GOT THROWN INTO LAVA!
             // WHAT A GIANT FUCKING NERD! LAUGH NOW!
             if (ev.Primary is not KillPlayerSource player)
             {
-                _point.AdjustPointValue(ev.Entity, -1, uid, point); // krill issue penalty
-                // -1 point to the nerd's team?
+                if (!ruleComponent.Money.ContainsKey(actor.PlayerSession.UserId))
+                    ruleComponent.Money.TryAdd(actor.PlayerSession.UserId, 0);
+
+                ruleComponent.Money[actor.PlayerSession.UserId] -= ruleComponent.SkillIssuePenalty;
                 continue;
             }
 
@@ -434,7 +436,12 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
                         ruleComponent.KillDeaths.Add(actor.PlayerSession.UserId, killerKd);
                     }
 
-                    killerKd[0]++;
+                    ruleComponent.KillDeaths[killer.PlayerId][0]++;
+
+                    if (!ruleComponent.Money.ContainsKey(killer.PlayerId))
+                        ruleComponent.Money.TryAdd(killer.PlayerId, 0);
+
+                    ruleComponent.Money[killer.PlayerId] += ruleComponent.KillReward;
                 }
             }
 
@@ -453,7 +460,12 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
                         ruleComponent.KillDeaths.Add(actor.PlayerSession.UserId, assistKd);
                     }
 
-                    assistKd[1]++;
+                    ruleComponent.KillDeaths[assist.PlayerId][1]++;
+
+                    if (!ruleComponent.Money.ContainsKey(assist.PlayerId))
+                        ruleComponent.Money.TryAdd(assist.PlayerId, 0);
+
+                    ruleComponent.Money[assist.PlayerId] += ruleComponent.AssistReward;
                 }
             }
 
@@ -480,9 +492,15 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
             // maybe wait a bit before ending the round?
             _roundEnd.DoRoundEndBehavior(RoundEndBehavior.InstantEnd, TimeSpan.FromSeconds(10));
         }
-        // DoRoundEndBehavior(uid);???
     }
 
+    /// <summary>
+    /// I will rewrite this to not require component input if needed. In fact, TODO
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="comp"></param>
+    /// <param name="item"></param>
+    /// <returns></returns>
     public bool TryBuyItem(NetUserId player, ViolenceRuleComponent comp, string item)
     {
         if (!comp.TeamMembers.TryGetValue(player, out var team))
@@ -638,6 +656,9 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
     /// <returns></returns>
     public bool CheckForRoundEnd(ViolenceRuleComponent comp)
     {
+        if (comp.RoundState != RoundState.InProgress)
+            return false;
+
         var aliveTeams = new List<ushort>();
 
         foreach (var team in comp.Teams)

@@ -10,20 +10,9 @@ namespace Content.Shared.Roles
         [DataField]
         public Dictionary<string, EntProtoId> Equipment = new();
 
-        /// <summary>
-        /// if empty, there is no skirt override - instead the uniform provided in equipment is added.
-        /// </summary>
-        [DataField]
-        public EntProtoId? InnerClothingSkirt;
-
-        [DataField]
-        public EntProtoId? Satchel;
-
-        [DataField]
-        public EntProtoId? Duffelbag;
-
         [DataField]
         public List<EntProtoId> Inhand = new(0);
+
         // White underwear
         [DataField("underweart")]
         private string _underweart = string.Empty;
@@ -31,6 +20,12 @@ namespace Content.Shared.Roles
         [DataField("underwearb")]
         private string _underwearb = string.Empty;
         // White underwear end
+
+        /// <summary>
+        /// Inserts entities into the specified slot's storage (if it does have storage).
+        /// </summary>
+        [DataField]
+        public Dictionary<string, List<EntProtoId>> Storage = new();
 
         [ViewVariables]
         [IdDataField]
@@ -40,12 +35,6 @@ namespace Content.Shared.Roles
         {
             if (profile != null)
             {
-                if (slot == "jumpsuit" && profile.Clothing == ClothingPreference.Jumpskirt && !string.IsNullOrEmpty(InnerClothingSkirt))
-                    return InnerClothingSkirt;
-                if (slot == "back" && profile.Backpack == BackpackPreference.Satchel && !string.IsNullOrEmpty(Satchel))
-                    return Satchel;
-                if (slot == "back" && profile.Backpack == BackpackPreference.Duffelbag && !string.IsNullOrEmpty(Duffelbag))
-                    return Duffelbag;
                 // White underwear
                 if (slot == "underweart" && profile.Sex == Sex.Female && !string.IsNullOrEmpty(_underweart))
                     return _underweart;

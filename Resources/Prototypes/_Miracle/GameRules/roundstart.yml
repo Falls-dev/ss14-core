@@ -1,6 +1,0 @@
-﻿- type: entity
-  id: Violence
-  parent: BaseGameRule
-  noSpawn: true
-  components:
-  - type: ViolenceRule

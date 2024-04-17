@@ -31,11 +31,12 @@ using Robust.Shared.Timing;
 namespace Content.Server._Miracle.GameRules.Violence;
 
 // TODO: respawns may suck
-// TODO: ViolencePreset, that sets mappool, teams, shop, rewards, startinggear, pointcap, RoundDuration and possibly more!
-// TODO: recheck matchflow and roundflow
+// TODO: ViolencePreset, that sets MapPool, teams, Shop, rewards, StartingGear, PointCap, RoundDuration and possibly more!
+// TODO: recheck match flow and round flow
 // TODO: test buying equipment
-// TODO: prototypes of gamerule, uplink and startingGear, gameMapPool, the map itself
+// TODO: prototypes of gameRule, uplink? and startingGear, gameMapPool, the map itself
 // TODO: make a menu to join the round, switch teams, leave the round, get scoreboard - мб сделает валтос
+// TODO: localize kill callouts
 
 public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
 {
@@ -257,7 +258,10 @@ public sealed class ViolenceRuleSystem : GameRuleSystem<ViolenceRuleComponent>
         // spawning players
         foreach (var (playerId, teamId) in comp.TeamMembers)
         {
-            var player = _playerManager.GetSessionById(playerId);
+            _playerManager.TryGetSessionById(playerId, out var player);
+
+            if (player == null)
+                continue;
 
             var profile = _gameTicker.GetPlayerProfile(player);
 

@@ -1,9 +1,0 @@
-﻿- type: gamePreset
-  id: Violence
-  alias:
-    - violence
-  name: Violence
-  description: Violence
-  showInVote: false
-  rules:
-    - Violence

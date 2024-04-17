@@ -1,0 +1,93 @@
+﻿- type: gamePreset
+  id: ViolenceDebug
+  alias:
+  - violenceTest
+  - violenceDebug
+  name: Violence
+  description: Violence
+  showInVote: false
+  rules:
+  - ViolenceTestRule
+
+- type: entity
+  id: ViolenceTestRule
+  parent: BaseGameRule
+  noSpawn: true
+  components:
+  - type: ViolenceRule
+    teams:
+    shop:
+    pointCap: 5
+    roundDuration: 5 # timespan issues?
+    killReward: 300
+    assistReward: 100
+    aliveReward: 300
+    skillIssuePenalty: 300 # penalty for suicide or being thrown in lava
+    mapPool: ViolenceTestMapPool
+
+- type: gameMapPool
+  id: ViolenceTestMapPool
+  maps:
+  - ViolenceTestMap
+
+- type: entity
+  id: SpawnPointViolenceOne
+  parent: SpawnPointJobBase
+  name: violence team 1 spawner
+  components:
+  - type: SpawnPoint
+    job_id: ViolenceJob
+    teamId: 1
+  - type: Sprite # TODO: edit this
+    layers:
+    - state: green
+    - state: qm
+
+- type: entity
+  name: violence latejoin spawn point (team 1)
+  id: SpawnPointLatejoinViolenceOne
+  parent: SpawnPointJobBase
+  components:
+  - type: Sprite
+    state: green
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    teamId: 1
+
+- type: entity
+  id: SpawnPointViolenceTwo
+  parent: SpawnPointJobBase
+  name: violence team 2 spawner
+  components:
+  - type: SpawnPoint
+    job_id: ViolenceJob
+    teamId: 2
+  - type: Sprite # TODO: edit this
+    layers:
+    - state: green
+    - state: qm
+
+- type: entity
+  name: violence latejoin spawn point (team 2)
+  id: SpawnPointLatejoinViolenceTwo
+  parent: SpawnPointJobBase
+  components:
+  - type: Sprite
+    state: green
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    teamId: 2
+
+- type: job
+  id: ViolenceJob
+  name: job-name-violence
+  description: job-description-violence
+  playTimeTracker: JobViolence
+  startingGear: CentcomGear
+  icon: "JobIconPassenger"
+  canBeAntag: false
+  access:
+  - Maintenance
+
+- type: playTimeTracker
+  id: JobViolence

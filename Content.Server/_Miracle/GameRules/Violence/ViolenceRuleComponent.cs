@@ -97,7 +97,7 @@ public sealed partial class ViolenceRuleComponent : Component
     /// <summary>
     /// The duration of a round.
     /// </summary>
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
+    [DataField("roundDuration", customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan RoundDuration = TimeSpan.FromMinutes(5);
 
     /// <summary>
@@ -149,6 +149,9 @@ public sealed partial class ViolenceRuleComponent : Component
     public int AssistReward { get; private set; } = 100;
 
 
+    /// <summary>
+    /// Penalty for suicide or being thrown in lava or something.
+    /// </summary>
     [DataField("skillIssuePenalty"), ViewVariables(VVAccess.ReadWrite)]
     public int SkillIssuePenalty { get; private set; } = 300;
 

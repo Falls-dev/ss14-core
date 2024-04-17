@@ -54,3 +54,12 @@
   id: ChemistLabCoat
   equipment:
     outerClothing: ClothingOuterCoatLabChem
+
+- type: itemLoadout
+  id: ChemistWintercoat
+  equipment: ChemistWintercoat
+
+- type: startingGear
+  id: ChemistWintercoat
+  equipment:
+    outerClothing: ClothingOuterWinterChem

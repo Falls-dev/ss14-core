@@ -53,3 +53,23 @@
   id: AtmosphericTechnicianDuffel
   equipment:
     back: ClothingBackpackDuffelAtmosphericsFilled
+
+# OuterClothing
+- type: itemLoadout
+  id: AtmosphericTechnicianWintercoat
+  equipment: AtmosphericTechnicianWintercoat
+
+- type: startingGear
+  id: AtmosphericTechnicianWintercoat
+  equipment:
+    outerClothing: ClothingOuterWinterAtmos
+
+# Shoes
+- type: itemLoadout
+  id: WhiteShoes
+  equipment: WhiteShoes
+
+- type: startingGear
+  id: WhiteShoes
+  equipment:
+    shoes: ClothingShoesColorWhite

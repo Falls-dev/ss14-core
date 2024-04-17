@@ -20,6 +20,5 @@
 - type: startingGear
   id: AtmosphericTechnicianGear
   equipment:
-    shoes: ClothingShoesColorWhite
     id: AtmosPDA
     ears: ClothingHeadsetEngineering

@@ -29,6 +29,5 @@
 - type: startingGear
   id: WardenGear
   equipment:
-    shoes: ClothingShoesBootsCombatFilled
     id: WardenPDA
     ears: ClothingHeadsetSecurity

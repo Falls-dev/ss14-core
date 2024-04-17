@@ -17,7 +17,5 @@
 - type: startingGear
   id: ScientistGear
   equipment:
-    shoes: ClothingShoesColorWhite
-    id: SciencePDA
     ears: ClothingHeadsetScience
 

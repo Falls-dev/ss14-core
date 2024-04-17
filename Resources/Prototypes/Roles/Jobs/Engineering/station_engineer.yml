@@ -20,6 +20,4 @@
 - type: startingGear
   id: StationEngineerGear
   equipment:
-    shoes: ClothingShoesBootsWork
-    id: EngineerPDA
     ears: ClothingHeadsetEngineering

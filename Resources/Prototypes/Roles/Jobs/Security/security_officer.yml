@@ -27,6 +27,4 @@
 - type: startingGear
   id: SecurityOfficerGear
   equipment:
-    shoes: ClothingShoesBootsCombatFilled
-    id: SecurityPDA
     ears: ClothingHeadsetSecurity

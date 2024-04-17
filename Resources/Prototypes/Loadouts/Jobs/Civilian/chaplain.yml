@@ -9,6 +9,15 @@
     head: ClothingHeadHatFez
 
 - type: itemLoadout
+  id: ChaplainNunHood
+  equipment: ChaplainNunHood
+
+- type: startingGear
+  id: ChaplainNunHood
+  equipment:
+    head: ClothingHeadHatHoodNunHood
+
+- type: itemLoadout
   id: ChaplainPlagueHat
   equipment: ChaplainPlagueHat
 

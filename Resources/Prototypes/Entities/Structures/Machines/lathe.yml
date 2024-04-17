@@ -502,6 +502,7 @@
       - TelecomServerCircuitboard
       - MassMediaCircuitboard
       - ReagentGrinderIndustrialMachineCircuitboard
+      - JukeboxCircuitBoard
   - type: BluespaceStorage
   - type: MaterialStorage
     whitelist:

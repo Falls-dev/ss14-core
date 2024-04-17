@@ -1,19 +1,4 @@
 ﻿Entries:
-- author: VasilisThePikachu
-  changes:
-  - message: The fridge's explosion resistance has been nerfed significantly, It's
-      no longer able to survive nukes at point blank range of the nuke.
-    type: Tweak
-  id: 5866
-  time: '2024-02-01T23:41:43.0000000+00:00'
-  url: https://api.github.com/repos/space-wizards/space-station-14/pulls/24844
-- author: Dygon
-  changes:
-  - message: You can't slip through chain link fences anymore.
-    type: Fix
-  id: 5867
-  time: '2024-02-02T04:24:20.0000000+00:00'
-  url: https://api.github.com/repos/space-wizards/space-station-14/pulls/24850
 - author: Psychpsyo
   changes:
   - message: You can now turn down the screen shake intensity in the accessibility
@@ -3834,3 +3819,17 @@
   id: 6365
   time: '2024-04-17T03:36:44.0000000+00:00'
   url: https://github.com/space-wizards/space-station-14/pull/27025
+- author: iNV3RT3D & metalgearsloth
+  changes:
+  - message: Added a jukebox.
+    type: Add
+  id: 6366
+  time: '2024-04-17T09:27:01.0000000+00:00'
+  url: https://github.com/space-wizards/space-station-14/pull/26736
+- author: Vermidia
+  changes:
+  - message: Pirate Accent and Mobster accent will respect capitalization better now
+    type: Fix
+  id: 6367
+  time: '2024-04-17T10:04:24.0000000+00:00'
+  url: https://github.com/space-wizards/space-station-14/pull/26644

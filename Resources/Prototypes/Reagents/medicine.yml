@@ -1064,6 +1064,16 @@
         conditions:
           - !type:ReagentThreshold
             min: 15
+  reactiveEffects:
+    Extinguish:
+      methods: [ Touch ]
+      effects:
+      - !type:ExtinguishReaction
+  plantMetabolism:
+  - !type:PlantAdjustWater
+    amount: 1
+  tileReactions:
+  - !type:ExtinguishTileReaction { }
 
 - type: reagent
   id: Pyrazine

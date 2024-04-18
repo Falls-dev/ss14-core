@@ -554,11 +554,8 @@
       amount: 1
     Silicon:
       amount: 1
-    Benzene:
-      amount: 1
   products:
     Insuzine: 3
-    Ash: 1
 
 - type: reaction
   id: Necrosol

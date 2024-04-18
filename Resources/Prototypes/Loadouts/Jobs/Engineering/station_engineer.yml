@@ -20,13 +20,31 @@
 
 # Head
 - type: itemLoadout
-  id: StationEngineerHead
-  equipment: StationEngineerHead
+  id: StationEngineerHardhatYellow
+  equipment: StationEngineerHardhatYellow
 
 - type: startingGear
-  id: StationEngineerHead
+  id: StationEngineerHardhatYellow
   equipment:
     head: ClothingHeadHatHardhatYellow
+
+- type: itemLoadout
+  id: StationEngineerHardhatOrange
+  equipment: StationEngineerHardhatOrange
+
+- type: startingGear
+  id: StationEngineerHardhatOrange
+  equipment:
+    head: ClothingHeadHatHardhatOrange
+
+- type: itemLoadout
+  id: StationEngineerHardhatRed
+  equipment: StationEngineerHardhatRed
+
+- type: startingGear
+  id: StationEngineerHardhatRed
+  equipment:
+    head: ClothingHeadHatHardhatRed
 
 - type: itemLoadout
   id: SeniorEngineerBeret

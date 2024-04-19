@@ -68,9 +68,6 @@
     - map: [ "enum.EdgeLayer.West" ]
       state: foam-west
   - type: SmoothEdge
-  - type: IconSmooth
-    key: walls
-    mode: NoSprite
   - type: FoamVisuals
     animationTime: 0.6
     animationState: foam-dissolve
@@ -148,14 +145,11 @@
   - type: Occluder
   - type: Appearance
   - type: SmoothEdge
-  - type: IconSmooth
-    key: walls
-    mode: NoSprite
   - type: Transform
     anchored: true
   - type: Airtight
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:

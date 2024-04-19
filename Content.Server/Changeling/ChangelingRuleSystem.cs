@@ -9,6 +9,7 @@ using Content.Server.Mind;
 using Content.Server.NPC.Systems;
 using Content.Server.Objectives;
 using Content.Server.Roles;
+using Content.Shared._White.Mood;
 using Content.Shared.Changeling;
 using Content.Shared.GameTicking;
 using Content.Shared.Objectives.Components;
@@ -40,7 +41,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
     private const float ChangelingStartDelay = 3f * 60;
     private const float ChangelingStartDelayVariance = 3f * 60;
 
-    private const int ChangelingMinPlayers = 10;
+    private const int ChangelingMinPlayers = 15;
 
     private const int ChangelingMaxDifficulty = 5;
     private const int ChangelingMaxPicks = 20;
@@ -55,6 +56,13 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         SubscribeLocalEvent<RoundRestartCleanupEvent>(ClearUsedNames);
 
         SubscribeLocalEvent<ChangelingRuleComponent, ObjectivesTextGetInfoEvent>(OnObjectivesTextGetInfo);
+
+        SubscribeLocalEvent<ChangelingRoleComponent, GetBriefingEvent>(OnGetBriefing);
+    }
+
+    private void OnGetBriefing(Entity<ChangelingRoleComponent> ent, ref GetBriefingEvent args)
+    {
+        args.Append(Loc.GetString("changeling-role-briefing-short"));
     }
 
     protected override void ActiveTick(
@@ -176,13 +184,6 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
             PrototypeId = changelingRule.ChangelingPrototypeId
         }, mind);
 
-        var briefing = Loc.GetString("changeling-role-briefing-short");
-
-        _roleSystem.MindAddRole(mindId, new RoleBriefingComponent
-        {
-            Briefing = briefing
-        }, mind, true);
-
         _roleSystem.MindPlaySound(mindId, changelingRule.GreetSoundNotification, mind);
         SendChangelingBriefing(mindId);
         changelingRule.ChangelingMinds.Add(mindId);
@@ -190,6 +191,8 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         // Change the faction
         _npcFaction.RemoveFaction(entity, "NanoTrasen", false);
         _npcFaction.AddFaction(entity, "Syndicate");
+
+        RaiseLocalEvent(mind.OwnedEntity.Value, new MoodEffectEvent("TraitorFocused"));
 
         EnsureComp<ChangelingComponent>(entity, out var readyChangeling);
 
@@ -232,7 +235,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
             if (changeling.TotalChangelings >= MaxChangelings)
                 continue;
 
-            if (_gulag.IsUserGulaged(ev.Player.UserId, out _))
+            if (_gulag.IsUserGulagged(ev.Player.UserId, out _))
                 continue;
 
             if (!ev.LateJoin)

@@ -1008,12 +1008,17 @@
 - type: reagent
   id: Holywater
   name: reagent-name-holywater
+  parent: BaseDrink
   group: Medicine
   desc: reagent-desc-holywater
   physicalDesc: reagent-physical-desc-holy
   flavor: holy
   color: "#91C3F7"
   metabolisms:
+    Drink:
+      effects:
+      - !type:SatiateThirst
+        factor: 4
     Medicine:
       effects:
       - !type:HealthChange
@@ -1027,6 +1032,7 @@
             Heat: -0.2
             Shock: -0.2
             Cold: -0.2
+      - !type:CureBlight
       - !type:DeconvertCultist
         conditions:
           - !type:ReagentThreshold
@@ -1162,3 +1168,86 @@
             Heat: -3.0
             Shock: -3.0
             Caustic: -1.0
+
+- type: reagent
+  id: Synthflesh
+  name: reagent-name-synthflesh
+  desc: reagent-desc-synthflesh
+  flavor: metallic
+  physicalDesc: reagent-physical-desc-gelatinous
+  color: "#E0D4D3"
+  reactiveEffects:
+    Acidic:
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        damage:
+          groups:
+            Brute: -1.25
+          types:
+            Heat: -1.25
+            Shock: -1.25
+            Cold: -1.25
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:HealthChange
+        conditions:
+        damage:
+          types:
+            Poison: 1
+  slippery: true
+
+- type: reagent
+  id: SilverSulfadiazine
+  name: reagent-name-silversulfadiazine
+  desc: reagent-desc-silversulfadiazine
+  flavor: medicine
+  physicalDesc: reagent-physical-desc-creamy
+  color: "#c2c22b"
+  reactiveEffects:
+    Acidic:
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        damage:
+          types:
+            Heat: -2
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:HealthChange
+        conditions:
+        damage:
+          types:
+            Heat: -2.0
+            Poison: 0.5
+
+- type: reagent
+  id: StypticPowder
+  name: reagent-name-stypticpowder
+  desc: reagent-desc-stypticpowder
+  flavor: medicine
+  physicalDesc: reagent-physical-desc-powdery
+  color: "#c2485e"
+  reactiveEffects:
+    Acidic:
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        damage:
+          groups:
+            Brute: -2
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:HealthChange
+        conditions:
+        damage:
+          groups:
+            Brute: -2
+          types:
+            Poison: 0.5

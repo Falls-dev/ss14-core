@@ -19,6 +19,18 @@
           - MachineLayer
   - type: Lathe
   - type: MaterialStorage
+    whitelist:
+      tags:
+      - Sheet
+      - RawMaterial
+      - Ingot
+      entities:
+      - Steel
+      - Glass
+      - Gold
+      - Plasma
+      - Uranium
+      - Plastic
   - type: Destructible
     thresholds:
     - trigger:
@@ -74,12 +86,6 @@
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: Machine
     board: AutolatheMachineCircuitboard
-  - type: MaterialStorage
-    whitelist:
-      tags:
-        - Sheet
-        - RawMaterial
-        - Ingot
   - type: Lathe
     idleState: icon
     runningState: building
@@ -184,13 +190,18 @@
        - CartridgeAntiMateriel
        - CartridgeCaselessRifle
        - MagazineBoxMagnumAP
-       - MagazineBoxAntiMateriel
+       - MagazineBoxAntiMaterielBig
        - MagazineBoxCaselessRifle
        - MagazineBoxPistol
        - MagazineBoxMagnum
        - MagazineBoxRifle
        - MagazineBoxLightRifle
        - GrenadeBlast
+       - LightModuleRecipe
+       - LaserModuleRecipe
+       - FlameHiderModuleRecipe
+       - SilencerModuleRecipe
+       - AcceleratorModuleRecipe
     emagDynamicRecipes:
       - CartridgePistolRubber
       - CartridgeMagnumRubber
@@ -225,6 +236,7 @@
       - MagazineGrenadeEmpty
       - GrenadeEMP
       - GrenadeFlash
+  - type: BluespaceStorage
 
 - type: entity
   id: AutolatheHyperConvection
@@ -237,6 +249,7 @@
   - type: Lathe
     materialUseMultiplier: 0.5
     timeMultiplier: 1.5
+  - type: BluespaceStorage
   - type: LatheHeatProducing
   - type: Machine
     board: AutolatheHyperConvectionMachineCircuitboard
@@ -265,12 +278,6 @@
   - type: Wires
     boardName: wires-board-name-protolathe
     layoutId: Protolathe
-  - type: MaterialStorage
-    whitelist:
-      tags:
-        - Sheet
-        - RawMaterial
-        - Ingot
   - type: Lathe
     idleState: icon
     runningState: building
@@ -349,6 +356,25 @@
       - WeaponAdvancedLaser
       - WeaponLaserCannon
       - WeaponXrayCannon
+      - WeaponDisablerSMG
+      - ClothingHandsGlovesMagnetic
+      - ClothingHandsGlovesMagneticAdvanced
+      - ClothingEyesGlassesSecurity
+      - ExplosivePayload
+      - FlashPayload
+      - PowerCageSmall
+      - PowerCageMedium
+      - PowerCageHigh
+      - ShuttleGunSvalinnMachineGunCircuitboard
+      - ShuttleGunPerforatorCircuitboard
+      - ShuttleGunFriendshipCircuitboard
+      - ShuttleGunDusterCircuitboard
+      - TelescopicShield
+      - Truncheon
+      - MagazineGrenadeEmpty
+      - GrenadeEMP
+      - GrenadeFlash
+  - type: BluespaceStorage
 
 - type: entity
   id: ProtolatheHyperConvection
@@ -361,6 +387,7 @@
   - type: Lathe
     materialUseMultiplier: 0.5
     timeMultiplier: 1.5
+  - type: BluespaceStorage
   - type: LatheHeatProducing
   - type: Machine
     board: ProtolatheHyperConvectionMachineCircuitboard
@@ -476,6 +503,7 @@
       - ArtifactCrusherMachineCircuitboard
       - TelecomServerCircuitboard
       - MassMediaCircuitboard
+  - type: BluespaceStorage
   - type: MaterialStorage
     whitelist:
       tags:
@@ -588,6 +616,7 @@
     - HamtrLLeg
     - HamtrRLeg
     - VimHarness
+  - type: BluespaceStorage
   - type: MaterialStorage
     whitelist:
       tags:
@@ -699,6 +728,11 @@
       - ShellShotgunPractice
       - WeaponLaserCarbinePractice
       - WeaponDisablerPractice
+      - LightModuleRecipe
+      - LaserModuleRecipe
+      - FlameHiderModuleRecipe
+      - SilencerModuleRecipe
+      - AcceleratorModuleRecipe
     dynamicRecipes:
       - CartridgeLightRifleIncendiary
       - CartridgeMagnumIncendiary
@@ -754,6 +788,8 @@
       - ShuttleGunPerforatorCircuitboard
       - ShuttleGunFriendshipCircuitboard
       - ShuttleGunDusterCircuitboard
+      - ClothingHandsGlovesMagnetic
+      - ClothingHandsGlovesMagneticAdvanced
   - type: EmagLatheRecipes
     emagStaticRecipes:
      - MagazineLightRifleBox
@@ -762,14 +798,9 @@
      - CartridgeAntiMateriel
      - CartridgeCaselessRifle
      - MagazineBoxMagnumAP
-     - MagazineBoxAntiMateriel
+     - MagazineBoxAntiMaterielBig
      - MagazineBoxCaselessRifle
-  - type: MaterialStorage
-    whitelist:
-      tags:
-        - Sheet
-        - RawMaterial
-        - Ingot
+  - type: BluespaceStorage
 
 - type: entity
   id: AmmoTechFab
@@ -814,12 +845,9 @@
         - CartridgeAntiMateriel
         - CartridgeCaselessRifle
         - MagazineBoxMagnumAP
-        - MagazineBoxAntiMateriel
+        - MagazineBoxAntiMaterielBig
         - MagazineBoxCaselessRifle
-    - type: MaterialStorage
-      whitelist:
-        tags:
-          - Sheet
+    - type: BluespaceStorage
 
 - type: entity
   id: MedicalTechFab
@@ -889,6 +917,7 @@
       - SyringeBluespace
       - SyringeCryostasis
       - ClothingEyesHudMedical
+  - type: BluespaceStorage
   - type: Machine
     board: MedicalTechFabCircuitboard
   - type: StealTarget
@@ -1073,6 +1102,7 @@
       - ClothingOuterWinterCentcom
       - ClothingOuterWinterSyndie
       - ClothingOuterWinterSyndieCap
+  - type: BluespaceStorage
   - type: MaterialStorage
     whitelist:
       tags:

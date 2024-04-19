@@ -32,7 +32,7 @@
     # only show after making the announcement at 50%
     enabled: false
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:

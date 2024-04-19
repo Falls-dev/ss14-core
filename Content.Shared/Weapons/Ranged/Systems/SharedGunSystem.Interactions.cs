@@ -1,3 +1,5 @@
+using System.Linq;
+using Content.Shared._White.WeaponModules;
 using Content.Shared.Actions;
 using Content.Shared.Examine;
 using Content.Shared.Hands;
@@ -20,6 +22,19 @@ public abstract partial class SharedGunSystem
                 ("mode", GetLocSelector(component.SelectedMode))));
             args.PushMarkup(Loc.GetString("gun-fire-rate-examine", ("color", FireRateExamineColor),
                 ("fireRate", $"{component.FireRateModified:0.0}")));
+
+            if (TryComp<WeaponModulesComponent>(uid, out var weaponModulesComponent))
+            {
+                if (weaponModulesComponent.Modules.Count == 0)
+                {
+                    args.PushMarkup(Loc.GetString("gun-modules", ("modules", "Пусто")));
+                    return;
+                }
+
+                var moduleNames = weaponModulesComponent.Modules.Select(module => Name(module)).ToArray();
+
+                args.PushMarkup(Loc.GetString("gun-modules", ("modules", string.Join(", ", moduleNames))));
+            }
 
             if (!TryComp<TwoModeEnergyAmmoProviderComponent>(uid, out var comp))
                 return;
@@ -123,6 +138,14 @@ public abstract partial class SharedGunSystem
 
     private void OnGunSelected(EntityUid uid, GunComponent component, HandSelectedEvent args)
     {
+        // WD EDIT START
+        if (component.FireRateModified <= 0f)
+            component.FireRateModified = component.FireRate;
+
+        if (component.FireRateModified <= 0f)
+            return;
+        // WD EDIT END
+
         var fireDelay = 1f / component.FireRateModified;
         if (fireDelay.Equals(0f))
             return;

@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Shared._White.WeaponModules;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
@@ -144,6 +145,7 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
 
         gun.ShootCoordinates = GetCoordinates(msg.Coordinates);
+        gun.Target =  GetEntity(msg.Target);
         Log.Debug($"Set shoot coordinates to {gun.ShootCoordinates}");
         AttemptShoot(user.Value, ent, gun);
     }
@@ -475,6 +477,9 @@ public abstract partial class SharedGunSystem : EntitySystem
 
     protected void MuzzleFlash(EntityUid gun, AmmoComponent component, EntityUid? user = null)
     {
+        bool cancelled = TryComp<WeaponModulesComponent>(gun, out var weaponModulesComponent) && weaponModulesComponent.WeaponFireEffect; // WD EDIT
+        if(cancelled) return; // WD EDIT END
+
         var attemptEv = new GunMuzzleFlashAttemptEvent();
         RaiseLocalEvent(gun, ref attemptEv);
         if (attemptEv.Cancelled)
@@ -533,9 +538,38 @@ public abstract partial class SharedGunSystem : EntitySystem
 
         Dirty(gun);
     }
+    // WD EDIT
+    public void SetProjectileSpeed(EntityUid weapon, float projectileSpeed)
+    {
+        if(!TryComp<GunComponent>(weapon, out var gunComponent))
+            return;
 
+        gunComponent.ProjectileSpeed = projectileSpeed;
+
+        RefreshModifiers(weapon);
+    }
+
+    public void SetFireRate(EntityUid weapon, float fireRate)
+    {
+        if(!TryComp<GunComponent>(weapon, out var gunComponent))
+            return;
+
+        gunComponent.FireRate = fireRate;
+
+        RefreshModifiers(weapon);
+    }
+
+    public void SetSound(EntityUid weapon, SoundSpecifier sound)
+    {
+        if(!TryComp<GunComponent>(weapon, out var gunComponent))
+            return;
+
+        gunComponent.SoundGunshot = sound;
+
+        RefreshModifiers(weapon);
+    }
+// WD EDIT END
     protected abstract void CreateEffect(EntityUid uid, MuzzleFlashEvent message, EntityUid? user = null);
-
     /// <summary>
     /// Used for animated effects on the client.
     /// </summary>
@@ -557,6 +591,12 @@ public abstract partial class SharedGunSystem : EntitySystem
 /// <param name="ThrowItems">Set this to true if the ammo shouldn't actually be fired, just thrown.</param>
 [ByRefEvent]
 public record struct AttemptShootEvent(EntityUid User, string? Message, bool Cancelled = false, bool ThrowItems = false);
+
+/// <summary>
+///     Raised when an entity is just about to be hit with a hitscan
+/// </summary>
+[ByRefEvent]
+public record struct HitscanHitAttemptEvent(EntityUid HitEntity, EntityUid? Target, bool Cancelled = false);
 
 /// <summary>
 ///     Raised directed on the gun after firing.

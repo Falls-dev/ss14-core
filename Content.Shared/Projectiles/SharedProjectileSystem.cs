@@ -190,6 +190,10 @@ public abstract partial class SharedProjectileSystem : EntitySystem
 
     private void PreventCollision(EntityUid uid, ProjectileComponent component, ref PreventCollideEvent args)
     {
+        // Shoot yourself!
+        if (args.OtherEntity == component.Target) // WD
+            return;
+
         if (component.IgnoreShooter && (args.OtherEntity == component.Shooter || args.OtherEntity == component.Weapon))
         {
             args.Cancelled = true;
@@ -333,6 +337,12 @@ public sealed class ImpactEffectEvent : EntityEventArgs
         Coordinates = coordinates;
     }
 }
+
+/// <summary>
+/// Raised when an entity is just about to be hit with a projectile
+/// </summary>
+[ByRefEvent]
+public record struct ProjectileCollideAttemptEvent(EntityUid ProjUid, ProjectileComponent Component, bool Cancelled);
 
 /// <summary>
 /// Raised when an entity is just about to be hit with a projectile but can reflect it

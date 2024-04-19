@@ -5,6 +5,7 @@ using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Content.Server.Power.Components;
 using Content.Server.Stack;
+using Content.Shared._White.ShitSilo;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Construction;
 using Content.Shared.Database;
@@ -78,7 +79,18 @@ public sealed class MaterialStorageSystem : SharedMaterialStorageSystem
             volume = sheetsToExtract * volumePerSheet;
         }
 
-        if (volume <= 0 || !TryChangeMaterialAmount(uid, msg.Material, -volume))
+        var gridUid = HasComp<BluespaceStorageComponent>(uid) &&
+                      TryComp<TransformComponent>(uid, out var transformComponent)
+            ? transformComponent.GridUid
+            : null;
+
+        var gridStorage = gridUid.HasValue &&
+                          TryComp<MaterialStorageComponent>(gridUid, out var materialStorageComponent)
+            ? materialStorageComponent
+            : null;
+
+
+        if (volume <= 0 || !TryChangeMaterialAmount(uid, msg.Material, -volume, gridUid: gridUid, gridStorage: gridStorage))
             return;
 
         var mats = SpawnMultipleFromMaterial(volume, material, Transform(uid).Coordinates, out _);
@@ -97,18 +109,23 @@ public sealed class MaterialStorageSystem : SharedMaterialStorageSystem
     {
         if (!Resolve(receiver, ref storage) || !Resolve(toInsert, ref material, ref composition, false))
             return false;
+
         if (TryComp<ApcPowerReceiverComponent>(receiver, out var power) && !power.Powered)
             return false;
+
         if (!base.TryInsertMaterialEntity(user, toInsert, receiver, storage, material, composition))
             return false;
+
         _audio.PlayPvs(storage.InsertingSound, receiver);
         _popup.PopupEntity(Loc.GetString("machine-insert-item", ("user", user), ("machine", receiver),
             ("item", toInsert)), receiver);
+
         QueueDel(toInsert);
 
         // Logging
         TryComp<StackComponent>(toInsert, out var stack);
         var count = stack?.Count ?? 1;
+
         _adminLogger.Add(LogType.Action, LogImpact.Low,
             $"{ToPrettyString(user):player} inserted {count} {ToPrettyString(toInsert):inserted} into {ToPrettyString(receiver):receiver}");
         return true;

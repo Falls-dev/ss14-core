@@ -102,7 +102,7 @@
     layoutId: APC
   - type: WiresVisuals
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: StrongMetallic
   - type: Destructible
     thresholds:
@@ -171,7 +171,7 @@
     node: apcFrame
   - type: WallMount
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:

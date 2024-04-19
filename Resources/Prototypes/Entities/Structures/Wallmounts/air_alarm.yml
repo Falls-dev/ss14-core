@@ -95,7 +95,7 @@
           "/Audio/Weapons/smash.ogg"
   # WD edit sounds end
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:

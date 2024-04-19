@@ -90,7 +90,7 @@ public sealed class RevolutionaryRuleSystem : GameRuleSystem<RevolutionaryRuleCo
             if (CheckCommandLose())
             {
                 // WD EDIT START
-                // Basically check for all in once gamemode
+                // Check for all in once gamemode
                 if (_gameTicker.GetActiveGameRules().Where(HasComp<RampingStationEventSchedulerComponent>).Any())
                     _roundEnd.DoRoundEndBehavior(RoundEndBehavior.ShuttleCall, component.ShuttleCallTime);
                 else
@@ -358,4 +358,25 @@ public sealed class RevolutionaryRuleSystem : GameRuleSystem<RevolutionaryRuleCo
         // revs lost and heads died
         "rev-stalemate"
     };
+
+    public void TransferRole(EntityUid transferFrom, EntityUid transferTo)
+    {
+        if (HasComp<CommandStaffComponent>(transferFrom))
+        {
+            EnsureComp<CommandStaffComponent>(transferTo);
+            RemComp<CommandStaffComponent>(transferFrom);
+        }
+
+        if (HasComp<HeadRevolutionaryComponent>(transferFrom))
+        {
+            EnsureComp<HeadRevolutionaryComponent>(transferTo);
+            RemComp<HeadRevolutionaryComponent>(transferFrom);
+        }
+
+        if (!HasComp<RevolutionaryComponent>(transferFrom))
+            return;
+
+        EnsureComp<RevolutionaryComponent>(transferTo);
+        RemComp<RevolutionaryComponent>(transferFrom);
+    }
 }

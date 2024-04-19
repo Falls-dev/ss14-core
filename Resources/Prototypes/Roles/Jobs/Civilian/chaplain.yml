@@ -16,7 +16,6 @@
   - !type:AddComponentSpecial
     components:
     - type: BibleUser #Lets them heal with bibles
-    - type: Holy
 
 - type: startingGear
   id: ChaplainGear
@@ -25,14 +24,13 @@
     jumpsuit: ClothingUniformJumpsuitChaplain
     back: ClothingBackpackChaplainFilled
     shoes: ClothingShoesColorBlack
+    belt: NullRod
     id: ChaplainPDA
     ears: ClothingHeadsetService
     pocket1: ArmamentsBeacon
     underwearb: ClothingUnderwearBottomBoxersWhite # White-Underwear
   underweart: ClothingUnderwearTopBraWhite # White-Underwear
   underwearb: ClothingUnderwearBottomPantiesWhite # White-Underwear
-  inhand:
-    - NullRod
   innerClothingSkirt: ClothingUniformJumpskirtChaplain
   satchel: ClothingBackpackSatchelChaplainFilled
   duffelbag: ClothingBackpackDuffelChaplainFilled

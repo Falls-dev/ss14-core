@@ -177,6 +177,7 @@
   - type: SleepEmitSound
   - type: SSDIndicator
   - type: StandingState
+    canLieDown: true
   - type: Fingerprint
   - type: Dna
   - type: MindContainer
@@ -216,6 +217,8 @@
         type: SpellSelectorBUI
       - key: enum.CultEmpowerRemoveUiKey.Key
         type: SpellRemoverBUI
+      - key: enum.BloodRitesUi.Key
+        type: CultistFactoryBUI
       # WD-EDIT END
   - type: Puller
   - type: Butcherable
@@ -297,6 +300,7 @@
     - Muted
     - Pacified
     - StaminaModifier
+    - Incorporeal
   - type: Blindable
   # Other
   - type: Temperature

@@ -7,4 +7,11 @@
     NetworkConfigurator: 5
     PowerCellMedium: 5
     ClothingHandsGlovesColorYellow: 6
-    BoxInflatable: 2
+    HolofanProjector: 5
+    trayScanner: 5
+    GeigerCounter: 5
+    InflatableWallStack1: 24
+    InflatableDoorStack1: 8
+  emaggedInventory:
+    RCD: 1
+    RCDAmmo: 3

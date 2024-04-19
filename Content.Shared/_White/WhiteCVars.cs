@@ -17,7 +17,7 @@ public sealed class WhiteCVars
     */
 
     public static readonly CVarDef<string> RulesWiki =
-        CVarDef.Create("white.wiki_rules", "https://wiki.ss14.su/%D0%9F%D1%80%D0%B0%D0%B2%D0%B8%D0%BB%D0%B0",
+        CVarDef.Create("white.wiki_rules", "https://js.ss14.su/rules",
             CVar.SERVER | CVar.REPLICATED);
 
     /*
@@ -197,7 +197,7 @@ public sealed class WhiteCVars
         CVarDef.Create("white.chat_size_separated", "0.6;0", CVar.CLIENTONLY | CVar.ARCHIVE);
 
     public static readonly CVarDef<string> DefaultChatSize =
-        CVarDef.Create("white.chat_size_default", "300;500", CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("white.chat_size_default", "300;-500", CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /*
     * OnlyInOhio
@@ -369,4 +369,14 @@ public sealed class WhiteCVars
 
     public static readonly CVarDef<string> UtkaClientBind =
         CVarDef.Create("white.utka_client_bind", "", CVar.SERVERONLY);
+
+    /*
+     * PlayTime Tracker
+     */
+
+    public static readonly CVarDef<string> TimeTrackerApiUrl =
+        CVarDef.Create("white.time_tracker_api", "https://ss14.su/api/jobs/", CVar.SERVERONLY | CVar.CONFIDENTIAL | CVar.ARCHIVE);
+
+    public static readonly CVarDef<string> TimeTrackerApiKey =
+        CVarDef.Create("white.time_tracker_key", "", CVar.SERVERONLY | CVar.CONFIDENTIAL | CVar.ARCHIVE);
 }

@@ -5373,6 +5373,7 @@ entities:
     - type: FTLDestination
     - type: BecomesStation
       id: Train
+    - type: MaterialStorage
 - proto: AccordionInstrument
   entities:
   - uid: 12393
@@ -11877,7 +11878,7 @@ entities:
     - type: Transform
       pos: 6.380858,-242.27087
       parent: 2
-- proto: BodyBag_Folded
+- proto: BodyBagFolded
   entities:
   - uid: 2706
     components:

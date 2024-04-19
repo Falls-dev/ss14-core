@@ -27,7 +27,7 @@
         layer:
         - MidImpassable, LowImpassable, BulletImpassable
   - type: Sprite
-    sprite: Structures/Power/Generation/solar_panel.rsi
+    sprite: White/Structures/Power/Generation/solar_panel.rsi
     state: normal
   - type: NodeContainer
     examinable: true
@@ -38,7 +38,7 @@
   - type: PowerMonitoringDevice
     group: Generator
     loadNode: output
-    sprite: Structures/Power/Generation/solar_panel.rsi
+    sprite: White/Structures/Power/Generation/solar_panel.rsi
     state: static
     collectionName: SolarPanel
   - type: Anchorable
@@ -61,7 +61,7 @@
     supplyRampRate: 500
   - type: SolarPanel
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:
@@ -90,7 +90,7 @@
   - type: Sprite
     state: broken
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:
@@ -135,13 +135,13 @@
         layer:
         - MachineLayer
   - type: Sprite
-    sprite: Structures/Power/Generation/solar_panel.rsi
+    sprite: White/Structures/Power/Generation/solar_panel.rsi
     state: solar_assembly
   - type: Transform
     anchored: true
     noRot: true
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:
@@ -180,13 +180,13 @@
         layer:
         - MachineLayer
   - type: Sprite
-    sprite: Structures/Power/Generation/solar_panel.rsi
+    sprite: White/Structures/Power/Generation/solar_panel.rsi
     state: solar_tracker
   - type: Transform
     anchored: true
     noRot: true
   - type: Damageable
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
   - type: Destructible
     thresholds:

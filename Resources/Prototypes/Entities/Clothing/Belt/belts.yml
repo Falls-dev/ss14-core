@@ -210,6 +210,21 @@
   - type: Appearance
 
 - type: entity
+  parent: ClothingBeltAssault # WD edit
+  id: ClothingBeltAssaultFilled
+  suffix: Filled
+  name: assault belt
+  description: A tactical assault belt.
+  components:
+  - type: StorageFill
+    contents:
+    - id: GrenadeFlashBang
+    - id: TearGasGrenade
+    - id: Stunbaton
+    - id: Handcuffs
+    - id: Handcuffs
+
+- type: entity
   parent: ClothingBeltStorageBase
   id: ClothingBeltJanitor
   name: janibelt
@@ -339,7 +354,7 @@
   - type: Storage
     whitelist:
       tags:
-        # - PlantAnalyzer
+        - PlantAnalyzer
         - PlantSampleTaker
         - BotanyShovel
         - BotanyHoe
@@ -358,10 +373,10 @@
         whitelist:
           tags:
           - BotanyHatchet
-      # hydro:
-      #   whitelist:
-      #     tags:
-      #     - PlantAnalyzer # Dunno what to put here, should be aight.
+      hydro:
+        whitelist:
+          tags:
+          - PlantAnalyzer # Dunno what to put here, should be aight.
       hoe:
         whitelist:
           tags:

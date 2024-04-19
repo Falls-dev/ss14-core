@@ -9,13 +9,12 @@
     state: dresser
   - type: Damageable
     damageModifierSet: Wood
-    damageContainer: Inorganic
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
         damage: 50
-
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawn:
@@ -26,8 +25,8 @@
         acts: [ "Destruction" ]
   - type: Storage
     grid:
-    - 0,0,6,3
-    maxItemSize: Normal
+    - 0,0,8,5
+    maxItemSize: Huge
   - type: ContainerContainer
     containers:
       storagebase: !type:Container

@@ -121,6 +121,7 @@
     soundHit:
       path: /Audio/Weapons/Guns/Hits/snap.ogg
   - type: StaminaDamageOnCollide
+    ignoreResistances: false
     damage: 22 # 5 hits to stun sounds reasonable
 
 - type: entity
@@ -207,7 +208,7 @@
   - type: Projectile
     damage:
       types:
-        Heat: 5
+        Heat: 0
     soundHit:
       path: "/Audio/Weapons/Guns/Hits/taser_hit.ogg"
     forceSound: true
@@ -1350,7 +1351,8 @@
           bounds: "-0.15,-0.3,0.15,0.3"
         hard: false
         mask:
-        - Opaque
+        - Impassable
+        - BulletImpassable
       fly-by: *flybyfixture
   - type: Ammo
     muzzleFlash: null
@@ -1377,3 +1379,19 @@
       shader: unshaded
   - type: ChangeTemperatureOnCollide
     temperature: -20
+
+- type: entity
+  name: blood bolt
+  id: BloodBolt
+  parent: BaseBullet
+  noSpawn: true
+  components:
+  - type: Sprite
+    sprite: White/Cult/Entities/arcane_barrage.rsi
+    state: bullet
+  - type: Ammo
+    muzzleFlash: null
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 20

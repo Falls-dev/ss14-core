@@ -20,6 +20,9 @@
     tags:
     - DroneUsable
     - WhitelistChameleon
+  - type: HideLayerClothing
+    slots:
+    - Snout
 
 - type: entity
   parent: WeldingMaskBase

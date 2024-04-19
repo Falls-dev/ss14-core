@@ -35,6 +35,7 @@
     denySound:
       path: /Audio/Machines/airlock_deny.ogg
   - type: Weldable
+    fuel: 10
     time: 10
   - type: ApcPowerReceiver
     powerLoad: 20

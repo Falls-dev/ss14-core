@@ -25,15 +25,16 @@
   - type: ItemToggleMeleeWeapon
     activatedDamage:
       types:
-        Blunt: 0
-  - type: Stunprod
+        Shock: 5
+  - type: Stunbaton
+    energyPerUse: 70
   - type: MeleeWeapon
     canHeavyAttack: false
     wideAnimationRotation: -135
     damage:
       types:
         Blunt: 9
-    angle: 0
+    angle: 60
     animation: WeaponArcThrust
   - type: StaminaDamageOnHit
     damage: 40

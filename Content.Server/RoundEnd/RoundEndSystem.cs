@@ -177,7 +177,7 @@ namespace Content.Server.RoundEnd
             if (_countdownTokenSource != null)
                 return;
 
-            _countdownTokenSource = new CancellationTokenSource();
+            _countdownTokenSource = new();
 
             if (requester != null)
             {

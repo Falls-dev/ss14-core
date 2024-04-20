@@ -176,8 +176,7 @@ public sealed class RevolutionaryRuleSystem : GameRuleSystem<RevolutionaryRuleCo
         var query = QueryActiveRules();
         while (query.MoveNext(out _, out _, out var comp, out _))
         {
-            var eligiblePlayers = _antagSelection.GetEligiblePlayers(ev.Players, comp.HeadRevPrototypeId)
-                .Where(player => !HasComp<CommandStaffComponent>(player)).ToList();
+            var eligiblePlayers = _antagSelection.GetEligiblePlayers(ev.Players, comp.HeadRevPrototypeId, customExcludeCondition: HasComp<CommandStaffComponent>);
 
             if (eligiblePlayers.Count == 0)
                 continue;

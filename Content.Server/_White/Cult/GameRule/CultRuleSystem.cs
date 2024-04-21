@@ -28,6 +28,7 @@ using Robust.Shared.Random;
 using Content.Shared._White;
 using Content.Shared._White.Cult.Components;
 using Content.Shared._White.Cult.Systems;
+using Content.Shared._White.Mood;
 using Content.Shared.Mind;
 using Content.Shared.NPC.Systems;
 using Robust.Server.Player;
@@ -390,6 +391,8 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         _factionSystem.RemoveFaction(cultist, "NanoTrasen", false);
         _factionSystem.AddFaction(cultist, "Cultist");
+
+        RaiseLocalEvent(cultist, new MoodEffectEvent("CultFocused"));
 
         if (_inventorySystem.TryGetSlotEntity(cultist, "back", out var backPack))
         {

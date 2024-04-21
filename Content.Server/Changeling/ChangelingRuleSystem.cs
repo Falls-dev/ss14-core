@@ -222,7 +222,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         readyChangeling.HiveName = _nameGenerator.GetName();
         Dirty(changeling, readyChangeling);
 
-        RaiseLocalEvent(mindId, new MoodEffectEvent("TraitorFocused")); // WD edit
+        RaiseLocalEvent(changeling, new MoodEffectEvent("TraitorFocused"));
 
         if (!giveObjectives)
             return true;

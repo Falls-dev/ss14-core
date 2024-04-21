@@ -119,7 +119,7 @@ public sealed class RunicDoorSystem : EntitySystem
             return true;
         }
 
-        _doorSystem.Deny(airlock);
+        // _doorSystem.Deny(airlock);
 
         if (!HasComp<HumanoidAppearanceComponent>(user) || _holyWeapon.IsHoldingHolyWeapon(user) ||
             TryComp(airlock, out ConcealableComponent? concealable) && concealable.Concealed)

@@ -45,32 +45,11 @@ namespace Content.IntegrationTests.Tests
         private static readonly string[] GameMaps =
         {
             "Dev",
-            "TestTeg",
-            "Fland",
-            "Meta",
-            "Packed",
-            "Cluster",
-            "Omega",
-            "Bagel",
-            "Origin",
             "CentComm",
-            "NukieOutpost",
-            "Box",
-            "Europa",
-            "Saltern",
-            "Core",
-            "Marathon",
-            "MeteorArena",
-            "Atlas",
-            "Reach",
-            "Train",
-            "Atom", 
-            "DryDock",
-            "Polaris",
-            "Scoupidia",
             "Triumph",
-            "Void",
-            "WonderBox"
+            "WonderBox",
+            "WhiteBox",
+            "WhiteMoose"
         };
 
         /// <summary>

@@ -1,20 +1,18 @@
-﻿using Content.Server.Body.Systems;
+﻿using System.Reflection;
+using Content.Server.Body.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Explosion.EntitySystems;
-using Content.Shared.Popups;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Random;
-using Content.Server.Explosion.EntitySystems;
-using Content.Shared.Explosion.Components;
-using Robust.Shared.Audio;
 using Content.Shared.CCVar;
 using Content.Shared.E20;
-using Robust.Server.GameObjects;
+using Content.Shared.Explosion.Components;
+using Content.Shared.Popups;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
+using Robust.Shared.Random;
+using Content.Server.E20;
 
-
-namespace Content.Server.E20Dice;
+namespace Content.Server.E20;
 
 
 public sealed class E20System : SharedE20System
@@ -27,6 +25,8 @@ public sealed class E20System : SharedE20System
     [Dependency] private readonly TriggerSystem _triggerSystem = default!;
     [Dependency] private readonly IConfigurationManager _cfgManager = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly E20SystemEvents _events = default!;
+
 
     public override void Initialize()
     {
@@ -36,6 +36,36 @@ public sealed class E20System : SharedE20System
 
     private void OnTimerRemove(EntityUid uid, ActiveTimerTriggerComponent comp, ComponentRemove args)
     {
+        //IoCManager.InjectDependencies(this);
+        E20Component e20 = EntityManager.GetComponent<E20Component>(uid);
+        E20SystemEvents eve = new E20SystemEvents();
+        Type type = eve.GetType();
+        //IoCManager.InjectDependencies(this);
+        if (type != null)
+        {
+            object instance = Activator.CreateInstance(type)!;
+            MethodInfo method = type.GetMethod(e20.Events[0], BindingFlags.Instance|BindingFlags.Public)!;
+            object[] parameters = new object[] { uid, e20 };
+            method.Invoke(instance, parameters);
+        }
+
+
+        /*Type myType = typeof(Content.Server.E20.E20SystemEvents);
+        MethodInfo? methodInfo = myType.GetMethod(e20.Events[0], BindingFlags.Instance|BindingFlags.Public);
+        object? instance = Activator.CreateInstance(myType);
+        Console.WriteLine($"Event name: {e20.Events[0]}");
+        Console.WriteLine($"Type name: {myType.FullName}");
+        Console.WriteLine($"Method info: {methodInfo}");
+
+
+        if (methodInfo != null)
+        {
+            object[] parameters = new object[] { uid, e20 };
+            methodInfo?.Invoke(instance, parameters);
+        }*/
+
+
+        /*
         E20Component e20 = EntityManager.GetComponent<E20Component>(uid);
         float intensity = e20.CurrentValue * 280; // Calculating power of explosion
 
@@ -55,7 +85,7 @@ public sealed class E20System : SharedE20System
             return;
         }
 
-        _explosion.TriggerExplosive(uid, totalIntensity:intensity);
+        _explosion.TriggerExplosive(uid, totalIntensity:intensity);*/
     }
 
     protected override void TimerEvent(EntityUid uid, E20Component? die = null)

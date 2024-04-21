@@ -20,6 +20,10 @@ public sealed partial class E20Component : Component
 
     public EntityUid LastUser;
 
+    [DataField]
+    [AutoNetworkedField]
+    public  List<string> Events = new();
+
     /// <summary>
     ///     Delay for dice action(Gib or Explosion).
     /// </summary>

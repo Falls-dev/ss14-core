@@ -158,9 +158,11 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
             cult.CurrentCultists.Add(component);
 
-            if (TryComp<ActorComponent>(uid, out var actor))
+            var name = Name(uid);
+
+            if (TryComp<ActorComponent>(uid, out var actor) && !cult.CultistsCache.ContainsKey(name))
             {
-                cult.CultistsCache.Add(MetaData(uid).EntityName, actor.PlayerSession.Name);
+                cult.CultistsCache.Add(name, actor.PlayerSession.Name);
             }
 
             UpdateCultistsAppearance(cult);

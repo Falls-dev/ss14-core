@@ -61,7 +61,7 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
 
         var uid = args.SenderSession.AttachedEntity.Value;
 
-        if (_stun.IsParalyzed(uid) || _gravity.IsWeightless(uid))
+        if (_stun.IsParalyzed(uid))
         {
             return;
         }
@@ -72,6 +72,11 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
         }
         else
         {
+            if (_gravity.IsWeightless(uid))
+            {
+                return;
+            }
+
             TryLieDown(uid);
         }
     }

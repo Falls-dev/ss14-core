@@ -6,6 +6,7 @@ using Content.Server.Bible.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
+using Content.Server.GameTicking.Rules.Components;
 using Content.Server.NPC.Systems;
 using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
@@ -72,6 +73,13 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         SubscribeLocalEvent<CultistComponent, MobStateChangedEvent>(OnCultistsStateChanged);
 
         SubscribeLocalEvent<CultistRoleComponent, GetBriefingEvent>(OnGetBriefing);
+    }
+
+    protected override void Added(EntityUid uid, CultRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
+    {
+        base.Added(uid, component, gameRule, args);
+
+        gameRule.MinPlayers = _cfg.GetCVar(WhiteCVars.CultMinPlayers);
     }
 
     private void OnGetBriefing(Entity<CultistRoleComponent> ent, ref GetBriefingEvent args)
@@ -187,10 +195,8 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
     private void DoCultistsStart(CultRuleComponent rule)
     {
-        var eligiblePlayers =
-            _antagSelection.GetEligiblePlayers(_playerManager.Sessions, rule.CultistRolePrototype);
-
-        eligiblePlayers.RemoveAll(HasComp<BibleUserComponent>);
+        var eligiblePlayers = _antagSelection.GetEligiblePlayers(_playerManager.Sessions, rule.CultistRolePrototype,
+            customExcludeCondition: HasComp<BibleUserComponent>);
 
         if (eligiblePlayers.Count == 0)
         {
@@ -357,7 +363,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         MakeCultist(entity, cultistRule);
     }
-    
+
     public bool MakeCultist(EntityUid cultist, CultRuleComponent rule)
     {
         if (!_mindSystem.TryGetMind(cultist, out var mindId, out var mind))

@@ -204,6 +204,8 @@
       radius: 2.0
       energy: 7.0
     - type: BloodBoilProjectile
+    - type: Projectile
+      ignoreTarget: true
 
 - type: entity
   id: ProjectileTeslaBall

@@ -1,6 +1,8 @@
 ﻿using Content.Shared.Mobs.Systems;
+using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Ranged.Systems;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Random;
 
 namespace Content.Shared.Standing.Systems;
@@ -25,7 +27,7 @@ public abstract partial class SharedStandingStateSystem
             return;
         }
 
-        if (!TryHit(uid, args.Component.Target))
+        if (!TryHit(uid, args.Component.Target, args.Component.IgnoreTarget))
         {
             args.Cancelled = true;
         }
@@ -44,9 +46,17 @@ public abstract partial class SharedStandingStateSystem
         }
     }
 
-    private bool TryHit(EntityUid uid, EntityUid? target)
+    private bool TryHit(EntityUid uid, EntityUid? target, bool ignoreTarget = false)
     {
-        if (_mobState.IsAlive(uid) && Random.NextFloat() < 0.3f)
+        // Lying and being pulled
+        if (!ignoreTarget && TryComp(uid, out PullableComponent? pullable) && pullable.BeingPulled)
+            return uid == target;
+
+        if (!TryComp(uid, out PhysicsComponent? physics))
+            return true;
+
+        // If alive and moving
+        if (_mobState.IsAlive(uid) && (ignoreTarget || physics.LinearVelocity.LengthSquared() > 0.01f))
         {
             // We should hit
             return true;

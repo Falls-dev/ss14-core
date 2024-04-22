@@ -139,7 +139,7 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
         return true;
     }
 
-    public bool TryLieDown(EntityUid uid, StandingStateComponent? standingState = null)
+    public bool TryLieDown(EntityUid uid, StandingStateComponent? standingState = null, bool dropHeldItems = false)
     {
         if (!Resolve(uid, ref standingState, false))
             return false;
@@ -149,7 +149,7 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
             return false;
         }
 
-        Down(uid, true, false, standingState);
+        Down(uid, true, dropHeldItems, standingState);
         return true;
     }
     // WD EDIT END

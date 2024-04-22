@@ -24,7 +24,6 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!; // WD EDIT
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!; // WD EDIT
     [Dependency] private readonly SharedStunSystem _stun = default!; // WD EDIT
-    [Dependency] private readonly SharedGravitySystem _gravity = default!;
 
     // If StandingCollisionLayer value is ever changed to more than one layer, the logic needs to be edited.
     private const int StandingCollisionLayer = (int)CollisionGroup.MidImpassable;
@@ -44,7 +43,6 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
 
         SubscribeLocalEvent<StandingStateComponent, StandingUpDoAfterEvent>(OnStandingUpDoAfter);
         SubscribeLocalEvent<StandingStateComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeed);
-        SubscribeLocalEvent<StandingStateComponent, EntParentChangedMessage>(OnEntityParentChanged);
         SubscribeLocalEvent<StandingStateComponent, SlipAttemptEvent>(OnSlipAttempt);
 
         InitializeColliding();
@@ -72,11 +70,6 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
         }
         else
         {
-            if (_gravity.IsWeightless(uid))
-            {
-                return;
-            }
-
             TryLieDown(uid);
         }
     }
@@ -93,15 +86,6 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
             args.ModifySpeed(0.4f, 0.4f);
         else
             args.ModifySpeed(1f, 1f);
-    }
-
-    private void OnEntityParentChanged(EntityUid uid, StandingStateComponent component,
-        ref EntParentChangedMessage args)
-    {
-        if (_gravity.IsWeightless(uid))
-        {
-            Stand(uid, force: true);
-        }
     }
 
     private void OnSlipAttempt(EntityUid uid, StandingStateComponent component, SlipAttemptEvent args)

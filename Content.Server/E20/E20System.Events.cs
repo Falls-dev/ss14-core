@@ -25,13 +25,17 @@ public  class E20SystemEvents : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        //IoCManager.InjectDependencies(this);
+        //IoCManager.Resolve<ExplosionSystem>();
+        //IoCManager.Resolve<BodySystem>();
+
     }
 
     public void ExplosionEvent(EntityUid uid, E20Component comp)
     {
+        IoCManager.InjectDependencies(this);
         //IoCManager.Register<ExplosionSystem, _explosion>();
         float intensity = comp.CurrentValue * 280; // Calculating power of explosion
+
 
         if (comp.CurrentValue == 20) // Critmass-like explosion
         {

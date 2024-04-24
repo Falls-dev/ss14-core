@@ -1246,6 +1246,9 @@
   id: TrashBag
 
 - type: Tag
+  id: Truncheon
+
+- type: Tag
   id: Unimplantable
 
 - type: Tag

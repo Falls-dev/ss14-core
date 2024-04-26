@@ -523,6 +523,8 @@
         - Flash
         - Handcuff
         - Ensnaring
+        - BallisticAmmoProvider
+        - CartridgeAmmo
   - type: ItemMapper
     mapLayers:
       flashbang:
@@ -650,7 +652,7 @@
         - CartridgeAmmo
 
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltSecurity
   id: ClothingBeltSecurityWebbing
   name: security webbing
   description: Unique and versatile chest rig, can hold security gear.
@@ -663,7 +665,7 @@
 - type: entity
   parent: ClothingBeltStorageBase
   id: ClothingBeltMercWebbing
-  name: mercenarie webbing
+  name: mercenary webbing
   description: Ideal for storing everything from ammo to weapons and combat essentials.
   components:
   - type: Sprite

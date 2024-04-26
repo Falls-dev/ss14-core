@@ -142,8 +142,7 @@
   - type: E20
     sides: 20
     currentValue: 20
-    events:
-    - ExplosionEvent
+    diceType: DiceOfFate
   - type: Sprite
     sprite: Objects/Fun/dice.rsi
     state: d20_20

@@ -34,20 +34,49 @@ public sealed class E20System : SharedE20System
         SubscribeLocalEvent<ActiveTimerTriggerComponent, ComponentRemove>(OnTimerRemove);
     }
 
+
+    private void E20Picker(EntityUid uid, E20Component comp)
+    {
+        _events.ExplosionEvent(uid, comp);
+    }
+
+    public delegate void MyMethodDelegate(EntityUid uid, E20Component comp);
+
+    private void DiceOfFatePicker(EntityUid uid, E20Component comp)
+    {
+        Dictionary<int, MyMethodDelegate> events = new Dictionary<int, MyMethodDelegate>();
+        events[1] = _events.ExplosionEvent;
+
+
+        MyMethodDelegate method = events[1];
+        method(uid, comp);
+    }
+
     private void OnTimerRemove(EntityUid uid, ActiveTimerTriggerComponent comp, ComponentRemove args)
     {
-        //IoCManager.InjectDependencies(this);
+
         E20Component e20 = EntityManager.GetComponent<E20Component>(uid);
-        E20SystemEvents eve = new E20SystemEvents();
-        Type type = eve.GetType();
-        //IoCManager.InjectDependencies(this);
-        if (type != null)
+
+        if (e20.DiceType == "E20")
         {
-            object instance = Activator.CreateInstance(type)!;
-            MethodInfo method = type.GetMethod(e20.Events[0], BindingFlags.Instance|BindingFlags.Public)!;
-            object[] parameters = new object[] { uid, e20 };
-            method.Invoke(instance, parameters);
+            E20Picker(uid, e20);
+            return;
         }
+
+        DiceOfFatePicker(uid, e20);
+
+
+        //_events.ExplosionEvent(uid, e20);
+        /* E20SystemEvents eve = new E20SystemEvents();
+         Type type = eve.GetType();
+         if (type != null)
+         {
+             object instance = Activator.CreateInstance(type)!;
+             MethodInfo method = type.GetMethod(e20.Events[0], BindingFlags.Instance|BindingFlags.Public)!;
+             object[] parameters = new object[] { uid, e20 };
+             method.Invoke(instance, parameters);
+
+         }*/
 
 
         /*Type myType = typeof(Content.Server.E20.E20SystemEvents);

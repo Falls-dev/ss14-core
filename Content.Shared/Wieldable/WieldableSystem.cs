@@ -136,7 +136,7 @@ public sealed class WieldableSystem : EntitySystem
 
         if (!component.Wielded)
             args.Handled = TryWield(uid, component, args.User);
-        else
+        else if (component.UnwieldOnUse)
             args.Handled = TryUnwield(uid, component, args.User);
     }
 

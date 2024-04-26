@@ -278,3 +278,6 @@ ComfyChairCargo: BrownComfyChair
 ComfyChairService: GreenComfyChair
 
 BoxTrashbag: TrashBag
+
+ReinforcementRadioSyndicateMonkey: ReinforcementRadioSyndicateAncestor
+ReinforcementRadioSyndicateMonkeyNukeops: ReinforcementRadioSyndicateAncestorNukeops

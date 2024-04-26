@@ -268,24 +268,19 @@ public sealed partial class EmergencyShuttleSystem
         EmergencyShuttleConsoleComponent component,
         EmergencyShuttleRepealAllMessage args)
     {
-        var player = args.Session.AttachedEntity;
-        if (player == null) return;
+        var player = args.Actor;
 
-        if (!_reader.FindAccessTags(player.Value).Contains(EmergencyRepealAllAccess))
+        if (!_reader.FindAccessTags(player).Contains(EmergencyRepealAllAccess))
         {
-            _popup.PopupCursor(Loc.GetString("emergency-shuttle-console-denied"), player.Value, PopupType.Medium);
+            _popup.PopupCursor(Loc.GetString("emergency-shuttle-console-denied"), player, PopupType.Medium);
             return;
         }
 
         if (component.AuthorizedEntities.Count == 0)
             return;
 
-        _logger.Add(LogType.EmergencyShuttle, LogImpact.High,
-            $"Emergency shuttle early launch REPEAL ALL by {args.Session:user}");
-
-        _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("emergency-shuttle-console-auth-revoked",
-            ("remaining", component.AuthorizationsRequired)));
-
+        _logger.Add(LogType.EmergencyShuttle, LogImpact.High, $"Emergency shuttle early launch REPEAL ALL by {args.Actor:user}");
+        _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("emergency-shuttle-console-auth-revoked", ("remaining", component.AuthorizationsRequired)));
         component.AuthorizedEntities.Clear();
         UpdateAllEmergencyConsoles();
     }
@@ -295,13 +290,11 @@ public sealed partial class EmergencyShuttleSystem
         EmergencyShuttleConsoleComponent component,
         EmergencyShuttleRepealMessage args)
     {
-        var player = args.Session.AttachedEntity;
-        if (player == null)
-            return;
+        var player = args.Actor;
 
-        if (!_idSystem.TryFindIdCard(player.Value, out var idCard) || !_reader.IsAllowed(idCard, uid))
+        if (!_idSystem.TryFindIdCard(player, out var idCard) || !_reader.IsAllowed(idCard, uid))
         {
-            _popup.PopupCursor(Loc.GetString("emergency-shuttle-console-denied"), player.Value, PopupType.Medium);
+            _popup.PopupCursor(Loc.GetString("emergency-shuttle-console-denied"), player, PopupType.Medium);
             return;
         }
 
@@ -309,9 +302,7 @@ public sealed partial class EmergencyShuttleSystem
         if (!component.AuthorizedEntities.Remove(MetaData(idCard).EntityName))
             return;
 
-        _logger.Add(LogType.EmergencyShuttle, LogImpact.High,
-            $"Emergency shuttle early launch REPEAL by {args.Session:user}");
-
+        _logger.Add(LogType.EmergencyShuttle, LogImpact.High, $"Emergency shuttle early launch REPEAL by {args.Actor:user}");
         var remaining = component.AuthorizationsRequired - component.AuthorizedEntities.Count;
         _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("emergency-shuttle-console-auth-revoked",
             ("remaining", remaining)));
@@ -325,13 +316,11 @@ public sealed partial class EmergencyShuttleSystem
         EmergencyShuttleConsoleComponent component,
         EmergencyShuttleAuthorizeMessage args)
     {
-        var player = args.Session.AttachedEntity;
-        if (player == null)
-            return;
+        var player = args.Actor;
 
-        if (!_idSystem.TryFindIdCard(player.Value, out var idCard) || !_reader.IsAllowed(idCard, uid))
+        if (!_idSystem.TryFindIdCard(player, out var idCard) || !_reader.IsAllowed(idCard, uid))
         {
-            _popup.PopupCursor(Loc.GetString("emergency-shuttle-console-denied"), args.Session, PopupType.Medium);
+            _popup.PopupCursor(Loc.GetString("emergency-shuttle-console-denied"), args.Actor, PopupType.Medium);
             return;
         }
 
@@ -339,9 +328,7 @@ public sealed partial class EmergencyShuttleSystem
         if (!component.AuthorizedEntities.Add(MetaData(idCard).EntityName))
             return;
 
-        _logger.Add(LogType.EmergencyShuttle, LogImpact.High,
-            $"Emergency shuttle early launch AUTH by {args.Session:user}");
-
+        _logger.Add(LogType.EmergencyShuttle, LogImpact.High, $"Emergency shuttle early launch AUTH by {args.Actor:user}");
         var remaining = component.AuthorizationsRequired - component.AuthorizedEntities.Count;
 
         if (remaining > 0)
@@ -388,9 +375,10 @@ public sealed partial class EmergencyShuttleSystem
             auths.Add(auth);
         }
 
-        if (_uiSystem.TryGetUi(uid, EmergencyConsoleUiKey.Key, out var bui))
+        if (_uiSystem.HasUi(uid, EmergencyConsoleUiKey.Key))
             _uiSystem.SetUiState(
-                bui,
+                uid,
+                EmergencyConsoleUiKey.Key,
                 new EmergencyConsoleBoundUserInterfaceState()
                 {
                     EarlyLaunchTime = EarlyLaunchAuthorized

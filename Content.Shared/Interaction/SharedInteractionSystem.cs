@@ -78,8 +78,11 @@ namespace Content.Shared.Interaction
 
         public override void Initialize()
         {
+            SubscribeLocalEvent<BoundUserInterfaceCheckRangeEvent>(HandleUserInterfaceRangeCheck);
             SubscribeLocalEvent<BoundUserInterfaceMessageAttempt>(OnBoundInterfaceInteractAttempt);
+
             SubscribeAllEvent<InteractInventorySlotEvent>(HandleInteractInventorySlotEvent);
+
             SubscribeLocalEvent<UnremoveableComponent, ContainerGettingRemovedAttemptEvent>(OnRemoveAttempt);
             SubscribeLocalEvent<UnremoveableComponent, GotUnequippedEvent>(OnUnequip);
             SubscribeLocalEvent<UnremoveableComponent, GotUnequippedHandEvent>(OnUnequipHand);
@@ -110,7 +113,9 @@ namespace Content.Shared.Interaction
         /// </summary>
         private void OnBoundInterfaceInteractAttempt(BoundUserInterfaceMessageAttempt ev)
         {
-            if (ev.Sender.AttachedEntity is not { } user || !_actionBlockerSystem.CanInteract(user, ev.Target))
+            var user = ev.Actor;
+
+            if (!_actionBlockerSystem.CanInteract(user, ev.Target))
             {
                 ev.Cancel();
                 return;
@@ -1151,6 +1156,21 @@ namespace Content.Shared.Interaction
 
             RaiseLocalEvent(uidA, new ContactInteractionEvent(uidB.Value));
             RaiseLocalEvent(uidB.Value, new ContactInteractionEvent(uidA));
+        }
+
+        private void HandleUserInterfaceRangeCheck(ref BoundUserInterfaceCheckRangeEvent ev)
+        {
+            if (ev.Result == BoundUserInterfaceRangeResult.Fail)
+                return;
+
+            if (InRangeUnobstructed(ev.Actor, ev.Target, ev.Data.InteractionRange))
+            {
+                ev.Result = BoundUserInterfaceRangeResult.Pass;
+            }
+            else
+            {
+                ev.Result = BoundUserInterfaceRangeResult.Fail;
+            }
         }
     }
 

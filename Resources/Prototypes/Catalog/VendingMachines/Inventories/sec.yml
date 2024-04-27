@@ -19,6 +19,7 @@
     CombatKnife: 3
     TearGasGrenade: 4
     ClusterBangFull: 2
+    RadioHandheldSecurity: 5
 
   contrabandInventory:
     FoodDonutHomer: 12

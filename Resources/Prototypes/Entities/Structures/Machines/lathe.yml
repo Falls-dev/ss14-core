@@ -708,22 +708,28 @@
       - Stunbaton
       - ForensicPad
       - RiotShield
-      - ShellShotgun
-      - ShellShotgunSlug
-      - ShellShotgunFlare
-      - ShellTranquilizer
+      - BoxShotgunSlug
+      - BoxLethalshot
+      - BoxShotgunFlare
       - MagazinePistol
+      - MagazinePistolEmpty
       - MagazinePistolSubMachineGun
+      - MagazinePistolSubMachineGunEmpty
       - MagazinePistolSubMachineGunTopMounted
+      - MagazinePistolSubMachineGunTopMountedEmpty
       - MagazineRifle
+      - MagazineRifleEmpty
       - MagazineLightRifle
+      - MagazineLightRifleEmpty
+      - MagazineShotgunEmpty
+      - MagazineShotgun
+      - MagazineShotgunSlug
       - MagazineBoxPistol
       - MagazineBoxMagnum
       - MagazineBoxRifle
       - MagazineBoxLightRifle
       - SpeedLoaderMagnum
-      - MagazineShotgun # WD EDIT
-      - MagazineShotgunSlug # WD EDIT
+      - SpeedLoaderMagnumEmpty
       - TargetHuman
       - TargetSyndicate
       - TargetClown
@@ -731,9 +737,9 @@
       - MagazineBoxMagnumPractice
       - MagazineBoxPistolPractice
       - MagazineBoxRiflePractice
-      - ShellShotgunPractice
       - WeaponLaserCarbinePractice
       - WeaponDisablerPractice
+      - BoxShotgunPractice
       - LightModuleRecipe
       - LaserModuleRecipe
       - FlameHiderModuleRecipe
@@ -741,18 +747,21 @@
       - AcceleratorModuleRecipe
       - ShinanoGrenadeBeanbagRecipe
     dynamicRecipes:
-      - CartridgeLightRifleIncendiary
-      - CartridgeMagnumIncendiary
-      - CartridgePistolIncendiary
-      - CartridgeRifleIncendiary
-      - CartridgeLightRifleUranium
-      - CartridgeMagnumUranium
-      - CartridgePistolUranium
-      - CartridgeRifleUranium
-      - CartridgeLightRifleRubber
-      - CartridgeMagnumRubber
-      - CartridgePistolRubber
-      - CartridgeRifleRubber
+      - MagazineLightRifleIncendiary
+      - SpeedLoaderMagnumIncendiary
+      - MagazinePistolIncendiary
+      - MagazineRifleIncendiary
+      - MagazineShotgunIncendiary
+      - MagazineLightRifleUranium
+      - SpeedLoaderMagnumUranium
+      - MagazinePistolUranium
+      - MagazineRifleUranium
+      - MagazineShotgunBeanbag
+      - ShellTranquilizer
+      - - CartridgeLightRifleRubber
+        - CartridgeMagnumRubber
+        - CartridgePistolRubber
+        - CartridgeRifleRubber
       - ExplosivePayload
       - FlashPayload
       - HoloprojectorSecurity
@@ -760,6 +769,7 @@
       - MagazineBoxMagnumIncendiary
       - MagazineBoxPistolIncendiary
       - MagazineBoxRifleIncendiary
+      - BoxShotgunIncendiary
       - MagazineBoxLightRifleUranium
       - MagazineBoxMagnumUranium
       - MagazineBoxPistolUranium
@@ -768,20 +778,19 @@
       - MagazineBoxMagnumRubber
       - MagazineBoxPistolRubber
       - MagazineBoxRifleRubber
+      - - BoxShotgunUranium
+        - BoxBeanbag
       - MagazineGrenadeEmpty
       - GrenadeEMP
       - GrenadeFlash
-      - ShellShotgunBeanbag
-      - ShellShotgunIncendiary
-      - ShellShotgunUranium
       - Signaller
       - SignalTrigger
       - TelescopicShield
       - TimerTrigger
       - Truncheon
       - VoiceTrigger
-      - WeaponDisablerPractice
       - WeaponAdvancedLaser
+      - WeaponDisabler
       - WeaponDisablerSMG
       - WeaponLaserCannon
       - WeaponLaserCarbine

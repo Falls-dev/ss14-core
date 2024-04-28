@@ -1,8 +1,12 @@
 ﻿using System.Numerics;
+using Content.Server.Administration.Commands;
 using Content.Server.Administration.Systems;
 using Content.Server.Body.Systems;
+using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Explosion.EntitySystems;
+using Content.Server.Ghost.Roles;
+using Content.Server.Ghost.Roles.Components;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Revenant.Components;
 using Content.Shared.CCVar;
@@ -13,6 +17,8 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.E20;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
+using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Polymorph;
@@ -41,19 +47,23 @@ public sealed class E20SystemEvents : EntitySystem
     [Dependency] private readonly StaminaSystem _stamina = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
+    [Dependency] private readonly GhostRoleSystem _ghost = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly IChatManager _ichat = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly TriggerSystem _triggerSystem = default!;
     [Dependency] private readonly IConfigurationManager _cfgManager = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
-    //private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly TransformSystem _transform = default!;
 
     public override void Initialize()
     {
         base.Initialize();
         //SubscribeLocalEvent<E20Component, ExaminedEvent>(DieEvent);
         //IoCManager.Resolve<BodySystem>();
+        SubscribeLocalEvent<GhostRoleComponent, TakeGhostRoleEvent>(OnTake);
 
     }
 
@@ -70,9 +80,10 @@ public sealed class E20SystemEvents : EntitySystem
 
         if (comp.CurrentValue == 1)
         {
+
             //TransformSystem ts = new TransformSystem();
-            MapCoordinates coords = Transform(comp.LastUser).MapPosition;
             //MapCoordinates coords = Transform(comp.LastUser).MapPosition;
+            MapCoordinates coords = Transform(comp.LastUser).MapPosition;
 
             _explosion.QueueExplosion(coords, ExplosionSystem.DefaultExplosionPrototypeId,
                 4,1,2,0); // Small explosion for the sake of appearance
@@ -97,7 +108,8 @@ public sealed class E20SystemEvents : EntitySystem
     public void AngryMobsSpawn(EntityUid uid, E20Component comp)
     {
         //TransformSystem ts = new TransformSystem();
-        MapCoordinates coords = Transform(uid).MapPosition;
+        MapCoordinates coords = _transform.GetMapCoordinates(uid);
+        //MapCoordinates coords = Transform(uid).MapPosition;
         EntityManager.SpawnEntities(coords, "MobCarpDungeon", 5);
     }
 
@@ -135,8 +147,8 @@ public sealed class E20SystemEvents : EntitySystem
     public void Throwing(EntityUid uid, E20Component comp)
     {
 
-        MapCoordinates diceCoords = Transform(uid).MapPosition;
-        MapCoordinates playerCoords = Transform(comp.LastUser).MapPosition;
+        MapCoordinates diceCoords = _transform.GetMapCoordinates(uid);
+        MapCoordinates playerCoords = _transform.GetMapCoordinates(comp.LastUser);
 
         var direction = diceCoords.Position - playerCoords.Position;
         var randomizedDirection = direction + new Vector2(_random.Next(-10, 10), _random.Next(-10, 10));
@@ -163,7 +175,7 @@ public sealed class E20SystemEvents : EntitySystem
 
     public void Cookie(EntityUid uid, E20Component comp)
     {
-        MapCoordinates coords = Transform(uid).MapPosition;
+        MapCoordinates coords = _transform.GetMapCoordinates(uid);
         EntityManager.SpawnEntities(coords, "FoodBakedCookie", 2);
     }
 
@@ -174,13 +186,13 @@ public sealed class E20SystemEvents : EntitySystem
 
     public void Money(EntityUid uid, E20Component comp)
     {
-        MapCoordinates coords = Transform(uid).MapPosition;
+        MapCoordinates coords = _transform.GetMapCoordinates(uid);
         EntityManager.SpawnEntities(coords, "SpaceCash1000", 1);
     }
 
     public void Revolver(EntityUid uid, E20Component comp)
     {
-        MapCoordinates coords = Transform(uid).MapPosition;
+        MapCoordinates coords = _transform.GetMapCoordinates(uid);
         EntityManager.SpawnEntities(coords, "WeaponRevolverInspector", 1);
     }
 
@@ -199,7 +211,41 @@ public sealed class E20SystemEvents : EntitySystem
         };
 
         var roll = _random.Next(0, wands.Count);
-        MapCoordinates coords = Transform(uid).MapPosition;
+        MapCoordinates coords = _transform.GetMapCoordinates(uid);
         EntityManager.SpawnEntities(coords, wands[roll], 1);
+    }
+
+
+    public void Slave(EntityUid uid, E20Component comp)
+    {
+
+
+
+        //GhostRoleMobSpawnerComponent gh = new GhostRoleMobSpawnerComponent();
+
+        var ghost = EnsureComp<GhostRoleComponent>(uid);
+        ghost.RoleName = Loc.GetString("osel");
+        ghost.RoleDescription = Loc.GetString("eat grass");
+    }
+
+    public void OnTake(EntityUid uid, GhostRoleComponent comp, TakeGhostRoleEvent args)
+    {
+
+        //TODO: нельзя чтобы через кнопку сделать рользью призрака он тригерился об этот ивент
+        MapCoordinates coords = _transform.GetMapCoordinates(uid);
+        var ghost = EnsureComp<GhostRoleComponent>(uid);
+        var spawnPoint = Spawn("MobHuman", coords);
+        _ghost.GhostRoleInternalCreateMindAndTransfer(args.Player, uid, spawnPoint, ghost);
+        var mind = EnsureComp<MindComponent>(spawnPoint);
+        var meta = MetaData(spawnPoint);
+        _metaData.SetEntityName(spawnPoint, "твоя мама", meta);
+        mind.CharacterName = "Артур пирожков нахуй";
+        SetOutfitCommand.SetOutfit(spawnPoint, "LibrarianGear", EntityManager);
+        _ichat.DispatchServerMessage(args.Player,"Служите вашей маме");
+
+
+
+        _ghost.UnregisterGhostRole((uid, ghost));
+        //EnsureComp<GhostRoleMobSpawnerComponent>(spawnPoint);
     }
 }

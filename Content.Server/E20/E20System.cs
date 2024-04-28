@@ -45,7 +45,7 @@ public sealed class E20System : SharedE20System
     private void DiceOfFatePicker(EntityUid uid, E20Component comp)
     {
         Dictionary<int, MyMethodDelegate> events = new Dictionary<int, MyMethodDelegate>();
-        events[1] = _events.MagicWand;
+        events[1] = _events.Slave;
 
 
         MyMethodDelegate method = events[1];

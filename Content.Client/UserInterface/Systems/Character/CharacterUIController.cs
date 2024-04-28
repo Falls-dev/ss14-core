@@ -1,10 +1,10 @@
-using System.Linq;
 using Content.Client.CharacterInfo;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Character.Controls;
 using Content.Client.UserInterface.Systems.Character.Windows;
 using Content.Client.UserInterface.Systems.Objectives.Controls;
+using Content.Shared._Lfwb.Stats;
 using Content.Shared.Input;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
@@ -23,11 +23,19 @@ namespace Content.Client.UserInterface.Systems.Character;
 public sealed class CharacterUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>, IOnSystemChanged<CharacterInfoSystem>
 {
     [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
     [UISystemDependency] private readonly CharacterInfoSystem _characterInfo = default!;
     [UISystemDependency] private readonly SpriteSystem _sprite = default!;
 
     private CharacterWindow? _window;
     private MenuButton? CharacterButton => UIManager.GetActiveUIWidgetOrNull<MenuBar.Widgets.GameTopMenuBar>()?.CharacterButton;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        IoCManager.InjectDependencies(this);
+    }
 
     public void OnStateEntered(GameplayState state)
     {
@@ -184,6 +192,42 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
 
         _window.RolePlaceholder.Visible = briefing == null && controls.Count == 0 && objectives.Count == 0;
         _window.MemoriesPlaceholder.Visible = memories.Count == 0;
+
+        FillStat();
+    }
+
+    private void FillStat()
+    {
+        _window?.StatsLabel.RemoveAllChildren();
+
+        if (_playerManager == default || _entityManager == default)
+            return;
+
+        var playerEntity = _playerManager.LocalPlayer!.ControlledEntity;
+
+        if (!playerEntity.HasValue)
+            return;
+
+        if (!_entityManager.TryGetComponent<StatsComponent>(playerEntity, out var stats))
+        {
+            _window?.StatsLabel.SetMessage("");
+            return;
+
+        }
+
+        var msg = new FormattedMessage();
+
+        msg.Clear();
+
+        msg.PushNewline();
+
+        foreach (var stat in stats.Stats)
+        {
+            var statLoc = Loc.GetString($"stat-{stat.Key}");
+            msg.AddMarkup($"[color=#7980ad]{statLoc}[/color]: [color=yellow]{stat.Value}[/color]\n");
+        }
+
+        _window?.StatsLabel.SetMessage(msg);
     }
 
     private void CharacterDetached(EntityUid uid)

@@ -1,3 +1,4 @@
+using Content.Shared._Lfwb.Stats;
 using Content.Shared.Access;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Players.PlayTimeTracking;
@@ -120,6 +121,12 @@ namespace Content.Shared.Roles
 
         [DataField("whitelistedSpecies")]
         public IReadOnlyCollection<ProtoId<SpeciesPrototype>> WhitelistedSpecies { get; private set; } = Array.Empty<ProtoId<SpeciesPrototype>>();
+
+        [DataField("statsModification"), ValidatePrototypeId<JobStatsModification>]
+        public string StatsModification = "DefaultStatsOverride";
+
+        [ValidatePrototypeId<JobStatsModification>]
+        public static string DefaultStatsModification = "DefaultStatsOverride";
     }
 
     /// <summary>

@@ -13,6 +13,15 @@ public abstract class SharedSkillsSystem : EntitySystem
         { SkillLevel.Legendary , TimeSpan.FromSeconds(0.5)},
     };
 
+    public static Dictionary<SkillLevel, float> SkillLevelToDelayFloat = new()
+    {
+        { SkillLevel.Weak , 6f},
+        { SkillLevel.Average , 4f},
+        { SkillLevel.Skilled , 2f},
+        { SkillLevel.Master , 1f},
+        { SkillLevel.Legendary , 0.5f},
+    };
+
     public static Dictionary<SkillLevel, float> SkillLevelToChance = new()
     {
         { SkillLevel.Weak , 0.2f},
@@ -20,6 +29,15 @@ public abstract class SharedSkillsSystem : EntitySystem
         { SkillLevel.Skilled , 0.6f},
         { SkillLevel.Master , 0.8f},
         { SkillLevel.Legendary , 1f},
+    };
+
+    public static Dictionary<SkillLevel, int> SkillLevelToAddition = new()
+    {
+        { SkillLevel.Weak , 0},
+        { SkillLevel.Average , 4},
+        { SkillLevel.Skilled , 6},
+        { SkillLevel.Master , 8},
+        { SkillLevel.Legendary , 10},
     };
 
     #endregion

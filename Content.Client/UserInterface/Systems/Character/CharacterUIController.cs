@@ -4,6 +4,7 @@ using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Character.Controls;
 using Content.Client.UserInterface.Systems.Character.Windows;
 using Content.Client.UserInterface.Systems.Objectives.Controls;
+using Content.Shared._Lfwb.Skills;
 using Content.Shared._Lfwb.Stats;
 using Content.Shared.Input;
 using JetBrains.Annotations;
@@ -194,14 +195,12 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         _window.MemoriesPlaceholder.Visible = memories.Count == 0;
 
         FillStat();
+        FillSkills();
     }
 
     private void FillStat()
     {
         _window?.StatsLabel.RemoveAllChildren();
-
-        if (_playerManager == default || _entityManager == default)
-            return;
 
         var playerEntity = _playerManager.LocalPlayer!.ControlledEntity;
 
@@ -212,7 +211,6 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         {
             _window?.StatsLabel.SetMessage("");
             return;
-
         }
 
         var msg = new FormattedMessage();
@@ -228,6 +226,35 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         }
 
         _window?.StatsLabel.SetMessage(msg);
+    }
+
+    private void FillSkills()
+    {
+        _window?.SkillsLabel.RemoveAllChildren();
+
+        var playerEntity = _playerManager.LocalPlayer!.ControlledEntity;
+
+        if (!playerEntity.HasValue)
+            return;
+
+        if (!_entityManager.TryGetComponent<SkillsComponent>(playerEntity, out var skills))
+        {
+            _window?.SkillsLabel.SetMessage("");
+            return;
+        }
+
+        var msg = new FormattedMessage();
+
+        msg.Clear();
+
+        msg.PushNewline();
+
+        foreach (var skill in skills.Skills)
+        {
+            msg.AddMarkup($"[color=#7980ad]{skill.Key.ToString()}[/color]: [color=yellow]{skill.Value.Item1.ToString()}[/color]\n");
+        }
+
+        _window?.SkillsLabel.SetMessage(msg);
     }
 
     private void CharacterDetached(EntityUid uid)

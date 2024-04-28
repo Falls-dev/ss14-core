@@ -1,3 +1,4 @@
+using Content.Shared._Lfwb.Skills;
 using Content.Shared._Lfwb.Stats;
 using Content.Shared.Access;
 using Content.Shared.Humanoid.Prototypes;
@@ -127,6 +128,9 @@ namespace Content.Shared.Roles
 
         [ValidatePrototypeId<JobStatsModification>]
         public static string DefaultStatsModification = "DefaultStatsOverride";
+
+        [DataField("skillsModification"), ValidatePrototypeId<JobSkillsModification>]
+        public string? SkillsModification;
     }
 
     /// <summary>

@@ -30,7 +30,7 @@ public sealed class StatsSystem : SharedStatsSystem
         foreach (var (stat, range) in preset.Preset)
         {
             var statValue = GetValue(range);
-            SetStatValue(component, stat, statValue);
+            SetStatValue(uid, component, stat, statValue);
         }
     }
 
@@ -44,13 +44,13 @@ public sealed class StatsSystem : SharedStatsSystem
         if (string.IsNullOrEmpty(ev.JobId))
         {
             var modification = _prototypeManager.Index<JobStatsModification>(JobPrototype.DefaultStatsModification);
-            ApplyJobStatsModification(statsComponent, modification);
+            ApplyJobStatsModification(ev.Mob, statsComponent, modification);
         }
         else
         {
             var job = _prototypeManager.Index<JobPrototype>(ev.JobId);
             var modification = _prototypeManager.Index<JobStatsModification>(job.StatsModification);
-            ApplyJobStatsModification(statsComponent, modification);
+            ApplyJobStatsModification(ev.Mob, statsComponent, modification);
         }
     }
 
@@ -63,30 +63,34 @@ public sealed class StatsSystem : SharedStatsSystem
         return component.Stats[stat];
     }
 
-    public void SetStatValue(StatsComponent component, Stat stat, int amount)
+    public void SetStatValue(EntityUid owner, StatsComponent component, Stat stat, int amount)
     {
         var newValue = Math.Clamp(amount, 0, 20);
         component.Stats[stat] = newValue;
+
+        Dirty(owner, component);
     }
 
-    public void ModifyStat(StatsComponent component, Stat stat, int amount)
+    public void ModifyStat(EntityUid owner, StatsComponent component, Stat stat, int amount)
     {
         var oldValue = component.Stats[stat];
         var newValue = Math.Max(0, oldValue + amount);
 
         component.Stats[stat] = newValue;
+
+        Dirty(owner, component);
     }
 
     #endregion
 
     #region Private
 
-    private void ApplyJobStatsModification(StatsComponent component, JobStatsModification modification)
+    private void ApplyJobStatsModification(EntityUid owner, StatsComponent component, JobStatsModification modification)
     {
         foreach (var (stat, range) in modification.StatsModification)
         {
             var modificationValue = GetValue(range);
-            ModifyStat(component, stat, modificationValue);
+            ModifyStat(owner, component, stat, modificationValue);
         }
     }
 

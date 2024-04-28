@@ -3,7 +3,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared._Lfwb.Stats;
 
 [Prototype("statsPreset")]
-public class StatsPresetPrototype : IPrototype
+public sealed class StatsPresetPrototype : IPrototype
 {
     [IdDataField]
     public string ID { get; } = default!;

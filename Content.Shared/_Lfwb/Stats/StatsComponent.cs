@@ -3,7 +3,6 @@ using Robust.Shared.GameStates;
 namespace Content.Shared._Lfwb.Stats;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(SharedStatsSystem))]
 public sealed partial class StatsComponent : Component
 {
     [DataField("statsPreset")]

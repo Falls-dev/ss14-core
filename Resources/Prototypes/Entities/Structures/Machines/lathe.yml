@@ -817,6 +817,7 @@
       - ShinanoGrenadeFlashRecipe
       - ShinanoGrenadeSmokeRecipe
       - ShinanoGrenadeStingerRecipe
+      - PortableRecharger
   - type: EmagLatheRecipes
     emagStaticRecipes:
      - MagazineLightRifleBox

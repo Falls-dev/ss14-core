@@ -205,7 +205,6 @@
   - type: StandingState
   - type: Tag
     tags:
-    - ShoesRequiredStepTriggerImmune
     - DoorBumpOpener
     - CanPilot
   - type: Emoting
@@ -213,6 +212,7 @@
     guides:
       - Cyborgs
   - type: Penetrated
+  - type: StepTriggerImmune
 
 - type: entity
   id: BaseBorgChassisNT

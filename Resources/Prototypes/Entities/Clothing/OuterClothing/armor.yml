@@ -151,6 +151,8 @@
         Caustic: 0.75
   - type: GroupExamine
   - type: GiftIgnore
+  - type: ClothingRequiredStepTriggerImmune
+    slots: WITHOUT_POCKET
 
 - type: entity
   parent: ClothingOuterBaseLarge
@@ -158,24 +160,24 @@
   name: chitinous armor
   description: Chitinous and flesh mass of armor.
   components:
-    - type: Sprite
-      sprite: Clothing/OuterClothing/Armor/changeling.rsi
-    - type: Clothing
-      sprite: Clothing/OuterClothing/Armor/changeling.rsi
-    - type: Armor
-      modifiers:
-        coefficients:
-          Blunt: 0.5
-          Slash: 0.5
-          Piercing: 0.6
-          Heat: 0.5
-    - type: ExplosionResistance
-      damageCoefficient: 0.5
-    - type: GroupExamine
-    - type: Unremoveable
-      deleteOnDrop: true
-    - type: ClothingModifyChemicalRegen
-    - type: DeleteOnChangelingRefund
+  - type: Sprite
+    sprite: Clothing/OuterClothing/Armor/changeling.rsi
+  - type: Clothing
+    sprite: Clothing/OuterClothing/Armor/changeling.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.6
+        Heat: 0.5
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: GroupExamine
+  - type: Unremoveable
+    deleteOnDrop: true
+  - type: ClothingModifyChemicalRegen
+  - type: DeleteOnChangelingRefund
 
 - type: entity
   parent: ClothingOuterArmorHeavy
@@ -284,6 +286,8 @@
   - type: ExplosionResistance
     damageCoefficient: 0.5
   - type: GroupExamine
+  - type: ClothingRequiredStepTriggerImmune
+    slots: WITHOUT_POCKET
 
 - type: entity
   parent: ClothingOuterBaseLarge
@@ -310,6 +314,8 @@
   - type: Construction
     graph: BoneArmor
     node: armor
+  - type: ClothingRequiredStepTriggerImmune
+    slots: WITHOUT_POCKET
 
 - type: entity
   parent: ClothingOuterBaseLarge
@@ -329,3 +335,6 @@
         Piercing: 0.6
         Heat: 0.5
   - type: GroupExamine
+  - type: ClothingRequiredStepTriggerImmune
+    slots: WITHOUT_POCKET
+

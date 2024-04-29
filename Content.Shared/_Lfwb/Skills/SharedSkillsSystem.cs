@@ -81,7 +81,11 @@ public abstract class SharedSkillsSystem : EntitySystem
         if (!TryComp<SkillsComponent>(owner, out var skillsComponent))
             return;
 
-        skillsComponent.Skills[skill] = (NextSkillLevel(skillsComponent.Skills[skill].Item1), 0);
+        var nextSkill = NextSkillLevel(skillsComponent.Skills[skill].Item1);
+        if (skillsComponent.Skills[skill].Item1 == nextSkill)
+            return;
+
+        skillsComponent.Skills[skill] = (nextSkill, 0);
 
         Dirty(owner, skillsComponent);
 

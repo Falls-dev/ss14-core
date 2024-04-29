@@ -226,6 +226,11 @@
   - type: ShowHealthIcons
     damageContainers:
     - Biological
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepHoverBorg
+      params:
+        volume: -6
 
 - type: entity
   id: BorgChassisService

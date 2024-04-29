@@ -63,6 +63,19 @@ public abstract class SharedStatsSystem : EntitySystem
         };
     }
 
+    public (int, string, bool) D20(int stat, int luck)
+    {
+        var roll = _robustRandom.Next(1, 21);
+        return roll switch
+        {
+            1 => (roll, "Критическая неудача!", false),
+            20 => (roll, "Критическая удача!", true),
+            _ => roll <= stat + luck
+                ? (roll, "Удача!", true)
+                : (roll, "Неудача!", false)
+        };
+    }
+
     #endregion
 }
 

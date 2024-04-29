@@ -111,14 +111,7 @@ public sealed partial class GunSystem : SharedGunSystem
         // Update shot based on the recoil
         toMap = fromMap.Position + angle.ToVec() * mapDirection.Length();
         mapDirection = toMap - fromMap.Position;
-
-        // WD EDIT START
-        // var gunVelocity = Physics.GetMapLinearVelocity(gunUid);
-        var gunVelocity = Vector2.Zero;
-
-        if (grid != null && TryComp(gridUid, out PhysicsComponent? physics))
-            gunVelocity = physics.LinearVelocity;
-        // WD EDIT END
+        var gunVelocity = Physics.GetMapLinearVelocity(fromEnt);
 
         // I must be high because this was getting tripped even when true.
         // DebugTools.Assert(direction != Vector2.Zero);
@@ -216,7 +209,7 @@ public sealed partial class GunSystem : SharedGunSystem
                             if (rayCastResults.Count == 0)
                                 break;
 
-                            RayCastResults? result = null; 
+                            RayCastResults? result = null;
                             foreach (var castResults in rayCastResults)
                             {
                                 var hitscanAttemptEv = new HitscanHitAttemptEvent(castResults.HitEntity, gun.Target);
@@ -234,7 +227,7 @@ public sealed partial class GunSystem : SharedGunSystem
                             {
                                 return;
                             }
-                            
+
                             var hit = result.Value.HitEntity;
                             lastHit = hit;
                             FireEffects(fromEffect, result.Value.Distance, dir.Normalized().ToAngle(), hitscan, hit);

@@ -22,7 +22,7 @@ public sealed class SkillsSystem : SharedSkillsSystem
         if(!HasComp<HumanoidAppearanceComponent>(ev.Mob))
             return;
 
-        var skillsComponent = EnsureComp<SkillsComponent>(ev.Mob);
+        EnsureComp<SkillsComponent>(ev.Mob);
 
         if (string.IsNullOrEmpty(ev.JobId))
             return;
@@ -34,15 +34,14 @@ public sealed class SkillsSystem : SharedSkillsSystem
 
         var modification = _prototypeManager.Index<JobSkillsModification>(job.SkillsModification);
 
-        ApplyJobSkillModification(ev.Mob, skillsComponent, modification);
+        ApplyJobSkillModification(ev.Mob, modification);
     }
 
-    private void ApplyJobSkillModification(EntityUid owner, SkillsComponent skillsComponent, JobSkillsModification modification)
+    private void ApplyJobSkillModification(EntityUid owner, JobSkillsModification modification)
     {
         foreach (var (skill, skillLevel) in modification.StatsModification)
         {
-            skillsComponent.SetSkillLevel(skill, skillLevel);
-            Dirty(owner, skillsComponent);
+            SetSkillLevel(owner, skill, skillLevel);
         }
     }
 }

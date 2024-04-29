@@ -1,19 +1,15 @@
+using Content.Shared.FixedPoint;
+using Content.Shared.Popups;
+
 namespace Content.Shared._Lfwb.Skills;
 
 public abstract class SharedSkillsSystem : EntitySystem
 {
+    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+
     #region Data
 
-    public static Dictionary<SkillLevel, TimeSpan> SkillLevelToDelay = new()
-    {
-        { SkillLevel.Weak , TimeSpan.FromSeconds(6)},
-        { SkillLevel.Average , TimeSpan.FromSeconds(4)},
-        { SkillLevel.Skilled , TimeSpan.FromSeconds(2)},
-        { SkillLevel.Master , TimeSpan.FromSeconds(1)},
-        { SkillLevel.Legendary , TimeSpan.FromSeconds(0.5)},
-    };
-
-    public static Dictionary<SkillLevel, float> SkillLevelToDelayFloat = new()
+    public static Dictionary<SkillLevel, float> SkillLevelToDelay = new()
     {
         { SkillLevel.Weak , 6f},
         { SkillLevel.Average , 4f},
@@ -39,6 +35,98 @@ public abstract class SharedSkillsSystem : EntitySystem
         { SkillLevel.Master , 8},
         { SkillLevel.Legendary , 10},
     };
+
+    #endregion
+
+    #region PublicApi
+
+    public void ApplySkillThreshold(EntityUid owner, Skill skill, FixedPoint2 value)
+    {
+        if (!TryComp<SkillsComponent>(owner, out var skillsComponent))
+            return;
+
+        var newValue = skillsComponent.Skills[skill].Item2 + value;
+        newValue = FixedPoint2.Clamp(newValue, 0, 100);
+
+        if (newValue >= 100)
+        {
+            ImproveSkill(owner, skill);
+            return;
+        }
+
+        skillsComponent.Skills[skill] = (skillsComponent.Skills[skill].Item1, newValue);
+
+        Dirty(owner, skillsComponent);
+    }
+
+    public SkillLevel GetSkillLevel(EntityUid owner, Skill skill)
+    {
+        return !TryComp<SkillsComponent>(owner, out var skillsComponent)
+            ? SkillLevel.Weak
+            : skillsComponent.Skills[skill].Item1;
+    }
+
+    public void SetSkillLevel(EntityUid owner, Skill skill, SkillLevel level)
+    {
+        if (!TryComp<SkillsComponent>(owner, out var skillsComponent))
+            return;
+
+        skillsComponent.Skills[skill] = (level, 0);
+
+        Dirty(owner, skillsComponent);
+    }
+
+    public void ImproveSkill(EntityUid owner, Skill skill)
+    {
+        if (!TryComp<SkillsComponent>(owner, out var skillsComponent))
+            return;
+
+        skillsComponent.Skills[skill] = (NextSkillLevel(skillsComponent.Skills[skill].Item1), 0);
+
+        Dirty(owner, skillsComponent);
+
+        _popupSystem.PopupEntity($"My {skill.ToString()} skill grows!", owner, owner);
+    }
+
+    public void DecreaseSkill(EntityUid owner, Skill skill)
+    {
+        if (!TryComp<SkillsComponent>(owner, out var skillsComponent))
+            return;
+
+        skillsComponent.Skills[skill] = (PreviousSkillLevel(skillsComponent.Skills[skill].Item1), 0);
+
+        Dirty(owner, skillsComponent);
+    }
+
+    #endregion
+
+    #region Private
+
+    private SkillLevel NextSkillLevel(SkillLevel currentLevel)
+    {
+        return currentLevel switch
+        {
+            SkillLevel.Weak => SkillLevel.Average,
+            SkillLevel.Average => SkillLevel.Skilled,
+            SkillLevel.Skilled => SkillLevel.Master,
+            SkillLevel.Master => SkillLevel.Legendary,
+            SkillLevel.Legendary => SkillLevel.Legendary,
+            _ => currentLevel
+        };
+    }
+
+    private SkillLevel PreviousSkillLevel(SkillLevel currentLevel)
+    {
+        return currentLevel switch
+        {
+            SkillLevel.Weak => SkillLevel.Weak,
+            SkillLevel.Average => SkillLevel.Weak,
+            SkillLevel.Skilled => SkillLevel.Average,
+            SkillLevel.Master => SkillLevel.Skilled,
+            SkillLevel.Legendary => SkillLevel.Master,
+            _ => currentLevel
+        };
+    }
 
     #endregion
 }

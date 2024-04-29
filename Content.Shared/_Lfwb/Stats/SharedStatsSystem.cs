@@ -37,9 +37,9 @@ public abstract class SharedStatsSystem : EntitySystem
         var oldValue = statsComponent.Stats[stat];
         var newValue = oldValue + amount;
 
-        var clamp = Math.Clamp(newValue, MinStat, MaxStat);
+        newValue = Math.Clamp(newValue, MinStat, MaxStat);
 
-        statsComponent.Stats[stat] = clamp;
+        statsComponent.Stats[stat] = newValue;
 
         Dirty(owner, statsComponent);
     }

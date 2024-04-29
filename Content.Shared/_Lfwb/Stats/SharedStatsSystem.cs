@@ -1,7 +1,13 @@
+using Robust.Shared.Network;
+using Robust.Shared.Random;
+
 namespace Content.Shared._Lfwb.Stats;
 
 public abstract class SharedStatsSystem : EntitySystem
 {
+    [Dependency] private readonly INetManager _netManager = default!;
+    [Dependency] private readonly IRobustRandom _robustRandom = default!;
+
     #region Data
 
     public static int MaxStat = 20;
@@ -42,6 +48,19 @@ public abstract class SharedStatsSystem : EntitySystem
         statsComponent.Stats[stat] = newValue;
 
         Dirty(owner, statsComponent);
+    }
+
+    public (int, string, bool) D20(int stat)
+    {
+        var roll = _robustRandom.Next(1, 21);
+        return roll switch
+        {
+            1 => (roll, "Критическая неудача!", false),
+            20 => (roll, "Критическая удача!", true),
+            _ => roll <= stat
+                ? (roll, "Удача!", true)
+                : (roll, "Неудача!", false)
+        };
     }
 
     #endregion

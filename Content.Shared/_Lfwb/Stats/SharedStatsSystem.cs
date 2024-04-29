@@ -1,17 +1,15 @@
-using Robust.Shared.Network;
 using Robust.Shared.Random;
 
 namespace Content.Shared._Lfwb.Stats;
 
 public abstract class SharedStatsSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _netManager = default!;
     [Dependency] private readonly IRobustRandom _robustRandom = default!;
 
     #region Data
 
-    public static int MaxStat = 20;
-    public static int MinStat = 0;
+    public int MaxStat = 20;
+    public int MinStat = 0;
 
     #endregion
 

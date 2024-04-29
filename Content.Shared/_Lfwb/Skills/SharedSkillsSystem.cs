@@ -11,16 +11,16 @@ public abstract class SharedSkillsSystem : EntitySystem
 
     #region Data
 
-    public static Dictionary<SkillLevel, float> SkillLevelToDelay = new()
+    public readonly Dictionary<SkillLevel, float> SkillLevelToDelay = new()
     {
-        { SkillLevel.Weak , 6f},
-        { SkillLevel.Average , 4f},
-        { SkillLevel.Skilled , 2f},
-        { SkillLevel.Master , 1f},
-        { SkillLevel.Legendary , 0.5f},
+        { SkillLevel.Weak , 8f},
+        { SkillLevel.Average , 6f},
+        { SkillLevel.Skilled , 3f},
+        { SkillLevel.Master , 2f},
+        { SkillLevel.Legendary , 1f},
     };
 
-    public static Dictionary<SkillLevel, float> SkillLevelToChance = new()
+    public readonly Dictionary<SkillLevel, float> SkillLevelToChance = new()
     {
         { SkillLevel.Weak , 0.2f},
         { SkillLevel.Average , 0.4f},
@@ -29,13 +29,13 @@ public abstract class SharedSkillsSystem : EntitySystem
         { SkillLevel.Legendary , 1f},
     };
 
-    public static Dictionary<SkillLevel, int> SkillLevelToAddition = new()
+    public readonly Dictionary<SkillLevel, int> SkillLevelToAddition = new()
     {
         { SkillLevel.Weak , 0},
-        { SkillLevel.Average , 4},
-        { SkillLevel.Skilled , 6},
-        { SkillLevel.Master , 8},
-        { SkillLevel.Legendary , 10},
+        { SkillLevel.Average , 2},
+        { SkillLevel.Skilled , 4},
+        { SkillLevel.Master , 6},
+        { SkillLevel.Legendary , 8},
     };
 
     #endregion

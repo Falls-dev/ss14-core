@@ -1,4 +1,5 @@
-﻿using Content.Shared.Damage;
+﻿using Content.Shared._Lfwb.Skills;
+using Content.Shared.Damage;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
@@ -10,6 +11,7 @@ namespace Content.Server.HealthExaminable;
 public sealed class HealthExaminableSystem : EntitySystem
 {
     [Dependency] private readonly ExamineSystemShared _examineSystem = default!;
+    [Dependency] private readonly SharedSkillsSystem _skillsSystem = default!;
 
     public override void Initialize()
     {
@@ -20,6 +22,10 @@ public sealed class HealthExaminableSystem : EntitySystem
 
     private void OnGetExamineVerbs(EntityUid uid, HealthExaminableComponent component, GetVerbsEvent<ExamineVerb> args)
     {
+        var skillLevel = _skillsSystem.GetSkillLevel(args.User, Skill.Medicine);
+        if (skillLevel < SkillLevel.Skilled)
+            return;
+
         if (!TryComp<DamageableComponent>(uid, out var damage))
             return;
 

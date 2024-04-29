@@ -12,8 +12,8 @@
 - type: jobStatsModification
   id: DefaultStatsOverride
   stats:
-    strength: [-2,2]
-    intelligence: [-2,2]
-    dexterity: [-2,2]
-    endurance: [-2,2]
+    strength: [-3, 2]
+    intelligence: [-3, 2]
+    dexterity: [-3, 2]
+    endurance: [-3, 2]
     luck: [-1, 1]

@@ -7,6 +7,8 @@ using Content.Server.Ghost;
 using Content.Server.Popups;
 using Content.Server.PowerCell;
 using Content.Server.Traits.Assorted;
+using Content.Shared._Lfwb.Skills;
+using Content.Shared._Lfwb.Stats;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
@@ -46,6 +48,8 @@ public sealed class DefibrillatorSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private readonly SharedSkillsSystem _skillsSystem = default!;
+    [Dependency] private readonly SharedStatsSystem _statsSystem = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -174,7 +178,7 @@ public sealed class DefibrillatorSystem : EntitySystem
             return false;
 
         _audio.PlayPvs(component.ChargeSound, uid);
-        return _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, component.DoAfterDuration, new DefibrillatorZapDoAfterEvent(),
+        return _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, _skillsSystem.SkillLevelToDelay[_skillsSystem.GetSkillLevel(user, Skill.Medicine)], new DefibrillatorZapDoAfterEvent(),
             uid, target, uid)
             {
                 BlockDuplicate = true,
@@ -188,11 +192,17 @@ public sealed class DefibrillatorSystem : EntitySystem
         if (!Resolve(uid, ref component) || !Resolve(target, ref mob, ref thresholds, false))
             return;
 
-        // clowns zap themselves
-        if (HasComp<ClumsyComponent>(user) && user != target)
+        if (_skillsSystem.GetSkillLevel(user, Skill.Medicine) == SkillLevel.Weak)
         {
-            Zap(uid, user, user, component);
-            return;
+            var intStat = _statsSystem.GetStat(user, Stat.Intelligence);
+            var (_, response, result) = _statsSystem.D20(intStat);
+
+            if (!result)
+            {
+                _popup.PopupEntity(response, user, user);
+                _electrocution.TryDoElectrocution(user, null, component.ZapDamage, component.WritheDuration, true, ignoreInsulation: true);
+                return;
+            }
         }
 
         if (!_powerCell.TryUseActivatableCharge(uid, user: user))
@@ -250,6 +260,8 @@ public sealed class DefibrillatorSystem : EntitySystem
             ? component.FailureSound
             : component.SuccessSound;
         _audio.PlayPvs(sound, uid);
+
+        _skillsSystem.ApplySkillThreshold(user, Skill.Medicine, 10);
 
         // if we don't have enough power left for another shot, turn it off
         if (!_powerCell.HasActivatableCharge(uid))

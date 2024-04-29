@@ -53,6 +53,14 @@
   maxCount:
 
 - type: stack
+  id: GroundCannabisRainbow
+  name: ground rainbow cannabis
+  icon: { sprite: /Textures/Objects/Specific/Hydroponics/rainbow_cannabis.rsi, state: powderpile_rainbow }
+  spawn: GroundCannabisRainbow
+  maxCount:
+  itemSize: 1
+
+- type: stack
   id: LeavesTobaccoDried
   name: dried tobacco leaves
   icon: { sprite: /Textures/Objects/Specific/Hydroponics/tobacco.rsi, state: dried }
@@ -71,3 +79,11 @@
   name: dried rainbow cannabis leaves
   icon: { sprite: /Textures/Objects/Specific/Hydroponics/rainbow_cannabis.rsi, state: dried }
   spawn: LeavesCannabisRainbowDried
+
+- type: stack
+  id: LeavesCannabisRainbowDried
+  name: dried rainbow cannabis leaves
+  icon: { sprite: /Textures/Objects/Specific/Hydroponics/rainbow_cannabis.rsi, state: dried }
+  spawn: LeavesCannabisRainbowDried
+  maxCount: 5
+  itemSize: 5

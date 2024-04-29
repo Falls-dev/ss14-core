@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Client.CharacterInfo;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Controls;
@@ -221,6 +222,9 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
 
         foreach (var stat in stats.Stats)
         {
+            if (stat.Key == Stat.Luck)
+                continue;
+
             var statLoc = Loc.GetString($"stat-{stat.Key}");
             msg.AddMarkup($"[color=#7980ad]{statLoc}[/color]: [color=yellow]{stat.Value}[/color]\n");
         }

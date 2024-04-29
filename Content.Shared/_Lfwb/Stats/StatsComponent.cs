@@ -15,6 +15,7 @@ public sealed partial class StatsComponent : Component
         {Stat.Strength, 10},
         {Stat.Intelligence, 10},
         {Stat.Dexterity, 10},
-        {Stat.Endurance, 10}
+        {Stat.Endurance, 10},
+        {Stat.Luck, 2}
     };
 }

@@ -125,7 +125,7 @@
   - type: Item
     size: Large
   - type: MeleeWeapon
-    attackRate: 0.5
+    attackRate: 1
     angle: 0
     animation: WeaponArcFist
     wideAnimationRotation: -135

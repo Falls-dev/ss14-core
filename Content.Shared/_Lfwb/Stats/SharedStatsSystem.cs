@@ -2,29 +2,46 @@ namespace Content.Shared._Lfwb.Stats;
 
 public abstract class SharedStatsSystem : EntitySystem
 {
+    #region Data
+
+    public static int MaxStat = 20;
+    public static int MinStat = 0;
+
+    #endregion
+
     #region PublicApi
 
-    public int GetStat(StatsComponent component, Stat stat)
+    public int GetStat(EntityUid owner, Stat stat)
     {
-        return component.Stats[stat];
+        return !TryComp<StatsComponent>(owner, out var statsComponent)
+            ? 0
+            : statsComponent.Stats[stat];
     }
 
-    public void SetStatValue(EntityUid owner, StatsComponent component, Stat stat, int amount)
+    public void SetStatValue(EntityUid owner, Stat stat, int amount)
     {
-        var newValue = Math.Clamp(amount, 0, 20);
-        component.Stats[stat] = newValue;
+        if (!TryComp<StatsComponent>(owner, out var statsComponent))
+            return;
 
-        Dirty(owner, component);
+        var newValue = Math.Clamp(amount, MinStat, MaxStat);
+        statsComponent.Stats[stat] = newValue;
+
+        Dirty(owner, statsComponent);
     }
 
-    public void ModifyStat(EntityUid owner, StatsComponent component, Stat stat, int amount)
+    public void ModifyStat(EntityUid owner, Stat stat, int amount)
     {
-        var oldValue = component.Stats[stat];
-        var newValue = Math.Max(0, oldValue + amount);
+        if (!TryComp<StatsComponent>(owner, out var statsComponent))
+            return;
 
-        component.Stats[stat] = newValue;
+        var oldValue = statsComponent.Stats[stat];
+        var newValue = oldValue + amount;
 
-        Dirty(owner, component);
+        var clamp = Math.Clamp(newValue, MinStat, MaxStat);
+
+        statsComponent.Stats[stat] = clamp;
+
+        Dirty(owner, statsComponent);
     }
 
     #endregion

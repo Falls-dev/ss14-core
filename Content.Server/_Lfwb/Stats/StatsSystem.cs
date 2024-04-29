@@ -30,7 +30,7 @@ public sealed class StatsSystem : SharedStatsSystem
         foreach (var (stat, range) in preset.Preset)
         {
             var statValue = GetValue(range);
-            SetStatValue(uid, component, stat, statValue);
+            SetStatValue(uid, stat, statValue);
         }
     }
 
@@ -63,7 +63,7 @@ public sealed class StatsSystem : SharedStatsSystem
         foreach (var (stat, range) in modification.StatsModification)
         {
             var modificationValue = GetValue(range);
-            ModifyStat(owner, component, stat, modificationValue);
+            ModifyStat(owner, stat, modificationValue);
         }
     }
 

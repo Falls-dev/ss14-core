@@ -1,10 +1,10 @@
-using Robust.Shared.Random;
+using Content.Shared._Lfwb.PredictedRandom;
 
 namespace Content.Shared._Lfwb.Stats;
 
 public abstract class SharedStatsSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _robustRandom = default!;
+    [Dependency] private readonly PredictedRandomSystem _predictedRandomSystem = default!;
 
     #region Data
 
@@ -50,7 +50,7 @@ public abstract class SharedStatsSystem : EntitySystem
 
     public (int, string, bool) D20(int stat)
     {
-        var roll = _robustRandom.Next(1, 21);
+        var roll = _predictedRandomSystem.Next(1, 21);
         return roll switch
         {
             1 => (roll, "Критическая неудача!", false),
@@ -63,7 +63,7 @@ public abstract class SharedStatsSystem : EntitySystem
 
     public (int, string, bool) D20(int stat, int luck)
     {
-        var roll = _robustRandom.Next(1, 21);
+        var roll = _predictedRandomSystem.Next(1, 21);
         return roll switch
         {
             1 => (roll, "Критическая неудача!", false),

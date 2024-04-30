@@ -14,9 +14,25 @@ public sealed class PredictedRandomSystem : EntitySystem
         return _random.Next(minValue, maxValue);
     }
 
+    public int Next(int minValue, int maxValue, int value)
+    {
+        SetSeed(value);
+        return _random.Next(minValue, maxValue);
+    }
+
     private void SetSeed()
     {
         var currentTick = _timing.CurTime.Seconds.GetHashCode();
         _random = new System.Random(currentTick);
+    }
+
+    private void SetSeed(int value)
+    {
+        var currentTick = _timing.CurTime.Seconds.GetHashCode();
+        var valueHash = value.GetHashCode();
+
+        var hash = HashCode.Combine(currentTick, valueHash);
+
+        _random = new System.Random(hash);
     }
 }

@@ -27,8 +27,10 @@ using Content.Shared._White;
 using Content.Shared._White.Implants.NeuroControl;
 using Content.Shared.Standing.Systems;
 using Content.Shared.StatusEffect;
+using Content.Shared.Stunnable;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
+using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
@@ -61,6 +63,8 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     [Dependency] private readonly SharedStandingStateSystem _standingState = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
     [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedStunSystem _stunSystem = default!;
 
     private const int AttackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque);
 
@@ -547,6 +551,8 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         var crit = TryCrit(user);
 
+        TryFlyDreamer(user, target.Value);
+
         // WD START
         var blockEvent = new MeleeBlockAttemptEvent(user);
         RaiseLocalEvent(target.Value, ref blockEvent);
@@ -609,7 +615,10 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         _meleeSound.PlayHitSound(target.Value, user, GetHighestDamageSound(modifiedDamage, _protoManager), hitEvent.HitSoundOverride, component);
         _stamina.TakeStaminaDamage(user, 5);
-        _skillsSystem.ApplySkillThreshold(user, Skill.Melee, 10);
+
+        if(_net.IsServer)
+            _skillsSystem.ApplySkillThreshold(user, Skill.Melee, 5);
+
         if (damageResult?.GetTotal() > FixedPoint2.Zero)
         {
             DoDamageEffect(targets, user, targetXform);
@@ -1068,7 +1077,10 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         {
             HellMessage(target, $"{Name(target)} смог(ла) паррировать атаку {Name(attacker)}!");
             _stamina.TakeStaminaDamage(target, 5);
-            _skillsSystem.ApplySkillThreshold(target, Skill.Melee, 10);
+
+            if(_net.IsServer)
+                _skillsSystem.ApplySkillThreshold(target, Skill.Melee, 5);
+
             return true;
         }
 
@@ -1137,7 +1149,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         {
             HellMessage(target, $"{Name(target)} смог(ла) увернуться от атаки {Name(attacker)}!");
             _stamina.TakeStaminaDamage(target, 15);
-            _skillsSystem.ApplySkillThreshold(target, Skill.Melee, 10);
+
+            if(_net.IsServer)
+                _skillsSystem.ApplySkillThreshold(target, Skill.Melee, 5);
             return true;
         }
 
@@ -1178,6 +1192,27 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         }
 
         return false;
+    }
+
+    public virtual void TryFlyDreamer(EntityUid attacker, EntityUid target)
+    {
+        var strAttacker = _statsSystem.GetStat(attacker, Stat.Strength);
+        var strTarget = _statsSystem.GetStat(target, Stat.Strength);
+
+        var strengthDifference = Math.Abs(strAttacker - strTarget);
+        if (strengthDifference < 6)
+            return;
+
+        if(!_predictedRandomSystem.Prob(0.333f))
+            return;
+
+        var wAttacker = Transform(attacker);
+        var wTarget = Transform(target);
+
+        var dir = (wTarget.WorldPosition - wAttacker.WorldPosition).Normalized();
+        _physics.ApplyLinearImpulse(target, dir * (10000 * strAttacker));
+        _stunSystem.TryKnockdown(target, TimeSpan.FromSeconds(2), false);
+        HellMessage(attacker, $"{Name(attacker)} использует свою огромную силу и отправляет в полет {Name(target)}!");
     }
 
     public virtual void HellMessage(EntityUid who, string message) {}

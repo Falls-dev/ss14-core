@@ -23,6 +23,12 @@ public sealed class PredictedRandomSystem : EntitySystem
         return _random.Next(minValue, maxValue);
     }
 
+    public double NextDouble()
+    {
+        SetSeed();
+        return _random.NextDouble();
+    }
+
     #endregion
 
     #region Prob

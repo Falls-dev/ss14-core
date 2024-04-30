@@ -40,15 +40,34 @@ public sealed class E20System : SharedE20System
         _events.ExplosionEvent(uid, comp);
     }
 
-    public delegate void MyMethodDelegate(EntityUid uid, E20Component comp);
+    private delegate void MyMethodDelegate(EntityUid uid, E20Component comp);
 
     private void DiceOfFatePicker(EntityUid uid, E20Component comp)
     {
         Dictionary<int, MyMethodDelegate> events = new Dictionary<int, MyMethodDelegate>();
-        events[1] = _events.Slave;
+        events[1] = _events.FullDestructionEvent;
+        events[2] = _events.DieEvent;
+        events[3] = _events.AngryMobsSpawnEvent;
+        events[4] = _events.ItemsDestructionEvent;
+        events[5] = _events.MonkeyPolymorphEvent;
+        events[6] = _events.SpeedReduceEvent;
+        events[7] = _events.ThrowingEvent;
+        events[8] = _events.ExplosionEvent;
+        events[9] = _events.DiseaseEvent;
+        events[10] = _events.NothingEvent;
+        events[11] = _events.CookieEvent;
+        events[12] = _events.RejuvenateEvent;
+        events[13] = _events.MoneyEvent;
+        events[14] = _events.RevolverEvent;
+        events[15] = _events.MagicWandEvent;
+        events[16] = _events.SlaveEvent;
+        events[17] = _events.RandomSyndieBundleEvent;
+        events[18] = _events.FullAccessEvent;
+        events[19] = _events.DamageResistEvent;
+        events[20] = _events.ChangelingTransformationEvent;
 
 
-        MyMethodDelegate method = events[1];
+        MyMethodDelegate method = events[1];//events[comp.CurrentValue];
         method(uid, comp);
     }
 

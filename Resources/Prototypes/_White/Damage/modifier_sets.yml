@@ -28,3 +28,14 @@
     Shock: 1.45
     Cold: 1.45
     Heat: 1.45
+
+- type: damageModifierSet
+  id: DiceOfFate
+  coefficients:
+    Blunt: 0.5
+    Slash: 0.5
+    Piercing: 0.5
+    Shock: 0.5
+    Cold: 0.5
+    Heat: 0.5
+    Radiation: 0.5

@@ -33,7 +33,7 @@
       - id: SyringeStimulants
 
 - type: entity
-  id: Observationskit
+  id: ObservationsKit
   parent: BoxCardboard
   name: observations kit
   suffix: Filled

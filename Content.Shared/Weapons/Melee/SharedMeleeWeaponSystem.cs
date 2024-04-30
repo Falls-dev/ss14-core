@@ -609,6 +609,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         _meleeSound.PlayHitSound(target.Value, user, GetHighestDamageSound(modifiedDamage, _protoManager), hitEvent.HitSoundOverride, component);
         _stamina.TakeStaminaDamage(user, 5);
+        _skillsSystem.ApplySkillThreshold(user, Skill.Melee, 10);
         if (damageResult?.GetTotal() > FixedPoint2.Zero)
         {
             DoDamageEffect(targets, user, targetXform);

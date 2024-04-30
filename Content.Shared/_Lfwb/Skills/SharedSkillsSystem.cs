@@ -1,13 +1,13 @@
+using Content.Shared._Lfwb.PredictedRandom;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
-using Robust.Shared.Random;
 
 namespace Content.Shared._Lfwb.Skills;
 
-public abstract class SharedSkillsSystem : EntitySystem
+public class SharedSkillsSystem : EntitySystem
 {
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-    [Dependency] private readonly IRobustRandom _robustRandom = default!;
+    [Dependency] private readonly PredictedRandomSystem _predictedRandomSystem = default!;
 
     #region Data
 
@@ -112,7 +112,7 @@ public abstract class SharedSkillsSystem : EntitySystem
         var skillLevel = skillsComponent.Skills[skill].Item1;
         var chance = SkillLevelToChance[skillLevel];
 
-        return _robustRandom.Prob(chance);
+        return _predictedRandomSystem.Prob(chance);
     }
 
     #endregion

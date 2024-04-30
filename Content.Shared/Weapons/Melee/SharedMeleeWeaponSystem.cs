@@ -1,6 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
+using Content.Shared._Lfwb.PredictedRandom;
+using Content.Shared._Lfwb.Skills;
+using Content.Shared._Lfwb.Stats;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CombatMode;
@@ -22,6 +25,8 @@ using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared._White;
 using Content.Shared._White.Implants.NeuroControl;
+using Content.Shared.Standing.Systems;
+using Content.Shared.StatusEffect;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
@@ -50,8 +55,22 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     [Dependency] private   readonly IPrototypeManager       _protoManager    = default!;
     [Dependency] private   readonly StaminaSystem           _stamina         = default!;
     [Dependency] private   readonly IConfigurationManager   _cfg             = default!;
+    [Dependency] private readonly SharedStatsSystem _statsSystem = default!;
+    [Dependency] private readonly SharedSkillsSystem _skillsSystem = default!;
+    [Dependency] private readonly PredictedRandomSystem _predictedRandomSystem = default!;
+    [Dependency] private readonly SharedStandingStateSystem _standingState = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
+    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
 
     private const int AttackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque);
+
+    public List<string> MissMessages = new()
+    {
+        "странно",
+        "невозможно",
+        "удивительно",
+        "невезуче"
+    };
 
     /// <summary>
     /// Maximum amount of targets allowed for a wide-attack.
@@ -315,6 +334,26 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         return false;
     }
 
+    public bool TryGetWeaponInHands(EntityUid entity, out EntityUid weaponUid, [NotNullWhen(true)] out MeleeWeaponComponent? melee)
+    {
+        weaponUid = default;
+        melee = null;
+
+        if (EntityManager.TryGetComponent(entity, out HandsComponent? hands) &&
+            hands.ActiveHandEntity is { } held)
+        {
+            if (EntityManager.TryGetComponent(held, out melee))
+            {
+                weaponUid = held;
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
     public void AttemptLightAttackMiss(EntityUid user, EntityUid weaponUid, MeleeWeaponComponent weapon, EntityCoordinates coordinates)
     {
         AttemptAttack(user, weaponUid, weapon, new LightAttackEvent(null, GetNetEntity(weaponUid), GetNetCoordinates(coordinates)), null);
@@ -424,8 +463,6 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
                     animation = miss && weapon.Animation == "WeaponArcThrust"
                         ? weapon.MissAnimation
                         : weapon.Animation;
-                    if (miss)
-                        weapon.NextAttack -= fireRate / 2f;
                     // WD EDIT END
                     break;
                 case DisarmAttackEvent disarm:
@@ -493,6 +530,23 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         // Sawmill.Debug($"Melee damage is {damage.Total} out of {component.Damage.Total}");
 
+        if (TryMiss(user))
+        {
+            var missEvent = new MeleeHitEvent(new List<EntityUid>(), user, meleeUid, damage, null);
+            RaiseLocalEvent(meleeUid, missEvent);
+            miss = true; // WD EDIT
+            _meleeSound.PlaySwingSound(user, meleeUid, component);
+
+            return;
+        }
+
+        if (TryParryOrDodge(user, target.Value))
+        {
+            return;
+        }
+
+        var crit = TryCrit(user);
+
         // WD START
         var blockEvent = new MeleeBlockAttemptEvent(user);
         RaiseLocalEvent(target.Value, ref blockEvent);
@@ -526,6 +580,10 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         RaiseLocalEvent(target.Value, attackedEvent);
 
         var modifiedDamage = DamageSpecifier.ApplyModifierSets(damage + hitEvent.BonusDamage + attackedEvent.BonusDamage, hitEvent.ModifiersList);
+
+        if (crit)
+            modifiedDamage.ApplyToAll(damage.GetTotal() / 1.4);
+
         var damageResult = Damageable.TryChangeDamage(target, modifiedDamage, component.IgnoreResistances || hitEvent.PenetrateArmor, origin:user); // WD EDIT
 
         if (damageResult != null && damageResult.Any())
@@ -550,7 +608,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         }
 
         _meleeSound.PlayHitSound(target.Value, user, GetHighestDamageSound(modifiedDamage, _protoManager), hitEvent.HitSoundOverride, component);
-
+        _stamina.TakeStaminaDamage(user, 5);
         if (damageResult?.GetTotal() > FixedPoint2.Zero)
         {
             DoDamageEffect(targets, user, targetXform);
@@ -872,4 +930,256 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         Dirty(uid, meleeWeapon);
     }
+
+    #region Skibidi Combat
+
+    public virtual bool TryMiss(EntityUid attacker)
+    {
+        // If we don't have stats or skills, let's pass, so we don't break anything here.
+        if (!HasComp<StatsComponent>(attacker) || !HasComp<SkillsComponent>(attacker))
+            return false;
+
+        var dex = _statsSystem.GetStat(attacker, Stat.Dexterity);
+        var luck = _statsSystem.GetStat(attacker, Stat.Luck);
+
+        var modifier = _predictedRandomSystem.Next(2, 6);
+
+        var skillLevel = _skillsSystem.GetSkillLevel(attacker, Skill.Melee);
+        switch (skillLevel)
+        {
+            case SkillLevel.Weak:
+                modifier += 2;
+                break;
+            case SkillLevel.Average:
+                modifier += 3;
+                break;
+            case SkillLevel.Skilled:
+                modifier += 4;
+                break;
+            case SkillLevel.Master:
+                modifier += 5;
+                break;
+            case SkillLevel.Legendary:
+                modifier += 6;
+                break;
+        }
+
+        var (_, message, result) = _statsSystem.D20(dex + luck + modifier);
+
+        if (!result)
+        {
+            var msg = message + $" {Name(attacker)} {_predictedRandomSystem.Pick(MissMessages)} промахивается!";
+            HellMessage(attacker, msg);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool TryParryOrDodge(EntityUid attacker, EntityUid target)
+    {
+        // No way!
+        if (attacker == target)
+            return false;
+
+        // We can't parry or dodge if we don't have stats or skills.
+        if (!HasComp<StatsComponent>(target) || !HasComp<SkillsComponent>(target))
+            return false;
+
+        // We can't parry or dodge if we not ready for that.
+        if (!_combatMode.IsInCombatMode(target))
+            return false;
+
+        // We can't parry or dodge if we stunned.
+        if (_statusEffectsSystem.HasStatusEffect(target, "KnockedDown"))
+            return false;
+
+        // We can't parry or dodge if we're laying.
+        if (_standingState.IsDown(target))
+            return false;
+
+        //Now we can choose the type.
+        return TryGetWeaponInHands(target, out _, out _)
+            ? TryParry(attacker, target)
+            : TryDodge(attacker, target);
+    }
+
+    public bool TryParry(EntityUid attacker, EntityUid target)
+    {
+        var parryChance = 0;
+
+        var meleeSkillTarget = _skillsSystem.GetSkillLevel(target, Skill.Melee);
+        switch (meleeSkillTarget)
+        {
+            case SkillLevel.Weak:
+                parryChance += 2;
+                break;
+            case SkillLevel.Average:
+                parryChance += 4;
+                break;
+            case SkillLevel.Skilled:
+                parryChance += 8;
+                break;
+            case SkillLevel.Master:
+                parryChance += 10;
+                break;
+            case SkillLevel.Legendary:
+                parryChance += 12;
+                break;
+        }
+
+        var meleeSkillAttacker = _skillsSystem.GetSkillLevel(attacker, Skill.Melee);
+        switch (meleeSkillAttacker)
+        {
+            case SkillLevel.Weak:
+                parryChance -= 2;
+                break;
+            case SkillLevel.Average:
+                parryChance -= 4;
+                break;
+            case SkillLevel.Skilled:
+                parryChance -= 8;
+                break;
+            case SkillLevel.Master:
+                parryChance -= 10;
+                break;
+            case SkillLevel.Legendary:
+                parryChance -= 12;
+                break;
+        }
+
+        var dexTarget = _statsSystem.GetStat(target, Stat.Dexterity);
+        var luck = _statsSystem.GetStat(target, Stat.Luck);
+
+        parryChance += (dexTarget + luck) / 2;
+
+        var dexAttacker = _statsSystem.GetStat(attacker, Stat.Dexterity);
+
+        if (!TryGetWeaponInHands(attacker, out _, out _))
+            parryChance += 2;
+
+        var dexDifference = dexAttacker - dexTarget;
+        parryChance -= dexDifference;
+
+        var dice = _statsSystem.D20();
+        if (dice <= parryChance)
+        {
+            HellMessage(target, $"{Name(target)} смог(ла) паррировать атаку {Name(attacker)}!");
+            _stamina.TakeStaminaDamage(target, 5);
+            _skillsSystem.ApplySkillThreshold(target, Skill.Melee, 10);
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool TryDodge(EntityUid attacker, EntityUid target)
+    {
+        var dodgeChance = 0;
+
+        var meleeSkillTarget = _skillsSystem.GetSkillLevel(target, Skill.Melee);
+        switch (meleeSkillTarget)
+        {
+            case SkillLevel.Weak:
+                dodgeChance += 1;
+                break;
+            case SkillLevel.Average:
+                dodgeChance += 2;
+                break;
+            case SkillLevel.Skilled:
+                dodgeChance += 3;
+                break;
+            case SkillLevel.Master:
+                dodgeChance += 4;
+                break;
+            case SkillLevel.Legendary:
+                dodgeChance += 5;
+                break;
+        }
+
+        var meleeSkillAttacker = _skillsSystem.GetSkillLevel(attacker, Skill.Melee);
+        switch (meleeSkillAttacker)
+        {
+            case SkillLevel.Weak:
+                dodgeChance -= 1;
+                break;
+            case SkillLevel.Average:
+                dodgeChance -= 2;
+                break;
+            case SkillLevel.Skilled:
+                dodgeChance -= 3;
+                break;
+            case SkillLevel.Master:
+                dodgeChance -= 4;
+                break;
+            case SkillLevel.Legendary:
+                dodgeChance -= 5;
+                break;
+        }
+
+        var dexTarget = _statsSystem.GetStat(target, Stat.Dexterity);
+        var luck = _statsSystem.GetStat(target, Stat.Luck);
+
+        dodgeChance += (dexTarget + luck) / 2;
+
+        var dexAttacker = _statsSystem.GetStat(attacker, Stat.Dexterity);
+
+        if (TryGetWeaponInHands(attacker, out _, out _))
+            dodgeChance -= 2;
+
+        var dexDifference = dexAttacker - dexTarget;
+        dodgeChance -= dexDifference;
+
+        var dice = _statsSystem.D20();
+        if (dice <= dodgeChance)
+        {
+            HellMessage(target, $"{Name(target)} смог(ла) увернуться от атаки {Name(attacker)}!");
+            _stamina.TakeStaminaDamage(target, 15);
+            _skillsSystem.ApplySkillThreshold(target, Skill.Melee, 10);
+            return true;
+        }
+
+        return false;
+    }
+
+    public virtual bool TryCrit(EntityUid attacker)
+    {
+        if (!TryGetWeaponInHands(attacker, out _, out _))
+            return false;
+
+        var skillLevel = _skillsSystem.GetSkillLevel(attacker, Skill.Melee);
+        var critChance = 0f;
+
+        switch (skillLevel)
+        {
+            case SkillLevel.Weak:
+                critChance = 0.05f;
+                break;
+            case SkillLevel.Average:
+                critChance = 0.1f;
+                break;
+            case SkillLevel.Skilled:
+                critChance = 0.15f;
+                break;
+            case SkillLevel.Master:
+                critChance = 0.2f;
+                break;
+            case SkillLevel.Legendary:
+                critChance = 0.3f;
+                break;
+        }
+
+        if (_predictedRandomSystem.Prob(critChance))
+        {
+            HellMessage(attacker, "CRITICAL HIT!!!");
+            return true;
+        }
+
+        return false;
+    }
+
+    public virtual void HellMessage(EntityUid who, string message) {}
+
+    #endregion
 }

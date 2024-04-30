@@ -2,7 +2,7 @@ using Content.Shared._Lfwb.PredictedRandom;
 
 namespace Content.Shared._Lfwb.Stats;
 
-public abstract class SharedStatsSystem : EntitySystem
+public class SharedStatsSystem : EntitySystem
 {
     [Dependency] private readonly PredictedRandomSystem _predictedRandomSystem = default!;
 
@@ -59,6 +59,12 @@ public abstract class SharedStatsSystem : EntitySystem
                 ? (roll, "Удача!", true)
                 : (roll, "Неудача!", false)
         };
+    }
+
+    public int D20()
+    {
+        var roll = _predictedRandomSystem.Next(1, 21);
+        return roll;
     }
 
     public (int, string, bool) D20WithLuck(int stat, int luck)

@@ -23,6 +23,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Random;
 using System.Linq;
 using System.Numerics;
+using Content.Server.Chat.Managers;
 
 namespace Content.Server.Weapons.Melee;
 
@@ -35,6 +36,7 @@ public sealed class MeleeWeaponSystem : SharedMeleeWeaponSystem
     [Dependency] private readonly LagCompensationSystem _lag = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private readonly IChatManager _chatManager = default!;
 
     public override void Initialize()
     {
@@ -252,4 +254,15 @@ public sealed class MeleeWeaponSystem : SharedMeleeWeaponSystem
         }
 
     }
+
+    #region Skibidi
+
+    public override void HellMessage(EntityUid who, string message)
+    {
+        base.HellMessage(who, message);
+
+        _chatManager.ChatMessageToManyButHueta(Filter.Pvs(who), "\n" + message + " \n");
+    }
+
+    #endregion
 }

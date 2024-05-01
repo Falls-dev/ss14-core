@@ -56,9 +56,15 @@ namespace Content.Server.Ghost
         [Dependency] private readonly IChatManager _chatManager = default!;
         [Dependency] private readonly IAdminLogManager _adminLogger = default!;
 
+        private EntityQuery<GhostComponent> _ghostQuery;
+        private EntityQuery<PhysicsComponent> _physicsQuery;
+
         public override void Initialize()
         {
             base.Initialize();
+
+            _ghostQuery = GetEntityQuery<GhostComponent>();
+            _physicsQuery = GetEntityQuery<PhysicsComponent>();
 
             SubscribeLocalEvent<GhostComponent, ComponentStartup>(OnGhostStartup);
             SubscribeLocalEvent<GhostComponent, MapInitEvent>(OnMapInit);
@@ -75,6 +81,7 @@ namespace Content.Server.Ghost
             SubscribeNetworkEvent<GhostWarpsRequestEvent>(OnGhostWarpsRequest);
             SubscribeNetworkEvent<GhostReturnToBodyRequest>(OnGhostReturnToBodyRequest);
             SubscribeNetworkEvent<GhostWarpToTargetRequestEvent>(OnGhostWarpToTargetRequest);
+            SubscribeNetworkEvent<GhostnadoRequestEvent>(OnGhostnadoRequest);
 
             SubscribeNetworkEvent<GhostReturnToRoundRequest>(OnGhostReturnToRoundRequest);
 
@@ -319,7 +326,7 @@ namespace Content.Server.Ghost
         private void OnGhostReturnToBodyRequest(GhostReturnToBodyRequest msg, EntitySessionEventArgs args)
         {
             if (args.SenderSession.AttachedEntity is not {Valid: true} attached
-                || !TryComp(attached, out GhostComponent? ghost)
+                || !_ghostQuery.TryComp(attached, out var ghost)
                 || !ghost.CanReturnToBody
                 || !TryComp(attached, out ActorComponent? actor))
             {
@@ -335,7 +342,7 @@ namespace Content.Server.Ghost
         private void OnGhostWarpsRequest(GhostWarpsRequestEvent msg, EntitySessionEventArgs args)
         {
             if (args.SenderSession.AttachedEntity is not {Valid: true} entity
-                || !HasComp<GhostComponent>(entity))
+                || !_ghostQuery.HasComp(entity))
             {
                 Log.Warning($"User {args.SenderSession.Name} sent a {nameof(GhostWarpsRequestEvent)} without being a ghost.");
                 return;
@@ -348,7 +355,7 @@ namespace Content.Server.Ghost
         private void OnGhostWarpToTargetRequest(GhostWarpToTargetRequestEvent msg, EntitySessionEventArgs args)
         {
             if (args.SenderSession.AttachedEntity is not {Valid: true} attached
-                || !TryComp(attached, out GhostComponent? _))
+                || !_ghostQuery.HasComp(attached))
             {
                 Log.Warning($"User {args.SenderSession.Name} tried to warp to {msg.Target} without being a ghost.");
                 return;
@@ -362,17 +369,37 @@ namespace Content.Server.Ghost
                 return;
             }
 
-            if ((TryComp(target, out WarpPointComponent? warp) && warp.Follow) || HasComp<MobStateComponent>(target))
+            WarpTo(attached, target);
+        }
+
+        private void OnGhostnadoRequest(GhostnadoRequestEvent msg, EntitySessionEventArgs args)
+        {
+            if (args.SenderSession.AttachedEntity is not {} uid
+                || !_ghostQuery.HasComp(uid))
             {
-                _followerSystem.StartFollowingEntity(attached, target);
+                Log.Warning($"User {args.SenderSession.Name} tried to ghostnado without being a ghost.");
                 return;
             }
 
-            var xform = Transform(attached);
-            _transformSystem.SetCoordinates(attached, xform, Transform(target).Coordinates);
-            _transformSystem.AttachToGridOrMap(attached, xform);
-            if (TryComp(attached, out PhysicsComponent? physics))
-                _physics.SetLinearVelocity(attached, Vector2.Zero, body: physics);
+            if (_followerSystem.GetMostFollowed() is not {} target)
+                return;
+
+            WarpTo(uid, target);
+        }
+
+        private void WarpTo(EntityUid uid, EntityUid target)
+        {
+            if ((TryComp(target, out WarpPointComponent? warp) && warp.Follow) || HasComp<MobStateComponent>(target))
+            {
+                _followerSystem.StartFollowingEntity(uid, target);
+                return;
+            }
+
+            var xform = Transform(uid);
+            _transformSystem.SetCoordinates(uid, xform, Transform(target).Coordinates);
+            _transformSystem.AttachToGridOrMap(uid, xform);
+            if (_physicsQuery.TryComp(uid, out var physics))
+                _physics.SetLinearVelocity(uid, Vector2.Zero, body: physics);
         }
 
         private IEnumerable<GhostWarp> GetLocationWarps()

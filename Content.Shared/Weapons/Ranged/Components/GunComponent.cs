@@ -1,7 +1,4 @@
-using Content.Shared.Damage;
-using Content.Shared.Tag;
 using Content.Shared.Weapons.Ranged.Events;
-using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
@@ -10,7 +7,6 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared.Weapons.Ranged.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
-[Access(typeof(SharedGunSystem))]
 public sealed partial class GunComponent : Component
 {
     #region Sound
@@ -77,6 +73,12 @@ public sealed partial class GunComponent : Component
     [DataField]
     public Angle AngleIncrease = Angle.FromDegrees(0.5);
 
+    [AutoNetworkedField]
+    public Angle OldAngleIncrease;
+
+    [AutoNetworkedField]
+    public EntityUid? CurrentShooter;
+
     /// <summary>
     /// How much the spread increases every time the gun fires.
     /// <seealso cref="GunRefreshModifiersEvent"/>
@@ -89,6 +91,9 @@ public sealed partial class GunComponent : Component
     /// </summary>
     [DataField]
     public Angle AngleDecay = Angle.FromDegrees(4);
+
+    [AutoNetworkedField]
+    public Angle OldAngleDecay;
 
     /// <summary>
     /// How much the <see cref="CurrentAngle"/> decreases per second.
@@ -104,6 +109,9 @@ public sealed partial class GunComponent : Component
     [AutoNetworkedField]
     public Angle MaxAngle = Angle.FromDegrees(2);
 
+    [AutoNetworkedField]
+    public Angle OldMaxAngle;
+
     /// <summary>
     /// The maximum angle allowed for <see cref="CurrentAngle"/>
     /// <seealso cref="GunRefreshModifiersEvent"/>
@@ -117,6 +125,9 @@ public sealed partial class GunComponent : Component
     [DataField]
     [AutoNetworkedField]
     public Angle MinAngle = Angle.FromDegrees(1);
+
+    [AutoNetworkedField]
+    public Angle OldMinAngle;
 
     /// <summary>
     ///  The minimum angle allowed for <see cref="CurrentAngle"/>.
@@ -165,6 +176,9 @@ public sealed partial class GunComponent : Component
     [DataField]
     [AutoNetworkedField]
     public float FireRate = 8f;
+
+    [AutoNetworkedField]
+    public float OldFireRate;
 
     /// <summary>
     /// How many times it shoots per second.

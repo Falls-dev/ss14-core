@@ -36,6 +36,15 @@ public class SharedSkillsSystem : EntitySystem
         { SkillLevel.Legendary , 8},
     };
 
+    public readonly Dictionary<SkillLevel, int> SkillLevelToSkibidi = new()
+    {
+        { SkillLevel.Weak , -3},
+        { SkillLevel.Average , -2},
+        { SkillLevel.Skilled , 1},
+        { SkillLevel.Master , 2},
+        { SkillLevel.Legendary , 3},
+    };
+
     #endregion
 
     #region PublicApi

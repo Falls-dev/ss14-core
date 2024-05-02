@@ -22,15 +22,19 @@ public class SharedStatsSystem : EntitySystem
             : statsComponent.Stats[stat];
     }
 
-    public void SetStatValue(EntityUid owner, Stat stat, int amount)
+    public void SetStatValue(EntityUid owner, Stat stat, int amount, bool init)
     {
         if (!TryComp<StatsComponent>(owner, out var statsComponent))
             return;
 
+        var old = statsComponent.Stats[stat];
         var newValue = Math.Clamp(amount, MinStat, MaxStat);
         statsComponent.Stats[stat] = newValue;
 
         Dirty(owner, statsComponent);
+
+        var ev = new StatChangedEvent(owner, stat, old, statsComponent.Stats[stat], init);
+        RaiseLocalEvent(owner, ref ev);
     }
 
     public void ModifyStat(EntityUid owner, Stat stat, int amount)
@@ -46,6 +50,9 @@ public class SharedStatsSystem : EntitySystem
         statsComponent.Stats[stat] = newValue;
 
         Dirty(owner, statsComponent);
+
+        var ev = new StatChangedEvent(owner, stat, oldValue, statsComponent.Stats[stat], false);
+        RaiseLocalEvent(owner, ref ev);
     }
 
     public (int, string, bool) D20(int stat)

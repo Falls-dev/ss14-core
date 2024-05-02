@@ -11,3 +11,6 @@ public enum Stat : byte
     Endurance = 3, // affects stamina
     Luck = 4
 }
+
+[ByRefEvent]
+public record struct StatChangedEvent(EntityUid Owner, Stat Stat, int OldValue, int NewValue, bool Init);

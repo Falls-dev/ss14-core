@@ -30,7 +30,7 @@ public sealed class StatsSystem : SharedStatsSystem
         foreach (var (stat, range) in preset.Preset)
         {
             var statValue = GetValue(range);
-            SetStatValue(uid, stat, statValue);
+            SetStatValue(uid, stat, statValue, true);
         }
     }
 

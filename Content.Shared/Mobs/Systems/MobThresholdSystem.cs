@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared._Lfwb.Stats;
 using Content.Shared.Alert;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
@@ -23,6 +24,52 @@ public sealed class MobThresholdSystem : EntitySystem
         SubscribeLocalEvent<MobThresholdsComponent, DamageChangedEvent>(OnDamaged);
         SubscribeLocalEvent<MobThresholdsComponent, UpdateMobStateEvent>(OnUpdateMobState);
         SubscribeLocalEvent<MobThresholdsComponent, MobStateChangedEvent>(OnThresholdsMobState);
+        SubscribeLocalEvent<MobThresholdsComponent, StatChangedEvent>(OnStatChanged);
+    }
+
+    private void OnStatChanged(Entity<MobThresholdsComponent> ent, ref StatChangedEvent args)
+    {
+        if (args.Stat != 0)
+            return;
+
+        var newThresholds = new Dictionary<FixedPoint2, MobState>();
+        var oldStat = args.OldValue;
+        var newStat = args.NewValue;
+
+        if (args.Init)
+        {
+            var valueToSet = newStat * 4;
+
+            foreach (var pair in ent.Comp.Thresholds)
+            {
+                if (pair.Value == MobState.Alive)
+                {
+                    newThresholds.Add(pair.Key, pair.Value);
+                    continue;
+                }
+
+                newThresholds.Add(pair.Key + valueToSet, pair.Value);
+            }
+        }
+        else
+        {
+            var total = newStat - oldStat;
+            var valueToSet = total * 4;
+
+            foreach (var pair in ent.Comp.Thresholds)
+            {
+                if (pair.Value == MobState.Alive)
+                {
+                    newThresholds.Add(pair.Key, pair.Value);
+                    continue;
+                }
+
+                newThresholds.Add(pair.Key + valueToSet, pair.Value);
+            }
+        }
+
+        ent.Comp.Thresholds = new SortedDictionary<FixedPoint2, MobState>(newThresholds);
+        Dirty(ent);
     }
 
     private void OnGetState(EntityUid uid, MobThresholdsComponent component, ref ComponentGetState args)

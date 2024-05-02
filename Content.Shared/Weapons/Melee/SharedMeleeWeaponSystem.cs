@@ -28,6 +28,7 @@ using Content.Shared._White.Implants.NeuroControl;
 using Content.Shared.Standing.Systems;
 using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
@@ -65,6 +66,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedStunSystem _stunSystem = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     private const int AttackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque);
 
@@ -959,7 +961,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         if (_standingState.IsDown(target))
             amt += 2;
 
-        var roll = _predictedRandomSystem.RollWith(5, 3);
+        var roll = _predictedRandomSystem.RollWith(6, 3);
         if (amt < roll)
         {
             HellMessage(attacker, $"{Name(attacker)} {_predictedRandomSystem.Pick(MissMessages)} промахивается!");
@@ -1013,6 +1015,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         var roll =  _predictedRandomSystem.RollWith(6, 3);
         if (roll < parryChance)
         {
+            if (_net.IsServer)
+                _audio.PlayPvs("/Audio/White/Combat/parry.ogg", target);
+
             HellMessage(target, $"{Name(target)} паррирует атаку {Name(attacker)}!");
             _stamina.TakeStaminaDamage(target, 10);
 
@@ -1040,6 +1045,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         var roll =  _predictedRandomSystem.RollWith(6, 3);
         if (roll < dodgeChance)
         {
+            if (_net.IsServer)
+                _audio.PlayPvs("/Audio/White/Combat/dodge.ogg", target);
+
             HellMessage(target, $"{Name(target)} уворачивается от атаки {Name(attacker)}!");
             _stamina.TakeStaminaDamage(target, 10);
 
@@ -1080,6 +1088,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         var strAttacker = _statsSystem.GetStat(attacker, Stat.Strength);
         var strTarget = _statsSystem.GetStat(target, Stat.Strength);
+
+        if (strAttacker < strTarget)
+            return;
 
         var strengthDifference = Math.Abs(strAttacker - strTarget);
         if (strengthDifference < 4)

@@ -7,7 +7,7 @@ public enum Stat : byte
 {
     Strength = 0,
     Intelligence = 1,
-    Dexterity = 2, // affects move speed.
+    Dexterity = 2,
     Endurance = 3,
     Luck = 4
 }

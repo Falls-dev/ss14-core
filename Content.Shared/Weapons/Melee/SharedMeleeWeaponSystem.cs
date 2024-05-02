@@ -617,7 +617,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         _stamina.TakeStaminaDamage(user, 5);
 
         if(_net.IsServer)
-            _skillsSystem.ApplySkillThreshold(user, Skill.Melee, 5);
+            _skillsSystem.ApplySkillThreshold(user, Skill.Melee, 3);
+
+        TryFlyDreamer(user, target.Value);
 
         if (damageResult?.GetTotal() > FixedPoint2.Zero)
         {
@@ -1015,7 +1017,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             _stamina.TakeStaminaDamage(target, 10);
 
             if(_net.IsServer)
-                _skillsSystem.ApplySkillThreshold(target, Skill.Melee, 5);
+                _skillsSystem.ApplySkillThreshold(target, Skill.Melee, 3);
 
             return true;
         }
@@ -1071,22 +1073,31 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
     public virtual void TryFlyDreamer(EntityUid attacker, EntityUid target)
     {
+        if (!HasComp<StatsComponent>(attacker) || !HasComp<SkillsComponent>(attacker))
+            return;
+        if (!HasComp<StatsComponent>(target) || !HasComp<SkillsComponent>(target))
+            return;
+
         var strAttacker = _statsSystem.GetStat(attacker, Stat.Strength);
         var strTarget = _statsSystem.GetStat(target, Stat.Strength);
 
         var strengthDifference = Math.Abs(strAttacker - strTarget);
-        if (strengthDifference < 6)
+        if (strengthDifference < 4)
             return;
 
-        if(!_predictedRandomSystem.Prob(0.333f))
+        if (!_predictedRandomSystem.Prob(0.15f))
             return;
 
-        var wAttacker = Transform(attacker);
-        var wTarget = Transform(target);
+        var wAttacker = TransformSystem.GetWorldPosition(attacker);
+        var wTarget = TransformSystem.GetWorldPosition(target);
 
-        var dir = (wTarget.WorldPosition - wAttacker.WorldPosition).Normalized();
-        _physics.ApplyLinearImpulse(target, dir * (10000 * strAttacker));
-        _stunSystem.TryKnockdown(target, TimeSpan.FromSeconds(2), false);
+        var dir = wTarget - wAttacker;
+
+        if(_net.IsServer)
+            _physics.ApplyLinearImpulse(target, dir * (2000 * strAttacker));
+
+        _stunSystem.TryKnockdown(target, TimeSpan.FromSeconds(1), false);
+
         HellMessage(attacker, $"{Name(attacker)} использует свою огромную силу и отправляет в полет {Name(target)}!");
     }
 

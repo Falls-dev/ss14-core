@@ -29,7 +29,7 @@ public sealed class MobThresholdSystem : EntitySystem
 
     private void OnStatChanged(Entity<MobThresholdsComponent> ent, ref StatChangedEvent args)
     {
-        if (args.Stat != 0)
+        if (args.Stat != Stat.Strength)
             return;
 
         var newThresholds = new Dictionary<FixedPoint2, MobState>();

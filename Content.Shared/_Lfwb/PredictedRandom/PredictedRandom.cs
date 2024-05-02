@@ -9,6 +9,28 @@ public sealed class PredictedRandomSystem : EntitySystem
 
     private System.Random _random = new();
 
+    #region Roll
+
+    private int Roll(int sides)
+    {
+        return _random.Next(1, sides + 1);
+    }
+
+    public int RollWith(int sides, int numberOfDice)
+    {
+        SetSeed();
+
+        var total = 0;
+        for (var i = 0; i < numberOfDice; i++)
+        {
+            total += Roll(sides);
+        }
+
+        return total;
+    }
+
+    #endregion
+
     #region Next
 
     public int Next(int minValue, int maxValue)

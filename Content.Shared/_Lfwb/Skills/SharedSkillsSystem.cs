@@ -1,4 +1,3 @@
-using Content.Shared._Lfwb.PredictedRandom;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
 
@@ -7,7 +6,6 @@ namespace Content.Shared._Lfwb.Skills;
 public class SharedSkillsSystem : EntitySystem
 {
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-    [Dependency] private readonly PredictedRandomSystem _predictedRandomSystem = default!;
 
     #region Data
 
@@ -104,15 +102,19 @@ public class SharedSkillsSystem : EntitySystem
         Dirty(owner, skillsComponent);
     }
 
-    public bool Roller(EntityUid owner, Skill skill)
+    public int GetSkillModifier(EntityUid owner, Skill skill)
     {
-        if (!TryComp<SkillsComponent>(owner, out var skillsComponent))
-            return false;
+        var skillLevel = GetSkillLevel(owner, skill);
 
-        var skillLevel = skillsComponent.Skills[skill].Item1;
-        var chance = SkillLevelToChance[skillLevel];
-
-        return _predictedRandomSystem.Prob(chance);
+        return skillLevel switch
+        {
+            SkillLevel.Weak => 2,
+            SkillLevel.Average => 4,
+            SkillLevel.Skilled => 6,
+            SkillLevel.Master => 8,
+            SkillLevel.Legendary => 10,
+            _ => 0
+        };
     }
 
     #endregion

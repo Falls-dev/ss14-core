@@ -61,38 +61,6 @@ public class SharedStatsSystem : EntitySystem
         };
     }
 
-    public int D20()
-    {
-        var roll = _predictedRandomSystem.Next(1, 21);
-        return roll;
-    }
-
-    public (int, string, bool) D20WithLuck(int stat, int luck)
-    {
-        var roll = _predictedRandomSystem.Next(1, 21);
-        return roll switch
-        {
-            1 => (roll, "Критическая неудача!", false),
-            20 => (roll, "Критическая удача!", true),
-            _ => roll <= stat + luck
-                ? (roll, "Удача!", true)
-                : (roll, "Неудача!", false)
-        };
-    }
-
-    public (int, string, bool) D20WithStatHash(int stat)
-    {
-        var roll = _predictedRandomSystem.Next(1, 21, stat);
-        return roll switch
-        {
-            1 => (roll, "Критическая неудача!", false),
-            20 => (roll, "Критическая удача!", true),
-            _ => roll <= stat
-                ? (roll, "Удача!", true)
-                : (roll, "Неудача!", false)
-        };
-    }
-
     #endregion
 }
 

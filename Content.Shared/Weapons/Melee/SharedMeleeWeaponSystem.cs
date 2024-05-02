@@ -938,42 +938,19 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
     public virtual bool TryMiss(EntityUid attacker)
     {
-        // If we don't have stats or skills, let's pass, so we don't break anything here.
         if (!HasComp<StatsComponent>(attacker) || !HasComp<SkillsComponent>(attacker))
             return false;
 
         var dex = _statsSystem.GetStat(attacker, Stat.Dexterity);
         var luck = _statsSystem.GetStat(attacker, Stat.Luck);
+        var skillModifier = _skillsSystem.GetSkillModifier(attacker, Skill.Melee);
 
-        var modifier = _predictedRandomSystem.Next(2, 6);
+        var amt = dex + luck + skillModifier;
 
-        var skillLevel = _skillsSystem.GetSkillLevel(attacker, Skill.Melee);
-        switch (skillLevel)
+        var roll = _predictedRandomSystem.RollWith(5, 3);
+        if (amt < roll)
         {
-            case SkillLevel.Weak:
-                modifier += 2;
-                break;
-            case SkillLevel.Average:
-                modifier += 3;
-                break;
-            case SkillLevel.Skilled:
-                modifier += 4;
-                break;
-            case SkillLevel.Master:
-                modifier += 5;
-                break;
-            case SkillLevel.Legendary:
-                modifier += 6;
-                break;
-        }
-
-        var (_, message, result) = _statsSystem.D20(dex + luck + modifier);
-
-        if (!result)
-        {
-            var msg = message + $" {Name(attacker)} {_predictedRandomSystem.Pick(MissMessages)} промахивается!";
-            HellMessage(attacker, msg);
-
+            HellMessage(attacker, $"{Name(attacker)} {_predictedRandomSystem.Pick(MissMessages)} промахивается!");
             return true;
         }
 
@@ -1010,66 +987,22 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
     public bool TryParry(EntityUid attacker, EntityUid target)
     {
-        var parryChance = 0;
-
-        var meleeSkillTarget = _skillsSystem.GetSkillLevel(target, Skill.Melee);
-        switch (meleeSkillTarget)
-        {
-            case SkillLevel.Weak:
-                parryChance += 2;
-                break;
-            case SkillLevel.Average:
-                parryChance += 4;
-                break;
-            case SkillLevel.Skilled:
-                parryChance += 8;
-                break;
-            case SkillLevel.Master:
-                parryChance += 10;
-                break;
-            case SkillLevel.Legendary:
-                parryChance += 12;
-                break;
-        }
-
-        var meleeSkillAttacker = _skillsSystem.GetSkillLevel(attacker, Skill.Melee);
-        switch (meleeSkillAttacker)
-        {
-            case SkillLevel.Weak:
-                parryChance -= 2;
-                break;
-            case SkillLevel.Average:
-                parryChance -= 4;
-                break;
-            case SkillLevel.Skilled:
-                parryChance -= 8;
-                break;
-            case SkillLevel.Master:
-                parryChance -= 10;
-                break;
-            case SkillLevel.Legendary:
-                parryChance -= 12;
-                break;
-        }
-
-        var dexTarget = _statsSystem.GetStat(target, Stat.Dexterity);
+        var dex = _statsSystem.GetStat(target, Stat.Dexterity);
         var luck = _statsSystem.GetStat(target, Stat.Luck);
+        var skillModifer = _skillsSystem.GetSkillModifier(target, Skill.Melee);
 
-        parryChance += (dexTarget + luck) / 2;
-
-        var dexAttacker = _statsSystem.GetStat(attacker, Stat.Dexterity);
+        var parryChance = dex + luck + skillModifer;
 
         if (!TryGetWeaponInHands(attacker, out _, out _))
             parryChance += 2;
+        else
+            parryChance -= _skillsSystem.GetSkillModifier(attacker, Skill.Melee);
 
-        var dexDifference = dexAttacker - dexTarget;
-        parryChance -= dexDifference;
-
-        var dice = _statsSystem.D20();
-        if (dice <= parryChance)
+        var roll =  _predictedRandomSystem.RollWith(6, 3);
+        if (roll < parryChance)
         {
-            HellMessage(target, $"{Name(target)} смог(ла) паррировать атаку {Name(attacker)}!");
-            _stamina.TakeStaminaDamage(target, 5);
+            HellMessage(target, $"{Name(target)} паррирует атаку {Name(attacker)}!");
+            _stamina.TakeStaminaDamage(target, 10);
 
             if(_net.IsServer)
                 _skillsSystem.ApplySkillThreshold(target, Skill.Melee, 5);
@@ -1082,69 +1015,22 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
     public bool TryDodge(EntityUid attacker, EntityUid target)
     {
-        var dodgeChance = 0;
-
-        var meleeSkillTarget = _skillsSystem.GetSkillLevel(target, Skill.Melee);
-        switch (meleeSkillTarget)
-        {
-            case SkillLevel.Weak:
-                dodgeChance += 1;
-                break;
-            case SkillLevel.Average:
-                dodgeChance += 2;
-                break;
-            case SkillLevel.Skilled:
-                dodgeChance += 3;
-                break;
-            case SkillLevel.Master:
-                dodgeChance += 4;
-                break;
-            case SkillLevel.Legendary:
-                dodgeChance += 5;
-                break;
-        }
-
-        var meleeSkillAttacker = _skillsSystem.GetSkillLevel(attacker, Skill.Melee);
-        switch (meleeSkillAttacker)
-        {
-            case SkillLevel.Weak:
-                dodgeChance -= 1;
-                break;
-            case SkillLevel.Average:
-                dodgeChance -= 2;
-                break;
-            case SkillLevel.Skilled:
-                dodgeChance -= 3;
-                break;
-            case SkillLevel.Master:
-                dodgeChance -= 4;
-                break;
-            case SkillLevel.Legendary:
-                dodgeChance -= 5;
-                break;
-        }
-
-        var dexTarget = _statsSystem.GetStat(target, Stat.Dexterity);
+        var dex = _statsSystem.GetStat(target, Stat.Dexterity);
         var luck = _statsSystem.GetStat(target, Stat.Luck);
 
-        dodgeChance += (dexTarget + luck) / 2;
+        var dodgeChance = dex + luck;
 
-        var dexAttacker = _statsSystem.GetStat(attacker, Stat.Dexterity);
+        if (!TryGetWeaponInHands(attacker, out _, out _))
+            dodgeChance += 2;
+        else
+            dodgeChance -= _skillsSystem.GetSkillModifier(attacker, Skill.Melee);
 
-        if (TryGetWeaponInHands(attacker, out _, out _))
-            dodgeChance -= 2;
-
-        var dexDifference = dexAttacker - dexTarget;
-        dodgeChance -= dexDifference;
-
-        var dice = _statsSystem.D20();
-        if (dice <= dodgeChance)
+        var roll =  _predictedRandomSystem.RollWith(6, 3);
+        if (roll < dodgeChance)
         {
-            HellMessage(target, $"{Name(target)} смог(ла) увернуться от атаки {Name(attacker)}!");
-            _stamina.TakeStaminaDamage(target, 15);
+            HellMessage(target, $"{Name(target)} уворачивается от атаки {Name(attacker)}!");
+            _stamina.TakeStaminaDamage(target, 10);
 
-            if(_net.IsServer)
-                _skillsSystem.ApplySkillThreshold(target, Skill.Melee, 5);
             return true;
         }
 

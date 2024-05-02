@@ -135,8 +135,8 @@
 
 - type: entity
   parent: BaseItem
-  id: E20Dice
-  name: E20
+  id: DiceOfFate
+  name: Dice Of Fate
   description: A die with twenty sides. The preferred die to throw at the GM.
   components:
   - type: E20
@@ -149,15 +149,50 @@
     noRot: true # If their sprites rotate, the number becomes even more illegible than usual.
   - type: Item
     size: Tiny
-  - type: Explosive # Powerful explosion in a large radius. Will break underplating.
-    explosionType: DemolitionCharge
-    totalIntensity: 360
-    intensitySlope: 10
-    maxIntensity: 120
-    canCreateVacuum: true
   - type: TypingIndicator
     proto: robot
   - type: Speech
     speechVerb: Robotic
     speechSounds: Vending
   - type: VoiceOfGod
+
+- type: entity
+  parent: BaseItem
+  id: E20Dice
+  name: E20
+  description: A die with twenty sides. The preferred die to throw at the GM.
+  components:
+  - type: E20
+    sides: 20
+    currentValue: 20
+    diceType: E20
+  - type: Sprite
+    sprite: Objects/Fun/dice.rsi
+    state: d20_20
+    noRot: true # If their sprites rotate, the number becomes even more illegible than usual.
+  - type: Item
+    size: Tiny
+  #- type: Explosive # Powerful explosion in a large radius. Will break underplating.
+  #  explosionType: DemolitionCharge
+  #  totalIntensity: 360
+  #  intensitySlope: 10
+  #  maxIntensity: 120
+  #  canCreateVacuum: true
+  - type: TypingIndicator
+    proto: robot
+  - type: Speech
+    speechVerb: Robotic
+    speechSounds: Vending
+  - type: VoiceOfGod
+
+- type: entity
+  parent: BaseItem
+  id: BrokenDice
+  name: Broken Dice
+  description: fat cock
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/dice.rsi
+    state: diceoffate_used
+  - type: Item
+    size: Tiny

@@ -29,6 +29,8 @@ public abstract class SharedE20System : EntitySystem
         component.IsActivated = true;
         component.LastUser = args.User;
         TimerEvent(uid, component);
+
+
     }
 
     private void OnLand(EntityUid uid, E20Component component, ref LandEvent args)

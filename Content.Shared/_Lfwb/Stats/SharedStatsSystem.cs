@@ -61,6 +61,23 @@ public class SharedStatsSystem : EntitySystem
         };
     }
 
+    public float StatToAdditionForce(int stat)
+    {
+        if (stat >= 1 && stat <= 7)
+            return 0.9f;
+
+        if (stat >= 8 && stat <= 12)
+            return 1.2f;
+
+        if (stat >= 13 && stat <= 15)
+            return 1.4f;
+
+        if (stat >= 16 && stat <= 20)
+            return 1.6f;
+
+        return 1f;
+    }
+
     #endregion
 }
 

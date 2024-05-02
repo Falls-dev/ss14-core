@@ -1,3 +1,4 @@
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -49,6 +50,12 @@ public sealed class PredictedRandomSystem : EntitySystem
     {
         SetSeed();
         return _random.NextDouble();
+    }
+
+    public float NextFloat(float minValue, float maxValue)
+    {
+        SetSeed();
+        return _random.NextFloat() * (maxValue - minValue) + minValue;
     }
 
     #endregion

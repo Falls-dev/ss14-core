@@ -47,6 +47,14 @@ namespace Content.Shared.Damage
             }
         }
 
+        public void MultiplyToAll(float value)
+        {
+            foreach (var key in DamageDict.Keys.ToList())
+            {
+                DamageDict[key] *= value;
+            }
+        }
+
         /// <summary>
         ///     Returns a sum of the damage values.
         /// </summary>

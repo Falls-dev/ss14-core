@@ -585,6 +585,11 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         var modifiedDamage = DamageSpecifier.ApplyModifierSets(damage + hitEvent.BonusDamage + attackedEvent.BonusDamage, hitEvent.ModifiersList);
 
+        modifiedDamage.MultiplyToAll(_statsSystem.StatToAdditionForce(_statsSystem.GetStat(user, Stat.Strength)));
+
+        if (crit)
+            modifiedDamage.MultiplyToAll(_predictedRandomSystem.NextFloat(1.2f, 1.6f));
+
         var damageResult = Damageable.TryChangeDamage(target, modifiedDamage, component.IgnoreResistances || hitEvent.PenetrateArmor, origin:user); // WD EDIT
 
         if (damageResult != null && damageResult.Any())

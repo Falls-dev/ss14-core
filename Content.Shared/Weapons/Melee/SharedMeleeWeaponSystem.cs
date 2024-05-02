@@ -534,7 +534,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         // Sawmill.Debug($"Melee damage is {damage.Total} out of {component.Damage.Total}");
 
-        if (TryMiss(user))
+        if (TryMiss(user, target.Value))
         {
             var missEvent = new MeleeHitEvent(new List<EntityUid>(), user, meleeUid, damage, null);
             RaiseLocalEvent(meleeUid, missEvent);
@@ -548,6 +548,8 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         {
             return;
         }
+
+        var crit = TryCrit(user);
 
         // WD START
         var blockEvent = new MeleeBlockAttemptEvent(user);
@@ -936,7 +938,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
     #region Skibidi Combat
 
-    public virtual bool TryMiss(EntityUid attacker)
+    public virtual bool TryMiss(EntityUid attacker, EntityUid target)
     {
         if (!HasComp<StatsComponent>(attacker) || !HasComp<SkillsComponent>(attacker))
             return false;
@@ -946,6 +948,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         var skillModifier = _skillsSystem.GetSkillModifier(attacker, Skill.Melee);
 
         var amt = dex + luck + skillModifier;
+
+        if (_standingState.IsDown(target))
+            amt += 2;
 
         var roll = _predictedRandomSystem.RollWith(5, 3);
         if (amt < roll)
@@ -989,9 +994,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     {
         var dex = _statsSystem.GetStat(target, Stat.Dexterity);
         var luck = _statsSystem.GetStat(target, Stat.Luck);
-        var skillModifer = _skillsSystem.GetSkillModifier(target, Skill.Melee);
+        var skillModifier = _skillsSystem.GetSkillModifier(target, Skill.Melee);
 
-        var parryChance = dex + luck + skillModifer;
+        var parryChance = dex + luck + skillModifier;
 
         if (!TryGetWeaponInHands(attacker, out _, out _))
             parryChance += 2;
@@ -1039,6 +1044,23 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
     public virtual bool TryCrit(EntityUid attacker)
     {
+        var critChance = 0;
+
+        critChance += _statsSystem.GetStat(attacker, Stat.Luck);
+
+        if (TryGetWeaponInHands(attacker, out _, out _))
+        {
+            var skillModifier = _skillsSystem.GetSkillModifier(attacker, Skill.Melee);
+            critChance += skillModifier / 2;
+        }
+
+        var roll = _predictedRandomSystem.RollWith(6, 4);
+        if (roll < critChance)
+        {
+            HellMessage(attacker, "CRITICAL HIT!!!");
+            return true;
+        }
+
         return false;
     }
 

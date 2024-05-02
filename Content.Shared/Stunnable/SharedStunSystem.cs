@@ -111,7 +111,7 @@ public abstract class SharedStunSystem : EntitySystem
     {
         // WD EDIT START
         // Don't stand up if we can lie down via keybind
-        if (!TryComp(uid, out StandingStateComponent? standing) || standing.CanLieDown)
+        if (!TryComp(uid, out StandingStateComponent? standing))
             return;
 
         _standingState.Stand(uid, standing);

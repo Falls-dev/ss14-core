@@ -141,8 +141,6 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
 
         gun.ShootCoordinates = GetCoordinates(msg.Coordinates);
-        gun.Target =  GetEntity(msg.Target);
-        Log.Debug($"Set shoot coordinates to {gun.ShootCoordinates}");
         AttemptShoot(user.Value, ent, gun);
     }
 
@@ -201,7 +199,6 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (gun.ShotCounter == 0)
             return;
 
-        Log.Debug($"Stopped shooting {ToPrettyString(uid)}");
         gun.ShotCounter = 0;
         gun.ShootCoordinates = null;
         Dirty(uid, gun);
@@ -477,7 +474,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         RemCompDeferred<AmmoComponent>(uid);
     }
 
-    protected void MuzzleFlash(EntityUid gun, AmmoComponent component, EntityUid? user = null)
+    protected void MuzzleFlash(EntityUid gun, AmmoComponent component, Angle worldAngle, EntityUid? user = null)
     {
         bool cancelled = TryComp<WeaponModulesComponent>(gun, out var weaponModulesComponent) && weaponModulesComponent.WeaponFireEffect; // WD EDIT
         if(cancelled) return; // WD EDIT END
@@ -492,7 +489,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (sprite == null)
             return;
 
-        var ev = new MuzzleFlashEvent(GetNetEntity(gun), sprite, user == gun);
+        var ev = new MuzzleFlashEvent(GetNetEntity(gun), sprite, worldAngle);
         CreateEffect(gun, ev, user);
     }
 
@@ -540,6 +537,7 @@ public abstract partial class SharedGunSystem : EntitySystem
 
         Dirty(gun);
     }
+
     // WD EDIT
     public void SetUseKey(GunComponent gun, bool useKey)
     {
@@ -552,7 +550,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     }
     public void SetProjectileSpeed(EntityUid weapon, float projectileSpeed)
     {
-        if(!TryComp<GunComponent>(weapon, out var gunComponent))
+        if (!TryComp<GunComponent>(weapon, out var gunComponent))
             return;
 
         gunComponent.ProjectileSpeed = projectileSpeed;
@@ -562,7 +560,7 @@ public abstract partial class SharedGunSystem : EntitySystem
 
     public void SetFireRate(EntityUid weapon, float fireRate)
     {
-        if(!TryComp<GunComponent>(weapon, out var gunComponent))
+        if (!TryComp<GunComponent>(weapon, out var gunComponent))
             return;
 
         gunComponent.FireRate = fireRate;
@@ -572,7 +570,7 @@ public abstract partial class SharedGunSystem : EntitySystem
 
     public void SetSound(EntityUid weapon, SoundSpecifier sound)
     {
-        if(!TryComp<GunComponent>(weapon, out var gunComponent))
+        if (!TryComp<GunComponent>(weapon, out var gunComponent))
             return;
 
         gunComponent.SoundGunshot = sound;
@@ -584,8 +582,9 @@ public abstract partial class SharedGunSystem : EntitySystem
     {
         gun.Target = target;
     }
-// WD EDIT END
-    protected abstract void CreateEffect(EntityUid uid, MuzzleFlashEvent message, EntityUid? user = null);
+    // WD EDIT END
+
+    protected abstract void CreateEffect(EntityUid gunUid, MuzzleFlashEvent message, EntityUid? user = null);
     /// <summary>
     /// Used for animated effects on the client.
     /// </summary>

@@ -549,10 +549,6 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             return;
         }
 
-        var crit = TryCrit(user);
-
-        TryFlyDreamer(user, target.Value);
-
         // WD START
         var blockEvent = new MeleeBlockAttemptEvent(user);
         RaiseLocalEvent(target.Value, ref blockEvent);
@@ -586,9 +582,6 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         RaiseLocalEvent(target.Value, attackedEvent);
 
         var modifiedDamage = DamageSpecifier.ApplyModifierSets(damage + hitEvent.BonusDamage + attackedEvent.BonusDamage, hitEvent.ModifiersList);
-
-        if (crit)
-            modifiedDamage.ApplyToAll(damage.GetTotal() / 1.4);
 
         var damageResult = Damageable.TryChangeDamage(target, modifiedDamage, component.IgnoreResistances || hitEvent.PenetrateArmor, origin:user); // WD EDIT
 
@@ -1160,37 +1153,6 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
     public virtual bool TryCrit(EntityUid attacker)
     {
-        if (!TryGetWeaponInHands(attacker, out _, out _))
-            return false;
-
-        var skillLevel = _skillsSystem.GetSkillLevel(attacker, Skill.Melee);
-        var critChance = 0f;
-
-        switch (skillLevel)
-        {
-            case SkillLevel.Weak:
-                critChance = 0.05f;
-                break;
-            case SkillLevel.Average:
-                critChance = 0.1f;
-                break;
-            case SkillLevel.Skilled:
-                critChance = 0.15f;
-                break;
-            case SkillLevel.Master:
-                critChance = 0.2f;
-                break;
-            case SkillLevel.Legendary:
-                critChance = 0.3f;
-                break;
-        }
-
-        if (_predictedRandomSystem.Prob(critChance))
-        {
-            HellMessage(attacker, "CRITICAL HIT!!!");
-            return true;
-        }
-
         return false;
     }
 

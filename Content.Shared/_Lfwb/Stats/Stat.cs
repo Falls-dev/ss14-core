@@ -5,9 +5,9 @@ namespace Content.Shared._Lfwb.Stats;
 [Serializable, NetSerializable]
 public enum Stat : byte
 {
-    Strength = 0, // affects damage, health, doafters where need str
-    Intelligence = 1, // affects examine text, doafters where needs int, machinery
-    Dexterity = 2, // affects move speed, attack speed, dodging/parry, hit chance, doafters speedup
+    Strength = 0, // health
+    Intelligence = 1,
+    Dexterity = 2, // affects move speed.
     Endurance = 3, // affects stamina
-    Luck = 4 // affects rollin
+    Luck = 4
 }

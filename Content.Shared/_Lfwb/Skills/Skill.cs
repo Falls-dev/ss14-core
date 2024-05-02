@@ -5,9 +5,9 @@ namespace Content.Shared._Lfwb.Skills;
 [Serializable, NetSerializable]
 public enum Skill : byte
 {
-    Melee = 0,
+    Melee = 0, // done
     Ranged = 1,
-    Medicine = 2,
+    Medicine = 2, // done
     Engineering = 3
 }
 

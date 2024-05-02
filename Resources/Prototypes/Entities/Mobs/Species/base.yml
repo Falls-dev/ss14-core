@@ -256,6 +256,8 @@
   - type: CharacterInformation
   - type: Penetrated
   - type: Mood
+  - type: Stats
+  - type: Skills
 
 - type: entity
   save: false

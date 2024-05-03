@@ -14,6 +14,8 @@ public sealed partial class E20Component : Component
 
     public bool IsActivated = false;
 
+    public bool IsUsed = false;
+
     /// <summary>
     /// Person who used E20. Required when 1 is rolled.
     /// </summary>

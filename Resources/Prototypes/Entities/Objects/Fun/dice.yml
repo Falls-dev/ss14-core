@@ -137,7 +137,7 @@
   parent: BaseItem
   id: DiceOfFate
   name: Dice Of Fate
-  description: A die with twenty sides. The preferred die to throw at the GM.
+  description: A die with twenty sides. Each side is slightly different but in what way?
   components:
   - type: E20
     sides: 20
@@ -146,7 +146,7 @@
   - type: Sprite
     sprite: Objects/Fun/dice.rsi
     state: d20_20
-    noRot: true # If their sprites rotate, the number becomes even more illegible than usual.
+    noRot: true
   - type: Item
     size: Tiny
   - type: TypingIndicator
@@ -160,7 +160,7 @@
   parent: BaseItem
   id: E20Dice
   name: E20
-  description: A die with twenty sides. The preferred die to throw at the GM.
+  description: A die with twenty sides. It has a button with a timer.
   components:
   - type: E20
     sides: 20
@@ -169,15 +169,9 @@
   - type: Sprite
     sprite: Objects/Fun/dice.rsi
     state: d20_20
-    noRot: true # If their sprites rotate, the number becomes even more illegible than usual.
+    noRot: true
   - type: Item
     size: Tiny
-  #- type: Explosive # Powerful explosion in a large radius. Will break underplating.
-  #  explosionType: DemolitionCharge
-  #  totalIntensity: 360
-  #  intensitySlope: 10
-  #  maxIntensity: 120
-  #  canCreateVacuum: true
   - type: TypingIndicator
     proto: robot
   - type: Speech
@@ -189,10 +183,10 @@
   parent: BaseItem
   id: BrokenDice
   name: Broken Dice
-  description: fat cock
+  description: Dice that's lost its powers, maybe there's still something in it.
   components:
   - type: Sprite
     sprite: Objects/Fun/dice.rsi
-    state: diceoffate_used
+    state: d20_used
   - type: Item
     size: Tiny

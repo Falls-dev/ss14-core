@@ -1231,7 +1231,22 @@
   description: uplink-e20-desc
   productEntity: E20Dice
   cost:
-    Telecrystal: 15
+    Telecrystal: 10
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Librarian
+  saleLimit: 1
+
+- type: listing
+  id: UplinkDiceOfFate
+  name: uplink-dice-of-fate-name
+  description: uplink-dice-of-fate-desc
+  productEntity: DiceOfFate
+  cost:
+    Telecrystal: 16
   categories:
   - UplinkJob
   conditions:

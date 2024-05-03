@@ -34,10 +34,12 @@ public sealed class E20System : SharedE20System
     private void E20Picker(EntityUid uid, E20Component comp)
     {
         _events.ExplosionEvent(uid, comp);
+        _polymorphSystem.PolymorphEntity(uid, "DiceShard");
     }
 
     private void DiceOfFatePicker(EntityUid uid, E20Component comp)
     {
+        comp.IsUsed = true;
         //FIXME
         Dictionary<int, EventsDelegate> events = new Dictionary<int, EventsDelegate>();
         events[1] = _events.FullDestructionEvent;
@@ -65,7 +67,10 @@ public sealed class E20System : SharedE20System
         EventsDelegate method = events[comp.CurrentValue];
         method(uid, comp);
 
-        _polymorphSystem.PolymorphEntity(uid, "DiceShard");
+        if (comp.IsUsed)
+        {
+            _polymorphSystem.PolymorphEntity(uid, "DiceShard");
+        }
 
     }
 

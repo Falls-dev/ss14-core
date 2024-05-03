@@ -9,6 +9,7 @@ using Content.Shared._White.Cult.Systems;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Doors.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Prying.Components;
 using Content.Shared.Weapons.Melee.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio;
@@ -28,6 +29,7 @@ public sealed class RunicDoorSystem : EntitySystem
     [Dependency] private readonly OccluderSystem _occluder = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly CuffableSystem _cuffable = default!;
+    [Dependency] private readonly HolyWeaponSystem _holyWeapon = default!;
 
     public override void Initialize()
     {
@@ -35,8 +37,14 @@ public sealed class RunicDoorSystem : EntitySystem
 
         SubscribeLocalEvent<RunicDoorComponent, BeforeDoorOpenedEvent>(OnBeforeDoorOpened);
         SubscribeLocalEvent<RunicDoorComponent, BeforeDoorClosedEvent>(OnBeforeDoorClosed);
-        SubscribeLocalEvent<RunicDoorComponent, AttackedEvent>(OnGetAttacked);
+        // SubscribeLocalEvent<RunicDoorComponent, AttackedEvent>(OnGetAttacked);
         SubscribeLocalEvent<RunicDoorComponent, ConcealEvent>(OnConceal);
+        SubscribeLocalEvent<RunicDoorComponent, BeforePryEvent>(OnBeforePry);
+    }
+
+    private void OnBeforePry(Entity<RunicDoorComponent> ent, ref BeforePryEvent args)
+    {
+        args.Cancelled = true;
     }
 
     private void OnConceal(Entity<RunicDoorComponent> ent, ref ConcealEvent args)
@@ -111,9 +119,9 @@ public sealed class RunicDoorSystem : EntitySystem
             return true;
         }
 
-        _doorSystem.Deny(airlock);
+        // _doorSystem.Deny(airlock);
 
-        if (!HasComp<HumanoidAppearanceComponent>(user) || HasComp<HolyComponent>(user) ||
+        if (!HasComp<HumanoidAppearanceComponent>(user) || _holyWeapon.IsHoldingHolyWeapon(user) ||
             TryComp(airlock, out ConcealableComponent? concealable) && concealable.Concealed)
             return false;
 

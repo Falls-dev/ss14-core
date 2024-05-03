@@ -59,10 +59,16 @@
   id: BaseModule
 
 - type: Tag
-  id: NeuroControl
+  id: NeuroStabilization
 
 - type: Tag
   id: InteractivePen
 
 - type: Tag
   id: InteractiveBoard
+
+- type: Tag
+  id: BaseBarrelModule
+
+- type: Tag
+  id: BaseHandGuardModule

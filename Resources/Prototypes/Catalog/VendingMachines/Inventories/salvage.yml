@@ -1,4 +1,4 @@
-﻿- type: vendingMachineInventory
+- type: vendingMachineInventory
   id: SalvageEquipmentInventory
   startingInventory:
     WeaponProtoKineticAccelerator: 4
@@ -15,10 +15,11 @@
     FlashlightLantern: 6
     Floodlight: 2
     RadioHandheld: 10
-    StackHolderHealingItem: 2
+    Brutepack: 2
     InflatableWallStack1: 40
     InflatableDoorStack1: 10
     SeismicCharge: 3
     FultonBeacon: 2
     Fulton: 3
-
+  emaggedInventory:
+    JetpackBlackFilled: 1

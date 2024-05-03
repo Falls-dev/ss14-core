@@ -21,6 +21,12 @@
         },
         {
             "name": "accelerator"
+        },
+        {
+            "name": "handguard_module"
+        },
+        {
+            "name": "barrel_module"
         }
     ]
 }

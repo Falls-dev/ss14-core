@@ -43,9 +43,13 @@
         useSound: /Audio/Items/jaws_cut.ogg
         changeSound: /Audio/Items/change_jaws.ogg
   - type: MeleeWeapon
+    wideAnimationRotation: 90
     damage:
       types:
-        Blunt: 10
+        Blunt: 15
+        Structural: 40
+    soundHit:
+      path: "/Audio/Weapons/smash.ogg"
 
 - type: entity
   name: syndicate jaws of life
@@ -84,4 +88,5 @@
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 14
+        Blunt: 20
+        Structural: 60

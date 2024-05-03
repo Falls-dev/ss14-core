@@ -127,6 +127,7 @@
   noSpawn: true
   components:
   - type: InstantAction
+    checkCanInteract: false
     useDelay: 40
     itemIconStyle: BigAction
     priority: -20

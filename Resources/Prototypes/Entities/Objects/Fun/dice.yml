@@ -131,3 +131,61 @@
       types:
         Piercing: 5
     # I love this
+
+- type: entity
+  parent: BaseItem
+  id: DiceOfFate
+  name: Dice Of Fate
+  description: A die with twenty sides. Each side is slightly different but in what way?
+  components:
+  - type: E20
+    sides: 20
+    currentValue: 20
+    diceType: DiceOfFate
+  - type: Sprite
+    sprite: Objects/Fun/dice.rsi
+    state: d20_20
+    noRot: true
+  - type: Item
+    size: Tiny
+  - type: TypingIndicator
+    proto: robot
+  - type: Speech
+    speechVerb: Robotic
+    speechSounds: Vending
+  - type: VoiceOfGod
+
+- type: entity
+  parent: BaseItem
+  id: E20Dice
+  name: E20
+  description: A die with twenty sides. It has a button with a timer.
+  components:
+  - type: E20
+    sides: 20
+    currentValue: 20
+    diceType: E20
+  - type: Sprite
+    sprite: Objects/Fun/dice.rsi
+    state: d20_20
+    noRot: true
+  - type: Item
+    size: Tiny
+  - type: TypingIndicator
+    proto: robot
+  - type: Speech
+    speechVerb: Robotic
+    speechSounds: Vending
+  - type: VoiceOfGod
+
+- type: entity
+  parent: BaseItem
+  id: BrokenDice
+  name: Broken Dice
+  description: Dice that's lost its powers, maybe there's still something in it.
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/dice.rsi
+    state: dice_of_fate_used
+  - type: Item
+    size: Tiny

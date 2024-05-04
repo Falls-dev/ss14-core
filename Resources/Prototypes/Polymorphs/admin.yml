@@ -47,3 +47,8 @@
     forced: true
     inventory: Drop
     allowRepeatedMorphs: true
+
+- type: polymorph
+  id: DiceShard
+  configuration:
+    entity: BrokenDice

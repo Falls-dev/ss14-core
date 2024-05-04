@@ -64,7 +64,7 @@ public sealed class E20System : SharedE20System
         events[20] = _events.ChangelingTransformationEvent;
 
 
-        EventsDelegate method = events[20];
+        EventsDelegate method = events[comp.CurrentValue];
         method(uid, comp);
 
         if (comp.IsUsed)

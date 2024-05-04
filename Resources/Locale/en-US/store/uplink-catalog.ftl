@@ -293,6 +293,12 @@ uplink-disposable-turret-desc = Looks and functions like a normal electrical too
 uplink-cluster-banana-peel-name = Cluster Banana
 uplink-cluster-banana-peel-desc = Splits into 6 explosive banana peels after being thrown, the peels detonate automatically after 20 seconds if nobody slips on them.
 
+uplink-e20-name = E20
+uplink-e20-desc = The mysterious twenty-sided die triggers an explosion three seconds after activation, with the radius depending on the force of the throw. Don't succumb to the temptation of using it thoughtlessly, as the consequences could be irreversible.
+
+uplink-dice-of-fate-name = Dice of fate
+uplink-dice-of-fate-desc = A dice concealing many secrets. Only your luck will be with you when you activate the twenty-sided. Each facet contains its own effect, from the most negative to the incredible. Use with caution!
+
 # Armor
 uplink-chameleon-name = Chameleon Kit
 uplink-chameleon-desc = A backpack full of items that contain chameleon technology allowing you to disguise as pretty much anything on the station, and more!

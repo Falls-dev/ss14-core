@@ -9,7 +9,6 @@ using Content.Server.Explosion.EntitySystems;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
-using Content.Server.Mind;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Revenant.Components;
 using Content.Shared.Access;
@@ -31,8 +30,6 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Throwing;
 using Robust.Server.GameObjects;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -59,7 +56,6 @@ public sealed class E20SystemEvents : EntitySystem
     [Dependency] private readonly ChangelingRuleSystem _changelingRule = default!;
     [Dependency] private readonly SharedMindSystem _minds = default!;
     [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
     [Dependency] private readonly TransformSystem _transform = default!;

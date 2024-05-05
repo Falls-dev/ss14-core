@@ -256,7 +256,8 @@
   - type: Clothing
     sprite: Objects/Tanks/plasma.rsi
     slots:
-    - Back
+    - Belt
+    - suitStorage
   - type: Tag
     tags:
       - TankPlasma

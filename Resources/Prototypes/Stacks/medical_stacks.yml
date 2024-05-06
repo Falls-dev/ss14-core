@@ -34,10 +34,10 @@
   maxCount: 10
 
 - type: stack
-  id: tourniquet
+  id: Tourniquet
   name: tourniquet
   icon: { sprite: "/Textures/Objects/Specific/Medical/medical.rsi", state: tourniquet }
-  spawn: tourniquet
+  spawn: Tourniquet
   maxCount: 5
   itemSize: 1
 

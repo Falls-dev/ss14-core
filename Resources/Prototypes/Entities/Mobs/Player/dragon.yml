@@ -14,6 +14,8 @@
     makeSentient: true
     name: ghost-role-information-space-dragon-name
     description: ghost-role-information-space-dragon-description
+    raffle:
+      settings: default
   - type: SlowOnDamage
     speedModifierThresholds:
       270: 0.7
@@ -164,6 +166,14 @@
   components:
   - type: GhostRole
     description: ghost-role-information-space-dragon-dungeon-description
+<<<<<<< HEAD
+=======
+    raffle:
+      settings: default
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      100: 0.7
+>>>>>>> 630a7a78ed (Add ghost role raffles (#26629))
   - type: MobThresholds
     thresholds:
       0: Alive

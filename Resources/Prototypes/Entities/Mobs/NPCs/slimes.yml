@@ -119,6 +119,8 @@
     makeSentient: true
     name: ghost-role-information-slimes-name
     description: ghost-role-information-slimes-description
+    raffle:
+      settings: short
   - type: Speech
     speechVerb: Slime
     speechSounds: Slime
@@ -148,6 +150,8 @@
         - SimpleHostile
     - type: GhostRole
       description: ghost-role-information-angry-slimes-description
+      raffle:
+        settings: short
     - type: GlobalAntagonist
       antagonistPrototype: globalAntagonistSlime
 
@@ -185,8 +189,13 @@
         - SimpleHostile
     - type: GhostRole
       description: ghost-role-information-angry-slimes-description
+<<<<<<< HEAD
     - type: GlobalAntagonist
       antagonistPrototype: globalAntagonistSlime
+=======
+      raffle:
+        settings: short
+>>>>>>> 630a7a78ed (Add ghost role raffles (#26629))
 
 - type: entity
   name: yellow slime
@@ -222,5 +231,10 @@
         - SimpleHostile
     - type: GhostRole
       description: ghost-role-information-angry-slimes-description
+<<<<<<< HEAD
     - type: GlobalAntagonist
       antagonistPrototype: globalAntagonistSlime
+=======
+      raffle:
+        settings: short
+>>>>>>> 630a7a78ed (Add ghost role raffles (#26629))

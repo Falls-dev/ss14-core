@@ -278,6 +278,8 @@
           bounds: "-0.25,-0.5,0.5,0.5"
         mask:
         - SubfloorMask
+  - type: Construction
+    node: routerflipped
 
 - type: entity
   id: DisposalJunction
@@ -360,6 +362,8 @@
           bounds: "-0.25,-0.5,0.5,0.5"
         mask:
         - SubfloorMask
+  - type: Construction
+    node: junctionflipped
 
 - type: entity
   id: DisposalYJunction
@@ -496,3 +500,5 @@
         pipe:
           Free: { state: signal-router-flipped-free }
           Anchored: { state: signal-router-flipped }
+  - type: Construction
+    node: signal_router_flipped

@@ -106,7 +106,8 @@
         Piercing: 0.9
         Heat: 0.4 # this technically means it protects against fires pretty well? -heat is just for lasers and stuff, not atmos temperature
   - type: Reflect
-    reflectProb: 0.5
+    reflectProb: 1
+    innate: true # armor grants a passive shield that does not require concentration to maintain
     reflects:
       - Energy
 

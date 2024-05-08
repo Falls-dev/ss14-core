@@ -227,30 +227,31 @@ namespace Content.Server.Preferences.Managers
                     // WD-EDIT
 
                     prefsData.Prefs = prefs;
-                    prefsData.PrefsLoaded = true;
-
-                    var msg = new MsgPreferencesAndSettings
-                    {
-                        Preferences = prefs,
-                        Settings = new GameSettings
-                        {
-                            MaxCharacterSlots = GetMaxUserCharacterSlots(session.UserId)
-                        }
-                    };
-
-                    _netManager.ServerSendMessage(msg, session.Channel);
                 }
             }
         }
 
-        public void SanitizeData(ICommonSession session)
+        public void FinishLoad(ICommonSession session)
         {
             // This is a separate step from the actual database load.
             // Sanitizing preferences requires play time info due to loadouts.
             // And play time info is loaded concurrently from the DB with preferences.
-            var data = _cachedPlayerPrefs[session.UserId];
-            DebugTools.Assert(data.Prefs != null);
-            data.Prefs = SanitizePreferences(session, data.Prefs, _dependencies);
+            var prefsData = _cachedPlayerPrefs[session.UserId];
+            DebugTools.Assert(prefsData.Prefs != null);
+            prefsData.Prefs = SanitizePreferences(session, prefsData.Prefs, _dependencies, session.UserId);
+
+            prefsData.PrefsLoaded = true;
+
+            var msg = new MsgPreferencesAndSettings
+            {
+                Preferences = prefsData.Prefs,
+                Settings = new GameSettings
+                {
+                    MaxCharacterSlots = GetMaxUserCharacterSlots(session.UserId)
+                }
+            };
+
+            _netManager.ServerSendMessage(msg, session.Channel);
         }
 
         public void OnClientDisconnected(ICommonSession session)

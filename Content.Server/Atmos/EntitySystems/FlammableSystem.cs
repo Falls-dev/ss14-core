@@ -14,6 +14,7 @@ using Content.Shared.Atmos.Components;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.Interaction;
+using Content.Shared.Inventory;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
@@ -46,6 +47,7 @@ namespace Content.Server.Atmos.EntitySystems
         [Dependency] private readonly AlertsSystem _alertsSystem = default!;
         [Dependency] private readonly FixtureSystem _fixture = default!;
         [Dependency] private readonly IAdminLogManager _adminLogger = default!;
+        [Dependency] private readonly InventorySystem _inventory = default!;
         [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
         [Dependency] private readonly SharedPopupSystem _popup = default!;
         [Dependency] private readonly UseDelaySystem _useDelay = default!;
@@ -53,6 +55,7 @@ namespace Content.Server.Atmos.EntitySystems
         [Dependency] private readonly IRobustRandom _random = default!;
         [Dependency] private readonly SpellBladeSystem _spellBlade = default!; // WD
 
+        private EntityQuery<InventoryComponent> _inventoryQuery;
         private EntityQuery<PhysicsComponent> _physicsQuery;
 
         public const float MinimumFireStacks = -10f;
@@ -70,6 +73,7 @@ namespace Content.Server.Atmos.EntitySystems
         {
             UpdatesAfter.Add(typeof(AtmosphereSystem));
 
+            _inventoryQuery = GetEntityQuery<InventoryComponent>();
             _physicsQuery = GetEntityQuery<PhysicsComponent>();
 
             SubscribeLocalEvent<FlammableComponent, MapInitEvent>(OnMapInit);
@@ -463,13 +467,20 @@ namespace Content.Server.Atmos.EntitySystems
                         continue;
                     }
 
-                    EnsureComp<IgnitionSourceComponent>(uid);
-                    _ignitionSourceSystem.SetIgnited(uid);
+                    var source = EnsureComp<IgnitionSourceComponent>(uid);
+                    _ignitionSourceSystem.SetIgnited((uid, source));
 
                     var damageScale = MathF.Min(  flammable.FireStacks, 5);
 
                     if (TryComp(uid, out TemperatureComponent? temp))
                         _temperatureSystem.ChangeHeat(uid, 12500 * damageScale, false, temp);
+
+                    var ev = new GetFireProtectionEvent();
+                    // let the thing on fire handle it
+                    RaiseLocalEvent(uid, ref ev);
+                    // and whatever it's wearing
+                    if (_inventoryQuery.TryComp(uid, out var inv))
+                        _inventory.RelayEvent((uid, inv), ref ev);
 
                     if (!_spellBlade.IsHoldingItemWithComponent<FireAspectComponent>(uid)) // WD EDIT
                         _damageableSystem.TryChangeDamage(uid, flammable.Damage * damageScale, interruptsDoAfters: false);

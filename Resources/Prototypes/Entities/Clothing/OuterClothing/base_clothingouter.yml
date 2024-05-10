@@ -163,6 +163,7 @@
   - type: ClothingTemperatureAdjust
   - type: ClothingRequiredStepTriggerImmune
     slots: WITHOUT_POCKET
+  - type: AllowSuitStorage
 
 - type: entity
   abstract: true
@@ -183,6 +184,7 @@
     size: Huge
   - type: ClothingRequiredStepTriggerImmune
     slots: WITHOUT_POCKET
+  - type: AllowSuitStorage
 
 - type: entity
   parent: ClothingOuterBase

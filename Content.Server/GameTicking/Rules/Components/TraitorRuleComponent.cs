@@ -32,6 +32,9 @@ public sealed partial class TraitorRuleComponent : Component
     [DataField]
     public ProtoId<DatasetPrototype> CodewordVerbs = "verbs";
 
+    [DataField]
+    public ProtoId<DatasetPrototype> ObjectiveIssuers = "TraitorCorporations";
+
     // WD edit start
     [DataField]
     public ProtoId<MoodEffectPrototype> MoodBuffEffect = "TraitorFocused";

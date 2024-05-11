@@ -167,6 +167,9 @@ public abstract partial class BaseActionEvent : HandledEntityEventArgs
     /// </summary>
     public EntityUid Performer;
 
+    /// <summary>
+    ///     The action that was performed.
+    /// </summary>
     public EntityUid Action;
 
     public ActionUseType ActionUseType = ActionUseType.Default;

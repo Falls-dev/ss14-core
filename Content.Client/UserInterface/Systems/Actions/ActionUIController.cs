@@ -232,6 +232,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
             {
                 action.Event.Target = coordinates;
                 action.Event.Performer = user;
+                action.Event.Action = actionId;
             }
 
             _actionsSystem.PerformAction(user, actionComp, actionId, action, action.Event, _timing.CurTime);
@@ -274,6 +275,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
             {
                 action.Event.Target = uid;
                 action.Event.Performer = user;
+                action.Event.Action = actionId;
             }
 
             _actionsSystem.PerformAction(user, actionComp, actionId, action, action.Event, _timing.CurTime);

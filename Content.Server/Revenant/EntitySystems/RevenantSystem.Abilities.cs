@@ -19,6 +19,7 @@ using Content.Server.Bible.Components;
 using Content.Server.Maps;
 using Content.Server.Revenant.Components;
 using Content.Shared._White.Cult.Components;
+using Content.Shared.Physics;
 using Content.Shared.DoAfter;
 using Content.Shared.Emag.Systems;
 using Content.Shared.FixedPoint;
@@ -151,17 +152,11 @@ public sealed partial class RevenantSystem
             return;
         }
 
-        // WD START
-        var tileref = Transform(uid).Coordinates.GetTileRef();
-        if (tileref != null)
+        if (_physics.GetEntitiesIntersectingBody(uid, (int) CollisionGroup.Impassable).Count > 0)
         {
-            if(_physics.GetEntitiesIntersectingBody(uid, (int) CollisionGroup.Impassable).Count > 0)
-            {
-                _popup.PopupEntity(Loc.GetString("revenant-in-solid"), uid, uid);
-                return;
-            }
+            _popup.PopupEntity(Loc.GetString("revenant-in-solid"), uid, uid);
+            return;
         }
-        // WD END
 
         var doAfter = new DoAfterArgs(EntityManager, uid, revenant.HarvestDebuffs.X, new HarvestEvent(), uid, target: target)
         {

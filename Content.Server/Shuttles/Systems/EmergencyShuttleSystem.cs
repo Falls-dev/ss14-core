@@ -207,7 +207,7 @@ public sealed partial class EmergencyShuttleSystem : EntitySystem
     {
         var ftlTime = TimeSpan.FromSeconds
         (
-            TryComp<FTLComponent>(uid, out var ftlComp) ? ftlComp.TravelTime : ShuttleSystem.DefaultTravelTime
+            TryComp<FTLComponent>(uid, out var ftlComp) ? ftlComp.TravelTime : _shuttle.DefaultTravelTime
         );
 
         if (!TryComp<DeviceNetworkComponent>(uid, out var netComp))

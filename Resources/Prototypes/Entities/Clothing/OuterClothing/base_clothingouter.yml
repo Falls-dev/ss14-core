@@ -125,7 +125,7 @@
 
 - type: entity
   abstract: true
-  parent: [ClothingOuterBase, GeigerCounterClothing]
+  parent: [ClothingOuterBase, GeigerCounterClothing, AllowSuitStorageClothing]
   id: ClothingOuterHardsuitBase
   name: base hardsuit
   components:
@@ -163,11 +163,10 @@
   - type: ClothingTemperatureAdjust
   - type: ClothingRequiredStepTriggerImmune
     slots: WITHOUT_POCKET
-  - type: AllowSuitStorage
 
 - type: entity
   abstract: true
-  parent: ClothingOuterBase
+  parent: [ClothingOuterBase, AllowSuitStorageClothing]
   id: ClothingOuterEVASuitBase
   name: base EVA Suit
   components:
@@ -184,7 +183,6 @@
     size: Huge
   - type: ClothingRequiredStepTriggerImmune
     slots: WITHOUT_POCKET
-  - type: AllowSuitStorage
 
 - type: entity
   parent: ClothingOuterBase

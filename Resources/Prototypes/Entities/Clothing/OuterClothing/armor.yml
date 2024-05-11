@@ -3,7 +3,7 @@
 
 #Basic armor vest
 - type: entity
-  parent: ClothingOuterBase
+  parent: [ClothingOuterBase, AllowSuitStorageClothing]
   id: ClothingOuterArmorBasic
   name: armor vest
   description: A standard Type I armored vest that provides decent protection against most types of damage.
@@ -21,7 +21,6 @@
         Heat: 0.80
   - type: ExplosionResistance
     damageCoefficient: 0.90
-  - type: AllowSuitStorage
   # WD edit sounds start
   - type: EmitSoundOnPickup
     sound:
@@ -48,7 +47,7 @@
     sprite: White/Clothing/OuterClothing/kevlar.rsi
 
 - type: entity
-  parent: ClothingOuterBaseLarge
+  parent: [ClothingOuterBaseLarge, AllowSuitStorageClothing]
   id: ClothingOuterArmorRiot
   name: riot suit
   description: A suit of semi-flexible polycarbonate body armor with heavy padding to protect against melee attacks. Perfect for fighting delinquents around the station.
@@ -133,7 +132,7 @@
   - type: CultItem
 
 - type: entity
-  parent: ClothingOuterBaseLarge
+  parent: [ClothingOuterBaseLarge, AllowSuitStorageClothing]
   id: ClothingOuterArmorHeavy
   name: heavy armor suit
   description: A heavily armored suit that protects against excessive damage.
@@ -247,7 +246,7 @@
       - RedMagusArmor
 
 - type: entity
-  parent: ClothingOuterBase
+  parent: [ClothingOuterBase, AllowSuitStorageClothing]
   id: ClothingOuterArmorCaptainCarapace
   name: captain's carapace
   description: An armored chestpiece that provides protection whilst still offering maximum mobility and flexibility. Issued only to the station's finest.
@@ -268,7 +267,6 @@
   - type: ExplosionResistance
     damageCoefficient: 0.65
   - type: GroupExamine
-  - type: AllowSuitStorage
 
 - type: entity
   parent: ClothingOuterBaseLarge

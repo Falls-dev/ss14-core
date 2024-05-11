@@ -101,8 +101,7 @@ namespace Content.Server.GameTicking
                 if (job == null)
                 {
                     var playerSession = _playerManager.GetSessionById(netUser);
-                    _chatManager.DispatchServerMessage(playerSession,
-                        Loc.GetString("job-not-available-wait-in-lobby"));
+                    _chatManager.DispatchServerMessage(playerSession, Loc.GetString("job-not-available-wait-in-lobby"));
                 }
                 else
                 {
@@ -470,10 +469,7 @@ namespace Content.Server.GameTicking
         /// <param name="station">The station they're spawning on</param>
         /// <param name="jobId">An optional job for them to spawn as</param>
         /// <param name="silent">Whether or not the player should be greeted upon joining</param>
-        public void MakeJoinGame(ICommonSession player,
-            EntityUid station,
-            string? jobId = null,
-            bool silent = false)
+        public void MakeJoinGame(ICommonSession player, EntityUid station, string? jobId = null, bool silent = false)
         {
             if (!_playerGameStatuses.ContainsKey(player.UserId))
                 return;
@@ -517,35 +513,20 @@ namespace Content.Server.GameTicking
                 return;
 
             Entity<MindComponent?>? mind = player.GetMind();
-
-            var name = GetPlayerProfile(player).Name;
-
             if (mind == null)
             {
+                var name = GetPlayerProfile(player).Name;
                 var (mindId, mindComp) = _mind.CreateMind(player.UserId, name);
                 mind = (mindId, mindComp);
                 _mind.SetUserId(mind.Value, player.UserId);
                 _roles.MindAddRole(mind.Value, new ObserverRoleComponent());
             }
 
-            var ghost = SpawnObserverMob();
-            _metaData.SetEntityName(ghost, name);
-            _ghost.SetCanReturnToBody(ghost, false);
-            _mind.TransferTo(mind.Value, ghost);
+            var ghost = _ghost.SpawnGhost(mind.Value);
             _adminLogger.Add(LogType.LateJoin,
                 LogImpact.Low,
                 $"{player.Name} late joined the round as an Observer with {ToPrettyString(ghost):entity}.");
         }
-
-        #region Mob Spawning Helpers
-
-        private EntityUid SpawnObserverMob()
-        {
-            var coordinates = GetObserverSpawnPoint();
-            return EntityManager.SpawnEntity(ObserverPrototypeName, coordinates);
-        }
-
-        #endregion
 
         #region Spawn Points
 
@@ -553,8 +534,7 @@ namespace Content.Server.GameTicking
         {
             _possiblePositions.Clear();
 
-            foreach (var (point, transform) in EntityManager
-                         .EntityQuery<SpawnPointComponent, TransformComponent>(true))
+            foreach (var (point, transform) in EntityManager.EntityQuery<SpawnPointComponent, TransformComponent>(true))
             {
                 if (point.SpawnType != SpawnPointType.Observer)
                     continue;

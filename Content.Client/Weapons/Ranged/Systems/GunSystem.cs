@@ -59,7 +59,8 @@ public sealed partial class GunSystem : SharedGunSystem
                     Timing,
                     _inputManager,
                     _player,
-                    this));
+                    this,
+                    TransformSystem));
             }
             else
             {

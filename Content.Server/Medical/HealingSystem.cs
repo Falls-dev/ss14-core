@@ -5,10 +5,14 @@ using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Medical.Components;
 using Content.Server.Popups;
 using Content.Server.Stack;
+using Content.Shared._Lfwb.Skills;
+using Content.Shared._Lfwb.Stats;
 using Content.Shared.Audio;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
+using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
@@ -35,6 +39,8 @@ public sealed class HealingSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly SolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private readonly SharedSkillsSystem _skillsSystem = default!;
+    [Dependency] private readonly SharedStatsSystem _statsSystem = default!;
 
     public override void Initialize()
     {
@@ -42,6 +48,22 @@ public sealed class HealingSystem : EntitySystem
         SubscribeLocalEvent<HealingComponent, UseInHandEvent>(OnHealingUse);
         SubscribeLocalEvent<HealingComponent, AfterInteractEvent>(OnHealingAfterInteract);
         SubscribeLocalEvent<DamageableComponent, HealingDoAfterEvent>(OnDoAfter);
+        SubscribeLocalEvent<PillComponent, ExaminedEvent>(OnPillExamined);
+    }
+
+    private void OnPillExamined(EntityUid uid, PillComponent component, ExaminedEvent args)
+    {
+        var skillLevel = _skillsSystem.GetSkillLevel(args.Examiner, Skill.Medicine);
+        if (skillLevel < SkillLevel.Skilled)
+            return;
+
+        if (!_solutionContainerSystem.TryGetSolution(uid, "food", out var solution))
+            return;
+
+        foreach (var solutionContent in solution.Value.Comp.Solution.Contents)
+        {
+            args.PushMarkup($"[color=red]{solutionContent.Reagent.ToString()}[/color]");
+        }
     }
 
     private void OnDoAfter(Entity<DamageableComponent> entity, ref HealingDoAfterEvent args)
@@ -79,7 +101,31 @@ public sealed class HealingSystem : EntitySystem
         if (healing.ModifyBloodLevel != 0)
             _bloodstreamSystem.TryModifyBloodLevel(entity.Owner, healing.ModifyBloodLevel);
 
-        var healed = _damageable.TryChangeDamage(entity.Owner, healing.Damage, true, origin: args.Args.User);
+        var damageOriginal = healing.Damage;
+        var damageModified = new DamageSpecifier(damageOriginal);
+
+        var skillLevel = _skillsSystem.GetSkillLevel(args.User, Skill.Medicine);
+
+        if (skillLevel == SkillLevel.Weak)
+        {
+            var intStat = _statsSystem.GetStat(args.User, Stat.Intelligence);
+            var (_, response, result) = _statsSystem.D20(intStat);
+
+            if (!result)
+            {
+                var amt = _random.Next(4, 8);
+                damageModified.ApplyToAll(amt);
+
+                _popupSystem.PopupEntity(response + $"{MetaData(args.User).EntityName} Ошибается и делает только хуже!", args.User, args.User);
+            }
+        }
+        else
+        {
+            var amt = _skillsSystem.SkillLevelToAddition[skillLevel];
+            damageModified.ApplyToAll(-amt);
+        }
+
+        var healed = _damageable.TryChangeDamage(entity.Owner, damageModified, true, origin: args.Args.User);
 
         if (healed == null && healing.BloodlossModifier != 0)
             return;
@@ -90,7 +136,16 @@ public sealed class HealingSystem : EntitySystem
 
         if (TryComp<StackComponent>(args.Used.Value, out var stackComp))
         {
-            _stacks.Use(args.Used.Value, 1, stackComp);
+            if (skillLevel > SkillLevel.Average)
+            {
+                var intStat = _statsSystem.GetStat(args.User, Stat.Intelligence);
+                var (_, response, result) = _statsSystem.D20(intStat);
+
+                if (result)
+                    _popupSystem.PopupEntity(response + "Используя свой интеллект и умения вы смогли вылечить и не использовать предмет!", args.User, args.User);
+                else
+                    _stacks.Use(args.Used.Value, 1, stackComp);
+            }
 
             if (_stacks.GetCount(args.Used.Value, stackComp) <= 0)
                 dontRepeat = true;
@@ -112,6 +167,8 @@ public sealed class HealingSystem : EntitySystem
         }
 
         _audio.PlayPvs(healing.HealingEndSound, entity.Owner, AudioHelpers.WithVariation(0.125f, _random).WithVolume(1f));
+
+        _skillsSystem.ApplySkillThreshold(args.User, Skill.Medicine, 5);
 
         // Logic to determine the whether or not to repeat the healing action
         args.Repeat = (HasDamage(entity.Comp, healing) && !dontRepeat);
@@ -190,8 +247,8 @@ public sealed class HealingSystem : EntitySystem
         var isNotSelf = user != target;
 
         var delay = isNotSelf
-            ? component.Delay
-            : component.Delay * GetScaledHealingPenalty(user, component);
+            ? _skillsSystem.SkillLevelToDelay[_skillsSystem.GetSkillLevel(user, Skill.Medicine)]
+            : _skillsSystem.SkillLevelToDelay[_skillsSystem.GetSkillLevel(user, Skill.Medicine)] * GetScaledHealingPenalty(user, component);
 
         var doAfterEventArgs =
             new DoAfterArgs(EntityManager, user, delay, new HealingDoAfterEvent(), target, target: target, used: uid)

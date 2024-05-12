@@ -3,10 +3,10 @@
   maps:
   - WonderBox
   - Scoupidia
-  - Triumph
+  #- Triumph
   - WhiteBox
-  - Bagel    # Temporary
+ # - Bagel    # Temporary
   - Meta     # Temporary
-  - Train    # Temporary
+ # - Train    # Temporary
 #  - Polaris
 #  - Void

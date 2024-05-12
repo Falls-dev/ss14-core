@@ -52,7 +52,7 @@
         map: [ "enum.ToggleVisuals.Layer" ]
   - type: MeleeWeapon
     wideAnimationRotation: -135
-    attackRate: 0.75
+    attackRate: 1
     damage:
       types:
         Blunt: 9

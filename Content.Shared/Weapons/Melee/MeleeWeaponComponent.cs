@@ -63,7 +63,7 @@ public sealed partial class MeleeWeaponComponent : Component
 
     // WD START
     [ViewVariables(VVAccess.ReadWrite), DataField]
-    public bool CanHeavyAttack = true;
+    public bool CanHeavyAttack;
 
     [ViewVariables(VVAccess.ReadWrite), DataField]
     public bool IgnoreResistances;

@@ -1,4 +1,5 @@
 using Content.Server.Access.Systems;
+using Content.Shared._Lfwb.Stats;
 using Content.Shared.Access.Components;
 using Content.Shared.Examine;
 using Robust.Shared.Enums;
@@ -23,7 +24,7 @@ namespace Content.Server._White.Other.ExamineSystem
         [Dependency] private readonly IdCardSystem _idCard = default!;
         [Dependency] private readonly IConsoleHost _consoleHost = default!;
         [Dependency] private readonly INetConfigurationManager _netConfigManager = default!;
-
+        [Dependency] private readonly SharedStatsSystem _statsSystem = default!;
 
         public override void Initialize()
         {
@@ -60,6 +61,33 @@ namespace Content.Server._White.Other.ExamineSystem
                 }
             }
             infoLines.Add($"Это же [bold]{name}[/bold]!");
+
+            var strExaminer = _statsSystem.GetStat(args.Examiner, Stat.Strength);
+            var strExamined = _statsSystem.GetStat(uid, Stat.Strength);
+
+            if (args.Examiner != uid)
+            {
+                if (strExaminer < strExamined)
+                {
+                    var str = "Он [bold]сильнее[/bold] меня!";
+                    infoLines.Add(str);
+                    args.PushMarkup(str);
+                }
+
+                if (strExaminer > strExamined)
+                {
+                    var str = "Он [bold]слабее[/bold] меня!";
+                    infoLines.Add(str);
+                    args.PushMarkup(str);
+                }
+
+                if (strExaminer == strExamined)
+                {
+                    var str = "Мы [bold]одинаково[/bold] сильны!";
+                    infoLines.Add(str);
+                    args.PushMarkup(str);
+                }
+            }
 
             var idInfoString = GetInfo(uid);
             if (!string.IsNullOrEmpty(idInfoString))

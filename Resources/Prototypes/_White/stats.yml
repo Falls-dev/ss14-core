@@ -1,0 +1,19 @@
+- type: statsPreset
+  id: HumanStatsPreset
+  preset:
+    strength: [8, 12]
+    intelligence: [8, 12]
+    dexterity: [8, 12]
+    endurance: [8, 12]
+    luck: [-1, 1]
+
+# Jobs and other shit
+
+- type: jobStatsModification
+  id: DefaultStatsOverride
+  stats:
+    strength: [-3, 2]
+    intelligence: [-3, 2]
+    dexterity: [-3, 2]
+    endurance: [-3, 2]
+    luck: [-1, 1]

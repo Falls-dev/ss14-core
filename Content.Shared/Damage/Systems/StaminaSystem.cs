@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._Lfwb.Stats;
 using Content.Shared._White.StaminaProtection;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
@@ -7,8 +8,6 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Events;
 using Content.Shared.Database;
 using Content.Shared.Effects;
-using Content.Shared.IdentityManagement;
-using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Rounding;
@@ -20,7 +19,6 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
-using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.Damage.Systems;
@@ -59,6 +57,32 @@ public sealed partial class StaminaSystem : EntitySystem
         SubscribeLocalEvent<StaminaDamageOnCollideComponent, ThrowDoHitEvent>(OnThrowHit);
 
         SubscribeLocalEvent<StaminaDamageOnHitComponent, MeleeHitEvent>(OnMeleeHit);
+
+        SubscribeLocalEvent<StaminaComponent, StatChangedEvent>(OnStatChanged);
+    }
+
+    private void OnStatChanged(Entity<StaminaComponent> ent, ref StatChangedEvent args)
+    {
+        if (args.Stat != Stat.Endurance)
+            return;
+
+        var oldStat = args.OldValue;
+        var newStat = args.NewValue;
+
+        if (args.Init)
+        {
+            var valueToSet = newStat * 4;
+            ent.Comp.CritThreshold += valueToSet;
+
+        }
+        else
+        {
+            var total = newStat - oldStat;
+            var valueToSet = total * 4;
+            ent.Comp.CritThreshold += valueToSet;
+        }
+
+        Dirty(ent);
     }
 
     private void OnStamHandleState(EntityUid uid, StaminaComponent component, ref AfterAutoHandleStateEvent args)

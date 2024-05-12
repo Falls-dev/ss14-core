@@ -1,6 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
+using Content.Shared._Lfwb.PredictedRandom;
+using Content.Shared._Lfwb.Skills;
+using Content.Shared._Lfwb.Stats;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CombatMode;
@@ -22,8 +25,13 @@ using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared._White;
 using Content.Shared._White.Implants.NeuroControl;
+using Content.Shared.Standing.Systems;
+using Content.Shared.StatusEffect;
+using Content.Shared.Stunnable;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
+using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
@@ -50,8 +58,25 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     [Dependency] private   readonly IPrototypeManager       _protoManager    = default!;
     [Dependency] private   readonly StaminaSystem           _stamina         = default!;
     [Dependency] private   readonly IConfigurationManager   _cfg             = default!;
+    [Dependency] private readonly SharedStatsSystem _statsSystem = default!;
+    [Dependency] private readonly SharedSkillsSystem _skillsSystem = default!;
+    [Dependency] private readonly PredictedRandomSystem _predictedRandomSystem = default!;
+    [Dependency] private readonly SharedStandingStateSystem _standingState = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
+    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedStunSystem _stunSystem = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     private const int AttackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque);
+
+    public List<string> MissMessages = new()
+    {
+        "странно",
+        "невозможно",
+        "удивительно",
+        "невезуче"
+    };
 
     /// <summary>
     /// Maximum amount of targets allowed for a wide-attack.
@@ -315,6 +340,26 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         return false;
     }
 
+    public bool TryGetWeaponInHands(EntityUid entity, out EntityUid weaponUid, [NotNullWhen(true)] out MeleeWeaponComponent? melee)
+    {
+        weaponUid = default;
+        melee = null;
+
+        if (EntityManager.TryGetComponent(entity, out HandsComponent? hands) &&
+            hands.ActiveHandEntity is { } held)
+        {
+            if (EntityManager.TryGetComponent(held, out melee))
+            {
+                weaponUid = held;
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
     public void AttemptLightAttackMiss(EntityUid user, EntityUid weaponUid, MeleeWeaponComponent weapon, EntityCoordinates coordinates)
     {
         AttemptAttack(user, weaponUid, weapon, new LightAttackEvent(null, GetNetEntity(weaponUid), GetNetCoordinates(coordinates)), null);
@@ -424,8 +469,6 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
                     animation = miss && weapon.Animation == "WeaponArcThrust"
                         ? weapon.MissAnimation
                         : weapon.Animation;
-                    if (miss)
-                        weapon.NextAttack -= fireRate / 2f;
                     // WD EDIT END
                     break;
                 case DisarmAttackEvent disarm:
@@ -493,6 +536,23 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         // Sawmill.Debug($"Melee damage is {damage.Total} out of {component.Damage.Total}");
 
+        if (TryMiss(user, target.Value))
+        {
+            var missEvent = new MeleeHitEvent(new List<EntityUid>(), user, meleeUid, damage, null);
+            RaiseLocalEvent(meleeUid, missEvent);
+            miss = true; // WD EDIT
+            _meleeSound.PlaySwingSound(user, meleeUid, component);
+
+            return;
+        }
+
+        if (TryParryOrDodge(user, target.Value))
+        {
+            return;
+        }
+
+        var crit = TryCrit(user);
+
         // WD START
         var blockEvent = new MeleeBlockAttemptEvent(user);
         RaiseLocalEvent(target.Value, ref blockEvent);
@@ -526,6 +586,12 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         RaiseLocalEvent(target.Value, attackedEvent);
 
         var modifiedDamage = DamageSpecifier.ApplyModifierSets(damage + hitEvent.BonusDamage + attackedEvent.BonusDamage, hitEvent.ModifiersList);
+
+        modifiedDamage.MultiplyToAll(_statsSystem.StatToAdditionForce(_statsSystem.GetStat(user, Stat.Strength)));
+
+        if (crit)
+            modifiedDamage.MultiplyToAll(_predictedRandomSystem.NextFloat(1.2f, 1.6f));
+
         var damageResult = Damageable.TryChangeDamage(target, modifiedDamage, component.IgnoreResistances || hitEvent.PenetrateArmor, origin:user); // WD EDIT
 
         if (damageResult != null && damageResult.Any())
@@ -550,6 +616,12 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         }
 
         _meleeSound.PlayHitSound(target.Value, user, GetHighestDamageSound(modifiedDamage, _protoManager), hitEvent.HitSoundOverride, component);
+        _stamina.TakeStaminaDamage(user, 5);
+
+        if(_net.IsServer)
+            _skillsSystem.ApplySkillThreshold(user, Skill.Melee, 3);
+
+        TryFlyDreamer(user, target.Value);
 
         if (damageResult?.GetTotal() > FixedPoint2.Zero)
         {
@@ -872,4 +944,175 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         Dirty(uid, meleeWeapon);
     }
+
+    #region Skibidi Combat
+
+    public virtual bool TryMiss(EntityUid attacker, EntityUid target)
+    {
+        if (!HasComp<StatsComponent>(attacker) || !HasComp<SkillsComponent>(attacker))
+            return false;
+
+        var dex = _statsSystem.GetStat(attacker, Stat.Dexterity);
+        var luck = _statsSystem.GetStat(attacker, Stat.Luck);
+        var skillModifier = _skillsSystem.GetSkillModifier(attacker, Skill.Melee);
+
+        var amt = dex + luck + skillModifier;
+
+        if (_standingState.IsDown(target))
+            amt += 2;
+
+        var roll = _predictedRandomSystem.RollWith(6, 3);
+        if (amt < roll)
+        {
+            HellMessage(attacker, $"{Name(attacker)} {_predictedRandomSystem.Pick(MissMessages)} промахивается!");
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool TryParryOrDodge(EntityUid attacker, EntityUid target)
+    {
+        // No way!
+        if (attacker == target)
+            return false;
+
+        // We can't parry or dodge if we don't have stats or skills.
+        if (!HasComp<StatsComponent>(target) || !HasComp<SkillsComponent>(target))
+            return false;
+
+        // We can't parry or dodge if we not ready for that.
+        if (!_combatMode.IsInCombatMode(target))
+            return false;
+
+        // We can't parry or dodge if we stunned.
+        if (_statusEffectsSystem.HasStatusEffect(target, "KnockedDown"))
+            return false;
+
+        // We can't parry or dodge if we're laying.
+        if (_standingState.IsDown(target))
+            return false;
+
+        //Now we can choose the type.
+        return TryGetWeaponInHands(target, out _, out _)
+            ? TryParry(attacker, target)
+            : TryDodge(attacker, target);
+    }
+
+    public bool TryParry(EntityUid attacker, EntityUid target)
+    {
+        var dex = _statsSystem.GetStat(target, Stat.Dexterity);
+        var luck = _statsSystem.GetStat(target, Stat.Luck);
+        var skillModifier = _skillsSystem.GetSkillModifier(target, Skill.Melee);
+
+        var parryChance = dex + luck + skillModifier;
+
+        if (!TryGetWeaponInHands(attacker, out _, out _))
+            parryChance += 2;
+        else
+            parryChance -= _skillsSystem.GetSkillModifier(attacker, Skill.Melee);
+
+        var roll =  _predictedRandomSystem.RollWith(6, 3);
+        if (roll < parryChance)
+        {
+            if (_net.IsServer)
+                _audio.PlayPvs("/Audio/White/Combat/parry.ogg", target);
+
+            HellMessage(target, $"{Name(target)} паррирует атаку {Name(attacker)}!");
+            _stamina.TakeStaminaDamage(target, 10);
+
+            if(_net.IsServer)
+                _skillsSystem.ApplySkillThreshold(target, Skill.Melee, 3);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool TryDodge(EntityUid attacker, EntityUid target)
+    {
+        var dex = _statsSystem.GetStat(target, Stat.Dexterity);
+        var luck = _statsSystem.GetStat(target, Stat.Luck);
+
+        var dodgeChance = dex + luck;
+
+        if (!TryGetWeaponInHands(attacker, out _, out _))
+            dodgeChance += 2;
+        else
+            dodgeChance -= _skillsSystem.GetSkillModifier(attacker, Skill.Melee);
+
+        var roll =  _predictedRandomSystem.RollWith(6, 3);
+        if (roll < dodgeChance)
+        {
+            if (_net.IsServer)
+                _audio.PlayPvs("/Audio/White/Combat/dodge.ogg", target);
+
+            HellMessage(target, $"{Name(target)} уворачивается от атаки {Name(attacker)}!");
+            _stamina.TakeStaminaDamage(target, 10);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public virtual bool TryCrit(EntityUid attacker)
+    {
+        var critChance = 0;
+
+        critChance += _statsSystem.GetStat(attacker, Stat.Luck);
+
+        if (TryGetWeaponInHands(attacker, out _, out _))
+        {
+            var skillModifier = _skillsSystem.GetSkillModifier(attacker, Skill.Melee);
+            critChance += skillModifier / 2;
+        }
+
+        var roll = _predictedRandomSystem.RollWith(6, 4);
+        if (roll < critChance)
+        {
+            HellMessage(attacker, "CRITICAL HIT!!!");
+            return true;
+        }
+
+        return false;
+    }
+
+    public virtual void TryFlyDreamer(EntityUid attacker, EntityUid target)
+    {
+        if (!HasComp<StatsComponent>(attacker) || !HasComp<SkillsComponent>(attacker))
+            return;
+        if (!HasComp<StatsComponent>(target) || !HasComp<SkillsComponent>(target))
+            return;
+
+        var strAttacker = _statsSystem.GetStat(attacker, Stat.Strength);
+        var strTarget = _statsSystem.GetStat(target, Stat.Strength);
+
+        if (strAttacker < strTarget)
+            return;
+
+        var strengthDifference = Math.Abs(strAttacker - strTarget);
+        if (strengthDifference < 4)
+            return;
+
+        if (!_predictedRandomSystem.Prob(0.15f))
+            return;
+
+        var wAttacker = TransformSystem.GetWorldPosition(attacker);
+        var wTarget = TransformSystem.GetWorldPosition(target);
+
+        var dir = wTarget - wAttacker;
+
+        if(_net.IsServer)
+            _physics.ApplyLinearImpulse(target, dir * (2000 * strAttacker));
+
+        _stunSystem.TryKnockdown(target, TimeSpan.FromSeconds(1), false);
+
+        HellMessage(attacker, $"{Name(attacker)} использует свою огромную силу и отправляет в полет {Name(target)}!");
+    }
+
+    public virtual void HellMessage(EntityUid who, string message) {}
+
+    #endregion
 }

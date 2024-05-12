@@ -18,6 +18,7 @@ using Content.Shared._White.Wizard.Magic;
 using Content.Shared.Actions;
 using Content.Shared.Cluwne;
 using Content.Shared.Coordinates.Helpers;
+using Content.Shared.Cuffs.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
@@ -28,6 +29,7 @@ using Content.Shared.Item;
 using Content.Shared.Magic;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
@@ -61,6 +63,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly EmpSystem _empSystem = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
 
     #endregion
 
@@ -665,6 +668,17 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private bool CheckRequirements(EntityUid spell, EntityUid performer)
     {
+        if (_mobState.IsCritical(performer) || _mobState.IsDead(performer))
+            return false;
+
+        if (TryComp<CuffableComponent>(performer, out var cuffableComponent))
+        {
+            var isCuffed = cuffableComponent.CuffedHandCount > 0;
+
+            if (isCuffed)
+                return false;
+        }
+
         var ev = new BeforeCastSpellEvent(performer);
         RaiseLocalEvent(spell, ref ev);
         return !ev.Cancelled;

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text.Json.Serialization;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
@@ -37,6 +38,22 @@ namespace Content.Shared.Damage
         [ViewVariables(VVAccess.ReadWrite)]
         [IncludeDataField(customTypeSerializer: typeof(DamageSpecifierDictionarySerializer), readOnly: true)]
         public Dictionary<string, FixedPoint2> DamageDict { get; set; } = new();
+
+        public void ApplyToAll(FixedPoint2 value)
+        {
+            foreach (var key in DamageDict.Keys.ToList())
+            {
+                DamageDict[key] += value;
+            }
+        }
+
+        public void MultiplyToAll(float value)
+        {
+            foreach (var key in DamageDict.Keys.ToList())
+            {
+                DamageDict[key] *= value;
+            }
+        }
 
         /// <summary>
         ///     Returns a sum of the damage values.

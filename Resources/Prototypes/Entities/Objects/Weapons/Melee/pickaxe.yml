@@ -12,7 +12,7 @@
     state: pickaxe
   - type: MeleeWeapon
     heavyAttackStaminaCost: 0 # For mining
-    attackRate: 0.7
+    attackRate: 1
     wideAnimationRotation: -135
     soundHit:
       path: "/Audio/Weapons/smash.ogg"

@@ -16,13 +16,19 @@
             </BoxContainer>
 
             <!-- WD EDIT -->
-            <Label Text="{Loc 'character-info-memories-label'}" HorizontalAlignment="Center" />
+            <Label Text="Память:" HorizontalAlignment="Center" />
             <BoxContainer Orientation="Vertical" Name="Memories" Access="Public" />
             <cc:Placeholder Name="MemoriesPlaceholder" Access="Public"
                             PlaceholderText="{Loc 'character-info-memories-placeholder-text'}" />
             <!-- WD EDIT END -->
 
-            <Label Name="ObjectivesLabel" Access="Public" Text="{Loc 'character-info-objectives-label'}"
+            <Label Text="Статы:" HorizontalAlignment="Center" />
+            <RichTextLabel Name="StatsLabel" Access="Public" HorizontalAlignment="Left" HorizontalExpand="True"/>
+
+            <Label Text="Скиллы:" HorizontalAlignment="Center" />
+            <RichTextLabel Name="SkillsLabel" Access="Public" HorizontalAlignment="Left" HorizontalExpand="True"/>
+
+            <Label Name="ObjectivesLabel" Access="Public" Text="Цели:"
                    HorizontalAlignment="Center" />
             <BoxContainer Orientation="Vertical" Name="Objectives" Access="Public" />
             <cc:Placeholder Name="RolePlaceholder" Access="Public"

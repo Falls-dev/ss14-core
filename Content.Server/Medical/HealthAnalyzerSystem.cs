@@ -3,6 +3,7 @@ using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Medical.Components;
 using Content.Server.PowerCell;
 using Content.Server.Temperature.Components;
+using Content.Shared._Lfwb.Skills;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
@@ -27,6 +28,7 @@ public sealed class HealthAnalyzerSystem : EntitySystem
     [Dependency] private readonly SolutionContainerSystem _solutionContainerSystem = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
+    [Dependency] private readonly SharedSkillsSystem _skillsSystem = default!;
 
     public override void Initialize()
     {
@@ -80,7 +82,7 @@ public sealed class HealthAnalyzerSystem : EntitySystem
 
         _audio.PlayPvs(uid.Comp.ScanningBeginSound, uid);
 
-        _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, uid.Comp.ScanDelay, new HealthAnalyzerDoAfterEvent(), uid, target: args.Target, used: uid)
+        _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, _skillsSystem.SkillLevelToDelay[_skillsSystem.GetSkillLevel(args.User, Skill.Medicine)], new HealthAnalyzerDoAfterEvent(), uid, target: args.Target, used: uid)
         {
             NeedHand = true,
             BreakOnMove = true
@@ -97,6 +99,7 @@ public sealed class HealthAnalyzerSystem : EntitySystem
         OpenUserInterface(args.User, uid);
         BeginAnalyzingEntity(uid, args.Target.Value);
         args.Handled = true;
+        _skillsSystem.ApplySkillThreshold(args.User, Skill.Medicine, 1);
     }
 
     /// <summary>

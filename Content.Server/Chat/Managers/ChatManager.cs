@@ -19,6 +19,7 @@ using Content.Shared._White;
 using Robust.Server.Player;
 using Robust.Shared.Asynchronous;
 using Robust.Shared.Configuration;
+using Robust.Shared.Console;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Replays;
@@ -58,6 +59,7 @@ namespace Content.Server.Chat.Managers
         [Dependency] private readonly IGameTiming _timing = default!;
         [Dependency] private readonly ReputationManager _repManager = default!;
         [Dependency] private readonly ITaskManager _taskManager = default!;
+        [Dependency] private readonly IConsoleHost _consoleHost = default!;
         /// WD-EDIT
 
         /// <summary>
@@ -404,6 +406,18 @@ namespace Content.Server.Chat.Managers
                 _configurationManager.GetCVar(CCVars.ReplayRecordAdminChat))
             {
                 _replay.RecordServerMessage(msg);
+            }
+        }
+
+        public void ChatMessageToManyButHueta(Filter filter, string message)
+        {
+            if (!filter.Recipients.Any())
+                return;
+
+            var clients = filter.Recipients.ToList();
+            foreach (var client in clients)
+            {
+                _consoleHost.RemoteExecuteCommand(client, $"notice [font size=15][color=#890000]{message}[/color][/font]");
             }
         }
 

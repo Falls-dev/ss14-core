@@ -35,8 +35,6 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Server.Shuttles.Components;
-using Content.Shared.Coordinates;
-using Content.Shared.Shuttles.Components;
 
 namespace Content.Server.Salvage;
 

@@ -714,7 +714,7 @@
   sex: Female
   speaker: matildaweasley
 
-  - type: ttsVoice
+- type: ttsVoice
   id: Romka
   name: tts-voice-name-romka
   sex: Male

@@ -17,8 +17,8 @@ dice-of-fate-revolver-event = Сыграем в рулетку?
 dice-of-fate-magic-wand-event = Магия освещает путь { $user }!
 dice-of-fate-slave-event = К { $user } скоро прибудет верный слуга!
 dice-of-fate-random-syndie-bundle-event = Таинственная коробка появляется из ниоткуда!
-dice-of-fate-full-access-event = "Ни одна дверь не устоит перед { $user }!"
-dice-of-fate-damage-resist-event = " { $user } не чувствует боли!"
+dice-of-fate-full-access-event = Ни одна дверь не устоит перед { $user }!
+dice-of-fate-damage-resist-event = { $user } не чувствует боли!
 dice-of-fate-changeling-transformation-event = Происходит нечто невероятное!
 
 ## Slave event role

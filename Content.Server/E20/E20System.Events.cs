@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Numerics;
 using Content.Server.Administration.Commands;
+using Content.Server.Administration.Logs;
 using Content.Server.Administration.Systems;
 using Content.Server.Body.Systems;
 using Content.Server.Changeling;
@@ -19,6 +20,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Database;
 using Content.Shared.Dataset;
 using Content.Shared.E20;
 using Content.Shared.IdentityManagement;
@@ -56,6 +58,7 @@ public partial class E20System
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
 
     public void InitializeEvents()
     {
@@ -83,6 +86,7 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-explosion-event"),
             Transform(uid).Coordinates, PopupType.Medium);
+
         _explosion.QueueExplosion(coords, "DemolitionCharge",
             intensity, 5, 240);
     }
@@ -91,6 +95,9 @@ public partial class E20System
     {
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-full-destruction-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} gibs {_entManager.ToPrettyString(comp.LastUser):target}");
+
         _bodySystem.GibBody(comp.LastUser);
     }
 
@@ -100,6 +107,9 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-die-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} kills {_entManager.ToPrettyString(comp.LastUser):target}");
+
         _damageableSystem.TryChangeDamage(comp.LastUser, damage, true);
     }
 
@@ -109,6 +119,9 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-angry-mobs-spawn-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} spawns angry carps");
+
         EntityManager.SpawnEntities(coords, "MobCarpDungeon", 5);
     }
 
@@ -126,12 +139,17 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-items-destruction-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} destroys {_entManager.ToPrettyString(comp.LastUser):target} items");
     }
 
     private void MonkeyPolymorphEvent(EntityUid uid, E20Component comp)
     {
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-monkey-polymorph-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} transforms {_entManager.ToPrettyString(comp.LastUser):target} into a monkey");
+
         _polymorphSystem.PolymorphEntity(comp.LastUser, "AdminMonkeySmite");
     }
 
@@ -151,6 +169,8 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-speed-reduce-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} reduces {_entManager.ToPrettyString(comp.LastUser):target} speed");
     }
 
     private void ThrowingEvent(EntityUid uid, E20Component comp)
@@ -161,7 +181,7 @@ public partial class E20System
         var direction = diceCoords.Position - playerCoords.Position;
         var randomizedDirection = direction + new Vector2(_random.Next(-10, 10), _random.Next(-10, 10));
 
-        _throwingSystem.TryThrow(comp.LastUser, randomizedDirection, 60, uid);
+        _throwingSystem.TryThrow(comp.LastUser, randomizedDirection, 60);
 
         var damage = new DamageSpecifier(_prototypeManager.Index<DamageTypePrototype>("Blunt"), 50);
 
@@ -172,6 +192,9 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-throwing-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} throws and stuns {_entManager.ToPrettyString(comp.LastUser):target}");
+
         _stamina.TakeStaminaDamage(comp.LastUser, staminaComponent.CritThreshold);
     }
 
@@ -179,6 +202,9 @@ public partial class E20System
     {
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-disease-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} infects {_entManager.ToPrettyString(comp.LastUser):target} with disease");
+
         var blight = EnsureComp<BlightComponent>(comp.LastUser);
         blight.Duration = 0f;
     }
@@ -187,6 +213,8 @@ public partial class E20System
     {
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-nothing-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} do nothing");
     }
 
     private void CookieEvent(EntityUid uid, E20Component comp)
@@ -195,6 +223,9 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-cookie-event"),
             Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} spawns a cookie");
+
         EntityManager.SpawnEntities(coords, "FoodBakedCookie", 2);
     }
 
@@ -202,6 +233,9 @@ public partial class E20System
     {
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-rejuvenate-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} heals {_entManager.ToPrettyString(comp.LastUser):target}");
+
         _rejuvenate.PerformRejuvenate(comp.LastUser);
     }
 
@@ -211,6 +245,9 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-money-event"),
             Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} spawns money");
+
         EntityManager.SpawnEntities(coords, "SpaceCash1000", 5);
     }
 
@@ -220,7 +257,11 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-revolver-event"),
             Transform(uid).Coordinates, PopupType.Medium);
-        EntityManager.SpawnEntities(coords, "WeaponRevolverInspector", 1);
+
+        var spawned = EntityManager.SpawnEntities(coords, "WeaponRevolverInspector", 1);
+
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} spawns a revolver {_entManager.ToPrettyString(spawned[0]):target}");
     }
 
     private void MagicWandEvent(EntityUid uid, E20Component comp)
@@ -242,7 +283,11 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-magic-wand-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
-        EntityManager.SpawnEntities(coords, roll, 1);
+
+        var spawned = EntityManager.SpawnEntities(coords, roll, 1);
+
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} spawns magic wand {_entManager.ToPrettyString(spawned[0]):target}");
     }
 
     private void SlaveEvent(EntityUid uid, E20Component comp)
@@ -256,6 +301,9 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-slave-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} creates a slave ghost role {ghost.RoleName}");
     }
 
     private void OnTake(EntityUid uid, GhostRoleComponent comp, TakeGhostRoleEvent args)
@@ -307,7 +355,11 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-random-syndie-bundle-event"),
             Transform(uid).Coordinates, PopupType.Medium);
-        EntityManager.SpawnEntities(coords, roll, 1);
+
+        var spawned = EntityManager.SpawnEntities(coords, roll, 1);
+
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} spawns a syndie bundle {_entManager.ToPrettyString(spawned[0]):target}");
     }
 
     private void FullAccessEvent(EntityUid uid, E20Component comp)
@@ -317,9 +369,11 @@ public partial class E20System
             .EnumeratePrototypes<AccessLevelPrototype>()
             .Select(p => new ProtoId<AccessLevelPrototype>(p.ID)).ToArray();
 
-
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-full-access-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} gives to {_entManager.ToPrettyString(comp.LastUser):target} full access");
+
         _accessSystem.TrySetTags(comp.LastUser, allAccess);
     }
 
@@ -329,6 +383,9 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-damage-resist-event",
             ("user", Identity.Entity(comp.LastUser, _entManager))) , Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} gives to {_entManager.ToPrettyString(comp.LastUser):target} damage resistance");
+
         _damageable.SetDamageModifierSetId(comp.LastUser, damageSet);
     }
 
@@ -342,6 +399,9 @@ public partial class E20System
 
         _popup.PopupCoordinates(Loc.GetString("dice-of-fate-changeling-transformation-event"),
             Transform(uid).Coordinates, PopupType.Medium);
+        _adminLogger.Add(LogType.Action,
+            $"{_entManager.ToPrettyString(uid):user} transforms {_entManager.ToPrettyString(comp.LastUser):target} into changeling");
+        
         _changelingRule.MakeChangeling(comp.LastUser, new ChangelingRuleComponent(), false);
     }
 }

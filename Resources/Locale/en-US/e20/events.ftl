@@ -17,7 +17,7 @@ dice-of-fate-revolver-event = Shall we play roulette?
 dice-of-fate-magic-wand-event = Magic lights the way { $user }!
 dice-of-fate-slave-event = A faithful servant is coming to { $user } soon!
 dice-of-fate-random-syndie-bundle-event = Mysterious box appears out of nowhere!
-dice-of-fate-full-access-event = No door can resist {$user}!
+dice-of-fate-full-access-event = No door can resist { $user }!
 dice-of-fate-damage-resist-event = { $user } feels no pain!
 dice-of-fate-changeling-transformation-event = Something incredible is happening!
 
@@ -25,4 +25,4 @@ dice-of-fate-changeling-transformation-event = Something incredible is happening
 
 dice-of-fate-slave-role-name = Bookworm
 dice-of-fate-slave-role-description = A servant who magically appeared in this world.
-dice-of-fate-slave-server-message = You were called from another dimension for the sole purpose of serving {$user}. Follow any of his orders, guard and protect him, now he is your master.
+dice-of-fate-slave-server-message = You were called from another dimension for the sole purpose of serving { $user }. Follow any of his orders, guard and protect him, now he is your master.

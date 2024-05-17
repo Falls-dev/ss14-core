@@ -401,7 +401,7 @@ public partial class E20System
             Transform(uid).Coordinates, PopupType.Medium);
         _adminLogger.Add(LogType.Action,
             $"{_entManager.ToPrettyString(uid):user} transforms {_entManager.ToPrettyString(comp.LastUser):target} into changeling");
-        
+
         _changelingRule.MakeChangeling(comp.LastUser, new ChangelingRuleComponent(), false);
     }
 }

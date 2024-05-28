@@ -42,9 +42,9 @@ public sealed class RespiratorSystem : EntitySystem
     [Dependency] private readonly BodySystem _bodySystem = default!;
     [Dependency] private readonly DamageableSystem _damageableSys = default!;
     [Dependency] private readonly LungSystem _lungSystem = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly InventorySystem _inventorySystem = default!; // WD
     [Dependency] private readonly ActionBlockerSystem _blocker = default!; // WD
     [Dependency] private readonly AudioSystem _audio = default!; // WD
@@ -118,8 +118,8 @@ public sealed class RespiratorSystem : EntitySystem
 
                 if (_gameTiming.CurTime >= respirator.LastGaspPopupTime + respirator.GaspPopupCooldown)
                 {
-                    respirator.LastGaspPopupTime = _gameTiming.CurTime;
-                    _popupSystem.PopupEntity($"{Name(Identity.Entity(uid, EntityManager))} задыхается!", uid);
+                    respirator.LastGaspEmoteTime = _gameTiming.CurTime;
+                    _chat.TryEmoteWithChat(uid, respirator.GaspEmote, ignoreActionBlocker: true);
                 }
 
                 TakeSuffocationDamage((uid, respirator));

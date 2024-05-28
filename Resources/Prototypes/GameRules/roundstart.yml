@@ -63,15 +63,63 @@
     roundMaxTime: 300
     roundEndDelay: 10
 
-- type: entity
-  id: Nukeops
-  parent: BaseGameRule
-  noSpawn: true
-  components:
   - type: GameRule
     minPlayers: 20
-  - type: NukeopsRule
-    faction: Syndicate
+  - type: LoadMapRule
+    gameMap: NukieOutpost
+  - type: AntagSelection
+    selectionTime: PrePlayerSpawn
+    definitions:
+    - prefRoles: [ NukeopsCommander ]
+      fallbackRoles: [ Nukeops, NukeopsMedic ]
+      spawnerPrototype: SpawnPointNukeopsCommander
+      startingGear: SyndicateCommanderGearFull
+      components:
+      - type: NukeOperative
+      - type: RandomMetadata
+        nameSegments:
+        - nukeops-role-commander
+        - SyndicateNamesElite
+      - type: NpcFactionMember
+        factions:
+        - Syndicate
+      mindComponents:
+      - type: NukeopsRole
+        prototype: NukeopsCommander
+    - prefRoles: [ NukeopsMedic ]
+      fallbackRoles: [ Nukeops, NukeopsCommander ]
+      spawnerPrototype: SpawnPointNukeopsMedic
+      startingGear: SyndicateOperativeMedicFull
+      components:
+      - type: NukeOperative
+      - type: RandomMetadata
+        nameSegments:
+        - nukeops-role-agent
+        - SyndicateNamesNormal
+      - type: NpcFactionMember
+        factions:
+        - Syndicate
+      mindComponents:
+      - type: NukeopsRole
+        prototype: NukeopsMedic
+    - prefRoles: [ Nukeops ]
+      fallbackRoles: [ NukeopsCommander, NukeopsMedic ]
+      spawnerPrototype: SpawnPointNukeopsOperative
+      max: 3
+      playerRatio: 10
+      startingGear: SyndicateOperativeGearFull
+      components:
+      - type: NukeOperative
+      - type: RandomMetadata
+        nameSegments:
+        - nukeops-role-operator
+        - SyndicateNamesNormal
+      - type: NpcFactionMember
+        factions:
+        - Syndicate
+      mindComponents:
+      - type: NukeopsRole
+        prototype: Nukeops
 
 - type: entity
   id: Pirates
@@ -92,7 +140,7 @@
   parent: BaseGameRule
   noSpawn: true
   components:
-    - type: ChangelingRule
+  - type: ChangelingRule
 #    - type: TraitorRule
 #      ruleChance: 0.6
 
@@ -145,10 +193,10 @@
   parent: BaseGameRule
   noSpawn: true
   components:
-    - type: CultRule
-      startingItems:
-        - RitualDagger
-        - CultRunicMetal20
+  - type: CultRule
+    startingItems:
+    - RitualDagger
+    - CultRunicMetal20
 
 - type: entity
   id: Wizard

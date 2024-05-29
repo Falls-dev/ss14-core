@@ -293,8 +293,6 @@
           shader: unshaded
           map: ["light"]
           visible: false
-    - type: PointLight
-      color: "#dd200b"
     - type: BorgChassis
       maxModules: 3
       moduleWhitelist:
@@ -374,3 +372,7 @@
       noMindState: synd_engi
     - type: Construction
       node: syndicatesaboteur
+    - type: ShowHealthBars
+      damageContainers:
+      - Inorganic
+      - Silicon

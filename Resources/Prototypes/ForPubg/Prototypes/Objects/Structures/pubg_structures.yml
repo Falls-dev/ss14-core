@@ -54,9 +54,6 @@
     - type: ContainerContainer
       containers:
         storagebase: !type:Container
-    - type: Construction
-      graph: Bookshelf
-      node: bookshelf
 
 # Шкаф с одеждой
 - type: entity

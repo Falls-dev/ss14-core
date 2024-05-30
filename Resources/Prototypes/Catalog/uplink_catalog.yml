@@ -859,7 +859,6 @@
       components:
       - SurplusBundle
   saleLimit: 1
-  saleBlacklist: true
 
 - type: listing
   id: UplinkSuperSurplusBundle
@@ -880,7 +879,6 @@
       components:
       - SurplusBundle
   saleLimit: 1
-  saleBlacklist: true
 
 - type: listing
   id: UplinkSingarityBeacon

@@ -1,10 +1,16 @@
-﻿using Content.Shared.Interaction.Events;
+﻿using Content.Shared._Lfwb.PredictedRandom;
+using Content.Shared.Interaction.Events;
+using Content.Shared.Popups;
 using Content.Shared.Throwing;
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Shared.E20;
 
 public abstract class SharedE20System : EntitySystem
 {
+    [Dependency] private readonly PredictedRandomSystem _predictedRandom = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -29,8 +35,6 @@ public abstract class SharedE20System : EntitySystem
         component.IsActivated = true;
         component.LastUser = args.User;
         TimerEvent(uid, component);
-
-
     }
 
     private void OnLand(EntityUid uid, E20Component component, ref LandEvent args)
@@ -69,10 +73,18 @@ public abstract class SharedE20System : EntitySystem
         // See the server system, client cannot count ¯\_(ツ)_/¯.
     }
 
-    protected virtual void Roll(EntityUid uid, E20Component? die = null)
+    private void Roll(EntityUid uid, E20Component? die = null)
     {
-        // See the server system, client cannot predict rolling.
+        if (!Resolve(uid, ref die))
+            return;
+
+        if (die.IsActivated)
+            return;
+
+        var roll = _predictedRandom.Next(1, die.Sides);
+        SetCurrentSide(uid, roll, die);
+
+        _popup.PopupEntity(Loc.GetString("dice-component-on-roll-land", ("die", uid), ("currentSide", die.CurrentValue)), uid);
+        _audio.PlayPvs(die.Sound, uid);
     }
-
-
 }

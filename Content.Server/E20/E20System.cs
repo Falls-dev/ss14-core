@@ -106,7 +106,7 @@ public partial class E20System : SharedE20System
         _chat.TrySendInGameICMessage(uid, Loc.GetString("DIE"), InGameICChatType.Speak, true);
     }
 
-    protected override void Roll(EntityUid uid, E20Component? die = null)
+    /*protected override void Roll(EntityUid uid, E20Component? die = null)
     {
         if (!Resolve(uid, ref die))
             return;
@@ -116,6 +116,6 @@ public partial class E20System : SharedE20System
 
         _popup.PopupEntity(Loc.GetString("dice-component-on-roll-land", ("die", uid), ("currentSide", die.CurrentValue)), uid);
         _audio.PlayPvs(die.Sound, uid);
-    }
+    }*/
 }
 

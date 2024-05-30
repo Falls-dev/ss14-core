@@ -12,6 +12,7 @@ public sealed partial class E20Component : Component
     ///     Or rolling value of dice again after activation.
     /// </summary>
 
+    [AutoNetworkedField]
     public bool IsActivated = false;
 
     public bool IsUsed = false;

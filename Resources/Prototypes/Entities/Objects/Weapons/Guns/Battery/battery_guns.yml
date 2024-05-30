@@ -1,3 +1,9 @@
+# Colors for pointlight
+# BDC07F - yellow
+# 7FC080 - green
+# C07F7F - red
+# 7F93C0 - blue
+
 - type: entity
   id: BaseWeaponBattery
   parent: BaseItem
@@ -123,6 +129,11 @@
     magState: mag
     steps: 5
     zeroVisible: true
+  - type: PointLightBattery
+  - type: PointLight
+    radius: 1.3
+    energy: 0.15
+    color: "#BDC07F"
 
 - type: entity
   name: retro laser blaster
@@ -146,6 +157,11 @@
     steps: 5
     zeroVisible: true
   - type: Appearance
+  - type: PointLightBattery
+  - type: PointLight
+    radius: 1.3
+    energy: 0.15
+    color: "#C07F7F"
 
 - type: entity
   name: makeshift laser pistol
@@ -166,6 +182,11 @@
   - type: ProjectileBatteryAmmoProvider
     proto: BulletTrailLaser
     fireCost: 125
+  - type: PointLightBattery
+  - type: PointLight
+    radius: 1.3
+    energy: 0.15
+    color: "#7FC080"
 
 - type: entity
   name: tesla gun
@@ -221,6 +242,11 @@
   - type: ProjectileBatteryAmmoProvider
     proto: BulletTrailLaser
     fireCost: 62.5
+  - type: PointLightBattery
+  - type: PointLight
+    radius: 1.3
+    energy: 0.15
+    color: "#7FC080"
 
 - type: entity
   name: practice laser rifle
@@ -259,6 +285,11 @@
   - type: ProjectileBatteryAmmoProvider
     proto: PulseBoltProjectile
     fireCost: 100
+  - type: PointLightBattery
+  - type: PointLight
+    radius: 1.3
+    energy: 0.15
+    color: "#7F93C0"
 
 - type: entity
   name: pulse carbine
@@ -287,6 +318,11 @@
   - type: ProjectileBatteryAmmoProvider
     proto: PulseBoltProjectile
     fireCost: 40
+  - type: PointLightBattery
+  - type: PointLight
+    radius: 1.3
+    energy: 0.15
+    color: "#7F93C0"
 
 - type: entity
   name: pulse rifle
@@ -311,6 +347,11 @@
   - type: ProjectileBatteryAmmoProvider
     proto: PulseBoltProjectile
     fireCost: 2.5
+  - type: PointLightBattery
+  - type: PointLight
+    radius: 1.3
+    energy: 0.15
+    color: "#7F93C0"
 
 - type: entity
   name: laser cannon
@@ -335,6 +376,11 @@
   - type: ProjectileBatteryAmmoProvider
     proto: BulletTrailLaserHeavy
     fireCost: 100
+  - type: PointLightBattery
+  - type: PointLight
+    radius: 1.3
+    energy: 0.15
+    color: "#C07F7F"
 
 - type: entity
   name: portable particle decelerator
@@ -571,6 +617,11 @@
     price: 750
   - type: StealTarget
     stealGroup: WeaponAntiqueLaser
+  - type: PointLightBattery
+  - type: PointLight
+    radius: 1.3
+    energy: 0.15
+    color: "#C07F7F"
 
 - type: entity
   name: advanced laser pistol
@@ -606,6 +657,11 @@
   - type: Appearance
   - type: StaticPrice
     price: 63
+  - type: PointLightBattery
+  - type: PointLight
+    radius: 1.3
+    energy: 0.15
+    color: "#C07F7F"
 
 - type: entity
   name: C.H.I.M.P. handcannon

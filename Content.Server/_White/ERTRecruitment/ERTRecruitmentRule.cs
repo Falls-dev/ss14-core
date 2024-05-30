@@ -195,8 +195,8 @@ public sealed class ERTRecruitmentRule : StationEventSystem<ERTRecruitmentRuleCo
         }
         */
 
-        var ERTMap = EnsureComp<ERTMapComponent>(outpost);
-        ERTMap.MapId = mapId;
+        var ertMap = EnsureComp<ERTMapComponent>(outpost);
+        ertMap.MapId = mapId;
         //ERTMap.Shuttle = shuttleId;
 
         return true;

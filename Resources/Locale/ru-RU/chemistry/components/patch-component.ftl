@@ -10,4 +10,4 @@ patch-cant-inject-now = Вы не можете наложить пластырь
 
 ## mob-inject doafter messages
 
-patch-component-injecting-target = {CAPITALIZE(($user))} пытается приклеить пластырь на вас!
+patch-component-injecting-target = {CAPITALIZE($user)} пытается приклеить пластырь на вас!

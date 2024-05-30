@@ -9,4 +9,4 @@ patch-cant-inject = Can't put a patch on {$target}!
 patch-cant-inject-now = Can't put a patch now
 ## mob-inject doafter messages
 
-patch-component-injecting-target = {CAPITALIZE(($user))} is trying to put a patch on you!
+patch-component-injecting-target = {CAPITALIZE($user)} is trying to put a patch on you!

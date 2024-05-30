@@ -1,1 +1,1 @@
-﻿polymorphable-canister-change-appearance-verb = Сменить вид
+﻿polymorphable-canister-change-appearance-verb = Перекрасить

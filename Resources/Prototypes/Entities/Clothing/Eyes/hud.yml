@@ -48,10 +48,10 @@
     access: [["Security"]]
   - type: SecurityHud
     criminalrecords:
-    - CriminalRecordIconReleased
-    - CriminalRecordIconSuspected
-    - CriminalRecordIconWanted
-    - CriminalRecordIconIncarcerated
+    - SecurityIconDischarged
+    - SecurityIconSuspected
+    - SecurityIconWanted
+    - SecurityIconIncarcerated
     - CriminalRecordIconRemove
   - type: UserInterface
     interfaces:

@@ -12,6 +12,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Content.Shared.Security;
+using Content.Shared.Security.Components;
 using Content.Shared.StationRecords;
 using Content.Shared.Verbs;
 using Robust.Server.GameObjects;
@@ -105,7 +106,6 @@ public sealed class SecurityHudSystem : EntitySystem
 
         var key = stationRecordKeyComp.Key.Value;
 
-
         if (!SetCriminalStatus(key, args.Status, user, idCard.Comp, component.Reason, component.SecurityChannel))
         {
             _popupSystem.PopupEntity(Loc.GetString("security-hud-cant-set-status"), user, user, PopupType.Medium);
@@ -136,21 +136,26 @@ public sealed class SecurityHudSystem : EntitySystem
             (SecurityStatus.Detained, SecurityStatus.None) => "released",
             (_, SecurityStatus.None) => "not-wanted",
             (_, SecurityStatus.Wanted) => "wanted",
-            (_, SecurityStatus.Released) => "released",
+            (_, SecurityStatus.Discharged) => "released",
             (_, SecurityStatus.Suspected) => "suspected",
             _ => "not-wanted"
         };
 
         _radio.SendRadioMessage(hud, Loc.GetString($"criminal-records-console-{statusString}", locArgs), securityChannel, hud);
 
-        var query = EntityQueryEnumerator<CriminalStatusDataComponent>();
-        if (!query.MoveNext(out var entity, out var criminalData))
+        var criminalData = EnsureComp<CriminalRecordComponent>(hud);
+
+        criminalData.StatusIcon = status switch
         {
-            entity = Spawn(null, Transform(hud).Coordinates);
-            criminalData = EnsureComp<CriminalStatusDataComponent>(entity);
-        }
-        criminalData.Statuses[rec.Name] = status;
-        Dirty(entity, criminalData);
+            SecurityStatus.Detained => "SecurityIconIncarcerated",
+            SecurityStatus.None => "CriminalRecordIconRemove",
+            SecurityStatus.Wanted => "SecurityIconWanted",
+            SecurityStatus.Discharged => "SecurityIconDischarged",
+            SecurityStatus.Suspected => "SecurityIconSuspected",
+            _ => criminalData.StatusIcon
+        };
+
+        Dirty(hud, criminalData);
 
         return true;
     }

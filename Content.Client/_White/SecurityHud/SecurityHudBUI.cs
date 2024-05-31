@@ -16,28 +16,28 @@ public sealed class SecurityHudBUI : BoundUserInterface
 
     private readonly Dictionary<string, string> _names = new()
     {
-        { "CriminalRecordIconReleased", Loc.GetString("criminal-records-status-released")},
-        { "CriminalRecordIconSuspected", Loc.GetString("criminal-records-status-suspected")},
-        { "CriminalRecordIconWanted", Loc.GetString("criminal-records-status-wanted")},
-        { "CriminalRecordIconIncarcerated", Loc.GetString("criminal-records-status-detained")},
+        { "SecurityIconDischarged", Loc.GetString("criminal-records-status-released")},
+        { "SecurityIconSuspected", Loc.GetString("criminal-records-status-suspected")},
+        { "SecurityIconWanted", Loc.GetString("criminal-records-status-wanted")},
+        { "SecurityIconIncarcerated", Loc.GetString("criminal-records-status-detained")},
         { "CriminalRecordIconRemove", Loc.GetString("security-hud-remove-status") }
     };
 
     private readonly Dictionary<string, string> _icons = new()
     {
-        { "CriminalRecordIconReleased", "/Textures/White/Interface/securityhud.rsi/released.png" },
-        { "CriminalRecordIconSuspected", "/Textures/White/Interface/securityhud.rsi/suspected.png" },
-        { "CriminalRecordIconWanted", "/Textures/White/Interface/securityhud.rsi/wanted.png" },
-        { "CriminalRecordIconIncarcerated", "/Textures/White/Interface/securityhud.rsi/incarcerated.png" },
+        { "SecurityIconDischarged", "/Textures/White/Interface/securityhud.rsi/released.png" },
+        { "SecurityIconSuspected", "/Textures/White/Interface/securityhud.rsi/suspected.png" },
+        { "SecurityIconWanted", "/Textures/White/Interface/securityhud.rsi/wanted.png" },
+        { "SecurityIconIncarcerated", "/Textures/White/Interface/securityhud.rsi/incarcerated.png" },
         { "CriminalRecordIconRemove", "/Textures/White/Interface/securityhud.rsi/remove.png" }
     };
 
     private readonly Dictionary<string, SecurityStatus> _status = new()
     {
-        { "CriminalRecordIconReleased", SecurityStatus.Released },
-        { "CriminalRecordIconSuspected", SecurityStatus.Suspected },
-        { "CriminalRecordIconWanted", SecurityStatus.Wanted },
-        { "CriminalRecordIconIncarcerated", SecurityStatus.Detained },
+        { "SecurityIconDischarged", SecurityStatus.Discharged },
+        { "SecurityIconSuspected", SecurityStatus.Suspected },
+        { "SecurityIconWanted", SecurityStatus.Wanted },
+        { "SecurityIconIncarcerated", SecurityStatus.Detained },
         { "CriminalRecordIconRemove", SecurityStatus.None }
     };
 
@@ -73,12 +73,6 @@ public sealed class SecurityHudBUI : BoundUserInterface
     {
         foreach (var id in ids)
         {
-            if (!_prototypeManager.TryIndex<StatusIconPrototype>(id, out var prototype))
-                return;
-
-            if(!prototype.Parents!.Contains("CriminalRecordIcon"))
-                return;
-
             if (_radialContainer == null)
                 continue;
 

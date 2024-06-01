@@ -1,4 +1,4 @@
-﻿using Content.Server.Access.Systems;
+using Content.Server.Access.Systems;
 using Content.Server.CriminalRecords.Systems;
 using Content.Server.Popups;
 using Content.Server.Radio.EntitySystems;
@@ -24,6 +24,7 @@ public sealed class SecurityHudSystem : EntitySystem
 {
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly CriminalRecordsSystem _criminalRecordsSystem = default!;
+    [Dependency] private readonly CriminalRecordsConsoleSystem _criminalRecordsConsoleSystem = default!;
     [Dependency] private readonly StationRecordsSystem _stationRecordsSystem = default!;
     [Dependency] private readonly IdCardSystem _idCardSystem = default!;
     [Dependency] private readonly RadioSystem _radio = default!;
@@ -62,7 +63,7 @@ public sealed class SecurityHudSystem : EntitySystem
         {
             Act = () =>
             {
-                SetWanted(args.User, args.Target, (EntityUid) ent, component);
+                SetWanted(args.User, args.Target, ent.Value, component);
             },
             Disabled = false,
             Priority = 0,
@@ -106,56 +107,46 @@ public sealed class SecurityHudSystem : EntitySystem
 
         var key = stationRecordKeyComp.Key.Value;
 
-        if (!SetCriminalStatus(key, args.Status, user, idCard.Comp, component.Reason, component.SecurityChannel))
+        if (!SetCriminalStatus(key, args.Status, uid, user, idCard.Comp, component.Reason, component.SecurityChannel))
         {
             _popupSystem.PopupEntity(Loc.GetString("security-hud-cant-set-status"), user, user, PopupType.Medium);
         }
     }
 
-    private bool SetCriminalStatus(StationRecordKey key, SecurityStatus status, EntityUid hud, IdCardComponent idCard, string reason, string securityChannel)
+    private bool SetCriminalStatus(StationRecordKey key, SecurityStatus status, EntityUid hud, EntityUid officer,
+        IdCardComponent idCard, string reason, string securityChannel)
     {
-        if (!_stationRecordsSystem.TryGetRecord<GeneralStationRecord>(key, out var rec))
+        if (!_stationRecordsSystem.TryGetRecord<GeneralStationRecord>(key, out var generalRecord))
             return false;
-
-        var name = string.Empty;
-        reason = idCard.FullName != null ? $"{reason} ({idCard.FullName})" : reason;
 
         if (!_stationRecordsSystem.TryGetRecord<CriminalRecord>(key, out var record) || record.Status == status)
             return false;
 
-        if (_stationRecordsSystem.TryGetRecord<GeneralStationRecord>(key, out var generalRecord))
-            name = generalRecord.Name;
+        var name = generalRecord.Name;
+        var officerName = Loc.GetString("criminal-records-console-unknown-officer");
+        if (_idCardSystem.TryFindIdCard(officer, out var id) && id.Comp.FullName is { } fullName)
+            officerName = fullName;
 
         _criminalRecordsSystem.TryChangeStatus(key, status, reason);
 
-        var locArgs = new (string, object)[] { ("name", name), ("officer", idCard.FullName)!, ("reason", reason) };
+        var locArgs = new (string, object)[] { ("name", name), ("officer", officerName), ("reason", reason) };
 
         var statusString = (record.Status, status) switch
         {
             (_, SecurityStatus.Detained) => "detained",
-            (SecurityStatus.Detained, SecurityStatus.None) => "released",
-            (_, SecurityStatus.None) => "not-wanted",
-            (_, SecurityStatus.Wanted) => "wanted",
-            (_, SecurityStatus.Discharged) => "released",
             (_, SecurityStatus.Suspected) => "suspected",
+            (_, SecurityStatus.Paroled) => "paroled",
+            (_, SecurityStatus.Discharged) => "released",
+            (_, SecurityStatus.Wanted) => "wanted",
+            (SecurityStatus.Suspected, SecurityStatus.None) => "not-suspected",
+            (SecurityStatus.Wanted, SecurityStatus.None) => "not-wanted",
+            (SecurityStatus.Detained, SecurityStatus.None) => "released",
+            (SecurityStatus.Paroled, SecurityStatus.None) => "not-parole",
             _ => "not-wanted"
         };
 
         _radio.SendRadioMessage(hud, Loc.GetString($"criminal-records-console-{statusString}", locArgs), securityChannel, hud);
-
-        var criminalData = EnsureComp<CriminalRecordComponent>(hud);
-
-        criminalData.StatusIcon = status switch
-        {
-            SecurityStatus.Detained => "SecurityIconIncarcerated",
-            SecurityStatus.None => "CriminalRecordIconRemove",
-            SecurityStatus.Wanted => "SecurityIconWanted",
-            SecurityStatus.Discharged => "SecurityIconDischarged",
-            SecurityStatus.Suspected => "SecurityIconSuspected",
-            _ => criminalData.StatusIcon
-        };
-
-        Dirty(hud, criminalData);
+        _criminalRecordsConsoleSystem.UpdateCriminalIdentity(name, status);
 
         return true;
     }

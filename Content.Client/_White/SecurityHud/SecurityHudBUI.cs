@@ -9,14 +9,14 @@ namespace Content.Client._White.SecurityHud;
 
 public sealed class SecurityHudBUI : BoundUserInterface
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     private RadialContainer? _radialContainer;
 
     private bool _updated;
 
     private readonly Dictionary<string, string> _names = new()
     {
-        { "SecurityIconDischarged", Loc.GetString("criminal-records-status-released")},
+        { "SecurityIconDischarged", Loc.GetString("criminal-records-status-discharged")},
+        { "SecurityIconParoled", Loc.GetString("criminal-records-status-paroled")},
         { "SecurityIconSuspected", Loc.GetString("criminal-records-status-suspected")},
         { "SecurityIconWanted", Loc.GetString("criminal-records-status-wanted")},
         { "SecurityIconIncarcerated", Loc.GetString("criminal-records-status-detained")},
@@ -25,7 +25,8 @@ public sealed class SecurityHudBUI : BoundUserInterface
 
     private readonly Dictionary<string, string> _icons = new()
     {
-        { "SecurityIconDischarged", "/Textures/White/Interface/securityhud.rsi/released.png" },
+        { "SecurityIconDischarged", "/Textures/White/Interface/securityhud.rsi/discharged.png" },
+        { "SecurityIconParoled", "/Textures/White/Interface/securityhud.rsi/paroled.png" },
         { "SecurityIconSuspected", "/Textures/White/Interface/securityhud.rsi/suspected.png" },
         { "SecurityIconWanted", "/Textures/White/Interface/securityhud.rsi/wanted.png" },
         { "SecurityIconIncarcerated", "/Textures/White/Interface/securityhud.rsi/incarcerated.png" },
@@ -35,6 +36,7 @@ public sealed class SecurityHudBUI : BoundUserInterface
     private readonly Dictionary<string, SecurityStatus> _status = new()
     {
         { "SecurityIconDischarged", SecurityStatus.Discharged },
+        { "SecurityIconParoled", SecurityStatus.Paroled },
         { "SecurityIconSuspected", SecurityStatus.Suspected },
         { "SecurityIconWanted", SecurityStatus.Wanted },
         { "SecurityIconIncarcerated", SecurityStatus.Detained },
@@ -44,7 +46,6 @@ public sealed class SecurityHudBUI : BoundUserInterface
 
     public SecurityHudBUI(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
-        IoCManager.InjectDependencies(this);
     }
 
     protected override void Open()

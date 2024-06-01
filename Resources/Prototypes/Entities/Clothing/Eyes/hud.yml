@@ -49,6 +49,7 @@
   - type: SecurityHud
     criminalrecords:
     - SecurityIconDischarged
+    - SecurityIconParoled
     - SecurityIconSuspected
     - SecurityIconWanted
     - SecurityIconIncarcerated

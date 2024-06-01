@@ -37,7 +37,7 @@ criminal-records-console-not-suspected = {$name} больше не под под
 criminal-records-console-detained = {$name} был задержан {$officer}.
 criminal-records-console-released = {$name} был освобожден {$officer}.
 criminal-records-console-not-wanted = {$name} больше не в розыске.
-criminal-records-console-paroled = {$name} был отпущен досрочно {$officer}.
+criminal-records-console-paroled = {$name} был отпущен условно-досрочно {$officer}.
 criminal-records-console-not-parole = {$name} больше не условно-досрочно освобождённый.
 criminal-records-console-unknown-officer = <неизвестный офицер>
 

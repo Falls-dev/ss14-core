@@ -146,6 +146,7 @@
     - StaminaModifier
     - RadiationProtection
     - Drowsiness
+    - Flashed
   - type: Reflect
     enabled: false
     reflectProb: 0
@@ -271,7 +272,6 @@
   id: BaseMobSpeciesOrganic
   abstract: true
   components:
-  - type: Flashable
   - type: Barotrauma
     damage:
       types:
@@ -286,6 +286,7 @@
         Heat: -0.07
       groups:
         Brute: -0.07
+<<<<<<< HEAD
   # Organs
   - type: StatusEffects
     allowed:
@@ -306,6 +307,9 @@
     - Pacified
     - StaminaModifier
     - Incorporeal
+=======
+
+>>>>>>> 1283989346 (Flash overlay rework and bugfixes (#27369))
   - type: Blindable
   # Other
   - type: Temperature

@@ -542,7 +542,7 @@
     Gasp:
       collection: MaleGasp
     DefaultDeathgasp:
-      collection: MaleDeathGasp
+      collection: MothDeathGasp
 
 - type: emoteSounds
   id: FemaleMoth
@@ -564,7 +564,7 @@
     Gasp:
       collection: FemaleGasp
     DefaultDeathgasp:
-      collection: FemaleDeathGasp
+      collection: MothDeathGasp
 
 - type: emoteSounds
   id: UnisexSilicon

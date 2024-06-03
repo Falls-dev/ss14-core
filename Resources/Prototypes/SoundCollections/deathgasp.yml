@@ -23,6 +23,11 @@
   - /Audio/Effects/Gasp/deathgasp_2.ogg
 
 - type: soundCollection
+  id: MothDeathGasp
+  files:
+  - /Audio/Effects/Gasp/moth_DeathGasp.ogg
+
+- type: soundCollection
   id: HarpyDeathGasp
   files:
   - /Audio/Effects/Gasp/male_deathgasp_1.ogg

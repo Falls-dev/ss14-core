@@ -308,3 +308,121 @@
           behaviors:
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
+
+# USSR Carpet - Ковёр
+- type: entity
+  parent: BaseSign
+  id: USSRCarpet
+  description: USSR
+  components:
+  - type: WallMount
+    arc: 360
+  - type: Sprite
+    drawdepth: WallTops
+    sprite: ForPubg/Textures/Structures/pubg_ussrcarpet.rsi
+    state: carpet
+    snapCardinals: false
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 5
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/poster_broken.ogg
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+        offset: 0
+
+# TrashCan
+- type: entity
+  name: TrashCan
+  id: PubgTrashcan
+  description: Trashcan
+  components:
+  - type: Clickable
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: true
+  - type: Pullable
+  - type: DamageExaminable
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,6,3
+  - type: UserInterface
+    interfaces:
+    - key: enum.StorageUiKey.Key
+      type: StorageBoundUserInterface
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: [ ]
+  - type: GenericVisualizer
+    visuals:
+      enum.StorageVisuals.Open:
+        base:
+          True: { state: icon-open }
+          False: { state: icon }
+  - type: Appearance
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/pubg_trashcan.rsi
+    state: icon
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.5,0.2,0.4"
+        density: 155
+        mask:
+        - MachineMask
+        layer:
+        - WallLayer
+
+# Wheels - Колёса
+- type: entity
+  id: PubgWheel
+  parent: BaseStructure
+  name: Wheel
+  description: Wheel
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/pubg_wheels.rsi
+    layers:
+    - state: wheel
+  - type: Appearance
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 100
+        mask:
+        - MachineMask
+        layer:
+        - WallLayer
+
+- type: entity
+  id: PubgWheels
+  parent: PubgWheel
+  name: Wheels
+  description: Wheels
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/pubg_wheels.rsi
+    layers:
+    - state: wheels

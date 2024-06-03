@@ -27,6 +27,15 @@
       },
       {
           "name": "wd40small"
+      },
+      {
+          "name": "newspaper"
+      },
+      {
+          "name": "newspapers"
+      },
+      {
+          "name": "package"
       }
   ]
 }

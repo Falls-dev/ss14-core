@@ -1,7 +1,7 @@
 - type: entity
   id: PubgLabElectricalPanel
   parent: BaseStructure
-  name: "Electrical Panel"
+  name: Electrical Panel
   description: Bjjjjjjj
   components:
   - type: Sprite
@@ -48,7 +48,7 @@
 - type: entity
   id: PubgLabElectropanelone
   parent: PubgLabElectricalPanel
-  name: "Electro Panel One"
+  name: Electro Panel One
   description: Bjjjjjjj
   components:
   - type: Sprite
@@ -60,7 +60,7 @@
 - type: entity
   id: PubgLabComputer
   parent: PubgLabElectricalPanel
-  name: "Computer"
+  name: Computer
   description: Bjjjjjjj
   components:
   - type: Sprite
@@ -72,7 +72,7 @@
 - type: entity
   id: PubgLabMonitor
   parent: PubgLabElectricalPanel
-  name: "Monitor"
+  name: Monitor
   description: Bjjjjjjj
   components:
   - type: Sprite
@@ -84,7 +84,7 @@
 - type: entity
   id: PubgLabServer
   parent: PubgLabElectricalPanel
-  name: "Server"
+  name: Server
   description: Bjjjjjjj
   components:
   - type: Sprite
@@ -96,7 +96,7 @@
 - type: entity
   id: PubgLabIntercome
   parent: PubgLabElectricalPanel
-  name: "Intercome"
+  name: Intercome
   description: Bjjjjjjj
   components:
   - type: Sprite
@@ -108,7 +108,7 @@
 - type: entity
   id: PubgLabIntercome2
   parent: PubgLabElectricalPanel
-  name: "Intercome 2"
+  name: Intercome 2
   description: Bjjjjjjj
   components:
   - type: Sprite
@@ -120,7 +120,7 @@
 - type: entity
   id: PubgLabLogo
   parent: PubgLabElectricalPanel
-  name: "Logo"
+  name: Logo
   description: Bjjjjjjj
   components:
   - type: Sprite

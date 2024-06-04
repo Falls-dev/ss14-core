@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._White.Keyhole.Components;
+using Content.Shared._White.Lighting;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
@@ -114,6 +115,8 @@ public abstract partial class SharedDoorSystem : EntitySystem
             || door.State == DoorState.Opening && !door.Partial;
 
         SetCollidable(ent, collidable, door);
+
+        RaiseLocalEvent(ent, new DoorlightsChangedEvent(door.State, true), true);
         AppearanceSystem.SetData(ent, DoorVisuals.State, door.State);
     }
 
@@ -162,6 +165,8 @@ public abstract partial class SharedDoorSystem : EntitySystem
             _activeDoors.Add(ent);
 
         RaiseLocalEvent(ent, new DoorStateChangedEvent(door.State));
+        RaiseLocalEvent(ent, new DoorlightsChangedEvent(door.State, true), true);
+
         AppearanceSystem.SetData(ent, DoorVisuals.State, door.State);
     }
 
@@ -210,7 +215,10 @@ public abstract partial class SharedDoorSystem : EntitySystem
 
         door.State = state;
         Dirty(uid, door);
+
         RaiseLocalEvent(uid, new DoorStateChangedEvent(state));
+        RaiseLocalEvent(uid, new DoorlightsChangedEvent(door.State, true), true);
+
         AppearanceSystem.SetData(uid, DoorVisuals.State, door.State);
         return true;
     }
@@ -514,6 +522,8 @@ public abstract partial class SharedDoorSystem : EntitySystem
         {
             door.NextStateChange = GameTiming.CurTime + door.OpenTimeTwo;
             door.State = DoorState.Opening;
+
+            RaiseLocalEvent(uid, new DoorlightsChangedEvent(door.State, true), true);
             AppearanceSystem.SetData(uid, DoorVisuals.State, DoorState.Opening);
             return false;
         }

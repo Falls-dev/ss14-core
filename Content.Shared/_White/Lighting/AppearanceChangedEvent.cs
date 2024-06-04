@@ -1,12 +1,14 @@
 ﻿namespace Content.Shared._White.Lighting;
 
-public sealed class AppearanceChangedEvent : EntityEventArgs
+public sealed class DoorlightsChangedEvent : EntityEventArgs
 {
     public Enum State;
+    public bool Value;
 
-    public AppearanceChangedEvent(Enum key)
+    public DoorlightsChangedEvent(Enum key, bool value)
     {
         State = key;
+        Value = value;
     }
 }
 

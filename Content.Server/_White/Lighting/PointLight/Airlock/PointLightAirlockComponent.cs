@@ -7,7 +7,7 @@ public sealed partial class PointLightAirlockComponent : Component
     public bool RequirePower = true;
 
     [ViewVariables]
-    public string BoltedColor = "#C07F7F";
+    public string BoltedColor = "#D56C6C";
 
     [ViewVariables]
     public string PoweredColor = "#7F93C0";

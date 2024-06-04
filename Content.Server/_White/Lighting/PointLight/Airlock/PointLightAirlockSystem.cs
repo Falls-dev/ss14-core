@@ -9,10 +9,10 @@ public sealed class PointLightAirlockSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<PointLightAirlockComponent, AppearanceChangedEvent>(OnDoorLightChanged);
+        SubscribeLocalEvent<PointLightAirlockComponent, DoorlightsChangedEvent>(OnDoorLightChanged);
     }
 
-    private void EnableLight(EntityUid uid, string hex)
+    private void ToggleLight(EntityUid uid, string hex, bool value)
     {
         if (!_pointLightSystem.TryGetLight(uid, out var pointLightComponent))
             return;
@@ -20,22 +20,12 @@ public sealed class PointLightAirlockSystem : EntitySystem
         var color = Color.FromHex(hex);
 
         _pointLightSystem.SetColor(uid, color, pointLightComponent);
-        _pointLightSystem.SetEnabled(uid, true, pointLightComponent);
+        _pointLightSystem.SetEnabled(uid, value, pointLightComponent);
 
-        RaiseLocalEvent(uid, new PointLightToggleEvent(true), true);
+        RaiseLocalEvent(uid, new PointLightToggleEvent(value), true);
     }
 
-    private void DisableLight(EntityUid uid)
-    {
-        if (!_pointLightSystem.TryGetLight(uid, out var pointLightComponent))
-            return;
-
-        _pointLightSystem.SetEnabled(uid, false, pointLightComponent);
-
-        RaiseLocalEvent(uid, new PointLightToggleEvent(false), true);
-    }
-
-    private void OnDoorLightChanged(EntityUid uid, PointLightAirlockComponent component, AppearanceChangedEvent args)
+    private void OnDoorLightChanged(EntityUid uid, PointLightAirlockComponent component, DoorlightsChangedEvent args)
     {
         if (!TryComp<DoorComponent>(uid, out var doorComponent))
             return;
@@ -43,24 +33,24 @@ public sealed class PointLightAirlockSystem : EntitySystem
 
         switch (args.State)
         {
-            case DoorVisualLayers.BaseBolted:
-                EnableLight(uid, component.BoltedColor);
+            case DoorVisuals.BoltLights:
+                ToggleLight(uid, component.BoltedColor, args.Value);
                 break;
 
             case DoorVisualLayers.BaseUnlit:
-                EnableLight(uid, component.PoweredColor);
+                ToggleLight(uid, component.PoweredColor, args.Value);
                 break;
 
             case DoorVisualLayers.BaseEmergencyAccess:
-                EnableLight(uid, component.EmergencyLightsColor);
+                ToggleLight(uid, component.EmergencyLightsColor, args.Value);
                 break;
 
             case DoorVisuals.ClosedLights:
-                EnableLight(uid, component.BoltedColor);
+                ToggleLight(uid, component.BoltedColor, args.Value);
                 break;
 
             default:
-                DisableLight(uid);
+                ToggleLight(uid, component.BoltedColor, false);
                 break;
         }
 

@@ -1,8 +1,8 @@
 - type: entity
   parent: BaseSubdermalImplant
   id: SmokeImplant
-  name: имплант дыма
-  description: Этот имплант выпускает облако дыма при активации.
+  name: smoke implant
+  description: This implant releases smoke cloud on activation.
   noSpawn: true
   components:
     - type: SubdermalImplant
@@ -38,8 +38,8 @@
 
 - type: entity
   parent: BaseSubdermalImplant
-  id: NeuroControlImplant
-  name: neuro control implant
+  id: NeuroStabilizationImplant
+  name: neuro stabilization implant
   description: Blocks all incoming stamina damage at a cost of shock.
   noSpawn: true
   components:
@@ -47,5 +47,5 @@
     permanent: true
   - type: Tag
     tags:
-    - NeuroControl
+    - NeuroStabilization
 

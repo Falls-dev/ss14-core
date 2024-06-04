@@ -139,7 +139,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 20
+        Blunt: 25
 
 - type: entity
   name: golden toolbox
@@ -163,7 +163,6 @@
     sprite: Objects/Tools/Toolboxes/toolbox_thief.rsi
     state: icon
   - type: ThiefUndeterminedBackpack
-    transformAfterSelect: AlwaysPoweredWallLight
     possibleSets:
     # - TO DO Thief pinpointer needed
     - ChemistrySet

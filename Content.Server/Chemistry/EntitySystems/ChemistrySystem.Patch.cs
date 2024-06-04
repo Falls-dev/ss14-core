@@ -60,7 +60,7 @@ namespace Content.Server.Chemistry.EntitySystems
             {
                 // Create a pop-up for the target
                 var userName = Identity.Entity(user, EntityManager);
-                _popup.PopupEntity(Loc.GetString("injector-component-injecting-target",
+                _popup.PopupEntity(Loc.GetString("patch-component-injecting-target",
                     ("user", userName)), user, target);
             }
 
@@ -73,9 +73,8 @@ namespace Content.Server.Chemistry.EntitySystems
 
             _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, actualDelay, new PatchDoAfterEvent(), patch.Owner, target: target, used: patch.Owner)
             {
-                BreakOnUserMove = true,
+                BreakOnMove = true,
                 BreakOnDamage = true,
-                BreakOnTargetMove = true
             });
         }
 

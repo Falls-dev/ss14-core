@@ -4,7 +4,7 @@ using Content.Shared.PowerCell;
 using Content.Shared.PowerCell.Components;
 using Content.Shared.Weapons.Ranged.Components;
 
-namespace Content.Server._White.Lighting;
+namespace Content.Server._White.Lighting.Pointlight.Battery;
 
 public sealed class PointLightBatterySystem : SharedLightningSystem
 {

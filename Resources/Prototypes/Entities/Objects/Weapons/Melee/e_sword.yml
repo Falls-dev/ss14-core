@@ -256,8 +256,6 @@
         types:
           Slash: 15
           Heat: 15
-    - type: MeleeWeapon
-      attackRate: 1
     - type: Reflect
       reflectProb: 1
       enabled: false

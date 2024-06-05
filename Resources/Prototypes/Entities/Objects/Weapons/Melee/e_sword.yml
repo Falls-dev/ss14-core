@@ -262,6 +262,7 @@
       reflects:
         - Energy
     - type: ToggleableWielded
+    - type: FlipOnHit
     - type: Construction
       deconstructionTarget: null
       graph: EnergyDoubleSwordGraph

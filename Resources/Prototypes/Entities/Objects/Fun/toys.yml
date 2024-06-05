@@ -1283,6 +1283,7 @@
     - type: ToggleableWielded
     - type: StaminaDamageOnHit
       damage: 16
+    - type: FlipOnHit
     - type: Construction
       deconstructionTarget: null
       graph: ToyDoubleSwordGraph

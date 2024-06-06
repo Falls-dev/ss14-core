@@ -132,7 +132,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         {
             cultists.Add((uid, mindContainer, transform));
         }
-        
+
         var rulesQuery = QueryActiveRules();
         while (rulesQuery.MoveNext(out _, out var cult, out _))
         {

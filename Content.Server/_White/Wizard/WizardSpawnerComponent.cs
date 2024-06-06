@@ -8,13 +8,13 @@ namespace Content.Server._White.Wizard;
 public sealed partial class WizardSpawnerComponent : Component
 {
     [DataField("name")]
-    public string Name = "Ololo, the Balls' Twister";
+    public string Name = "Ololo The Balls' Twister";
 
     [DataField("points")]
     public int Points = 10;
 
     [DataField("startingGear")]
-    public ProtoId<StartingGearPrototype> StartingGear = "WizardStartingGear";
+    public ProtoId<StartingGearPrototype> StartingGear = "WizardBlueGear";
 
     [DataField]
     public ProtoId<AntagPrototype> WizardRoleProto = "WizardRole";

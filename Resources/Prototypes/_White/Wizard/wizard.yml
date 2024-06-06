@@ -1,0 +1,29 @@
+- type: antag
+  id: WizardRole
+  name: roles-antag-wizard-name #TODO
+  antagonist: true
+  setPreference: true
+  objective: roles-antag-wizard-objective #TODO
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5h
+
+- type: entity
+  id: SpawnPointWizard
+  parent: MarkerBase
+  name: wizard
+  components:
+  - type: SpawnPoint
+  - type: Sprite
+    layers:
+    - state: green
+    - sprite: Objects/Fun/toys.rsi #TODO: sprite?
+      state: synb
+
+# survive objective
+- type: entity
+  noSpawn: true
+  parent: BaseSurviveObjective
+  id: WizardSurviveObjective
+  name: Survive the shift, causing as much chaos as possible.
+  description: Wizard Federation sent you to the Nanotracen space station to sow chaos and destruction. Don't disappoint them.

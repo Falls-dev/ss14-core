@@ -19,7 +19,7 @@ public sealed partial class WizardRuleComponent : Component
     public bool AnnouncementOnWizardDeath = true;
 
     [DataField]
-    public string WizardKilledText = "nuke-ops-no-more-threat-announcement-shuttle-call";
+    public string WizardKilledText = "nuke-ops-no-more-threat-announcement-shuttle-call"; //TODO
 
     [DataField("points")]
     public int Points = 10; //TODO: wizard shop prototype
@@ -34,7 +34,7 @@ public sealed partial class WizardRuleComponent : Component
     public EntProtoId GhostSpawnPointProto = "SpawnPointGhostWizard"; //TODO
 
     [DataField("startingGear")]
-    public ProtoId<StartingGearPrototype> StartingGear = "WizardStartingGear"; //TODO: wizard starting gear prototype
+    public ProtoId<StartingGearPrototype> StartingGear = "WizardBlueGear";
 
     [DataField("spawnShuttle")]
     public bool SpawnShuttle = true;
@@ -43,7 +43,7 @@ public sealed partial class WizardRuleComponent : Component
     public EntityUid? ShuttleMap;
 
     [DataField("shuttlePath")]
-    public string ShuttlePath = "a"; //TODO: shuttle path
+    public string ShuttlePath = "/Maps/Shuttles/wizard.yml";
 
     /// <summary>
     /// Maybe erase this

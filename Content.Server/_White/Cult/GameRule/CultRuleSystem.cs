@@ -211,13 +211,13 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         var selectedCultists = _antagSelection.ChooseAntags(cultistsToSelect, eligiblePlayers);
 
+        var potentialTargets = FindPotentialTargets(selectedCultists);
+        rule.CultTarget = _random.PickAndTake(potentialTargets).Mind;
+
         foreach (var cultist in selectedCultists)
         {
             MakeCultist(cultist, rule);
         }
-
-        var potentialTargets = FindPotentialTargets(selectedCultists);
-        rule.CultTarget = _random.PickAndTake(potentialTargets).Mind;
     }
 
     public MindComponent? GetTarget()

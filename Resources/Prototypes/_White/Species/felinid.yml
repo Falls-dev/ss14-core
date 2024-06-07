@@ -3,14 +3,13 @@
   name: species-name-felinid
   roundStart: true
   prototype: MobFelinid
-  sprites: MobHumanSprites
   markingLimits: MobFelinidMarkingLimits
   dollPrototype: MobFelinidDummy
   skinColoration: HumanToned
   bodyTypes:
     - HumanNormal
   sponsorOnly: true
-  forAmins: true
+  forAdmins: true
 
 - type: markingPoints
   id: MobFelinidMarkingLimits

@@ -3,13 +3,14 @@ using System.Numerics;
 using Content.Server._White.Other;
 using Content.Server.Body.Systems;
 using Content.Server.Popups;
-using Content.Server.Pulling;
+using Content.Shared._White.BetrayalDagger;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Maps;
+using Content.Shared.Movement.Pulling.Components;
+using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Popups;
-using Content.Shared.Pulling.Components;
 using Robust.Server.Audio;
 using Robust.Server.Containers;
 using Robust.Server.GameObjects;
@@ -31,6 +32,7 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
     [Dependency] private readonly PullingSystem _pullingSystem = default!;
     [Dependency] private readonly ContainerSystem _containerSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly TelefragSystem _telefrag = default!;
 
     public override void Initialize()
     {
@@ -80,16 +82,16 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
         if (!TryComp<TransformComponent>(args.User, out var xform))
             return;
 
-        if (TryComp<SharedPullableComponent>(args.User, out var pullable) && pullable.BeingPulled)
+        if (TryComp<PullableComponent>(args.User, out var pullable) && pullable.BeingPulled)
         {
-            _pullingSystem.TryStopPull(pullable);
+            _pullingSystem.TryStopPull(args.User, pullable);
         }
 
-        if (TryComp<SharedPullerComponent>(args.User, out var pulling)
+        if (TryComp<PullerComponent>(args.User, out var pulling)
             && pulling.Pulling != null &&
-            TryComp<SharedPullableComponent>(pulling.Pulling.Value, out var subjectPulling))
+            TryComp<PullableComponent>(pulling.Pulling.Value, out var subjectPulling))
         {
-            _pullingSystem.TryStopPull(subjectPulling);
+            _pullingSystem.TryStopPull(pulling.Pulling.Value, subjectPulling);
         }
 
         if (_containerSystem.IsEntityInContainer(args.User))
@@ -113,12 +115,7 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
             return;
         }
 
-        SoundAndEffects(component, coords, oldCoords);
-
-        _transform.SetCoordinates(args.User, coords);
-
-        component.Uses--;
-        component.NextUse = _timing.CurTime + component.Cooldown;
+        Teleport(args.User, component, coords, oldCoords);
     }
 
     private void OnExamine(EntityUid uid, ExperimentalSyndicateTeleporterComponent component, ExaminedEvent args)
@@ -132,17 +129,24 @@ public sealed class ExperimentalSyndicateTeleporter : EntitySystem
 
         var coords = xform.Coordinates.Offset(newOffset).SnapToGrid(EntityManager);
 
-        SoundAndEffects(component, coords, oldCoords);
-
-        _transform.SetCoordinates(uid, coords);
-
-        component.Uses--;
-        component.NextUse = _timing.CurTime + component.Cooldown;
+        Teleport(uid, component, coords, oldCoords);
 
         if (TryCheckWall(coords))
         {
             _bodySystem.GibBody(uid, true, splatModifier: 3F);
         }
+    }
+
+    private void Teleport(EntityUid uid, ExperimentalSyndicateTeleporterComponent component, EntityCoordinates coords,
+        EntityCoordinates oldCoords)
+    {
+        SoundAndEffects(component, coords, oldCoords);
+
+        _telefrag.Telefrag(coords, uid);
+        _transform.SetCoordinates(uid, coords);
+
+        component.Uses--;
+        component.NextUse = _timing.CurTime + component.Cooldown;
     }
 
     private void SoundAndEffects(ExperimentalSyndicateTeleporterComponent component, EntityCoordinates coords, EntityCoordinates oldCoords)

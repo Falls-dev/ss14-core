@@ -8,12 +8,10 @@
     sprite: Clothing/Eyes/Hud/diag.rsi
   - type: Clothing
     sprite: Clothing/Eyes/Hud/diag.rsi
-  - type: ClothingGrantComponent
-    component:
-      - type: ShowWhiteHealthBars
-        damageContainers:
-        - Inorganic
-        - Silicon
+  - type: ShowHealthBars
+    damageContainers:
+    - Inorganic
+    - Silicon
 
 - type: entity
   parent: ClothingEyesBase
@@ -25,23 +23,18 @@
     sprite: Clothing/Eyes/Hud/med.rsi
   - type: Clothing
     sprite: Clothing/Eyes/Hud/med.rsi
-# - type: ShowHealthBars
-#   damageContainers:
-#   - Biological
+  - type: ShowHealthBars
+    damageContainers:
+    - Biological
   - type: ShowHealthIcons
     damageContainers:
     - Biological
-  - type: ClothingGrantComponent
-    component:
-      - type: ShowWhiteHealthBars
-        damageContainers:
-        - Biological
   - type: Tag
     tags:
     - HudMedical
 
 - type: entity
-  parent: ClothingEyesBase
+  parent: [ClothingEyesBase, SecHud]
   id: ClothingEyesHudSecurity
   name: security hud
   description: A heads-up display that scans the humanoids in view and provides accurate data about their ID status and security records.
@@ -117,14 +110,12 @@
     sprite: Clothing/Eyes/Hud/medonion.rsi
   - type: Clothing
     sprite: Clothing/Eyes/Hud/medonion.rsi
+  - type: ShowHealthBars
+    damageContainers:
+    - Biological
   - type: ShowHealthIcons
     damageContainers:
     - Biological
-  - type: ClothingGrantComponent
-    component:
-      - type: ShowWhiteHealthBars
-        damageContainers:
-        - Biological
   - type: ShowHungerIcons
 
 - type: entity
@@ -137,19 +128,17 @@
     sprite: Clothing/Eyes/Hud/medonionbeer.rsi
   - type: Clothing
     sprite: Clothing/Eyes/Hud/medonionbeer.rsi
+  - type: ShowHealthBars
+    damageContainers:
+    - Biological
   - type: ShowHealthIcons
     damageContainers:
     - Biological
-  - type: ClothingGrantComponent
-    component:
-      - type: ShowWhiteHealthBars
-        damageContainers:
-        - Biological
   - type: ShowHungerIcons
   - type: ShowThirstIcons
 
 - type: entity
-  parent: ClothingEyesBase
+  parent: [ClothingEyesBase, SecHud]
   id: ClothingEyesHudMedSec
   name: medsec hud
   description: An eye display that looks like a mixture of medical and security huds.
@@ -162,17 +151,15 @@
     graph: HudMedSec
     node: medsecHud
   - type: ShowSecurityIcons
+  - type: ShowHealthBars
+    damageContainers:
+    - Biological
   - type: ShowHealthIcons
     damageContainers:
     - Biological
-  - type: ClothingGrantComponent
-    component:
-      - type: ShowWhiteHealthBars
-        damageContainers:
-        - Biological
 
 - type: entity
-  parent: ClothingEyesBase
+  parent: [ClothingEyesBase, SecHud]
   id: ClothingEyesHudMultiversal
   name: multiversal hud
   description: Filler
@@ -182,20 +169,17 @@
   - type: Clothing
     sprite: Clothing/Eyes/Hud/medsecengi.rsi
   - type: ShowSecurityIcons
-  - type: ClothingGrantComponent
-    component:
-      - type: ShowWhiteHealthBars
-        damageContainers:
-        - Biological
-        - Inorganic
-        - Silicon
+  - type: ShowHealthBars
+    damageContainers:
+    - Biological
+    - Inorganic
   - type: ShowHealthIcons
     damageContainers:
     - Biological
   - type: ShowSyndicateIcons
 
 - type: entity
-  parent: ClothingEyesBase
+  parent: [ClothingEyesBase, SecHud]
   id: ClothingEyesHudOmni
   name: omni hud
   description: Filler
@@ -205,16 +189,13 @@
   - type: Clothing
     sprite: Clothing/Eyes/Hud/omni.rsi
   - type: ShowSecurityIcons
+  - type: ShowHealthBars
+    damageContainers:
+    - Biological
+    - Inorganic
   - type: ShowHealthIcons
     damageContainers:
     - Biological
-  - type: ClothingGrantComponent
-    component:
-      - type: ShowWhiteHealthBars
-        damageContainers:
-        - Biological
-        - Inorganic
-        - Silicon
   - type: ShowHungerIcons
   - type: ShowThirstIcons
   - type: ShowSyndicateIcons
@@ -271,3 +252,18 @@
     sprite: Clothing/Eyes/Hud/beerpatch.rsi
   - type: Clothing
     sprite: Clothing/Eyes/Hud/beerpatch.rsi
+
+- type: entity
+  parent: ClothingEyesBase
+  id: ClothingEyesEyepatchHudDiag
+  name: diagnostic hud eyepatch
+  description: A heads-up display capable of analyzing the integrity and status of robotics and exosuits. Made out of see-borg-ium.
+  components:
+  - type: Sprite
+    sprite: Clothing/Eyes/Hud/diagpatch.rsi
+  - type: Clothing
+    sprite: Clothing/Eyes/Hud/diagpatch.rsi
+  - type: ShowHealthBars
+    damageContainers:
+    - Inorganic
+    - Silicon

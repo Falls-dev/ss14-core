@@ -4,6 +4,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Content.Shared.Projectiles;
+using Content.Shared.Standing.Systems;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Misc;
@@ -27,9 +28,8 @@ public abstract class SharedTentacleGun : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
     [Dependency] private readonly ITimerManager _timerManager = default!;
-    [Dependency] private readonly SharedStunSystem _stunSystem = default!;
+    [Dependency] private readonly SharedStandingStateSystem _standing = default!;
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -143,8 +143,8 @@ public abstract class SharedTentacleGun : EntitySystem
             if(!TryComp<PhysicsComponent>(activeItem, out var physicsComponent))
                 continue;
 
-            var coords = Transform(args.Embedded).Coordinates;
-            _handsSystem.TryDrop(args.Embedded, activeItem, coords);
+            if (!_handsSystem.TryDrop(args.Embedded, activeItem))
+                continue;
 
             var force = physicsComponent.Mass * 2.5f / 2;
 
@@ -155,10 +155,7 @@ public abstract class SharedTentacleGun : EntitySystem
 
     private bool PullMob(ProjectileEmbedEvent args)
     {
-        var stunTime = _random.Next(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(3));
-
-        if (!_stunSystem.TryParalyze(args.Embedded, stunTime, true))
-            return false;
+        _standing.TryLieDown(args.Embedded);
 
         _throwingSystem.TryThrow(args.Embedded, Transform(args.Shooter!.Value).Coordinates, 5f);
 

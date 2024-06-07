@@ -35,6 +35,7 @@
   - type: ActivatableUI
     key: enum.PaperUiKey.Key
     closeOnHandDeselect: false
+    requireHands: false
   - type: UserInterface
     interfaces:
     - key: enum.PaperUiKey.Key
@@ -86,6 +87,10 @@
         reagents:
         - ReagentId: Fiber
           Quantity: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      Paper: 100
 
 - type: entity
   name: paper scrap
@@ -667,6 +672,7 @@
     - key: enum.StorageUiKey.Key
       type: StorageBoundUserInterface
   - type: MeleeWeapon
+    wideAnimationRotation: 180
     damage:
       types:
         Blunt: 10

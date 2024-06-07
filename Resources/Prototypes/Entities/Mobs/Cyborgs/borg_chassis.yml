@@ -220,10 +220,10 @@
     access: [["Medical"], ["Command"], ["Research"]]
   - type: Inventory
     templateId: borgDutch
-  - type: ShowHealthIcons
+  - type: ShowHealthBars
     damageContainers:
     - Biological
-  - type: ShowWhiteHealthBars
+  - type: ShowHealthIcons
     damageContainers:
     - Biological
 
@@ -287,6 +287,8 @@
           shader: unshaded
           map: ["light"]
           visible: false
+    - type: PointLight
+      color: "#dd200b"
     - type: BorgChassis
       maxModules: 3
       moduleWhitelist:
@@ -298,6 +300,8 @@
       noMindState: synd_sec
     - type: Construction
       node: syndicateassault
+    - type: Damageable
+      damageModifierSet: AssaultBorg
 
 - type: entity
   id: BorgChassisSyndicateMedical

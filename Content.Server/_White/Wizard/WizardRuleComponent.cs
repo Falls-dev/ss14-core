@@ -1,7 +1,7 @@
+using Content.Server.RoundEnd;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.Random;
 using Content.Shared.Roles;
-using Robust.Shared.Audio;
-using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._White.Wizard;
@@ -12,29 +12,30 @@ namespace Content.Server._White.Wizard;
 [RegisterComponent]
 public sealed partial class WizardRuleComponent : Component
 {
+    public readonly List<EntityUid> WizardMinds = new();
+
+    public EntityUid? TargetStation;
+
     [DataField("minPlayers")]
     public int MinPlayers = 20;
 
     [DataField("announcementOnWizardDeath")]
     public bool AnnouncementOnWizardDeath = true;
 
-    [DataField]
-    public string WizardKilledText = "nuke-ops-no-more-threat-announcement-shuttle-call"; //TODO
-
     [DataField("points")]
     public int Points = 10; //TODO: wizard shop prototype
 
     [DataField("wizardRoleProto")]
-    public ProtoId<AntagPrototype> WizardRoleProto = "WizardRole"; //TODO: wizard role prototype
+    public ProtoId<AntagPrototype> WizardRoleProto = "WizardRole";
 
     [DataField("wizardSpawnPointProto")]
-    public EntProtoId SpawnPointProto = "WizardSpawnPoint"; //TODO: wizard ghost role prototype
+    public EntProtoId SpawnPointProto = "SpawnPointWizard";
 
     [DataField]
-    public EntProtoId GhostSpawnPointProto = "SpawnPointGhostWizard"; //TODO
+    public EntProtoId GhostSpawnPointProto = "SpawnPointGhostWizard";
 
     [DataField("startingGear")]
-    public ProtoId<StartingGearPrototype> StartingGear = "WizardBlueGear";
+    public ProtoId<StartingGearPrototype> StartingGear = "WizardGear";
 
     [DataField("spawnShuttle")]
     public bool SpawnShuttle = true;
@@ -43,17 +44,25 @@ public sealed partial class WizardRuleComponent : Component
     public EntityUid? ShuttleMap;
 
     [DataField("shuttlePath")]
-    public string ShuttlePath = "/Maps/Shuttles/wizard.yml";
+    public string ShuttlePath = "/Maps/White/Shuttles/wizard.yml";
 
-    /// <summary>
-    /// Maybe erase this
-    /// </summary>
     [DataField]
-    public ProtoId<WeightedRandomPrototype> ObjectiveGroup = "TraitorObjectiveGroups"; //TODO: wizard objectives' prototype, not traitor objectives
+    public ProtoId<NpcFactionPrototype> Faction = "Wizard";
 
-    /// <summary>
-    ///     Path to antagonist alert sound.
-    /// </summary>
+    public RoundEndBehavior RoundEndBehavior = RoundEndBehavior.ShuttleCall;
+
     [DataField]
-    public SoundSpecifier GreetSoundNotification = new SoundPathSpecifier("/Audio/Ambience/Antag/traitor_start.ogg");
+    public string RoundEndTextSender = "comms-console-announcement-title-centcom";
+
+    [DataField]
+    public string RoundEndTextShuttleCall = "wizard-no-more-threat-announcement-shuttle-call";
+
+    [DataField]
+    public string RoundEndTextAnnouncement = "wizard-no-more-threat-announcement";
+
+    [DataField]
+    public TimeSpan EvacShuttleTime = TimeSpan.FromMinutes(5);
+
+    [DataField]
+    public ProtoId<WeightedRandomPrototype> ObjectiveGroup = "WizardObjectiveGroups";
 }

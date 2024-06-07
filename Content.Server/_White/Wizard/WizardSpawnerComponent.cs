@@ -14,7 +14,7 @@ public sealed partial class WizardSpawnerComponent : Component
     public int Points = 10;
 
     [DataField("startingGear")]
-    public ProtoId<StartingGearPrototype> StartingGear = "WizardBlueGear";
+    public ProtoId<StartingGearPrototype> StartingGear = "WizardGear";
 
     [DataField]
     public ProtoId<AntagPrototype> WizardRoleProto = "WizardRole";

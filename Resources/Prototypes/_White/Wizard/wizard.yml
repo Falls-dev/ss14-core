@@ -1,9 +1,9 @@
 - type: antag
   id: WizardRole
-  name: roles-antag-wizard-name #TODO
+  name: roles-antag-wizard-name
   antagonist: true
   setPreference: true
-  objective: roles-antag-wizard-objective #TODO
+  objective: roles-antag-wizard-objective
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 18000 # 5h
@@ -11,19 +11,46 @@
 - type: entity
   id: SpawnPointWizard
   parent: MarkerBase
-  name: wizard
+  name: wizard spawn point
   components:
   - type: SpawnPoint
   - type: Sprite
     layers:
     - state: green
-    - sprite: Objects/Fun/toys.rsi #TODO: sprite?
-      state: synb
+    - sprite: Objects/Fun/figurines.rsi
+      state: wizard
 
-# survive objective
+- type: entity
+  id: SpawnPointGhostWizard
+  parent: MarkerBase
+  name: wizard spawn point (ghost role)
+  components:
+  - type: GhostRole
+  - type: GhostRoleMobSpawner
+    prototype: MobHumanSpaceWiz
+  - type: Sprite
+    layers:
+    - state: green
+    - sprite: Objects/Fun/figurines.rsi
+      state: wizard_fake
+
+- type: startingGear
+  id: WizardGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorDarkBlue
+    back: ClothingBackpackFilled
+    head: ClothingHeadHatRealWizardBlue
+    outerClothing: ClothingOuterRealWizardBlue
+    shoes: ClothingShoesWizard
+  innerClothingSkirt: ClothingUniformJumpskirtColorDarkBlue
+  satchel: ClothingBackpackSatchelFilled
+  duffelbag: ClothingBackpackDuffelFilled
+
 - type: entity
   noSpawn: true
-  parent: BaseSurviveObjective
-  id: WizardSurviveObjective
-  name: Survive the shift, causing as much chaos as possible.
-  description: Wizard Federation sent you to the Nanotracen space station to sow chaos and destruction. Don't disappoint them.
+  name: Space Wizard
+  parent: MobHuman
+  id: MobHumanSpaceWiz
+  components:
+    - type: Wizard
+    - type: RandomHumanoidAppearance

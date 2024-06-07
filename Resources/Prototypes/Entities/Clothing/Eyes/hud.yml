@@ -34,7 +34,7 @@
     - HudMedical
 
 - type: entity
-  parent: ClothingEyesBase
+  parent: [ClothingEyesBase, SecHud]
   id: ClothingEyesHudSecurity
   name: security hud
   description: A heads-up display that scans the humanoids in view and provides accurate data about their ID status and security records.
@@ -138,7 +138,7 @@
   - type: ShowThirstIcons
 
 - type: entity
-  parent: ClothingEyesBase
+  parent: [ClothingEyesBase, SecHud]
   id: ClothingEyesHudMedSec
   name: medsec hud
   description: An eye display that looks like a mixture of medical and security huds.
@@ -159,7 +159,7 @@
     - Biological
 
 - type: entity
-  parent: ClothingEyesBase
+  parent: [ClothingEyesBase, SecHud]
   id: ClothingEyesHudMultiversal
   name: multiversal hud
   description: Filler
@@ -179,7 +179,7 @@
   - type: ShowSyndicateIcons
 
 - type: entity
-  parent: ClothingEyesBase
+  parent: [ClothingEyesBase, SecHud]
   id: ClothingEyesHudOmni
   name: omni hud
   description: Filler

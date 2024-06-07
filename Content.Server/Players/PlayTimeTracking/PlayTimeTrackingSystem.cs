@@ -37,6 +37,7 @@ public sealed class PlayTimeTrackingSystem : EntitySystem
     [Dependency] private readonly IPlayTimeTrackingManager _tracking = default!;
     [Dependency] private readonly IAdminManager _adminManager = default!;
     [Dependency] private readonly IServerPreferencesManager _preferencesManager = default!;
+    [Dependency] private readonly SharedRoleSystem _role = default!;
 
     public override void Initialize()
     {
@@ -174,7 +175,6 @@ public sealed class PlayTimeTrackingSystem : EntitySystem
             return true;
 
         if (!_prototypes.TryIndex<JobPrototype>(role, out var job) ||
-            job.Requirements == null ||
             !_cfg.GetCVar(CCVars.GameRoleTimers))
             return true;
 
@@ -237,20 +237,8 @@ public sealed class PlayTimeTrackingSystem : EntitySystem
                 continue;
             }
 
-            if (!_prototypes.TryIndex<JobPrototype>(job, out var jobber) ||
-                jobber.Requirements == null ||
-                jobber.Requirements.Count == 0)
-                continue;
-
-            foreach (var requirement in jobber.Requirements)
-            {
-                if (JobRequirements.TryRequirementMet(requirement, playTimes, out _, EntityManager, _prototypes))
-                    continue;
-
-                jobs.RemoveSwap(i);
-                i--;
-                break;
-            }
+            jobs.RemoveSwap(i);
+            i--;
         }
     }
 

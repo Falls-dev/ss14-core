@@ -49,7 +49,7 @@ public sealed partial class WizardRuleComponent : Component
     [DataField]
     public ProtoId<NpcFactionPrototype> Faction = "Wizard";
 
-    public RoundEndBehavior RoundEndBehavior = RoundEndBehavior.ShuttleCall;
+    public RoundEndBehavior RoundEndBehavior = RoundEndBehavior.Nothing;
 
     [DataField]
     public string RoundEndTextSender = "comms-console-announcement-title-centcom";

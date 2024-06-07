@@ -1,0 +1,112 @@
+# Pubg Trash
+- type: entity
+  parent: BaseItem
+  id: PubgTrash
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/utensils.rsi
+
+- type: entity
+  parent: PubgTrash
+  id: PubgTrashAKB
+  components:
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: ForPubg/Textures/Trash/pubg_trash.rsi
+    state: akb
+
+- type: entity
+  parent: PubgTrash
+  id: PubgTrashBoard
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: ForPubg/Textures/Trash/pubg_trash.rsi
+    state: board
+
+- type: entity
+  parent: PubgTrash
+  id: PubgTrashDvd
+  components:
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite: ForPubg/Textures/Trash/pubg_trash.rsi
+    state: dvd
+
+- type: entity
+  parent: PubgTrash
+  id: PubgTrashFiltr
+  components:
+  - type: Item
+    size: Large
+    shape:
+    - 0, 0, 2, 3
+  - type: Sprite
+    sprite: ForPubg/Textures/Trash/pubg_trash.rsi
+    state: filtr
+
+- type: entity
+  parent: PubgTrash
+  id: PubgTrashMotherboard
+  components:
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite: ForPubg/Textures/Trash/pubg_trash.rsi
+    state: motherboard
+
+- type: entity
+  parent: PubgTrash
+  id: PubgTrashNewspaper
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: ForPubg/Textures/Trash/pubg_trash.rsi
+    state: newspaper
+
+- type: entity
+  parent: PubgTrash
+  id: PubgTrashNewspapers
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: ForPubg/Textures/Trash/pubg_trash.rsi
+    state: newspapers
+
+- type: entity
+  parent: PubgTrash
+  id: PubgTrashPackage
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: ForPubg/Textures/Trash/pubg_trash.rsi
+    state: package
+
+- type: entity
+  parent: PubgTrash
+  id: PubgTrashSnus
+  components:
+  - type: Item
+    size: Large
+    shape:
+    - 0, 0, 0, 3
+  - type: Sprite
+    sprite: ForPubg/Textures/Trash/pubg_trash.rsi
+    state: snus
+
+- type: entity
+  parent: PubgTrash
+  id: PubgTrashWD40
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: ForPubg/Textures/Trash/pubg_trash.rsi
+    state: wd40small

@@ -1,0 +1,88 @@
+# PUBG Fuel Canister
+- type: entity
+  id: PubgFuelCanister
+  parent: StorageTank
+  name: Fuel Canister
+  description: A fuel Barrel.
+  placement:
+    mode: PlaceFree
+  components:
+  - type: StaticPrice
+    price: 750
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/pubg_canister.rsi
+    layers:
+    - state: canisterbig
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.30
+        density: 155
+        mask:
+        - MachineMask
+        layer:
+        - WallLayer
+  - type: Appearance
+  - type: ExaminableSolution
+    solution: tank
+  - type: ReagentTank
+    tankType: Fuel
+  - type: Item
+    size: Large
+    shape:
+    - 0, 0, 2, 3
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: WeldingFuel
+          Quantity: 200
+  - type: Explosive
+    explosionType: Default
+    totalIntensity: 120 # ~ 5 tile radius
+    intensitySlope: 50
+    canCreateVacuum: false
+
+- type: entity
+  id: PubgFuelCanister1
+  parent: PubgFuelCanister
+  name: Fuel Canister
+  description: A fuel Barrel.
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/pubg_canister.rsi
+    layers:
+    - state: canisterbig1
+
+- type: entity
+  id: PubgFuelCanisterSmall
+  parent: PubgFuelCanister
+  name: Fuel Canister
+  description: A fuel Barrel.
+  components:
+  - type: Item
+    size: Normal
+    shape:
+    - 0, 0, 1, 1
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/pubg_canister.rsi
+    layers:
+    - state: canistersmall
+  - type: Explosive
+    explosionType: Default
+    totalIntensity: 60
+    intensitySlope: 30
+    canCreateVacuum: false
+
+- type: entity
+  id: PubgFuelCanisterSmall1
+  parent: PubgFuelCanisterSmall
+  name: Fuel Canister
+  description: A fuel Barrel.
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/pubg_canister.rsi
+    layers:
+    - state: canistersmall1

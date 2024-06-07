@@ -8,7 +8,6 @@
     color: "#ffd1a3ff"
     radius: 5
     softness: 1
-  - type: IgnoreWeather
   - type: SpriteFade
   - type: Clickable
   - type: Sprite

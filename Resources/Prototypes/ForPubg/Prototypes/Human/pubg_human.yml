@@ -21,13 +21,15 @@
     - type: MovementSpeedModifier
       baseWalkSpeed: 3.5
       baseSprintSpeed: 3.5
+    - type: StandingState
+      canLieDown: false
     - type: Butcherable
       butcheringType: Spike
       spawned:
         - id: FoodMeatHuman
           amount: 5
-          
-#Spawn Marker 
+
+#Spawn Marker
 - type: entity
   id: SpawnPubgPlayer
   parent: SpawnPointJobBase
@@ -65,12 +67,12 @@
     jumpsuit: ClothingUniformJumpsuitOperative
 #    pocket1: ####
 #    pocket2: ####
-          
+
 - type: entity
   parent: PubgMobHuman
   id: PubgMobPlayer
   name: Pubg Player
   components:
     - type: Loadout
-      prototypes: 
+      prototypes:
       - PubgMobPlayerGear

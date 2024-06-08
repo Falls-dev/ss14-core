@@ -38,8 +38,6 @@
   name: Force
   noSpawn: true
   components:
-    - type: Magic
-      requiresClothes: true
     - type: WorldTargetAction
       itemIconStyle: BigAction
       useDelay: 60
@@ -102,8 +100,6 @@
   name: Cards
   noSpawn: true
   components:
-    - type: Magic
-      requiresClothes: true
     - type: WorldTargetAction
       itemIconStyle: BigAction
       useDelay: 60
@@ -220,8 +216,6 @@
   name: Cluwne Curse
   noSpawn: true
   components:
-    - type: Magic
-      requiresClothes: true
     - type: EntityTargetAction
       canTargetSelf: false
       range: 3
@@ -238,8 +232,6 @@
   name: Banana Touch
   noSpawn: true
   components:
-    - type: Magic
-      requiresClothes: true
     - type: EntityTargetAction
       canTargetSelf: false
       range: 3
@@ -256,8 +248,6 @@
   name: Mime Touch
   noSpawn: true
   components:
-    - type: Magic
-      requiresClothes: true
     - type: EntityTargetAction
       canTargetSelf: false
       range: 3
@@ -275,8 +265,6 @@
   noSpawn: true
   components:
     - type: InstantRecall
-    - type: Magic
-      requiresClothes: true
     - type: InstantAction
       useDelay: 10
       itemIconStyle: BigAction

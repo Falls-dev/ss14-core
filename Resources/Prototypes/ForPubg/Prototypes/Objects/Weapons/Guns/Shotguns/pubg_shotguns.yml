@@ -23,7 +23,7 @@
     - type: AmmoCounter
     - type: Gun
       fireRate: 3
-      projectileSpeed: 30
+      projectileSpeed: 35
       selectedMode: SemiAuto
       availableModes:
         - SemiAuto
@@ -44,6 +44,8 @@
         ballistic-ammo: !type:Container
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15
 
 # Baikal MP153
 - type: entity
@@ -91,6 +93,8 @@
         ballistic-ammo: !type:Container
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15
 
 # Chazer
 - type: entity
@@ -138,3 +142,5 @@
         ballistic-ammo: !type:Container
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15

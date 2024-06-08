@@ -29,7 +29,7 @@
       angleIncrease: 4
       angleDecay: 16
       fireRate: 10
-      projectileSpeed: 30
+      projectileSpeed: 35
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -39,7 +39,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -65,6 +66,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.08
 
 # Beryl
 - type: entity
@@ -98,7 +101,7 @@
       angleDecay: 16
       fireRate: 8
       selectedMode: FullAuto
-      projectileSpeed: 30
+      projectileSpeed: 35
       availableModes:
         - FullAuto
       soundGunshot:
@@ -107,7 +110,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -133,6 +137,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.08
 
 # FN-FAL
 - type: entity
@@ -165,7 +171,7 @@
       angleIncrease: 4
       angleDecay: 16
       fireRate: 8
-      projectileSpeed: 30
+      projectileSpeed: 35
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -175,7 +181,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -201,6 +208,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.08
 
 # AS Val
 - type: entity
@@ -243,7 +252,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -269,6 +279,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.08
 
 # A91
 - type: entity
@@ -301,7 +313,7 @@
       angleIncrease: 4
       angleDecay: 16
       fireRate: 8
-      projectileSpeed: 25 # Standart 25f
+      projectileSpeed: 35 # Standart 25f
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -311,7 +323,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -337,6 +350,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.08
 
 # Ohio Ordance 1918
 - type: entity
@@ -368,8 +383,8 @@
       maxAngle: 30
       angleIncrease: 4
       angleDecay: 16
-      fireRate: 4
-      projectileSpeed: 25 # Standart 25f
+      fireRate: 5
+      projectileSpeed: 30 # Standart 25f
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -379,7 +394,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -405,3 +421,5 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.08

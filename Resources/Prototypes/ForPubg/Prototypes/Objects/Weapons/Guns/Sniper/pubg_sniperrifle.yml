@@ -32,7 +32,7 @@
       angleIncrease: 4
       angleDecay: 16
       fireRate: 3
-      projectileSpeed: 35
+      projectileSpeed: 40
       selectedMode: SemiAuto
       availableModes:
         - SemiAuto
@@ -42,7 +42,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -68,6 +69,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.04
 
 # SV-98
 - type: entity
@@ -103,7 +106,7 @@
       angleIncrease: 4
       angleDecay: 16
       fireRate: 1
-      projectileSpeed: 35
+      projectileSpeed: 50
       selectedMode: SemiAuto
       availableModes:
         - SemiAuto
@@ -113,7 +116,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -139,6 +143,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.04
 
 # Barrett
 - type: entity
@@ -174,7 +180,7 @@
       angleIncrease: 4
       angleDecay: 16
       fireRate: 1
-      projectileSpeed: 40
+      projectileSpeed: 50
       selectedMode: SemiAuto
       availableModes:
         - SemiAuto
@@ -184,7 +190,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -210,3 +217,5 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.04

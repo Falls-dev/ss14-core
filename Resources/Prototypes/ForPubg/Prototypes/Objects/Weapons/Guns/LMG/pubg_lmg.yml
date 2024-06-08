@@ -31,7 +31,7 @@
       angleIncrease: 2
       angleDecay: 16
       fireRate: 12
-      projectileSpeed: 25 # Standart 25f
+      projectileSpeed: 30 # Standart 25f
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -41,7 +41,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -67,3 +68,5 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.08

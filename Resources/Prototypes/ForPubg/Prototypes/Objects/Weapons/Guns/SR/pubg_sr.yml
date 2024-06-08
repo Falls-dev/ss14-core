@@ -29,7 +29,7 @@
       angleIncrease: 4
       angleDecay: 16
       fireRate: 3
-      projectileSpeed: 25 # Standart 25f
+      projectileSpeed: 35 # Standart 25f
       selectedMode: SemiAuto
       availableModes:
         - SemiAuto
@@ -65,6 +65,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.055
 
 # Garand
 - type: entity
@@ -95,7 +97,7 @@
       angleIncrease: 4
       angleDecay: 16
       fireRate: 3
-      projectileSpeed: 30
+      projectileSpeed: 35
       selectedMode: SemiAuto
       availableModes:
         - SemiAuto
@@ -127,6 +129,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.055
 
 # Merkel Sr1
 - type: entity
@@ -157,7 +161,7 @@
       angleIncrease: 4
       angleDecay: 16
       fireRate: 1
-      projectileSpeed: 35
+      projectileSpeed: 45
       selectedMode: SemiAuto
       availableModes:
         - SemiAuto
@@ -189,3 +193,5 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.055

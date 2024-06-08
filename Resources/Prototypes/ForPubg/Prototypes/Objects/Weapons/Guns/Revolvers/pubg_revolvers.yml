@@ -26,7 +26,7 @@
     - type: Gun
       selectedMode: SemiAuto
       fireRate: 1.0
-      projectileSpeed: 35
+      projectileSpeed: 30
       availableModes:
         - SemiAuto
       soundGunshot:
@@ -51,6 +51,8 @@
         path: /Audio/Weapons/Guns/MagIn/revolver_magin.ogg
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15
 
 # Rex
 - type: entity
@@ -105,3 +107,5 @@
         path: /Audio/Weapons/Guns/MagIn/revolver_magin.ogg
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15

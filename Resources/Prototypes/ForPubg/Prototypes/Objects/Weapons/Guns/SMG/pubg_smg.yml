@@ -25,7 +25,7 @@
       angleIncrease: 2
       angleDecay: 16
       fireRate: 12
-      projectileSpeed: 20
+      projectileSpeed: 25
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -35,7 +35,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -61,6 +62,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15
 
 # P90
 - type: entity
@@ -89,7 +92,7 @@
       angleIncrease: 2
       angleDecay: 16
       fireRate: 10
-      projectileSpeed: 25 # Standart 25f
+      projectileSpeed: 30 # Standart 25f
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -99,7 +102,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -125,6 +129,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15
 
 # Vityaz
 - type: entity
@@ -153,7 +159,7 @@
       angleIncrease: 2
       angleDecay: 16
       fireRate: 8
-      projectileSpeed: 20
+      projectileSpeed: 25
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -163,7 +169,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -189,6 +196,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15
 
 # CPW
 - type: entity
@@ -217,7 +226,7 @@
       angleIncrease: 2
       angleDecay: 16
       fireRate: 12
-      projectileSpeed: 25 # Standart 25f
+      projectileSpeed: 35 # Standart 25f
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -227,7 +236,8 @@
       magState: mag
       steps: 1
       zeroVisible: true
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -253,3 +263,5 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15

@@ -26,13 +26,14 @@
         - Belt
     - type: Gun
       fireRate: 3
-      projectileSpeed: 20
+      projectileSpeed: 25
       selectedMode: SemiAuto
       availableModes:
         - SemiAuto
       soundGunshot:
         path: /Audio/ForPubg/Sounds/Weapons/Pistols/pm_gunshot.ogg
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
       soundRack:
         path: /Audio/Weapons/Guns/Cock/pistol_cock.ogg
     - type: ItemSlots
@@ -64,6 +65,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15
 
 # Grach
 - type: entity
@@ -93,13 +96,14 @@
         - Belt
     - type: Gun
       fireRate: 5
-      projectileSpeed: 20
+      projectileSpeed: 25
       selectedMode: SemiAuto
       availableModes:
         - SemiAuto
       soundGunshot:
         path: /Audio/ForPubg/Sounds/Weapons/Pistols/grach_gunshot.ogg
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
       soundRack:
         path: /Audio/Weapons/Guns/Cock/pistol_cock.ogg
     - type: ItemSlots
@@ -131,6 +135,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15
 
 # Luger
 - type: entity
@@ -160,13 +166,14 @@
         - Belt
     - type: Gun
       fireRate: 4
-      projectileSpeed: 25 # Standart 25f
+      projectileSpeed: 30 # Standart 25f
       selectedMode: SemiAuto
       availableModes:
         - SemiAuto
       soundGunshot:
         path: /Audio/ForPubg/Sounds/Weapons/Pistols/luger_gunshot.ogg
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
       soundRack:
         path: /Audio/Weapons/Guns/Cock/pistol_cock.ogg
     - type: ItemSlots
@@ -198,6 +205,8 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15
 
 # Desert Eagle
 - type: entity
@@ -233,7 +242,8 @@
         - SemiAuto
       soundGunshot:
         path: /Audio/ForPubg/Sounds/Weapons/Pistols/deserteagle_gunshot.ogg
-    - type: MagazineAmmoProvider
+    - type: ChamberMagazineAmmoProvider
+      boltClosed: null
       soundRack:
         path: /Audio/Weapons/Guns/Cock/pistol_cock.ogg
     - type: ItemSlots
@@ -265,3 +275,5 @@
     - type: Appearance
     - type: StaticPrice
       price: 500
+    - type: Telescope
+      divisor: 0.15

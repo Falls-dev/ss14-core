@@ -39,7 +39,7 @@
   noSpawn: true
   components:
     - type: Magic
-      requiresClothes: false
+      requiresClothes: true
     - type: WorldTargetAction
       itemIconStyle: BigAction
       useDelay: 60
@@ -62,8 +62,8 @@
       event: !type:ForceSpellEvent
         speech: "EL DRITCH!"
     - type: VariableUseDelay
-      useDelay: 2
-      altUseDelay: 6
+      useDelay: 6
+      altUseDelay: 2
       chargeUseDelay: 20
 
 - type: entity
@@ -103,7 +103,7 @@
   noSpawn: true
   components:
     - type: Magic
-      requiresClothes: false
+      requiresClothes: true
     - type: WorldTargetAction
       itemIconStyle: BigAction
       useDelay: 60
@@ -221,7 +221,7 @@
   noSpawn: true
   components:
     - type: Magic
-      requiresClothes: false
+      requiresClothes: true
     - type: EntityTargetAction
       canTargetSelf: false
       range: 3
@@ -239,7 +239,7 @@
   noSpawn: true
   components:
     - type: Magic
-      requiresClothes: false
+      requiresClothes: true
     - type: EntityTargetAction
       canTargetSelf: false
       range: 3
@@ -257,7 +257,7 @@
   noSpawn: true
   components:
     - type: Magic
-      requiresClothes: false
+      requiresClothes: true
     - type: EntityTargetAction
       canTargetSelf: false
       range: 3
@@ -276,7 +276,7 @@
   components:
     - type: InstantRecall
     - type: Magic
-      requiresClothes: false
+      requiresClothes: true
     - type: InstantAction
       useDelay: 10
       itemIconStyle: BigAction

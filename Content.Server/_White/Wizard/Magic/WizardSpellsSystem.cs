@@ -773,8 +773,7 @@ public sealed class WizardSpellsSystem : EntitySystem
         if (!hasReqs)
         {
             args.Cancelled = true;
-            _popupSystem.PopupEntity("Missing Requirements! You need to wear your robe and hat!", args.Performer,
-                args.Performer);
+            _popupSystem.PopupEntity(Loc.GetString("magic-component-missing-req"), args.Performer, args.Performer);
         }
     }
 

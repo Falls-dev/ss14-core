@@ -91,7 +91,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnInstantRecallSpell(InstantRecallSpellEvent msg)
     {
-        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+        if (!CanCast(msg))
             return;
 
         if (!TryComp<HandsComponent>(msg.Performer, out var handsComponent))
@@ -143,7 +143,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnMimeTouchSpell(MimeTouchSpellEvent msg)
     {
-        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+        if (!CanCast(msg))
             return;
 
         if (!HasComp<HumanoidAppearanceComponent>(msg.Target))
@@ -168,7 +168,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnBananaTouchSpell(BananaTouchSpellEvent msg)
     {
-        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+        if (!CanCast(msg))
             return;
 
         if (!HasComp<HumanoidAppearanceComponent>(msg.Target))
@@ -192,7 +192,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnCluwneCurseSpell(CluwneCurseSpellEvent msg)
     {
-        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+        if (!CanCast(msg))
             return;
 
         if (!HasComp<HumanoidAppearanceComponent>(msg.Target))
@@ -215,7 +215,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnEmpSpell(EmpSpellEvent msg)
     {
-        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+        if (!CanCast(msg))
             return;
 
         var coords = _transformSystem.ToMapCoordinates(Transform(msg.Performer).Coordinates);
@@ -232,7 +232,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnJauntSpell(EtherealJauntSpellEvent msg)
     {
-        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+        if (!CanCast(msg))
             return;
 
         if (_statusEffectsSystem.HasStatusEffect(msg.Performer, "Incorporeal"))
@@ -256,7 +256,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnBlinkSpell(BlinkSpellEvent msg)
     {
-        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+        if (!CanCast(msg))
             return;
 
         var transform = Transform(msg.Performer);
@@ -308,7 +308,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnForcewallSpell(ForceWallSpellEvent msg)
     {
-        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+        if (!CanCast(msg))
             return;
 
         switch (msg.ActionUseType)
@@ -376,7 +376,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnCardsSpell(CardsSpellEvent msg)
     {
-        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+        if (!CanCast(msg))
             return;
 
         var result = true;
@@ -476,7 +476,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnFireballSpell(FireballSpellEvent msg)
     {
-        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+        if (!CanCast(msg))
             return;
 
         var result = true;
@@ -561,7 +561,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnForceSpell(ForceSpellEvent msg)
     {
-        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+        if (!CanCast(msg))
             return;
 
         var result = true;
@@ -618,7 +618,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void OnArcSpell(ArcSpellEvent msg)
     {
-        if (msg.Handled || !CheckRequirements(msg.Action, msg.Performer))
+        if (!CanCast(msg))
             return;
 
         var result = true;
@@ -692,6 +692,12 @@ public sealed class WizardSpellsSystem : EntitySystem
     #endregion
 
     #region Helpers
+
+    private bool CanCast(BaseActionEvent msg)
+    {
+        return !msg.Handled && CheckRequirements(msg.Action, msg.Performer) &&
+               !_statusEffectsSystem.HasStatusEffect(msg.Performer, "Incorporeal");
+    }
 
     private void Speak(BaseActionEvent args)
     {

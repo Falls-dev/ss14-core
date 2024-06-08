@@ -39,7 +39,7 @@
   noSpawn: true
   components:
     - type: Magic
-      requiresClothes: true
+      requiresClothes: false
     - type: WorldTargetAction
       itemIconStyle: BigAction
       useDelay: 60
@@ -62,9 +62,9 @@
       event: !type:ForceSpellEvent
         speech: "EL DRITCH!"
     - type: VariableUseDelay
-      useDelay: 6
-      altUseDelay: 12
-      chargeUseDelay: 40
+      useDelay: 2
+      altUseDelay: 6
+      chargeUseDelay: 20
 
 - type: entity
   id: ActionFireballSpell
@@ -93,8 +93,8 @@
         posData: !type:TargetCasterPos
         speech: action-speech-spell-fireball
     - type: VariableUseDelay
-      useDelay: 6
-      altUseDelay: 12
+      useDelay: 5
+      altUseDelay: 10
       chargeUseDelay: 40
 
 - type: entity
@@ -103,7 +103,7 @@
   noSpawn: true
   components:
     - type: Magic
-      requiresClothes: true
+      requiresClothes: false
     - type: WorldTargetAction
       itemIconStyle: BigAction
       useDelay: 60
@@ -128,7 +128,7 @@
         posData: !type:TargetCasterPos
         speech: "SHIZO NERO!"
     - type: VariableUseDelay
-      useDelay: 6
+      useDelay: 4
       altUseDelay: 1
       chargeUseDelay: 40
 
@@ -221,11 +221,11 @@
   noSpawn: true
   components:
     - type: Magic
-      requiresClothes: true
+      requiresClothes: false
     - type: EntityTargetAction
       canTargetSelf: false
-      range: 2
-      useDelay: 400
+      range: 3
+      useDelay: 60
       itemIconStyle: BigAction
       icon:
         sprite: Objects/Magic/magicactions.rsi
@@ -239,11 +239,11 @@
   noSpawn: true
   components:
     - type: Magic
-      requiresClothes: true
+      requiresClothes: false
     - type: EntityTargetAction
       canTargetSelf: false
-      range: 2
-      useDelay: 200
+      range: 3
+      useDelay: 30
       itemIconStyle: BigAction
       icon:
         sprite: Objects/Magic/magicactions.rsi
@@ -257,11 +257,11 @@
   noSpawn: true
   components:
     - type: Magic
-      requiresClothes: true
+      requiresClothes: false
     - type: EntityTargetAction
       canTargetSelf: false
-      range: 2
-      useDelay: 200
+      range: 3
+      useDelay: 30
       itemIconStyle: BigAction
       icon:
         sprite: Objects/Magic/magicactions.rsi
@@ -276,7 +276,7 @@
   components:
     - type: InstantRecall
     - type: Magic
-      requiresClothes: true
+      requiresClothes: false
     - type: InstantAction
       useDelay: 10
       itemIconStyle: BigAction

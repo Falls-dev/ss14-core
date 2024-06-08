@@ -44,4 +44,4 @@
       lifetime: 25.0
     - type: NpcFactionMember
       factions:
-      - Syndicate
+      - Changeling

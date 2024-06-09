@@ -133,3 +133,12 @@
     - type: Scroll
       actionId: ActionInstantRecallSpell
       learnPopup: scroll-component-recall
+
+- type: entity
+  id: ScrollTeleport
+  parent: BaseScroll
+  name: "Teleport scroll"
+  components:
+    - type: Scroll
+      actionId: ActionTeleportSpell
+      learnPopup: scroll-component-teleport

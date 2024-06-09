@@ -1,5 +1,5 @@
-scroll-component-start = Вы начинаете изучать {subject}
-scroll-component-end = Вы изучили {subject}. Свиток медленно сгорает в ваших руках.
+scroll-component-start = Вы начинаете изучать { $subject }.
+scroll-component-end = Вы изучили { $subject }. Свиток медленно сгорает в ваших руках.
 
 scroll-component-fireball = огненный шар
 scroll-component-forcewall = силовую стену
@@ -14,6 +14,7 @@ scroll-component-cluwne = проклятье
 scroll-component-clown = бананы
 scroll-component-silence = тишину
 scroll-component-recall = призыв
+scroll-component-teleport = телепортацию
 
 ent-BaseScroll = магический свиток
     .desc = Этот древний пергамент, ставший реликвией в арканных преданиях, хранит в себе бесчисленные мистические заклятия и забытые заклинания.
@@ -42,4 +43,6 @@ ent-ScrollBananaTouch = свиток бананового касания
 ent-ScrollMimeTouch = свиток касания мима
     .desc = { ent-BaseScroll.desc }
 ent-ScrollInstantRecall = свиток мгновенного призыва
+    .desc = { ent-BaseScroll.desc }
+ent-ScrollTeleport = свиток телепортации
     .desc = { ent-BaseScroll.desc }

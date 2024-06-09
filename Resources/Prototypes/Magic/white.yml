@@ -272,3 +272,20 @@
         sprite: Objects/Magic/magicactions.rsi
         state: summons
       event: !type:InstantRecallSpellEvent
+
+- type: entity
+  id: ActionTeleportSpell
+  name: Teleport
+  noSpawn: true
+  components:
+    - type: Magic
+      requiresClothes: true
+    - type: InstantAction
+      checkCanInteract: false
+      useDelay: 60
+      itemIconStyle: BigAction
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: teleport
+      event: !type:TeleportSpellEvent
+        speech: "SCYAR FIDE!"

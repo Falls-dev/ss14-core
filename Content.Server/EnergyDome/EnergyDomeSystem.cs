@@ -179,12 +179,11 @@ public sealed partial class EnergyDomeSystem : EntitySystem
 
         if (HasComp<PowerCellDrawComponent>(generatorUid))
         {
-            _powerCell.TryGetBatteryFromSlot(generatorUid, out var cell);
-            if (cell != null)
+            if (_powerCell.TryGetBatteryFromSlot(generatorUid, out var cell, out var batteryComp))
             {
-                _battery.UseCharge(generatorUid, energyLeak);
+                _battery.UseCharge(cell.Value, energyLeak, batteryComp);
 
-                if (cell.CurrentCharge == 0)
+                if (batteryComp.CurrentCharge == 0)
                     TurnOff((generatorUid, generatorComp), true);
             }
         }

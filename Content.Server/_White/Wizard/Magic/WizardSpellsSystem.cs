@@ -14,6 +14,7 @@ using Content.Server.Magic;
 using Content.Server.Singularity.EntitySystems;
 using Content.Server.Standing;
 using Content.Server.Weapons.Ranged.Systems;
+using Content.Shared._White.BetrayalDagger;
 using Content.Shared._White.Wizard;
 using Content.Shared._White.Wizard.Magic;
 using Content.Shared.Actions;
@@ -64,6 +65,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     [Dependency] private readonly EmpSystem _empSystem = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
+    [Dependency] private readonly TelefragSystem _telefrag = default!;
 
     #endregion
 
@@ -289,6 +291,7 @@ public sealed class WizardSpellsSystem : EntitySystem
         if (!foundTeleportPos)
             return;
 
+        _telefrag.Telefrag(coords, msg.Performer);
         _transformSystem.SetCoordinates(msg.Performer, coords);
         _transformSystem.AttachToGridOrMap(msg.Performer);
 
@@ -662,7 +665,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void ArcSpellCharge(ArcSpellEvent msg)
     {
-        _lightning.ShootRandomLightnings(msg.Performer, 2f * msg.ChargeLevel, msg.ChargeLevel * 2, "WizardLightning", 1,
+        _lightning.ShootRandomLightnings(msg.Performer, 1.5f * msg.ChargeLevel, msg.ChargeLevel * 2, "WizardLightning", 2,
             caster: msg.Performer);
     }
 

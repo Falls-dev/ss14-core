@@ -31,7 +31,7 @@
     - type: VariableUseDelay
       useDelay: 6
       altUseDelay: 12
-      chargeUseDelay: 40
+      chargeUseDelay: 30
 
 - type: entity
   id: ActionForceSpell
@@ -62,7 +62,7 @@
     - type: VariableUseDelay
       useDelay: 6
       altUseDelay: 2
-      chargeUseDelay: 20
+      chargeUseDelay: 30
 
 - type: entity
   id: ActionFireballSpell
@@ -93,7 +93,7 @@
     - type: VariableUseDelay
       useDelay: 5
       altUseDelay: 10
-      chargeUseDelay: 40
+      chargeUseDelay: 30
 
 - type: entity
   id: ActionCardSpell
@@ -126,7 +126,7 @@
     - type: VariableUseDelay
       useDelay: 4
       altUseDelay: 1
-      chargeUseDelay: 40
+      chargeUseDelay: 30
 
 - type: entity
   id: ActionForcewallSpell
@@ -160,7 +160,7 @@
     - type: VariableUseDelay
       useDelay: 10
       altUseDelay: 20
-      chargeUseDelay: 60
+      chargeUseDelay: 50
 
 - type: entity
   id: ActionBlinkSpell

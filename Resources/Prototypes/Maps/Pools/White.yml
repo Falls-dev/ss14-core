@@ -2,11 +2,13 @@
   id: WhiteMapPool
   maps:
   - WonderBox
-  - Scoupidia
   - Triumph
   - WhiteBox
+  - Core
+  - Origin
   - Meta     # Temporary
-  - Train    # Temporary
+# - Train    # Temporary
+# - Scoupidia
 # - Bagel    # Она утонула
-#  - Polaris
-#  - Void
+# - Polaris
+# - Void

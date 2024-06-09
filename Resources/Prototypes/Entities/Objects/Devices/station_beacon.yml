@@ -26,6 +26,7 @@
     color: "#D4D4D496"
   - type: WarpPoint
   - type: SpawnTeleportLocation
+  - type: GiftIgnore
   - type: ActivatableUI
     key: enum.NavMapBeaconUiKey.Key
     singleUser: true

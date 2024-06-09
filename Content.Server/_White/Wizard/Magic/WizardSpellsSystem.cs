@@ -17,6 +17,7 @@ using Content.Server.Singularity.EntitySystems;
 using Content.Server.Standing;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared._White.BetrayalDagger;
+using Content.Shared._White.Events;
 using Content.Shared._White.Wizard;
 using Content.Shared._White.Wizard.Magic;
 using Content.Shared.Actions;
@@ -432,6 +433,8 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void CardsSpellDefault(CardsSpellEvent msg)
     {
+        TurnOffShield(msg.Performer);
+
         var xform = Transform(msg.Performer);
 
         for (var i = 0; i < 10; i++)
@@ -456,6 +459,8 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void CardsSpellCharge(CardsSpellEvent msg)
     {
+        TurnOffShield(msg.Performer);
+
         var xform = Transform(msg.Performer);
 
         var count = 10 + 10 * msg.ChargeLevel;
@@ -494,6 +499,7 @@ public sealed class WizardSpellsSystem : EntitySystem
         Del(msg.TargetUid);
         var item = Spawn(msg.Prototype);
         _handsSystem.TryPickupAnyHand(msg.Performer, item);
+        TurnOffShield(msg.Performer);
 
         return true;
     }
@@ -532,6 +538,8 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void FireballSpellDefault(FireballSpellEvent msg)
     {
+        TurnOffShield(msg.Performer);
+
         var xform = Transform(msg.Performer);
 
         foreach (var pos in _magicSystem.GetSpawnPositions(xform, msg.Pos))
@@ -696,6 +704,8 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     private void ArcSpellAlt(ArcSpellEvent msg)
     {
+        TurnOffShield(msg.Performer);
+
         var xform = Transform(msg.Performer);
 
         foreach (var pos in _magicSystem.GetSpawnPositions(xform, msg.Pos))
@@ -720,6 +730,11 @@ public sealed class WizardSpellsSystem : EntitySystem
     #endregion
 
     #region Helpers
+
+    private void TurnOffShield(EntityUid uid)
+    {
+        RaiseLocalEvent(uid, new EnergyDomeClothesTurnOffEvent());
+    }
 
     private bool CanCast(BaseActionEvent msg)
     {

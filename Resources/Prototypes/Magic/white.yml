@@ -278,8 +278,6 @@
   name: Teleport
   noSpawn: true
   components:
-    - type: Magic
-      requiresClothes: true
     - type: InstantAction
       checkCanInteract: false
       useDelay: 60

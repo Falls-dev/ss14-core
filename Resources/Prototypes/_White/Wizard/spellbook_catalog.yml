@@ -207,12 +207,28 @@
     stock: 1
 
 - type: listing
+  id: SpellBookSmite
+  name: spellbook-smite-name
+  description: spellbook-smite-desc
+  productEntity: ScrollSmite
+  icon:
+    sprite: Objects/Magic/magicactions.rsi
+    state: gib
+  cost:
+    SpellPoint: 2
+  categories:
+  - AttackSpells
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
   id: SpellBookHardsuit
   name: spellbook-hardsuit-name
   description: spellbook-hardsuit-desc
   productEntity: ClothingOuterHardsuitWizard
   cost:
-    SpellPoint: 2
+    SpellPoint: 4
   categories:
   - MagicItems
   conditions:

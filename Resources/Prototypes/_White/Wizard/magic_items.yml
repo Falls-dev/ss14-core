@@ -2,7 +2,7 @@
   name: высокочастотный клинок
   parent: Katana
   id: HighFrequencyBlade
-  description: Клинок, атакующий с невероятной быстротой а также способный отражать выстрелы.
+  description: Клинок, атакующий с невероятной быстротой, а также способный отражать выстрелы.
   components:
   - type: Sprite
     sprite: White/Objects/Weapons/Chaplain/hfrequency.rsi

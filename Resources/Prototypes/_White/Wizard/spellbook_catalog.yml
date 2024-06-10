@@ -71,7 +71,7 @@
     sprite: Objects/Magic/magicactions.rsi
     state: push
   cost:
-    SpellPoint: 1
+    SpellPoint: 2
   categories:
   - UtilitySpells
   conditions:

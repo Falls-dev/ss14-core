@@ -29,7 +29,7 @@ public sealed class TeleportSpellEui : BaseEui
 
         _performer = performer;
 
-        Timer.Spawn(TimeSpan.FromSeconds(10), Close);
+        Timer.Spawn(TimeSpan.FromSeconds(60), Close);
     }
 
     public override EuiStateBase GetNewState()

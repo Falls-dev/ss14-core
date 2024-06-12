@@ -37,7 +37,6 @@ using Content.Shared._White.Cult.Components;
 using Content.Shared._White.Cult.Runes;
 using Content.Shared._White.Cult.UI;
 using Content.Shared.Cuffs;
-using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
 using Content.Shared.Mindshield.Components;
 using Content.Shared.Mobs.Systems;
@@ -597,7 +596,7 @@ public sealed partial class CultSystem : EntitySystem
 
     private bool AddCultistBuff(EntityUid target, EntityUid user)
     {
-        if (HasComp<CultBuffComponent>(target))
+        if (TryComp<CultBuffComponent>(target, out var buff) && buff.BuffTime > buff.BuffLimit)
         {
             _popupSystem.PopupEntity(Loc.GetString("cult-buff-already-buffed"), user, user);
             return false;

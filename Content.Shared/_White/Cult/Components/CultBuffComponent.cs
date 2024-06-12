@@ -8,5 +8,5 @@ public sealed partial class CultBuffComponent : Component
 
     public static float NearbyTilesBuffRadius = 1f;
 
-    public static readonly TimeSpan CultTileBuffTime = TimeSpan.FromSeconds(5);
+    public static readonly TimeSpan CultTileBuffTime = TimeSpan.FromSeconds(1);
 }

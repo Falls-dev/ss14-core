@@ -876,7 +876,10 @@ public sealed partial class CultSystem : EntitySystem
                 return false;
 
             if (!_mobState.IsDead(target, mobState))
+            {
+                _popupSystem.PopupEntity(Loc.GetString("cult-revive-rune-already-alive"), user, user);
                 return false;
+            }
 
             var airlossGroup = _prototypeManager.Index<DamageGroupPrototype>("Airloss");
 
@@ -886,7 +889,10 @@ public sealed partial class CultSystem : EntitySystem
             {
                 var afterHeal = damageable.TotalDamage - toHeal;
                 if (deadThreshold <= afterHeal)
+                {
+                    _popupSystem.PopupEntity(Loc.GetString("cult-revive-rune-too-damaged"), user, user);
                     return false;
+                }
 
                 var asphyxType = _prototypeManager.Index<DamageTypePrototype>("Asphyxiation");
                 var bloodlossType = _prototypeManager.Index<DamageTypePrototype>("Bloodloss");

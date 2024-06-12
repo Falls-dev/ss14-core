@@ -165,7 +165,7 @@
 - type: entity
   id: ActionAdrenalineSacs
   name: changeling-ability-adrenaline-sacks
-  description: changeling-ability-adrenaline-sacks.desc
+  description: changeling-ability-adrenaline-sacks-desc
   noSpawn: true
   components:
     - type: InstantAction

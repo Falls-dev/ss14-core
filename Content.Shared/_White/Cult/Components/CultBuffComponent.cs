@@ -7,6 +7,9 @@ public sealed partial class CultBuffComponent : Component
     public TimeSpan BuffTime = TimeSpan.FromSeconds(60);
 
     [ViewVariables(VVAccess.ReadOnly), DataField]
+    public TimeSpan StartingBuffTime = TimeSpan.FromSeconds(60);
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
     public TimeSpan BuffLimit = TimeSpan.FromSeconds(55);
 
     public static float NearbyTilesBuffRadius = 1f;

@@ -602,7 +602,8 @@ public sealed partial class CultSystem : EntitySystem
             return false;
         }
 
-        EnsureComp<CultBuffComponent>(target);
+        buff = EnsureComp<CultBuffComponent>(target);
+        buff.BuffTime = buff.StartingBuffTime;
         return true;
     }
 

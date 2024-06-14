@@ -275,6 +275,34 @@
             pitch: 2
         ejectSound: /Audio/Weapons/Guns/MagOut/smg_magout.ogg
 
+
+- type: entity
+  id: TestShuttleGunDuster
+  parent: ShuttleGunDuster
+  name: TEST
+  description: A powerful stationary grenade launcher. A cartridge is required for use.
+  components:
+  - type: StationaryTurret
+    pilotWhitelist:
+      components:
+      - HumanoidAppearance
+  - type: ContainerContainer
+    containers:
+      turret-battery-slot: !type:ContainerSlot
+
+- type: entity
+  id: ActionTurretEject
+  name: Eject
+  description: Ejects the pilot from the turret
+  noSpawn: true
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: Interface/Actions/actions_mecha.rsi
+      state: mech_eject
+    event: !type:TurretEjectPilotEvent
+
 # ---- Other weapon ----
 
 - type: entity

@@ -1,4 +1,6 @@
 using System.Linq;
+using Content.Client.Interactable;
+using Content.Client.UserInterface.Systems.Chat;
 using Content.Shared.Examine;
 using Content.Shared.Chat;
 using Content.Shared.GameTicking;
@@ -10,7 +12,6 @@ using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
-using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Replays;
@@ -31,7 +32,7 @@ namespace Content.Client.Popups
         [Dependency] private readonly IReplayRecordingManager _replayRecording = default!;
         [Dependency] private readonly ExamineSystemShared _examine = default!;
         [Dependency] private readonly SharedTransformSystem _transform = default!;
-        [Dependency] private readonly IClientNetManager _clientNet = default!;
+        [Dependency] private readonly InteractionSystem _interaction = default!; // WhiteDream
 
         public IReadOnlyList<WorldPopupLabel> WorldLabels => _aliveWorldLabels;
         public IReadOnlyList<CursorPopupLabel> CursorLabels => _aliveCursorLabels;
@@ -94,6 +95,13 @@ namespace Content.Client.Popups
 
             _aliveWorldLabels.Add(label);
 
+            // START WhiteDream 
+            if (!_isLogging)
+                return;
+
+            if (!_interaction.InRangeUnobstructed(_playerManager.LocalEntity!.Value, coordinates, 10))
+                return;
+
             var fontSizeDict = new Dictionary<PopupType, string>
             {
                 { PopupType.Medium, "12" },
@@ -103,14 +111,16 @@ namespace Content.Client.Popups
             };
 
             var fontsize = fontSizeDict.GetValueOrDefault(type, "10");
-            var fontcolor = type is PopupType.LargeCaution or PopupType.MediumCaution or PopupType.SmallCaution ? "c62828" : "aeabc4";
+            var fontcolor = type is PopupType.LargeCaution or PopupType.MediumCaution or PopupType.SmallCaution
+                ? "c62828"
+                : "aeabc4";
 
-            if (_isLogging)
-            {
-                var wrappedMEssage = $"[font size={fontsize}][color=#{fontcolor}]{message}[/color][/font]";
-                var chatMsg = new ChatMessage(ChatChannel.Emotes, message, wrappedMEssage, GetNetEntity(EntityUid.Invalid), null);
-                _clientNet.DispatchLocalNetMessage(new MsgChatMessage { Message = chatMsg });
-            }
+            var wrappedMEssage = $"[font size={fontsize}][color=#{fontcolor}]{message}[/color][/font]";
+            var chatMsg = new ChatMessage(ChatChannel.Emotes, message, wrappedMEssage,
+                GetNetEntity(EntityUid.Invalid), null);
+            _uiManager.GetUIController<ChatUIController>().ProcessChatMessage(chatMsg);
+            
+            // END WhiteDream
         }
 
         #region Abstract Method Implementations

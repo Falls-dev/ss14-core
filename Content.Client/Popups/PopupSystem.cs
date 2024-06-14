@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Client.Interactable;
 using Content.Client.UserInterface.Systems.Chat;
 using Content.Shared.Examine;
 using Content.Shared.Chat;
@@ -32,7 +31,6 @@ namespace Content.Client.Popups
         [Dependency] private readonly IReplayRecordingManager _replayRecording = default!;
         [Dependency] private readonly ExamineSystemShared _examine = default!;
         [Dependency] private readonly SharedTransformSystem _transform = default!;
-        [Dependency] private readonly InteractionSystem _interaction = default!; // WhiteDream
 
         public IReadOnlyList<WorldPopupLabel> WorldLabels => _aliveWorldLabels;
         public IReadOnlyList<CursorPopupLabel> CursorLabels => _aliveCursorLabels;
@@ -99,7 +97,7 @@ namespace Content.Client.Popups
             if (!_isLogging)
                 return;
 
-            if (!_interaction.InRangeUnobstructed(_playerManager.LocalEntity!.Value, coordinates, 10))
+            if (!_examine.InRangeUnOccluded(_playerManager.LocalEntity!.Value, coordinates, 10))
                 return;
 
             var fontSizeDict = new Dictionary<PopupType, string>

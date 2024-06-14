@@ -15,7 +15,6 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared._White.StationaryTurret;
 
-
 public abstract class SharedStationaryTurretSystem : EntitySystem
 {
     [Dependency] private readonly INetManager _net = default!;
@@ -23,7 +22,7 @@ public abstract class SharedStationaryTurretSystem : EntitySystem
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedContentEyeSystem _eyeSystem = default!;
     [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
+    [Dependency] protected readonly SharedInteractionSystem _interaction = default!;
 
     public override void Initialize()
     {
@@ -52,6 +51,7 @@ public abstract class SharedStationaryTurretSystem : EntitySystem
         if(!TryComp<AutoShootGunComponent>(uid, out var auto))
             return;
 
+
         if(auto.Enabled == false)
             _gunSystem.SetEnabled(uid, auto, true);
         else
@@ -70,6 +70,9 @@ public abstract class SharedStationaryTurretSystem : EntitySystem
             return;
 
         if(!CanInteract(pilot, turret))
+            return;
+
+        if(!_interaction.InRangeUnobstructed(pilot, turret))
             return;
 
         var rider = EnsureComp<StationaryTurretPilotComponent>(pilot);

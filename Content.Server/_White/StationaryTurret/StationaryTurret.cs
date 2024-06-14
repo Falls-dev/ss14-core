@@ -1,15 +1,9 @@
 using Content.Shared._White.StationaryTurret;
-using Content.Server.Atmos.EntitySystems;
-using Content.Server.Power.EntitySystems;
-using Content.Shared.ActionBlocker;
-using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
-using Robust.Server.Containers;
-using Robust.Server.GameObjects;
 using Robust.Shared.Collections;
 
 namespace Content.Server._White.StationaryTurret;
@@ -17,16 +11,9 @@ namespace Content.Server._White.StationaryTurret;
 public sealed partial class StationaryTurret : SharedStationaryTurretSystem
 {
 
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly BatterySystem _battery = default!;
-    [Dependency] private readonly ContainerSystem _container = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
 
-    /// <inheritdoc/>
     public override void Initialize()
     {
         base.Initialize();
@@ -117,8 +104,13 @@ public sealed partial class StationaryTurret : SharedStationaryTurretSystem
 
         while (query.MoveNext(out var uid, out var comp))
         {
+            var turret = comp.Turret;
+            if(!_interaction.InRangeUnobstructed(uid, turret))
+                toRemove.Add((uid, comp));
+
             if (!TryComp<MobStateComponent>(uid, out var state))
                 continue;
+
             if (state.CurrentState is MobState.Dead or MobState.Critical)
                 toRemove.Add((uid, comp));
         }

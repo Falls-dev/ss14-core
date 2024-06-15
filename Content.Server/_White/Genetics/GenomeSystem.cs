@@ -46,6 +46,29 @@ public sealed class GenomeSystem : EntitySystem
         // only empty in test and when vving
         if (comp.GenomeId != string.Empty)
             comp.Layout = GetOrCreateLayout(comp.GenomeId);
+
+        var mutations = Array.Empty<string>();
+        foreach (var (name, (index, len)) in comp.Layout.Values)
+        {
+            if (!name.Contains("mutation"))
+                continue;
+
+            // инициализируй тут последовательность случайно мутацией, проверь нет ли ее в mutations
+            var mutatedBits = Array.Empty<int>();
+            var bits = comp.Layout.GetInt(comp.Genome, name);
+
+            // мутируй тут случайный бит, сохрани в mutatedBits
+
+            var prob = 0.4f; // need to evaluate
+            while (prob > 0.01f)
+            {
+                if (!_random.Prob(prob))
+                    break;
+                // мутируй тут случайный бит, если его нет в mutatedBits
+                // сохрани его в mutatedBits
+                prob = prob / 2;
+            }
+        }
     }
 
     private void Reset(RoundRestartCleanupEvent args)

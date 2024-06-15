@@ -16,7 +16,6 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Spawners;
 using System.Numerics;
-using System.Threading.Tasks;
 
 namespace Content.Server.Chemistry.EntitySystems
 {
@@ -31,7 +30,6 @@ namespace Content.Server.Chemistry.EntitySystems
         [Dependency] private readonly ReactiveSystem _reactive = default!;
 
         private const float ReactTime = 0.125f;
-        private HashSet<EntityUid> _processedCollisions = new(); // WD edit
 
         public override void Initialize()
         {
@@ -42,25 +40,13 @@ namespace Content.Server.Chemistry.EntitySystems
 
         private void HandleCollide(Entity<VaporComponent> entity, ref StartCollideEvent args)
         {
-            if (!EntityManager.TryGetComponent(entity.Owner, out SolutionContainerManagerComponent? contents))
-                return;
-
-            if (_processedCollisions.Contains(args.OtherEntity)) // WD edit
-                return;
+            if (!EntityManager.TryGetComponent(entity.Owner, out SolutionContainerManagerComponent? contents)) return;
 
             foreach (var (_, soln) in _solutionContainerSystem.EnumerateSolutions((entity.Owner, contents)))
             {
                 var solution = soln.Comp.Solution;
                 _reactive.DoEntityReaction(args.OtherEntity, solution, ReactionMethod.Touch);
             }
-
-
-            // WD edit start
-            var collision = args.OtherEntity;
-            _processedCollisions.Add(collision);
-
-            Task.Delay(TimeSpan.FromSeconds(0.5)).ContinueWith(_ => _processedCollisions.Remove(collision));
-            // WD edit end
 
             // Check for collision with a impassable object (e.g. wall) and stop
             if ((args.OtherFixture.CollisionLayer & (int) CollisionGroup.Impassable) != 0 && args.OtherFixture.Hard)

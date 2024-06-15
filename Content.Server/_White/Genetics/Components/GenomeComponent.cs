@@ -26,6 +26,9 @@ public sealed partial class GenomeComponent : Component
     [ViewVariables]
     public List<string> Mutations = default!;
 
+    [DataField("humanGenes")]
+    public bool HumanGenes = false;
+
     /// <summary>
     /// Genome bits themselves.
     /// Data can be retrieved with <c>comp.Layout.GetInt(comp.Genome, "name")</c>, etc.

@@ -1,8 +1,10 @@
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using Content.Server._White.Genetics.Components;
 using Content.Server.GameTicking.Events;
 using Content.Shared._White.Genetics;
 using Content.Shared.GameTicking;
+using Content.Shared.Humanoid;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -16,26 +18,30 @@ public sealed class GenomeSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly MutationSystem _mutationSystem = default!;
+    [Dependency] private readonly ILogManager _log = default!;
 
 
+    protected ISawmill Sawmill = default!;
     // This is where all the genome layouts are stored.
     // TODO: store on round entity when thats done, so persistence reloading doesnt scramble genes
     [ViewVariables]
     private readonly Dictionary<string, GenomeLayout> _layouts = new();
 
     private string _mutationsPool = "StandardHumanMutations";
-    private Dictionary<string, (int, Genome)> _mutations= new ();
+    private bool _mutationsInitialized = false;
+    private Dictionary<string, (Genome, MutationEffect[])> _mutations = new ();
 
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<GenomeComponent, MapInitEvent>(OnInit);
-        SubscribeLocalEvent<RoundStartingEvent>(OnRoundStart);
+        SubscribeLocalEvent<GenomeComponent, ComponentInit>(OnGenomeCompInit);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(Reset);
+        InitializeMutations();
+        Sawmill = _log.GetSawmill("genetics");
     }
 
-    private void OnInit(EntityUid uid, GenomeComponent comp, MapInitEvent args)
+    private void OnGenomeCompInit(EntityUid uid, GenomeComponent comp, ComponentInit args)
     {
         // only empty in test and when vving
         if (comp.GenomeId != string.Empty)
@@ -45,14 +51,16 @@ public sealed class GenomeSystem : EntitySystem
     private void Reset(RoundRestartCleanupEvent args)
     {
         _layouts.Clear();
+        _mutations.Clear();
     }
 
-    private void OnRoundStart(RoundStartingEvent ev)
+    private void InitializeMutations()
     {
         _proto.TryIndex<MutationCollectionPrototype>(_mutationsPool, out var pool);
         if (pool == null)
         {
             //TODO: throw an error here
+            return;
         }
         else
         {
@@ -60,38 +68,29 @@ public sealed class GenomeSystem : EntitySystem
             {
                 _proto.TryIndex<MutationPrototype>(mutation, out var mutationProto);
                 if (mutationProto != null)
-                    _mutations.Add(mutationProto.Name, (mutationProto.Length, GenerateSomeRandomGeneticSequenceAndCheckIfItIsIn_mutationsFunction(mutationProto.Length)));
+                    _mutations.Add(mutationProto.Name, (GenerateSomeRandomGeneticSequenceAndCheckIfItIsIn_mutationsFunction(mutationProto.Length), mutationProto.Effect));
             }
         }
+
+        _mutationsInitialized = true;
     }
 
-    public Genome GenerateSomeRandomGeneticSequenceAndCheckIfItIsIn_mutationsFunction(int length)
+    public Genome GenerateSomeRandomGeneticSequenceAndCheckIfItIsIn_mutationsFunction(int length, int cycle = 0)
     {
         var sequence = new Genome(length);
-        bool flag = true;
-        while (flag || !_mutations.ContainsValue((length, sequence)))
-        {
-            sequence.Mutate(0, length, 0.5f);
+        sequence.Mutate(0, length, 0.5f);
 
-            flag = false;
+        if (cycle >= 10) // i think 10 cycles is enough
+        {
+            return sequence;
         }
 
+        foreach (var (_, (seq, _)) in _mutations)
+        {
+            if (sequence == seq)
+                return GenerateSomeRandomGeneticSequenceAndCheckIfItIsIn_mutationsFunction(length, cycle + 1);
+        }
         return sequence;
-    }
-
-    public void ApplyMutation(EntityUid uid, string id, GenomeComponent comp)
-    {
-        if (!HasComp<GenomeComponent>(uid))
-            return;
-        switch (id)
-        {
-            case "SuperStrength":
-                _mutationSystem.SuperStrength(uid, comp, true);
-                break;
-            case "XrayVision":
-                _mutationSystem.XrayVision(uid, comp, true);
-                break;
-        }
     }
 
     /// <summary>

@@ -1,9 +1,10 @@
 using Robust.Shared.Serialization;
 using System.Collections;
+using System.Linq;
 using System.Text;
 using Robust.Shared.Random;
 
-namespace Content.Shared.Genetics;
+namespace Content.Shared._White.Genetics;
 
 /// <summary>
 /// Genome for an organism.
@@ -22,7 +23,7 @@ public sealed partial class Genome
     /// Bits that represent the genes bools and ints.
     /// </summary>
     [ViewVariables]
-    public BitArray Bits = new BitArray(0);
+    public bool?[] Bits = Array.Empty<bool?>();
 
     private static char[] Bases = new[] { 'A', 'C', 'G', 'T'};
 
@@ -31,7 +32,7 @@ public sealed partial class Genome
     /// </summary>
     public Genome(int count = 0)
     {
-        Bits = new BitArray(count);
+        Bits = new bool?[count];
     }
 
     /// <summary>
@@ -39,7 +40,11 @@ public sealed partial class Genome
     /// </summary>
     public void CopyTo(Genome other)
     {
-        other.Bits = new BitArray(Bits);
+        other.Bits = Array.Empty<bool?>();
+        foreach (var bit in Bits)
+        {
+            var enumerable = other.Bits.Append(null); //weird
+        }
     }
 
     /// <summary>
@@ -47,9 +52,9 @@ public sealed partial class Genome
     /// If it is out of bounds false is returned.
     /// </summary>
     /// <param name="index">Bit index to get from</param>
-    public bool GetBool(int index)
+    public bool? GetBool(int index)
     {
-        return index < Bits.Length && Bits[index];
+        return index > Bits.Length ? null : Bits[index];
     }
 
     /// <summary>
@@ -58,13 +63,18 @@ public sealed partial class Genome
     /// </summary>
     /// <param name="index">Starting bit index to get from</param>
     /// <param name="bits">Number of bits to read</param>
-    public int GetInt(int index, int bits)
+    public int? GetInt(int index, int bits)
     {
         var value = 0;
         for (int i = 0; i < bits; i++)
         {
             var bit = 1 << i;
-            if (GetBool(index + i))
+            var v = GetBool(index + i);
+
+            if (v == null)
+                return null;
+
+            if (v.Value)
             {
                 value |= bit;
             }
@@ -84,7 +94,11 @@ public sealed partial class Genome
         for (int i = 0; i < bases; i++)
         {
             // 2 bits makes a base
-            var c = Bases[GetInt(index + i * 2, 2)];
+            var c = 'N'; // null genome
+            var b = GetInt(index + i * 2, 2);
+            if (b != null)
+                c = Bases[b.Value];
+
             builder.Append(c);
         }
 
@@ -123,7 +137,14 @@ public sealed partial class Genome
     /// <param name="index">Bit index to flip</param>
     public void FlipBit(int index)
     {
-        Bits[index] = !Bits[index];
+        if (Bits[index] != null)
+            Bits[index] = !Bits[index];
+        else
+        {
+            var coin = _robustRandom.Prob(0.5f);
+            Bits[index] = coin;
+        }
+
     }
 
     /// <summary>

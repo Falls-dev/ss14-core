@@ -1,7 +1,7 @@
-using Content.Shared.Genetics;
+using Content.Shared._White.Genetics;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.Genetics.Components;
+namespace Content.Server._White.Genetics.Components;
 
 /// <summary>
 /// Gives this entity a genome for traits to be passed on and potentially mutated.

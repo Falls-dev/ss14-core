@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.Genetics;
+namespace Content.Shared._White.Genetics;
 
 /// <summary>
 /// Genes for an organism, provides the actual values which are used to build <see cref="Genome"/> bits.

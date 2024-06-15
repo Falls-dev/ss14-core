@@ -1,7 +1,7 @@
 ﻿using Content.Shared.DNAModifier;
 using Robust.Shared.Containers;
 
-namespace Content.Server.Genetics.Components
+namespace Content.Server._White.Genetics.Components
 {
     [RegisterComponent]
     public sealed partial class DNAModifierComponent : SharedDNAModifierComponent

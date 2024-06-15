@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.Genetics;
+namespace Content.Shared._White.Genetics;
 
 /// <summary>
 /// This is a prototype for mutation

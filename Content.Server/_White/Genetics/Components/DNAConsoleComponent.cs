@@ -1,4 +1,4 @@
-﻿namespace Content.Server.Genetics.Components
+﻿namespace Content.Server._White.Genetics.Components
 {
     [RegisterComponent]
     public sealed partial class DNAConsoleComponent : Component

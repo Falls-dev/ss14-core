@@ -1,7 +1,7 @@
-using Robust.Shared.Random;
+using Content.Shared._White.Genetics;
 using Robust.Shared.Utility;
 
-namespace Content.Shared.Genetics;
+namespace Content.Shared._White.Genetics;
 
 /// <summary>
 /// Maps a <see cref="Genome"/>'s bits to bools and ints.
@@ -25,7 +25,7 @@ public sealed class GenomeLayout
     /// <summary>
     /// Get a bool from the genome by name.
     /// </summary>
-    public bool GetBool(Genome genome, string name)
+    public bool? GetBool(Genome genome, string name)
     {
         var (index, bits) = Values[name];
         DebugTools.Assert(bits == 1, "Do not use GetBool for int genome values");
@@ -36,7 +36,7 @@ public sealed class GenomeLayout
     /// <summary>
     /// Get an int from the genome by name.
     /// </summary>
-    public int GetInt(Genome genome, string name)
+    public int? GetInt(Genome genome, string name)
     {
         var (index, bits) = Values[name];
         return genome.GetInt(index, bits);

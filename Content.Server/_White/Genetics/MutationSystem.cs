@@ -1,8 +1,8 @@
-﻿using Content.Server.Genetics.Components;
+﻿using Content.Server._White.Genetics.Components;
 using Content.Shared.Weapons.Melee;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.Genetics;
+namespace Content.Server._White.Genetics;
 
 /// <summary>
 /// Apply Mutation Effect?

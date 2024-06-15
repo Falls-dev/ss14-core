@@ -1,17 +1,12 @@
-using System.Collections;
-using Content.Server.Genetics.Components;
+using System.Diagnostics.CodeAnalysis;
+using Content.Server._White.Genetics.Components;
+using Content.Server.GameTicking.Events;
+using Content.Shared._White.Genetics;
 using Content.Shared.GameTicking;
-using Content.Shared.Genetics;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using Content.Server.GameTicking.Events;
-using Content.Shared.Damage;
-using Content.Shared.Movement.Systems;
-using Content.Shared.Weapons.Melee;
 
-namespace Content.Server.Genetics;
+namespace Content.Server._White.Genetics;
 
 /// <summary>
 /// Assigns each <see cref="GenomePrototype"/> a random <see cref="GenomeLayout"/> roundstart.

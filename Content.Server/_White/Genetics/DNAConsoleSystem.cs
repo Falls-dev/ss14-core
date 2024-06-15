@@ -1,12 +1,12 @@
 ﻿using System.Linq;
+using Content.Server._White.Genetics.Components;
 using Content.Server.Administration.Logs;
 using Content.Server.DeviceLinking.Systems;
-using Content.Server.Genetics.Components;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
-using Content.Shared.Database;
 using Content.Shared.DeviceLinking;
 using Content.Shared.DeviceLinking.Events;
+using Content.Shared.DNAConsole;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Mind;
 using Content.Shared.Mobs.Components;
@@ -15,9 +15,8 @@ using Content.Shared.UserInterface;
 using JetBrains.Annotations;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
-using Content.Shared.DNAConsole;
 
-namespace Content.Server.Genetics
+namespace Content.Server._White.Genetics
 {
     [UsedImplicitly]
     public sealed class CloningConsoleSystem : EntitySystem

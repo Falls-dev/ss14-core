@@ -1,4 +1,4 @@
-﻿namespace Content.Server.Genetics.Components;
+﻿namespace Content.Server._White.Genetics.Components;
 
 /// <summary>
 /// Shrimply a tracking component for pods that are cloning.

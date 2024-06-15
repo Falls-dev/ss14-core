@@ -1,7 +1,5 @@
-﻿using Content.Server.Cloning;
-using Content.Server.Cloning.Components;
+﻿using Content.Server._White.Genetics.Components;
 using Content.Server.DeviceLinking.Systems;
-using Content.Server.Genetics.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Speech.Components;
 using Content.Shared.ActionBlocker;
@@ -9,7 +7,6 @@ using Content.Shared.Body.Components;
 using Content.Shared.Climbing.Systems;
 using Content.Shared.Destructible;
 using Content.Shared.DeviceLinking.Events;
-using Content.Shared.DNAModifier;
 using Content.Shared.DragDrop;
 using Content.Shared.Humanoid;
 using Content.Shared.Mobs.Components;
@@ -20,7 +17,7 @@ using Robust.Server.Containers;
 using Robust.Shared.Containers;
 using static Content.Shared.DNAModifier.SharedDNAModifierComponent;
 
-namespace Content.Server.Genetics;
+namespace Content.Server._White.Genetics;
 
 public sealed class DNAModifierSystem : EntitySystem
 {

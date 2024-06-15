@@ -1,0 +1,26 @@
+﻿<DefaultWindow xmlns="https://spacestation14.io"
+            Title="{Loc 'comp-pda-ui-menu-title'}"
+            SetSize="400 400"
+            MinSize="400 400">
+    <TabContainer Name="MasterTabContainer">
+        <BoxContainer Name="DNA"
+                      Orientation="Vertical"
+                      VerticalExpand="True"
+                      HorizontalExpand="True"
+                      MinSize="100 150">
+            <BoxContainer Name="DNAConsoleContent" Margin="5 5 5 5" Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
+                <RichTextLabel Name="ModifierInfoLabel" Access="Public" HorizontalExpand="True" />
+                <Label HorizontalAlignment="Center" Name="ModifierActivity" Access="Public" HorizontalExpand="True" />
+            <BoxContainer Name="DNAModifierMissing" Margin="5 5 5 5" Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Loc 'DNAModifier missing!'}" />
+            </BoxContainer>
+            <BoxContainer Name="DNAModifierFar" Margin="5 5 5 5" Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Loc 'DNAModifier is far!'}" />
+            </BoxContainer>
+
+                <Label HorizontalAlignment="Center" Text="all is ok." Name="DNATest" />
+
+            </BoxContainer>
+        </BoxContainer>
+    </TabContainer>
+</DefaultWindow>

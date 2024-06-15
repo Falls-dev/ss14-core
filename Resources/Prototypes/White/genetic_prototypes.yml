@@ -1,0 +1,112 @@
+- type: wireLayout
+  id: DNAModifier
+  dummyWires: 2
+  wires:
+  - !type:PowerWireAction
+  - !type:PowerWireAction
+    pulseTimeout: 15
+    
+ - type: entity
+  parent: BaseComputerCircuitboard
+  id: DNAConsoleComputerCircuitboard
+  name: dna console computer board
+  description: A computer printed circuit board for a dna console.
+  components:
+    - type: Sprite
+      state: cpu_dna
+    - type: ComputerBoard
+      prototype: ComputerDNAConsole
+      
+- type: entity
+  parent: BaseComputer
+  id: ComputerDNAConsole
+  name: dna console computer
+  description: soon
+  components:
+  - type: DNAConsole
+  - type: DeviceList
+  - type: DeviceNetwork
+    deviceNetId: Wired
+  - type: Sprite
+    layers:
+    - map: ["computerLayerBody"]
+      state: computer
+    - map: ["computerLayerKeyboard"]
+      state: generic_keyboard
+    - map: ["computerLayerScreen"]
+      state: dna
+    - map: ["computerLayerKeys"]
+      state: generic_keys
+  - type: ApcPowerReceiver
+    powerLoad: 3400 #We want this to fail first so I transferred most of the scanner and pod's power here. (3500 in total)
+  - type: Computer
+    board: DNAConsoleComputerCircuitboard
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#00908D"
+  - type: DeviceLinkSource
+    range: 4
+    ports:
+      - DNAModifierSender
+  - type: ActivatableUI
+    key: enum.DNAConsoleUiKey.Key
+  - type: UserInterface
+    interfaces:
+      - key: enum.DNAConsoleUiKey.Key
+        type: DNAConsoleBoundUserInterface
+  - type: Speech
+    speechVerb: Robotic
+    speechSounds: Pai
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: StrongMetallic
+    
+- type: entity
+  id: DNAModifierMachineCircuitboard
+  parent: BaseMachineCircuitboard
+  name: dna modifier machine board
+  description: A machine printed circuit board for a dna modifier.
+  components:
+    - type: Sprite
+      state: dnamodifier
+    - type: MachineBoard
+      prototype: DNAModifier
+      requirements:
+        Capacitor: 1
+      materialRequirements:
+        Glass: 5
+        Cable: 1
+        
+- type: sourcePort
+  id: DNAModifierSender
+  name: signal-port-name-dna-modifier-sender
+  description: signal-port-description-dna-modifier-sender
+  
+- type: sinkPort
+  id: DNAModifierReceiver
+  name: signal-port-name-dna-modifier-receiver
+  description: signal-port-description-dna-modifier-receiver
+
+- type: genome
+  id: HumanGenomePrototype
+  valuebits:
+
+
+- type: mutationCollection
+  id: StandardHumanMutations
+  mutations:
+  - SuperStrength
+  - XrayVision
+
+- type: mutation
+  id: SuperStrength
+  name: Super Strength
+  instability: 10
+  length: 64
+
+- type: mutation
+  id: XrayVision
+  name: X-ray vision
+  instability: 30
+  length: 64

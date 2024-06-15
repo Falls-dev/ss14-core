@@ -5,18 +5,18 @@
   - !type:PowerWireAction
   - !type:PowerWireAction
     pulseTimeout: 15
-    
- - type: entity
+
+- type: entity
   parent: BaseComputerCircuitboard
   id: DNAConsoleComputerCircuitboard
   name: dna console computer board
   description: A computer printed circuit board for a dna console.
   components:
-    - type: Sprite
-      state: cpu_dna
-    - type: ComputerBoard
-      prototype: ComputerDNAConsole
-      
+  - type: Sprite
+    state: cpu_dna
+  - type: ComputerBoard
+    prototype: ComputerDNAConsole
+
 - type: entity
   parent: BaseComputer
   id: ComputerDNAConsole
@@ -61,7 +61,7 @@
   - type: Damageable
     damageContainer: Inorganic
     damageModifierSet: StrongMetallic
-    
+
 - type: entity
   id: DNAModifierMachineCircuitboard
   parent: BaseMachineCircuitboard
@@ -77,12 +77,12 @@
       materialRequirements:
         Glass: 5
         Cable: 1
-        
+
 - type: sourcePort
   id: DNAModifierSender
   name: signal-port-name-dna-modifier-sender
   description: signal-port-description-dna-modifier-sender
-  
+
 - type: sinkPort
   id: DNAModifierReceiver
   name: signal-port-name-dna-modifier-receiver
@@ -91,7 +91,6 @@
 - type: genome
   id: HumanGenomePrototype
   valuebits:
-
 
 - type: mutationCollection
   id: StandardHumanMutations

@@ -27,4 +27,7 @@ public sealed partial class MutationPrototype : IPrototype
     /// </summary>
     [DataField("length", required: true)]
     public int Length { get; private set; } = 64;
+
+    [DataField("effects")]
+    public MutationEffect[] Effect = default!;
 }

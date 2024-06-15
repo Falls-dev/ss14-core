@@ -94,7 +94,7 @@ public sealed class GenomeSystem : EntitySystem
         }
     }
 
-       /// <summary>
+    /// <summary>
     /// Either gets an existing genome layout or creates a new random one.
     /// Genome layouts are reset between rounds.
     /// Anything with <see cref="GenomeComponent"/> calls this on mapinit to ensure it uses the correct layout.

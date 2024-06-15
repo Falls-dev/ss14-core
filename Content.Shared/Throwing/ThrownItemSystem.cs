@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Threading.Tasks;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Gravity;
@@ -26,7 +25,6 @@ namespace Content.Shared.Throwing
         [Dependency] private readonly SharedGravitySystem _gravity = default!;
 
         private const string ThrowingFixture = "throw-fixture";
-        private readonly HashSet<(EntityUid, EntityUid)> _processedCollisions = new(); // WD edit
 
         public override void Initialize()
         {
@@ -64,22 +62,10 @@ namespace Content.Shared.Throwing
             if (!args.OtherFixture.Hard)
                 return;
 
-            // WD edit start
-            var collisionPair = (Uid: uid, OtherUid: args.OtherEntity);
-            if (_processedCollisions.Contains(collisionPair))
-                return;
-            // WD edit start
-
             if (args.OtherEntity == component.Thrower)
                 return;
 
             ThrowCollideInteraction(component, args.OurEntity, args.OtherEntity);
-
-            // WD edit start
-            _processedCollisions.Add(collisionPair);
-
-            Task.Delay(TimeSpan.FromSeconds(0.5)).ContinueWith(_ => _processedCollisions.Remove(collisionPair));
-            // WD edit end
         }
 
         private void PreventCollision(EntityUid uid, ThrownItemComponent component, ref PreventCollideEvent args)

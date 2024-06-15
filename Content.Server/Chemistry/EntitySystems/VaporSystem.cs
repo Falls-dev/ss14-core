@@ -31,8 +31,7 @@ namespace Content.Server.Chemistry.EntitySystems
         [Dependency] private readonly ReactiveSystem _reactive = default!;
 
         private const float ReactTime = 0.125f;
-        private readonly HashSet<(EntityUid, EntityUid)> _processedCollisions = new(); // WD edit
-
+        private HashSet<EntityUid> _processedCollisions = new(); // WD edit
 
         public override void Initialize()
         {
@@ -46,11 +45,8 @@ namespace Content.Server.Chemistry.EntitySystems
             if (!EntityManager.TryGetComponent(entity.Owner, out SolutionContainerManagerComponent? contents))
                 return;
 
-            // WD edit start
-            var collisionPair = (Uid: entity.Owner, OtherUid: args.OtherEntity);
-            if (_processedCollisions.Contains(collisionPair))
+            if (_processedCollisions.Contains(args.OtherEntity)) // WD edit
                 return;
-            // WD edit end
 
             foreach (var (_, soln) in _solutionContainerSystem.EnumerateSolutions((entity.Owner, contents)))
             {
@@ -58,10 +54,12 @@ namespace Content.Server.Chemistry.EntitySystems
                 _reactive.DoEntityReaction(args.OtherEntity, solution, ReactionMethod.Touch);
             }
 
-            // WD edit start
-            _processedCollisions.Add(collisionPair);
 
-            Task.Delay(TimeSpan.FromSeconds(0.5)).ContinueWith(_ => _processedCollisions.Remove(collisionPair));
+            // WD edit start
+            var collision = args.OtherEntity;
+            _processedCollisions.Add(collision);
+
+            Task.Delay(TimeSpan.FromSeconds(0.5)).ContinueWith(_ => _processedCollisions.Remove(collision));
             // WD edit end
 
             // Check for collision with a impassable object (e.g. wall) and stop

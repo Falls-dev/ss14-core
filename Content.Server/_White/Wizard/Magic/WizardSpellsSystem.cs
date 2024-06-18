@@ -148,6 +148,24 @@ public sealed class WizardSpellsSystem : EntitySystem
 
         msg.Handled = true;
         Speak(msg);
+
+        var hasWiz = HasComp<WizardComponent>(uid);
+        var targetHasWiz = HasComp<WizardComponent>(target);
+
+        if (hasWiz == targetHasWiz)
+            return;
+
+        if (hasWiz)
+        {
+            RemComp<WizardComponent>(uid);
+            EnsureComp<WizardComponent>(target);
+        }
+
+        if (targetHasWiz)
+        {
+            RemComp<WizardComponent>(target);
+            EnsureComp<WizardComponent>(uid);
+        }
     }
 
     #endregion

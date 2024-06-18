@@ -228,7 +228,7 @@
   description: spellbook-hardsuit-desc
   productEntity: ClothingOuterHardsuitWizard
   cost:
-    SpellPoint: 4
+    SpellPoint: 5
   categories:
   - MagicItems
   conditions:

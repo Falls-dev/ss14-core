@@ -70,7 +70,7 @@ public sealed partial class EnergyDomeSystem : EntitySystem
     {
         if (args.User == null)
             return;
-        
+
         RaiseLocalEvent(args.User.Value, new EnergyDomeClothesTurnOffEvent());
     }
 

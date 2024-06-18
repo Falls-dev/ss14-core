@@ -168,6 +168,8 @@ public sealed class WeaponModulesSystem : EntitySystem
         if(!TryInsertModule(module, weapon, component, args.Container.ID, out var weaponModulesComponent))
             return;
 
+        if(HasComp<TelescopeComponent>(weapon)) return;
+
         AddComp<TelescopeComponent>(weapon);
     }
     #endregion
@@ -236,6 +238,8 @@ public sealed class WeaponModulesSystem : EntitySystem
 
         if(!TryEjectModule(module, weapon, args.Container.ID, out var weaponModulesComponent))
             return;
+
+        if(!HasComp<TelescopeComponent>(weapon)) return;
 
         RemComp<TelescopeComponent>(weapon);
     }

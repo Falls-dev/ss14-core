@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Kitchen.Components;
 using Content.Server.Popups;
+using Content.Shared._White.NiceIdCards;
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
@@ -9,6 +10,7 @@ using Content.Shared.Database;
 using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.StatusIcon;
+using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -21,6 +23,7 @@ public sealed class IdCardSystem : SharedIdCardSystem
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
+    [Dependency] private readonly SharedAppearanceSystem _sharedAppearance = default!;
 
     public override void Initialize()
     {
@@ -140,6 +143,20 @@ public sealed class IdCardSystem : SharedIdCardSystem
             _adminLogger.Add(LogType.Identity, LogImpact.Low,
                 $"{ToPrettyString(player.Value):player} has changed the job icon of {ToPrettyString(uid):entity} to {jobIcon} ");
         }
+
+        return true;
+    }
+
+    public bool TryChangeVisuals(EntityUid uid, string jobIconName, IdCardComponent? id = null)
+    {
+        if (!Resolve(uid, ref id))
+            return false;
+
+        //if (_prototypeManager.TryIndex<StatusIconPrototype>(jobIconName, out var jobIcon) && id.JobIcon == jobIcon.ID)
+            //return true;
+        var name = jobIconName.Replace("JobIcon", "");
+        _sharedAppearance.SetData(uid, IdVisuals.State, name);
+        Dirty(uid, id);
 
         return true;
     }

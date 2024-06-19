@@ -11,6 +11,10 @@
       rootTask:
         task: SimpleHostileCompound
       blackboard:
+        NavInteract: !type:Bool
+          true
+        NavPry: !type:Bool
+          true
         NavSmash: !type:Bool
           true
     - type: NpcFactionMember
@@ -61,9 +65,8 @@
       soundHit:
         path: /Audio/Effects/bite.ogg
       damage:
-        types:
-          Piercing: 5
-          Slash: 10
+        groups:
+          Brute: 15
     - type: TypingIndicator
       proto: alien
     - type: Tag
@@ -80,6 +83,20 @@
       interactFailureSound:
         path: /Audio/Effects/bite.ogg
     - type: Penetrated
+    - type: NightVision
+      toggleSound: null
+      color: "#404040"
+    - type: Tool
+      speed: 2
+      qualities:
+        - Prying
+    - type: Prying
+      pryPowered: !type:Bool
+          true
+      force: !type:Bool
+        true
+      useSound:
+        path: /Audio/Items/crowbar.ogg
 
 - type: entity
   parent: BaseMobCarp
@@ -144,6 +161,8 @@
     energy: 0.5
   - type: RgbLightController
     layers: [ 0 ]
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 6
 
 - type: entity
   id: MobCarpSalvage
@@ -178,13 +197,10 @@
     thresholds:
       0: Alive
       50: Dead
-  - type: SlowOnDamage
-    speedModifierThresholds:
-      25: 0.7
   - type: MeleeWeapon
     damage:
-      types:
-        Slash: 6
+      groups:
+        Brute: 7.5
 
 - type: entity
   name: sharkminnow
@@ -234,8 +250,9 @@
           amount: 4
     - type: MeleeWeapon
       damage:
+        groups:
+          Brute: 15
         types:
-          Slash: 12
           Bloodloss: 5
 
 - type: entity

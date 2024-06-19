@@ -28,6 +28,15 @@
     - Security
   - type: UseDelay
     delay: 6
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/White/Items/Handcuffs/pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/White/Items/Handcuffs/drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/White/Items/Handcuffs/drop.ogg
 
 - type: entity
   name: makeshift handcuffs
@@ -36,7 +45,6 @@
   parent: Handcuffs
   components:
   - type: Handcuff
-    breakoutTime: 3
     cuffedRSI: Objects/Misc/cablecuffs.rsi
     bodyIconState: body-overlay
     color: forestgreen
@@ -79,7 +87,6 @@
     size: Tiny
     storedRotation: 0
   - type: Handcuff
-    breakoutTime: 3
     cuffedRSI: Objects/Misc/cablecuffs.rsi  # cablecuffs will look fine
     bodyIconState: body-overlay
     breakOnRemove: true

@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Shared._White.Events;
 using Content.Shared._White.WeaponModules;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
@@ -353,6 +354,7 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
         }
 
+        RaiseLocalEvent(user, new EnergyDomeClothesTurnOffEvent()); // WD
         // Shoot confirmed - sounds also played here in case it's invalid (e.g. cartridge already spent).
         Shoot(gunUid, gun, ev.Ammo, fromCoordinates, toCoordinates.Value, out var userImpulse, user, throwItems: attemptEv.ThrowItems);
         var shotEv = new GunShotEvent(user, ev.Ammo);
@@ -533,6 +535,11 @@ public abstract partial class SharedGunSystem : EntitySystem
         Dirty(gun);
     }
     // WD EDIT
+    public void SetUseKey(GunComponent gun, bool useKey)
+    {
+        gun.UseKey = useKey;
+    }
+
     public void SetProjectileSpeed(EntityUid weapon, float projectileSpeed)
     {
         if(!TryComp<GunComponent>(weapon, out var gunComponent))

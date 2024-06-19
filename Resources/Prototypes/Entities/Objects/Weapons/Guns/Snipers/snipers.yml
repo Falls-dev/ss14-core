@@ -38,6 +38,15 @@
         ents: []
   - type: StaticPrice
     price: 500
+  - type: EmitSoundOnPickup
+    sound:
+      collection: SnipersPickUp
+  - type: EmitSoundOnDrop
+    sound:
+      collection: SnipersDrop
+  - type: EmitSoundOnLand
+    sound:
+      collection: SnipersDrop
 
 - type: entity
   name: Kardashev-Mosin
@@ -65,6 +74,8 @@
       - CartridgeAntiMateriel
     capacity: 5
     proto: CartridgeAntiMateriel
+  - type: Gun
+    fireRate: 0.6
   - type: Wieldable
     forceTwoHanded: True
   - type: Telescope

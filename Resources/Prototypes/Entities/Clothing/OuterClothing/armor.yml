@@ -61,7 +61,7 @@
       coefficients:
         Blunt: 0.4
         Slash: 0.4
-        Piercing: 0.7
+        Piercing: 0.9
         Heat: 0.9
         Caustic: 0.9
   - type: ExplosionResistance
@@ -106,7 +106,7 @@
         Piercing: 0.9
         Heat: 0.4 # this technically means it protects against fires pretty well? -heat is just for lasers and stuff, not atmos temperature
   - type: Reflect
-    reflectProb: 1
+    reflectProb: 0.5
     reflects:
       - Energy
 
@@ -200,7 +200,7 @@
     sprite: Clothing/OuterClothing/Armor/heavyred.rsi
 
 - type: entity
-  parent: ClothingOuterArmorHeavy
+  parent: ClothingOuterBaseLarge
   id: ClothingOuterArmorMagusblue
   name: blue magus armor
   description: An blue armored suit that provides good protection.
@@ -209,9 +209,22 @@
     sprite: Clothing/OuterClothing/Armor/magusblue.rsi
   - type: Clothing
     sprite: Clothing/OuterClothing/Armor/magusblue.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.6
+        Heat: 0.5
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: GroupExamine
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
 
 - type: entity
-  parent: ClothingOuterArmorHeavy
+  parent: ClothingOuterArmorMagusblue
   id: ClothingOuterArmorMagusred
   name: red magus armor
   description: A red armored suit that provides good protection.

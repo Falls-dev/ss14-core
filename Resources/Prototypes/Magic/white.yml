@@ -330,6 +330,7 @@
         components:
         - MindContainer
         - ActionContainer
+        - MobState
       canTargetSelf: false
       checkCanInteract: false
       useDelay: 60

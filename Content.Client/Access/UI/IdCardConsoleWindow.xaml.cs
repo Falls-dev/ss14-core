@@ -24,6 +24,8 @@ namespace Content.Client.Access.UI
 
         private readonly IdCardConsoleBoundUserInterface _owner;
 
+        private GridContainer _grid = default!;
+
         private AccessLevelControl _accessButtons = new();
         private readonly Dictionary<string, TextureButton> _jobIconButtons = new(); //WD-EDIT
         private readonly List<string> _jobPrototypeIds = new();
@@ -92,24 +94,34 @@ namespace Content.Client.Access.UI
             if (rsi == null)
                 return;
 
-            foreach (var jobIcon in idConsoleComponent.JobIcons)
+            foreach (var department in idConsoleComponent.JobIcons)
             {
-                var newButton = new TextureButton
+                _grid = new GridContainer
                 {
-                    TextureNormal = rsi.RSI.TryGetState(jobIcon, out var state) ? state.Frame0
-                        : rsi.RSI.TryGetState("CustomId", out var customState) ? customState.Frame0
-                        : null,
-                    Scale = new Vector2(5, 5)
+                    Columns = department.Count
                 };
-
-                _jobIconButtons.Add(jobIcon, newButton);
-                newButton.OnPressed += _ =>
+                foreach (var jobIcon in department)
                 {
-                    _lastJobIcon = "JobIcon" + jobIcon;
-                    SubmitData();
-                };
+                    var newButton = new TextureButton
+                    {
+                        TextureNormal = rsi.RSI.TryGetState(jobIcon, out var state) ? state.Frame0
+                            : rsi.RSI.TryGetState("CustomId", out var customState) ? customState.Frame0
+                            : null,
+                        Scale = new Vector2(5, 5)
+                    };
 
-                JobIconsGrid.AddChild(newButton);
+                    _jobIconButtons.TryAdd(jobIcon, newButton);
+
+                    newButton.OnPressed += _ =>
+                    {
+                        _lastJobIcon = "JobIcon" + jobIcon;
+                        SubmitData();
+                    };
+
+                    _grid.AddChild(newButton);
+                }
+
+                JobIconsGrid.AddChild(_grid);
             }
             //WD-EDIT
         }

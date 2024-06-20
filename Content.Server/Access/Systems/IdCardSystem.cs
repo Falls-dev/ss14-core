@@ -152,8 +152,6 @@ public sealed class IdCardSystem : SharedIdCardSystem
         if (!Resolve(uid, ref id))
             return false;
 
-        //if (_prototypeManager.TryIndex<StatusIconPrototype>(jobIconName, out var jobIcon) && id.JobIcon == jobIcon.ID)
-            //return true;
         var name = jobIconName.Replace("JobIcon", "");
         _sharedAppearance.SetData(uid, IdVisuals.State, name);
 

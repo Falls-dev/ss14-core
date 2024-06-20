@@ -24,6 +24,7 @@
     - WhitelistChameleon
   - type: StealTarget
     stealGroup: IDCard
+  - type: Appearance
   - type: GenericVisualizer
     visuals:
       enum.IdVisuals.State:

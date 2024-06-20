@@ -156,7 +156,6 @@ public sealed class IdCardSystem : SharedIdCardSystem
             //return true;
         var name = jobIconName.Replace("JobIcon", "");
         _sharedAppearance.SetData(uid, IdVisuals.State, name);
-        Dirty(uid, id);
 
         return true;
     }

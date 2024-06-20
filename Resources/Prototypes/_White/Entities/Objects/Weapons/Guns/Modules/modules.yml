@@ -121,7 +121,7 @@
   name: "aim module"
   parent: BaseAimModule
   components:
-  - type: EightAimModule
+  - type: AimModule
     value: "eightaim"
     module_type: "aim_module"
   - type: Sprite

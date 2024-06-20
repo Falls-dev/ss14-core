@@ -38,8 +38,8 @@ public sealed class WeaponModulesSystem : EntitySystem
         SubscribeLocalEvent<AcceleratorModuleComponent, EntGotInsertedIntoContainerMessage>(AcceleratorModuleOnInsert);
         SubscribeLocalEvent<AcceleratorModuleComponent, EntGotRemovedFromContainerMessage>(AcceleratorModuleOnEject);
 
-        SubscribeLocalEvent<EightAimModuleComponent, EntGotInsertedIntoContainerMessage>(EightAimModuleOnInsert);
-        SubscribeLocalEvent<EightAimModuleComponent, EntGotRemovedFromContainerMessage>(EightAimModuleOnEject);
+        SubscribeLocalEvent<AimModuleComponent, EntGotInsertedIntoContainerMessage>(EightAimModuleOnInsert);
+        SubscribeLocalEvent<AimModuleComponent, EntGotRemovedFromContainerMessage>(EightAimModuleOnEject);
     }
 
     private bool TryInsertModule(EntityUid module, EntityUid weapon, BaseModuleComponent component,
@@ -159,7 +159,7 @@ public sealed class WeaponModulesSystem : EntitySystem
         _gunSystem.SetFireRate(weapon, component.OldFireRate + component.FireRateAdd);
     }
 
-    private void EightAimModuleOnInsert(EntityUid module, EightAimModuleComponent component, EntGotInsertedIntoContainerMessage args)
+    private void EightAimModuleOnInsert(EntityUid module, AimModuleComponent component, EntGotInsertedIntoContainerMessage args)
     {
         EntityUid weapon = args.Container.Owner;
 
@@ -168,9 +168,7 @@ public sealed class WeaponModulesSystem : EntitySystem
         if(!TryInsertModule(module, weapon, component, args.Container.ID, out var weaponModulesComponent))
             return;
 
-        if(HasComp<TelescopeComponent>(weapon)) return;
-
-        AddComp<TelescopeComponent>(weapon);
+        EnsureComp<TelescopeComponent>(weapon).Divisor = component.Divisor;
     }
     #endregion
 
@@ -232,14 +230,12 @@ public sealed class WeaponModulesSystem : EntitySystem
         _gunSystem.SetFireRate(weapon, component.OldFireRate);
     }
 
-    private void EightAimModuleOnEject(EntityUid module, EightAimModuleComponent component, EntGotRemovedFromContainerMessage args)
+    private void EightAimModuleOnEject(EntityUid module, AimModuleComponent component, EntGotRemovedFromContainerMessage args)
     {
         EntityUid weapon = args.Container.Owner;
 
         if(!TryEjectModule(module, weapon, args.Container.ID, out var weaponModulesComponent))
             return;
-
-        if(!HasComp<TelescopeComponent>(weapon)) return;
 
         RemComp<TelescopeComponent>(weapon);
     }

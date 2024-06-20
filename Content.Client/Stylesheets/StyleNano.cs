@@ -160,13 +160,13 @@ namespace Content.Client.Stylesheets
 
         // WD - HoP console
 
-        public static readonly Color ButtonColorCommand = Color.FromHex("#1049A9");
-        public static readonly Color ButtonColorSecurity = Color.FromHex("#BC3232");
-        public static readonly Color ButtonColorMedical = Color.FromHex("#0A67A3");
-        public static readonly Color ButtonColorEngineering = Color.FromHex("#FF7D14");
-        public static readonly Color ButtonColorCargo = Color.FromHex("#A15100");
-        public static readonly Color ButtonColorResearching = Color.FromHex("#8A16B7");
-        public static readonly Color ButtonColorService = Color.FromHex("#00A779");
+        public static readonly Color ButtonColorCommand = Color.FromHex("#436BAD");
+        public static readonly Color ButtonColorSecurity = Color.FromHex("#BF5454");
+        public static readonly Color ButtonColorMedical = Color.FromHex("#4494C8");
+        public static readonly Color ButtonColorEngineering = Color.FromHex("#FDA55E");
+        public static readonly Color ButtonColorCargo = Color.FromHex("#9E6A34");
+        public static readonly Color ButtonColorResearching = Color.FromHex("#984EB4");
+        public static readonly Color ButtonColorService = Color.FromHex("#40A166");
 
         public override Stylesheet Stylesheet { get; }
 

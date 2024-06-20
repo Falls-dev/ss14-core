@@ -87,6 +87,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<StopTimeSpellEvent>(OnTimeStop);
         SubscribeLocalEvent<MindswapSpellEvent>(OnMindswapSpell);
         SubscribeLocalEvent<TeleportSpellEvent>(OnTeleportSpell);
         SubscribeLocalEvent<InstantRecallSpellEvent>(OnInstantRecallSpell);
@@ -104,6 +105,25 @@ public sealed class WizardSpellsSystem : EntitySystem
 
         SubscribeLocalEvent<MagicComponent, BeforeCastSpellEvent>(OnBeforeCastSpell);
     }
+
+    #region Timestop
+
+    private void OnTimeStop(StopTimeSpellEvent msg)
+    {
+        if (!CanCast(msg))
+            return;
+
+        var ent = Spawn(msg.Prototype, Transform(msg.Performer).Coordinates);
+        _transformSystem.AttachToGridOrMap(ent);
+
+        var comp = EnsureComp<PreventCollideComponent>(ent);
+        comp.Uid = msg.Performer;
+
+        msg.Handled = true;
+        Speak(msg);
+    }
+
+    #endregion
 
     #region Mindswap
 

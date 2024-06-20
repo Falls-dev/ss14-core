@@ -18,7 +18,10 @@
         mask:
         - None
         layer:
+        - Impassable
+        - HighImpassable
         - MidImpassable
+        - LowImpassable
         - Opaque
         - BulletImpassable
   - type: Physics

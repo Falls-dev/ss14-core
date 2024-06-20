@@ -1,11 +1,9 @@
-﻿using Content.Shared.Doors.Components;
-using Content.Shared.Lock;
-using Content.Shared.Storage;
+﻿using Content.Shared.Lock;
 using Content.Shared.Storage.Components;
 
 namespace Content.Shared._White.Lighting.PointLight.Locker;
 
-public sealed class SharedPointLightAirlockSystem : EntitySystem
+public sealed class PointLightLockerSystem : EntitySystem
 {
     [Dependency] private readonly SharedPointLightSystem _pointLightSystem = default!;
     public override void Initialize()

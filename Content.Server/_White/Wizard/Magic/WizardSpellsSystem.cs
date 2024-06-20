@@ -25,7 +25,6 @@ using Content.Shared._White.Wizard;
 using Content.Shared._White.Wizard.Magic;
 using Content.Shared.Actions;
 using Content.Shared.Borer;
-using Content.Shared.Changeling;
 using Content.Shared.Cluwne;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Hands.Components;
@@ -140,7 +139,7 @@ public sealed class WizardSpellsSystem : EntitySystem
 
         if (TryComp(target, out InfestedBorerComponent? borer) && borer.ControllingBrain)
         {
-            _popupSystem.PopupEntity("Его разумом кто-то управляет.", uid, uid, PopupType.MediumCaution);
+            _popupSystem.PopupEntity(Loc.GetString("mindswap-borer-failed"), uid, uid, PopupType.MediumCaution);
             return;
         }
 
@@ -155,7 +154,7 @@ public sealed class WizardSpellsSystem : EntitySystem
         if (targetHasMind)
         {
             _mindSystem.TransferTo(targetMindId, uid, mind: targetMind);
-            _popupSystem.PopupEntity(Loc.GetString("Ваш разум подменили!"), uid, uid, PopupType.LargeCaution);
+            _popupSystem.PopupEntity(Loc.GetString("mindswap-success"), uid, uid, PopupType.LargeCaution);
         }
 
         TransferAllMagicActions(uid, target);

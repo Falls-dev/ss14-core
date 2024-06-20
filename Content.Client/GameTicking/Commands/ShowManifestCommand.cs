@@ -1,28 +1,31 @@
 ﻿using Content.Client.GameTicking.Managers;
 using Content.Shared.Administration;
+using Content.Shared.GameTicking;
 using Robust.Shared.Console;
+using Robust.Shared.Network;
 
-namespace Content.Client.GameTicking.Commands;
-
-[AnyCommand]
-public sealed class ShowManifestCommand : IConsoleCommand
+namespace Content.Client.GameTicking.Commands
 {
-    [Dependency] private readonly IEntitySystemManager _entitySystem = default!;
-    public string Command => "showmanifest";
-    public string Description => "Shows manifest if you closed one";
-    public string Help => "Usage: showmanifest";
-
-    public void Execute(IConsoleShell shell, string argStr, string[] args)
+    [AnyCommand]
+    public sealed class ShowManifestCommand : IConsoleCommand
     {
-        var ticker = _entitySystem.GetEntitySystem<ClientGameTicker>();
-        var window = ticker._window;
+        [Dependency] private readonly IEntitySystemManager _entitySystem = default!;
 
-        if (window == null)
+        public string Command => "showmanifest";
+        public string Description => "Shows round end summary window";
+        public string Help => "Usage: showmanifest";
+
+        public void Execute(IConsoleShell shell, string argStr, string[] args)
         {
-            shell.WriteLine("This can only be executed while the game is not in a round.");
-            return;
-        }
+            var ticker = _entitySystem.GetEntitySystem<ClientGameTicker>();
+            var window = ticker._window;
 
-        window.OpenCentered();
+            if (!ticker.IsGameStarted && window != null)
+            {
+                window.OpenCentered();
+                return;
+            }
+            shell.WriteLine("You can't open manifest right now");
+        }
     }
 }

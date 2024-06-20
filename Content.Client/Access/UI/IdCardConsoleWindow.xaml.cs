@@ -28,7 +28,7 @@ namespace Content.Client.Access.UI
 
         private AccessLevelControl _accessButtons = new();
         private readonly Dictionary<string, TextureButton> _jobIconButtons = new(); //WD-EDIT
-        private readonly List<string> _jobPrototypeIds = new();
+        private string _newJob = "";
 
         private string? _lastFullName;
         private string? _lastJobTitle;
@@ -60,22 +60,6 @@ namespace Content.Client.Access.UI
             };
 
             JobTitleSaveButton.OnPressed += _ => SubmitData();
-
-            var jobs = _prototypeManager.EnumeratePrototypes<JobPrototype>().ToList();
-            jobs.Sort((x, y) => string.Compare(x.LocalizedName, y.LocalizedName, StringComparison.CurrentCulture));
-
-            foreach (var job in jobs)
-            {
-                if (!job.OverrideConsoleVisibility.GetValueOrDefault(job.SetPreference))
-                {
-                    continue;
-                }
-
-                _jobPrototypeIds.Add(job.ID);
-                JobPresetOptionButton.AddItem(Loc.GetString(job.Name), _jobPrototypeIds.Count - 1);
-            }
-
-            JobPresetOptionButton.OnItemSelected += SelectJobPreset;
 
             _accessButtons.Populate(accessLevels, prototypeManager);
             AccessLevelControlContainer.AddChild(_accessButtons);
@@ -114,6 +98,8 @@ namespace Content.Client.Access.UI
 
                     newButton.OnPressed += _ =>
                     {
+                        SelectJobPreset(jobIcon);
+                        _newJob = jobIcon;
                         _lastJobIcon = "JobIcon" + jobIcon;
                         SubmitData();
                     };
@@ -137,15 +123,14 @@ namespace Content.Client.Access.UI
             }
         }
 
-        private void SelectJobPreset(OptionButton.ItemSelectedEventArgs args)
+        private void SelectJobPreset(string jobName)
         {
-            if (!_prototypeManager.TryIndex(_jobPrototypeIds[args.Id], out JobPrototype? job))
+            if (!_prototypeManager.TryIndex(jobName, out JobPrototype? job))
             {
                 return;
             }
 
             JobTitleLineEdit.Text = Loc.GetString(job.Name);
-            args.Button.SelectId(args.Id);
 
             ClearAllAccess();
 
@@ -216,18 +201,10 @@ namespace Content.Client.Access.UI
 
             JobTitleSaveButton.Disabled = !interfaceEnabled || !jobTitleDirty;
 
-            JobPresetOptionButton.Disabled = !interfaceEnabled;
-
             _accessButtons.UpdateState(state.TargetIdAccessList?.ToList() ??
                                        new List<ProtoId<AccessLevelPrototype>>(),
                                        state.AllowedModifyAccessList?.ToList() ??
                                        new List<ProtoId<AccessLevelPrototype>>());
-
-            var jobIndex = _jobPrototypeIds.IndexOf(state.TargetIdJobPrototype);
-            if (jobIndex >= 0)
-            {
-                JobPresetOptionButton.SelectId(jobIndex);
-            }
 
             //WD-EDIT
             if (_resource.TryGetResource(new ResPath("/Textures/Interface/Misc/job_icons.rsi"), out RSIResource? rsi))
@@ -246,7 +223,6 @@ namespace Content.Client.Access.UI
                         : rsi.RSI.TryGetState("CustomId", out var customState)
                             ? customState.Frame0
                             : null,
-
                     TextureScale = new Vector2(4, 4)
                 };
 
@@ -268,15 +244,14 @@ namespace Content.Client.Access.UI
         private void SubmitData()
         {
             // Don't send this if it isn't dirty.
-            var jobProtoDirty = _lastJobProto != null &&
-                _jobPrototypeIds[JobPresetOptionButton.SelectedId] != _lastJobProto;
+            var jobProtoDirty = _lastJobProto != null && _newJob != _lastJobProto;
 
             _owner.SubmitData(
                 FullNameLineEdit.Text,
                 JobTitleLineEdit.Text,
                 // Iterate over the buttons dictionary, filter by `Pressed`, only get key from the key/value pair
                 _accessButtons.ButtonsList.Where(x => x.Value.Pressed).Select(x => x.Key).ToList(),
-                jobProtoDirty ? _jobPrototypeIds[JobPresetOptionButton.SelectedId] : string.Empty,
+                jobProtoDirty ? _newJob : string.Empty,
                 _lastJobIcon);
         }
     }

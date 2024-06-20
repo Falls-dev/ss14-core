@@ -113,7 +113,6 @@ public sealed class AirlockSystem : SharedAirlockSystem
         args.Sprite.LayerSetVisible(DoorVisualLayers.BaseUnlit, unlitVisible);
         args.Sprite.LayerSetVisible(DoorVisualLayers.BaseBolted, boltedVisible);
 
-        //RaiseLocalEvent(uid, new DoorlightsChangedEvent(DoorVisuals.BoltLights, boltedVisible));
         if (comp.EmergencyAccessLayer)
         {
             args.Sprite.LayerSetVisible(

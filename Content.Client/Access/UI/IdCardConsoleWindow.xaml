@@ -26,8 +26,9 @@
             <Button Name="JobTitleSaveButton" Text="{Loc 'id-card-console-window-save-button'}" Disabled="True" />
         </GridContainer>
         <Control MinSize="0 8" />
-        <GridContainer Name="AccessLevelControlContainer" />
+        <GridContainer Name="AccessLevelControlContainer" Columns="7" HorizontalExpand="True" HorizontalAlignment="Center" >
         <!-- WD EDIT -->
+        </GridContainer>
         <GridContainer Name="CurrentJobIcon" Columns="2">
             <Label Text="Текущая выбранная иконка для роли: " />
         </GridContainer>

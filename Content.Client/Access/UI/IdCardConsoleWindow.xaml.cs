@@ -66,7 +66,7 @@ namespace Content.Client.Access.UI
 
             foreach (var department in _groupAccessButtons.ButtonGroups)
             {
-                var departmentGrid = new  GridContainer {Columns = department.Values.Count};
+                var departmentGrid = new GridContainer {};
                 foreach (var button in department.Values)
                 {
                     departmentGrid.AddChild(button);

@@ -10,6 +10,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using YamlDotNet.Core.Tokens;
 using static Content.Shared.Access.Components.IdCardConsoleComponent;
 
 namespace Content.Client.Access.UI
@@ -26,7 +27,7 @@ namespace Content.Client.Access.UI
 
         private GridContainer _grid = default!;
 
-        private AccessLevelControl _accessButtons = new();
+        private readonly AccessLevelControl _groupAccessButtons = new();
         private readonly Dictionary<string, TextureButton> _jobIconButtons = new(); //WD-EDIT
         private string _newJob = "";
 
@@ -38,7 +39,7 @@ namespace Content.Client.Access.UI
         public IdCardConsoleWindow(
             IdCardConsoleBoundUserInterface owner,
             IPrototypeManager prototypeManager,
-            List<ProtoId<AccessLevelPrototype>> accessLevels)
+            List<List<ProtoId<AccessLevelPrototype>>> accessLevels)
         {
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
@@ -61,10 +62,20 @@ namespace Content.Client.Access.UI
 
             JobTitleSaveButton.OnPressed += _ => SubmitData();
 
-            _accessButtons.Populate(accessLevels, prototypeManager);
-            AccessLevelControlContainer.AddChild(_accessButtons);
+            _groupAccessButtons.PopulateForConsole(accessLevels, prototypeManager);
 
-            foreach (var (id, button) in _accessButtons.ButtonsList)
+            foreach (var department in _groupAccessButtons.ButtonGroups)
+            {
+                var departmentGrid = new  GridContainer {Columns = department.Values.Count};
+                foreach (var button in department.Values)
+                {
+                    departmentGrid.AddChild(button);
+                }
+                AccessLevelControlContainer.AddChild(departmentGrid);
+            }
+
+
+            foreach (var (id, button) in _groupAccessButtons.ButtonsList)
             {
                 button.OnPressed += _ => SubmitData();
             }
@@ -114,11 +125,14 @@ namespace Content.Client.Access.UI
 
         private void ClearAllAccess()
         {
-            foreach (var button in _accessButtons.ButtonsList.Values)
+            foreach (var group in _groupAccessButtons.ButtonGroups)
             {
-                if (button.Pressed)
+                foreach (var button in group.Values)
                 {
-                    button.Pressed = false;
+                    if (button.Pressed)
+                    {
+                        button.Pressed = false;
+                    }
                 }
             }
         }
@@ -137,24 +151,27 @@ namespace Content.Client.Access.UI
             // this is a sussy way to do this
             foreach (var access in job.Access)
             {
-                if (_accessButtons.ButtonsList.TryGetValue(access, out var button) && !button.Disabled)
+                foreach (var group in _groupAccessButtons.ButtonGroups)
                 {
-                    button.Pressed = true;
+                    if (group.TryGetValue(access, out var button) && !button.Disabled)
+                    {
+                        button.Pressed = true;
+                    }
                 }
+
             }
 
             foreach (var group in job.AccessGroups)
             {
                 if (!_prototypeManager.TryIndex(group, out AccessGroupPrototype? groupPrototype))
-                {
                     continue;
-                }
 
                 foreach (var access in groupPrototype.Tags)
                 {
-                    if (_accessButtons.ButtonsList.TryGetValue(access, out var button) && !button.Disabled)
+                    foreach (var buttonGroup in _groupAccessButtons.ButtonGroups)
                     {
-                        button.Pressed = true;
+                        if (buttonGroup.TryGetValue(access, out var button) && !button.Disabled)
+                            button.Pressed = true;
                     }
                 }
             }
@@ -201,8 +218,9 @@ namespace Content.Client.Access.UI
 
             JobTitleSaveButton.Disabled = !interfaceEnabled || !jobTitleDirty;
 
-            _accessButtons.UpdateState(state.TargetIdAccessList?.ToList() ??
-                                       new List<ProtoId<AccessLevelPrototype>>(),
+
+            _groupAccessButtons.UpdateStateConsole(state.TargetIdAccessList?.ToList() ??
+                                                   new List<ProtoId<AccessLevelPrototype>>(),
                                        state.AllowedModifyAccessList?.ToList() ??
                                        new List<ProtoId<AccessLevelPrototype>>());
 
@@ -250,7 +268,11 @@ namespace Content.Client.Access.UI
                 FullNameLineEdit.Text,
                 JobTitleLineEdit.Text,
                 // Iterate over the buttons dictionary, filter by `Pressed`, only get key from the key/value pair
-                _accessButtons.ButtonsList.Where(x => x.Value.Pressed).Select(x => x.Key).ToList(),
+                _groupAccessButtons.ButtonGroups
+                    .SelectMany(dict => dict)
+                    .Where(x => x.Value.Pressed)
+                    .Select(x => x.Key)
+                    .ToList(),
                 jobProtoDirty ? _newJob : string.Empty,
                 _lastJobIcon);
         }

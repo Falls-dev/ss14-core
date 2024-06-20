@@ -79,6 +79,19 @@ public sealed partial class IdCardConsoleComponent : Component
         "Theatre"
     };
 
+    // WD edit
+    [DataField, AutoNetworkedField]
+    public List<List<ProtoId<AccessLevelPrototype>>> AccessLevelsConsole = new()
+    {
+        new List<ProtoId<AccessLevelPrototype>> {"Captain", "HeadOfPersonnel", "HeadOfSecurity", "ChiefMedicalOfficer", "ChiefEngineer", "ResearchDirector", "Command"}, // Command
+        new List<ProtoId<AccessLevelPrototype>> {"Armory", "Brig", "Security","Detective", "Lawyer"}, // Security
+        new List<ProtoId<AccessLevelPrototype>> {"Chemistry", "Cryogenics", "Medical"}, // Medical
+        new List<ProtoId<AccessLevelPrototype>> {"Atmospherics", "Engineering", "External", "Maintenance"}, // Engineering
+        new List<ProtoId<AccessLevelPrototype>> {"Research"}, // Researching
+        new List<ProtoId<AccessLevelPrototype>> {"Cargo", "Salvage"}, // Cargo
+        new List<ProtoId<AccessLevelPrototype>> { "Service", "Theatre", "Bar", "Chapel", "Hydroponics", "Janitor", "Kitchen"} // Service
+    };
+
     //WD-EDIT
     // Command, Service, Security, Medical, Engineering, Researching, Cargo,
     [DataField("jobIcons")]

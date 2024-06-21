@@ -440,7 +440,7 @@ public sealed class WizardRuleSystem : GameRuleSystem<WizardRuleComponent>
         if (!_prototypeManager.TryIndex(rule.StartingGear, out var gear))
         {
             _sawmill.Error("Failed to load wizard gear prototype");
-            return false; // Add VerbGear
+            return false;
         }
 
         SetupWizardEntity(wizard, rule.Points, gear, profile);

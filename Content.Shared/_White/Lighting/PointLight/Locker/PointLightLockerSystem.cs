@@ -9,10 +9,11 @@ public sealed class PointLightLockerSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<PointLightLockerComponent, ComponentInit>(OnComponentInit);
+
         SubscribeLocalEvent<PointLightLockerComponent, LockToggledEvent>(OnLockToggled);
         SubscribeLocalEvent<PointLightLockerComponent, StorageAfterOpenEvent>(OnStorageAfterOpen);
         SubscribeLocalEvent<PointLightLockerComponent, StorageAfterCloseEvent>(OnStorageAfterClose);
-        SubscribeLocalEvent<PointLightLockerComponent, ComponentInit>(OnComponentInit);
     }
 
     public void ToggleLight(EntityUid uid, string hex, bool enable = true)

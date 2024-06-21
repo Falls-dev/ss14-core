@@ -183,8 +183,8 @@
         maxVol: 1000
   - type: PointLight
     enabled: false
-    radius: 1.05
-    energy: 0.5
+    radius: 1.5
+    energy: 0.7
     color: lightblue
     mask: /Textures/Effects/LightMasks/cone.png
     autoRot: true

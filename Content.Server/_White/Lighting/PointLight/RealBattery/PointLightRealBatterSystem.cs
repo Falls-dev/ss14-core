@@ -1,4 +1,6 @@
 ﻿using Content.Server.Power.Components;
+using Content.Shared.PowerCell;
+using Content.Shared.Rounding;
 
 namespace Content.Server._White.Lighting.PointLight.RealBattery;
 
@@ -9,6 +11,7 @@ public sealed class PointLightRealBatterySystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<PointLightRealBatteryComponent, ChargeChangedEvent>(OnChargeChanged);
+        SubscribeLocalEvent<PointLightRealBatteryComponent, ComponentInit>(OnComponentInit);
     }
 
     public void ToggleLight(EntityUid uid, string hex, bool enable = true)
@@ -27,21 +30,30 @@ public sealed class PointLightRealBatterySystem : EntitySystem
         RaiseLocalEvent(uid, new PointLightToggleEvent(enable), true);
     }
 
+    public void OnComponentInit(EntityUid uid, PointLightRealBatteryComponent component, ComponentInit args)
+    {
+        if (!TryComp<BatteryComponent>(uid, out var battery))
+            return;
+
+        var ev = new ChargeChangedEvent(battery.CurrentCharge, battery.MaxCharge);
+        RaiseLocalEvent(uid, ref ev);
+    }
     public void OnChargeChanged(EntityUid uid, PointLightRealBatteryComponent component, ChargeChangedEvent args)
     {
-        var percent = MathF.Round(args.Charge / args.MaxCharge * 100);
+        var frac = args.Charge / args.MaxCharge;
+        var level = (byte) ContentHelpers.RoundToNearestLevels(frac, 1, PowerCellComponent.PowerCellVisualsLevels);
 
-        switch (percent)
+        switch (level)
         {
-            case >= 70f:
+            case 2:
                 ToggleLight(uid, component.GreenColor);
                 break;
 
-            case >= 30f and < 70f:
+            case 1:
                 ToggleLight(uid, component.YellowColor);
                 break;
 
-            case < 30f:
+            case 0:
                 ToggleLight(uid, string.Empty, false);
                 break;
         }

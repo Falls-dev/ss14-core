@@ -1,6 +1,4 @@
-﻿using Robust.Shared.GameStates;
-
-namespace Content.Server._White.Lighting.PointLight.RealBattery;
+﻿namespace Content.Server._White.Lighting.PointLight.RealBattery;
 
 [RegisterComponent]
 public sealed partial class PointLightRealBatteryComponent : Component

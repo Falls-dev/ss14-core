@@ -99,8 +99,11 @@
   - type: Welder
   - type: PointLight
     enabled: false
-    radius: 1.5
+    radius: 1.4
+    energy: 0.5
     color: orange
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
     netsync: false
   - type: Appearance
   - type: RequiresEyeProtection
@@ -180,8 +183,12 @@
         maxVol: 1000
   - type: PointLight
     enabled: false
-    radius: 1.5
+    radius: 1.05
+    energy: 0.5
     color: lightblue
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    netsync: false
   - type: SolutionRegeneration
     solution: Welder
     generated:
@@ -213,5 +220,9 @@
     speed: 0.7
   - type: PointLight
     enabled: false
-    radius: 1.0
+    radius: 0.9
+    energy: 0.5
     color: orange
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    netsync: false

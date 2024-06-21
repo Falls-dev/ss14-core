@@ -53,7 +53,6 @@ public sealed class PointLightLockerSystem : EntitySystem
     public void OnStorageAfterClose(EntityUid uid, PointLightLockerComponent component, StorageAfterCloseEvent args)
     {
         ChangeLightOnDoorToggled(uid, component, false);
-        ToggleLight(uid, component.GreenColor);
     }
 
     public void ChangeLightOnDoorToggled(EntityUid uid, PointLightLockerComponent component, bool status)

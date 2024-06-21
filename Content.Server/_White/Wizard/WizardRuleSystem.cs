@@ -393,4 +393,58 @@ public sealed class WizardRuleSystem : GameRuleSystem<WizardRuleComponent>
         ICommonSession? session = null;
         SpawnWizard(session, component, true);
     }
+
+    /// <summary>
+    /// Makes mob a wizard through admin verb button
+    /// </summary>
+    public void AdminMakeWizard(EntityUid uid)
+    {
+        var rule = EntityQuery<WizardRuleComponent>().FirstOrDefault();
+
+        if (rule == null)
+        {
+            GameTicker.StartGameRule("Wizard", out var ruleEntity);
+            rule = Comp<WizardRuleComponent>(ruleEntity);
+        }
+
+        if (HasComp<WizardComponent>(uid))
+            return;
+
+        MakeWizard(uid, rule, true);
+    }
+
+    private bool MakeWizard(EntityUid wizard, WizardRuleComponent rule,
+        bool giveObjectives = true)
+    {
+        if (!_mind.TryGetMind(wizard, out var mindId, out var mind))
+        {
+            Log.Info("Failed getting mind for picked wizard.");
+            return false;
+        }
+
+        if (HasComp<WizardRoleComponent>(mindId))
+        {
+            Log.Error($"Player {mind.CharacterName} is already a wizard.");
+            return false;
+        }
+
+        HumanoidCharacterProfile? profile = null;
+        if (TryComp(wizard, out ActorComponent? actor))
+            profile = _prefs.GetPreferences(actor.PlayerSession.UserId).SelectedCharacter as HumanoidCharacterProfile;
+
+        if (giveObjectives)
+        {
+            AddRole(mindId, mind, rule);
+        }
+
+        if (!_prototypeManager.TryIndex(rule.StartingGear, out var gear))
+        {
+            _sawmill.Error("Failed to load wizard gear prototype");
+            return false; // Add VerbGear
+        }
+
+        SetupWizardEntity(wizard, rule.Points, gear, profile);
+
+        return true;
+    }
 }

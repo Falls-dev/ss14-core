@@ -2,7 +2,7 @@
 
 namespace Content.Server._White.Lighting.PointLight.RealBattery;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent]
 public sealed partial class PointLightRealBatteryComponent : Component
 {
     [DataField, ViewVariables]

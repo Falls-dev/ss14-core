@@ -87,6 +87,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<ArcaneBarrageSpellEvent>(OnArcaneBarrage);
         SubscribeLocalEvent<StopTimeSpellEvent>(OnTimeStop);
         SubscribeLocalEvent<MindswapSpellEvent>(OnMindswapSpell);
         SubscribeLocalEvent<TeleportSpellEvent>(OnTeleportSpell);
@@ -105,6 +106,29 @@ public sealed class WizardSpellsSystem : EntitySystem
 
         SubscribeLocalEvent<MagicComponent, BeforeCastSpellEvent>(OnBeforeCastSpell);
     }
+
+    #region Arcane Barrage
+
+    private void OnArcaneBarrage(ArcaneBarrageSpellEvent msg)
+    {
+        if (!CanCast(msg))
+            return;
+
+        var uid = msg.Performer;
+
+        var entity = Spawn(msg.Prototype, Transform(uid).Coordinates);
+        if (!_handsSystem.TryPickupAnyHand(uid, entity))
+        {
+            _popupSystem.PopupEntity(Loc.GetString("arcane-barrage-no-empty-hand"), uid, uid);
+            QueueDel(entity);
+            _actions.SetCooldown(msg.Action, TimeSpan.FromSeconds(1));
+            return;
+        }
+
+        msg.Handled = true;
+    }
+
+    #endregion
 
     #region Timestop
 

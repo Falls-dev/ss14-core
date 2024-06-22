@@ -30,7 +30,7 @@
         posData: !type:TargetCasterPos
     - type: VariableUseDelay
       useDelay: 6
-      altUseDelay: 12
+      altUseDelay: 5
       chargeUseDelay: 30
 
 - type: entity

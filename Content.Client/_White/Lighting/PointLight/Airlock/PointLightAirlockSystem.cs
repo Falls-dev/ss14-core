@@ -13,7 +13,7 @@ public sealed class PointLightAirlockSystem : EntitySystem
         SubscribeLocalEvent<PointLightAirlockComponent, AppearanceChangeEvent>(OnLightsChanged);
     }
 
-    public void ToggleLight(EntityUid uid, string hex, PointLightAirlockComponent airlockLight, bool enable = true)
+    private void ToggleLight(EntityUid uid, string hex, PointLightAirlockComponent airlockLight, bool enable = true)
     {
         if (!_pointLightSystem.TryGetLight(uid, out var pointLightComponent))
             return;
@@ -31,7 +31,7 @@ public sealed class PointLightAirlockSystem : EntitySystem
 
     }
 
-    public void OnLightsChanged(EntityUid uid, PointLightAirlockComponent component, AppearanceChangeEvent args)
+    private void OnLightsChanged(EntityUid uid, PointLightAirlockComponent component, AppearanceChangeEvent args)
     {
         if (args.AppearanceData.TryGetValue(DoorVisuals.Powered, out var isPowered) && !(bool) isPowered)
         {
@@ -66,7 +66,7 @@ public sealed class PointLightAirlockSystem : EntitySystem
 
     }
 
-    public void HandleState(EntityUid uid, PointLightAirlockComponent component, DoorState state)
+    private void HandleState(EntityUid uid, PointLightAirlockComponent component, DoorState state)
     {
         switch (state)
         {

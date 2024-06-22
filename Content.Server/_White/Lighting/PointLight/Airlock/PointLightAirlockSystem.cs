@@ -19,6 +19,7 @@ public sealed class PointLightAirlockSystem : EntitySystem
             return;
 
         RaiseLocalEvent(uid, new DoorlightsChangedEvent(args.Powered ? door.State : null, args.Powered), true);
+        component.IsPowered = args.Powered;
     }
 
 }

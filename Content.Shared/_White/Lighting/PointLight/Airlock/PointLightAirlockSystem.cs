@@ -13,7 +13,7 @@ public sealed class SharedPointLightAirlockSystem : EntitySystem
         SubscribeLocalEvent<PointLightAirlockComponent, DoorlightsChangedEvent>(OnDoorLightChanged);
     }
 
-    public void ToggleLight(EntityUid uid, string hex, bool enable = true)
+    public void ToggleLight(EntityUid uid, string hex, PointLightAirlockComponent airlockLight, bool enable = true)
     {
         if (!_pointLightSystem.TryGetLight(uid, out var pointLightComponent))
             return;
@@ -27,12 +27,22 @@ public sealed class SharedPointLightAirlockSystem : EntitySystem
         _pointLightSystem.SetEnabled(uid, enable, pointLightComponent);
 
         RaiseLocalEvent(uid, new PointLightToggleEvent(enable), true);
+        airlockLight.IsLightsEnabled = enable;
     }
 
     public void OnDoorLightChanged(EntityUid uid, PointLightAirlockComponent component, DoorlightsChangedEvent args)
     {
         if (!TryComp<DoorComponent>(uid, out var door))
             return;
+
+        if (!component.IsPowered)
+        {
+            if (component.IsLightsEnabled)
+                ToggleLight(uid, string.Empty, component, false);
+
+            return;
+        }
+
 
         if (TryComp<AirlockComponent>(uid, out var airlockComponent) && airlockComponent.EmergencyAccess && args.Value && args.State is not DoorVisuals.EmergencyLights && args.State != null)
             return; // While emergency access lights must be yellow no matter what
@@ -41,40 +51,40 @@ public sealed class SharedPointLightAirlockSystem : EntitySystem
         {
             case DoorVisuals.BoltLights:
                 if (args.Value)
-                    ToggleLight(uid, component.RedColor);
+                    ToggleLight(uid, component.RedColor, component);
                 else
                     RaiseLocalEvent(uid, new DoorlightsChangedEvent(door.State, true));
                 break;
 
             case DoorState.Denying:
-                ToggleLight(uid, component.RedColor);
+                ToggleLight(uid, component.RedColor, component);
                 break;
 
             case DoorState.Closed:
-                ToggleLight(uid, component.BlueColor);
+                ToggleLight(uid, component.BlueColor, component);
                 break;
 
             case DoorVisuals.EmergencyLights:
                 if (args.Value)
-                    ToggleLight(uid, component.YellowColor);
+                    ToggleLight(uid, component.YellowColor, component);
                 else
                     RaiseLocalEvent(uid, new DoorlightsChangedEvent(door.State, true));
                 break;
 
             case DoorState.Open:
-                ToggleLight(uid, component.BlueColor);
+                ToggleLight(uid, component.BlueColor, component);
                 break;
 
             case DoorState.Opening:
-                ToggleLight(uid, component.GreenColor);
+                ToggleLight(uid, component.GreenColor, component);
                 break;
 
             case DoorState.Closing:
-                ToggleLight(uid, component.GreenColor);
+                ToggleLight(uid, component.GreenColor, component);
                 break;
 
             default:
-                ToggleLight(uid, "", false);
+                ToggleLight(uid, string.Empty, component, false);
                 break;
         }
 

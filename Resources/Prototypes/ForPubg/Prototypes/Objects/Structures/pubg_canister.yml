@@ -10,6 +10,7 @@
   - type: StaticPrice
     price: 750
   - type: Sprite
+    noRot: false
     sprite: ForPubg/Textures/Structures/pubg_canister.rsi
     layers:
     - state: canisterbig
@@ -86,3 +87,91 @@
     sprite: ForPubg/Textures/Structures/pubg_canister.rsi
     layers:
     - state: canistersmall1
+
+# PUBG Quantum Canister
+- type: entity
+  id: PubgQuantumCanister
+  parent: StorageTank
+  name: Quantum Canister
+  description: Quantum Canister.
+  placement:
+    mode: PlaceFree
+  components:
+  - type: StaticPrice
+    price: 750
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/pubg_quantumcanister.rsi
+    noRot: false
+    layers:
+    - state: base
+    - state: overlay
+      shader: overlay
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.30
+        density: 20
+        hard: false
+        mask:
+        - FlyingMobMask
+        layer:
+        - FlyingMobLayer
+  - type: Appearance
+  - type: Item
+    size: Large
+    shape:
+    - 0, 0, 2, 3
+  - type: Explosive
+    explosionType: Cryo
+    maxIntensity: 20000
+    totalIntensity: 1500000
+    intensitySlope: 25000
+    canCreateVacuum: false
+  - type: OnUseTimerTrigger
+    delay: 5
+    beepSound:
+      path: /Audio/Effects/Grenades/Supermatter/smbeep.ogg
+      params:
+        volume: -2
+    beepInterval: 0.5
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:ExplodeBehavior
+  - type: TwoStageTrigger
+    triggerDelay: 3
+    components:
+    - type: AmbientSound
+      enabled: true
+      volume: 0
+      range: 20
+      sound:
+        path: /Audio/Effects/Grenades/Supermatter/supermatter_loop.ogg
+    - type: GravityWell
+      maxRange: 20
+      baseRadialAcceleration: 100
+      baseTangentialAcceleration: 8
+      gravPulsePeriod: 0.10
+    - type: SingularityDistortion
+      intensity: 50
+      falloffPower: 1
+    - type: PointLight
+      enabled: true
+      color: "#ffaa44"
+      energy: 15
+      radius: 20
+      softness: 1
+      offset: "0, 0"
+    - type: SoundOnTrigger
+      sound:
+        path: /Audio/Effects/Grenades/Supermatter/supermatter_loop.ogg
+        params:
+          volume: 5
+    - type: ExplodeOnTrigger
+    - type: MovementIgnoreGravity
+      gravityState: true

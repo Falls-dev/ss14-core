@@ -408,6 +408,8 @@ ent-PubgFuelCanisterSmall = Малая топливная канистра
 .desc = В условиях отсутствия автотранспорта годится для бартера или в качестве переносной взрывчатки
 ent-PubgFuelCanisterSmall1 = { ent-PubgFuelCanisterSmall }
 .desc = { ent-PubgFuelCanisterSmall.desc }
+ent-PubgQuantumCanister = Квантовая канистра
+.desc = Устройство(?) неизвестной разработки имеющее спусковой механизм
 
 # Pubg Lab Decor
 ent-PubgLabElectricalPanel = Электрическая панель

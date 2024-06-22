@@ -16,6 +16,6 @@ public sealed class TeslaProjectileSystem : EntitySystem
 
     private void OnStartCollide(Entity<TeslaProjectileComponent> ent, ref ProjectileHitEvent args)
     {
-        _lightning.ShootRandomLightnings(ent, 4, 4, arcDepth: 2, triggerLightningEvents: false);
+        _lightning.ShootRandomLightnings(ent, 3, 4, "WizardLightning", 2, false, ent.Comp.Caster);
     }
 }

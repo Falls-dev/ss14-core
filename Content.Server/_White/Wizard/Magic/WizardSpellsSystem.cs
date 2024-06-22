@@ -4,6 +4,7 @@ using Content.Server._White.Cult;
 using Content.Server._White.IncorporealSystem;
 using Content.Server._White.Wizard.Magic.Amaterasu;
 using Content.Server._White.Wizard.Magic.Other;
+using Content.Server._White.Wizard.Magic.TeslaProjectile;
 using Content.Server._White.Wizard.Teleport;
 using Content.Server.Abilities.Mime;
 using Content.Server.Administration.Commands;
@@ -803,6 +804,7 @@ public sealed class WizardSpellsSystem : EntitySystem
                 userVelocity = physics.LinearVelocity;
 
             var ent = Spawn(msg.Prototype, spawnCoords);
+            EnsureComp<TeslaProjectileComponent>(ent).Caster = msg.Performer;
             var direction = msg.Target.ToMapPos(EntityManager, _transformSystem) -
                             spawnCoords.ToMapPos(EntityManager, _transformSystem);
             _gunSystem.ShootProjectile(ent, direction, userVelocity, msg.Performer, msg.Performer);

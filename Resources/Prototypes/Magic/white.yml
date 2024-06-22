@@ -29,7 +29,7 @@
         prototype: ProjectileTeslaBall
         posData: !type:TargetCasterPos
     - type: VariableUseDelay
-      useDelay: 6
+      useDelay: 5
       altUseDelay: 5
       chargeUseDelay: 30
 

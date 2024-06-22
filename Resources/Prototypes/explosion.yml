@@ -158,7 +158,8 @@
       Shock: 15
   tileBreakChance: [0]
   tileBreakIntensity: [0]
-  lightColor: Cyan
-  fireColor: Cyan
+  lightColor: "#4080FF"
+  fireColor: "#4080FF"
   texturePath: /Textures/Effects/fire_greyscale.rsi
   fireStates: 3
+  ignoreResistances: false

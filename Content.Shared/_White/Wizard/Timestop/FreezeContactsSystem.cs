@@ -31,7 +31,6 @@ public sealed class FreezeContactsSystem : EntitySystem
 
         SubscribeLocalEvent<FreezeContactsComponent, StartCollideEvent>(OnEntityEnter);
         SubscribeLocalEvent<FreezeContactsComponent, EndCollideEvent>(OnEntityExit);
-        SubscribeLocalEvent<FreezeContactsComponent, ComponentStartup>(OnContactStartup);
 
         SubscribeLocalEvent<FrozenComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<FrozenComponent, ComponentRemove>(OnRemove);
@@ -52,17 +51,6 @@ public sealed class FreezeContactsSystem : EntitySystem
         SubscribeLocalEvent<FrozenComponent, PickupAttemptEvent>(OnAttempt);
         SubscribeLocalEvent<FrozenComponent, IsEquippingAttemptEvent>(OnEquipAttempt);
         SubscribeLocalEvent<FrozenComponent, IsUnequippingAttemptEvent>(OnUnequipAttempt);
-    }
-
-    private void OnContactStartup(Entity<FreezeContactsComponent> ent, ref ComponentStartup args)
-    {
-        if (!TryComp(ent, out PhysicsComponent? body))
-            return;
-
-        foreach (var uid in _physics.GetContactingEntities(ent, body))
-        {
-            FreezeEm(uid, ent);
-        }
     }
 
     private void OnMoveAttempt(EntityUid uid, FrozenComponent component, UpdateCanMoveEvent args)

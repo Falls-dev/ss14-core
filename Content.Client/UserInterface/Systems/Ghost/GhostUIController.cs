@@ -1,8 +1,6 @@
-﻿using Content.Client.Gameplay;
-using Content.Client.Ghost;
+﻿using Content.Client.Ghost;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Client.UserInterface.Systems.Ghost.Widgets;
-using Content.Shared._White.MagGloves;
 using Content.Shared.Ghost;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;

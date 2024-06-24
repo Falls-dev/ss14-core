@@ -70,14 +70,14 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
         private void AddButtons()
         {
-            AddButtons(_alivePlayers, "Живые", string.Empty, true); // Alive
-            AddButtons(_deadPlayers, "Мертвые", string.Empty, true); // Dead
-            AddButtons(_ghostPlayers, "Призраки", string.Empty, true); // Ghost
-            AddButtons(_leftPlayers, "Вышедшие из тела", string.Empty, true); // Left
-
+            AddPlayerButtons(_alivePlayers, "Живые", string.Empty, true); // Alive
+            AddPlayerButtons(_deadPlayers, "Мертвые", string.Empty, true); // Dead
+            AddPlayerButtons(_ghostPlayers, "Призраки", string.Empty, true); // Ghost
+            AddPlayerButtons(_leftPlayers, "Вышедшие из тела", string.Empty, true); // Left
+            AddPlaceButtons(_placeWarps, "ButtonColorSpecificDepartment");
         }
 
-        private void AddButtons(Dictionary<GhostWarpPlayer, string> players, string text, string styleClass, bool enableByDepartmentColorSheet)
+        private void AddPlayerButtons(Dictionary<GhostWarpPlayer, string> players, string text, string styleClass, bool enableByDepartmentColorSheet)
         {
             if (players.Count == 0)
                 return;
@@ -105,7 +105,6 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
                 if (enableByDepartmentColorSheet)
                     styleClass = _departmentStyles[sortedPlayers.IndexOf(departmentList)];
-
 
                 var labelText = _departmentNames[sortedPlayers.IndexOf(departmentList)];
 
@@ -139,6 +138,53 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 bigGrid.AddChild(departmentLabel);
                 bigGrid.AddChild(departmentGrid);
             }
+
+            GhostTeleportContainter.AddChild(bigGrid);
+        }
+        private void AddPlaceButtons(List<GhostWarpPlace> places, string styleClass)
+        {
+            var bigGrid = new GridContainer();
+
+            var bigLabel = new Label
+            {
+                Text = "Локации и объекты",
+                StyleClasses = { "LabelBig" }
+            };
+            bigGrid.AddChild(bigLabel);
+
+            var placesGrid = new GridContainer
+            {
+                Columns = 5,
+            };
+
+            var countLabel = new Label
+            {
+                Text = "Количество: " + places.Count,
+                StyleClasses = { "LabelSecondaryColor" }
+            };
+
+            foreach (var place in places)
+            {
+                var placeButton = new Button
+                {
+                    Text = place.Name,
+                    TextAlign = Label.AlignMode.Right,
+                    HorizontalAlignment = HAlignment.Center,
+                    VerticalAlignment = VAlignment.Center,
+                    SizeFlagsStretchRatio = 1,
+                    StyleClasses = { styleClass },
+                    ToolTip = place.Description,
+                    TooltipDelay = 0.1f,
+                    SetWidth = 180,
+                };
+
+                placeButton.OnPressed += _ => WarpClicked?.Invoke(place.Entity);
+                placeButton.Visible = ButtonIsVisible(placeButton);
+
+                placesGrid.AddChild(placeButton);
+            }
+            bigGrid.AddChild(countLabel);
+            bigGrid.AddChild(placesGrid);
 
             GhostTeleportContainter.AddChild(bigGrid);
         }
@@ -225,7 +271,11 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
         private bool ButtonIsVisible(Button button)
         {
-            return string.IsNullOrEmpty(_searchText) || button.Text == null || button.Text.Contains(_searchText, StringComparison.OrdinalIgnoreCase);
+            var a = string.IsNullOrEmpty(_searchText);
+            var b = button.Text == null;
+            var c = button.Text != null && button.Text.Contains(_searchText, StringComparison.OrdinalIgnoreCase);
+
+            return a || b || c;
         }
 
         private void UpdateVisibleButtons()

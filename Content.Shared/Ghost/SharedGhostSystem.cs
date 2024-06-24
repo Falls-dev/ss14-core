@@ -134,10 +134,11 @@ namespace Content.Shared.Ghost
     [Serializable, NetSerializable]
     public struct GhostWarpPlace
     {
-        public GhostWarpPlace(NetEntity entity, string displayName)
+        public GhostWarpPlace(NetEntity entity, string name, string description)
         {
             Entity = entity;
-            DisplayName = displayName;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>
@@ -149,7 +150,12 @@ namespace Content.Shared.Ghost
         /// <summary>
         /// The display name to be surfaced in the ghost warps menu
         /// </summary>
-        public string DisplayName { get; }
+        public string Name { get; }
+
+        /// <summary>
+        /// The display name to be surfaced in the ghost warps menu
+        /// </summary>
+        public string Description { get; }
 
     }
     /// <summary>

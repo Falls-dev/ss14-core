@@ -2,6 +2,7 @@
 using Content.Client.Ghost;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Client.UserInterface.Systems.Ghost.Widgets;
+using Content.Shared._White.MagGloves;
 using Content.Shared.Ghost;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
@@ -59,9 +60,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
     public void UpdateGui()
     {
         if (Gui == null)
-        {
             return;
-        }
 
         Gui.Visible = _system?.IsGhost ?? false;
         Gui.Update(_system?.AvailableGhostRoleCount, _system?.Player?.CanReturnToBody);
@@ -96,7 +95,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
         if (Gui?.TargetWindow is not { } window)
             return;
 
-        window.UpdateWarps(msg.Warps);
+        window.UpdateWarps(msg.Players, msg.Places);
         window.Populate();
     }
 

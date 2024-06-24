@@ -27,11 +27,15 @@ using JetBrains.Annotations;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Content.Shared._White;
+using Content.Shared.Humanoid;
+using Content.Shared.Roles;
+using Content.Shared.SSDIndicator;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using InvisibilityComponent = Content.Shared._White.Administration.InvisibilityComponent;
 
@@ -55,6 +59,7 @@ namespace Content.Server.Ghost
         [Dependency] private readonly VisibilitySystem _visibilitySystem = default!;
         [Dependency] private readonly IChatManager _chatManager = default!;
         [Dependency] private readonly IAdminLogManager _adminLogger = default!;
+        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
         public override void Initialize()
         {
@@ -341,7 +346,7 @@ namespace Content.Server.Ghost
                 return;
             }
 
-            var response = new GhostWarpsResponseEvent(GetPlayerWarps(entity).Concat(GetLocationWarps()).ToList());
+            var response = new GhostWarpsResponseEvent(GetPlayerWarps(), GetLocationWarps());
             RaiseNetworkEvent(response, args.SenderSession.Channel);
         }
 
@@ -375,33 +380,62 @@ namespace Content.Server.Ghost
                 _physics.SetLinearVelocity(attached, Vector2.Zero, body: physics);
         }
 
-        private IEnumerable<GhostWarp> GetLocationWarps()
+        private List<GhostWarpPlace> GetLocationWarps()
         {
+            var warps = new List<GhostWarpPlace> { };
             var allQuery = AllEntityQuery<WarpPointComponent>();
 
             while (allQuery.MoveNext(out var uid, out var warp))
             {
-                yield return new GhostWarp(GetNetEntity(uid), warp.Location ?? Name(uid), true);
+                var newWarp =  new GhostWarpPlace(GetNetEntity(uid), warp.Location ?? Name(uid));
+                warps.Add(newWarp);
             }
+
+            return warps;
         }
 
-        private IEnumerable<GhostWarp> GetPlayerWarps(EntityUid except)
+        private List<GhostWarpPlayer> GetPlayerWarps()
         {
-            foreach (var player in _playerManager.Sessions)
+            var warps = new List<GhostWarpPlayer> { };
+
+            foreach (var mindContainer in EntityQuery<MindContainerComponent>())
             {
-                if (player.AttachedEntity is not {Valid: true} attached)
+                var entity = mindContainer.Owner;
+
+                if (!(HasComp<HumanoidAppearanceComponent>(entity) || HasComp<GhostComponent>(entity)))
                     continue;
 
-                if (attached == except) continue;
+                var playerDepartmentId = _prototypeManager.Index<DepartmentPrototype>("Specific").ID;
+                var playerJobName = "Неизвестно";
 
-                TryComp<MindContainerComponent>(attached, out var mind);
+                if (_jobs.MindTryGetJob(mindContainer.Mind ?? mindContainer.LastMindStored, out _, out var jobPrototype))
+                {
+                    playerJobName = Loc.GetString(jobPrototype.Name);
 
-                var jobName = _jobs.MindTryGetJobName(mind?.Mind);
-                var playerInfo = $"{Comp<MetaDataComponent>(attached).EntityName} ({jobName})";
+                    if (_jobs.TryGetDepartment(jobPrototype.ID, out var departmentPrototype))
+                    {
+                        playerDepartmentId = departmentPrototype.ID;
+                    }
+                }
+                var hasAnyMind = (mindContainer.Mind ?? mindContainer.LastMindStored) != null;
+                var isDead = _mobState.IsDead(entity);
+                var isLeft = TryComp<SSDIndicatorComponent>(entity, out var indicator) && indicator.IsSSD && !isDead && hasAnyMind;
 
-                if (_mobState.IsAlive(attached) || _mobState.IsCritical(attached))
-                    yield return new GhostWarp(GetNetEntity(attached), playerInfo, false);
+                var warp = new GhostWarpPlayer(
+                    GetNetEntity(entity),
+                    Comp<MetaDataComponent>(entity).EntityName,
+                    playerJobName,
+                    playerDepartmentId,
+                    HasComp<GhostComponent>(entity),
+                    isLeft,
+                    isDead,
+                    _mobState.IsAlive(entity)
+                );
+
+                warps.Add(warp);
             }
+
+            return warps;
         }
 
         #endregion

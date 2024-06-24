@@ -3,6 +3,7 @@ using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 using Content.Shared.Popups;
+using Content.Shared.Roles;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Ghost
@@ -63,17 +64,80 @@ namespace Content.Shared.Ghost
     }
 
     /// <summary>
+    /// An player body a ghost can warp to.
+    /// This is used as part of <see cref="GhostWarpsResponseEvent"/>
+    /// </summary>
+    [Serializable, NetSerializable]
+    public struct GhostWarpPlayer
+    {
+        public GhostWarpPlayer(NetEntity entity, string playerName, string playerJobName, string playerDepartmentID, bool isGhost, bool isLeft, bool isDead, bool isAlive)
+        {
+            Entity = entity;
+            Name = playerName;
+            JobName = playerJobName;
+            DepartmentID = playerDepartmentID;
+
+            IsGhost = isGhost;
+            IsLeft = isLeft;
+            IsDead = isDead;
+            IsAlive = isAlive;
+        }
+
+        /// <summary>
+        /// The entity representing the warp point.
+        /// This is passed back to the server in <see cref="GhostWarpToTargetRequestEvent"/>
+        /// </summary>
+        public NetEntity Entity { get; }
+
+        /// <summary>
+        /// The display player name to be surfaced in the ghost warps menu
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// The display player job to be surfaced in the ghost warps menu
+        /// </summary>
+
+        public string JobName { get; }
+
+        /// <summary>
+        /// The display player department to be surfaced in the ghost warps menu
+        /// </summary>
+        public string DepartmentID { get; set; }
+
+        /// <summary>
+        /// Is player is ghost
+        /// </summary>
+        public bool IsGhost { get;  }
+
+        /// <summary>
+        /// Is player body alive
+        /// </summary>
+        public bool IsAlive { get;  }
+
+        /// <summary>
+        /// Is player body dead
+        /// </summary>
+        public bool IsDead { get;  }
+
+        /// <summary>
+        /// Is player left from body
+        /// </summary>
+        public bool IsLeft { get;  }
+    }
+
+
+    /// <summary>
     /// An individual place a ghost can warp to.
     /// This is used as part of <see cref="GhostWarpsResponseEvent"/>
     /// </summary>
     [Serializable, NetSerializable]
-    public struct GhostWarp
+    public struct GhostWarpPlace
     {
-        public GhostWarp(NetEntity entity, string displayName, bool isWarpPoint)
+        public GhostWarpPlace(NetEntity entity, string displayName)
         {
             Entity = entity;
             DisplayName = displayName;
-            IsWarpPoint = isWarpPoint;
         }
 
         /// <summary>
@@ -87,12 +151,7 @@ namespace Content.Shared.Ghost
         /// </summary>
         public string DisplayName { get; }
 
-        /// <summary>
-        /// Whether this warp represents a warp point or a player
-        /// </summary>
-        public bool IsWarpPoint { get;  }
     }
-
     /// <summary>
     /// A server to client response for a <see cref="GhostWarpsRequestEvent"/>.
     /// Contains players, and locations a ghost can warp to
@@ -100,15 +159,21 @@ namespace Content.Shared.Ghost
     [Serializable, NetSerializable]
     public sealed class GhostWarpsResponseEvent : EntityEventArgs
     {
-        public GhostWarpsResponseEvent(List<GhostWarp> warps)
+        public GhostWarpsResponseEvent(List<GhostWarpPlayer> players, List<GhostWarpPlace> places)
         {
-            Warps = warps;
+            Players = players;
+            Places = places;
         }
+
+        /// <summary>
+        /// A list of players to teleport.
+        /// </summary>
+        public List<GhostWarpPlayer> Players { get; }
 
         /// <summary>
         /// A list of warp points.
         /// </summary>
-        public List<GhostWarp> Warps { get; }
+        public List<GhostWarpPlace> Places { get; }
     }
 
     /// <summary>
@@ -153,3 +218,4 @@ namespace Content.Shared.Ghost
     {
     }
 }
+

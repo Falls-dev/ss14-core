@@ -6,6 +6,7 @@ namespace Content.Server._White.Genetics.Components;
 /// <summary>
 /// Gives this entity a genome for traits to be passed on and potentially mutated.
 /// Both of those must be handled by other systems, on its own it has no functionality.
+/// TODO: комплиментарные последовательности
 /// </summary>
 [RegisterComponent]
 public sealed partial class GenomeComponent : Component

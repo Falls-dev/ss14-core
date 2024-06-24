@@ -155,6 +155,19 @@ public sealed partial class Genome
     }
 
     /// <summary>
+    /// TODO: recheck
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="array"></param>
+    public void SetBitArray(int index, BitArray array)
+    {
+        for (int i = index; i < array.Length; i++)
+        {
+            Bits[i] = array[i - index];
+        }
+    }
+
+    /// <summary>
     /// Mutates a part of Genome from index to index + length. The more severity - the more mutated it will be.
     /// May need to move it to a different system.
     /// </summary>
@@ -174,7 +187,7 @@ public sealed partial class Genome
     }
 
     /// <summary>
-    /// Future function that will extend the genome (used for tg mutators)
+    /// Future function that will extend the genome (used for tg mutators). TODO
     /// </summary>
     /// <param name="length"></param>
     /// <param name="array"></param>

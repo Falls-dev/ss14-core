@@ -1,3 +1,4 @@
+using System.Collections;
 using Content.Shared._White.Genetics;
 using Robust.Shared.Utility;
 
@@ -63,6 +64,25 @@ public sealed class GenomeLayout
     {
         var (index, bits) = Values[name];
         genome.SetInt(index, bits: bits, value: value);
+    }
+
+    /// <summary>
+    /// TODO: recheck
+    /// </summary>
+    /// <param name="genome"></param>
+    /// <param name="name"></param>
+    /// <param name="array"></param>
+    public void SetBitArray(Genome genome, string name, BitArray array)
+    {
+        var (index, bits) = Values[name];
+
+        if (bits != array.Length)
+            return;
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            genome.SetBool(index + i, array[i]);
+        }
     }
 
     /// <summary>

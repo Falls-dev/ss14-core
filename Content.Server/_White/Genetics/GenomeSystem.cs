@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Server._White.Genetics.Components;
 using Content.Server.GameTicking.Events;
 using Content.Shared._White.Genetics;
+using Content.Shared.Flash.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Robust.Shared.Prototypes;
@@ -21,7 +23,7 @@ public sealed class GenomeSystem : EntitySystem
     [Dependency] private readonly ILogManager _log = default!;
 
 
-    protected ISawmill Sawmill = default!;
+    protected ISawmill _sawmill = default!;
     // This is where all the genome layouts are stored.
     // TODO: store on round entity when thats done, so persistence reloading doesnt scramble genes
     [ViewVariables]
@@ -38,36 +40,68 @@ public sealed class GenomeSystem : EntitySystem
         SubscribeLocalEvent<GenomeComponent, ComponentInit>(OnGenomeCompInit);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(Reset);
         InitializeMutations();
-        Sawmill = _log.GetSawmill("genetics");
+        _sawmill = _log.GetSawmill("genetics");
     }
 
+
+    /// <summary>
+    /// TODO: test this whole thing
+    /// </summary>
+    /// <param name="uid"></param>
+    /// <param name="comp"></param>
+    /// <param name="args"></param>
     private void OnGenomeCompInit(EntityUid uid, GenomeComponent comp, ComponentInit args)
     {
         // only empty in test and when vving
         if (comp.GenomeId != string.Empty)
             comp.Layout = GetOrCreateLayout(comp.GenomeId);
 
-        var mutations = Array.Empty<string>();
+        var mutationsPool = _mutations;
         foreach (var (name, (index, len)) in comp.Layout.Values)
         {
             if (!name.Contains("mutation"))
                 continue;
 
-            // инициализируй тут последовательность случайно мутацией, проверь нет ли ее в mutations
+            var mutationName = mutationsPool.Keys.ToArray()[_random.Next(mutationsPool.Count)];
+
+            var (genome, _) = mutationsPool[mutationName];
+            var bits = genome.Bits;
+            if (bits.Length == 0)
+            {
+                _sawmill.Error($"Error while initializing a sequence in GenomeComponent. Name: {name}; Length: {len}");
+                //throw new Exception()
+                continue;
+            }
             var mutatedBits = Array.Empty<int>();
-            var bits = comp.Layout.GetInt(comp.Genome, name);
 
-            // мутируй тут случайный бит, сохрани в mutatedBits
-
-            var prob = 0.4f; // need to evaluate
-            while (prob > 0.01f)
+            var prob = 0.99f;
+            while (prob > 0.001f)
             {
                 if (!_random.Prob(prob))
+                {
+                    if (float.Round(prob, 2) == 0.99f)
+                    {
+                        // TODO: send the event ot apply the mutation here
+                    }
                     break;
-                // мутируй тут случайный бит, если его нет в mutatedBits
-                // сохрани его в mutatedBits
+                }
+
+                var i = _random.Next(len);
+
+                if (mutatedBits.Contains(i))
+                {
+                    break;
+                }
+
+                bits[i] = !bits[i];
+                mutatedBits.Append(i);
+
                 prob = prob / 2;
             }
+
+            mutationsPool.Remove(mutationName);
+            comp.Layout.SetBitArray(comp.Genome, name, bits);
+            // TODO: сгенерить тут комплиментарную последовательность?
         }
     }
 
@@ -75,6 +109,7 @@ public sealed class GenomeSystem : EntitySystem
     {
         _layouts.Clear();
         _mutations.Clear();
+        _mutationsInitialized = false;
     }
 
     private void InitializeMutations()
@@ -85,14 +120,12 @@ public sealed class GenomeSystem : EntitySystem
             //TODO: throw an error here
             return;
         }
-        else
+
+        foreach (var mutation in pool.Mutations)
         {
-            foreach (var mutation in pool.Mutations)
-            {
-                _proto.TryIndex<MutationPrototype>(mutation, out var mutationProto);
-                if (mutationProto != null)
-                    _mutations.Add(mutationProto.Name, (GenerateSomeRandomGeneticSequenceAndCheckIfItIsIn_mutationsFunction(mutationProto.Length), mutationProto.Effect));
-            }
+            _proto.TryIndex<MutationPrototype>(mutation, out var mutationProto);
+            if (mutationProto != null)
+                _mutations.Add(mutationProto.Name, (GenerateSomeRandomGeneticSequenceAndCheckIfItIsIn_mutationsFunction(mutationProto.Length), mutationProto.Effect));
         }
 
         _mutationsInitialized = true;
@@ -105,6 +138,7 @@ public sealed class GenomeSystem : EntitySystem
 
         if (cycle >= 10) // i think 10 cycles is enough
         {
+            _sawmill.Error("Mutations initialization error. Try making longer sequences or less mutations");
             return sequence;
         }
 
@@ -192,5 +226,19 @@ public sealed class GenomeSystem : EntitySystem
     private void AddLayout(string id, GenomeLayout layout)
     {
         _layouts.Add(id, layout);
+    }
+
+    public BitArray? GenerateRandomBitArrayPossiblyNull(int length)
+    {
+        if (length <= 0)
+            return null;
+
+        var array = new BitArray(length);
+        for (int i = 0; i < length; i++)
+        {
+            array[i] = _random.Prob(0.5f);
+        }
+
+        return array;
     }
 }

@@ -329,8 +329,9 @@
     sprite: Objects/Specific/Chemistry/syringe.rsi
     state: "syringe_base0"
   - type: Item
-    size: Tiny
+    size: Small
     sprite: Objects/Specific/Chemistry/syringe.rsi
+    storedRotation: -45
   - type: SolutionContainerManager
     solutions:
       injector:

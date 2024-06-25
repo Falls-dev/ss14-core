@@ -121,7 +121,7 @@
     sprite: Objects/Specific/Hydroponics/Equipment/plant_bag.rsi
     state: icon
   - type: Item
-    storedRotation: -90
+    size: Normal
   - type: Clothing
     quickEquip: false
     slots:

@@ -20,6 +20,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
         private Dictionary<GhostWarpPlayer, string> _leftPlayers = new();
         private Dictionary<GhostWarpPlayer, string> _deadPlayers = new();
         private Dictionary<GhostWarpPlayer, string> _ghostPlayers = new();
+
         private List<string> _departmentStyles = new List<string>
         {
             "ButtonColorCommandDepartment",
@@ -32,6 +33,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             "ButtonColorJusticeDepartment",
             "ButtonColorSpecificDepartment"
         };
+
         private List<string> _departmentNames = new List<string>
         {
             "Командование: ",
@@ -52,7 +54,6 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
         public GhostTargetWindow()
         {
             RobustXamlLoader.Load(this);
-            SearchBar.OnTextChanged += OnSearchTextChanged;
         }
 
         public void Populate()
@@ -77,7 +78,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             AddPlaceButtons(_placeWarps, "ButtonColorSpecificDepartment");
         }
 
-        private void AddPlayerButtons(Dictionary<GhostWarpPlayer, string> players, string text, string styleClass, bool enableByDepartmentColorSheet)
+        private void AddPlayerButtons(Dictionary<GhostWarpPlayer, string> players, string text, string styleClass,
+            bool enableByDepartmentColorSheet)
         {
             if (players.Count == 0)
                 return;
@@ -141,6 +143,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
             GhostTeleportContainter.AddChild(bigGrid);
         }
+
         private void AddPlaceButtons(List<GhostWarpPlace> places, string styleClass)
         {
             var bigGrid = new GridContainer();
@@ -183,6 +186,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
                 placesGrid.AddChild(placeButton);
             }
+
             bigGrid.AddChild(countLabel);
             bigGrid.AddChild(placesGrid);
 
@@ -276,28 +280,6 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             var c = button.Text != null && button.Text.Contains(_searchText, StringComparison.OrdinalIgnoreCase);
 
             return a || b || c;
-        }
-
-        private void UpdateVisibleButtons()
-        {
-            foreach (var bigGrid in GhostTeleportContainter.Children)
-            {
-                foreach (var departmentGrid in bigGrid.Children)
-                {
-                    foreach (var playerButton in departmentGrid.Children)
-                    {
-                        if (playerButton is Button button)
-                            button.Visible = ButtonIsVisible(button);
-                    }
-                }
-            }
-        }
-
-        private void OnSearchTextChanged(LineEdit.LineEditEventArgs args)
-        {
-            _searchText = args.Text;
-
-            UpdateVisibleButtons();
         }
     }
 }

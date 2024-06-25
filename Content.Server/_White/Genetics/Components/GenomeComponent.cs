@@ -24,11 +24,29 @@ public sealed partial class GenomeComponent : Component
     [ViewVariables]
     public GenomeLayout Layout = new();
 
+    /// <summary>
+    /// Activated mutations. Acquired through activators or radiation.
+    /// </summary>
     [ViewVariables]
-    public List<string> Mutations = default!;
+    public List<string> ActivatedMutations = new List<string>();
 
+    /// <summary>
+    /// Mutations that were acquired via mutators.
+    /// </summary>
+    [DataField]
+    public List<string> MutatedMutations = new List<string>();
+
+    /// <summary>
+    /// TODO: review
+    /// </summary>
     [DataField("humanGenes")]
     public bool HumanGenes = false;
+
+    /// <summary>
+    /// Key is the name of the region in GenomeLayout, value is the name of corresponding mutation.
+    /// </summary>
+    [DataField]
+    public Dictionary<string, string> MutationRegions = new Dictionary<string, string>();
 
     /// <summary>
     /// Genome bits themselves.
@@ -39,4 +57,10 @@ public sealed partial class GenomeComponent : Component
     /// </remarks>
     [DataField]
     public Genome Genome = new();
+
+    /// <summary>
+    /// It is changed when a mutation through mutator is applied.
+    /// </summary>
+    [DataField]
+    public int Instability = 0;
 }

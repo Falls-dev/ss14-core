@@ -15,11 +15,10 @@ namespace Content.Server._White.Genetics;
 /// <summary>
 /// Assigns each <see cref="GenomePrototype"/> a random <see cref="GenomeLayout"/> roundstart.
 /// </summary>
-public sealed class GenomeSystem : EntitySystem
+public sealed partial class GenomeSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MutationSystem _mutationSystem = default!;
     [Dependency] private readonly ILogManager _log = default!;
 
 
@@ -31,7 +30,7 @@ public sealed class GenomeSystem : EntitySystem
 
     private string _mutationsPool = "StandardHumanMutations";
     private bool _mutationsInitialized = false;
-    private Dictionary<string, (Genome, MutationEffect[])> _mutations = new ();
+    private Dictionary<string, (Genome Genome, MutationEffect[] Effects, int Instability)> _mutations = new ();
 
     public override void Initialize()
     {
@@ -39,6 +38,7 @@ public sealed class GenomeSystem : EntitySystem
 
         SubscribeLocalEvent<GenomeComponent, ComponentInit>(OnGenomeCompInit);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(Reset);
+        SubscribeLocalEvent<GenomeChangedEvent>(OnGenomeChanged);
         InitializeMutations();
         _sawmill = _log.GetSawmill("genetics");
     }
@@ -64,7 +64,7 @@ public sealed class GenomeSystem : EntitySystem
 
             var mutationName = mutationsPool.Keys.ToArray()[_random.Next(mutationsPool.Count)];
 
-            var (genome, _) = mutationsPool[mutationName];
+            var (genome, effect, _) = mutationsPool[mutationName]; //TODO: are mutations standardised in size?
             var bits = genome.Bits;
             if (bits.Length == 0)
             {
@@ -79,9 +79,9 @@ public sealed class GenomeSystem : EntitySystem
             {
                 if (!_random.Prob(prob))
                 {
-                    if (float.Round(prob, 2) == 0.99f)
+                    if (prob == 0.99f)
                     {
-                        // TODO: send the event ot apply the mutation here
+                        ApplyMutation(uid, comp, mutationName);
                     }
                     break;
                 }
@@ -101,7 +101,7 @@ public sealed class GenomeSystem : EntitySystem
 
             mutationsPool.Remove(mutationName);
             comp.Layout.SetBitArray(comp.Genome, name, bits);
-            // TODO: сгенерить тут комплиментарную последовательность?
+            comp.MutationRegions.Add(name, mutationName);
         }
     }
 
@@ -125,7 +125,7 @@ public sealed class GenomeSystem : EntitySystem
         {
             _proto.TryIndex<MutationPrototype>(mutation, out var mutationProto);
             if (mutationProto != null)
-                _mutations.Add(mutationProto.Name, (GenerateSomeRandomGeneticSequenceAndCheckIfItIsIn_mutationsFunction(mutationProto.Length), mutationProto.Effect));
+                _mutations.Add(mutationProto.Name, (GenerateSomeRandomGeneticSequenceAndCheckIfItIsIn_mutationsFunction(mutationProto.Length), mutationProto.Effect, mutationProto.Instability));
         }
 
         _mutationsInitialized = true;
@@ -138,11 +138,11 @@ public sealed class GenomeSystem : EntitySystem
 
         if (cycle >= 10) // i think 10 cycles is enough
         {
-            _sawmill.Error("Mutations initialization error. Try making longer sequences or less mutations");
+            _sawmill.Error("ActivatedMutations initialization error. Try making longer sequences or less mutations");
             return sequence;
         }
 
-        foreach (var (_, (seq, _)) in _mutations)
+        foreach (var (_, (seq, _, _)) in _mutations)
         {
             if (sequence == seq)
                 return GenerateSomeRandomGeneticSequenceAndCheckIfItIsIn_mutationsFunction(length, cycle + 1);

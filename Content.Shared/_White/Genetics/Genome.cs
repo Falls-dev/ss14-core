@@ -92,6 +92,11 @@ public sealed partial class Genome
         return builder.ToString();
     }
 
+    public int GetLength()
+    {
+        return Bits.Length;
+    }
+
     /// <summary>
     /// Sets a boolean value at a bit index to a value.
     /// </summary>

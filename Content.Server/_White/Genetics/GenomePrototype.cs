@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._White.Genetics;
+namespace Content.Server._White.Genetics;
 
 /// <summary>
 /// Genome for an organism.

@@ -7,6 +7,7 @@ using Content.Shared.Body.Components;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
+using Content.Shared.Examine;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
@@ -52,7 +53,19 @@ namespace Content.Server.Kitchen.EntitySystems
 
             SubscribeLocalEvent<KitchenSpikeComponent, SuicideEvent>(OnSuicide);
 
+            SubscribeLocalEvent<KitchenSpikeComponent, ExaminedEvent>(OnExamine);
+
             SubscribeLocalEvent<ButcherableComponent, CanDropDraggedEvent>(OnButcherableCanDrop);
+        }
+
+        private void OnExamine(Entity<KitchenSpikeComponent> ent, ref ExaminedEvent args)
+        {
+            var (uid, comp) = ent;
+
+            if (comp.Victim is not "?" or "")
+            {
+                args.PushMarkup(Loc.GetString("comp-kitchen-spike-examine", ("this", uid), ("victim", comp.Victim)));
+            }
         }
 
         private void OnButcherableCanDrop(EntityUid uid, ButcherableComponent component, ref CanDropDraggedEvent args)

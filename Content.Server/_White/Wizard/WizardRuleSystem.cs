@@ -240,7 +240,6 @@ public sealed class WizardRuleSystem : GameRuleSystem<WizardRuleComponent>
         {
             NotifyWizard(actor.PlayerSession, wizard, component);
             filter.AddPlayer(actor.PlayerSession);
-            wizard.IsRoundStartWizard = true;
         }
     }
 

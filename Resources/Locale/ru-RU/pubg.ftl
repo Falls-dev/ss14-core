@@ -283,6 +283,8 @@ ent-PubgObdalbosMedipen = Обдолбыш
 .desc = *Этикетка о составе отсутствует*
 
 ### PUBG Structures
+
+# Misc
 ent-PubgWindow = Окно
 .desc = Старое окно, старого мира...
 
@@ -302,6 +304,44 @@ ent-PubgWheel = Колесо
 .desc = Неотъемлемый компонент автомобиля
 ent-PubgWheels = Колёса
 .desc = Неотъемлемый компонент автомобиля
+
+## Trees
+ent-PubgSnowBigTree = Большое дерево
+.desc = Огромное...
+ent-PubgSnowBigTree2 = { ent-PubgSnowBigTree }
+.desc = { ent-PubgSnowBigTree.desc }
+ent-PubgSnowBigTree3 = { ent-PubgSnowBigTree }
+.desc = { ent-PubgSnowBigTree.desc }
+ent-PubgSnowBigTree4 = { ent-PubgSnowBigTree }
+.desc = { ent-PubgSnowBigTree.desc }
+## Furniture
+# Kitchen
+ent-PubgFurnitureKitchen = Столешница
+.desc = Потрёпанная жизнью и временем столешница. Может хранить в себе вещи, идеально подходит для старой кухни
+ent-PubgFurnitureKitchenMiddle = { ent-PubgFurnitureKitchen }
+.desc = { ent-PubgFurnitureKitchen.desc }
+ent-PubgFurnitureKitchenLeft = { ent-PubgFurnitureKitchen }
+.desc = { ent-PubgFurnitureKitchen.desc }
+ent-PubgFurnitureKitchenRight = { ent-PubgFurnitureKitchen }
+.desc = { ent-PubgFurnitureKitchen.desc }
+ent-PubgFurnitureKitchenHalfLeft = { ent-PubgFurnitureKitchen }
+.desc = { ent-PubgFurnitureKitchen.desc }
+ent-PubgFurnitureKitchenHalfRight = { ent-PubgFurnitureKitchen }
+.desc = { ent-PubgFurnitureKitchen.desc }
+
+# Dresser
+ent-PubgFurnitureDresser = Комод
+.desc = Потрёпанный жизнью и временем комод. Может хранить в себе вещи, идеально подходит для старого дома
+ent-PubgFurnitureDresserLeft = { ent-PubgFurnitureDresser }
+.desc = { ent-PubgFurnitureDresser.desc }
+ent-PubgFurnitureDresserRight = { ent-PubgFurnitureDresser }
+.desc = { ent-PubgFurnitureDresser.desc }
+ent-PubgFurnitureDresserMiddle = { ent-PubgFurnitureDresser }
+.desc = { ent-PubgFurnitureDresser.desc }
+
+# Corner
+ent-PubgFurnitureCorner = Угол стойки
+.desc = Потрёпанная жизнью и временем угловая часть стойки. На неё можно что-то положить, идеально подходит для старого дома
 
 ## Barrels
 # Fuel

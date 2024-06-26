@@ -12,7 +12,7 @@
         - state: barricade_full
     - type: RandomSpawner
       prototypes:
-        # 
+        #
         - Barricade
       chance: 0.50
 
@@ -30,7 +30,7 @@
         - state: barricade
     - type: RandomSpawner
       prototypes:
-        # 
+        #
         - BarricadeBlock
       chance: 0.20
 
@@ -48,7 +48,7 @@
         - state: wall_girder
     - type: RandomSpawner
       prototypes:
-        # 
+        #
         - Girder
       chance: 0.50
 
@@ -69,10 +69,10 @@
         - GrilleBroken
       rareChance: 0.05
       prototypes:
-        # 
+        #
         - Grille
       chance: 0.99
-      
+
 # Flora: Trees snow
 - type: entity
   id: PubgRandomSpawnerTreeSnow
@@ -96,8 +96,13 @@
         - FloraTreeSnow04
         - FloraTreeSnow05
         - FloraTreeSnow06
+        - PubgSnowBigTree
+        - PubgSnowBigTree2
+        - PubgSnowBigTree3
+        - PubgSnowBigTree4
+      offset: 0.2
       chance: 0.10
-# Flora Tree - ёлька      
+# Flora Tree - ёлька
 - type: entity
   id: PubgRandomSpawnerTreeSnowConifer
   name: Random snow tree (Yolka)
@@ -117,4 +122,5 @@
         - FloraTreeConifer03
         - FloraTreeConifer02
         - FloraTreeConifer01
+      offset: 0.2
       chance: 0.10

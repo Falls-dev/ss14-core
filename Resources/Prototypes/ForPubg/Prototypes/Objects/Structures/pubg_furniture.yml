@@ -1,0 +1,251 @@
+- type: entity
+  name: Furniture
+  id: PubgFurnitureBase
+  abstract: true
+  description: Fuck you
+  placement:
+    mode: PlaceFree
+  components:
+  - type: Clickable
+  - type: Physics
+    bodyType: Dynamic
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Weapons/smash.ogg"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.30,-0.30,0.30,0.30"
+        density: 100
+        mask:
+        - MachineMask
+        layer:
+        - WallLayer
+  - type: Sprite
+    sprite: Structures/Furniture/chairs.rsi
+    noRot: true
+  - type: Pullable
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+  - type: StaticPrice
+    price: 10
+
+# Kitchen Furniture
+- type: entity
+  name: Furniture kitchen
+  id: PubgFurnitureBaseKitchen
+  abstract: true
+  parent: PubgFurnitureBase
+  description: Kitchen!
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Transform
+    anchored: true
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,6,3
+  - type: Clickable
+  - type: UserInterface
+    interfaces:
+    - key: enum.StorageUiKey.Key
+      type: StorageBoundUserInterface
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: [ ]
+  - type: Rotatable
+  - type: Sprite
+    state: middle
+
+- type: entity
+  name: Furniture kitchen
+  id: PubgFurnitureKitchen
+  parent: PubgFurnitureBaseKitchen
+  description: Kitchen!
+  suffix: Base
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/Furniture/pubg_kitchen.rsi
+    state: k_0
+    noRot: true
+
+- type: entity
+  name: Furniture kitchen
+  id: PubgFurnitureKitchenMiddle
+  parent: PubgFurnitureBaseKitchen
+  description: Kitchen!
+  suffix: Middle
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/Furniture/pubg_kitchen.rsi
+    state: km_0
+    noRot: true
+
+- type: entity
+  name: Furniture kitchen
+  id: PubgFurnitureKitchenLeft
+  parent: PubgFurnitureBaseKitchen
+  description: Kitchen!
+  suffix: Left
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/Furniture/pubg_kitchen.rsi
+    state: kl_0
+    noRot: true
+
+- type: entity
+  name: Furniture kitchen
+  id: PubgFurnitureKitchenRight
+  parent: PubgFurnitureBaseKitchen
+  description: Kitchen!
+  suffix: Right
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/Furniture/pubg_kitchen.rsi
+    state: kr_0
+    noRot: true
+
+- type: entity
+  name: Furniture kitchen
+  id: PubgFurnitureKitchenHalfLeft
+  parent: PubgFurnitureBaseKitchen
+  description: Kitchen!
+  suffix: Half left
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/Furniture/pubg_kitchen.rsi
+    state: khl_0
+    noRot: true
+
+- type: entity
+  name: Furniture kitchen
+  id: PubgFurnitureKitchenHalfRight
+  parent: PubgFurnitureBaseKitchen
+  description: Kitchen!
+  suffix: Half right
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/Furniture/pubg_kitchen.rsi
+    state: khr_0
+    noRot: true
+
+# Furniture corner
+
+- type: entity
+  name: Furniture corner
+  id: PubgFurnitureCorner
+  parent: PubgFurnitureBase
+  description: Corner!
+  suffix: Corner
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Transform
+    anchored: true
+  - type: Rotatable
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/Furniture/pubg_kitchen.rsi
+    state: cc_0
+    noRot: true
+
+# Dresser Furniture
+
+- type: entity
+  name: Furniture dresser
+  id: PubgFurnitureBaseDresser
+  abstract: true
+  parent: PubgFurnitureBase
+  description: Dresser!
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,6,3
+  - type: Clickable
+  - type: UserInterface
+    interfaces:
+    - key: enum.StorageUiKey.Key
+      type: StorageBoundUserInterface
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: [ ]
+  - type: Transform
+    anchored: true
+  - type: Rotatable
+  - type: Sprite
+    state: middle
+
+- type: entity
+  name: Furniture dresser
+  id: PubgFurnitureDresser
+  parent: PubgFurnitureBaseDresser
+  description: Dresser!
+  suffix: Base
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/Furniture/pubg_dresser.rsi
+    state: d_0
+    noRot: true
+
+- type: entity
+  name: Furniture dresser
+  id: PubgFurnitureDresserLeft
+  parent: PubgFurnitureBaseDresser
+  description: Dresser!
+  suffix: Half left
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/Furniture/pubg_dresser.rsi
+    state: dl_0
+    noRot: true
+
+- type: entity
+  name: Furniture dresser
+  id: PubgFurnitureDresserRight
+  parent: PubgFurnitureBaseDresser
+  description: Dresser!
+  suffix: Half right
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/Furniture/pubg_dresser.rsi
+    state: dr_0
+    noRot: true
+
+- type: entity
+  name: Furniture dresser
+  id: PubgFurnitureDresserMiddle
+  parent: PubgFurnitureBaseDresser
+  description: Dresser!
+  suffix: Half middle
+  components:
+  - type: Sprite
+    sprite: ForPubg/Textures/Structures/Furniture/pubg_dresser.rsi
+    state: dm_0
+    noRot: true

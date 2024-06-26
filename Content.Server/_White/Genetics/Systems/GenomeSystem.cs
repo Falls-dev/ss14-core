@@ -81,7 +81,7 @@ public sealed partial class GenomeSystem : EntitySystem
                 {
                     if (prob == 0.99f)
                     {
-                        ApplyMutation(uid, comp, mutationName);
+                        ApplyMutatorMutation(uid, comp, mutationName);
                     }
                     break;
                 }

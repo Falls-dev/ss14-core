@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using Content.Server._White.Genetics.Components;
-using Content.Shared._White.Genetics;
-using Content.Shared.Weapons.Melee;
-using Robust.Shared.Prototypes;
+﻿using Content.Server._White.Genetics.Components;
 
 namespace Content.Server._White.Genetics;
 
@@ -34,7 +30,7 @@ public sealed partial class GenomeSystem
                 if (args.Comp.Genome.GetInt(indexes.Item1, indexes.Item2) !=
                     mutation.Genome.GetInt(0, mutation.Genome.GetLength()))
                 {
-                    CancelMutation(args.Uid, args.Comp, possibleMutation);
+                    CancelMutatorMutation(args.Uid, args.Comp, possibleMutation);
                 }
             }
             else
@@ -42,7 +38,7 @@ public sealed partial class GenomeSystem
                 if (args.Comp.Genome.GetInt(indexes.Item1, indexes.Item2) ==
                     mutation.Genome.GetInt(0, mutation.Genome.GetLength()))
                 {
-                    ApplyMutation(args.Uid, args.Comp, possibleMutation);
+                    ApplyMutatorMutation(args.Uid, args.Comp, possibleMutation);
                 }
             }
 
@@ -50,30 +46,36 @@ public sealed partial class GenomeSystem
         }
     }
 
-    public void ApplyMutation(EntityUid uid, GenomeComponent comp, string mutationName)
+    public void ApplyMutatorMutation(EntityUid uid, GenomeComponent comp, string mutationName)
     {
         if (!_mutations.TryGetValue(mutationName, out var mutation))
             return;
 
-        comp.Instability += mutation.Instability;
-        comp.ActivatedMutations.Add(mutationName);
+        comp.Instability += mutation.Instability; //TODO: think
+        comp.MutatedMutations.Add(mutationName);
         foreach (var effect in mutation.Effects)
         {
             effect.Apply(uid, EntityManager);
         }
     }
 
-    public void CancelMutation(EntityUid uid, GenomeComponent comp, string mutationName)
+    public void CancelMutatorMutation(EntityUid uid, GenomeComponent comp, string mutationName)
     {
-        if (!comp.ActivatedMutations.Contains(mutationName) || _mutations.TryGetValue(mutationName, out var mutation))
+        if (!comp.MutatedMutations.Contains(mutationName) || _mutations.TryGetValue(mutationName, out var mutation))
             return;
 
-        comp.ActivatedMutations.Remove(mutationName);
+        comp.MutatedMutations.Remove(mutationName);
         comp.Instability -= mutation.Instability;
         foreach (var effect in mutation.Effects)
         {
             effect.Cancel(uid, EntityManager);
         }
+    }
+
+    public void ApplyActivatorMutation(EntityUid uid, GenomeComponent comp, string mutationName)
+    {
+        if (!_mutations.TryGetValue(mutationName, out var mutation))
+            return;
     }
 
 

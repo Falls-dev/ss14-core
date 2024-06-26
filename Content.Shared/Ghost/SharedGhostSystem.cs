@@ -1,3 +1,4 @@
+using Content.Shared._White.Antag;
 using Content.Shared.Emoting;
 using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
@@ -126,6 +127,46 @@ namespace Content.Shared.Ghost
         public bool IsLeft { get;  }
     }
 
+    [Serializable, NetSerializable]
+    public struct GhostWarpGlobalAntagonist
+    {
+        public GhostWarpGlobalAntagonist(NetEntity entity, string playerName, string antagonistName, string antagonistDescription, string prototypeID)
+        {
+            Entity = entity;
+            Name = playerName;
+            AntagonistName = antagonistName;
+            AntagonistDescription = antagonistDescription;
+            PrototypeID = prototypeID;
+        }
+
+        /// <summary>
+        /// The entity representing the warp point.
+        /// This is passed back to the server in <see cref="GhostWarpToTargetRequestEvent"/>
+        /// </summary>
+        public NetEntity Entity { get; }
+
+        /// <summary>
+        /// The display player name to be surfaced in the ghost warps menu
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// The display antagonist name to be surfaced in the ghost warps menu
+        /// </summary>
+        public string AntagonistName { get; }
+
+        /// <summary>
+        /// The display antagonist description to be surfaced in the ghost warps menu
+        /// </summary>
+        public string AntagonistDescription { get; }
+
+        /// <summary>
+        /// A antagonist prototype id
+        /// </summary>
+        public string PrototypeID { get; }
+
+    }
+
 
     /// <summary>
     /// An individual place a ghost can warp to.
@@ -165,10 +206,11 @@ namespace Content.Shared.Ghost
     [Serializable, NetSerializable]
     public sealed class GhostWarpsResponseEvent : EntityEventArgs
     {
-        public GhostWarpsResponseEvent(List<GhostWarpPlayer> players, List<GhostWarpPlace> places)
+        public GhostWarpsResponseEvent(List<GhostWarpPlayer> players, List<GhostWarpPlace> places, List<GhostWarpGlobalAntagonist> antagonists)
         {
             Players = players;
             Places = places;
+            Antagonists = antagonists;
         }
 
         /// <summary>
@@ -180,6 +222,11 @@ namespace Content.Shared.Ghost
         /// A list of warp points.
         /// </summary>
         public List<GhostWarpPlace> Places { get; }
+
+        /// <summary>
+        /// A list of antagonists to teleport.
+        /// </summary>
+        public List<GhostWarpGlobalAntagonist> Antagonists { get; }
     }
 
     /// <summary>

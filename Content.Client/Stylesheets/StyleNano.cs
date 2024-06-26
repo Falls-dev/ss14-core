@@ -169,6 +169,7 @@ namespace Content.Client.Stylesheets
         public static readonly Color ButtonColorCivilian = Color.FromHex("#40A166");
         public static readonly Color ButtonColorJustice = Color.FromHex("#8E3D3D");
         public static readonly Color ButtonColorSpecific = Color.FromHex("#969696");
+        public static readonly Color ButtonColorAntagonist = Color.FromHex("#7F4141");
 
         public override Stylesheet Stylesheet { get; }
 
@@ -1412,6 +1413,12 @@ namespace Content.Client.Stylesheets
                     {
                         new StyleProperty(Button.StylePropertyModulateSelf, ButtonColorSpecific),
                     }),
+                new StyleRule(
+                    new SelectorElement(typeof(MenuButton), new[] {MenuButton.StyleClassRedTopButton}, null, new[] {Button.StylePseudoClassNormal}),
+                    new[]
+                    {
+                        new StyleProperty(Button.StylePropertyModulateSelf, ButtonColorAntagonist),
+                    }),
 
 
                 // NanoHeading
@@ -1695,6 +1702,11 @@ namespace Content.Client.Stylesheets
                     .Prop(Control.StylePropertyModulateSelf, ButtonColorSpecific),
                 Element<Button>().Class("ButtonColorSpecificDepartment").Pseudo(ContainerButton.StylePseudoClassNormal)
                     .Prop(Control.StylePropertyModulateSelf, ButtonColorSpecific),
+
+                Element<Button>().Class("ButtonColorAntagonistDepartment")
+                    .Prop(Control.StylePropertyModulateSelf, ButtonColorAntagonist),
+                Element<Button>().Class("ButtonColorAntagonistDepartment").Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(Control.StylePropertyModulateSelf, ButtonColorAntagonist),
                 // ---
 
                 // Green Button ---

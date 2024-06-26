@@ -27,6 +27,7 @@ using JetBrains.Annotations;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Content.Shared._White;
+using Content.Shared._White.Antag;
 using Content.Shared.Humanoid;
 using Content.Shared.Roles;
 using Content.Shared.SSDIndicator;
@@ -346,7 +347,7 @@ namespace Content.Server.Ghost
                 return;
             }
 
-            var response = new GhostWarpsResponseEvent(GetPlayerWarps(), GetLocationWarps());
+            var response = new GhostWarpsResponseEvent(GetPlayerWarps(), GetLocationWarps(), GetAntagonistWarps());
             RaiseNetworkEvent(response, args.SenderSession.Channel);
         }
 
@@ -402,7 +403,7 @@ namespace Content.Server.Ghost
             {
                 var entity = mindContainer.Owner;
 
-                if (!(HasComp<HumanoidAppearanceComponent>(entity) || HasComp<GhostComponent>(entity)))
+                if (!(HasComp<HumanoidAppearanceComponent>(entity) || HasComp<GhostComponent>(entity)) || HasComp<GlobalAntagonistComponent>(entity))
                     continue;
 
                 var playerDepartmentId = _prototypeManager.Index<DepartmentPrototype>("Specific").ID;
@@ -430,6 +431,29 @@ namespace Content.Server.Ghost
                     isLeft,
                     isDead,
                     _mobState.IsAlive(entity)
+                );
+
+                warps.Add(warp);
+            }
+
+            return warps;
+        }
+
+        private List<GhostWarpGlobalAntagonist> GetAntagonistWarps()
+        {
+            var warps = new List<GhostWarpGlobalAntagonist> { };
+
+            foreach (var antagonist in EntityQuery<GlobalAntagonistComponent>())
+            {
+                var entity = antagonist.Owner;
+                var prototype = _prototypeManager.Index<AntagonistPrototype>(antagonist.AntagonistPrototype ?? "globalAntagonistUnknown");
+
+                var warp = new GhostWarpGlobalAntagonist(
+                    GetNetEntity(entity),
+                    Comp<MetaDataComponent>(entity).EntityName,
+                    prototype.Name,
+                    prototype.Description,
+                    prototype.ID
                 );
 
                 warps.Add(warp);

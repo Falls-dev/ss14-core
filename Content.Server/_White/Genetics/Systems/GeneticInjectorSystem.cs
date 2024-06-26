@@ -3,7 +3,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Pidgin.Configuration;
 
-namespace Content.Server._White.Genetics;
+namespace Content.Server._White.Genetics.Systems;
 
 public sealed class GeneticInjectorSystem : EntitySystem
 {
@@ -37,9 +37,6 @@ public sealed class GeneticInjectorSystem : EntitySystem
         }
 
         // activator mutations
-
-
-
 
     }
 }

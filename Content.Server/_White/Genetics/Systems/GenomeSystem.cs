@@ -4,13 +4,15 @@ using System.Linq;
 using Content.Server._White.Genetics.Components;
 using Content.Server.GameTicking.Events;
 using Content.Shared._White.Genetics;
+using Content.Shared.Damage;
 using Content.Shared.Flash.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
+using Content.Shared.Radiation.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
-namespace Content.Server._White.Genetics;
+namespace Content.Server._White.Genetics.Systems;
 
 /// <summary>
 /// Assigns each <see cref="GenomePrototype"/> a random <see cref="GenomeLayout"/> roundstart.
@@ -39,6 +41,7 @@ public sealed partial class GenomeSystem : EntitySystem
         SubscribeLocalEvent<GenomeComponent, ComponentInit>(OnGenomeCompInit);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(Reset);
         SubscribeLocalEvent<GenomeChangedEvent>(OnGenomeChanged);
+        SubscribeLocalEvent<GenomeComponent, OnIrradiatedEvent>(OnIrradiated);
         InitializeMutations();
         _sawmill = _log.GetSawmill("genetics");
     }
@@ -102,6 +105,21 @@ public sealed partial class GenomeSystem : EntitySystem
             mutationsPool.Remove(mutationName);
             comp.Layout.SetBitArray(comp.Genome, name, bits);
             comp.MutationRegions.Add(name, mutationName);
+        }
+    }
+
+
+    /// <summary>
+    /// TODO: Test this shit
+    /// </summary>
+    /// <param name="uid"></param>
+    /// <param name="comp"></param>
+    /// <param name="args"></param>
+    public void OnIrradiated(EntityUid uid, GenomeComponent comp, OnIrradiatedEvent args)
+    {
+        if (args.TotalRads > 20)
+        {
+            // TODO: change genome, apply random mutation via mutator
         }
     }
 
@@ -181,26 +199,6 @@ public sealed partial class GenomeSystem : EntitySystem
     }
 
     /// <summary>
-    /// Sets the <c>Genome</c> bits from a <see cref="GenesPrototype"/>'s values.
-    /// </summary>
-    public void LoadGenes(EntityUid uid, ProtoId<GenesPrototype> id, GenomeComponent? comp = null)
-    {
-        if (!Resolve(uid, ref comp))
-            return;
-
-        var genes = _proto.Index(id);
-        foreach (var name in genes.Bools)
-        {
-            comp.Layout.SetBool(comp.Genome, name, true);
-        }
-
-        foreach (var (name, value) in genes.Ints)
-        {
-            comp.Layout.SetInt(comp.Genome, name, value);
-        }
-    }
-
-    /// <summary>
     /// Copies the <c>Genome</c> bits from a parent to a child.
     /// They must use the same genome layout or it will be logged and copy nothing.
     /// </summary>
@@ -226,19 +224,5 @@ public sealed partial class GenomeSystem : EntitySystem
     private void AddLayout(string id, GenomeLayout layout)
     {
         _layouts.Add(id, layout);
-    }
-
-    public BitArray? GenerateRandomBitArrayPossiblyNull(int length)
-    {
-        if (length <= 0)
-            return null;
-
-        var array = new BitArray(length);
-        for (int i = 0; i < length; i++)
-        {
-            array[i] = _random.Prob(0.5f);
-        }
-
-        return array;
     }
 }

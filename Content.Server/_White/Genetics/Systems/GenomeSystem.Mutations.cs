@@ -1,6 +1,6 @@
 ﻿using Content.Server._White.Genetics.Components;
 
-namespace Content.Server._White.Genetics;
+namespace Content.Server._White.Genetics.Systems;
 
 /// <summary>
 /// Apply Mutation Apply?
@@ -30,7 +30,7 @@ public sealed partial class GenomeSystem
                 if (args.Comp.Genome.GetInt(indexes.Item1, indexes.Item2) !=
                     mutation.Genome.GetInt(0, mutation.Genome.GetLength()))
                 {
-                    CancelMutatorMutation(args.Uid, args.Comp, possibleMutation);
+                    CancelActivatorMutation(args.Uid, args.Comp, possibleMutation);
                 }
             }
             else
@@ -38,11 +38,11 @@ public sealed partial class GenomeSystem
                 if (args.Comp.Genome.GetInt(indexes.Item1, indexes.Item2) ==
                     mutation.Genome.GetInt(0, mutation.Genome.GetLength()))
                 {
-                    ApplyMutatorMutation(args.Uid, args.Comp, possibleMutation);
+                    ApplyActivatorMutation(args.Uid, args.Comp, possibleMutation);
                 }
             }
 
-            //TODO: incorporated mutator mutations?
+            //TODO: incorporate mutator mutations?
         }
     }
 
@@ -51,12 +51,14 @@ public sealed partial class GenomeSystem
         if (!_mutations.TryGetValue(mutationName, out var mutation))
             return;
 
-        comp.Instability += mutation.Instability; //TODO: think
+        comp.Instability += mutation.Instability;
         comp.MutatedMutations.Add(mutationName);
         foreach (var effect in mutation.Effects)
         {
             effect.Apply(uid, EntityManager);
         }
+
+        CheckInstability(uid, comp, mutation.Instability);
     }
 
     public void CancelMutatorMutation(EntityUid uid, GenomeComponent comp, string mutationName)
@@ -70,12 +72,56 @@ public sealed partial class GenomeSystem
         {
             effect.Cancel(uid, EntityManager);
         }
+
+        CheckInstability(uid, comp, -mutation.Instability);
     }
 
     public void ApplyActivatorMutation(EntityUid uid, GenomeComponent comp, string mutationName)
     {
+        if (comp.ActivatedMutations.Contains(mutationName))
+            return;
+
         if (!_mutations.TryGetValue(mutationName, out var mutation))
             return;
+
+        if (!comp.MutationRegions.ContainsValue(mutationName))
+            return;
+
+        var activated = false;
+        foreach (var region in comp.MutationRegions.Keys)
+        {
+            if (mutationName != comp.MutationRegions[region])
+                continue;
+
+            comp.Layout.SetBitArray(comp.Genome, region, mutation.Genome.Bits);
+
+            if (activated)
+                continue;
+
+            comp.ActivatedMutations.Add(mutationName);
+            foreach (var effect in mutation.Effects)
+            {
+                effect.Apply(uid, EntityManager);
+            }
+
+            activated = true;
+        }
+    }
+
+    public void CancelActivatorMutation(EntityUid uid, GenomeComponent comp, string mutationName)
+    {
+         if (!comp.ActivatedMutations.Contains(mutationName))
+             return;
+
+         if (!_mutations.TryGetValue(mutationName, out var mutation))
+             return;
+
+         foreach (var effect in mutation.Effects)
+         {
+             effect.Cancel(uid, EntityManager);
+         }
+
+         comp.ActivatedMutations.Remove(mutationName);
     }
 
 

@@ -125,7 +125,7 @@ public sealed class WizardRuleSystem : GameRuleSystem<WizardRuleComponent>
 
     private void OnMobStateChanged(EntityUid uid, WizardComponent component, MobStateChangedEvent ev)
     {
-        if (ev.NewMobState == MobState.Dead)
+        if (ev.NewMobState == MobState.Dead & component.IsRoundStartWizard)
             CheckAnnouncement();
     }
 
@@ -239,6 +239,7 @@ public sealed class WizardRuleSystem : GameRuleSystem<WizardRuleComponent>
         {
             NotifyWizard(actor.PlayerSession, wizard, component);
             filter.AddPlayer(actor.PlayerSession);
+            wizard.IsRoundStartWizard = true;
         }
     }
 
@@ -298,10 +299,10 @@ public sealed class WizardRuleSystem : GameRuleSystem<WizardRuleComponent>
         _npcFaction.AddFaction(mob, "Wizard");
     }
 
-    private void SpawnWizard(ICommonSession? session, WizardRuleComponent component, bool spawnGhostRoles = true)
+    private EntityCoordinates WizardSpawnPoint(WizardRuleComponent component)
     {
         if (component.ShuttleMap is not {Valid: true} mapUid)
-            return;
+            return EntityCoordinates.Invalid;
 
         var spawn = new EntityCoordinates();
         foreach (var (_, meta, xform) in EntityQuery<SpawnPointComponent, MetaDataComponent, TransformComponent>(true))
@@ -316,11 +317,23 @@ public sealed class WizardRuleSystem : GameRuleSystem<WizardRuleComponent>
             break;
         }
 
-        //Fallback, spawn at the centre of the map
+        // Fallback, spawn at the centre of the map
         if (spawn == new EntityCoordinates())
         {
             spawn = Transform(mapUid).Coordinates;
             _sawmill.Warning("Fell back to default spawn for wizard!");
+        }
+
+        return spawn;
+    }
+
+    private void SpawnWizard(ICommonSession? session, WizardRuleComponent component, bool spawnGhostRoles = true)
+    {
+        var spawn = WizardSpawnPoint(component);
+        if (spawn == EntityCoordinates.Invalid)
+        {
+            _sawmill.Error("Failed to calculate wizard spawn point");
+            return;
         }
 
         var wizardAntag = _prototypeManager.Index(component.WizardRoleProto);
@@ -444,6 +457,10 @@ public sealed class WizardRuleSystem : GameRuleSystem<WizardRuleComponent>
         }
 
         SetupWizardEntity(wizard, rule.Points, gear, profile);
+
+        var spawnpoint = WizardSpawnPoint(rule);
+        var transform = EnsureComp<TransformComponent>(wizard);
+        transform.Coordinates = spawnpoint;
 
         return true;
     }

@@ -38,6 +38,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager.Exceptions;
 using Robust.Shared.Timing;
 using InvisibilityComponent = Content.Shared._White.Administration.InvisibilityComponent;
 
@@ -503,9 +504,12 @@ namespace Content.Server.Ghost
             foreach (var antagonist in EntityQuery<GlobalAntagonistComponent>())
             {
                 var entity = antagonist.Owner;
+
+                if (!_mobState.IsAlive(entity))
+                    continue;
+
                 var prototype =
-                    _prototypeManager.Index<AntagonistPrototype>(antagonist.AntagonistPrototype ??
-                                                                 "globalAntagonistUnknown");
+                    _prototypeManager.Index<AntagonistPrototype>(antagonist.AntagonistPrototype ?? "globalAntagonistUnknown");
 
                 var warp = new GhostWarpGlobalAntagonist(
                     GetNetEntity(entity),

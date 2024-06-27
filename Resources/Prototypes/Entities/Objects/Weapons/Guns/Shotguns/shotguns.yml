@@ -105,7 +105,7 @@
   - type: MagazineAmmoProvider
   - type: MagazineVisuals
     magState: mag
-    steps: 1
+    steps: 4
     zeroVisible: true
   - type: Appearance
   - type: StaticPrice

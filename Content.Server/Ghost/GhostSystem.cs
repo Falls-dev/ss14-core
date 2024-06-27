@@ -456,8 +456,10 @@ namespace Content.Server.Ghost
             {
                 var entity = mindContainer.Owner;
 
-                if (!(HasComp<HumanoidAppearanceComponent>(entity) || HasComp<GhostComponent>(entity)) ||
-                    HasComp<GlobalAntagonistComponent>(entity))
+                if (!(HasComp<HumanoidAppearanceComponent>(entity) || HasComp<GhostComponent>(entity)))
+                    continue;
+
+                if (HasComp<GlobalAntagonistComponent>(entity))
                     continue;
 
                 var playerDepartmentId = _prototypeManager.Index<DepartmentPrototype>("Specific").ID;

@@ -71,7 +71,7 @@
   description: Pla-ket-ket-ket-ket! Uses .35 auto ammo.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/SMGs/atreides.rsi
+    sprite: White/Objects/Weapons/Guns/SMGs/atreides.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -94,7 +94,7 @@
   description: A firearm that is often used by the infamous nuclear operatives. Uses .35 auto ammo.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/SMGs/c20r.rsi
+    sprite: White/Objects/Weapons/Guns/SMGs/c20r.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -185,7 +185,7 @@
   description: An excellent fully automatic Heavy SMG.
   components:
     - type: Sprite
-      sprite: Objects/Weapons/Guns/SMGs/drozd.rsi
+      sprite: White/Objects/Weapons/Guns/SMGs/drozd.rsi
       layers:
         - state: base
           map: ["enum.GunVisualLayers.Base"]
@@ -325,7 +325,7 @@
   description: An excellent SMG, produced by NanoTrasen's Small Arms Division. Uses .35 auto ammo.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/SMGs/wt550.rsi
+    sprite: White/Objects/Weapons/Guns/SMGs/wt550.rsi
     layers:
       - state: base
         map: ["enum.GunVisualLayers.Base"]

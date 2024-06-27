@@ -7,7 +7,7 @@
   components:
   - type: Sprite
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Launchers/china_lake.rsi
+    sprite: White/Objects/Weapons/Guns/Launchers/china_lake.rsi
     quickEquip: false
     slots:
     - Back
@@ -36,12 +36,12 @@
   description: PLOOP
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Launchers/china_lake.rsi
+    sprite: White/Objects/Weapons/Guns/Launchers/china_lake.rsi
     layers:
       - state: icon
         map: ["enum.GunVisualLayers.Base"]
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Launchers/china_lake.rsi
+    sprite: White/Objects/Weapons/Guns/Launchers/china_lake.rsi
     slots:
     - Back
     - suitStorage
@@ -70,14 +70,14 @@
   description: A modified ancient rocket-propelled grenade launcher.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Launchers/rocket.rsi
+    sprite: White/Objects/Weapons/Guns/Launchers/rocket.rsi
     layers:
       - state: base
         map: ["enum.GunVisualLayers.Base"]
       - state: mag-0
         map: ["enum.GunVisualLayers.Mag"]
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Launchers/rocket.rsi
+    sprite: White/Objects/Weapons/Guns/Launchers/rocket.rsi
   - type: Gun
     fireRate: 0.5
     soundGunshot:
@@ -103,14 +103,14 @@
   description: A modified ancient rocket-propelled grenade launcher.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Launchers/rocket.rsi
+    sprite: White/Objects/Weapons/Guns/Launchers/rocket.rsi
     layers:
       - state: base
         map: ["enum.GunVisualLayers.Base"]
       - state: mag-0
         map: ["enum.GunVisualLayers.Mag"]
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Launchers/rocket.rsi
+    sprite: White/Objects/Weapons/Guns/Launchers/rocket.rsi
   - type: Gun
     fireRate: 6
     selectedMode: FullAuto

@@ -9,5 +9,5 @@ public sealed partial class BloodLossAccentComponent : Component
 
     [DataField]
     [ViewVariables(VVAccess.ReadWrite)]
-    public string ToReplace = " ... ";
+    public string ToReplace = "...";
 }

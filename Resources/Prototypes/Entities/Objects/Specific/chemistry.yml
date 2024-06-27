@@ -154,6 +154,8 @@
   description: Used to contain a moderate amount of chemicals and solutions.
   id: Beaker
   components:
+  - type: Item
+    size: Tiny
   - type: Spillable
     solution: beaker
   - type: StaticPrice
@@ -281,6 +283,7 @@
   - type: Item
     size: Tiny
     sprite: Objects/Specific/Chemistry/dropper.rsi
+    storedRotation: -45
   - type: Appearance
   - type: SolutionContainerVisuals
     maxFillLevels: 1

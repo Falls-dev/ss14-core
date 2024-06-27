@@ -840,3 +840,5 @@
       price: 800
     - type: Item
       size: Large
+      shape:
+      - 0, 0, 3, 1

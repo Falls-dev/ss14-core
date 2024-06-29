@@ -51,7 +51,7 @@
     description: ghost-role-information-cerberus-description
     rules: ghost-role-information-cerberus-rules
     raffle:
-      settings: default
+      settings: short
   - type: GhostRoleMobSpawner
     prototype: MobCorgiCerberus
   - type: Sprite

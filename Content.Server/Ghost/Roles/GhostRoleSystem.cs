@@ -8,6 +8,7 @@ using Content.Server.Ghost.Roles.Raffles;
 using Content.Shared.Ghost.Roles.Raffles;
 using Content.Server.Ghost.Roles.UI;
 using Content.Server.Mind.Commands;
+using Content.Server.Popups;
 using Content.Shared.Administration;
 using Content.Shared.Database;
 using Content.Shared.Follower;
@@ -376,6 +377,11 @@ namespace Content.Server.Ghost.Roles
             if (!_ghostRoles.TryGetValue(identifier, out var roleEnt))
                 return;
 
+            if (_gulagSystem.IsUserGulagged(player.UserId, out _))
+            {
+                return;
+            }
+
             // get raffle or create a new one if it doesn't exist
             var raffle = _ghostRoleRaffles.TryGetValue(identifier, out var raffleEnt)
                 ? raffleEnt.Comp
@@ -470,7 +476,7 @@ namespace Content.Server.Ghost.Roles
 
             if (_gulagSystem.IsUserGulagged(player.UserId, out _))
             {
-                return;
+                return false;
             }
 
             var ev = new TakeGhostRoleEvent(player);

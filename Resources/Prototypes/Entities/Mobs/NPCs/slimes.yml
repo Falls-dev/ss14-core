@@ -228,10 +228,7 @@
         - SimpleHostile
     - type: GhostRole
       description: ghost-role-information-angry-slimes-description
-<<<<<<< HEAD
-    - type: GlobalAntagonist
-      antagonistPrototype: globalAntagonistSlime
-=======
       raffle:
         settings: short
->>>>>>> 630a7a78ed (Add ghost role raffles (#26629))
+    - type: GlobalAntagonist
+      antagonistPrototype: globalAntagonistSlime

@@ -18,7 +18,7 @@
       settings: default
   - type: SlowOnDamage
     speedModifierThresholds:
-      270: 0.7
+      400: 0.7
   - type: GhostTakeoverAvailable
   - type: HTN
     rootTask:
@@ -167,10 +167,7 @@
   - type: GhostRole
     description: ghost-role-information-space-dragon-dungeon-description
     raffle:
-      settings: default
-  - type: SlowOnDamage
-    speedModifierThresholds:
-      100: 0.7
+      settings: short
   - type: MobThresholds
     thresholds:
       0: Alive

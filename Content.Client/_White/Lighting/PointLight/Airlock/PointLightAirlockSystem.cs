@@ -4,6 +4,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._White.Lighting.PointLight.Airlock;
 
+// TODO: Перепилить емаггинг дверей, потому что ебучие двери вообще не в курсе, емагнуты они или нет.
+// А сам емаг просто ставит стейты, а не поражает дверь
+// А еще он ставит дверь на болты каким-то хуем не меняя DoorVisuals.BoltLights
 public sealed class PointLightAirlockSystem : EntitySystem
 {
     [Dependency] private readonly SharedPointLightSystem _pointLightSystem = default!;

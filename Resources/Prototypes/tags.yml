@@ -1180,7 +1180,7 @@
 
 - type: Tag
   id: SuitEVA
-  
+
 - type: Tag
   id: Sunglasses
 
@@ -1378,6 +1378,10 @@
 - type: Tag
   id: CartridgeSniper12-7x99mm
 
+# GRENADE LAUNCHER
+- type: Tag
+  id: CartridgeGL-40mm
+
 ####### MAGZ
 
 # PISTOLS
@@ -1455,4 +1459,3 @@
 # LMG
 - type: Tag
   id: MagazineLmgRPD
-

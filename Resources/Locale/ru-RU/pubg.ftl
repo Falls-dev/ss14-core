@@ -51,6 +51,10 @@ ent-WeaponPubgRevolverSmith = Смити
     .desc = Тяжелый револьвер калибра Магнум 500. Стреляй только точно
 ent-WeaponPubgRevolverRex = Рэкс
     .desc = Револьвер калибра Магнум 357. Просто Рэкс!
+ent-PubgWeaponGL06 = Гоха
+    .desc = Классический однозарядный гранатомёт модифицированный под снаряд Вог-25
+ent-PubgWeaponRG06 = Рог
+    .desc = Гранатомёт барабанного типа, способен вмещать до 6 снарядов Вог-25
 
 ### PUBG Magz
 ent-MagazineLmgRPD = Магазин РПД
@@ -93,6 +97,9 @@ ent-CartridgeSniper12-7x99mm = Патрон 12.7x99мм
 ent-CartridgeRifle7-62x39mm = Патрон 7-62x39мм
 ent-CartridgeRevolverMagnum500 = Патрон Магнум 500мм
 ent-CartridgeRevolverMagnum357 = Патрон Магнум 357мм
+ent-PubgGrenadeCartridge = Снаряд Вог-25
+ent-PubgSuperGrenadeCartridge = Снаряд Вог-25М
+ent-PubgHighExplosiveCartridge = Снаряд Вфг-25
 
 ### PUBG Ammo boxes
 ent-BaseMagazineBoxRifle7-62x39mm = Коробка патрон 7.62x39мм

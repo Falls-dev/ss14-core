@@ -236,33 +236,25 @@ public sealed class AntagSelectionSystem : GameRuleSystem<GameRuleComponent>
         return chosenPlayers;
     }
 
-    public void ChooseAntags(Entity<AntagSelectionComponent> ent, IList<ICommonSession> pool, AntagSelectionDefinition def)
+    /// <summary>
+    /// Helper method to choose antags from a list
+    /// </summary>
+    /// <param name="eligiblePlayers">List of eligible players</param>
+    /// <param name="count">How many to choose</param>
+    /// <returns>Up to the specified count of elements from the provided list</returns>
+    public List<EntityUid> ChooseAntags(int count, List<EntityUid> eligiblePlayers)
     {
-        var playerPool = GetPlayerPool(ent, pool, def);
-        var count = GetTargetAntagCount(ent, GetTotalPlayerCount(pool), def);
+        var chosenPlayers = new List<EntityUid>();
 
-        // if there is both a spawner and players getting picked, let it fall back to a spawner.
-        var noSpawner = def.SpawnerPrototype == null;
         for (var i = 0; i < count; i++)
         {
-            var session = (ICommonSession?) null;
-            if (def.PickPlayer)
-            {
-                if (!playerPool.TryPickAndTake(RobustRandom, out session) && noSpawner)
-                {
-                    Log.Warning($"Couldn't pick a player for {ToPrettyString(ent):rule}, no longer choosing antags for this definition");
-                    break;
-                }
+            if (eligiblePlayers.Count == 0)
+                break;
 
-                if (session != null && ent.Comp.SelectedSessions.Contains(session))
-                {
-                    Log.Warning($"Somehow picked {session} for an antag when this rule already selected them previously");
-                    continue;
-                }
-            }
-
-            MakeAntag(ent, session, def);
+            chosenPlayers.Add(RobustRandom.PickAndTake(eligiblePlayers));
         }
+
+        return chosenPlayers;
     }
 
     /// <summary>

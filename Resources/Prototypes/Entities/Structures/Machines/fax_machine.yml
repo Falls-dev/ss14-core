@@ -62,7 +62,6 @@
     deviceNetId: Wireless
     receiveFrequencyId: Fax
     transmitFrequencyId: Fax
-  - type: RequireProjectileTarget
 
 # Special
 - type: entity

@@ -36,6 +36,9 @@
   suffix: Human, NukeOps
   components:
     - type: NukeOperative
+    - type: GlobalAntagonist
+      antagonistPrototype: globalAntagonistNukeops
+
 
 # Nuclear Operative
 - type: entity
@@ -45,6 +48,8 @@
   id: MobHumanNukeOp
   components:
     - type: NukeOperative
+    - type: GlobalAntagonist
+      antagonistPrototype: globalAntagonistNukeops
     - type: RandomHumanoidAppearance
 
 - type: entity
@@ -56,6 +61,8 @@
     - type: RandomHumanoidAppearance
       randomizeName: false
     - type: NukeOperative
+    - type: GlobalAntagonist
+      antagonistPrototype: globalAntagonistNukeops
     - type: Loadout
       prototypes: [SyndicateLoneOperativeGearFull]
     - type: RandomMetadata
@@ -81,6 +88,8 @@
     factions:
     - Syndicate
   - type: SpaceNinja
+  - type: GlobalAntagonist
+    antagonistPrototype: globalAntagonistNinja
   - type: GenericAntag
     rule: Ninja
   - type: AutoImplant

@@ -1,6 +1,7 @@
 - type: entity
   parent: BaseGameRule
   id: GameRuleMeteorScheduler
+  noSpawn: true
   components:
   - type: GameRule
     minPlayers: 25
@@ -19,7 +20,7 @@
 - type: entity
   parent: BaseGameRule
   id: GameRuleMeteorSwarm
-  abstract: true
+  noSpawn: true
   components:
   - type: GameRule
   - type: MeteorSwarm
@@ -27,6 +28,7 @@
 - type: entity
   parent: GameRuleMeteorSwarm
   id: GameRuleSpaceDustMinor
+  noSpawn: true
   components:
   - type: MeteorSwarm
     announcement: null
@@ -44,6 +46,7 @@
 - type: entity
   parent: GameRuleMeteorSwarm
   id: GameRuleSpaceDustMajor
+  noSpawn: true
   components:
   - type: MeteorSwarm
     announcement: station-event-space-dust-start-announcement
@@ -61,6 +64,7 @@
 - type: entity
   parent: GameRuleMeteorSwarm
   id: GameRuleMeteorSwarmSmall
+  noSpawn: true
   components:
   - type: MeteorSwarm
     meteors:
@@ -70,6 +74,7 @@
 - type: entity
   parent: GameRuleMeteorSwarm
   id: GameRuleMeteorSwarmMedium
+  noSpawn: true
   components:
   - type: MeteorSwarm
     meteors:
@@ -80,6 +85,7 @@
 - type: entity
   parent: GameRuleMeteorSwarm
   id: GameRuleMeteorSwarmLarge
+  noSpawn: true
   components:
   - type: MeteorSwarm
     meteors:
@@ -90,6 +96,7 @@
 - type: entity
   parent: GameRuleMeteorSwarm
   id: GameRuleUristSwarm
+  noSpawn: true
   components:
   - type: MeteorSwarm
     announcement: station-event-meteor-urist-start-announcement

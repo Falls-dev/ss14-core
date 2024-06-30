@@ -1,11 +1,10 @@
 using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking.Rules;
+using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.StationEvents.Components;
-using Content.Shared.GameTicking.Components;
-using Content.Shared.Random.Helpers;
 using Robust.Server.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
@@ -59,7 +58,7 @@ public sealed class MeteorSwarmSystem : GameRuleSystem<MeteorSwarmComponent>
         var meteorsToSpawn = component.MeteorsPerWave.Next(RobustRandom);
         for (var i = 0; i < meteorsToSpawn; i++)
         {
-            var spawnProto = RobustRandom.Pick(component.Meteors);
+            var spawnProto = RobustRandom.Pick(component.Meteors).Key;
 
             var angle = component.NonDirectional
                 ? RobustRandom.NextAngle()

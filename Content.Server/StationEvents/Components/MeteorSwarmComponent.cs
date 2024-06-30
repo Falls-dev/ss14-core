@@ -1,5 +1,5 @@
-﻿using Content.Server.StationEvents.Events;
-using Content.Shared.Destructible.Thresholds;
+﻿using Content.Server.Destructible.Thresholds;
+using Content.Server.StationEvents.Events;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 

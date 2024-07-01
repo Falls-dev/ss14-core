@@ -4,6 +4,7 @@ using Content.Shared._CM14.Medical.Surgery.Effects.Complete;
 using Content.Shared._CM14.Medical.Surgery.Steps.Parts;
 using Content.Shared._CM14.Xenos.Hugger;
 using Content.Shared.Body.Part;
+using Content.Shared.Buckle.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.EntitySystems;
@@ -24,7 +25,6 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
     [Dependency] private readonly IComponentFactory _compFactory = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
@@ -108,7 +108,7 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
         step = default;
 
         if (!HasComp<CMSurgeryTargetComponent>(body) ||
-            !_standing.IsDown(body) ||
+            !IsLyingDown(body) ||
             GetEntity(netPart) is not { Valid: true } netPartEnt ||
             !TryComp(netPartEnt, out BodyPartComponent? partComp) ||
             GetSingleton(surgery) is not { } surgeryEntId ||
@@ -152,6 +152,22 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
     private List<EntityUid> GetTools(EntityUid surgeon)
     {
         return _hands.EnumerateHeld(surgeon).ToList();
+    }
+
+    public bool IsLyingDown(EntityUid entity)
+    {
+        if (_standing.IsDown(entity))
+            return true;
+
+        if (TryComp(entity, out BuckleComponent? buckle) &&
+            TryComp(buckle.BuckledTo, out StrapComponent? strap))
+        {
+            var rotation = strap.Rotation;
+            if (rotation.GetCardinalDir() is Direction.West or Direction.East)
+                return true;
+        }
+
+        return false;
     }
 
     protected virtual void RefreshUI(EntityUid body)

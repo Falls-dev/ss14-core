@@ -30,6 +30,9 @@ public sealed class ArrivalNotificationSystem : EntitySystem
         if (!_prototypeManager.TryIndex<JobPrototype>(args.JobId, out var jobPrototype))
             return;
 
+        if (jobPrototype.AnnouncementPrototype == null)
+            return;
+
         if (!_prototypeManager.TryIndex<ArrivalNotificationPrototype>(jobPrototype.AnnouncementPrototype, out var notification))
             return;
 

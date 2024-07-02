@@ -7,7 +7,6 @@
   description: survival-description
   rules:
     - RampingStationEventScheduler
-    - GameRuleMeteorScheduler
     - BasicRoundstartVariation
 
 - type: gamePreset
@@ -25,7 +24,6 @@
     - Cult
     - Wizard
     - BasicRoundstartVariation
-    - GameRuleMeteorScheduler
 
 - type: gamePreset
   id: Extended
@@ -50,7 +48,6 @@
   description: greenshift-description
   rules:
   - BasicRoundstartVariation
-  - GameRuleMeteorScheduler
 
 - type: gamePreset
   id: Secret
@@ -88,7 +85,7 @@
     - sandbox
   name: sandbox-title
   description: sandbox-description
-  showInVote: false # Not suitable for use without admin intervention, since entity spamming can quickly crash a server
+  showInVote: false
   maxPlayers: 5
   rules:
     - Sandbox
@@ -178,7 +175,6 @@
     - Pirates
     - BasicStationEventScheduler
     - BasicRoundstartVariation
-    - GameRuleMeteorScheduler
 
 #WD EDIT START
 - type: gamePreset
@@ -194,7 +190,6 @@
     - SubGamemodesRule
     - BasicStationEventScheduler
     - BasicRoundstartVariation
-    - GameRuleMeteorScheduler
 
 - type: gamePreset
   id: Changeling
@@ -209,7 +204,6 @@
     - SubGamemodesRule
     - BasicStationEventScheduler
     - BasicRoundstartVariation
-    - GameRuleMeteorScheduler
 
 - type: gamePreset
   id: Wizard
@@ -225,5 +219,4 @@
     - SubGamemodesRule
     - BasicStationEventScheduler
     - BasicRoundstartVariation
-    - GameRuleMeteorScheduler
 #WD EDIT END

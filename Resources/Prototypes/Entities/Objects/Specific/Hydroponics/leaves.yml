@@ -65,7 +65,7 @@
       - Smokable
   - type: Item
     size: Tiny
-    
+
 - type: entity
   name: rainbow cannabis leaves
   parent: LeavesCannabis
@@ -77,8 +77,8 @@
   - type: Produce
     seedId: rainbowCannabis
   - type: PointLight
-    radius: 1.5
-    energy: 2
+    radius: 1.4
+    energy: 0.3
   - type: RgbLightController
     cycleRate: 0.6
   - type: SolutionContainerManager

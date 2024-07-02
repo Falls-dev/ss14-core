@@ -22,24 +22,28 @@ public sealed class GnomeAccentSystem : EntitySystem
 
         msg = _replacement.ApplyReplacements(msg, "gnome");
 
-        // replaces no at the start of words with GNO, changed from g so words are simpler to read
-        msg = Regex.Replace(msg, @"(?<!\w)\bno", "GNO", RegexOptions.IgnoreCase);
-        // replaces certain past tense words with GNOMED 
-        msg = Regex.Replace(msg, @"(?<!\w)\bfuck you", "GET GNOMED", RegexOptions.IgnoreCase);
-        msg = Regex.Replace(msg, @"(?<!\w)\bshitters", "GNOMERS", RegexOptions.IgnoreCase);
-        msg = Regex.Replace(msg, @"(?<!\w)\bfucked", "GNOMED", RegexOptions.IgnoreCase);
-        msg = Regex.Replace(msg, @"(?<!\w)\bkilled", "GNOMED", RegexOptions.IgnoreCase);
-        msg = Regex.Replace(msg, @"(?<!\w)\bdead", "GNOMED", RegexOptions.IgnoreCase);
-        msg = Regex.Replace(msg, @"(?<!\w)\bshot", "GNOMED", RegexOptions.IgnoreCase);
-        msg = Regex.Replace(msg, @"(?<!\w)\bstabbed", "GNOMED", RegexOptions.IgnoreCase);
-        //various other replacements to get a more gnomeish "feel" :3 the ones below this are capitalized, that is just to make it work
-        //TODO: make this work without ignoring the case
-        msg = Regex.Replace(msg, @"(?<!\w)\bmy", "mi", RegexOptions.None);
-        msg = Regex.Replace(msg, @"(?<!\w)\bfriend", "chum", RegexOptions.None);
-        msg = Regex.Replace(msg, @"(?<!\w)\bfriends", "chums", RegexOptions.None);
+        // Пиздец, а не код
+
+        msg = Regex.Replace(msg, @"(?<!\w)\bне", "ГНЕМ", RegexOptions.IgnoreCase);
+        msg = Regex.Replace(msg, @"(?<!\w)\bнет", "ГНЕМТ", RegexOptions.IgnoreCase);
+
+        msg = Regex.Replace(msg, @"(?<!\w)\bнахуй", "ГНАМХУЙ", RegexOptions.IgnoreCase);
+        msg = Regex.Replace(msg, @"(?<!\w)\bпидоры", "ГНОМЕРЫ", RegexOptions.IgnoreCase);
+        msg = Regex.Replace(msg, @"(?<!\w)\bхуесос", "ГНОХУСОМ", RegexOptions.IgnoreCase);
+        msg = Regex.Replace(msg, @"(?<!\w)\bебал", "ГНОМИЛ", RegexOptions.IgnoreCase);
+        msg = Regex.Replace(msg, @"(?<!\w)\bзаебал", "ЗАГНОМИЛ", RegexOptions.IgnoreCase);
+        msg = Regex.Replace(msg, @"(?<!\w)\bубил", "УГНОМИЛ", RegexOptions.IgnoreCase);
+        msg = Regex.Replace(msg, @"(?<!\w)\bубит", "УГНОМЛЕН", RegexOptions.IgnoreCase);
+        msg = Regex.Replace(msg, @"(?<!\w)\bебнул", "УГНОМЛЕН", RegexOptions.IgnoreCase);
+        msg = Regex.Replace(msg, @"(?<!\w)\bстрелял", "СТРЕГНОМИЛ", RegexOptions.IgnoreCase);
+        msg = Regex.Replace(msg, @"(?<!\w)\bзаколол", "СГНОМИЛ", RegexOptions.IgnoreCase);
+
+        msg = Regex.Replace(msg, @"(?<!\w)\bмой", "муй", RegexOptions.None);
+        msg = Regex.Replace(msg, @"(?<!\w)\bдруг", "бро", RegexOptions.None);
+        msg = Regex.Replace(msg, @"(?<!\w)\bдрузья", "друганы", RegexOptions.None);
         return msg;
     }
-    
+
 
     private void OnAccentGet(EntityUid uid, GnomeAccentComponent component, AccentGetEvent args)
     {

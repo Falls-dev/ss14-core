@@ -10,4 +10,7 @@ public sealed partial class DeathGaspsComponent : Component
 
     [DataField]
     public SoundSpecifier HeartSounds = new SoundCollectionSpecifier("heartSounds");
+
+    [DataField]
+    public bool CanOtherHearDeathSound;
 }

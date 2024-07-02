@@ -48,7 +48,10 @@ public sealed class OnDeath : EntitySystem
 
         var newStream = _audio.PlayEntity(component.HeartSounds, uid, uid, AudioParams.Default.WithLoop(true));
 
-        _playingStreams[uid] = newStream.Value.Entity;
+        if (newStream.HasValue)
+        {
+            _playingStreams[uid] = newStream.Value.Entity;
+        }
     }
 
     private void StopPlayingStream(EntityUid uid)
@@ -62,7 +65,10 @@ public sealed class OnDeath : EntitySystem
 
     private void PlayDeathSound(EntityUid uid, DeathGaspsComponent component)
     {
-        _audio.PlayEntity(component.DeathSounds, uid, uid, AudioParams.Default);
+        if (component.CanOtherHearDeathSound)
+            _audio.PlayPvs(component.DeathSounds, uid, AudioParams.Default);
+        else
+            _audio.PlayEntity(component.DeathSounds, uid, uid, AudioParams.Default);
     }
 
     private void OnDetach(EntityUid uid, DeathGaspsComponent component, PlayerDetachedEvent args)

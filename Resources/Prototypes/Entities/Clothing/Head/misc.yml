@@ -47,22 +47,8 @@
     - HEAD
     - neck
   - type: Construction
-    graph: flowercrown
-    node: flowercrown
-
-- type: entity
-  parent: ClothingHeadBase
-  id: ClothingHeadHatHairflower
-  name: hairflower
-  description: A red flower for beautiful ladies.
-  components:
-  - type: Sprite
-    sprite: Clothing/Head/Misc/hairflower.rsi
-  - type: Clothing
-    sprite: Clothing/Head/Misc/hairflower.rsi
-  - type: Construction
-    graph: hairflower
-    node: hairflower
+    graph: flowerwreath
+    node: flowerwreath
 
 - type: entity
   parent: ClothingHeadLightBase

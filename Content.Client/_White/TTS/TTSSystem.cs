@@ -5,13 +5,13 @@ using Robust.Client.Audio;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Components;
 using Robust.Shared.Configuration;
+// ReSharper disable InconsistentNaming
 
 namespace Content.Client._White.TTS;
 
 /// <summary>
 /// Plays TTS audio in world
 /// </summary>
-// ReSharper disable once InconsistentNaming
 public sealed class TTSSystem : EntitySystem
 {
     [Dependency] private readonly IAudioManager _audioManager = default!;
@@ -133,7 +133,7 @@ public sealed class TTSSystem : EntitySystem
 
     private void ClearQueues()
     {
-        foreach (var (uid, queue) in _enquedStreams)
+        foreach (var (_, queue) in _enquedStreams)
         {
             queue.Clear();
         }

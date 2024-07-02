@@ -848,6 +848,10 @@
         - SmallMobLayer
   - type: Stripping
   - type: Strippable
+  - type: UserInterface
+    interfaces:
+    - key: enum.StrippingUiKey.Key
+      type: StrippableBoundUserInterface
   - type: GhostRole
     prob: 1
     makeSentient: true
@@ -895,13 +899,12 @@
     messagePerceivedByOthers: hugging-success-generic-others
   - type: MeleeWeapon
     soundHit:
-      collection: Punch
+      collection: ToySqueak
     angle: 30
     animation: WeaponArcPunch
     damage:
       types:
-        Blunt: 1
-        Piercing: 1
+        Piercing: 3
   - type: Puller #dont need hands because they are at a disadvantage anyway, this way they can hold a light and drag a box for a backpack
     needsHands: false
   - type: CanHostGuardian #touch this stuff to make the fuckers hold still when not possesed (NOT THE GAURDIAN)
@@ -960,12 +963,35 @@
       types:
         Blunt: 20
     soundHit:
-      collection: GlassBreak
+      collection: GnomesDeathCollection
   - type: Vocal
     sounds:
       Male: Gnome
       Female: Gnome
       Unsexed: Gnome
-    wilhelmProbability: 0.001
+    wilhelmProbability: 0.0001
   - type: Unrevivable
+  - type: Tool
+    qualities:
+    - Screwing
+    useSound:
+      collection: Screwdriver
+  - type: FelinidFood
+  - type: Speech
+    speechSounds: GnomesSpeech
+    speechVerb: SmallMob
+  - type: Extractable
+    grindableSolutionName: food
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        reagents:
+        - ReagentId: UnstableMutagen
+          Quantity: 5
+  - type: BadFood
+  - type: DeathGasps
+    deathSounds:
+      collection: GnomesDeathCollection
+  - type: Thieving
+    stripTimeReduction: 4
 

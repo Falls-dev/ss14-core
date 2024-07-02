@@ -16,8 +16,7 @@ public sealed class OnDeath : EntitySystem
     }
 
     private readonly Dictionary<EntityUid, EntityUid> _playingStreams = new();
-    private static readonly SoundSpecifier DeathSounds = new SoundCollectionSpecifier("deathSounds");
-    private static readonly SoundSpecifier HeartSounds = new SoundCollectionSpecifier("heartSounds");
+
 
     private void HandleDeathEvent(EntityUid uid, DeathGaspsComponent component, MobStateChangedEvent args)
     {
@@ -31,28 +30,25 @@ public sealed class OnDeath : EntitySystem
                 StopPlayingStream(uid);
                 break;
             case MobState.Critical:
-                PlayPlayingStream(uid);
+                PlayPlayingStream(uid, component);
                 break;
             case MobState.Dead:
                 StopPlayingStream(uid);
-                PlayDeathSound(uid);
+                PlayDeathSound(uid, component);
                 break;
         }
     }
 
-    private void PlayPlayingStream(EntityUid uid)
+    private void PlayPlayingStream(EntityUid uid, DeathGaspsComponent component)
     {
         if (_playingStreams.TryGetValue(uid, out var currentStream))
         {
             _audio.Stop(currentStream);
         }
 
-        var newStream = _audio.PlayEntity(HeartSounds, uid, uid, AudioParams.Default.WithLoop(true));
+        var newStream = _audio.PlayEntity(component.HeartSounds, uid, uid, AudioParams.Default.WithLoop(true));
 
-        if (newStream.HasValue)
-        {
-            _playingStreams[uid] = newStream.Value.Entity;
-        }
+        _playingStreams[uid] = newStream.Value.Entity;
     }
 
     private void StopPlayingStream(EntityUid uid)
@@ -64,9 +60,9 @@ public sealed class OnDeath : EntitySystem
         _playingStreams.Remove(uid);
     }
 
-    private void PlayDeathSound(EntityUid uid)
+    private void PlayDeathSound(EntityUid uid, DeathGaspsComponent component)
     {
-        _audio.PlayEntity(DeathSounds, uid, uid, AudioParams.Default);
+        _audio.PlayEntity(component.DeathSounds, uid, uid, AudioParams.Default);
     }
 
     private void OnDetach(EntityUid uid, DeathGaspsComponent component, PlayerDetachedEvent args)

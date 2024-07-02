@@ -823,10 +823,7 @@
 
 - type: entity #WHY MUST YOU THROW ERRORS HOW DARE YOU
   name: Gnome #this thing is covered in comments, its for my sanity, ignore them please.
-  parent:     #without them id forget what everything does
-  - BaseSimpleMob
-  - MobCombat
-  - MobAtmosExposed
+  parent: [BaseSimpleMob, MobCombat, MobAtmosExposed]
   id: MobGnome
   description: "A garden's trusty helper"
   components:
@@ -851,10 +848,6 @@
         - SmallMobLayer
   - type: Stripping
   - type: Strippable
-  - type: UserInterface
-    interfaces:
-      enum.StrippingUiKey.Key:
-        type: StrippableBoundUserInterface
   - type: GhostRole
     prob: 1
     makeSentient: true
@@ -933,11 +926,11 @@
     damage:
       types:
         Blunt: 60 #per second, scales with pressure and other constants.
-  - type: Repairable 
+  - type: Repairable
     fuelCost: 5
     qualityNeeded: Gluing
-    doAfterDelay: 8      
-  - type: ZombieImmune   
+    doAfterDelay: 8
+  - type: ZombieImmune
   - type: Damageable
     damageContainer: StructuralInorganic
   - type: CanEscapeInventory
@@ -955,7 +948,7 @@
         spawn:
           ClothingHeadHatGnome:
            min: 1
-           max: 1 
+           max: 1
           ShardGlass:
             min: 1
             max: 3

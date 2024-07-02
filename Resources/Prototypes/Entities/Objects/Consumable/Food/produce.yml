@@ -1533,34 +1533,6 @@
     program: 56
 
 - type: entity
-  name: spaceman's trumpet
-  description: A vivid flower that smells faintly of freshly cut grass. Touching the flower seems to stain the skin some time after contact, yet most other surfaces seem to be unaffected by this phenomenon.
-  id: FoodSpacemansTrumpet
-  parent: FoodProduceBase
-  components:
-  - type: FlavorProfile
-    flavors:
-      - violets
-  - type: Sprite
-    sprite: Objects/Specific/Hydroponics/spacemans_trumpet.rsi
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 4
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 1
-        - ReagentId: PolypyryliumOligomers
-          Quantity: 3
-  - type: Produce
-    seedId: spacemansTrumpet
-  - type: Tag
-    tags:
-    - Flower
-  - type: Instrument #hehe trumpet
-    program: 56
-
-- type: entity
   name: koibean
   description: These beans seem a little bit fishy.
   id: FoodKoibean

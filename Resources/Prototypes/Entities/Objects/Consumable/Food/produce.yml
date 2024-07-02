@@ -1765,6 +1765,7 @@
   - type: SliceableFood
     count: 5
     slice: FoodHolymelonSlice
+  - type: HolyWeapon
   - type: Tag
     tags:
     - Fruit

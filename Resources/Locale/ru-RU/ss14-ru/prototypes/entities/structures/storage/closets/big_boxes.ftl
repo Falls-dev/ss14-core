@@ -7,7 +7,7 @@ ent-BigBox = { ent-BaseBigBox }
     .desc = { ent-BaseBigBox.desc }
 ent-GhostBox = призрачная коробка
     .desc = Остерегайтесь!
-    .suffix = { "" }
+
 ent-Exclamation = восклицание
     .desc = { "" }
-    .suffix = { "" }
+

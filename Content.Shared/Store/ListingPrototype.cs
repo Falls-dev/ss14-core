@@ -118,7 +118,7 @@ public partial class ListingData : IEquatable<ListingData>, ICloneable
 
     public int SaleAmount;
 
-    public Dictionary<string, FixedPoint2> OldCost = new();
+    public Dictionary<ProtoId<CurrencyPrototype>, FixedPoint2> OldCost = new();
 
     [DataField]
     public List<string> Components = new();

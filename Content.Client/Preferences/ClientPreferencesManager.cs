@@ -26,6 +26,7 @@ namespace Content.Client.Preferences
         [Dependency] private readonly IBaseClient _baseClient = default!;
         [Dependency] private readonly IConfigurationManager _cfg = default!;
         [Dependency] private readonly IPrototypeManager _prototypes = default!;
+        [Dependency] private readonly IPlayerManager _playerManager = default!;
 
         //WD-EDIT
         [Dependency] private readonly SponsorsManager _sponsorsManager = default!;

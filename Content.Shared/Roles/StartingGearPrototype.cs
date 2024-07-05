@@ -31,18 +31,8 @@ namespace Content.Shared.Roles
         [IdDataField]
         public string ID { get; private set; } = string.Empty;
 
-        public string GetGear(string slot, HumanoidCharacterProfile? profile)
+        public string GetGear(string slot)
         {
-            if (profile != null)
-            {
-                // White underwear
-                if (slot == "underweart" && profile.Sex == Sex.Female && !string.IsNullOrEmpty(_underweart))
-                    return _underweart;
-                if (slot == "underwearb" && profile.Sex == Sex.Female && !string.IsNullOrEmpty(_underwearb))
-                    return _underwearb;
-                // White underwear end
-            }
-
             return Equipment.TryGetValue(slot, out var equipment) ? equipment : string.Empty;
         }
     }

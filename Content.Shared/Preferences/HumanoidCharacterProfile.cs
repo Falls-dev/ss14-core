@@ -47,9 +47,9 @@ namespace Content.Shared.Preferences
             string borgName,
             string flavortext,
             string species,
+            string voice,
             int age,
             Sex sex,
-            string voice,
             Gender gender,
             ProtoId<BodyTypePrototype> bodyType,
             HumanoidCharacterAppearance appearance,
@@ -85,7 +85,7 @@ namespace Content.Shared.Preferences
             HumanoidCharacterProfile other,
             Dictionary<string, JobPriority> jobPriorities,
             List<string> antagPreferences,
-            List<string> traitPreferences),
+            List<string> traitPreferences,
             Dictionary<string, RoleLoadout> loadouts)
             : this(other.Name,
                 other.ClownName,
@@ -105,10 +105,10 @@ namespace Content.Shared.Preferences
                 antagPreferences,
                 traitPreferences,
                 loadouts)
-        {
-        }
+            {
+            }
 
-        /// <summary>Copy constructor</summary>
+            /// <summary>Copy constructor</summary>
         private HumanoidCharacterProfile(HumanoidCharacterProfile other)
             : this(other, new Dictionary<string, JobPriority>(other.JobPriorities), new List<string>(other.AntagPreferences), new List<string>(other.TraitPreferences), new Dictionary<string, RoleLoadout>(other.Loadouts))
         {
@@ -125,13 +125,13 @@ namespace Content.Shared.Preferences
             int age,
             Sex sex,
             Gender gender,
-            string bodyType,
+            ProtoId<BodyTypePrototype> bodyType,
             HumanoidCharacterAppearance appearance,
             SpawnPriorityPreference spawnPriority,
             IReadOnlyDictionary<string, JobPriority> jobPriorities,
             PreferenceUnavailableMode preferenceUnavailable,
             IReadOnlyList<string> antagPreferences,
-            IReadOnlyList<string> traitPreferences),
+            IReadOnlyList<string> traitPreferences,
             Dictionary<string, RoleLoadout> loadouts)
             : this(name, clownName, mimeName, borgName, flavortext, species, voice, age, sex, gender, bodyType,
                 appearance, spawnPriority, new Dictionary<string, JobPriority>(jobPriorities),
@@ -253,7 +253,7 @@ namespace Content.Shared.Preferences
             var borgName = GetBorgName();
 
             return new HumanoidCharacterProfile(name, clownName, mimeName, borgName, "", species, voiceId, age, sex,
-                gender, HumanoidCharacterAppearance.Random(species, sex), HumanoidCharacterAppearance.Random(species, sex), SpawnPriorityPreference.None,
+                gender, bodyType, HumanoidCharacterAppearance.Random(species, sex), SpawnPriorityPreference.None,
                 new Dictionary<string, JobPriority>
                 {
                     { SharedGameTicker.FallbackOverflowJob, JobPriority.High },

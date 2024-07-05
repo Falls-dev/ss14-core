@@ -1,6 +1,6 @@
 ## UI
 
-injector-draw-text = Забор
+injector-draw-text = Набор
 injector-inject-text = Введение
 injector-invalid-injector-toggle-mode = Неверный режим
 injector-volume-label = Объём: [color=white]{ $currentVolume }/{ $totalVolume }[/color]

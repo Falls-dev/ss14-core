@@ -7,5 +7,5 @@ admin-ui-atmos-grid-current = Текущий
 admin-ui-atmos-tile-x = TileX
 admin-ui-atmos-tile-y = TileY
 admin-ui-atmos-gas = Газ
-admin-ui-atmos-gas-amount = Кол-во
+admin-ui-atmos-gas-amount = количество
 admin-ui-atmos-temperature = Температура

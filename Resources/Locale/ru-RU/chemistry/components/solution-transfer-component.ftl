@@ -11,7 +11,7 @@ comp-solution-transfer-is-full = { CAPITALIZE($target) } полон!
 
 ## Displayed in change transfer amount verb's name
 
-comp-solution-transfer-verb-custom-amount = Своё кол-во
+comp-solution-transfer-verb-custom-amount = Своё количество
 comp-solution-transfer-verb-amount = { $amount } ед.
 comp-solution-transfer-verb-toggle = Переключить на { $amount } ед.
 

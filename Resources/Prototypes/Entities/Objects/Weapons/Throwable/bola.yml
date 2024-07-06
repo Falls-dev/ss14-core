@@ -48,12 +48,16 @@
     canThrowTrigger: true
     canMoveBreakout: true
 
+# WD added
+
 - type: entity
   parent: Bola
   id: CultBola
   name: Bola
   description: Linked together with some spare cuffs and metal.
   components:
+    - type: Sprite
+      sprite: White/Cult/bola.rsi
     - type: Ensnaring
       freeTime: 2.0
       breakoutTime: 3.5 #all bola should generally be fast to remove

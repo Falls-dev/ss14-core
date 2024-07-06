@@ -5,8 +5,8 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 
 namespace Content.Server._White.Loadout;
 
-[Prototype("loadout")]
-public sealed class LoadoutItemPrototype : IPrototype
+[Prototype("sponsorLoadout")]
+public sealed class SponsorLoadoutItemPrototype : IPrototype
 {
     [IdDataFieldAttribute] public string ID { get; } = default!;
 

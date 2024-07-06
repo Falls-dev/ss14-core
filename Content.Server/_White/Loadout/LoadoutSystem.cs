@@ -32,7 +32,7 @@ public sealed class LoadoutSystem : EntitySystem
             foreach (var loadoutId in sponsor.AllowedMarkings)
             {
                 // NOTE: Now is easy to not extract method because event give all info we need
-                if (_prototypeManager.TryIndex<LoadoutItemPrototype>(loadoutId, out var loadout))
+                if (_prototypeManager.TryIndex<SponsorLoadoutItemPrototype>(loadoutId, out var loadout))
                 {
                     var isSponsorOnly = loadout.SponsorOnly &&
                                         !sponsor.AllowedMarkings.Contains(loadoutId);

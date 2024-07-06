@@ -68,6 +68,7 @@ namespace Content.Server.IoC
             IoCManager.Register<DiscordWebhook>();
             IoCManager.Register<ServerDbEntryManager>();
             IoCManager.Register<ISharedPlaytimeManager, PlayTimeTrackingManager>();
+            IoCManager.Register<IPlayTimeTrackingManager, GlobalPlayTimeTrackingManager>();
 
             // WD-EDIT
             IoCManager.Register<SponsorsManager>();

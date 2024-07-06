@@ -38,22 +38,8 @@ using Direction = Robust.Shared.Maths.Direction;
 
 namespace Content.Client.Preferences.UI
 {
-    public sealed class HighlightedContainer : PanelContainer
-    {
-        public HighlightedContainer()
-        {
-            PanelOverride = new StyleBoxFlat
-            {
-                ContentMarginTopOverride = 10,
-                ContentMarginBottomOverride = 10,
-                ContentMarginLeftOverride = 10,
-                ContentMarginRightOverride = 10
-            };
-        }
-    }
-
     [GenerateTypedNameReferences]
-    public sealed partial class HumanoidProfileEditor : BoxContainer
+    public sealed partial class HumanoidProfileEditor : Control
     {
 
         //WD-EDIT
@@ -61,9 +47,10 @@ namespace Content.Client.Preferences.UI
         private readonly IClientAdminManager _adminManager;
         //WD-EDIT
 
+
+        private readonly IPrototypeManager _prototypeManager;
         private readonly IClientPreferencesManager _preferencesManager;
-        private readonly IEntityManager _entMan;
-        private readonly IConfigurationManager _configurationManager;
+        private readonly IEntityManager _entMan = default!;
         private readonly MarkingManager _markingManager;
         private readonly JobRequirementsManager _requirements;
 
@@ -129,6 +116,7 @@ namespace Content.Client.Preferences.UI
 
         public HumanoidProfileEditor(IClientPreferencesManager preferencesManager, IPrototypeManager prototypeManager, IConfigurationManager configurationManager)
         {
+            IoCManager.InjectDependencies(this);
             RobustXamlLoader.Load(this);
             _sponsorsManager = IoCManager.Resolve<SponsorsManager>();
             _adminManager = IoCManager.Resolve<IClientAdminManager>();

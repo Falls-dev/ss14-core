@@ -50,4 +50,8 @@ salvage-expedition-difficulty-Minor = Незначительная
 
 ent-ToySwordDouble = двойной игрушечный меч
 
+# Cult
 
+ent-CultBola = магическая { ent-Bola }
+    .desc = { ent-Bola.desc }
+    .suffic = культ

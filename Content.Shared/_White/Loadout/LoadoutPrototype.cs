@@ -3,7 +3,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 
-namespace Content.Server._White.Loadout;
+namespace Content.Shared._White.Loadout;
 
 [Prototype("sponsorLoadout")]
 public sealed class SponsorLoadoutItemPrototype : IPrototype

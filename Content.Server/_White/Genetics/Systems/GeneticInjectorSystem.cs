@@ -1,14 +1,16 @@
 using Content.Server._White.Genetics.Components;
 using Content.Server.DoAfter;
 using Content.Server.Popups;
+using Content.Shared._White.Genetics;
 using Content.Shared.DoAfter;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs.Systems;
+using Content.Shared._White.Genetics.Components;
 
 namespace Content.Server._White.Genetics.Systems;
 
-public sealed class GeneticInjectorSystem : EntitySystem
+public sealed class GeneticInjectorSystem : SharedGeneticInjectorSystem
 {
     [Dependency] private readonly GenomeSystem _genome = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
@@ -38,6 +40,12 @@ public sealed class GeneticInjectorSystem : EntitySystem
             targetGenome = new GenomeComponent();
             AddComp(args.Target.Value, targetGenome);
         }
+
+        if (!entity.Comp.Used)
+            return;
+
+        if (entity.Comp.MutationProtos.Count + entity.Comp.ActivatorMutations.Count == 0)
+            return;
 
         var delay = entity.Comp.UseDelay;
 
@@ -93,6 +101,12 @@ public sealed class GeneticInjectorSystem : EntitySystem
             _genome.ApplyActivatorMutation(args.Target.Value, targetGenome, mutation);
             mutationList.Add(mutation);
         }
+
+        injector.Comp.MutationProtos.Clear(); // TODO: probably need another way to make injectors single-use
+        injector.Comp.ActivatorMutations.Clear();
+        injector.Comp.Used = true;
+
+
 
         // TODO: admin log here, use mutationList
     }

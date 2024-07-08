@@ -1,7 +1,7 @@
 using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 
-namespace Content.Server._White.Genetics.Components;
+namespace Content.Shared._White.Genetics.Components;
 
 public sealed partial class GeneticInjectorComponent : Component
 {
@@ -17,8 +17,20 @@ public sealed partial class GeneticInjectorComponent : Component
     [DataField("useDelay")]
     public float UseDelay = 2.5f;
 
-    [DataField("name")]
-    public string? Name;
+    [DataField]
+    public bool Used = false;
+
+    /// <summary>
+    /// Sprite state to use if Used = false
+    /// </summary>
+    [DataField]
+    public string NewState = "new";
+
+    /// <summary>
+    /// Sprite state to use if Used = true
+    /// </summary>
+    [DataField]
+    public string UsedState = "used";
 }
 
 [Serializable, NetSerializable]

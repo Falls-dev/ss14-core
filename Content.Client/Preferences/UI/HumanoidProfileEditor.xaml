@@ -5,7 +5,7 @@
          xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls">
     <BoxContainer Orientation="Horizontal">
         <!-- Left side -->
-        <BoxContainer Orientation="Vertical" Margin="10 10 10 10">
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" HorizontalAlignment="Stretch" Margin="10 10 10 10">
             <!-- Middle container -->
             <BoxContainer Orientation="Vertical" SeparationOverride="10">
                 <!-- Name box-->

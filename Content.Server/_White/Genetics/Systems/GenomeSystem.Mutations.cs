@@ -76,6 +76,12 @@ public sealed partial class GenomeSystem
         CheckInstability(uid, comp, -mutation.Instability);
     }
 
+    /// <summary>
+    /// Applies the mutation indefinitely if entity has the corresponding region. sets that region
+    /// </summary>
+    /// <param name="uid"></param>
+    /// <param name="comp"></param>
+    /// <param name="mutationName"></param>
     public void ApplyActivatorMutation(EntityUid uid, GenomeComponent comp, string mutationName)
     {
         if (comp.ActivatedMutations.Contains(mutationName))
@@ -93,7 +99,7 @@ public sealed partial class GenomeSystem
             if (mutationName != comp.MutationRegions[region])
                 continue;
 
-            comp.Layout.SetBitArray(comp.Genome, region, mutation.Genome.Bits);
+            comp.Layout.SetBitArray(comp.Genome, region, mutation.Genome.Bits); // this should probably vary depending on context
 
             if (activated)
                 continue;

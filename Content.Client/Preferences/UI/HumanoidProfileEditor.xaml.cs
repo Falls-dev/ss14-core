@@ -123,6 +123,7 @@ namespace Content.Client.Preferences.UI
             _prototypeManager = prototypeManager;
             _preferencesManager = preferencesManager;
             _markingManager = IoCManager.Resolve<MarkingManager>();
+            _entMan = IoCManager.Resolve<IEntityManager>(); // WD
             var controller = UserInterfaceManager.GetUIController<LobbyUIController>();
             controller.PreviewDummyUpdated += OnDummyUpdate;
 

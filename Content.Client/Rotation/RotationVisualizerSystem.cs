@@ -2,6 +2,7 @@ using Content.Shared.Rotation;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Shared.Animations;
+using Robust.Shared.Graphics.RSI;
 
 namespace Content.Client.Rotation;
 
@@ -10,12 +11,42 @@ public sealed class RotationVisualizerSystem : SharedRotationVisualsSystem
 
     [Dependency] private readonly AppearanceSystem _appearance = default!;
     [Dependency] private readonly AnimationPlayerSystem _animation = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<RotationVisualsComponent, AppearanceChangeEvent>(OnAppearanceChange);
+        SubscribeLocalEvent<RotationVisualsComponent, MoveEvent>(OnMove);
+    }
+
+    private void OnMove(EntityUid uid, RotationVisualsComponent component, ref MoveEvent args)
+    {
+        if (!TryComp<SpriteComponent>(uid, out var sprite) ||
+            !TryComp<AppearanceComponent>(uid, out var appearance))
+            return;
+
+        _appearance.TryGetData<RotationState>(uid, RotationVisuals.RotationState, out var state, appearance);
+
+        var rotation = _transform.GetWorldRotation(uid);
+
+        if (rotation.GetDir() is Direction.East or Direction.North or Direction.NorthEast or Direction.SouthEast)
+        {
+            SetHorizontalAngle(uid, Angle.FromDegrees(270));
+
+            if (state == RotationState.Horizontal &&
+                sprite.Rotation == component.DefaultRotation)
+                sprite.Rotation = Angle.FromDegrees(270);
+
+            return;
+        }
+
+        ResetHorizontalAngle(uid);
+
+        if (state == RotationState.Horizontal &&
+            sprite.Rotation == Angle.FromDegrees(270))
+            sprite.Rotation = component.DefaultRotation;
     }
 
     private void OnAppearanceChange(EntityUid uid, RotationVisualsComponent component, ref AppearanceChangeEvent args)

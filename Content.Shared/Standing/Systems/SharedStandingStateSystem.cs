@@ -7,12 +7,16 @@ using Content.Shared.Physics;
 using Content.Shared.Rotation;
 using Content.Shared.Slippery;
 using Content.Shared.Stunnable;
+using Content.Shared._White.Wizard.Timestop;
+using Content.Shared._White;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Serialization;
+using Robust.Shared.Configuration;
+
 
 namespace Content.Shared.Standing.Systems;
 
@@ -25,6 +29,7 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!; // WD EDIT
     [Dependency] private readonly SharedStunSystem _stun = default!; // WD EDIT
     [Dependency] private readonly MobStateSystem _mobState = default!; // WD EDIT
+    [Dependency] private readonly INetConfigurationManager _cfg = default!; // WD EDIT
 
     // If StandingCollisionLayer value is ever changed to more than one layer, the logic needs to be edited.
     private const int StandingCollisionLayer = (int)CollisionGroup.MidImpassable;
@@ -41,6 +46,7 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
             .Register<SharedStandingStateSystem>();
 
         SubscribeNetworkEvent<ChangeStandingStateEvent>(OnChangeState);
+        SubscribeNetworkEvent<CheckAutoGetUpEvent>(OnCheckAutoGetUp);
 
         SubscribeLocalEvent<StandingStateComponent, StandingUpDoAfterEvent>(OnStandingUpDoAfter);
         SubscribeLocalEvent<StandingStateComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeed);
@@ -53,12 +59,22 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
 
     private void OnChangeState(ChangeStandingStateEvent ev, EntitySessionEventArgs args)
     {
+        if (TryComp<FrozenComponent>(args.SenderSession.AttachedEntity, out _))
+        {
+            return;
+        }
+
         if (!args.SenderSession.AttachedEntity.HasValue)
         {
             return;
         }
 
         var uid = args.SenderSession.AttachedEntity.Value;
+
+        if (!TryComp(uid, out StandingStateComponent? standing))
+            return;
+
+        RaiseNetworkEvent(new CheckAutoGetUpEvent());
 
         if (_stun.IsParalyzed(uid))
         {
@@ -70,18 +86,39 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
             return;
         }
 
-        if (IsDown(uid))
+        if (IsDown(uid, standing))
         {
-            TryStandUp(uid);
+            TryStandUp(uid, standing);
         }
         else
         {
-            TryLieDown(uid);
+            TryLieDown(uid, standing);
         }
+    }
+
+    private void OnCheckAutoGetUp(CheckAutoGetUpEvent ev, EntitySessionEventArgs args)
+    {
+        if (!args.SenderSession.AttachedEntity.HasValue)
+        {
+            return;
+        }
+
+        var uid = args.SenderSession.AttachedEntity.Value;
+
+        if (!TryComp(uid, out StandingStateComponent? standing))
+            return;
+
+        standing.AutoGetUp = _cfg.GetClientCVar(args.SenderSession.Channel, WhiteCVars.AutoGetUp);
+        Dirty(args.SenderSession.AttachedEntity.Value, standing);
     }
 
     private void OnStandingUpDoAfter(EntityUid uid, StandingStateComponent component, StandingUpDoAfterEvent args)
     {
+        if (args.Handled)
+        {
+            component.CurrentState = StandingState.Lying;
+            return;
+        }
         Stand(uid);
     }
 

@@ -23,19 +23,28 @@ namespace Content.Shared.Standing
         // WD EDIT
         [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
         public bool CanLieDown = false;
-        
+
+        // WD EDIT
+        [DataField, AutoNetworkedField]
+        public bool AutoGetUp = false;
+
         /// <summary>
         ///     List of fixtures that had their collision mask changed when the entity was downed.
         ///     Required for re-adding the collision mask.
         /// </summary>
         [DataField, AutoNetworkedField]
         public List<string> ChangedFixtures = new();
-        
+
     }
 }
 
 [Serializable, NetSerializable]
-public sealed class ChangeStandingStateEvent : EntityEventArgs
+public sealed class ChangeStandingStateEvent : CancellableEntityEventArgs
+{
+}
+
+[Serializable, NetSerializable]
+public sealed class CheckAutoGetUpEvent : CancellableEntityEventArgs
 {
 }
 

@@ -37,7 +37,7 @@ public sealed partial class GenomeComponent : Component
     public List<string> MutatedMutations = new List<string>();
 
     /// <summary>
-    /// TODO: review
+    /// TODO: wtf is this
     /// </summary>
     [DataField("humanGenes")]
     public bool HumanGenes = false;

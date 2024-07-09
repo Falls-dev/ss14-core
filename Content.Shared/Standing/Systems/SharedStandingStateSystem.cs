@@ -9,6 +9,8 @@ using Content.Shared.Slippery;
 using Content.Shared.Stunnable;
 using Content.Shared._White.Wizard.Timestop;
 using Content.Shared._White;
+using Content.Shared.Buckle;
+using Content.Shared.Buckle.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Physics;
@@ -30,6 +32,7 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
     [Dependency] private readonly SharedStunSystem _stun = default!; // WD EDIT
     [Dependency] private readonly MobStateSystem _mobState = default!; // WD EDIT
     [Dependency] private readonly INetConfigurationManager _cfg = default!; // WD EDIT
+    [Dependency] private readonly SharedBuckleSystem _buckle = default!; // WD EDIT
 
     // If StandingCollisionLayer value is ever changed to more than one layer, the logic needs to be edited.
     private const int StandingCollisionLayer = (int)CollisionGroup.MidImpassable;
@@ -99,9 +102,7 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
     private void OnCheckAutoGetUp(CheckAutoGetUpEvent ev, EntitySessionEventArgs args)
     {
         if (!args.SenderSession.AttachedEntity.HasValue)
-        {
             return;
-        }
 
         var uid = args.SenderSession.AttachedEntity.Value;
 
@@ -228,6 +229,9 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
 
         // Optional component.
         Resolve(uid, ref appearance, ref hands, false);
+
+        if (TryComp(uid, out BuckleComponent? buckle) && buckle.Buckled && !_buckle.TryUnbuckle(uid, uid, buckleComp: buckle))
+            return false;
 
         // This is just to avoid most callers doing this manually saving boilerplate
         // 99% of the time you'll want to drop items but in some scenarios (e.g. buckling) you don't want to.

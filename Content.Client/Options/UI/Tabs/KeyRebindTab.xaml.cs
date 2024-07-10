@@ -98,7 +98,7 @@ namespace Content.Client.Options.UI.Tabs
             _deferCommands.Add(_inputManager.SaveToUserData);
         }
 
-        private void HandleToggleAutoGetUp(BaseButton.ButtonToggledEventArgs args)
+        private void HandleToggleAutoGetUp(BaseButton.ButtonToggledEventArgs args) // WD EDIT
         {
             _cfg.SetCVar(WhiteCVars.AutoGetUp, args.Pressed);
             _cfg.SaveToFile();

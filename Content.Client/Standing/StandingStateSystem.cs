@@ -5,5 +5,5 @@ namespace Content.Client.Standing;
 
 public sealed class StandingStateSystem : SharedStandingStateSystem
 {
-
+    
 }

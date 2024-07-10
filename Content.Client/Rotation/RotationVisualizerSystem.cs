@@ -2,7 +2,6 @@ using Content.Shared.Rotation;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Shared.Animations;
-using Robust.Shared.Graphics.RSI;
 
 namespace Content.Client.Rotation;
 
@@ -33,20 +32,24 @@ public sealed class RotationVisualizerSystem : SharedRotationVisualsSystem
 
         if (rotation.GetDir() is Direction.East or Direction.North or Direction.NorthEast or Direction.SouthEast)
         {
-            SetHorizontalAngle(uid, Angle.FromDegrees(270));
+            component.HorizontalRotation = Angle.FromDegrees(270);
 
             if (state == RotationState.Horizontal &&
                 sprite.Rotation == component.DefaultRotation)
+            {
                 sprite.Rotation = Angle.FromDegrees(270);
+            }
 
             return;
         }
 
-        ResetHorizontalAngle(uid);
+        component.HorizontalRotation = component.DefaultRotation;
 
         if (state == RotationState.Horizontal &&
             sprite.Rotation == Angle.FromDegrees(270))
+        {
             sprite.Rotation = component.DefaultRotation;
+        }
     }
 
     private void OnAppearanceChange(EntityUid uid, RotationVisualsComponent component, ref AppearanceChangeEvent args)

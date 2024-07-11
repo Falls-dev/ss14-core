@@ -1,5 +1,5 @@
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: QuartermasterJumpsuit
   equipment: QuartermasterJumpsuit
 
@@ -8,7 +8,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitQM
 
-- type: loadout
+- type: itemLoadout
   id: QuartermasterJumpskirt
   equipment: QuartermasterJumpskirt
 
@@ -17,7 +17,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtQM
 
-- type: loadout
+- type: itemLoadout
   id: QuartermasterTurtleneck
   equipment: QuartermasterTurtleneck
 
@@ -26,7 +26,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitQMTurtleneck
 
-- type: loadout
+- type: itemLoadout
   id: QuartermasterTurtleneckSkirt
   equipment: QuartermasterTurtleneckSkirt
 
@@ -35,7 +35,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtQMTurtleneck
 
-- type: loadout
+- type: itemLoadout
   id: QuartermasterFormalSuit
   equipment: QuartermasterFormalSuit
 
@@ -45,7 +45,7 @@
     jumpsuit: ClothingUniformJumpsuitQMFormal
 
 # Head
-- type: loadout
+- type: itemLoadout
   id: QuartermasterHead
   equipment: QuartermasterHead
 
@@ -54,7 +54,7 @@
   equipment:
     head: ClothingHeadHatQMsoft
 
-- type: loadout
+- type: itemLoadout
   id: QuartermasterBeret
   equipment: QuartermasterBeret
 
@@ -64,7 +64,7 @@
     head: ClothingHeadHatBeretQM
 
 # Neck
-- type: loadout
+- type: itemLoadout
   id: QuartermasterCloak
   equipment: QuartermasterCloak
 
@@ -73,7 +73,7 @@
   equipment:
     neck: ClothingNeckCloakQm
 
-- type: loadout
+- type: itemLoadout
   id: QuartermasterMantle
   equipment: QuartermasterMantle
 
@@ -83,7 +83,7 @@
     neck: ClothingNeckMantleQM
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: QuartermasterBackpack
   equipment: QuartermasterBackpack
 
@@ -92,7 +92,7 @@
   equipment:
     back: ClothingBackpackQuartermasterFilled
 
-- type: loadout
+- type: itemLoadout
   id: QuartermasterSatchel
   equipment: QuartermasterSatchel
 
@@ -101,7 +101,7 @@
   equipment:
     back: ClothingBackpackSatchelQuartermasterFilled
 
-- type: loadout
+- type: itemLoadout
   id: QuartermasterDuffel
   equipment: QuartermasterDuffel
 

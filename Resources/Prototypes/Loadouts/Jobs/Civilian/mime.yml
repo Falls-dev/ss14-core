@@ -1,5 +1,5 @@
 # Head
-- type: loadout
+- type: itemLoadout
   id: MimeHead
   equipment: MimeHead
 
@@ -8,7 +8,7 @@
   equipment:
     head: ClothingHeadHatBeret
 
-- type: loadout
+- type: itemLoadout
   id: MimeFrenchBeret
   equipment: MimeFrenchBeret
 
@@ -17,7 +17,7 @@
   equipment:
     head: ClothingHeadHatBeretFrench
 
-- type: loadout
+- type: itemLoadout
   id: MimeCap
   equipment: MimeCap
 
@@ -27,7 +27,7 @@
     head: ClothingHeadHatMimesoft
 
 # Mask
-- type: loadout
+- type: itemLoadout
   id: MimeMask
   equipment: MimeMask
 
@@ -36,7 +36,7 @@
   equipment:
     mask: ClothingMaskMime
 
-- type: loadout
+- type: itemLoadout
   id: MimeMaskSad
   equipment: MimeMaskSad
 
@@ -45,7 +45,7 @@
   equipment:
     mask: ClothingMaskSadMime
 
-- type: loadout
+- type: itemLoadout
   id: MimeMaskScared
   equipment: MimeMaskScared
 
@@ -55,7 +55,7 @@
     mask: ClothingMaskScaredMime
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: MimeJumpsuit
   equipment: MimeJumpsuit
 
@@ -64,7 +64,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitMime
 
-- type: loadout
+- type: itemLoadout
   id: MimeJumpskirt
   equipment: MimeJumpskirt
 
@@ -74,7 +74,7 @@
     jumpsuit: ClothingUniformJumpskirtMime
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: MimeBackpack
   equipment: MimeBackpack
 
@@ -83,7 +83,7 @@
   equipment:
     back: ClothingBackpackMimeFilled
 
-- type: loadout
+- type: itemLoadout
   id: MimeSatchel
   equipment: MimeSatchel
 
@@ -92,7 +92,7 @@
   equipment:
     back: ClothingBackpackSatchelMimeFilled
 
-- type: loadout
+- type: itemLoadout
   id: MimeDuffel
   equipment: MimeDuffel
 

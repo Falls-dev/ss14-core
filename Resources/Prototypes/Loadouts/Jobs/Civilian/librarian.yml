@@ -1,5 +1,5 @@
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: LibrarianJumpsuit
   equipment: LibrarianJumpsuit
 
@@ -8,7 +8,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitLibrarian
 
-- type: loadout
+- type: itemLoadout
   id: LibrarianJumpskirt
   equipment: LibrarianJumpskirt
 
@@ -17,7 +17,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtLibrarian
 
-- type: loadout
+- type: itemLoadout
   id: CuratorJumpsuit
   equipment: CuratorJumpsuit
 
@@ -26,7 +26,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitCurator
 
-- type: loadout
+- type: itemLoadout
   id: CuratorJumpskirt
   equipment: CuratorJumpskirt
 

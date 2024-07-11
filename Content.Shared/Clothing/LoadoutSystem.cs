@@ -37,7 +37,7 @@ public sealed class LoadoutSystem : EntitySystem
     /// <summary>
     /// Tries to get the first entity prototype for operations such as sprite drawing.
     /// </summary>
-    public EntProtoId? GetFirstOrNull(LoadoutPrototype loadout)
+    public EntProtoId? GetFirstOrNull(ItemLoadoutPrototype loadout)
     {
         if (!_protoMan.TryIndex(loadout.Equipment, out var gear))
             return null;
@@ -72,7 +72,7 @@ public sealed class LoadoutSystem : EntitySystem
     /// <summary>
     /// Tries to get the name of a loadout.
     /// </summary>
-    public string GetName(LoadoutPrototype loadout)
+    public string GetName(ItemLoadoutPrototype loadout)
     {
         if (!_protoMan.TryIndex(loadout.Equipment, out var gear))
             return Loc.GetString("loadout-unknown");

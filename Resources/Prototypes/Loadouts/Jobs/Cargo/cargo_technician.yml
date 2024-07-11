@@ -1,5 +1,5 @@
 # Head
-- type: loadout
+- type: itemLoadout
   id: CargoTechnicianHead
   equipment: CargoTechnicianHead
 
@@ -9,7 +9,7 @@
     head: ClothingHeadHatCargosoft
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: CargoTechnicianJumpsuit
   equipment: CargoTechnicianJumpsuit
 
@@ -18,7 +18,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitCargo
 
-- type: loadout
+- type: itemLoadout
   id: CargoTechnicianJumpskirt
   equipment: CargoTechnicianJumpskirt
 
@@ -28,7 +28,7 @@
     jumpsuit: ClothingUniformJumpskirtCargo
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: CargoTechnicianBackpack
   equipment: CargoTechnicianBackpack
 
@@ -37,7 +37,7 @@
   equipment:
     back: ClothingBackpackCargoFilled
 
-- type: loadout
+- type: itemLoadout
   id: CargoTechnicianSatchel
   equipment: CargoTechnicianSatchel
 
@@ -46,7 +46,7 @@
   equipment:
     back: ClothingBackpackSatchelCargoFilled
 
-- type: loadout
+- type: itemLoadout
   id: CargoTechnicianDuffel
   equipment: CargoTechnicianDuffel
 

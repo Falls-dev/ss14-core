@@ -1,5 +1,5 @@
 # Head
-- type: loadout
+- type: itemLoadout
   id: ParamedicHead
   equipment: ParamedicHead
 
@@ -9,7 +9,7 @@
     head: ClothingHeadHatParamedicsoft
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: ParamedicJumpsuit
   equipment: ParamedicJumpsuit
 
@@ -18,7 +18,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitParamedic
 
-- type: loadout
+- type: itemLoadout
   id: ParamedicJumpskirt
   equipment: ParamedicJumpskirt
 
@@ -28,7 +28,7 @@
     jumpsuit: ClothingUniformJumpskirtParamedic
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: ParamedicBackpack
   equipment: ParamedicBackpack
 
@@ -37,7 +37,7 @@
   equipment:
     back: ClothingBackpackParamedicFilled
 
-- type: loadout
+- type: itemLoadout
   id: ParamedicSatchel
   equipment: ParamedicSatchel
 
@@ -46,7 +46,7 @@
   equipment:
     back: ClothingBackpackSatchelParamedicFilled
 
-- type: loadout
+- type: itemLoadout
   id: ParamedicDuffel
   equipment: ParamedicDuffel
 
@@ -56,7 +56,7 @@
     back: ClothingBackpackDuffelParamedicFilled
 
 # Outer clothing
-- type: loadout
+- type: itemLoadout
   id: ParamedicWindbreaker
   equipment: ParamedicWindbreaker
 

@@ -1,5 +1,5 @@
 # Head
-- type: loadout
+- type: itemLoadout
   id: ChaplainHead
   equipment: ChaplainHead
 
@@ -8,7 +8,7 @@
   equipment:
     head: ClothingHeadHatFez
 
-- type: loadout
+- type: itemLoadout
   id: ChaplainPlagueHat
   equipment: ChaplainPlagueHat
 
@@ -17,7 +17,7 @@
   equipment:
     head: ClothingHeadHatPlaguedoctor
 
-- type: loadout
+- type: itemLoadout
   id: ChaplainWitchHat
   equipment: ChaplainWitchHat
 
@@ -26,7 +26,7 @@
   equipment:
     head: ClothingHeadHatWitch
 
-- type: loadout
+- type: itemLoadout
   id: ChaplainWitchHatAlt
   equipment: ChaplainWitchHatAlt
 
@@ -36,7 +36,7 @@
     head: ClothingHeadHatWitch1
 
 # Mask
-- type: loadout
+- type: itemLoadout
   id: ChaplainMask
   equipment: ChaplainMask
 
@@ -46,7 +46,7 @@
     mask: ClothingMaskPlague
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: ChaplainJumpsuit
   equipment: ChaplainJumpsuit
 
@@ -55,7 +55,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitChaplain
 
-- type: loadout
+- type: itemLoadout
   id: ChaplainJumpskirt
   equipment: ChaplainJumpskirt
 
@@ -64,7 +64,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtChaplain
 
-- type: loadout
+- type: itemLoadout
   id: ChaplainRobesDark
   equipment: ChaplainRobesDark
 
@@ -73,7 +73,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitMonasticRobeDark
 
-- type: loadout
+- type: itemLoadout
   id: ChaplainRobesLight
   equipment: ChaplainRobesLight
 
@@ -83,7 +83,7 @@
     jumpsuit: ClothingUniformJumpsuitMonasticRobeLight
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: ChaplainBackpack
   equipment: ChaplainBackpack
 
@@ -92,7 +92,7 @@
   equipment:
     back: ClothingBackpackChaplainFilled
 
-- type: loadout
+- type: itemLoadout
   id: ChaplainSatchel
   equipment: ChaplainSatchel
 
@@ -101,7 +101,7 @@
   equipment:
     back: ClothingBackpackSatchelChaplainFilled
 
-- type: loadout
+- type: itemLoadout
   id: ChaplainDuffel
   equipment: ChaplainDuffel
 
@@ -111,7 +111,7 @@
     back: ClothingBackpackDuffelChaplainFilled
 
 # Neck
-- type: loadout
+- type: itemLoadout
   id: ChaplainNeck
   equipment: ChaplainNeck
 
@@ -121,7 +121,7 @@
     neck: ClothingNeckStoleChaplain
 
 # Outer clothing
-- type: loadout
+- type: itemLoadout
   id: ChaplainPlagueSuit
   equipment: ChaplainPlagueSuit
 
@@ -130,7 +130,7 @@
   equipment:
     outerClothing: ClothingOuterPlagueSuit
 
-- type: loadout
+- type: itemLoadout
   id: ChaplainNunRobe
   equipment: ChaplainNunRobe
 
@@ -139,7 +139,7 @@
   equipment:
     outerClothing: ClothingOuterNunRobe
 
-- type: loadout
+- type: itemLoadout
   id: ChaplainBlackHoodie
   equipment: ChaplainBlackHoodie
 
@@ -148,7 +148,7 @@
   equipment:
     outerClothing: ClothingOuterHoodieBlack
 
-- type: loadout
+- type: itemLoadout
   id: ChaplainHoodie
   equipment: ChaplainHoodie
 

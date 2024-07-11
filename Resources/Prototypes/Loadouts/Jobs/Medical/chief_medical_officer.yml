@@ -1,5 +1,5 @@
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: ChiefMedicalOfficerJumpsuit
   equipment: ChiefMedicalOfficerJumpsuit
 
@@ -8,7 +8,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitCMO
 
-- type: loadout
+- type: itemLoadout
   id: ChiefMedicalOfficerJumpskirt
   equipment: ChiefMedicalOfficerJumpskirt
 
@@ -18,7 +18,7 @@
     jumpsuit: ClothingUniformJumpskirtCMO
 
 # Head
-- type: loadout
+- type: itemLoadout
   id: ChiefMedicalOfficerBeret
   equipment: ChiefMedicalOfficerBeret
 
@@ -28,7 +28,7 @@
     head: ClothingHeadHatBeretCmo
 
 # Neck
-- type: loadout
+- type: itemLoadout
   id: ChiefMedicalOfficerCloak
   equipment: ChiefMedicalOfficerCloak
 
@@ -37,7 +37,7 @@
   equipment:
     neck: ClothingCloakCmo
 
-- type: loadout
+- type: itemLoadout
   id: ChiefMedicalOfficerMantle
   equipment: ChiefMedicalOfficerMantle
 
@@ -47,7 +47,7 @@
     neck: ClothingNeckMantleCMO
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: ChiefMedicalOfficerBackpack
   equipment: ChiefMedicalOfficerBackpack
 
@@ -56,7 +56,7 @@
   equipment:
     back: ClothingBackpackCMOFilled
 
-- type: loadout
+- type: itemLoadout
   id: ChiefMedicalOfficerSatchel
   equipment: ChiefMedicalOfficerSatchel
 
@@ -65,7 +65,7 @@
   equipment:
     back: ClothingBackpackSatchelCMOFilled
 
-- type: loadout
+- type: itemLoadout
   id: ChiefMedicalOfficerDuffel
   equipment: ChiefMedicalOfficerDuffel
 
@@ -75,7 +75,7 @@
     back: ClothingBackpackDuffelCMOFilled
 
 # Outer clothing
-- type: loadout
+- type: itemLoadout
   id: ChiefMedicalOfficerLabCoat
   equipment: ChiefMedicalOfficerLabCoat
 

@@ -30,5 +30,5 @@ public sealed class LoadoutGroupPrototype : IPrototype
     public int MaxLimit = 1;
 
     [DataField(required: true)]
-    public List<ProtoId<LoadoutPrototype>> Loadouts = new();
+    public List<ProtoId<ItemLoadoutPrototype>> Loadouts = new();
 }

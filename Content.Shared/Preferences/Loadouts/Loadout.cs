@@ -9,5 +9,5 @@ namespace Content.Shared.Preferences.Loadouts;
 [Serializable, NetSerializable]
 public sealed class Loadout
 {
-    public ProtoId<LoadoutPrototype> Prototype;
+    public ProtoId<ItemLoadoutPrototype> Prototype;
 }

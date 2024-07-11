@@ -9,7 +9,7 @@
       time: 54000 #15 hrs, special reward for HoP mains
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: HoPJumpsuit
   equipment: HoPJumpsuit
 
@@ -18,7 +18,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitHoP
 
-- type: loadout
+- type: itemLoadout
   id: HoPJumpskirt
   equipment: HoPJumpskirt
 
@@ -28,7 +28,7 @@
     jumpsuit: ClothingUniformJumpskirtHoP
 
 # Head
-- type: loadout
+- type: itemLoadout
   id: HoPHead
   equipment: HoPHead
 
@@ -38,7 +38,7 @@
     head: ClothingHeadHatHopcap
 
 # Neck
-- type: loadout
+- type: itemLoadout
   id: HoPCloak
   equipment: HoPCloak
 
@@ -47,7 +47,7 @@
   equipment:
     neck: ClothingNeckCloakHop
 
-- type: loadout
+- type: itemLoadout
   id: HoPMantle
   equipment: HoPMantle
 
@@ -57,7 +57,7 @@
     neck: ClothingNeckMantleHOP
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: HoPBackpack
   equipment: HoPBackpack
 
@@ -66,7 +66,7 @@
   equipment:
     back: ClothingBackpackHOPFilled
 
-- type: loadout
+- type: itemLoadout
   id: HoPSatchel
   equipment: HoPSatchel
 
@@ -75,7 +75,7 @@
   equipment:
     back: ClothingBackpackSatchelHOPFilled
 
-- type: loadout
+- type: itemLoadout
   id: HoPDuffel
   equipment: HoPDuffel
 
@@ -84,7 +84,7 @@
   equipment:
     back: ClothingBackpackDuffelHOPFilled
 
-- type: loadout
+- type: itemLoadout
   id: HoPBackpackIan
   equipment: HoPBackpackIan
   effects:

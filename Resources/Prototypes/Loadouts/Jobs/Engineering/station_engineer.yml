@@ -19,7 +19,7 @@
       time: 216000 # 60 hrs
 
 # Head
-- type: loadout
+- type: itemLoadout
   id: StationEngineerHead
   equipment: StationEngineerHead
 
@@ -28,7 +28,7 @@
   equipment:
     head: ClothingHeadHatHardhatYellow
 
-- type: loadout
+- type: itemLoadout
   id: SeniorEngineerBeret
   equipment: EngineeringBeret
   effects:
@@ -41,7 +41,7 @@
     head: ClothingHeadHatBeretEngineering
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: StationEngineerJumpsuit
   equipment: StationEngineerJumpsuit
 
@@ -50,7 +50,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitEngineering
 
-- type: loadout
+- type: itemLoadout
   id: StationEngineerJumpskirt
   equipment: StationEngineerJumpskirt
 
@@ -59,7 +59,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtEngineering
 
-- type: loadout
+- type: itemLoadout
   id: StationEngineerHazardsuit
   equipment: StationEngineerHazardsuit
 
@@ -68,7 +68,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitEngineeringHazard
 
-- type: loadout
+- type: itemLoadout
   id: SeniorEngineerJumpsuit
   equipment: SeniorEngineerJumpsuit
   effects:
@@ -80,7 +80,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitSeniorEngineer
 
-- type: loadout
+- type: itemLoadout
   id: SeniorEngineerJumpskirt
   equipment: SeniorEngineerJumpskirt
   effects:
@@ -93,7 +93,7 @@
     jumpsuit: ClothingUniformJumpskirtSeniorEngineer
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: StationEngineerBackpack
   equipment: StationEngineerBackpack
 
@@ -102,7 +102,7 @@
   equipment:
     back: ClothingBackpackEngineeringFilled
 
-- type: loadout
+- type: itemLoadout
   id: StationEngineerSatchel
   equipment: StationEngineerSatchel
 
@@ -111,7 +111,7 @@
   equipment:
     back: ClothingBackpackSatchelEngineeringFilled
 
-- type: loadout
+- type: itemLoadout
   id: StationEngineerDuffel
   equipment: StationEngineerDuffel
 
@@ -121,7 +121,7 @@
     back: ClothingBackpackDuffelEngineeringFilled
 
 # OuterClothing
-- type: loadout
+- type: itemLoadout
   id: StationEngineerOuterVest
   equipment: StationEngineerOuterVest
 
@@ -131,7 +131,7 @@
     outerClothing: ClothingOuterVestHazard
 
 # ID
-- type: loadout
+- type: itemLoadout
   id: StationEngineerPDA
   equipment: StationEngineerPDA
 
@@ -140,7 +140,7 @@
   equipment:
     id: EngineerPDA
 
-- type: loadout
+- type: itemLoadout
   id: SeniorEngineerPDA
   equipment: SeniorEngineerPDA
   effects:

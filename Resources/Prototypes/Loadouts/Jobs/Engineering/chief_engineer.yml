@@ -1,5 +1,5 @@
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: ChiefEngineerJumpsuit
   equipment: ChiefEngineerJumpsuit
 
@@ -8,7 +8,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitChiefEngineer
 
-- type: loadout
+- type: itemLoadout
   id: ChiefEngineerJumpskirt
   equipment: ChiefEngineerJumpskirt
 
@@ -17,7 +17,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtChiefEngineer
 
-- type: loadout
+- type: itemLoadout
   id: ChiefEngineerTurtleneck
   equipment: ChiefEngineerTurtleneck
 
@@ -26,7 +26,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitChiefEngineerTurtle
 
-- type: loadout
+- type: itemLoadout
   id: ChiefEngineerTurtleneckSkirt
   equipment: ChiefEngineerTurtleneckSkirt
 
@@ -36,7 +36,7 @@
     jumpsuit: ClothingUniformJumpskirtChiefEngineerTurtle
 
 # Head
-- type: loadout
+- type: itemLoadout
   id: ChiefEngineerHead
   equipment: ChiefEngineerHead
 
@@ -45,12 +45,12 @@
   equipment:
     head: ClothingHeadHatHardhatWhite
 
-- type: loadout
+- type: itemLoadout
   id: ChiefEngineerBeret
   equipment: EngineeringBeret
 
 # Neck
-- type: loadout
+- type: itemLoadout
   id: ChiefEngineerCloak
   equipment: ChiefEngineerCloak
 
@@ -59,7 +59,7 @@
   equipment:
     neck: ClothingNeckCloakCe
 
-- type: loadout
+- type: itemLoadout
   id: ChiefEngineerMantle
   equipment: ChiefEngineerMantle
 
@@ -69,7 +69,7 @@
     neck: ClothingNeckMantleCE
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: ChiefEngineerBackpack
   equipment: ChiefEngineerBackpack
 
@@ -78,7 +78,7 @@
   equipment:
     back: ClothingBackpackChiefEngineerFilled
 
-- type: loadout
+- type: itemLoadout
   id: ChiefEngineerSatchel
   equipment: ChiefEngineerSatchel
 
@@ -87,7 +87,7 @@
   equipment:
     back: ClothingBackpackSatchelChiefEngineerFilled
 
-- type: loadout
+- type: itemLoadout
   id: ChiefEngineerDuffel
   equipment: ChiefEngineerDuffel
 

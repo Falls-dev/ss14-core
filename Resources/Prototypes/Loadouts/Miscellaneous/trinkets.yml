@@ -1,4 +1,4 @@
-- type: loadout
+- type: itemLoadout
   id: PlushieLizard
   equipment: PlushieLizard
 
@@ -8,7 +8,7 @@
     back:
     - PlushieLizard
 
-- type: loadout
+- type: itemLoadout
   id: ClothingNeckLGBTPin
   equipment: ClothingNeckLGBTPin
 
@@ -18,7 +18,7 @@
     back:
     - ClothingNeckLGBTPin
 
-- type: loadout
+- type: itemLoadout
   id: ClothingNeckAromanticPin
   equipment: ClothingNeckAromanticPin
 
@@ -28,7 +28,7 @@
     back:
     - ClothingNeckAromanticPin
 
-- type: loadout
+- type: itemLoadout
   id: ClothingNeckAsexualPin
   equipment: ClothingNeckAsexualPin
 
@@ -38,7 +38,7 @@
     back:
     - ClothingNeckAsexualPin
 
-- type: loadout
+- type: itemLoadout
   id: ClothingNeckBisexualPin
   equipment: ClothingNeckBisexualPin
 
@@ -48,7 +48,7 @@
     back:
     - ClothingNeckBisexualPin
 
-- type: loadout
+- type: itemLoadout
   id: ClothingNeckIntersexPin
   equipment: ClothingNeckIntersexPin
 
@@ -58,7 +58,7 @@
     back:
     - ClothingNeckIntersexPin
 
-- type: loadout
+- type: itemLoadout
   id: ClothingNeckLesbianPin
   equipment: ClothingNeckLesbianPin
 
@@ -68,7 +68,7 @@
     back:
     - ClothingNeckLesbianPin
 
-- type: loadout
+- type: itemLoadout
   id: ClothingNeckNonBinaryPin
   equipment: ClothingNeckNonBinaryPin
 
@@ -78,7 +78,7 @@
     back:
     - ClothingNeckNonBinaryPin
 
-- type: loadout
+- type: itemLoadout
   id: ClothingNeckPansexualPin
   equipment: ClothingNeckPansexualPin
 
@@ -88,7 +88,7 @@
     back:
     - ClothingNeckPansexualPin
 
-- type: loadout
+- type: itemLoadout
   id: ClothingNeckTransPin
   equipment: ClothingNeckTransPin
 

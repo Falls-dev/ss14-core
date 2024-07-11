@@ -14,8 +14,8 @@ public sealed partial class LoadoutGroupContainer : BoxContainer
 {
     private readonly LoadoutGroupPrototype _groupProto;
 
-    public event Action<ProtoId<LoadoutPrototype>>? OnLoadoutPressed;
-    public event Action<ProtoId<LoadoutPrototype>>? OnLoadoutUnpressed;
+    public event Action<ProtoId<ItemLoadoutPrototype>>? OnLoadoutPressed;
+    public event Action<ProtoId<ItemLoadoutPrototype>>? OnLoadoutUnpressed;
 
     public LoadoutGroupContainer(RoleLoadout loadout, LoadoutGroupPrototype groupProto, ICommonSession session, IDependencyCollection collection)
     {

@@ -1,5 +1,5 @@
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: RedJumpsuit
   equipment: RedJumpsuit
 
@@ -8,7 +8,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitColorRed
 
-- type: loadout
+- type: itemLoadout
   id: RedJumpskirt
   equipment: RedJumpskirt
 

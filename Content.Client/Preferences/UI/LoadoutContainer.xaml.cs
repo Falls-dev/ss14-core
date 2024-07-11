@@ -20,7 +20,7 @@ public sealed partial class LoadoutContainer : BoxContainer
 
     public Button Select => SelectButton;
 
-    public LoadoutContainer(ProtoId<LoadoutPrototype> proto, bool disabled, FormattedMessage? reason)
+    public LoadoutContainer(ProtoId<ItemLoadoutPrototype> proto, bool disabled, FormattedMessage? reason)
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);

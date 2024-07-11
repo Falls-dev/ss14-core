@@ -14,7 +14,7 @@
       time: 216000 # 60 hrs
 
 # Head
-- type: loadout
+- type: itemLoadout
   id: SecurityHelmet
   equipment: SecurityHelmet
 
@@ -23,7 +23,7 @@
   equipment:
     head: ClothingHeadHelmetBasic
 
-- type: loadout
+- type: itemLoadout
   id: SecurityHat
   equipment: SecurityHat
 
@@ -32,7 +32,7 @@
   equipment:
     head: ClothingHeadHatSecsoft
 
-- type: loadout
+- type: itemLoadout
   id: SecurityBeret
   equipment: SecurityBeret
 
@@ -42,7 +42,7 @@
     head: ClothingHeadHatBeretSecurity
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: SecurityJumpsuit
   equipment: SecurityJumpsuit
 
@@ -51,7 +51,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitSec
 
-- type: loadout
+- type: itemLoadout
   id: SecurityJumpskirt
   equipment: SecurityJumpskirt
 
@@ -60,7 +60,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtSec
 
-- type: loadout
+- type: itemLoadout
   id: SeniorOfficerJumpsuit
   equipment: SeniorOfficerJumpsuit
   effects:
@@ -72,7 +72,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitSeniorOfficer
 
-- type: loadout
+- type: itemLoadout
   id: SeniorOfficerJumpskirt
   equipment: SeniorOfficerJumpskirt
   effects:
@@ -85,7 +85,7 @@
     jumpsuit: ClothingUniformJumpskirtSeniorOfficer
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: SecurityBackpack
   equipment: SecurityBackpack
 
@@ -94,7 +94,7 @@
   equipment:
     back: ClothingBackpackSecurityFilled
 
-- type: loadout
+- type: itemLoadout
   id: SecuritySatchel
   equipment: SecuritySatchel
 
@@ -103,7 +103,7 @@
   equipment:
     back: ClothingBackpackSatchelSecurityFilled
 
-- type: loadout
+- type: itemLoadout
   id: SecurityDuffel
   equipment: SecurityDuffel
 
@@ -113,7 +113,7 @@
     back: ClothingBackpackDuffelSecurityFilled
 
 # PDA
-- type: loadout
+- type: itemLoadout
   id: SecurityPDA
   equipment: SecurityPDA
 
@@ -122,7 +122,7 @@
   equipment:
     id: SecurityPDA
 
-- type: loadout
+- type: itemLoadout
   id: SeniorOfficerPDA
   equipment: SeniorOfficerPDA
   effects:

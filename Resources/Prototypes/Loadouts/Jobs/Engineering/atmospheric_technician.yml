@@ -1,5 +1,5 @@
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: AtmosphericTechnicianJumpsuit
   equipment: AtmosphericTechnicianJumpsuit
 
@@ -8,7 +8,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitAtmos
 
-- type: loadout
+- type: itemLoadout
   id: AtmosphericTechnicianJumpskirt
   equipment: AtmosphericTechnicianJumpskirt
 
@@ -17,7 +17,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtAtmos
 
-- type: loadout
+- type: itemLoadout
   id: AtmosphericTechnicianJumpsuitCasual
   equipment: AtmosphericTechnicianJumpsuitCasual
 
@@ -27,7 +27,7 @@
     jumpsuit: ClothingUniformJumpsuitAtmosCasual
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: AtmosphericTechnicianBackpack
   equipment: AtmosphericTechnicianBackpack
 
@@ -36,7 +36,7 @@
   equipment:
     back: ClothingBackpackAtmosphericsFilled
 
-- type: loadout
+- type: itemLoadout
   id: AtmosphericTechnicianSatchel
   equipment: AtmosphericTechnicianSatchel
 
@@ -45,7 +45,7 @@
   equipment:
     back: ClothingBackpackSatchelAtmosphericsFilled
 
-- type: loadout
+- type: itemLoadout
   id: AtmosphericTechnicianDuffel
   equipment: AtmosphericTechnicianDuffel
 

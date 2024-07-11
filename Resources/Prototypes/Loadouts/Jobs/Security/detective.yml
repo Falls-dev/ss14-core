@@ -1,5 +1,5 @@
 # Head
-- type: loadout
+- type: itemLoadout
   id: DetectiveFedora
   equipment: DetectiveFedora
 
@@ -8,7 +8,7 @@
   equipment:
     head: ClothingHeadHatFedoraBrown
 
-- type: loadout
+- type: itemLoadout
   id: DetectiveFedoraGrey
   equipment: DetectiveFedoraGrey
 
@@ -16,9 +16,9 @@
   id: DetectiveFedoraGrey
   equipment:
     head: ClothingHeadHatFedoraGrey
-  
+
 # Neck
-- type: loadout
+- type: itemLoadout
   id: DetectiveTie
   equipment: DetectiveTie
 
@@ -28,7 +28,7 @@
     neck: ClothingNeckTieDet
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: DetectiveJumpsuit
   equipment: DetectiveJumpsuit
 
@@ -37,7 +37,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitDetective
 
-- type: loadout
+- type: itemLoadout
   id: DetectiveJumpskirt
   equipment: DetectiveJumpskirt
 
@@ -46,7 +46,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtDetective
 
-- type: loadout
+- type: itemLoadout
   id: NoirJumpsuit
   equipment: NoirJumpsuit
 
@@ -55,7 +55,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitDetectiveGrey
 
-- type: loadout
+- type: itemLoadout
   id: NoirJumpskirt
   equipment: NoirJumpskirt
 
@@ -65,7 +65,7 @@
     jumpsuit: ClothingUniformJumpskirtDetectiveGrey
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: DetectiveBackpack
   equipment: DetectiveBackpack
 
@@ -74,7 +74,7 @@
   equipment:
     back: ClothingBackpackSecurityFilledDetective
 
-- type: loadout
+- type: itemLoadout
   id: DetectiveSatchel
   equipment: DetectiveSatchel
 
@@ -83,7 +83,7 @@
   equipment:
     back: ClothingBackpackSatchelSecurityFilledDetective
 
-- type: loadout
+- type: itemLoadout
   id: DetectiveDuffel
   equipment: DetectiveDuffel
 
@@ -93,7 +93,7 @@
     back: ClothingBackpackDuffelSecurityFilledDetective
 
 # OuterClothing
-- type: loadout
+- type: itemLoadout
   id: DetectiveArmorVest
   equipment: DetectiveArmorVest
 
@@ -102,7 +102,7 @@
   equipment:
     outerClothing: ClothingOuterVestDetective
 
-- type: loadout
+- type: itemLoadout
   id: DetectiveCoat
   equipment: DetectiveCoat
 

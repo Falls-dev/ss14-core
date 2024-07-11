@@ -1,5 +1,5 @@
 # Head
-- type: loadout
+- type: itemLoadout
   id: JesterHat
   equipment: JesterHat
 
@@ -9,7 +9,7 @@
     head: ClothingHeadHatJesterAlt
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: ClownSuit
   equipment: ClownSuit
 
@@ -18,7 +18,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitClown
 
-- type: loadout
+- type: itemLoadout
   id: JesterSuit
   equipment: JesterSuit
 
@@ -28,7 +28,7 @@
     jumpsuit: ClothingUniformJumpsuitJesterAlt
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: ClownBackpack
   equipment: ClownBackpack
 
@@ -37,7 +37,7 @@
   equipment:
     back: ClothingBackpackClownFilled
 
-- type: loadout
+- type: itemLoadout
   id: ClownSatchel
   equipment: ClownSatchel
 
@@ -46,7 +46,7 @@
   equipment:
     back: ClothingBackpackSatchelClownFilled
 
-- type: loadout
+- type: itemLoadout
   id: ClownDuffel
   equipment: ClownDuffel
 
@@ -56,7 +56,7 @@
     back: ClothingBackpackDuffelClownFilled
 
 # Shoes
-- type: loadout
+- type: itemLoadout
   id: ClownShoes
   equipment: ClownShoes
 
@@ -65,7 +65,7 @@
   equipment:
     shoes: ClothingShoesClown
 
-- type: loadout
+- type: itemLoadout
   id: JesterShoes
   equipment: JesterShoes
 

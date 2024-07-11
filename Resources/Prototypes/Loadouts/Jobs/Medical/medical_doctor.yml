@@ -20,7 +20,7 @@
 
 # Head
 
-- type: loadout
+- type: itemLoadout
   id: SeniorPhysicianBeret
   equipment: SeniorPhysicianBeret
   effects:
@@ -32,7 +32,7 @@
   equipment:
     head: ClothingHeadHatBeretSeniorPhysician
 
-- type: loadout
+- type: itemLoadout
   id: MedicalBeret
   equipment: MedicalBeret
 
@@ -41,7 +41,7 @@
   equipment:
     head: ClothingHeadHatBeretMedic
 
-- type: loadout
+- type: itemLoadout
   id: BlueSurgeryCap
   equipment: BlueSurgeryCap
 
@@ -50,7 +50,7 @@
   equipment:
     head: ClothingHeadHatSurgcapBlue
 
-- type: loadout
+- type: itemLoadout
   id: GreenSurgeryCap
   equipment: GreenSurgeryCap
 
@@ -59,7 +59,7 @@
   equipment:
     head: ClothingHeadHatSurgcapGreen
 
-- type: loadout
+- type: itemLoadout
   id: PurpleSurgeryCap
   equipment: PurpleSurgeryCap
 
@@ -69,7 +69,7 @@
     head: ClothingHeadHatSurgcapPurple
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: MedicalDoctorJumpsuit
   equipment: MedicalDoctorJumpsuit
 
@@ -78,7 +78,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitMedicalDoctor
 
-- type: loadout
+- type: itemLoadout
   id: MedicalDoctorJumpskirt
   equipment: MedicalDoctorJumpskirt
 
@@ -87,7 +87,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtMedicalDoctor
 
-- type: loadout
+- type: itemLoadout
   id: SeniorPhysicianJumpsuit
   equipment: SeniorPhysicianJumpsuit
   effects:
@@ -99,7 +99,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitSeniorPhysician
 
-- type: loadout
+- type: itemLoadout
   id: SeniorPhysicianJumpskirt
   equipment: SeniorPhysicianJumpskirt
   effects:
@@ -111,7 +111,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtSeniorPhysician
 
-- type: loadout
+- type: itemLoadout
   id: MedicalBlueScrubs
   equipment: MedicalBlueScrubs
 
@@ -120,7 +120,7 @@
   equipment:
     jumpsuit: UniformScrubsColorBlue
 
-- type: loadout
+- type: itemLoadout
   id: MedicalGreenScrubs
   equipment: MedicalGreenScrubs
 
@@ -129,7 +129,7 @@
   equipment:
     jumpsuit: UniformScrubsColorGreen
 
-- type: loadout
+- type: itemLoadout
   id: MedicalPurpleScrubs
   equipment: MedicalPurpleScrubs
 
@@ -139,7 +139,7 @@
     jumpsuit: UniformScrubsColorPurple
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: MedicalDoctorBackpack
   equipment: MedicalDoctorBackpack
 
@@ -148,7 +148,7 @@
   equipment:
     back: ClothingBackpackMedicalFilled
 
-- type: loadout
+- type: itemLoadout
   id: MedicalDoctorSatchel
   equipment: MedicalDoctorSatchel
 
@@ -157,7 +157,7 @@
   equipment:
     back: ClothingBackpackSatchelMedicalFilled
 
-- type: loadout
+- type: itemLoadout
   id: MedicalDoctorDuffel
   equipment: MedicalDoctorDuffel
 
@@ -168,7 +168,7 @@
 
 # OuterClothing
 
-- type: loadout
+- type: itemLoadout
   id: SeniorPhysicianLabCoat
   equipment: SeniorPhysicianLabCoat
   effects:
@@ -181,7 +181,7 @@
     outerClothing: ClothingOuterCoatLabSeniorPhysician
 
 # ID
-- type: loadout
+- type: itemLoadout
   id: MedicalDoctorPDA
   equipment: MedicalDoctorPDA
 
@@ -190,7 +190,7 @@
   equipment:
     id: MedicalPDA
 
-- type: loadout
+- type: itemLoadout
   id: SeniorPhysicianPDA
   equipment: SeniorPhysicianPDA
   effects:

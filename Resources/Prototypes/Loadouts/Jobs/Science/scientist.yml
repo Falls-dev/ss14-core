@@ -10,7 +10,7 @@
 
 # Head
 
-- type: loadout
+- type: itemLoadout
   id: ScientificBeret
   equipment: ScientificBeret
   effects:
@@ -24,7 +24,7 @@
 
 # Neck
 
-- type: loadout
+- type: itemLoadout
   id: ScientistTie
   equipment: ScientistTie
 
@@ -34,7 +34,7 @@
     neck: ClothingNeckTieSci
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: ScientistJumpsuit
   equipment: ScientistJumpsuit
 
@@ -43,7 +43,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitScientist
 
-- type: loadout
+- type: itemLoadout
   id: ScientistJumpskirt
   equipment: ScientistJumpskirt
 
@@ -52,7 +52,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtScientist
 
-- type: loadout
+- type: itemLoadout
   id: SeniorResearcherJumpsuit
   equipment: SeniorResearcherJumpsuit
   effects:
@@ -64,7 +64,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitSeniorResearcher
 
-- type: loadout
+- type: itemLoadout
   id: SeniorResearcherJumpskirt
   equipment: SeniorResearcherJumpskirt
   effects:
@@ -77,7 +77,7 @@
     jumpsuit: ClothingUniformJumpskirtSeniorResearcher
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: ScientistBackpack
   equipment: ScientistBackpack
 
@@ -86,7 +86,7 @@
   equipment:
     back: ClothingBackpackScienceFilled
 
-- type: loadout
+- type: itemLoadout
   id: ScientistSatchel
   equipment: ScientistSatchel
 
@@ -95,7 +95,7 @@
   equipment:
     back: ClothingBackpackSatchelScienceFilled
 
-- type: loadout
+- type: itemLoadout
   id: ScientistDuffel
   equipment: ScientistDuffel
 
@@ -105,7 +105,7 @@
     back: ClothingBackpackDuffelScienceFilled
 
 # OuterClothing
-- type: loadout
+- type: itemLoadout
   id: RegularLabCoat
   equipment: RegularLabCoat
 
@@ -114,7 +114,7 @@
   equipment:
     outerClothing: ClothingOuterCoatLab
 
-- type: loadout
+- type: itemLoadout
   id: ScienceLabCoat
   equipment: ScienceLabCoat
 
@@ -123,7 +123,7 @@
   equipment:
     outerClothing: ClothingOuterCoatRnd
 
-- type: loadout
+- type: itemLoadout
   id: SeniorResearcherLabCoat
   equipment: SeniorResearcherLabCoat
   effects:
@@ -136,7 +136,7 @@
     outerClothing: ClothingOuterCoatLabSeniorResearcher
 
 # ID
-- type: loadout
+- type: itemLoadout
   id: ScientistPDA
   equipment: ScientistPDA
 
@@ -145,7 +145,7 @@
   equipment:
     id: SciencePDA
 
-- type: loadout
+- type: itemLoadout
   id: SeniorResearcherPDA
   equipment: SeniorResearcherPDA
   effects:

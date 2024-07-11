@@ -1,5 +1,5 @@
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: HeadofSecurityJumpsuit
   equipment: HeadofSecurityJumpsuit
 
@@ -8,7 +8,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitHoS
 
-- type: loadout
+- type: itemLoadout
   id: HeadofSecurityJumpskirt
   equipment: HeadofSecurityJumpskirt
 
@@ -17,7 +17,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtHoS
 
-- type: loadout
+- type: itemLoadout
   id: HeadofSecurityTurtleneck
   equipment: HeadofSecurityTurtleneck
 
@@ -26,7 +26,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitHoSAlt
 
-- type: loadout
+- type: itemLoadout
   id: HeadofSecurityTurtleneckSkirt
   equipment: HeadofSecurityTurtleneckSkirt
 
@@ -35,7 +35,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtHoSAlt
 
-- type: loadout
+- type: itemLoadout
   id: HeadofSecurityFormalSuit
   equipment: HeadofSecurityFormalSuit
 
@@ -44,7 +44,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitHosFormal
 
-- type: loadout
+- type: itemLoadout
   id: HeadofSecurityFormalSkirt
   equipment: HeadofSecurityFormalSkirt
 
@@ -54,7 +54,7 @@
     jumpsuit: ClothingUniformJumpskirtHosFormal
 
 # Head
-- type: loadout
+- type: itemLoadout
   id: HeadofSecurityHead
   equipment: HeadofSecurityHead
 
@@ -63,7 +63,7 @@
   equipment:
     head: ClothingHeadHatHoshat
 
-- type: loadout
+- type: itemLoadout
   id: HeadofSecurityBeret
   equipment: HeadofSecurityBeret
 
@@ -73,7 +73,7 @@
     head: ClothingHeadHatBeretHoS
 
 # Neck
-- type: loadout
+- type: itemLoadout
   id: HeadofSecurityCloak
   equipment: HeadofSecurityCloak
 
@@ -82,7 +82,7 @@
   equipment:
     neck: ClothingNeckCloakHos
 
-- type: loadout
+- type: itemLoadout
   id: HeadofSecurityMantle
   equipment: HeadofSecurityMantle
 
@@ -92,7 +92,7 @@
     neck: ClothingNeckMantleHOS
 
 # OuterClothing
-- type: loadout
+- type: itemLoadout
   id: HeadofSecurityCoat
   equipment: HeadofSecurityCoat
 
@@ -101,7 +101,7 @@
   equipment:
     outerClothing: ClothingOuterCoatHoSTrench
 
-- type: loadout
+- type: itemLoadout
   id: HeadofSecurityWinterCoat
   equipment: HeadofSecurityWinterCoat
 

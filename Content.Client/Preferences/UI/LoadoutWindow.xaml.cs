@@ -12,8 +12,8 @@ namespace Content.Client.Preferences.UI;
 [GenerateTypedNameReferences]
 public sealed partial class LoadoutWindow : FancyWindow
 {
-    public event Action<ProtoId<LoadoutGroupPrototype>, ProtoId<LoadoutPrototype>>? OnLoadoutPressed;
-    public event Action<ProtoId<LoadoutGroupPrototype>, ProtoId<LoadoutPrototype>>? OnLoadoutUnpressed;
+    public event Action<ProtoId<LoadoutGroupPrototype>, ProtoId<ItemLoadoutPrototype>>? OnLoadoutPressed;
+    public event Action<ProtoId<LoadoutGroupPrototype>, ProtoId<ItemLoadoutPrototype>>? OnLoadoutUnpressed;
 
     private List<LoadoutGroupContainer> _groups = new();
 

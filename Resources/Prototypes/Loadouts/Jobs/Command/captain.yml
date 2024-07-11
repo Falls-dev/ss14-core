@@ -1,5 +1,5 @@
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: CaptainJumpsuit
   equipment: CaptainJumpsuit
 
@@ -8,7 +8,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitCaptain
 
-- type: loadout
+- type: itemLoadout
   id: CaptainJumpskirt
   equipment: CaptainJumpskirt
 
@@ -17,7 +17,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtCaptain
 
-- type: loadout
+- type: itemLoadout
   id: CaptainFormalSuit
   equipment: CaptainFormalSuit
 
@@ -26,7 +26,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitCapFormal
 
-- type: loadout
+- type: itemLoadout
   id: CaptainFormalSkirt
   equipment: CaptainFormalSkirt
 
@@ -36,7 +36,7 @@
     jumpsuit: ClothingUniformJumpskirtCapFormalDress
 
 # Head
-- type: loadout
+- type: itemLoadout
   id: CaptainHead
   equipment: CaptainHead
 
@@ -45,7 +45,7 @@
   equipment:
     head: ClothingHeadHatCaptain
 
-- type: loadout
+- type: itemLoadout
   id: CaptainCap
   equipment: CaptainCap
 
@@ -55,7 +55,7 @@
     head: ClothingHeadHatCapcap
 
 # Neck
-- type: loadout
+- type: itemLoadout
   id: CaptainCloak
   equipment: CaptainCloak
 
@@ -63,8 +63,8 @@
   id: CaptainCloak
   equipment:
     neck: ClothingNeckCloakCap
-  
-- type: loadout
+
+- type: itemLoadout
   id: CaptainCloakFormal
   equipment: CaptainCloakFormal
 
@@ -73,7 +73,7 @@
   equipment:
     neck: ClothingNeckCloakCapFormal
 
-- type: loadout
+- type: itemLoadout
   id: CaptainMantle
   equipment: CaptainMantle
 
@@ -83,7 +83,7 @@
     neck: ClothingNeckMantleCap
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: CaptainBackpack
   equipment: CaptainBackpack
 
@@ -92,7 +92,7 @@
   equipment:
     back: ClothingBackpackCaptainFilled
 
-- type: loadout
+- type: itemLoadout
   id: CaptainSatchel
   equipment: CaptainSatchel
 
@@ -101,7 +101,7 @@
   equipment:
     back: ClothingBackpackSatchelCaptainFilled
 
-- type: loadout
+- type: itemLoadout
   id: CaptainDuffel
   equipment: CaptainDuffel
 

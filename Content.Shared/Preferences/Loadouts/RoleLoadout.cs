@@ -111,7 +111,7 @@ public sealed class RoleLoadout
         }
     }
 
-    private void Apply(LoadoutPrototype loadoutProto)
+    private void Apply(ItemLoadoutPrototype loadoutProto)
     {
         foreach (var effect in loadoutProto.Effects)
         {
@@ -155,7 +155,7 @@ public sealed class RoleLoadout
     /// <summary>
     /// Returns whether a loadout is valid or not.
     /// </summary>
-    public bool IsValid(ICommonSession session, ProtoId<LoadoutPrototype> loadout, IDependencyCollection collection, [NotNullWhen(false)] out FormattedMessage? reason)
+    public bool IsValid(ICommonSession session, ProtoId<ItemLoadoutPrototype> loadout, IDependencyCollection collection, [NotNullWhen(false)] out FormattedMessage? reason)
     {
         reason = null;
 
@@ -187,7 +187,7 @@ public sealed class RoleLoadout
     /// <summary>
     /// Applies the specified loadout to this group.
     /// </summary>
-    public bool AddLoadout(ProtoId<LoadoutGroupPrototype> selectedGroup, ProtoId<LoadoutPrototype> selectedLoadout, IPrototypeManager protoManager)
+    public bool AddLoadout(ProtoId<LoadoutGroupPrototype> selectedGroup, ProtoId<ItemLoadoutPrototype> selectedLoadout, IPrototypeManager protoManager)
     {
         var groupLoadouts = SelectedLoadouts[selectedGroup];
 
@@ -226,7 +226,7 @@ public sealed class RoleLoadout
     /// <summary>
     /// Removed the specified loadout from this group.
     /// </summary>
-    public bool RemoveLoadout(ProtoId<LoadoutGroupPrototype> selectedGroup, ProtoId<LoadoutPrototype> selectedLoadout, IPrototypeManager protoManager)
+    public bool RemoveLoadout(ProtoId<LoadoutGroupPrototype> selectedGroup, ProtoId<ItemLoadoutPrototype> selectedLoadout, IPrototypeManager protoManager)
     {
         // Although this may bring us below minimum we'll let EnsureValid handle it.
 

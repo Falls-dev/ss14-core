@@ -1,5 +1,5 @@
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: LawyerJumpsuit
   equipment: LawyerJumpsuit
 
@@ -8,7 +8,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitLawyerBlack
 
-- type: loadout
+- type: itemLoadout
   id: LawyerJumpskirt
   equipment: LawyerJumpskirt
 
@@ -17,7 +17,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtLawyerBlack
 
-- type: loadout
+- type: itemLoadout
   id: LawyerJumpsuitBlue
   equipment: LawyerJumpsuitBlue
 
@@ -26,7 +26,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitLawyerBlue
 
-- type: loadout
+- type: itemLoadout
   id: LawyerJumpskirtBlue
   equipment: LawyerJumpskirtBlue
 
@@ -35,7 +35,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtLawyerBlue
 
-- type: loadout
+- type: itemLoadout
   id: LawyerJumpsuitPurple
   equipment: LawyerJumpsuitPurple
 
@@ -44,7 +44,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitLawyerPurple
 
-- type: loadout
+- type: itemLoadout
   id: LawyerJumpskirtPurple
   equipment: LawyerJumpskirtPurple
 
@@ -53,7 +53,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtLawyerPurple
 
-- type: loadout
+- type: itemLoadout
   id: LawyerJumpsuitRed
   equipment: LawyerJumpsuitRed
 
@@ -62,7 +62,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitLawyerRed
 
-- type: loadout
+- type: itemLoadout
   id: LawyerJumpskirtRed
   equipment: LawyerJumpskirtRed
 
@@ -71,7 +71,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtLawyerRed
 
-- type: loadout
+- type: itemLoadout
   id: LawyerJumpsuitGood
   equipment: LawyerJumpsuitGood
 
@@ -80,7 +80,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitLawyerGood
 
-- type: loadout
+- type: itemLoadout
   id: LawyerJumpskirtGood
   equipment: LawyerJumpskirtGood
 
@@ -90,7 +90,7 @@
     jumpsuit: ClothingUniformJumpskirtLawyerGood
 
 # Neck
-- type: loadout
+- type: itemLoadout
   id: LawyerNeck
   equipment: LawyerNeck
 

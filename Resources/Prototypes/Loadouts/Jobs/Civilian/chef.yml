@@ -1,5 +1,5 @@
 # Head
-- type: loadout
+- type: itemLoadout
   id: ChefHead
   equipment: ChefHead
 
@@ -9,7 +9,7 @@
     head: ClothingHeadHatChef
 
 # Mask
-- type: loadout
+- type: itemLoadout
   id: ChefMask
   equipment: ChefMask
 
@@ -19,7 +19,7 @@
     mask: ClothingMaskItalianMoustache
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: ChefJumpsuit
   equipment: ChefJumpsuit
 
@@ -28,7 +28,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitChef
 
-- type: loadout
+- type: itemLoadout
   id: ChefJumpskirt
   equipment: ChefJumpskirt
 
@@ -38,7 +38,7 @@
     jumpsuit: ClothingUniformJumpskirtChef
 
 # Outer clothing
-- type: loadout
+- type: itemLoadout
   id: ChefApron
   equipment: ChefApron
 
@@ -47,7 +47,7 @@
   equipment:
     outerClothing: ClothingOuterApronChef
 
-- type: loadout
+- type: itemLoadout
   id: ChefJacket
   equipment: ChefJacket
 

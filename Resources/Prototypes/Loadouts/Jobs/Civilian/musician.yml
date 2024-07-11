@@ -1,5 +1,5 @@
 # Back
-- type: loadout
+- type: itemLoadout
   id: MusicianBackpack
   equipment: MusicianBackpack
 
@@ -8,7 +8,7 @@
   equipment:
     back: ClothingBackpackMusicianFilled
 
-- type: loadout
+- type: itemLoadout
   id: MusicianSatchel
   equipment: MusicianSatchel
 
@@ -17,7 +17,7 @@
   equipment:
     back: ClothingBackpackSatchelMusicianFilled
 
-- type: loadout
+- type: itemLoadout
   id: MusicianDuffel
   equipment: MusicianDuffel
 

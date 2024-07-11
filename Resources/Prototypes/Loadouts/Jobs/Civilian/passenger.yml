@@ -9,7 +9,7 @@
       time: 36000 #10 hrs, silly reward for people who play passenger a lot
 
 # Face
-- type: loadout
+- type: itemLoadout
   id: PassengerFace
   equipment: GasMask
   effects:
@@ -22,7 +22,7 @@
     mask: ClothingMaskGas
 
 # Jumpsuit
-- type: loadout
+- type: itemLoadout
   id: GreyJumpsuit
   equipment: GreyJumpsuit
 
@@ -31,7 +31,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitColorGrey
 
-- type: loadout
+- type: itemLoadout
   id: GreyJumpskirt
   equipment: GreyJumpskirt
 
@@ -41,7 +41,7 @@
     jumpsuit: ClothingUniformJumpskirtColorGrey
 
 # Back
-- type: loadout
+- type: itemLoadout
   id: CommonBackpack
   equipment: CommonBackpack
 
@@ -50,7 +50,7 @@
   equipment:
     back: ClothingBackpackFilled
 
-- type: loadout
+- type: itemLoadout
   id: CommonSatchel
   equipment: CommonSatchel
 
@@ -59,7 +59,7 @@
   equipment:
     back: ClothingBackpackSatchelFilled
 
-- type: loadout
+- type: itemLoadout
   id: CommonDuffel
   equipment: CommonDuffel
 
@@ -69,7 +69,7 @@
     back: ClothingBackpackDuffelFilled
 
 # Gloves
-- type: loadout
+- type: itemLoadout
   id: PassengerGloves
   equipment: FingerlessInsulatedGloves
   effects:

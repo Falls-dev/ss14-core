@@ -148,7 +148,7 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
             DebugTools.Assert(entity is null);
             var jobEntity = EntityManager.SpawnEntity(prototype.JobEntity, coordinates);
             MakeSentientCommand.MakeSentient(jobEntity, EntityManager);
-            DoJobSpecials(job, jobEntity);
+            DoJobSpecials(job, jobEntity, profile);
             _identity.QueueIdentityUpdate(jobEntity);
             return jobEntity;
         }

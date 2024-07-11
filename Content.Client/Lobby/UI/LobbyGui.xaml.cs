@@ -22,6 +22,8 @@ namespace Content.Client.Lobby.UI
             SetAnchorPreset(MainContainer, LayoutPreset.Wide);
             SetAnchorPreset(Background, LayoutPreset.Wide);
 
+            LobbySong.SetMarkup(Loc.GetString("lobby-state-song-no-song-text"));
+
             OptionsButton.OnPressed += _ => _userInterfaceManager.GetUIController<OptionsUIController>().ToggleWindow();
             DiscordButton.OnPressed += _ => _stalinManager.RequestUri();
             QuitButton.OnPressed += _ => _consoleHost.ExecuteCommand("disconnect");
@@ -35,19 +37,15 @@ namespace Content.Client.Lobby.UI
                     CharacterSetupState.Visible = false;
                     Center.Visible = true;
                     RightSide.Visible = true;
-                    Version.Visible = true;
                     LabelName.Visible = true;
                     Changelog.Visible = true;
-                    VersionLabel.Visible = true;
                     break;
                 case LobbyGuiState.CharacterSetup:
                     CharacterSetupState.Visible = true;
                     Center.Visible = false;
                     RightSide.Visible = false;
-                    Version.Visible = false;
                     LabelName.Visible = false;
                     Changelog.Visible = false;
-                    VersionLabel.Visible = false;
                     break;
             }
         }

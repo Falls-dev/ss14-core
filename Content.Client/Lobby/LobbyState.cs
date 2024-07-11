@@ -243,7 +243,6 @@ namespace Content.Client.Lobby
             }
 
             _lobby!.LabelName.SetMarkup("[font=\"Bedstead\" size=20] White Dream [/font]");
-            _lobby!.Version.SetMarkup("Version: 1.0");
             _lobby!.ChangelogLabel.SetMarkup("Список изменений:");
         }
 

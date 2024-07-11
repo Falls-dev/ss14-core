@@ -134,9 +134,9 @@ public sealed class SurveillanceCameraSystem : EntitySystem
             return;
         }
 
-        if (TryComp<SurveillanceBodyCameraComponent>(uid, out var bodycamComp))
+        if (TryComp<SurveillanceBodyCameraComponent>(uid, out _)) // WD EDIT
         {
-            component.NameSet = false;
+            return;
         }
 
         if (component.NameSet && component.NetworkSet)
@@ -212,7 +212,7 @@ public sealed class SurveillanceCameraSystem : EntitySystem
         UpdateSetupInterface(uid, camera);
     }
 
-    private void UpdateSetupInterface(EntityUid uid, SurveillanceCameraComponent? camera = null, DeviceNetworkComponent? deviceNet = null)
+    public void UpdateSetupInterface(EntityUid uid, SurveillanceCameraComponent? camera = null, DeviceNetworkComponent? deviceNet = null)
     {
         if (!Resolve(uid, ref camera, ref deviceNet))
         {

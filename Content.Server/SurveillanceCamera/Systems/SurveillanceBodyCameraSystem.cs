@@ -3,10 +3,11 @@ using Content.Server.Power.EntitySystems;
 using Content.Server.PowerCell;
 using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.Examine;
-using Content.Shared.Interaction;
 using Content.Shared.Item;
 using Content.Shared.PowerCell.Components;
 using Content.Shared.Toggleable;
+using Content.Shared.IdentityManagement;
+using Robust.Shared.Player;
 
 namespace Content.Server.SurveillanceCamera.Systems;
 
@@ -27,7 +28,6 @@ public sealed class SurveillanceBodyCameraSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<SurveillanceBodyCameraComponent, ActivateInWorldEvent>(OnActivate);
         SubscribeLocalEvent<SurveillanceBodyCameraComponent, PowerCellChangedEvent>(OnPowerCellChanged);
         SubscribeLocalEvent<SurveillanceBodyCameraComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<SurveillanceBodyCameraComponent, ComponentInit>(OnInit);
@@ -35,7 +35,6 @@ public sealed class SurveillanceBodyCameraSystem : EntitySystem
 
     public void OnInit(EntityUid uid, SurveillanceBodyCameraComponent comp, ComponentInit args)
     {
-
         if (!TryComp<SurveillanceCameraComponent>(uid, out var surComp))
             return;
 
@@ -57,39 +56,38 @@ public sealed class SurveillanceBodyCameraSystem : EntitySystem
             if (!surComp.Active)
                 continue;
 
-            if (!_battery.TryUseCharge(uid, cam.Wattage * frameTime))
-            {
-                _surveillanceCameras.SetActive(uid, false, surComp);
-                AppearanceChange(uid, surComp.Active);
-            }
-        }
-    }
-    public void OnActivate(EntityUid uid, SurveillanceBodyCameraComponent comp, ActivateInWorldEvent args)
-    {
-        if (!TryComp<SurveillanceCameraComponent>(uid, out var surComp))
-            return;
+            // WD EDIT START
+            if (_battery.TryUseCharge(uid, cam.Wattage * frameTime, battery))
+                continue;
 
-        if (!_powerCell.TryGetBatteryFromSlot(uid, out var battery))
-            return;
-
-        _surveillanceCameras.SetActive(uid, battery.CurrentCharge > comp.Wattage && !surComp.Active, surComp);
-        AppearanceChange(uid, surComp.Active);
-
-        var message = Loc.GetString(surComp.Active ? "surveillance-body-camera-on" : "surveillance-body-camera-off");
-        _popup.PopupEntity(message, args.User, args.User);
-        args.Handled = true;
-    }
-
-    public void OnPowerCellChanged(EntityUid uid, SurveillanceBodyCameraComponent comp, PowerCellChangedEvent args)
-    {
-        if (!TryComp<SurveillanceCameraComponent>(uid, out var surComp))
-            return;
-
-        if (args.Ejected)
-        {
+            var message = Loc.GetString("surveillance-body-camera-off",
+                ("item", Identity.Entity(uid, EntityManager)));
+            _popup.PopupEntity(message, uid, Filter.PvsExcept(uid, entityManager: EntityManager), true);
             _surveillanceCameras.SetActive(uid, false, surComp);
             AppearanceChange(uid, surComp.Active);
+            // WD EDIT END
         }
+    }
+
+    private void OnPowerCellChanged(EntityUid uid, SurveillanceBodyCameraComponent comp, PowerCellChangedEvent args)
+    {
+        if (!TryComp<SurveillanceCameraComponent>(uid, out var surComp))
+            return;
+
+        // WD EDIT START
+        if (!args.Ejected)
+            return;
+
+        if (surComp.Active)
+        {
+            var message = Loc.GetString("surveillance-body-camera-off",
+                ("item", Identity.Entity(uid, EntityManager)));
+            _popup.PopupEntity(message, uid, Filter.PvsExcept(uid, entityManager: EntityManager), true);
+        }
+
+        _surveillanceCameras.SetActive(uid, false, surComp);
+        AppearanceChange(uid, surComp.Active);
+        // WD EDIT END
     }
 
     public void OnExamine(EntityUid uid, SurveillanceBodyCameraComponent comp, ExaminedEvent args)
@@ -100,7 +98,8 @@ public sealed class SurveillanceBodyCameraSystem : EntitySystem
         if (args.IsInDetailsRange)
         {
             var message =
-                Loc.GetString(surComp.Active ? "surveillance-body-camera-on" : "surveillance-body-camera-off");
+                Loc.GetString(surComp.Active ? "surveillance-body-camera-on" : "surveillance-body-camera-off",
+                    ("item", Identity.Entity(uid, EntityManager))); // WD EDIT
             args.PushMarkup(message);
         }
     }

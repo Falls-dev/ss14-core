@@ -269,7 +269,7 @@
 
 - type: sponsorLoadout
   id: JukeboxLoadout
-  entity: Jukebox
+  entity: Boombox
   sponsorOnly: true
 
 - type: sponsorLoadout

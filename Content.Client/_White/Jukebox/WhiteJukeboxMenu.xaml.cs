@@ -9,18 +9,18 @@ using Robust.Shared.Timing;
 namespace Content.Client._White.Jukebox;
 
 [GenerateTypedNameReferences]
-public sealed partial class JukeboxMenu : DefaultWindow
+public sealed partial class WhiteJukeboxMenu : DefaultWindow
 {
     [Dependency] private readonly IEntityManager _entityManager = default!;
     private readonly JukeboxSystem _jukeboxSystem;
 
     private readonly EntityUid _jukeboxEntity;
-    private readonly JukeboxComponent _component;
+    private readonly WhiteJukeboxComponent _component;
 
     private readonly List<JukeboxSongEntry> _defaultSongsEntries = new() { };
     private readonly List<JukeboxSongEntry> _tapeSongsEntries = new() { };
 
-    public JukeboxMenu(EntityUid jukeboxEntity, JukeboxComponent component)
+    public WhiteJukeboxMenu(EntityUid jukeboxEntity, WhiteJukeboxComponent component)
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);

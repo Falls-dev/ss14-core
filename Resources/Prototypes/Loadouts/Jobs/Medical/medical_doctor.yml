@@ -167,7 +167,7 @@
     back: ClothingBackpackDuffelMedicalFilled
 
 # OuterClothing
-- type: loadout
+- type: itemLoadout
   id: MedicalDoctorWintercoat
   equipment: MedicalDoctorWintercoat
 
@@ -189,7 +189,7 @@
     outerClothing: ClothingOuterCoatLabSeniorPhysician
 
 # Shoes
-- type: loadout
+- type: itemLoadout
   id: MedicalWinterBoots
   equipment: MedicalWinterBoots
 

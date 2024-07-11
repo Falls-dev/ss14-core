@@ -98,7 +98,7 @@
     back:
     - ClothingNeckTransPin
 
-- type: loadout
+- type: itemLoadout
   id: ClothingNeckAutismPin
   equipment: ClothingNeckAutismPin
 
@@ -108,7 +108,7 @@
     back:
     - ClothingNeckAutismPin
 
-- type: loadout
+- type: itemLoadout
   id: ClothingNeckGoldAutismPin
   equipment: ClothingNeckGoldAutismPin
 

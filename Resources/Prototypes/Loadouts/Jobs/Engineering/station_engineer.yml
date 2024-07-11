@@ -129,8 +129,8 @@
   id: StationEngineerOuterVest
   equipment:
     outerClothing: ClothingOuterVestHazard
-  
-- type: loadout
+
+- type: itemLoadout
   id: StationEngineerWintercoat
   equipment: StationEngineerWintercoat
 
@@ -138,9 +138,9 @@
   id: StationEngineerWintercoat
   equipment:
     outerClothing: ClothingOuterWinterEngi
-  
+
 # Shoes
-- type: loadout
+- type: itemLoadout
   id: WorkBoots
   equipment: WorkBoots
 
@@ -149,7 +149,7 @@
   equipment:
     shoes: ClothingShoesBootsWork
 
-- type: loadout
+- type: itemLoadout
   id: EngineeringWinterBoots
   equipment: EngineeringWinterBoots
 

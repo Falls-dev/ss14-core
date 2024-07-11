@@ -113,7 +113,7 @@
     back: ClothingBackpackDuffelSecurityFilled
 
 # Outerclothing
-- type: loadout
+- type: itemLoadout
   id: ArmorVest
   equipment: ArmorVest
 
@@ -122,7 +122,7 @@
   equipment:
     outerClothing: ClothingOuterArmorBasic
 
-- type: loadout
+- type: itemLoadout
   id: ArmorVestSlim
   equipment: ArmorVestSlim
 
@@ -131,7 +131,7 @@
   equipment:
     outerClothing: ClothingOuterArmorBasicSlim
 
-- type: loadout
+- type: itemLoadout
   id: SecurityOfficerWintercoat
   equipment: SecurityOfficerWintercoat
 
@@ -141,7 +141,7 @@
     outerClothing: ClothingOuterWinterSec
 
 # Shoes
-- type: loadout
+- type: itemLoadout
   id: CombatBoots
   equipment: CombatBoots
 
@@ -150,7 +150,7 @@
   equipment:
     shoes: ClothingShoesBootsCombatFilled
 
-- type: loadout
+- type: itemLoadout
   id: SecurityWinterBoots
   equipment: SecurityWinterBoots
 

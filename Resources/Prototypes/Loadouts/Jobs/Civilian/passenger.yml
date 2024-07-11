@@ -40,7 +40,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtColorGrey
 
-- type: loadout
+- type: itemLoadout
   id: AncientJumpsuit
   equipment: AncientJumpsuit
   effects:

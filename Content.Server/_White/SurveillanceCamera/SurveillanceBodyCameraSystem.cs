@@ -1,19 +1,19 @@
-using Content.Server.Popups;
+﻿using Content.Server.Popups;
 using Content.Server.Power.EntitySystems;
 using Content.Server.PowerCell;
-using Content.Shared.Clothing.EntitySystems;
+using Content.Server.SurveillanceCamera;
 using Content.Shared.Examine;
+using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.Item;
+using Content.Shared.Actions;
 using Content.Shared.PowerCell.Components;
-using Content.Shared.Toggleable;
+using Content.Shared._White.SurveillanceCamera;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Toggleable;
 using Robust.Shared.Player;
 
-namespace Content.Server.SurveillanceCamera.Systems;
+namespace Content.Server._White.SurveillanceCamera;
 
-/// <summary>
-/// This handles the bodycamera all itself. Activation, examine,init, powercell stuff.
-/// </summary>
 public sealed class SurveillanceBodyCameraSystem : EntitySystem
 {
     [Dependency] private readonly PowerCellSystem _powerCell = default!;
@@ -26,11 +26,39 @@ public sealed class SurveillanceBodyCameraSystem : EntitySystem
 
     public override void Initialize()
     {
-        base.Initialize();
-
+        SubscribeLocalEvent<SurveillanceBodyCameraComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<SurveillanceBodyCameraComponent, GetItemActionsEvent>(OnGetActions);
+        SubscribeLocalEvent<SurveillanceBodyCameraComponent, ToggleBodyCameraEvent>(OnToggleAction);
         SubscribeLocalEvent<SurveillanceBodyCameraComponent, PowerCellChangedEvent>(OnPowerCellChanged);
         SubscribeLocalEvent<SurveillanceBodyCameraComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<SurveillanceBodyCameraComponent, ComponentInit>(OnInit);
+    }
+
+    private void OnStartup(EntityUid uid, SurveillanceBodyCameraComponent component, ComponentStartup args)
+    {
+        EnsureComp(uid, out SurveillanceCameraComponent surComp);
+        _surveillanceCameras.UpdateSetupInterface(uid, surComp);
+    }
+
+    private void OnGetActions(EntityUid uid, SurveillanceBodyCameraComponent component, GetItemActionsEvent args)
+    {
+        args.AddAction(ref component.ToggleActionEntity, component.ToggleAction);
+    }
+
+    private void OnToggleAction(EntityUid uid, SurveillanceBodyCameraComponent component, ToggleBodyCameraEvent args)
+    {
+        if (!TryComp<SurveillanceCameraComponent>(uid, out var surComp))
+            return;
+
+        if (!_powerCell.TryGetBatteryFromSlot(uid, out var battery))
+            return;
+
+        _surveillanceCameras.SetActive(uid, battery.CurrentCharge > component.Wattage && !surComp.Active, surComp);
+        AppearanceChange(uid, surComp.Active);
+
+        var message = Loc.GetString(surComp.Active ? "surveillance-body-camera-on" : "surveillance-body-camera-off",
+            ("item", Identity.Entity(uid, EntityManager)));
+        _popup.PopupEntity(message, uid, Filter.PvsExcept(uid, entityManager: EntityManager), true);
     }
 
     public void OnInit(EntityUid uid, SurveillanceBodyCameraComponent comp, ComponentInit args)
@@ -56,16 +84,15 @@ public sealed class SurveillanceBodyCameraSystem : EntitySystem
             if (!surComp.Active)
                 continue;
 
-            // WD EDIT START
             if (_battery.TryUseCharge(uid, cam.Wattage * frameTime, battery))
                 continue;
 
             var message = Loc.GetString("surveillance-body-camera-off",
-                ("item", Identity.Entity(uid, EntityManager)));
+                    ("item", Identity.Entity(uid, EntityManager)));
             _popup.PopupEntity(message, uid, Filter.PvsExcept(uid, entityManager: EntityManager), true);
+
             _surveillanceCameras.SetActive(uid, false, surComp);
             AppearanceChange(uid, surComp.Active);
-            // WD EDIT END
         }
     }
 
@@ -74,7 +101,6 @@ public sealed class SurveillanceBodyCameraSystem : EntitySystem
         if (!TryComp<SurveillanceCameraComponent>(uid, out var surComp))
             return;
 
-        // WD EDIT START
         if (!args.Ejected)
             return;
 
@@ -87,7 +113,6 @@ public sealed class SurveillanceBodyCameraSystem : EntitySystem
 
         _surveillanceCameras.SetActive(uid, false, surComp);
         AppearanceChange(uid, surComp.Active);
-        // WD EDIT END
     }
 
     public void OnExamine(EntityUid uid, SurveillanceBodyCameraComponent comp, ExaminedEvent args)
@@ -95,23 +120,22 @@ public sealed class SurveillanceBodyCameraSystem : EntitySystem
         if (!TryComp<SurveillanceCameraComponent>(uid, out var surComp))
             return;
 
-        if (args.IsInDetailsRange)
-        {
-            var message =
-                Loc.GetString(surComp.Active ? "surveillance-body-camera-on" : "surveillance-body-camera-off",
-                    ("item", Identity.Entity(uid, EntityManager))); // WD EDIT
-            args.PushMarkup(message);
-        }
+        if (!args.IsInDetailsRange)
+            return;
+
+        var message = Loc.GetString(surComp.Active ? "surveillance-body-camera-on" : "surveillance-body-camera-off",
+            ("item", Identity.Entity(uid, EntityManager)));
+        args.PushMarkup(message);
     }
 
-    public void AppearanceChange(EntityUid uid, Boolean isActive)
+    public void AppearanceChange(EntityUid uid, bool isActive)
     {
-        if (TryComp<AppearanceComponent>(uid, out var appearance) &&
-            TryComp<ItemComponent>(uid, out var item))
-        {
-            _item.SetHeldPrefix(uid, isActive ? "on" : "off", false, item);
-            _clothing.SetEquippedPrefix(uid, isActive ? null : "off");
-            _appearance.SetData(uid, ToggleVisuals.Toggled, isActive, appearance);
-        }
+        if (!TryComp<AppearanceComponent>(uid, out var appearance) ||
+            !TryComp<ItemComponent>(uid, out var item))
+            return;
+
+        _item.SetHeldPrefix(uid, isActive ? "on" : "off", false, item);
+        _clothing.SetEquippedPrefix(uid, isActive ? null : "off");
+        _appearance.SetData(uid, ToggleVisuals.Toggled, isActive, appearance);
     }
 }

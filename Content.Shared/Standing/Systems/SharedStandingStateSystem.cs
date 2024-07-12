@@ -236,17 +236,6 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
         standingState.CurrentState = StandingState.Lying;
         Dirty(uid, standingState);
 
-        var rotation = _transform.GetWorldRotation(uid); // WD EDIT
-        _appearance.TryGetData<bool>(uid, BuckleVisuals.Buckled, out var state, appearance); // WD EDIT
-
-        if (!state) // WD EDIT
-        {
-            if (rotation.GetDir() is Direction.East or Direction.North or Direction.NorthEast or Direction.SouthEast)
-                _rotation.SetHorizontalAngle(uid, Angle.FromDegrees(270));
-            else
-                _rotation.ResetHorizontalAngle(uid);
-        }
-
         RaiseLocalEvent(uid, new DownedEvent());
 
         // Seemed like the best place to put it

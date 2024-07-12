@@ -54,3 +54,13 @@
   id: WardenArmoredWinterCoat
   equipment:
     outerClothing: ClothingOuterWinterWarden
+
+# PDA
+
+- type: itemLoadout # WD
+  id: WardenPDA
+  equipment: WardenPDA
+- type: startingGear
+  id: WardenPDA
+  equipment:
+    id: WardenPDA

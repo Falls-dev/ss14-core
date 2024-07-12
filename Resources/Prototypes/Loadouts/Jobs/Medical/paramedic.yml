@@ -83,3 +83,12 @@
   id: BlueShoes
   equipment:
     shoes: ClothingShoesColorBlue
+
+# PDA
+- type: itemLoadout # WD
+  id: ParamedicPDA
+  equipment: ParamedicPDA
+- type: startingGear
+  id: ParamedicPDA
+  equipment:
+    id: ParamedicPDA

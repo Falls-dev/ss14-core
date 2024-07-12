@@ -19,19 +19,6 @@
       time: 216000 # 60 hrs
 
 # Head
-
-- type: itemLoadout
-  id: SeniorPhysicianBeret
-  equipment: SeniorPhysicianBeret
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: SeniorPhysician
-
-- type: startingGear
-  id: SeniorPhysicianBeret
-  equipment:
-    head: ClothingHeadHatBeretSeniorPhysician
-
 - type: itemLoadout
   id: MedicalBeret
   equipment: MedicalBeret
@@ -207,15 +194,3 @@
   id: MedicalDoctorPDA
   equipment:
     id: MedicalPDA
-
-- type: itemLoadout
-  id: SeniorPhysicianPDA
-  equipment: SeniorPhysicianPDA
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: SeniorPhysician
-
-- type: startingGear
-  id: SeniorPhysicianPDA
-  equipment:
-    id: SeniorPhysicianPDA

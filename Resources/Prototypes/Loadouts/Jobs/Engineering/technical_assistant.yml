@@ -16,3 +16,14 @@
   id: YellowJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtColorYellow
+
+
+# PDA
+
+- type: itemLoadout # WD
+  id: TechnicalAssistantPDA
+  equipment: TechnicalAssistantPDA
+- type: startingGear
+  id: TechnicalAssistantPDA
+  equipment:
+    id: TechnicalAssistantPDA

@@ -17,16 +17,6 @@
   equipment:
     head: ClothingHeadHatFedoraGrey
 
-# Neck
-- type: itemLoadout
-  id: DetectiveTie
-  equipment: DetectiveTie
-
-- type: startingGear
-  id: DetectiveTie
-  equipment:
-    neck: ClothingNeckTieDet
-
 # Jumpsuit
 - type: itemLoadout
   id: DetectiveJumpsuit
@@ -110,3 +100,14 @@
   id: DetectiveCoat
   equipment:
     outerClothing: ClothingOuterCoatDetective
+
+
+# Gloves
+
+- type: itemLoadout
+  id: GlovesForensic
+  equipment: GlovesForensic
+- type: startingGear
+  id: GlovesForensic
+  equipment:
+    gloves: ClothingHandsGlovesForensic

@@ -10,7 +10,7 @@
 
 # Face
 - type: itemLoadout
-  id: PassengerFace
+  id: AssistantFace
   equipment: GasMask
   effects:
   - !type:GroupLoadoutEffect
@@ -82,7 +82,7 @@
 
 # Gloves
 - type: itemLoadout
-  id: PassengerGloves
+  id: AssistantGloves
   equipment: FingerlessInsulatedGloves
   effects:
   - !type:GroupLoadoutEffect
@@ -95,11 +95,11 @@
 
 # Outerclothing
 - type: itemLoadout
-  id: PassengerWintercoat
-  equipment: PassengerWintercoat
+  id: AssistantWintercoat
+  equipment: AssistantWintercoat
 
 - type: startingGear
-  id: PassengerWintercoat
+  id: AssistantWintercoat
   equipment:
     outerClothing: ClothingOuterWinterCoat
 

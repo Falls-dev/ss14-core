@@ -92,3 +92,13 @@
   id: ChiefMedicalOfficerWintercoat
   equipment:
     outerClothing: ClothingOuterWinterCMO
+
+# PDA
+
+- type: itemLoadout # WD
+  id: ChiefMedicalOfficerPDA
+  equipment: ChiefMedicalOfficerPDA
+- type: startingGear
+  id: ChiefMedicalOfficerPDA
+  equipment:
+    id: CMOPDA

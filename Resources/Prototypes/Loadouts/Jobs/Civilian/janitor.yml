@@ -28,7 +28,7 @@
     jumpsuit: ClothingUniformJumpskirtJanitor
 
 # Gloves
-- type: loadout
+- type: itemLoadout
   id: JanitorGlovesRubber
   equipment: JanitorGlovesRubber
 
@@ -37,7 +37,7 @@
   equipment:
     gloves: ClothingHandsGlovesJanitor
 
-- type: loadout
+- type: itemLoadout
   id: JanitorGlovesOrange
   equipment: JanitorGlovesOrange
 
@@ -46,7 +46,7 @@
   equipment:
     gloves: ClothingHandsGlovesColorOrange
 
-- type: loadout
+- type: itemLoadout
   id: JanitorGlovesPurple
   equipment: JanitorGlovesPurple
 

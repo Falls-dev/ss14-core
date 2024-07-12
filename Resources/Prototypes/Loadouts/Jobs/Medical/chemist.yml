@@ -63,3 +63,13 @@
   id: ChemistWintercoat
   equipment:
     outerClothing: ClothingOuterWinterChem
+
+# PDA
+
+- type: itemLoadout # WD added
+  id: ChemistPDA
+  equipment: ChemistPDA
+- type: startingGear
+  id: ChemistPDA
+  equipment:
+    id: ChemistryPDA

@@ -115,3 +115,12 @@
   id: BrownShoes
   equipment:
     shoes: ClothingShoesColorBrown
+
+# PDA
+- type: itemLoadout # WD
+  id: ChiefEngineerPDA
+  equipment: ChiefEngineerPDA
+- type: startingGear
+  id: ChiefEngineerPDA
+  equipment:
+    id: EngineerPDA

@@ -81,9 +81,6 @@
 - type: itemLoadout
   id: SeniorOfficerJumpsuit
   equipment: SeniorOfficerJumpsuit
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: SeniorOfficer
 
 - type: startingGear
   id: SeniorOfficerJumpsuit
@@ -93,9 +90,6 @@
 - type: itemLoadout
   id: SeniorOfficerJumpskirt
   equipment: SeniorOfficerJumpskirt
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: SeniorOfficer
 
 - type: startingGear
   id: SeniorOfficerJumpskirt
@@ -190,9 +184,6 @@
 - type: itemLoadout
   id: SeniorOfficerPDA
   equipment: SeniorOfficerPDA
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: SeniorOfficer
 
 - type: startingGear
   id: SeniorOfficerPDA

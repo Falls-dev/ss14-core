@@ -13,9 +13,6 @@
 - type: itemLoadout
   id: ScientificBeret
   equipment: ScientificBeret
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: SeniorResearcher
 
 - type: startingGear
   id: ScientificBeret
@@ -51,30 +48,6 @@
   id: ScientistJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtScientist
-
-- type: itemLoadout
-  id: SeniorResearcherJumpsuit
-  equipment: SeniorResearcherJumpsuit
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: SeniorResearcher
-
-- type: startingGear
-  id: SeniorResearcherJumpsuit
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitSeniorResearcher
-
-- type: itemLoadout
-  id: SeniorResearcherJumpskirt
-  equipment: SeniorResearcherJumpskirt
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: SeniorResearcher
-
-- type: startingGear
-  id: SeniorResearcherJumpskirt
-  equipment:
-    jumpsuit: ClothingUniformJumpskirtSeniorResearcher
 
 # Back
 - type: itemLoadout
@@ -132,18 +105,6 @@
   equipment:
     outerClothing: ClothingOuterWinterSci
 
-- type: itemLoadout
-  id: SeniorResearcherLabCoat
-  equipment: SeniorResearcherLabCoat
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: SeniorResearcher
-
-- type: startingGear
-  id: SeniorResearcherLabCoat
-  equipment:
-    outerClothing: ClothingOuterCoatLabSeniorResearcher
-
 # Shoes
 - type: itemLoadout
   id: ScienceWinterBoots
@@ -164,14 +125,3 @@
   equipment:
     id: SciencePDA
 
-- type: itemLoadout
-  id: SeniorResearcherPDA
-  equipment: SeniorResearcherPDA
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: SeniorResearcher
-
-- type: startingGear
-  id: SeniorResearcherPDA
-  equipment:
-    id: SeniorResearcherPDA

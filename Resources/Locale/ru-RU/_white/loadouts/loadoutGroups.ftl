@@ -1,0 +1,10 @@
+﻿loadout-group-head = Голова
+loadout-group-ears = Наушник
+loadout-group-neck = Шея
+loadout-group-jumpsuit = Униформа
+loadout-group-outerclothing = Верхняя одежда
+loadout-group-backpack = Рюкзак
+loadout-group-gloves = Перчатки
+loadout-group-shoes = Ботинки
+loadout-group-pda = ПДА
+loadout-group-trinkets = Побрякушки

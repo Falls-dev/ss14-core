@@ -3,32 +3,39 @@
   id: JobCaptain
   groups:
   - CaptainHead
+  - CommondCommandHeadset
   - CaptainNeck
   - CaptainJumpsuit
   - CaptainBackpack
   - CaptainOuterClothing
+  - CaptainShoes
+  - CaptainPDA
   - Trinkets
 
 - type: roleLoadout
   id: JobHeadOfPersonnel
   groups:
   - HoPHead
+  - CommondCommandHeadset
   - HoPNeck
   - HoPJumpsuit
   - HoPBackpack
   - HoPOuterClothing
+  - HoPShoes
+  - HoPGloves
+  - HoPPDA
   - Trinkets
 
 # Civilian
 - type: roleLoadout
   id: JobPassenger
   groups:
-  - PassengerJumpsuit
+  - AssistantJumpsuit
   - CommonBackpack
-  - PassengerFace
-  - PassengerGloves
-  - PassengerOuterClothing
-  - PassengerShoes
+  - AssistantFace
+  - AssistantGloves
+  - AssistantOuterClothing
+  - AssistantShoes
   - Trinkets
 
 - type: roleLoadout
@@ -168,14 +175,33 @@
   - ChiefEngineerBackpack
   - ChiefEngineerNeck
   - ChiefEngineerOuterClothing
+  - CommonEngineerGloves
   - ChiefEngineerShoes
+  - ChiefEngineerPDA
+  - Trinkets
+
+- type: roleLoadout
+  id: JobSeniorEngineer
+  groups:
+  - SeniorEngineerHead
+  - SeniorEngineerJumpsuit
+  - StationEngineerBackpack
+  - StationEngineerOuterClothing
+  - CommonEngineerGloves
+  - StationEngineerShoes
+  - SeniorEngineerPDA
   - Trinkets
 
 - type: roleLoadout
   id: JobTechnicalAssistant
   groups:
+  - StationEngineerHead
   - TechnicalAssistantJumpsuit
   - StationEngineerBackpack
+  - StationEngineerOuterClothing
+  - CommonEngineerGloves
+  - StationEngineerShoes
+  - TechnicalAssistantPDA
   - Trinkets
 
 - type: roleLoadout
@@ -185,17 +211,21 @@
   - StationEngineerJumpsuit
   - StationEngineerBackpack
   - StationEngineerOuterClothing
+  - CommonEngineerGloves
   - StationEngineerShoes
-  - StationEngineerID
+  - StationEngineerPDA
   - Trinkets
 
 - type: roleLoadout
   id: JobAtmosphericTechnician
   groups:
+  - StationEngineerHead
   - AtmosphericTechnicianJumpsuit
   - AtmosphericTechnicianBackpack
   - AtmosphericTechnicianOuterClothing
+  - CommonEngineerGloves
   - AtmosphericTechnicianShoes
+  - AtmosphericTechnicianPDA
   - Trinkets
 
 # Science
@@ -203,21 +233,38 @@
   id: JobResearchDirector
   groups:
   - ResearchDirectorHead
+  - ResearchDirectorHeadset
   - ResearchDirectorNeck
   - ResearchDirectorJumpsuit
   - ResearchDirectorBackpack
   - ResearchDirectorOuterClothing
   - ResearchDirectorShoes
+  - CommonScienceGloves
+  - ResearchDirectorPDA
+  - Trinkets
+
+- type: roleLoadout
+  id: JobSeniorResearcher
+  groups:
+  - ScientistHead
+  - CommonScientistNeck
+  - SeniorResearcherJumpsuit
+  - ScientistBackpack
+  - SeniorResearcherOuterclothing
+  - CommonScienceGloves
+  - ScientistShoes
+  - SeniorResearcherPDA
   - Trinkets
 
 - type: roleLoadout
   id: JobScientist
   groups:
   - ScientistHead
-  - ScientistNeck
+  - CommonScientistNeck
   - ScientistJumpsuit
   - ScientistBackpack
   - ScientistOuterClothing
+  - CommonScienceGloves
   - ScientistShoes
   - ScientistPDA
   - Trinkets
@@ -225,8 +272,13 @@
 - type: roleLoadout
   id: JobResearchAssistant
   groups:
+  - CommonScientistNeck
   - ResearchAssistantJumpsuit
+  - ScientistOuterClothing
   - ScientistBackpack
+  - CommonScienceGloves
+  - ScientistShoes
+  - ResearchAssistantPDA
   - Trinkets
 
 # Security
@@ -234,31 +286,48 @@
   id: JobHeadOfSecurity
   groups:
   - HeadofSecurityHead
+  - SecurityCommandHeadset
   - HeadofSecurityNeck
   - HeadofSecurityJumpsuit
-  - SecurityBackpack
+  - CommonSecurityBackpack
   - HeadofSecurityOuterClothing
-  - SecurityShoes
+  - CommonSecurityShoes
+  - HeadofSecurityPDA
   - Trinkets
 
 - type: roleLoadout
   id: JobWarden
   groups:
   - WardenHead
+  - SecurityCommandHeadset
+  - CommonSecurityNeck
   - WardenJumpsuit
-  - SecurityBackpack
-  - WardenOuterClothing
-  - SecurityShoes
+  - CommonSecurityBackpack
+  - CommonSecurityShoes
+  - WardenPDA
+  - Trinkets
+
+- type: roleLoadout
+  id: JobSeniorOfficer
+  groups:
+  - CommonSecurityHead
+  - CommonSecurityNeck
+  - SeniorOfficerJumpsuit
+  - CommonSecurityBackpack
+  - SecurityOuterClothing
+  - CommonSecurityShoes
+  - SeniorOfficerPDA
   - Trinkets
 
 - type: roleLoadout
   id: JobSecurityOfficer
   groups:
-  - SecurityHead
+  - CommonSecurityHead
+  - CommonSecurityNeck
   - SecurityJumpsuit
-  - SecurityBackpack
+  - CommonSecurityBackpack
   - SecurityOuterClothing
-  - SecurityShoes
+  - CommonSecurityShoes
   - SecurityPDA
   - Trinkets
 
@@ -266,18 +335,23 @@
   id: JobDetective
   groups:
   - DetectiveHead
-  - DetectiveNeck
+  - CommonSecurityNeck
   - DetectiveJumpsuit
   - DetectiveBackpack
   - DetectiveOuterClothing
-  - SecurityShoes
+  - DetectiveGloves
+  - DetectiveShoes
   - Trinkets
 
 - type: roleLoadout
   id: JobSecurityCadet
   groups:
+  - CommonSecurityHead
+  - CommonSecurityNeck
   - SecurityCadetJumpsuit
-  - SecurityBackpack
+  - CommonSecurityBackpack
+  - CommonSecurityShoes
+  - SecurityCadetPDA
   - Trinkets
 
 # Medical
@@ -289,7 +363,21 @@
   - ChiefMedicalOfficerBackpack
   - ChiefMedicalOfficerOuterClothing
   - ChiefMedicalOfficerNeck
+  - CommonMedicalGloves
   - ChiefMedicalOfficerShoes
+  - ChiefMedicalOfficerPDA
+  - Trinkets
+
+- type: roleLoadout
+  id: JobSeniorPhysician
+  groups:
+  - SeniorPhysicianHead
+  - SeniorPhysicianJumpsuit
+  - MedicalBackpack
+  - SeniorPhysicianOuterClothing
+  - CommonMedicalShoes
+  - CommonMedicalGloves
+  - SeniorPhysicianPDA
   - Trinkets
 
 - type: roleLoadout
@@ -299,24 +387,33 @@
   - MedicalDoctorJumpsuit
   - MedicalBackpack
   - MedicalDoctorOuterClothing
-  - MedicalShoes
+  - CommonMedicalShoes
+  - CommonMedicalGloves
   - MedicalDoctorPDA
   - Trinkets
 
 - type: roleLoadout
   id: JobMedicalIntern
   groups:
+  - MedicalDoctorHead
   - MedicalInternJumpsuit
   - MedicalBackpack
+  - CommonMedicalOuterClothing
+  - CommonMedicalGloves
+  - CommonMedicalShoes
+  - MedicalInternPDA
   - Trinkets
 
 - type: roleLoadout
   id: JobChemist
   groups:
+  - ChemistEyes
   - ChemistJumpsuit
   - ChemistBackpack
   - ChemistOuterClothing
-  - MedicalShoes
+  - CommonMedicalGloves
+  - ChemistShoes
+  - ChemistPDA
   - Trinkets
 
 - type: roleLoadout
@@ -326,7 +423,9 @@
   - ParamedicJumpsuit
   - ParamedicBackpack
   - ParamedicOuterClothing
-  - ParamedicShoes
+  - CommonMedicalGloves
+  - CommonMedicalShoes
+  - ParamedicPDA
   - Trinkets
 
 # Wildcards

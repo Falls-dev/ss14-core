@@ -105,3 +105,21 @@
   id: HoPWintercoat
   equipment:
     outerClothing: ClothingOuterWinterHoP
+
+# gloves
+- type: itemLoadout # WD
+  id: HoPGloves
+  equipment: HoPGloves
+- type: startingGear
+  id: HoPGloves
+  equipment:
+    gloves: ClothingHandsGlovesHop
+
+# PDA
+- type: itemLoadout # WD
+  id: HoPPDA
+  equipment: HoPPDA
+- type: startingGear
+  id: HoPPDA
+  equipment:
+    gloves: HoPPDA

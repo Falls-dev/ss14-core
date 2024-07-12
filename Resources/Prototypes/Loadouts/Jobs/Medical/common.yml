@@ -1,0 +1,9 @@
+﻿# Gloves
+
+- type: itemLoadout
+  id: MedicalGlovesNitrile
+  equipment: MedicalGlovesNitrile
+- type: startingGear
+  id: MedicalGlovesNitrile
+  equipment:
+    gloves: ClothingHandsGlovesNitrile

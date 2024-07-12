@@ -1,0 +1,174 @@
+﻿# Eyes
+
+- type: itemLoadout
+  id: GlassesGarOrange
+  equipment: GlassesGarOrange
+- type: startingGear
+  id: GlassesGarOrange
+  equipment:
+    eyes: ClothingEyesGlassesGarOrange
+
+# Shoes
+
+- type: itemLoadout
+  id: BootsLaceup
+  equipment: BootsLaceup
+- type: startingGear
+  id: BootsLaceup
+  equipment:
+    shoes: ClothingShoesBootsLaceup
+
+- type: itemLoadout
+  id: ShoesLeather
+  equipment: ShoesLeather
+- type: startingGear
+  id: ShoesLeather
+  equipment:
+    shoes: ClothingShoesLeather
+
+- type: itemLoadout
+  id: BootsJack
+  equipment: BootsJack
+- type: startingGear
+  id: BootsJack
+  equipment:
+    shoes: ClothingShoesBootsJack
+
+- type: itemLoadout
+  id: ShoesColorOrange
+  equipment: ShoesColorOrange
+- type: startingGear
+  id: ShoesColorOrange
+  equipment:
+    shoes: ClothingShoesColorOrange
+
+# OuterClothing
+
+- type: itemLoadout
+  id: CoatJensen
+  equipment: CoatJensen
+- type: startingGear
+  id: CoatJensen
+  equipment:
+    outerClothing: ClothingOuterCoatJensen
+
+- type: itemLoadout
+  id: CoatInspector
+  equipment: CoatInspector
+- type: startingGear
+  id: CoatInspector
+  equipment:
+    outerClothing: ClothingOuterCoatInspector
+
+- type: itemLoadout
+  id: CoatGentle
+  equipment: CoatGentle
+- type: startingGear
+  id: CoatGentle
+  equipment:
+    outerClothing: ClothingOuterCoatGentle
+
+# Gloves
+
+- type: itemLoadout
+  id: GlovesColorBlack
+  equipment: GlovesColorBlack
+- type: startingGear
+  id: GlovesColorBlack
+  equipment:
+    gloves: ClothingHandsGlovesColorBlack
+
+- type: itemLoadout
+  id: GlovesLatex
+  equipment: GlovesLatex
+- type: startingGear
+  id: GlovesLatex
+  equipment:
+    gloves: ClothingHandsGlovesLatex
+
+- type: itemLoadout
+  id: GlovesColorPurple
+  equipment: GlovesColorPurple
+- type: startingGear
+  id: GlovesColorPurple
+  equipment:
+    gloves: ClothingHandsGlovesColorPurple
+
+# Neck
+
+# Neck
+- type: itemLoadout
+  id: BlackTie
+  equipment: BlackTie
+- type: startingGear
+  id: BlackTie
+  equipment:
+    neck: ClothingNeckTieDet
+
+- type: itemLoadout
+  id: RedTie
+  equipment: RedTie
+- type: startingGear
+  id: RedTie
+  equipment:
+    neck: ClothingNeckTieRed
+
+# Head
+
+- type: itemLoadout
+  id: CowboyBountyHunter
+  equipment: CowboyBountyHunter
+- type: startingGear
+  id: CowboyBountyHunter
+  equipment:
+    head: ClothingHeadHatCowboyBountyHunter
+
+- type: itemLoadout
+  id: CowboyBlack
+  equipment: CowboyBlack
+- type: startingGear
+  id: CowboyBlack
+  equipment:
+    head: ClothingHeadHatCowboyBlack
+
+- type: itemLoadout
+  id: CowboyBrown
+  equipment: CowboyBrown
+- type: startingGear
+  id: CowboyBrown
+  equipment:
+    head: ClothingHeadHatCowboyBrown
+
+- type: itemLoadout
+  id: CowboyRed
+  equipment: CowboyRed
+- type: startingGear
+  id: CowboyRed
+  equipment:
+    head: ClothingHeadHatCowboyRed
+
+- type: itemLoadout
+  id: CowboyGrey
+  equipment: CowboyGrey
+- type: startingGear
+  id: CowboyGrey
+  equipment:
+    head: ClothingHeadHatCowboyGrey
+
+- type: itemLoadout
+  id: CowboyWhite
+  equipment: CowboyWhite
+- type: startingGear
+  id: CowboyWhite
+  equipment:
+    gloves: ClothingHeadHatCowboyWhite
+
+
+# backpack
+- type: itemLoadout
+  id: CommonSatchelLeather
+  equipment: CommonSatchelLeather
+- type: startingGear
+  id: CommonSatchelLeather
+  equipment:
+    gloves: ClothingBackpackSatchelLeather

@@ -53,6 +53,22 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtHosFormal
 
+- type: itemLoadout # WD
+  id: HeadofSecurityJumpsuitHoSGrey
+  equipment: HeadofSecurityJumpsuitHoSGrey
+- type: startingGear
+  id: HeadofSecurityJumpsuitHoSGrey
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitHoSGrey
+
+- type: itemLoadout # WD
+  id: HeadofSecurityJumpsuitHoSBlue
+  equipment: HeadofSecurityJumpsuitHoSBlue
+- type: startingGear
+  id: HeadofSecurityJumpsuitHoSBlue
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitHoSBlue
+
 # Head
 - type: itemLoadout
   id: HeadofSecurityHead
@@ -91,7 +107,7 @@
   equipment:
     neck: ClothingNeckMantleHOS
 
-# OuterClothing
+# OuterClothing - removed
 - type: itemLoadout
   id: HeadofSecurityCoat
   equipment: HeadofSecurityCoat
@@ -109,3 +125,13 @@
   id: HeadofSecurityWinterCoat
   equipment:
     outerClothing: ClothingOuterWinterHoS
+
+# PDA
+
+- type: itemLoadout # WD
+  id: HeadofSecurityPDA
+  equipment: HeadofSecurityPDA
+- type: startingGear
+  id: HeadofSecurityPDA
+  equipment:
+    id: HoSPDA

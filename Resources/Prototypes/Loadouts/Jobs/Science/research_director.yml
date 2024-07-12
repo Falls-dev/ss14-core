@@ -89,3 +89,31 @@
   id: ResearchDirectorWintercoat
   equipment:
     outerClothing: ClothingOuterWinterRD
+
+# pda
+
+- type: itemLoadout # WD
+  id: ResearchDirectorPDA
+  equipment: ResearchDirectorPDA
+- type: startingGear
+  id: ResearchDirectorPDA
+  equipment:
+    id: RnDPDA
+
+# Ears
+
+- type: itemLoadout # WD
+  id: ResearchDirectorHeadsetAlt
+  equipment: ResearchDirectorHeadsetAlt
+- type: startingGear
+  id: ResearchDirectorHeadsetAlt
+  equipment:
+    ears: ClothingHeadsetAltScience
+
+- type: itemLoadout # WD
+  id: ResearchDirectorHeadset
+  equipment: ResearchDirectorHeadset
+- type: startingGear
+  id: ResearchDirectorHeadset
+  equipment:
+    ears: ClothingHeadsetRD

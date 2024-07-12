@@ -73,3 +73,12 @@
   id: WhiteShoes
   equipment:
     shoes: ClothingShoesColorWhite
+
+# PDA
+- type: itemLoadout # WD
+  id: AtmosphericTechnicianPDA
+  equipment: AtmosphericTechnicianPDA
+- type: startingGear
+  id: AtmosphericTechnicianPDA
+  equipment:
+    id: AtmosPDA

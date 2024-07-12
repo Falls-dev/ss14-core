@@ -8,3 +8,4 @@ loadout-group-gloves = Перчатки
 loadout-group-shoes = Ботинки
 loadout-group-pda = ПДА
 loadout-group-trinkets = Побрякушки
+loadout-group-instruments = Инструменты

@@ -123,3 +123,13 @@
   id: HoPPDA
   equipment:
     gloves: HoPPDA
+
+# Ears
+- type: itemLoadout # WD
+  id: HoPEars
+  equipment: HoPEars
+
+- type: startingGear
+  id: HoPEars
+  equipment:
+    id: ClothingHeadsetCommand

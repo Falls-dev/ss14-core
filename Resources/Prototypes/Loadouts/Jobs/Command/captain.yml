@@ -129,3 +129,13 @@
   id: CaptainPDA
   equipment:
     id: CaptainPDA
+
+# Ears
+- type: itemLoadout # WD
+  id: CaptainEars
+  equipment: CaptainEars
+
+- type: startingGear
+  id: CaptainEars
+  equipment:
+    id: ClothingHeadsetAltCommand

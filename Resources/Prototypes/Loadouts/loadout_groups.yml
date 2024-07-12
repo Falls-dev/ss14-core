@@ -17,6 +17,12 @@
   - CaptainCap
 
 - type: loadoutGroup
+  id: CaptainEars
+  name: loadout-group-ears
+  loadouts:
+  - CaptainEars
+
+- type: loadoutGroup
   id: CaptainJumpsuit
   name: loadout-group-jumpsuit
   loadouts:
@@ -48,6 +54,7 @@
   name: loadout-group-outerclothing
   minLimit: 0
   loadouts:
+  - CaptainOuterClothing
   - CaptainWintercoat
 
 - type: loadoutGroup
@@ -70,6 +77,12 @@
   minLimit: 0
   loadouts:
   - HoPHead
+
+- type: loadoutGroup
+  id: HoPEars
+  name: loadout-group-ears
+  loadouts:
+  - HoPEars
 
 - type: loadoutGroup
   id: HoPJumpsuit
@@ -474,6 +487,41 @@
   loadouts:
   - MusicianWintercoat
 
+- type: loadoutGroup
+  id: Instruments
+  name: loadout-group-instruments
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - Glockenspiel
+  - MusicBox
+  - Xylophone
+  - Microphone
+  - Synthesizer
+  - Kalimba
+  - Woodblock
+  - ElectricGuitar
+  - BassGuitar
+  - RockGuitar
+  - AcousticGuitar
+  - Banjo
+  - Violin
+  - Viola
+  - Cello
+  - Trumpet
+  - Trombone
+  - FrenchHorn
+  - Euphonium
+  - Saxophone
+  - Accordion
+  - Harmonica
+  - Clarinet
+  - Flute
+  - Recorder
+  - PanFlute
+  - Ocarina
+  - Bagpipe
+
 # Cargo
 - type: loadoutGroup
   id: QuartermasterHead
@@ -687,6 +735,7 @@
   - StationEngineerHardhatYellow
   - StationEngineerHardhatOrange
   - StationEngineerHardhatRed
+  - SeniorEngineerBeret
 
 - type: loadoutGroup
   id: StationEngineerJumpsuit
@@ -695,6 +744,8 @@
   - StationEngineerJumpsuit
   - StationEngineerJumpskirt
   - StationEngineerHazardsuit
+  - SeniorEngineerJumpsuit
+  - SeniorEngineerJumpskirt
 
 - type: loadoutGroup
   id: StationEngineerBackpack
@@ -869,6 +920,10 @@
   loadouts:
   - ScientistJumpsuit
   - ScientistJumpskirt
+  - RoboticistJumpsuit
+  - RoboticistJumpskirt
+  - SeniorResearcherJumpsuit
+  - SeniorResearcherJumpskirt
 
 - type: loadoutGroup
   id: ScientistBackpack
@@ -887,13 +942,26 @@
   - RegularLabCoat
   - ScienceLabCoat
   - ScienceWintercoat
+  - RoboticistLabCoat
+  - RoboticistWintercoat
+  - SeniorResearcherLabCoat
 
 - type: loadoutGroup
   id: ScientistShoes
   name: loadout-group-shoes
   loadouts:
   - WhiteShoes
+  - BlackShoes
   - ScienceWinterBoots
+
+- type: loadoutGroup
+  id: ScientistGloves
+  name: loadout-group-scientist-gloves
+  minLimit: 0
+  loadouts:
+  - LatexGloves
+  - PurpleGloves
+  - RobohandsGloves
 
 - type: loadoutGroup
   id: ScientistPDA

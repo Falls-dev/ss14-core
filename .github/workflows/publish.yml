@@ -5,6 +5,8 @@ concurrency:
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 10 * * *'
 
 jobs:
   build:
@@ -20,17 +22,12 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3.2.0
       with:
-        dotnet-version: '8.0.205'
+        dotnet-version: 8.0.x
 
     - name: Get Engine Tag
       run: |
         cd RobustToolbox
         git fetch --depth=1
-
-    - name: Update Directory.Packages.props
-      run: |
-        dotnet --list-sdks
-        cp -f global.json RobustToolbox/
 
     - name: Install dependencies
       run: dotnet restore
@@ -44,49 +41,35 @@ jobs:
     - name: Package client
       run: dotnet run --project Content.Packaging client --no-wipe-release
 
-    - name: Update Build Info
-      run: Tools/gen_build_info.py
-
-    - name: Shuffle files around
-      run: |
-        mkdir "release/${{ github.sha }}"
-        mv release/*.zip "release/${{ github.sha }}"
-
-    - name: Upload files to hive
-      uses: burnett01/rsync-deployments@5.2
+    - name: Upload build artifact
+      id: artifact-upload-step
+      uses: actions/upload-artifact@v4
       with:
-        switches: -avzr --ignore-existing
-        path: "release/${{ github.sha }}"
-        remote_path: ${{ secrets.BUILDS_PATH }}
-        remote_host: ${{ secrets.BUILDS_HOST }}
-        remote_port: ${{ secrets.BUILDS_PORT }}
-        remote_user: ${{ secrets.BUILDS_USERNAME }}
-        remote_key: ${{ secrets.BUILDS_SSH_KEY }}
-        remote_key_pass: ${{ secrets.BUILDS_SSH_KEY_PASS }}
+        name: build
+        path: release/*.zip
+        compression-level: 0
+        retention-days: 0
 
-    - name: Update manifest JSON
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.BUILDS_HOST }}
-        port: ${{ secrets.BUILDS_PORT }}
-        username: ${{ secrets.BUILDS_USERNAME }}
-        key: ${{ secrets.BUILDS_SSH_KEY }}
-        passphrase: ${{ secrets.BUILDS_SSH_KEY_PASS }}
-        script: sh ~/ss14/anvil/cortice.sh ${{ github.sha }}
+    - name: Publish version
+      run: Tools/publish_github_artifact.py
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        ARTIFACT_ID: ${{ steps.artifact-upload-step.outputs.artifact-id }}
+        GITHUB_REPOSITORY: ${{ vars.GITHUB_REPOSITORY }}
 
     - name: Publish changelog (Discord)
-      continue-on-error: true
-      run: |
-        Tools/actions_changelogs_since_last_run.py
-        exit 1
+      run: Tools/actions_changelogs_since_last_run.py
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         DISCORD_WEBHOOK_URL: ${{ secrets.CHANGELOG_DISCORD_WEBHOOK }}
 
     - name: Publish changelog (RSS)
-      continue-on-error: true
-      run: |
-        Tools/actions_changelog_rss.py
-        exit 1
+      run: Tools/actions_changelog_rss.py
       env:
         CHANGELOG_RSS_KEY: ${{ secrets.CHANGELOG_RSS_KEY }}
+
+    - uses: geekyeggo/delete-artifact@v5
+      if: always()
+      with:
+        name: build

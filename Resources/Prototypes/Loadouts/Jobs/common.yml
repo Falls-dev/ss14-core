@@ -8,6 +8,23 @@
   equipment:
     eyes: ClothingEyesGlassesGarOrange
 
+- type: itemLoadout
+  id: GlassesGar
+  equipment: GlassesGar
+- type: startingGear
+  id: GlassesGar
+  equipment:
+    eyes: ClothingEyesGlassesGar
+
+- type: itemLoadout
+  id: GlassesGarGiga
+  equipment: GlassesGarGiga
+- type: startingGear
+  id: GlassesGarGiga
+  equipment:
+    eyes: ClothingEyesGlassesGarGiga
+
+
 # Shoes
 
 - type: itemLoadout
@@ -161,7 +178,7 @@
 - type: startingGear
   id: CowboyWhite
   equipment:
-    gloves: ClothingHeadHatCowboyWhite
+    head: ClothingHeadHatCowboyWhite
 
 
 # backpack
@@ -171,4 +188,54 @@
 - type: startingGear
   id: CommonSatchelLeather
   equipment:
-    gloves: ClothingBackpackSatchelLeather
+    back: ClothingBackpackSatchelLeather
+
+# Mask
+
+- type: itemLoadout
+  id: MaskCigarette
+  equipment: MaskCigarette
+- type: startingGear
+  id: MaskCigarette
+  equipment:
+    mask: Cigarette
+
+- type: itemLoadout
+  id: MaskCigar
+  equipment: MaskCigar
+- type: startingGear
+  id: MaskCigar
+  equipment:
+    mask: Cigar
+
+- type: itemLoadout
+  id: MaskCigarGold
+  equipment: MaskCigarGold
+- type: startingGear
+  id: MaskCigarGold
+  equipment:
+    mask: CigarGold
+
+- type: itemLoadout
+  id: MaskCigaretteSpent
+  equipment: MaskCigaretteSpent
+- type: startingGear
+  id: MaskCigaretteSpent
+  equipment:
+    mask: CigaretteSpent
+
+- type: itemLoadout
+  id: MaskCigarSpent
+  equipment: MaskCigarSpent
+- type: startingGear
+  id: MaskCigarSpent
+  equipment:
+    mask: CigarSpent
+
+- type: itemLoadout
+  id: MaskCigarGoldSpent
+  equipment: MaskCigarGoldSpent
+- type: startingGear
+  id: MaskCigarGoldSpent
+  equipment:
+    mask: CigarGoldSpent

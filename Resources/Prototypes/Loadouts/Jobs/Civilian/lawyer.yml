@@ -98,3 +98,13 @@
   id: LawyerNeck
   equipment:
     neck: ClothingNeckLawyerbadge
+
+# PDA
+
+- type: itemLoadout # WD
+  id: LawyerPDA
+  equipment: LawyerPDA
+- type: startingGear
+  id: LawyerPDA
+  equipment:
+    id: LawyerPDA

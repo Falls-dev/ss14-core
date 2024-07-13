@@ -3,35 +3,39 @@
   id: JobCaptain
   groups:
   - CaptainHead
-  - CaptainEars
-  - CommondCommandHeadset
+  - CaptainEyes
+  - CommonCommandHeadset # WD
+  - CommonMaskCigar # WD
   - CaptainNeck
   - CaptainJumpsuit
   - CaptainBackpack
   - CaptainOuterClothing
   - CaptainShoes
-  - CaptainPDA
+  - CaptainPDA # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobHeadOfPersonnel
   groups:
   - HoPHead
-  - HoPEars
-  - CommondCommandHeadset
+  - CommonGlasses # WD
+  - CommonCommandHeadset # WD
+  - CommonMaskCigar
   - HoPNeck
   - HoPJumpsuit
   - HoPBackpack
   - HoPOuterClothing
   - HoPShoes
-  - HoPGloves
-  - HoPPDA
+  - HoPGloves # WD
+  - HoPPDA # WD
   - Trinkets
 
 # Civilian
 - type: roleLoadout
   id: JobPassenger
   groups:
+  - CommonGlasses # WD
+  - CommonMaskCigarette # WD
   - AssistantJumpsuit
   - CommonBackpack
   - AssistantFace
@@ -44,69 +48,86 @@
   id: JobBartender
   groups:
   - BartenderHead
+  - CommonServiceEars # WD
+  - CommonGlasses # WD
+  - CommonMaskCigarette # WD
   - BartenderJumpsuit
   - CommonBackpack
   - BartenderOuterClothing
-  - Glasses
   - Trinkets
 
 - type: roleLoadout
   id: JobServiceWorker
   groups:
+  - CommonServiceEars # WD
+  - CommonGlasses # WD
+  - CommonMaskCigarette # WD
   - BartenderJumpsuit
   - CommonBackpack
-  - Glasses
+  - ServiceWorkerPDA # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobChef
   groups:
   - ChefHead
+  - CommonServiceEars # WD
+  - CommonGlasses # WD
   - ChefMask
   - ChefJumpsuit
   - CommonBackpack
   - ChefOuterClothing
-  - Glasses
+  - ChefPDA # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobLibrarian
   groups:
+  - CommonServiceEars # WD
+  - CommonGlasses # WD
+  - CommonMaskCigarette # WD
   - LibrarianJumpsuit
   - CommonBackpack
-  - Glasses
+  - LibrarianPDA
   - Trinkets
 
 - type: roleLoadout
   id: JobLawyer
   groups:
+  - CommonGlasses # WD
+  - CommonMaskCigarette # WD
   - LawyerNeck
   - LawyerJumpsuit
   - CommonBackpack
-  - Glasses
+  - LawyerPDA
   - Trinkets
 
 - type: roleLoadout
   id: JobChaplain
   groups:
   - ChaplainHead
+  - CommonServiceEars # WD
   - ChaplainMask
   - ChaplainNeck
   - ChaplainJumpsuit
   - ChaplainBackpack
   - ChaplainOuterClothing
-  - Glasses
+  - CommonGlasses # WD
+  - ChaplainPDA # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobJanitor
   groups:
   - JanitorHead
+  - CommonServiceEars # WD
+  - CommonGlasses # WD
+  - CommonMaskCigarette # WD
   - JanitorJumpsuit
   - JanitorGloves
   - CommonBackpack
   - JanitorOuterClothing
-  - Glasses
+  - JanitorPDA # WD
   - Trinkets
   - JanitorPlunger
 
@@ -114,39 +135,51 @@
   id: JobBotanist
   groups:
   - BotanistHead
+  - CommonServiceEars # WD
+  - CommonGlasses # WD
+  - CommonMaskCigarette # WD
   - BotanistJumpsuit
   - BotanistBackpack
   - BotanistOuterClothing
-  - Glasses
+  - BotanistPDA # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobClown
   groups:
   - ClownHead
+  - CommonServiceEars # WD
+  - CommonGlasses # WD
+  - ClownMask # WD
+  - ClownNeck # WD
   - ClownJumpsuit
   - ClownBackpack
   - ClownOuterClothing
   - ClownShoes
-  - Glasses
+  - ClownPDA # WD
+  - ClownTrinkets # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobMime
   groups:
   - MimeHead
+  - CommonServiceEars # WD
   - MimeMask
   - MimeJumpsuit
   - MimeBackpack
   - MimeOuterClothing
+  - MimePDA
   - Trinkets
 
 - type: roleLoadout
   id: JobMusician
   groups:
+  - CommonServiceEars # WD
   - MusicianBackpack
   - MusicianOuterClothing
-  - Glasses
+  - CommonGlasses # WD
+  - MusicianPDA
   - Trinkets
   - Instruments
 
@@ -160,7 +193,7 @@
   - QuartermasterBackpack
   - QuartermasterOuterClothing
   - QuartermasterShoes
-  - Glasses
+  - CommonGlasses # WD
   - Trinkets
 
 - type: roleLoadout
@@ -171,7 +204,7 @@
   - CargoTechnicianBackpack
   - CargoTechnicianOuterClothing
   - CargoTechnicianShoes
-  - Glasses
+  - CommonGlasses # WD
   - Trinkets
 
 - type: roleLoadout
@@ -180,7 +213,7 @@
   - SalvageSpecialistBackpack
   - SalvageSpecialistOuterClothing
   - SalvageSpecialistShoes
-  - Glasses
+  - CommonGlasses # WD
   - Trinkets
 
 # Engineering
@@ -255,7 +288,6 @@
   - ResearchDirectorJumpsuit
   - ResearchDirectorBackpack
   - ResearchDirectorOuterClothing
-  - ScientistGloves
   - ResearchDirectorShoes
   - CommonScienceGloves
   - ResearchDirectorPDA
@@ -285,7 +317,7 @@
   - CommonScienceGloves
   - ScientistShoes
   - ScientistPDA
-  - Glasses
+  - CommonGlasses # WD
   - Trinkets
 
 - type: roleLoadout
@@ -305,7 +337,9 @@
   id: JobHeadOfSecurity
   groups:
   - HeadofSecurityHead
+  - HeadofSecurityEyes # WD
   - SecurityCommandHeadset
+  - CommonSecurityCommandMask # WD
   - HeadofSecurityNeck
   - HeadofSecurityJumpsuit
   - CommonSecurityBackpack
@@ -319,6 +353,7 @@
   groups:
   - WardenHead
   - SecurityCommandHeadset
+  - CommonSecurityCommandMask # WD
   - CommonSecurityNeck
   - WardenJumpsuit
   - CommonSecurityBackpack
@@ -330,6 +365,8 @@
   id: JobSeniorOfficer
   groups:
   - CommonSecurityHead
+  - CommonSecurityHeadset # WD
+  - CommonSecurityCommandMask # WD
   - CommonSecurityNeck
   - SeniorOfficerJumpsuit
   - CommonSecurityBackpack
@@ -342,7 +379,9 @@
   id: JobSecurityOfficer
   groups:
   - CommonSecurityHead
-  - CommonSecurityNeck
+  - CommonSecurityHeadset # WD
+  - CommonSecurityMask # WD
+  - CommonSecurityNeck # WD
   - SecurityJumpsuit
   - CommonSecurityBackpack
   - SecurityOuterClothing
@@ -355,6 +394,8 @@
   id: JobDetective
   groups:
   - DetectiveHead
+  - CommonSecurityHeadset # WD
+  - CommonMaskCigarette # WD
   - CommonSecurityNeck
   - DetectiveJumpsuit
   - DetectiveBackpack
@@ -367,6 +408,7 @@
   id: JobSecurityCadet
   groups:
   - CommonSecurityHead
+  - CommonSecurityHeadset # WD
   - CommonSecurityNeck
   - SecurityCadetJumpsuit
   - CommonSecurityBackpack
@@ -379,11 +421,12 @@
   id: JobChiefMedicalOfficer
   groups:
   - ChiefMedicalOfficerHead
-  - MedicalMask
+  - ChiefMedicalOfficerEars # WD
+  - CommonMedicalMask # WD
+  - ChiefMedicalOfficerNeck
   - ChiefMedicalOfficerJumpsuit
   - ChiefMedicalOfficerBackpack
   - ChiefMedicalOfficerOuterClothing
-  - ChiefMedicalOfficerNeck
   - CommonMedicalGloves
   - ChiefMedicalOfficerShoes
   - ChiefMedicalOfficerPDA
@@ -393,6 +436,8 @@
   id: JobSeniorPhysician
   groups:
   - SeniorPhysicianHead
+  - CommonMedicalHeadset # WD
+  - CommonMedicalMask
   - SeniorPhysicianJumpsuit
   - MedicalBackpack
   - SeniorPhysicianOuterClothing
@@ -405,7 +450,8 @@
   id: JobMedicalDoctor
   groups:
   - MedicalDoctorHead
-  - MedicalMask
+  - CommonMedicalHeadset # WD
+  - CommonMedicalMask # WD
   - MedicalDoctorJumpsuit
   - MedicalGloves
   - MedicalBackpack
@@ -419,6 +465,8 @@
   id: JobMedicalIntern
   groups:
   - MedicalDoctorHead
+  - CommonMedicalHeadset # WD
+  - CommonMedicalMask # WD
   - MedicalInternJumpsuit
   - MedicalBackpack
   - CommonMedicalOuterClothing
@@ -430,7 +478,10 @@
 - type: roleLoadout
   id: JobChemist
   groups:
+  - ChemistHead # WD
+  - CommonMedicalHeadset # WD
   - ChemistEyes
+  - CommonMedicalMask # WD
   - ChemistJumpsuit
   - MedicalGloves
   - ChemistBackpack
@@ -444,7 +495,8 @@
   id: JobParamedic
   groups:
   - ParamedicHead
-  - MedicalMask
+  - CommonMedicalHeadset # WD
+  - CommonMedicalMask # WD
   - ParamedicJumpsuit
   - ParamedicBackpack
   - ParamedicOuterClothing
@@ -457,30 +509,33 @@
 - type: roleLoadout
   id: JobZookeeper
   groups:
+  - CommonServiceEars # WD
   - CommonBackpack
-  - Glasses
+  - CommonGlasses # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobReporter
   groups:
+  - CommonServiceEars # WD
   - ReporterJumpsuit
   - CommonBackpack
-  - Glasses
+  - CommonGlasses # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobPsychologist
   groups:
   - MedicalBackpack
-  - Glasses
+  - CommonGlasses # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobBoxer
   groups:
+  - CommonServiceEars # WD
   - BoxerJumpsuit
   - BoxerGloves
   - CommonBackpack
-  - Glasses
+  - CommonGlasses # WD
   - Trinkets

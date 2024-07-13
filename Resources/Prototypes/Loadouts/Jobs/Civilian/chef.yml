@@ -64,3 +64,13 @@
   id: ChefWintercoat
   equipment:
     outerClothing: ClothingOuterWinterChef
+
+# PDA
+
+- type: itemLoadout # WD
+  id: ChefPDA
+  equipment: ChefPDA
+- type: startingGear
+  id: ChefPDA
+  equipment:
+    id: ChefPDA

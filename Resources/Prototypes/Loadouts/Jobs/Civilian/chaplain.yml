@@ -165,3 +165,13 @@
   id: ChaplainHoodie
   equipment:
     outerClothing: ClothingOuterHoodieChaplain
+
+# PDA
+
+- type: itemLoadout # WD
+  id: ChaplainPDA
+  equipment: ChaplainPDA
+- type: startingGear
+  id: ChaplainPDA
+  equipment:
+    id: ChaplainPDA

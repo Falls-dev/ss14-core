@@ -93,6 +93,16 @@
   equipment:
     outerClothing: ClothingOuterWinterCMO
 
+# Ears
+
+- type: itemLoadout # WD
+  id: CMOHeadset
+  equipment: CMOHeadset
+- type: startingGear
+  id: CMOHeadset
+  equipment:
+    ears: ClothingHeadsetCMO
+
 # PDA
 
 - type: itemLoadout # WD

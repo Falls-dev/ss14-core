@@ -35,3 +35,13 @@
   id: MusicianWintercoat
   equipment:
     outerClothing: ClothingOuterWinterMusician
+
+# PDA
+
+- type: itemLoadout # WD
+  id: MusicianPDA
+  equipment: MusicianPDA
+- type: startingGear
+  id: MusicianPDA
+  equipment:
+    id: MusicianPDA

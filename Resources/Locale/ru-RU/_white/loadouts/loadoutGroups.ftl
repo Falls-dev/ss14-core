@@ -1,11 +1,14 @@
 ﻿loadout-group-head = Голова
 loadout-group-ears = Наушник
+loadout-group-eyes = Очки
 loadout-group-neck = Шея
+loadout-group-mask = Маска
 loadout-group-jumpsuit = Униформа
 loadout-group-outerclothing = Верхняя одежда
 loadout-group-backpack = Рюкзак
 loadout-group-gloves = Перчатки
 loadout-group-shoes = Ботинки
 loadout-group-pda = ПДА
+loadout-group-job-trinkets = Уник. побрякушки
 loadout-group-trinkets = Побрякушки
-loadout-group-instruments = Инструменты
+loadout-group-instruments = Муз. инструменты

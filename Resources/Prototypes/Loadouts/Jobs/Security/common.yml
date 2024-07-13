@@ -24,3 +24,21 @@
   id: SecurityCommandHeadset
   equipment:
     ears: ClothingHeadsetAltSecurity
+
+# Mask
+
+- type: itemLoadout
+  id: SecurityMaskStandard
+  equipment: SecurityMaskStandard
+- type: startingGear
+  id: SecurityMaskStandard
+  equipment:
+    mask: ClothingMaskGasSecurity
+
+- type: itemLoadout
+  id: SecurityMaskSwat
+  equipment: SecurityMaskSwat
+- type: startingGear
+  id: SecurityMaskSwat
+  equipment:
+    mask: ClothingMaskGasSwat

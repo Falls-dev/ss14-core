@@ -54,6 +54,14 @@
   equipment:
     mask: ClothingMaskScaredMime
 
+- type: itemLoadout # WD
+  id: MimeMaskSexy
+  equipment: MimeMaskSexy
+- type: startingGear
+  id: MimeMaskSexy
+  equipment:
+    mask: ClothingMaskSexyMime
+
 # Jumpsuit
 - type: itemLoadout
   id: MimeJumpsuit
@@ -110,3 +118,13 @@
   id: MimeWintercoat
   equipment:
     outerClothing: ClothingOuterWinterMime
+
+# PDA
+
+- type: itemLoadout
+  id: MimePDA
+  equipment: MimePDA
+- type: startingGear
+  id: MimePDA
+  equipment:
+    id: MimePDA

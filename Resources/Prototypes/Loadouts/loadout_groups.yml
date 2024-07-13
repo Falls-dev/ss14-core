@@ -16,11 +16,17 @@
   - CaptainHead
   - CaptainCap
 
-- type: loadoutGroup
-  id: CaptainEars
-  name: loadout-group-ears
+- type: loadoutGroup # WD
+  id: CaptainEyes
+  name: loadout-group-eyes
+  minLimit: 0
   loadouts:
-  - CaptainEars
+  - GlassesGarGiga
+  - GlassesGar
+  - GlassesGarOrange
+  - Glasses
+  - GlassesJamjar
+  - GlassesJensen
 
 - type: loadoutGroup
   id: CaptainJumpsuit
@@ -47,7 +53,7 @@
   - CaptainBackpack
   - CaptainSatchel
   - CaptainDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: CaptainOuterClothing
@@ -79,12 +85,6 @@
   - HoPHead
 
 - type: loadoutGroup
-  id: HoPEars
-  name: loadout-group-ears
-  loadouts:
-  - HoPEars
-
-- type: loadoutGroup
   id: HoPJumpsuit
   name: loadout-group-jumpsuit
   loadouts:
@@ -107,7 +107,7 @@
   - HoPSatchel
   - HoPDuffel
   - HoPBackpackIan
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: HoPOuterClothing
@@ -141,8 +141,8 @@
   id: CommonCommandHeadset
   name: loadout-group-ears
   loadouts:
-  - ClothingHeadsetAltCommand
-  - ClothingHeadsetCommand
+  - CommandHeadset
+  - CommandHeadsetAlt
 
 # Civilian
 - type: loadoutGroup
@@ -174,7 +174,7 @@
   - CommonBackpack
   - CommonSatchel
   - CommonDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: AssistantOuterClothing
@@ -246,6 +246,12 @@
   - ChefWintercoat
 
 - type: loadoutGroup
+  id: ChefPDA
+  name: loadout-group-pda
+  loadouts:
+  - ChefPDA
+
+- type: loadoutGroup
   id: LibrarianJumpsuit
   name: loadout-group-jumpsuit
   loadouts:
@@ -253,6 +259,12 @@
   - LibrarianJumpskirt
   - CuratorJumpsuit
   - CuratorJumpskirt
+
+- type: loadoutGroup
+  id: LibrarianPDA
+  name: loadout-group-pda
+  loadouts:
+  - LibrarianPDA
 
 - type: loadoutGroup
   id: LawyerJumpsuit
@@ -275,6 +287,12 @@
   minLimit: 0
   loadouts:
   - LawyerNeck
+
+- type: loadoutGroup
+  id: LawyerPDA
+  name: loadout-group-pda
+  loadouts:
+  - LawyerPDA
 
 - type: loadoutGroup
   id: ChaplainHead
@@ -310,7 +328,7 @@
   - ChaplainBackpack
   - ChaplainSatchel
   - ChaplainDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: ChaplainOuterClothing
@@ -328,6 +346,12 @@
   minLimit: 0
   loadouts:
   - ChaplainNeck
+
+- type: loadoutGroup
+  id: ChaplainPDA
+  name: loadout-group-pda
+  loadouts:
+  - ChaplainPDA
 
 - type: loadoutGroup
   id: JanitorHead
@@ -360,6 +384,12 @@
   - JanitorWintercoat
 
 - type: loadoutGroup
+  id: JanitorPDA
+  name: loadout-group-pda
+  loadouts:
+  - JanitorPDA
+
+- type: loadoutGroup
   id: BotanistHead
   name: loadout-group-head
   minLimit: 0
@@ -382,7 +412,7 @@
   - BotanistBackpack
   - BotanistSatchel
   - BotanistDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: BotanistOuterClothing
@@ -393,11 +423,33 @@
   - BotanistWintercoat
 
 - type: loadoutGroup
+  id: BotanistPDA
+  name: loadout-group-pda
+  loadouts:
+  - BotanistPDA
+
+- type: loadoutGroup
   id: ClownHead
   name: loadout-group-head
   minLimit: 0
   loadouts:
   - JesterHat
+
+- type: loadoutGroup # WD
+  id: ClownMask
+  name: loadout-group-mask
+  loadouts:
+  - ClownMask
+  - ClownMaskSexy
+  - ClownMaskCluwne
+  - ClownMaskBanana
+
+- type: loadoutGroup # WD
+  id: ClownNeck
+  name: loadout-group-neck
+  minLimit: 0
+  loadouts:
+  - ClownMedal
 
 - type: loadoutGroup
   id: ClownJumpsuit
@@ -405,6 +457,7 @@
   loadouts:
   - ClownSuit
   - JesterSuit
+  - ClownJumpsuitBanana
 
 - type: loadoutGroup
   id: ClownBackpack
@@ -413,7 +466,7 @@
   - ClownBackpack
   - ClownSatchel
   - ClownDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: ClownOuterClothing
@@ -428,7 +481,27 @@
   name: loadout-group-shoes
   loadouts:
   - ClownShoes
+  - ClownShoesLarge
   - JesterShoes
+  - ClownShoesBanana
+
+- type: loadoutGroup # WD
+  id: ClownTrinkets
+  name: loadout-group-job-trinkets
+  minLimit: 0
+  maxLimit: 5
+  loadouts:
+  - ClownTrinketRecorder
+  - ClownTrinketCrayon
+  - ClownTrinketStamp
+  - ClownBikeHornGolden
+  - ClownPhoneBanana
+
+- type: loadoutGroup # WD
+  id: ClownPDA
+  name: loadout-group-pda
+  loadouts:
+  - ClownPDA
 
 - type: loadoutGroup
   id: MimeHead
@@ -447,6 +520,7 @@
   - MimeMask
   - MimeMaskSad
   - MimeMaskScared
+  - MimeMaskSexy
 
 - type: loadoutGroup
   id: MimeJumpsuit
@@ -462,7 +536,7 @@
   - MimeBackpack
   - MimeSatchel
   - MimeDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: MimeOuterClothing
@@ -471,6 +545,12 @@
   loadouts:
   - MimeWintercoat
 
+- type: loadoutGroup # WD
+  id: MimePDA
+  name: loadout-group-pda
+  loadouts:
+  - MimePDA
+
 - type: loadoutGroup
   id: MusicianBackpack
   name: loadout-group-backpack
@@ -478,7 +558,7 @@
   - MusicianBackpack
   - MusicianSatchel
   - MusicianDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: MusicianOuterClothing
@@ -487,11 +567,16 @@
   loadouts:
   - MusicianWintercoat
 
-- type: loadoutGroup
+- type: loadoutGroup # WD
+  id: MusicianPDA
+  name: loadout-group-pda
+  loadouts:
+  - MusicianPDA
+
+- type: loadoutGroup # WD
   id: Instruments
   name: loadout-group-instruments
-  minLimit: 0
-  maxLimit: 2
+  maxLimit: 3
   loadouts:
   - Glockenspiel
   - MusicBox
@@ -522,6 +607,47 @@
   - Ocarina
   - Bagpipe
 
+- type: loadoutGroup # WD
+  id: ServiceWorkerPDA
+  name: loadout-group-pda
+  loadouts:
+  - ServiceWorkerPDA
+
+- type: loadoutGroup # WD
+  id: CommonServiceEars
+  name: loadout-group-ears
+  loadouts:
+  - ServiceHeadset
+
+- type: loadoutGroup # WD
+  id: CommonGlasses
+  name: loadout-group-eyes
+  minLimit: 0
+  loadouts:
+  - Glasses
+  - GlassesJamjar
+  - GlassesJensen
+
+- type: loadoutGroup # WD
+  id: CommonMaskCigarette
+  name: loadout-group-mask
+  minLimit: 0
+  loadouts:
+  - MaskCigarette
+  - MaskCigaretteSpent
+
+- type: loadoutGroup # WD
+  id: CommonMaskCigar
+  name: loadout-group-mask
+  minLimit: 0
+  loadouts:
+  - MaskCigarette
+  - MaskCigar
+  - MaskCigarGold
+  - MaskCigaretteSpent
+  - MaskCigarSpent
+  - MaskCigarGoldSpent
+
 # Cargo
 - type: loadoutGroup
   id: QuartermasterHead
@@ -548,7 +674,7 @@
   - QuartermasterBackpack
   - QuartermasterSatchel
   - QuartermasterDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: QuartermasterNeck
@@ -593,7 +719,7 @@
   - CargoTechnicianBackpack
   - CargoTechnicianSatchel
   - CargoTechnicianDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: CargoTechnicianOuterClothing
@@ -616,7 +742,7 @@
   - SalvageSpecialistBackpack
   - SalvageSpecialistSatchel
   - SalvageSpecialistDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: SalvageSpecialistOuterClothing
@@ -657,7 +783,7 @@
   - ChiefEngineerBackpack
   - ChiefEngineerSatchel
   - ChiefEngineerDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: ChiefEngineerNeck
@@ -735,7 +861,6 @@
   - StationEngineerHardhatYellow
   - StationEngineerHardhatOrange
   - StationEngineerHardhatRed
-  - SeniorEngineerBeret
 
 - type: loadoutGroup
   id: StationEngineerJumpsuit
@@ -744,8 +869,6 @@
   - StationEngineerJumpsuit
   - StationEngineerJumpskirt
   - StationEngineerHazardsuit
-  - SeniorEngineerJumpsuit
-  - SeniorEngineerJumpskirt
 
 - type: loadoutGroup
   id: StationEngineerBackpack
@@ -754,7 +877,7 @@
   - StationEngineerBackpack
   - StationEngineerSatchel
   - StationEngineerDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: StationEngineerOuterClothing
@@ -799,7 +922,7 @@
   - AtmosphericTechnicianBackpack
   - AtmosphericTechnicianSatchel
   - AtmosphericTechnicianDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: AtmosphericTechnicianShoes
@@ -852,7 +975,7 @@
   - ResearchDirectorBackpack
   - ResearchDirectorSatchel
   - ResearchDirectorDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: ResearchDirectorOuterClothing
@@ -896,6 +1019,8 @@
   loadouts:
   - SeniorResearcherJumpsuit
   - SeniorResearcherJumpskirt
+  - RoboticistJumpsuit
+  - RoboticistJumpskirt
 
 - type: loadoutGroup
   id: SeniorResearcherOuterclothing
@@ -906,6 +1031,8 @@
   - RegularLabCoat
   - ScienceLabCoat
   - ScienceWintercoat
+  - RoboticistLabCoat
+  - RoboticistWintercoat
 
 - type: loadoutGroup
   id: ScientistHead
@@ -922,8 +1049,6 @@
   - ScientistJumpskirt
   - RoboticistJumpsuit
   - RoboticistJumpskirt
-  - SeniorResearcherJumpsuit
-  - SeniorResearcherJumpskirt
 
 - type: loadoutGroup
   id: ScientistBackpack
@@ -932,7 +1057,7 @@
   - ScientistBackpack
   - ScientistSatchel
   - ScientistDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: ScientistOuterClothing
@@ -944,7 +1069,6 @@
   - ScienceWintercoat
   - RoboticistLabCoat
   - RoboticistWintercoat
-  - SeniorResearcherLabCoat
 
 - type: loadoutGroup
   id: ScientistShoes
@@ -953,15 +1077,6 @@
   - WhiteShoes
   - BlackShoes
   - ScienceWinterBoots
-
-- type: loadoutGroup
-  id: ScientistGloves
-  name: loadout-group-scientist-gloves
-  minLimit: 0
-  loadouts:
-  - LatexGloves
-  - PurpleGloves
-  - RobohandsGloves
 
 - type: loadoutGroup
   id: ScientistPDA
@@ -1012,6 +1127,17 @@
   - CowboyBrown
   - CowboyBlack
   - CowboyBountyHunter
+
+- type: loadoutGroup
+  id: HeadofSecurityEyes
+  name: loadout-group-eyes
+  minLimit: 0
+  loadouts:
+  - GlassesGarGiga
+  - GlassesGarOrange
+  - Glasses
+  - GlassesJamjar
+  - GlassesJensen
 
 - type: loadoutGroup
   id: HeadofSecurityJumpsuit
@@ -1151,7 +1277,7 @@
   - DetectiveBackpack
   - DetectiveSatchel
   - DetectiveDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: DetectiveOuterClothing
@@ -1209,6 +1335,21 @@
   - CowboyBountyHunter
 
 - type: loadoutGroup
+  id: CommonSecurityMask
+  name: loadout-group-mask
+  minLimit: 0
+  loadouts:
+  - SecurityMaskStandard
+
+- type: loadoutGroup
+  id: CommonSecurityCommandMask
+  name: loadout-group-mask
+  minLimit: 0
+  loadouts:
+  - SecurityMaskStandard
+  - SecurityMaskSwat
+
+- type: loadoutGroup
   id: CommonSecurityNeck
   name: loadout-group-neck
   minLimit: 0
@@ -1235,7 +1376,7 @@
   - SecurityBackpack
   - SecuritySatchel
   - SecurityDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: CommonSecurityShoes
@@ -1246,6 +1387,13 @@
   - SecurityWinterBoots
 
 # Medical
+
+- type: loadoutGroup
+  id: ChiefMedicalOfficerEars
+  name: loadout-group-ears
+  loadouts:
+  - CMOHeadset
+
 - type: loadoutGroup
   id: ChiefMedicalOfficerHead
   name: loadout-group-head
@@ -1256,6 +1404,7 @@
   - BlueSurgeryCap
   - GreenSurgeryCap
   - PurpleSurgeryCap
+  - CowboyWhite
 
 - type: loadoutGroup
   id: ChiefMedicalOfficerJumpsuit
@@ -1282,7 +1431,7 @@
   - ChiefMedicalOfficerBackpack
   - ChiefMedicalOfficerSatchel
   - ChiefMedicalOfficerDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: ChiefMedicalOfficerNeck
@@ -1329,6 +1478,7 @@
   - BlueSurgeryCap
   - GreenSurgeryCap
   - PurpleSurgeryCap
+  - CowboyWhite
 
 - type: loadoutGroup
   id: SeniorPhysicianOuterClothing
@@ -1354,6 +1504,7 @@
   - BlueSurgeryCap
   - GreenSurgeryCap
   - PurpleSurgeryCap
+  - CowboyWhite
 
 - type: loadoutGroup
   id: MedicalDoctorJumpsuit
@@ -1380,7 +1531,7 @@
   - MedicalDoctorBackpack
   - MedicalDoctorSatchel
   - MedicalDoctorDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: MedicalShoes
@@ -1407,6 +1558,17 @@
   name: loadout-group-jumpsuit
   loadouts:
   - MedicalInternPDA
+
+- type: loadoutGroup
+  id: ChemistHead
+  name: loadout-group-head
+  minLimit: 0
+  loadouts:
+  - MedicalBeret
+  - BlueSurgeryCap
+  - GreenSurgeryCap
+  - PurpleSurgeryCap
+  - CowboyWhite
 
 - type: loadoutGroup
   id: ChemistEyes
@@ -1438,7 +1600,7 @@
   - ChemistBackpack
   - ChemistSatchel
   - ChemistDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: ChemistShoes
@@ -1461,6 +1623,7 @@
   minLimit: 0
   loadouts:
   - ParamedicHead
+  - CowboyWhite
 
 - type: loadoutGroup
   id: ParamedicJumpsuit
@@ -1485,13 +1648,25 @@
   - ParamedicBackpack
   - ParamedicSatchel
   - ParamedicDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeather # WD
 
 - type: loadoutGroup
   id: ParamedicPDA
   name: loadout-group-pda
   loadouts:
   - ParamedicPDA
+
+- type: loadoutGroup
+  id: CommonMedicalHeadset
+  name: loadout-group-gloves
+  loadouts:
+  - MedicalHeadset
+
+- type: loadoutGroup
+  id: CommonMedicalMask
+  name: loadout-group-mask
+  loadouts:
+  - MedicalMask
 
 - type: loadoutGroup
   id: CommonMedicalGloves

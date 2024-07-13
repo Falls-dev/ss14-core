@@ -91,3 +91,13 @@
   id: BotanistWintercoat
   equipment:
     outerClothing: ClothingOuterWinterHydro
+
+# PDA
+
+- type: itemLoadout # WD
+  id: BotanistPDA
+  equipment: BotanistPDA
+- type: startingGear
+  id: BotanistPDA
+  equipment:
+    id: BotanistPDA

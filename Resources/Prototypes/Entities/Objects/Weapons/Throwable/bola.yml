@@ -48,6 +48,7 @@
     canThrowTrigger: true
     canMoveBreakout: true
   - type: KnockdownOnCollide
+    behavior: DropIfStanding
 
 # WD added
 
@@ -95,4 +96,3 @@
           collection: EnergyMiss
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
-  - type: KnockdownOnCollide

@@ -1,3 +1,13 @@
+# Timers
+- type: loadoutEffectGroup # WD
+  id: TimerJanitorFunnyHeads
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobJanitor
+      time: 36000 # 10 hours
+
 # Head
 - type: itemLoadout
   id: JanitorHead
@@ -7,6 +17,28 @@
   id: JanitorHead
   equipment:
     head: ClothingHeadHatPurplesoft
+
+- type: itemLoadout # WD
+  id: JanitorPlunger
+  equipment: JanitorPlunger
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: TimerJanitorFunnyHeads
+- type: startingGear
+  id: JanitorPlunger
+  equipment:
+    head: Plunger
+
+- type: itemLoadout # WD
+  id: JanitorBucket
+  equipment: JanitorBucket
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: TimerJanitorFunnyHeads
+- type: startingGear
+  id: JanitorBucket
+  equipment:
+    head: Bucket
 
 # Jumpsuit
 - type: itemLoadout

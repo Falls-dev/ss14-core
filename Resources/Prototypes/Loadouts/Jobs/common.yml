@@ -59,6 +59,30 @@
   equipment:
     shoes: ClothingShoesColorOrange
 
+- type: itemLoadout
+  id: ShoesColorBlack
+  equipment: ShoesColorBlack
+- type: startingGear
+  id: ShoesColorBlack
+  equipment:
+    shoes: ClothingShoesColorBlack
+
+- type: itemLoadout
+  id: BootsWinter
+  equipment: BootsWinter
+- type: startingGear
+  id: BootsWinter
+  equipment:
+    shoes: ClothingShoesBootsWinter
+
+- type: itemLoadout
+  id: ShoesTourist
+  equipment: ShoesTourist
+- type: startingGear
+  id: ShoesTourist
+  equipment:
+    shoes: ClothingShoesTourist
+
 # OuterClothing
 
 - type: itemLoadout
@@ -84,6 +108,38 @@
   id: CoatGentle
   equipment:
     outerClothing: ClothingOuterCoatGentle
+
+- type: itemLoadout
+  id: CoatTrench
+  equipment: CoatTrench
+- type: startingGear
+  id: CoatTrench
+  equipment:
+    outerClothing: ClothingOuterCoatTrench
+
+- type: itemLoadout
+  id: CoatBomber
+  equipment: CoatBomber
+- type: startingGear
+  id: CoatBomber
+  equipment:
+    outerClothing: ClothingOuterCoatBomber
+
+- type: itemLoadout
+  id: HoodieGrey
+  equipment: HoodieGrey
+- type: startingGear
+  id: HoodieGrey
+  equipment:
+    outerClothing: ClothingOuterHoodieGrey
+
+- type: itemLoadout
+  id: HoodieBlack
+  equipment: HoodieBlack
+- type: startingGear
+  id: HoodieBlack
+  equipment:
+    outerClothing: ClothingOuterHoodieBlack
 
 # Gloves
 
@@ -111,7 +167,13 @@
   equipment:
     gloves: ClothingHandsGlovesColorPurple
 
-# Neck
+- type: itemLoadout
+  id: GlovesFingerless
+  equipment: GlovesFingerless
+- type: startingGear
+  id: GlovesFingerless
+  equipment:
+    gloves: ClothingHandsGlovesFingerless
 
 # Neck
 - type: itemLoadout
@@ -180,6 +242,93 @@
   equipment:
     head: ClothingHeadHatCowboyWhite
 
+- type: itemLoadout
+  id: SafariHat
+  equipment: SafariHat
+- type: startingGear
+  id: SafariHat
+  equipment:
+    head: ClothingHeadSafari
+
+- type: itemLoadout
+  id: BowlerHat
+  equipment: BowlerHat
+- type: startingGear
+  id: BowlerHat
+  equipment:
+    head: ClothingHeadHatBowlerHat
+
+- type: itemLoadout
+  id: FedoraBrown
+  equipment: FedoraBrown
+- type: startingGear
+  id: FedoraBrown
+  equipment:
+    head: ClothingHeadHatFedoraBrown
+
+- type: itemLoadout
+  id: FedoraGrey
+  equipment: FedoraGrey
+- type: startingGear
+  id: FedoraGrey
+  equipment:
+    head: ClothingHeadHatFedoraGrey
+
+- type: itemLoadout
+  id: Tophat
+  equipment: Tophat
+- type: startingGear
+  id: Tophat
+  equipment:
+    head: ClothingHeadHatTophat
+
+- type: itemLoadout
+  id: FrenchBeret
+  equipment: FrenchBeret
+- type: startingGear
+  id: FrenchBeret
+  equipment:
+    head: ClothingHeadHatBeretFrench
+
+- type: itemLoadout
+  id: BeretStandard
+  equipment: BeretStandard
+- type: startingGear
+  id: BeretStandard
+  equipment:
+    head: ClothingHeadHatBeret
+
+- type: itemLoadout
+  id: HatGreyFlatcap
+  equipment: HatGreyFlatcap
+- type: startingGear
+  id: HatGreyFlatcap
+  equipment:
+    head: ClothingHeadHatGreyFlatcap
+
+- type: itemLoadout
+  id: HatBlacksoft
+  equipment: HatBlacksoft
+- type: startingGear
+  id: HatBlacksoft
+  equipment:
+    head: ClothingHeadHatBlacksoft
+
+- type: itemLoadout
+  id: HatBrownFlatcap
+  equipment: HatBrownFlatcap
+- type: startingGear
+  id: HatBrownFlatcap
+  equipment:
+    head: ClothingHeadHatBrownFlatcap
+
+- type: itemLoadout
+  id: HatMagician
+  equipment: HatMagician
+- type: startingGear
+  id: HatMagician
+  equipment:
+    head: ClothingHeadHatMagician
 
 # backpack
 - type: itemLoadout
@@ -239,3 +388,29 @@
   id: MaskCigarGoldSpent
   equipment:
     mask: CigarGoldSpent
+
+# Jumpsuit
+
+- type: itemLoadout
+  id: JumpsuitSafari
+  equipment: JumpsuitSafari
+- type: startingGear
+  id: JumpsuitSafari
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitSafari
+
+- type: itemLoadout
+  id: JumpsuitFamily
+  equipment: JumpsuitFamily
+- type: startingGear
+  id: JumpsuitFamily
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitFamilyGuy
+
+- type: itemLoadout
+  id: JumpsuitLoungewear
+  equipment: JumpsuitLoungewear
+- type: startingGear
+  id: JumpsuitLoungewear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitLoungewear

@@ -103,21 +103,12 @@
   equipment:
     outerClothing: ClothingOuterWinterCoat
 
-# Shoes
-- type: itemLoadout
-  id: BlackShoes
-  equipment: BlackShoes
+# PDA
 
+- type: itemLoadout # WD
+  id: AssistantPDA
+  equipment: AssistantPDA
 - type: startingGear
-  id: BlackShoes
+  id: AssistantPDA
   equipment:
-    shoes: ClothingShoesColorBlack
-
-- type: itemLoadout
-  id: WinterBoots
-  equipment: WinterBoots
-
-- type: startingGear
-  id: WinterBoots
-  equipment:
-    shoes: ClothingShoesBootsWinter
+    id: PassengerPDA

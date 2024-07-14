@@ -2,7 +2,6 @@
 - type: itemLoadout
   id: ReporterJumpsuit
   equipment: ReporterJumpsuit
-
 - type: startingGear
   id: ReporterJumpsuit
   equipment:
@@ -11,8 +10,17 @@
 - type: itemLoadout
   id: JournalistJumpsuit
   equipment: JournalistJumpsuit
-
 - type: startingGear
   id: JournalistJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitJournalist
+
+# PDA
+
+- type: itemLoadout
+  id: ReporterPDA
+  equipment: ReporterPDA
+- type: startingGear
+  id: ReporterPDA
+  equipment:
+    jumpsuit: ReporterPDA

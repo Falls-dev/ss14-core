@@ -116,6 +116,16 @@
   equipment:
     shoes: ClothingShoesColorBrown
 
+# Ears
+
+- type: itemLoadout # WD
+  id: ChiefEngineerHeadset
+  equipment: ChiefEngineerHeadset
+- type: startingGear
+  id: ChiefEngineerHeadset
+  equipment:
+    ears: ClothingHeadsetCE
+
 # PDA
 - type: itemLoadout # WD
   id: ChiefEngineerPDA

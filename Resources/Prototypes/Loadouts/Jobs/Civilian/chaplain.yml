@@ -129,6 +129,14 @@
   equipment:
     neck: ClothingNeckStoleChaplain
 
+- type: itemLoadout # WD
+  id: ChaplainNecklaceSilver
+  equipment: ChaplainNecklaceSilver
+- type: startingGear
+  id: ChaplainNecklaceSilver
+  equipment:
+    neck: ClothingNeckNecklaceSilver
+
 # Outer clothing
 - type: itemLoadout
   id: ChaplainPlagueSuit

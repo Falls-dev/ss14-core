@@ -1,23 +1,5 @@
 # Head
 - type: itemLoadout
-  id: MimeHead
-  equipment: MimeHead
-
-- type: startingGear
-  id: MimeHead
-  equipment:
-    head: ClothingHeadHatBeret
-
-- type: itemLoadout
-  id: MimeFrenchBeret
-  equipment: MimeFrenchBeret
-
-- type: startingGear
-  id: MimeFrenchBeret
-  equipment:
-    head: ClothingHeadHatBeretFrench
-
-- type: itemLoadout
   id: MimeCap
   equipment: MimeCap
 

@@ -23,10 +23,10 @@
   - CommonMaskCigar
   - HoPNeck
   - HoPJumpsuit
+  - HoPGloves # WD
   - HoPBackpack
   - HoPOuterClothing
   - HoPShoes
-  - HoPGloves # WD
   - HoPPDA # WD
   - Trinkets
 
@@ -34,14 +34,15 @@
 - type: roleLoadout
   id: JobPassenger
   groups:
+  - AssistantHead # WD
   - CommonGlasses # WD
   - CommonMaskCigarette # WD
   - AssistantJumpsuit
   - CommonBackpack
-  - AssistantFace
-  - AssistantGloves
+  - CommonGloves # WD
   - AssistantOuterClothing
-  - AssistantShoes
+  - CommonShoes # WD
+  - AssistantPDA # WD
   - Trinkets
 
 - type: roleLoadout
@@ -54,6 +55,8 @@
   - BartenderJumpsuit
   - CommonBackpack
   - BartenderOuterClothing
+  - CommonShoes # WD
+  - BartenderPDA
   - Trinkets
 
 - type: roleLoadout
@@ -64,6 +67,7 @@
   - CommonMaskCigarette # WD
   - BartenderJumpsuit
   - CommonBackpack
+  - CommonShoes # WD
   - ServiceWorkerPDA # WD
   - Trinkets
 
@@ -77,6 +81,7 @@
   - ChefJumpsuit
   - CommonBackpack
   - ChefOuterClothing
+  - CommonShoes # WD
   - ChefPDA # WD
   - Trinkets
 
@@ -88,6 +93,7 @@
   - CommonMaskCigarette # WD
   - LibrarianJumpsuit
   - CommonBackpack
+  - CommonShoes # WD
   - LibrarianPDA
   - Trinkets
 
@@ -99,6 +105,7 @@
   - LawyerNeck
   - LawyerJumpsuit
   - CommonBackpack
+  - CommonShoes # WD
   - LawyerPDA
   - Trinkets
 
@@ -106,13 +113,15 @@
   id: JobChaplain
   groups:
   - ChaplainHead
+  - CommonGlasses # WD
   - CommonServiceEars # WD
   - ChaplainMask
   - ChaplainNeck
   - ChaplainJumpsuit
+  - CommonGloves # WD
   - ChaplainBackpack
   - ChaplainOuterClothing
-  - CommonGlasses # WD
+  - CommonShoes # WD
   - ChaplainPDA # WD
   - Trinkets
 
@@ -124,12 +133,12 @@
   - CommonGlasses # WD
   - CommonMaskCigarette # WD
   - JanitorJumpsuit
-  - JanitorGloves
+  - CommonGloves # WD
   - CommonBackpack
   - JanitorOuterClothing
+  - CommonShoes # WD
   - JanitorPDA # WD
   - Trinkets
-  - JanitorPlunger
 
 - type: roleLoadout
   id: JobBotanist
@@ -141,6 +150,7 @@
   - BotanistJumpsuit
   - BotanistBackpack
   - BotanistOuterClothing
+  - CommonShoes # WD
   - BotanistPDA # WD
   - Trinkets
 
@@ -221,11 +231,12 @@
   id: JobChiefEngineer
   groups:
   - ChiefEngineerHead
+  - ChiefEngineerHeadset # WD
   - ChiefEngineerJumpsuit
   - ChiefEngineerBackpack
   - ChiefEngineerNeck
   - ChiefEngineerOuterClothing
-  - CommonEngineerGloves
+  - CommonGloves # WD
   - ChiefEngineerShoes
   - ChiefEngineerPDA
   - Trinkets
@@ -234,10 +245,11 @@
   id: JobSeniorEngineer
   groups:
   - SeniorEngineerHead
+  - CommonEngineeringHeadset
   - SeniorEngineerJumpsuit
   - StationEngineerBackpack
   - StationEngineerOuterClothing
-  - CommonEngineerGloves
+  - CommonGloves # WD
   - StationEngineerShoes
   - SeniorEngineerPDA
   - Trinkets
@@ -246,10 +258,11 @@
   id: JobTechnicalAssistant
   groups:
   - StationEngineerHead
+  - CommonEngineeringHeadset
   - TechnicalAssistantJumpsuit
   - StationEngineerBackpack
   - StationEngineerOuterClothing
-  - CommonEngineerGloves
+  - CommonGloves # WD
   - StationEngineerShoes
   - TechnicalAssistantPDA
   - Trinkets
@@ -258,10 +271,11 @@
   id: JobStationEngineer
   groups:
   - StationEngineerHead
+  - CommonEngineeringHeadset
   - StationEngineerJumpsuit
   - StationEngineerBackpack
   - StationEngineerOuterClothing
-  - CommonEngineerGloves
+  - CommonGloves # WD
   - StationEngineerShoes
   - StationEngineerPDA
   - Trinkets
@@ -270,10 +284,11 @@
   id: JobAtmosphericTechnician
   groups:
   - StationEngineerHead
+  - CommonEngineeringHeadset
   - AtmosphericTechnicianJumpsuit
   - AtmosphericTechnicianBackpack
   - AtmosphericTechnicianOuterClothing
-  - CommonEngineerGloves
+  - CommonGloves # WD
   - AtmosphericTechnicianShoes
   - AtmosphericTechnicianPDA
   - Trinkets
@@ -283,7 +298,7 @@
   id: JobResearchDirector
   groups:
   - ResearchDirectorHead
-  - ResearchDirectorHeadset
+  - ResearchDirectorHeadset # WD
   - ResearchDirectorNeck
   - ResearchDirectorJumpsuit
   - ResearchDirectorBackpack
@@ -297,6 +312,7 @@
   id: JobSeniorResearcher
   groups:
   - ScientistHead
+  - CommonScienceHeadset
   - CommonScientistNeck
   - SeniorResearcherJumpsuit
   - ScientistBackpack
@@ -310,6 +326,7 @@
   id: JobScientist
   groups:
   - ScientistHead
+  - CommonScienceHeadset
   - CommonScientistNeck
   - ScientistJumpsuit
   - ScientistBackpack
@@ -323,6 +340,7 @@
 - type: roleLoadout
   id: JobResearchAssistant
   groups:
+  - CommonScienceHeadset
   - CommonScientistNeck
   - ResearchAssistantJumpsuit
   - ScientistOuterClothing
@@ -338,7 +356,7 @@
   groups:
   - HeadofSecurityHead
   - HeadofSecurityEyes # WD
-  - SecurityCommandHeadset
+  - CommonSecurityCommandHeadset # WD
   - CommonSecurityCommandMask # WD
   - HeadofSecurityNeck
   - HeadofSecurityJumpsuit
@@ -352,7 +370,7 @@
   id: JobWarden
   groups:
   - WardenHead
-  - SecurityCommandHeadset
+  - CommonSecurityCommandHeadset # WD
   - CommonSecurityCommandMask # WD
   - CommonSecurityNeck
   - WardenJumpsuit
@@ -517,25 +535,38 @@
 - type: roleLoadout
   id: JobReporter
   groups:
-  - CommonServiceEars # WD
-  - ReporterJumpsuit
-  - CommonBackpack
+  - ReporterHat # WD
   - CommonGlasses # WD
+  - CommonServiceEars # WD
+  - CommonMaskCigarette # WD
+  - ReporterJumpsuit
+  - CommonGloves # WD
+  - CommonBackpack
+  - ReporterPDA # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobPsychologist
   groups:
-  - MedicalBackpack
+  - PsychologistHead
   - CommonGlasses # WD
+  - CommonMedicalHeadset # WD
+  - CommonMedicalMask # WD
+  - PsychologistJumpsuit # WD
+  - CommonMedicalGloves # WD
+  - MedicalBackpack
+  - MedicalDoctorOuterClothing
+  - CommonMedicalShoes
+  - PsychologistPDA
   - Trinkets
 
 - type: roleLoadout
   id: JobBoxer
   groups:
   - CommonServiceEars # WD
+  - CommonGlasses # WD
   - BoxerJumpsuit
   - BoxerGloves
   - CommonBackpack
-  - CommonGlasses # WD
+  - CommonShoes # WD
   - Trinkets

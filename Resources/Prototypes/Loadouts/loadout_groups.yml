@@ -161,13 +161,6 @@
   - AssistantFace
 
 - type: loadoutGroup
-  id: AssistantGloves
-  name: loadout-group-gloves
-  minLimit: 0
-  loadouts:
-  - AssistantGloves
-
-- type: loadoutGroup
   id: CommonBackpack
   name: loadout-group-backpack
   loadouts:
@@ -176,27 +169,45 @@
   - CommonDuffel
   - CommonSatchelLeather # WD
 
-- type: loadoutGroup
+- type: loadoutGroup # WD
+  id: AssistantHead
+  name: loadout-group-head
+  minLimit: 0
+  loadouts:
+  - HatGreyFlatcap
+  - HatBrownFlatcap
+  - HatBlacksoft
+  - FedoraGrey
+  - CowboyGrey
+
+- type: loadoutGroup # WD edit
   id: AssistantOuterClothing
   name: loadout-group-outerclothing
   minLimit: 0
   loadouts:
+  - HoodieGrey
+  - HoodieBlack
+  - CoatGentle
   - AssistantWintercoat
+  - CoatBomber
 
-- type: loadoutGroup
-  id: AssistantShoes
-  name: loadout-group-shoes
+- type: loadoutGroup # WD
+  id: AssistantPDA
+  name: loadout-group-pda
   loadouts:
-  - BlackShoes
-  - WinterBoots
+  - AssistantPDA
 
-- type: loadoutGroup
+- type: loadoutGroup # WD edot
   id: BartenderHead
   name: loadout-group-head
   minLimit: 0
   loadouts:
-  - BartenderHead
-  - BartenderBowler
+  - BowlerHat
+  - Tophat
+  - HatMagician
+  - BeretStandard
+  - FrenchBeret
+  - FedoraGrey
 
 - type: loadoutGroup
   id: BartenderJumpsuit
@@ -214,6 +225,12 @@
   - BartenderVest
   - BartenderApron
   - BartenderWintercoat
+
+- type: loadoutGroup # WD
+  id: BartenderPDA
+  name: loadout-group-pda
+  loadouts:
+  - BartenderPDA
 
 - type: loadoutGroup
   id: ChefHead
@@ -302,8 +319,6 @@
   - ChaplainHead
   - ChaplainNunHood
   - ChaplainPlagueHat
-  - ChaplainWitchHat
-  - ChaplainWitchHatAlt
 
 - type: loadoutGroup
   id: ChaplainMask
@@ -340,11 +355,11 @@
   - ChaplainBlackHoodie
   - ChaplainHoodie
 
-- type: loadoutGroup
+- type: loadoutGroup # WD edit
   id: ChaplainNeck
   name: loadout-group-neck
-  minLimit: 0
   loadouts:
+  - ChaplainNecklaceSilver
   - ChaplainNeck
 
 - type: loadoutGroup
@@ -353,12 +368,14 @@
   loadouts:
   - ChaplainPDA
 
-- type: loadoutGroup
+- type: loadoutGroup # WD edit
   id: JanitorHead
   name: loadout-group-head
   minLimit: 0
   loadouts:
   - JanitorHead
+  - JanitorPlunger
+  - JanitorBucket
 
 - type: loadoutGroup
   id: JanitorJumpsuit
@@ -434,6 +451,7 @@
   minLimit: 0
   loadouts:
   - JesterHat
+  - HatMagician
 
 - type: loadoutGroup # WD
   id: ClownMask
@@ -508,8 +526,8 @@
   name: loadout-group-head
   minLimit: 0
   loadouts:
-  - MimeHead
-  - MimeFrenchBeret
+  - BeretStandard
+  - FrenchBeret
   - MimeCap
 
 - type: loadoutGroup
@@ -648,6 +666,23 @@
   - MaskCigarSpent
   - MaskCigarGoldSpent
 
+- type: loadoutGroup
+  id: CommonGloves
+  name: loadout-group-gloves
+  minLimit: 0
+  loadouts:
+  - GlovesColorBlack
+  - GlovesFingerless
+
+- type: loadoutGroup
+  id: CommonShoes
+  name: loadout-group-shoes
+  loadouts:
+  - ShoesColorBlack
+  - BootsLaceup
+  - ShoesTourist
+  - BootsWinter
+
 # Cargo
 - type: loadoutGroup
   id: QuartermasterHead
@@ -766,6 +801,12 @@
   loadouts:
   - ChiefEngineerHead
   - ChiefEngineerBeret
+
+- type: loadoutGroup # WD
+  id: ChiefEngineerHeadset
+  name: loadout-group-ears
+  loadouts:
+  - ChiefEngineerHeadset
 
 - type: loadoutGroup
   id: ChiefEngineerJumpsuit
@@ -939,11 +980,10 @@
   - AtmosphericTechnicianPDA
 
 - type: loadoutGroup
-  id: CommonEngineerGloves
-  name: loadout-group-gloves
-  minLimit: 0
+  id: CommonEngineeringHeadset
+  name: loadout-group-ears
   loadouts:
-  - GlovesColorBlack
+  - EngineeringHeadset
 
 # Science
 - type: loadoutGroup
@@ -1114,6 +1154,13 @@
   - GlovesColorBlack
   - GlovesColorPurple
   - GlovesLatex
+  - ClothingHandsGlovesRobohands
+
+- type: loadoutGroup # WD
+  id: CommonScienceHeadset
+  name: loadout-group-ears
+  loadouts:
+  - ScienceHeadset
 
 # Security
 - type: loadoutGroup
@@ -1254,8 +1301,9 @@
   name: loadout-group-head
   minLimit: 0
   loadouts:
-  - DetectiveFedora
-  - DetectiveFedoraGrey
+  - FedoraBrown
+  - FedoraGrey
+  - BowlerHat
   - CowboyRed
   - CowboyBrown
   - CowboyBlack
@@ -1288,6 +1336,7 @@
   - CoatJensen
   - CoatInspector
   - CoatGentle
+  - CoatTrench
 
 - type: loadoutGroup
   id: DetectiveGloves
@@ -1623,6 +1672,10 @@
   minLimit: 0
   loadouts:
   - ParamedicHead
+  - MedicalBeret
+  - BlueSurgeryCap
+  - GreenSurgeryCap
+  - PurpleSurgeryCap
   - CowboyWhite
 
 - type: loadoutGroup
@@ -1657,8 +1710,34 @@
   - ParamedicPDA
 
 - type: loadoutGroup
+  id: PsychologistHead
+  name: loadout-group-head
+  minLimit: 0
+  loadouts:
+  - BowlerHat
+  - Tophat
+  - BeretStandard
+  - FrenchBeret
+  - FedoraGrey
+
+- type: loadoutGroup
+  id: PsychologistJumpsuit
+  name: loadout-group-jumpsuit
+  loadouts:
+  - PsychologistJumpsuit
+  - JumpsuitFamily
+  - NoirJumpsuit
+  - NoirJumpskirt
+
+- type: loadoutGroup
+  id: PsychologistPDA
+  name: loadout-group-pda
+  loadouts:
+  - PsychologistPDA
+
+- type: loadoutGroup
   id: CommonMedicalHeadset
-  name: loadout-group-gloves
+  name: loadout-group-ears
   loadouts:
   - MedicalHeadset
 
@@ -1686,18 +1765,38 @@
 
 - type: loadoutGroup
   id: CommonMedicalOuterClothing
-  name: loadout-group-outherclothing
+  name: loadout-group-outerclothing
   minLimit: 0
   loadouts:
   - RegularLabCoat
 
 # Wildcards
 - type: loadoutGroup
+  id: ReporterHat
+  name: loadout-group-jumpsuit
+  loadouts:
+  - HatGreyFlatcap
+  - HatBrownFlatcap
+  - HatBlacksoft
+  - FedoraGrey
+  - CowboyGrey
+  - HatMagician
+
+- type: loadoutGroup
   id: ReporterJumpsuit
   name: loadout-group-jumpsuit
   loadouts:
   - ReporterJumpsuit
   - JournalistJumpsuit
+  - JumpsuitSafari
+  - JumpsuitFamily
+  - JumpsuitLoungewear
+
+- type: loadoutGroup
+  id: ReporterPDA
+  name: loadout-group-pda
+  loadouts:
+  - ReporterPDA
 
 - type: loadoutGroup
   id: BoxerJumpsuit

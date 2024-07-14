@@ -1,22 +1,3 @@
-# Head
-- type: itemLoadout
-  id: DetectiveFedora
-  equipment: DetectiveFedora
-
-- type: startingGear
-  id: DetectiveFedora
-  equipment:
-    head: ClothingHeadHatFedoraBrown
-
-- type: itemLoadout
-  id: DetectiveFedoraGrey
-  equipment: DetectiveFedoraGrey
-
-- type: startingGear
-  id: DetectiveFedoraGrey
-  equipment:
-    head: ClothingHeadHatFedoraGrey
-
 # Jumpsuit
 - type: itemLoadout
   id: DetectiveJumpsuit

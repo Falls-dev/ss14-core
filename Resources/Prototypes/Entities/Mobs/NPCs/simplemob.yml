@@ -107,12 +107,9 @@
       - TemporaryBlindness
       - Pacified
       - StaminaModifier
-<<<<<<< HEAD
       - RadiationProtection
       - Drowsiness
-=======
       - Flashed
->>>>>>> 1283989346 (Flash overlay rework and bugfixes (#27369))
   - type: Bloodstream
     bloodMaxVolume: 150
   - type: MobPrice

@@ -199,9 +199,7 @@ namespace Content.Server.Flash
 
         private void OnPermanentBlindnessFlashAttempt(EntityUid uid, PermanentBlindnessComponent component, FlashAttemptEvent args)
         {
-            // check for total blindness
-            if (component.Blindness == 0)
-                args.Cancel();
+            args.Cancel();
         }
 
         private void OnTemporaryBlindnessFlashAttempt(EntityUid uid, TemporaryBlindnessComponent component, FlashAttemptEvent args)

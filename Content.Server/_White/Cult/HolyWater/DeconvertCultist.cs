@@ -56,7 +56,7 @@ public sealed partial class DeconvertCultist : ReagentEffect
 
         entityManager.RemoveComponent<CultistComponent>(uid);
         entityManager.RemoveComponent<PentagramComponent>(uid);
-        entityManager.RemoveComponent<GlobalAntagonistComponent>(uid)
+        entityManager.RemoveComponent<GlobalAntagonistComponent>(uid);
 
         var cultRuleSystem = entityManager.System<CultRuleSystem>();
         cultRuleSystem.RemoveObjectiveAndRole(uid);

@@ -80,6 +80,7 @@
 # WD EDIT
 - type: statusEffect
   id: Incorporeal
+  alwaysAllowed: true
 
 - type: statusEffect
   id: BloodLoss

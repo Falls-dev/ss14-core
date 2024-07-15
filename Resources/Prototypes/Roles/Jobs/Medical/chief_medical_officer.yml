@@ -36,6 +36,3 @@
 
 - type: startingGear
   id: CMOGear
-  equipment:
-    id: CMOPDA
-    ears: ClothingHeadsetCMO

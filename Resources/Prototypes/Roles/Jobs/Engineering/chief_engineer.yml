@@ -39,6 +39,3 @@
 
 - type: startingGear
   id: ChiefEngineerGear
-  equipment:
-    id: CEPDA
-    ears: ClothingHeadsetCE

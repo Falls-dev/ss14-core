@@ -18,5 +18,3 @@
 
 - type: startingGear
   id: DoctorGear
-  equipment:
-    ears: ClothingHeadsetMedical

@@ -26,5 +26,3 @@
 
 - type: startingGear
   id: SecurityOfficerGear
-  equipment:
-    ears: ClothingHeadsetSecurity

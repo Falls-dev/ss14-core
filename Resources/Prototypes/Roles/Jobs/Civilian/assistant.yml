@@ -11,6 +11,3 @@
 
 - type: startingGear
   id: PassengerGear
-  equipment:
-    id: PassengerPDA
-    ears: ClothingHeadsetGrey

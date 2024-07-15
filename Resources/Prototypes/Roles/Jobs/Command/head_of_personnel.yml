@@ -60,7 +60,3 @@
 
 - type: startingGear
   id: HoPGear
-  equipment:
-    shoes: ClothingShoesColorBrown
-    id: HoPPDA
-    ears: ClothingHeadsetAltCommand

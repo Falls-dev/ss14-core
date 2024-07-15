@@ -41,7 +41,3 @@
 
 - type: startingGear
   id: HoSGear
-  equipment:
-    eyes: ClothingEyesGlassesSecurity
-    id: HoSPDA
-    ears: ClothingHeadsetAltSecurity

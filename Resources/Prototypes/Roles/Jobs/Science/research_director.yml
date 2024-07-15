@@ -33,6 +33,3 @@
 
 - type: startingGear
   id: ResearchDirectorGear
-  equipment:
-    id: RnDPDA
-    ears: ClothingHeadsetRD

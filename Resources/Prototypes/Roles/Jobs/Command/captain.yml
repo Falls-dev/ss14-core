@@ -38,6 +38,3 @@
 
 - type: startingGear
   id: CaptainGear
-  equipment:
-    id: CaptainPDA
-    ears: ClothingHeadsetAltCommand

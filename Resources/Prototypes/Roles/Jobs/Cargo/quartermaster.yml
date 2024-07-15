@@ -37,6 +37,3 @@
 
 - type: startingGear
   id: QuartermasterGear
-  equipment:
-    id: QuartermasterPDA
-    ears: ClothingHeadsetQM

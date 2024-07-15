@@ -414,3 +414,41 @@
   id: JumpsuitLoungewear
   equipment:
     jumpsuit: ClothingUniformJumpsuitLoungewear
+
+- type: itemLoadout
+  id: JumpsuitOveralls
+  equipment: JumpsuitOveralls
+- type: startingGear
+  id: JumpsuitOveralls
+  equipment:
+    jumpsuit: ClothingUniformOveralls
+
+# Ears
+
+- type: itemLoadout
+  id: AssistantHeadset
+  equipment: AssistantHeadset
+- type: startingGear
+  id: AssistantHeadset
+  equipment:
+    ears: ClothingHeadsetGrey
+
+# Belt
+
+- type: itemLoadout
+  id: BeltUtility
+  equipment: BeltUtility
+- type: startingGear
+  id: BeltUtility
+  equipment:
+    belt: ClothingBeltUtility
+
+# Inhands
+
+- type: itemLoadout
+  id: Cane
+  equipment: Cane
+- type: startingGear
+  id: Cane
+  equipment:
+    belt: Cane

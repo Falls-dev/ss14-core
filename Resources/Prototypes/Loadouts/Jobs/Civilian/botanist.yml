@@ -92,6 +92,26 @@
   equipment:
     outerClothing: ClothingOuterWinterHydro
 
+# Gloves
+
+- type: itemLoadout
+  id: BotanistGlovesLeather
+  equipment: BotanistGlovesLeather
+- type: startingGear
+  id: BotanistGlovesLeather
+  equipment:
+    gloves: ClothingHandsGlovesLeather
+
+# Mask
+
+- type: itemLoadout
+  id: BotanistMaskBand
+  equipment: BotanistMaskBand
+- type: startingGear
+  id: BotanistMaskBand
+  equipment:
+    mask: ClothingMaskBandBotany
+
 # PDA
 
 - type: itemLoadout # WD

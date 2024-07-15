@@ -1,3 +1,23 @@
+# Mask
+
+- type: itemLoadout # WD
+  id: SalvageSpecialistMaskGas
+  equipment: SalvageSpecialistMaskGas
+- type: startingGear
+  id: SalvageSpecialistMaskGas
+  equipment:
+    mask: ClothingMaskGasExplorer
+
+# Jumpsuit
+
+- type: itemLoadout # WD
+  id: SalvageSpecialistJumpsuit
+  equipment: SalvageSpecialistJumpsuit
+- type: startingGear
+  id: SalvageSpecialistJumpsuit
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitSalvageSpecialist
+
 # Back
 - type: itemLoadout
   id: SalvageSpecialistBackpack
@@ -45,3 +65,22 @@
   id: SalvageBoots
   equipment:
     shoes: ClothingShoesBootsSalvage
+
+# Belt
+- type: itemLoadout
+  id: SalvageSpecialistWebbing
+  equipment: SalvageSpecialistWebbing
+- type: startingGear
+  id: SalvageSpecialistWebbing
+  equipment:
+    belt: ClothingBeltSalvageWebbing
+
+# PDA
+
+- type: itemLoadout
+  id: SalvagePDA
+  equipment: SalvagePDA
+- type: startingGear
+  id: SalvagePDA
+  equipment:
+    id: SalvagePDA

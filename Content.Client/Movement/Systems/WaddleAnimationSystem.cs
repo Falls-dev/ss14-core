@@ -90,8 +90,8 @@ public sealed class WaddleAnimationSystem : EntitySystem
                     KeyFrames =
                     {
                         new AnimationTrackProperty.KeyFrame(Angle.FromDegrees(0), 0),
-                        new AnimationTrackProperty.KeyFrame(Angle.FromDegrees(tumbleIntensity), len/2),
-                        new AnimationTrackProperty.KeyFrame(Angle.FromDegrees(0), len/2),
+                        new AnimationTrackProperty.KeyFrame(Angle.FromDegrees(tumbleIntensity), len/3),
+                        new AnimationTrackProperty.KeyFrame(Angle.FromDegrees(0), len/3),
                     }
                 },
                 new AnimationTrackComponentProperty()
@@ -102,8 +102,8 @@ public sealed class WaddleAnimationSystem : EntitySystem
                     KeyFrames =
                     {
                         new AnimationTrackProperty.KeyFrame(new Vector2(), 0),
-                        new AnimationTrackProperty.KeyFrame(component.HopIntensity, len/2),
-                        new AnimationTrackProperty.KeyFrame(new Vector2(), len/2),
+                        new AnimationTrackProperty.KeyFrame(component.HopIntensity, len/3),
+                        new AnimationTrackProperty.KeyFrame(new Vector2(), len/3),
                     }
                 }
             }

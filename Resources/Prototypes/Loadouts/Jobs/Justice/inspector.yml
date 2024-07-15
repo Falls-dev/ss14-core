@@ -24,7 +24,7 @@
 - type: startingGear
   id: InspectorGlasses
   equipment:
-    head: ClothingEyesGlassesInspector
+    eyes: ClothingEyesGlassesInspector
 
 # Mask
 
@@ -44,7 +44,7 @@
 - type: startingGear
   id: InspectorCloak
   equipment:
-    head: ClothingNeckCloakInspector
+    neck: ClothingNeckCloakInspector
 
 - type: itemLoadout # WD
   id: InspectorMantle
@@ -52,7 +52,7 @@
 - type: startingGear
   id: InspectorMantle
   equipment:
-    head: ClothingNeckMantleInspector
+    neck: ClothingNeckMantleInspector
 
 - type: itemLoadout # WD
   id: InspectorMedal
@@ -60,7 +60,7 @@
 - type: startingGear
   id: InspectorMedal
   equipment:
-    head: ClothingNeckInspectorbadge
+    neck: ClothingNeckInspectorbadge
 
 # Jumpsuit
 
@@ -169,16 +169,18 @@
   equipment: InspectorFlask
 - type: startingGear
   id: InspectorFlask
-  equipment:
-    id: DrinkDetFlask
+  storage:
+    back:
+    - DrinkDetFlask
 
 - type: itemLoadout # WD
   id: InspectorStamp
   equipment: InspectorStamp
 - type: startingGear
   id: InspectorStamp
-  equipment:
-    id: RubberStampInspector
+  storage:
+    back:
+    - RubberStampInspector
 
 # Inhand
 

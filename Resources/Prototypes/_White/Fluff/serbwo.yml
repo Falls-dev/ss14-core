@@ -285,7 +285,7 @@
   sponsorOnly: true
   whitelistJobs: [Paramedic]
 
-- type: loadout
+- type: sponsorLoadout
   id: CargoLoadoutSerbwoSA
   entity: HandTeleporter
   sponsorOnly: true

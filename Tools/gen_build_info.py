@@ -42,7 +42,7 @@ def generate_build_json(file: str) -> str:
     # Env variables set by Jenkins.
 
     hash = sha256_file(file)
-    engine_version = "1.4.8.8"
+    engine_version = "218.1.0"
     manifest_hash = generate_manifest_hash(file)
 
     return json.dumps({

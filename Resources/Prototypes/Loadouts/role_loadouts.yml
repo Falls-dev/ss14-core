@@ -177,11 +177,13 @@
 - type: roleLoadout
   id: JobMusician
   groups:
-  - CommonServiceHeadset # WD
-  - MusicianBackpack
-  - MusicianOuterClothing
+  - MusicianHead # WD
   - CommonGlasses # WD
-  - MusicianPDA
+  - CommonServiceHeadset # WD
+  - MusicianJumpsuit # WD
+  - MusicianOuterClothing
+  - MusicianBackpack
+  - MusicianPDA # WD
   - Trinkets
   - Instruments
 
@@ -243,7 +245,7 @@
   - ChiefEngineerOuterClothing
   - CommonGloves # WD
   - ChiefEngineerShoes
-  - ChiefEngineerPDA
+  - ChiefEngineerPDA # WD
   - Trinkets
 
 - type: roleLoadout

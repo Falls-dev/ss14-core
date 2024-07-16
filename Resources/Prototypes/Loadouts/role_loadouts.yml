@@ -114,6 +114,7 @@
   - ChaplainNullRod # WD
   - CommonShoes # WD
   - ChaplainPDA # WD
+  - ChaplainJobTrinkets # WD
   - Trinkets
 
 - type: roleLoadout
@@ -171,6 +172,7 @@
   - MimeJumpsuit
   - MimeBackpack
   - MimeOuterClothing
+  - CommonShoes # WD
   - MimePDA
   - Trinkets
 
@@ -184,6 +186,7 @@
   - MusicianOuterClothing
   - MusicianBackpack
   - MusicianPDA # WD
+  - CommonShoes # WD
   - Trinkets
   - Instruments
 

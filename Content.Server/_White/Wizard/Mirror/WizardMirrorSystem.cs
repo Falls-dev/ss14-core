@@ -1,7 +1,8 @@
 ﻿using Content.Server.Humanoid;
-using Content.Server.Preferences.Managers;
+using Content.Server.IdentityManagement;
 using Content.Shared._White.Wizard.Mirror;
 using Content.Shared.Humanoid;
+using Content.Shared.Humanoid.Markings;
 using Content.Shared.Interaction;
 using Content.Shared.Physics;
 using Content.Shared.Preferences;
@@ -13,11 +14,11 @@ namespace Content.Server._White.Wizard.Mirror;
 
 public sealed class WizardMirrorSystem : EntitySystem
 {
-    [Dependency] private readonly IServerPreferencesManager _prefs = default!;
     [Dependency] private readonly HumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly IdentitySystem _identity = default!;
 
     public override void Initialize()
     {
@@ -55,6 +56,7 @@ public sealed class WizardMirrorSystem : EntitySystem
 
         _humanoid.LoadProfile(component.Target.Value, args.Profile, humanoid);
         _metaData.SetEntityName(component.Target.Value, args.Profile.Name);
+        _identity.QueueIdentityUpdate(component.Target.Value);
     }
 
     private void OnInteractHand(EntityUid uid, WizardMirrorComponent component, ref InteractHandEvent args)
@@ -86,10 +88,46 @@ public sealed class WizardMirrorSystem : EntitySystem
 
     private void UpdateInterface(EntityUid mirrorUid, EntityUid targetUid, WizardMirrorComponent component)
     {
-        if (!TryComp<ActorComponent>(targetUid, out var actor))
+        if (!TryComp<HumanoidAppearanceComponent>(targetUid, out var humanoid) ||
+            !TryComp<MetaDataComponent>(targetUid, out var meta))
             return;
 
-        var profile = (HumanoidCharacterProfile) _prefs.GetPreferences(actor.PlayerSession.UserId).SelectedCharacter;
+        var hair = humanoid.MarkingSet.TryGetCategory(MarkingCategories.Hair, out var hairMarkings)
+            ? new List<Marking>(hairMarkings)[0]
+            : null;
+
+        var facialHair = humanoid.MarkingSet.TryGetCategory(MarkingCategories.FacialHair, out var facialHairMarkings)
+            ? new List<Marking>(facialHairMarkings)[0]
+            : null;
+
+        var profile = HumanoidCharacterProfile.RandomWithSpecies(humanoid.Species)
+            .WithAge(humanoid.Age)
+            .WithGender(humanoid.Gender)
+            .WithName(meta.EntityName)
+            .WithSex(humanoid.Sex)
+            .WithVoice(humanoid.Voice)
+            .WithBodyType(humanoid.BodyType);
+
+        profile = profile.WithCharacterAppearance(
+            profile.WithCharacterAppearance(
+                profile.Appearance.WithSkinColor(humanoid.SkinColor))
+                .Appearance.WithEyeColor(humanoid.EyeColor));
+
+        if (hair != null)
+        {
+            profile = profile.WithCharacterAppearance(
+                profile.WithCharacterAppearance(
+                        profile.Appearance.WithHairStyleName(hair.MarkingId))
+                    .Appearance.WithHairColor(hair.MarkingColors[0]));
+        }
+
+        if (facialHair != null)
+        {
+            profile = profile.WithCharacterAppearance(
+                profile.WithCharacterAppearance(
+                        profile.Appearance.WithFacialHairStyleName(facialHair.MarkingId))
+                    .Appearance.WithFacialHairColor(facialHair.MarkingColors[0]));
+        }
 
         var state = new WizardMirrorUiState(profile);
 

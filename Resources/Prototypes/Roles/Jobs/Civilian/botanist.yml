@@ -16,7 +16,3 @@
 
 - type: startingGear
   id: BotanistGear
-  equipment:
-    shoes: ClothingShoesColorBrown
-    id: BotanistPDA
-    ears: ClothingHeadsetService

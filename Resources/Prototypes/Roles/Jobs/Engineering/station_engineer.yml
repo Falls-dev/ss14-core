@@ -19,5 +19,3 @@
 
 - type: startingGear
   id: StationEngineerGear
-  equipment:
-    ears: ClothingHeadsetEngineering

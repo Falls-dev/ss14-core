@@ -18,8 +18,3 @@
 
 - type: startingGear
   id: ResearchAssistantGear
-  equipment:
-    back: ClothingBackpackScienceFilled
-    shoes: ClothingShoesColorWhite
-    id: ResearchAssistantPDA
-    ears: ClothingHeadsetScience

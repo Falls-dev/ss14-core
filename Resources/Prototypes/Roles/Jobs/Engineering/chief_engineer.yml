@@ -16,7 +16,7 @@
   startingGear: ChiefEngineerGear
   icon: "JobIconChiefEngineer"
   requireAdminNotify: true
-  announcementPrototype: ChiefEngineerArrivalNotification
+  arrivalNotificationPrototype: ChiefEngineerArrivalNotification
   supervisors: job-supervisors-captain
   whitelistedSpecies:
     - Human
@@ -39,6 +39,3 @@
 
 - type: startingGear
   id: ChiefEngineerGear
-  equipment:
-    id: CEPDA
-    ears: ClothingHeadsetCE

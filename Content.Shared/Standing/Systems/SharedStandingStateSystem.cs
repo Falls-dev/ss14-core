@@ -7,12 +7,17 @@ using Content.Shared.Physics;
 using Content.Shared.Rotation;
 using Content.Shared.Slippery;
 using Content.Shared.Stunnable;
+using Content.Shared._White.Wizard.Timestop;
+using Content.Shared.Buckle;
+using Content.Shared.Buckle.Components;
+using Content.Shared.Mobs;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Serialization;
+
 
 namespace Content.Shared.Standing.Systems;
 
@@ -25,6 +30,9 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!; // WD EDIT
     [Dependency] private readonly SharedStunSystem _stun = default!; // WD EDIT
     [Dependency] private readonly MobStateSystem _mobState = default!; // WD EDIT
+    [Dependency] private readonly SharedBuckleSystem _buckle = default!; // WD EDIT
+    [Dependency] private readonly SharedTransformSystem _transform = default!; // WD EDIT
+    [Dependency] private readonly SharedRotationVisualsSystem _rotation = default!; // WD EDIT
 
     // If StandingCollisionLayer value is ever changed to more than one layer, the logic needs to be edited.
     private const int StandingCollisionLayer = (int)CollisionGroup.MidImpassable;
@@ -53,12 +61,20 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
 
     private void OnChangeState(ChangeStandingStateEvent ev, EntitySessionEventArgs args)
     {
+        if (TryComp<FrozenComponent>(args.SenderSession.AttachedEntity, out _)) // WD EDIT
+            return;
+
         if (!args.SenderSession.AttachedEntity.HasValue)
         {
             return;
         }
 
         var uid = args.SenderSession.AttachedEntity.Value;
+
+        if (!TryComp(uid, out StandingStateComponent? standing)) // WD EDIT
+            return;
+
+        RaiseNetworkEvent(new CheckAutoGetUpEvent()); // WD EDIT
 
         if (_stun.IsParalyzed(uid))
         {
@@ -70,18 +86,23 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
             return;
         }
 
-        if (IsDown(uid))
+        if (IsDown(uid, standing))
         {
-            TryStandUp(uid);
+            TryStandUp(uid, standing);
         }
         else
         {
-            TryLieDown(uid);
+            TryLieDown(uid, standing);
         }
     }
 
     private void OnStandingUpDoAfter(EntityUid uid, StandingStateComponent component, StandingUpDoAfterEvent args)
     {
+        if (args.Handled || _stun.IsParalyzed(uid)) // WD EDIT
+        {
+            component.CurrentState = StandingState.Lying;
+            return;
+        }
         Stand(uid);
     }
 
@@ -192,6 +213,9 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
         // Optional component.
         Resolve(uid, ref appearance, ref hands, false);
 
+        if (TryComp(uid, out BuckleComponent? buckle) && buckle.Buckled && !_buckle.TryUnbuckle(uid, uid, buckleComp: buckle)) // WD EDIT
+            return false;
+
         // This is just to avoid most callers doing this manually saving boilerplate
         // 99% of the time you'll want to drop items but in some scenarios (e.g. buckling) you don't want to.
         // We do this BEFORE downing because something like buckle may be blocking downing but we want to drop hand items anyway
@@ -212,6 +236,25 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
 
         standingState.CurrentState = StandingState.Lying;
         Dirty(uid, standingState);
+
+        if (TryComp<TransformComponent>(uid, out var transform)) // WD EDIT
+        {
+            var rotation = transform.LocalRotation;
+            _appearance.TryGetData<bool>(uid, BuckleVisuals.Buckled, out var buckled, appearance);
+
+            if (!buckled && (!_appearance.TryGetData<MobState>(uid, MobStateVisuals.State, out var state, appearance) ||
+                             state is MobState.Alive))
+            {
+                if (rotation.GetDir() is Direction.East
+                    or Direction.North
+                    or Direction.NorthEast
+                    or Direction.SouthEast)
+                    _rotation.SetHorizontalAngle(uid, Angle.FromDegrees(270));
+                else
+                    _rotation.ResetHorizontalAngle(uid);
+            }
+        }
+
         RaiseLocalEvent(uid, new DownedEvent());
 
         // Seemed like the best place to put it
@@ -256,6 +299,9 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
 
         // Optional component.
         Resolve(uid, ref appearance, false);
+
+        if (TryComp(uid, out BuckleComponent? buckle) && buckle.Buckled && !_buckle.TryUnbuckle(uid, uid, buckleComp: buckle)) // WD EDIT
+            return false;
 
         if (standingState.CurrentState is StandingState.Standing)
             return true;

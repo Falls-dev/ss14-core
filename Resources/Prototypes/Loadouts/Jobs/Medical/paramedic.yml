@@ -84,6 +84,16 @@
   equipment:
     shoes: ClothingShoesColorBlue
 
+# Belt
+- type: itemLoadout # WD
+  id: ParamedicBelt
+  equipment: ParamedicBelt
+- type: startingGear
+  id: ParamedicBelt
+  equipment:
+    belt: ClothingBeltMedicalEMT
+
+
 # PDA
 - type: itemLoadout # WD
   id: ParamedicPDA

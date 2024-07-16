@@ -14,7 +14,7 @@
       time: 36000 #10 hrs
   startingGear: InspectorGear
   icon: "JobIconInspector"
-  announcementPrototype: InspectorArrivalNotification
+  arrivalNotificationPrototype: InspectorArrivalNotification
   supervisors: job-supervisors-captain
   access:
     - Service
@@ -24,17 +24,3 @@
 
 - type: startingGear
   id: InspectorGear
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitWhiteInspectorFormal
-    back: ClothingBackpackFilled
-    shoes: ClothingShoesBootsInspector
-    id: InspectorPDA
-    ears: ClothingHeadsetAltSecurity
-    underwearb: ClothingUnderwearBottomBoxersInspector # White-Underwear
-  underweart: ClothingUnderwearTopBraInspector # White-Underwear
-  underwearb: ClothingUnderwearBottomPantiesInspector # White-Underwear
-  inhand:
-    - BriefcaseBrownFilled
-  innerClothingSkirt: ClothingUniformJumpskirtInspector
-  satchel: ClothingBackpackSatchelFilled
-  duffelbag: ClothingBackpackDuffelFilled

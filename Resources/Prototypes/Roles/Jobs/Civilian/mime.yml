@@ -20,11 +20,6 @@
 
 - type: startingGear
   id: MimeGear
-  equipment:
-    shoes: ClothingShoesColorWhite
-    pocket1: CrayonMime
-    id: MimePDA
-    ears: ClothingHeadsetService
 
 - type: entity
   id: ActionMimeInvisibleWall

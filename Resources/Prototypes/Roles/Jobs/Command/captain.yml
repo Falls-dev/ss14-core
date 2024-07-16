@@ -21,7 +21,7 @@
   icon: "JobIconCaptain"
   requireAdminNotify: true
   joinNotifyCrew: true
-  announcementPrototype: CaptainArrivalNotification
+  arrivalNotificationPrototype: CaptainArrivalNotification
   supervisors: job-supervisors-centcom
   whitelistedSpecies:
     - Human
@@ -38,6 +38,3 @@
 
 - type: startingGear
   id: CaptainGear
-  equipment:
-    id: CaptainPDA
-    ears: ClothingHeadsetAltCommand

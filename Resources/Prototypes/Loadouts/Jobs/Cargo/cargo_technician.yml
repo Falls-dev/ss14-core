@@ -74,3 +74,13 @@
   id: CargoWinterBoots
   equipment:
     shoes: ClothingShoesBootsWinterCargo
+
+# PDA
+
+- type: itemLoadout
+  id: CargoPDA
+  equipment: CargoPDA
+- type: startingGear
+  id: CargoPDA
+  equipment:
+    id: CargoPDA

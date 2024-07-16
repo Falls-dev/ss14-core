@@ -35,5 +35,3 @@
 
 - type: startingGear
   id: SeniorOfficerGear
-  equipment:
-    ears: ClothingHeadsetSecurity

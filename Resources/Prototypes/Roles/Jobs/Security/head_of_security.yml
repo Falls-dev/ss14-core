@@ -16,7 +16,7 @@
   startingGear: HoSGear
   icon: "JobIconHeadOfSecurity"
   requireAdminNotify: true
-  announcementPrototype: HeadOfSecurityArrivalNotification
+  arrivalNotificationPrototype: HeadOfSecurityArrivalNotification
   supervisors: job-supervisors-captain
   whitelistedSpecies:
     - Human
@@ -41,7 +41,3 @@
 
 - type: startingGear
   id: HoSGear
-  equipment:
-    eyes: ClothingEyesGlassesSecurity
-    id: HoSPDA
-    ears: ClothingHeadsetAltSecurity

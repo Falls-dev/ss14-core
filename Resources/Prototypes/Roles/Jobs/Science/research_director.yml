@@ -13,7 +13,7 @@
   startingGear: ResearchDirectorGear
   icon: "JobIconResearchDirector"
   requireAdminNotify: true
-  announcementPrototype: ResearchDirectorArrivalNotification
+  arrivalNotificationPrototype: ResearchDirectorArrivalNotification
   supervisors: job-supervisors-captain
   whitelistedSpecies:
     - Human
@@ -33,6 +33,3 @@
 
 - type: startingGear
   id: ResearchDirectorGear
-  equipment:
-    id: RnDPDA
-    ears: ClothingHeadsetRD

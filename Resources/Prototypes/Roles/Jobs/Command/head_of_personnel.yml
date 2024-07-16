@@ -20,7 +20,7 @@
   startingGear: HoPGear
   icon: "JobIconHeadOfPersonnel"
   requireAdminNotify: true
-  announcementPrototype: HeadOfPersonnelArrivalNotification
+  arrivalNotificationPrototype: HeadOfPersonnelArrivalNotification
   supervisors: job-supervisors-captain
   whitelistedSpecies:
     - Human
@@ -60,7 +60,3 @@
 
 - type: startingGear
   id: HoPGear
-  equipment:
-    shoes: ClothingShoesColorBrown
-    id: HoPPDA
-    ears: ClothingHeadsetAltCommand

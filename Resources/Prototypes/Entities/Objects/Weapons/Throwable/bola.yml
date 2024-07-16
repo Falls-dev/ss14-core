@@ -1,18 +1,9 @@
 - type: entity
   name: bola
-  parent: BaseItem
+  parent: BaseBola
   id: Bola
   description: Linked together with some spare cuffs and metal.
   components:
-  - type: Item
-    size: Normal
-  - type: Sprite
-    sprite: Objects/Weapons/Throwable/bola.rsi
-    state: icon
-  - type: EmitSoundOnThrow
-    sound: /Audio/Weapons/bolathrow.ogg
-  - type: EmitSoundOnLand
-    sound: /Audio/Effects/snap.ogg
   - type: Construction
     graph: Bola
     node: bola
@@ -39,24 +30,60 @@
     damage:
       types:
         Blunt: 5
+
+# WD added
+
+- type: entity
+  name: bola
+  parent: BaseItem
+  abstract: true
+  id: BaseBola
+  description: Linked together with some spare cuffs and metal.
+  components:
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite: Objects/Weapons/Throwable/bola.rsi
+    state: icon
+  - type: EmitSoundOnThrow
+    sound: /Audio/Weapons/bolathrow.ogg
+  - type: EmitSoundOnLand
+    sound: /Audio/Effects/snap.ogg
   - type: Ensnaring
     freeTime: 2.0
     breakoutTime: 3.5 #all bola should generally be fast to remove
     walkSpeed: 0.7 #makeshift bola shouldn't slow too much
     sprintSpeed: 0.7
-    staminaDamage: 55 # Sudden weight increase sapping stamina
+    staminaDamage: 33 # Sudden weight increase sapping stamina
     canThrowTrigger: true
     canMoveBreakout: true
+  - type: KnockdownOnCollide
 
 - type: entity
-  parent: Bola
+  parent: BaseBola
   id: CultBola
   name: Bola
   description: Linked together with some spare cuffs and metal.
   components:
+    - type: Sprite
+      sprite: White/Cult/bola.rsi
     - type: Ensnaring
-      freeTime: 2.0
-      breakoutTime: 3.5 #all bola should generally be fast to remove
       walkSpeed: 0.5
       sprintSpeed: 0.5
-      canThrowTrigger: true
+    - type: CultItem
+
+- type: entity
+  parent: BaseBola
+  id: EnergyBola
+  name: Bola
+  description: Linked together with some spare cuffs and metal.
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: White/Objects/Weapons/Throwable/energybola.rsi
+  - type: Ensnaring
+    walkSpeed: 0.6
+    sprintSpeed: 0.6
+  - type: EmitSoundOnLand
+    collection: sparks

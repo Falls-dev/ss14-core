@@ -18,7 +18,3 @@
 
 - type: startingGear
   id: MedicalInternGear
-  equipment:
-    shoes: ClothingShoesColorWhite
-    id: MedicalInternPDA
-    ears: ClothingHeadsetMedical

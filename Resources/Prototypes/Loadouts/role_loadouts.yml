@@ -35,6 +35,7 @@
   id: JobPassenger
   groups:
   - AssistantHead # WD
+  - AssistantHeadset # WD
   - CommonGlasses # WD
   - CommonMaskCigarette # WD
   - AssistantJumpsuit
@@ -49,7 +50,7 @@
   id: JobBartender
   groups:
   - BartenderHead
-  - CommonServiceEars # WD
+  - CommonServiceHeadset # WD
   - CommonGlasses # WD
   - CommonMaskCigarette # WD
   - BartenderJumpsuit
@@ -62,7 +63,7 @@
 - type: roleLoadout
   id: JobServiceWorker
   groups:
-  - CommonServiceEars # WD
+  - CommonServiceHeadset # WD
   - CommonGlasses # WD
   - CommonMaskCigarette # WD
   - BartenderJumpsuit
@@ -75,7 +76,7 @@
   id: JobChef
   groups:
   - ChefHead
-  - CommonServiceEars # WD
+  - CommonServiceHeadset # WD
   - CommonGlasses # WD
   - ChefMask
   - ChefJumpsuit
@@ -88,25 +89,14 @@
 - type: roleLoadout
   id: JobLibrarian
   groups:
-  - CommonServiceEars # WD
+  - CommonServiceHeadset # WD
   - CommonGlasses # WD
   - CommonMaskCigarette # WD
   - LibrarianJumpsuit
   - CommonBackpack
   - CommonShoes # WD
   - LibrarianPDA
-  - Trinkets
-
-- type: roleLoadout
-  id: JobLawyer
-  groups:
-  - CommonGlasses # WD
-  - CommonMaskCigarette # WD
-  - LawyerNeck
-  - LawyerJumpsuit
-  - CommonBackpack
-  - CommonShoes # WD
-  - LawyerPDA
+  - InhandCane
   - Trinkets
 
 - type: roleLoadout
@@ -114,13 +104,14 @@
   groups:
   - ChaplainHead
   - CommonGlasses # WD
-  - CommonServiceEars # WD
+  - CommonServiceHeadset # WD
   - ChaplainMask
   - ChaplainNeck
   - ChaplainJumpsuit
   - CommonGloves # WD
   - ChaplainBackpack
   - ChaplainOuterClothing
+  - ChaplainNullRod # WD
   - CommonShoes # WD
   - ChaplainPDA # WD
   - Trinkets
@@ -129,7 +120,7 @@
   id: JobJanitor
   groups:
   - JanitorHead
-  - CommonServiceEars # WD
+  - CommonServiceHeadset # WD
   - CommonGlasses # WD
   - CommonMaskCigarette # WD
   - JanitorJumpsuit
@@ -144,12 +135,13 @@
   id: JobBotanist
   groups:
   - BotanistHead
-  - CommonServiceEars # WD
+  - CommonServiceHeadset # WD
   - CommonGlasses # WD
-  - CommonMaskCigarette # WD
+  - BotanistMask # WD
   - BotanistJumpsuit
   - BotanistBackpack
   - BotanistOuterClothing
+  - BotanistGloves # WD
   - CommonShoes # WD
   - BotanistPDA # WD
   - Trinkets
@@ -158,7 +150,7 @@
   id: JobClown
   groups:
   - ClownHead
-  - CommonServiceEars # WD
+  - CommonServiceHeadset # WD
   - CommonGlasses # WD
   - ClownMask # WD
   - ClownNeck # WD
@@ -174,7 +166,7 @@
   id: JobMime
   groups:
   - MimeHead
-  - CommonServiceEars # WD
+  - CommonServiceHeadset # WD
   - MimeMask
   - MimeJumpsuit
   - MimeBackpack
@@ -185,7 +177,7 @@
 - type: roleLoadout
   id: JobMusician
   groups:
-  - CommonServiceEars # WD
+  - CommonServiceHeadset # WD
   - MusicianBackpack
   - MusicianOuterClothing
   - CommonGlasses # WD
@@ -198,32 +190,45 @@
   id: JobQuartermaster
   groups:
   - QuartermasterHead
+  - QuartermasterHeadset # WD
+  - CommonGlasses # WD
   - QuartermasterNeck
   - QuartermasterJumpsuit
   - QuartermasterBackpack
   - QuartermasterOuterClothing
+  - CommonGloves # WD
   - QuartermasterShoes
-  - CommonGlasses # WD
+  - QuartermasterPDA # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobCargoTechnician
   groups:
   - CargoTechnicianHead
+  - CommonCargoEars # WD
+  - CommonGlasses # WD
   - CargoTechnicianJumpsuit
   - CargoTechnicianBackpack
   - CargoTechnicianOuterClothing
+  - CommonGloves # WD
   - CargoTechnicianShoes
-  - CommonGlasses # WD
+  - CargoTechnicianPDA
   - Trinkets
 
 - type: roleLoadout
   id: JobSalvageSpecialist
   groups:
-  - SalvageSpecialistBackpack
+  - SalvageSpecialistHead # WD
+  - CommonCargoEars # WD
+  - SalvageSpecialistEyes # WD
+  - SalvageSpecialistMask # WD
+  - SalvageSpecialistJumpsuit # WD
   - SalvageSpecialistOuterClothing
+  - SalvageSpecialistBelt # WD
+  - SalvageSpecialistBackpack
+  - SalvageSpecialistGloves # WD
   - SalvageSpecialistShoes
-  - CommonGlasses # WD
+  - SalvagePDA # WD
   - Trinkets
 
 # Engineering
@@ -518,18 +523,58 @@
   - ParamedicJumpsuit
   - ParamedicBackpack
   - ParamedicOuterClothing
-  - CommonMedicalGloves
-  - CommonMedicalShoes
-  - ParamedicPDA
+  - ParamedicBelt # WD
+  - CommonMedicalGloves # WD
+  - CommonMedicalShoes # WD
+  - ParamedicPDA # WD
+  - Trinkets
+
+# Justice
+
+- type: roleLoadout # WD
+  id: JobInspector
+  groups:
+  - InspectorHead
+  - InspectorGlasses
+  - CommonSecurityCommandHeadset
+  - InspectorMask
+  - InspectorNeck
+  - InspectorJumpsuit
+  - InspectorOuterclothing
+  - InspectorBackpack
+  - InspectorGloves
+  - InspectorShoes
+  - InspectorPDA
+  - BriefcaseInhand
+  - InspectorJobTrinkets
+  - Trinkets
+
+- type: roleLoadout
+  id: JobLawyer
+  groups:
+  - LawyerHead # WD
+  - CommonGlasses # WD
+  - CommonSecurityHeadset
+  - CommonMaskCigarette # WD
+  - LawyerNeck
+  - LawyerJumpsuit
+  - CommonBackpack
+  - CommonShoes # WD
+  - LawyerPDA
+  - BriefcaseInhand # WD
+  - LawyerJobTrinkets # WD
   - Trinkets
 
 # Wildcards
 - type: roleLoadout
   id: JobZookeeper
   groups:
-  - CommonServiceEars # WD
-  - CommonBackpack
+  - ZookeeperHead # WD
+  - CommonServiceHeadset # WD
   - CommonGlasses # WD
+  - ZookeeperJumpsuit # WD
+  - CommonBackpack
+  - ZookeeperPDA # WD
   - Trinkets
 
 - type: roleLoadout
@@ -537,7 +582,7 @@
   groups:
   - ReporterHat # WD
   - CommonGlasses # WD
-  - CommonServiceEars # WD
+  - CommonServiceHeadset # WD
   - CommonMaskCigarette # WD
   - ReporterJumpsuit
   - CommonGloves # WD
@@ -548,7 +593,7 @@
 - type: roleLoadout
   id: JobPsychologist
   groups:
-  - PsychologistHead
+  - PsychologistHead # WD
   - CommonGlasses # WD
   - CommonMedicalHeadset # WD
   - CommonMedicalMask # WD
@@ -556,17 +601,19 @@
   - CommonMedicalGloves # WD
   - MedicalBackpack
   - MedicalDoctorOuterClothing
-  - CommonMedicalShoes
-  - PsychologistPDA
+  - CommonMedicalShoes # WD
+  - PsychologistPDA # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobBoxer
   groups:
-  - CommonServiceEars # WD
+  - CommonServiceHeadset # WD
   - CommonGlasses # WD
   - BoxerJumpsuit
   - BoxerGloves
   - CommonBackpack
+  - BoxerBelt # WD
   - CommonShoes # WD
+  - BoxerPDA # WD
   - Trinkets

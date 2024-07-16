@@ -27,5 +27,3 @@
 
 - type: startingGear
   id: SeniorPhysicianGear
-  equipment:
-    ears: ClothingHeadsetMedical

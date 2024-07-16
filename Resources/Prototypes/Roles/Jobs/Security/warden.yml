@@ -28,6 +28,3 @@
 
 - type: startingGear
   id: WardenGear
-  equipment:
-    id: WardenPDA
-    ears: ClothingHeadsetSecurity

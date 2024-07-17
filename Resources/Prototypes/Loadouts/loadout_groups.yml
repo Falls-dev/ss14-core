@@ -595,6 +595,15 @@
   loadouts:
   - MimeWintercoat
 
+- type: loadoutGroup
+  id: MimeGloves
+  name: loadout-group-gloves
+  minLimit: 0
+  loadouts:
+  - GlovesColorWhite
+  - GlovesColorBlack
+  - GlovesFingerless
+
 - type: loadoutGroup # WD
   id: MimePDA
   name: loadout-group-pda

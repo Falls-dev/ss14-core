@@ -967,6 +967,7 @@
   id: CommonCargoJobTrinkets
   name: loadout-group-job-trinkets
   minLimit: 0
+  maxLimit: 2
   loadouts:
   - CargoAppraisalTool
   - Clipboard

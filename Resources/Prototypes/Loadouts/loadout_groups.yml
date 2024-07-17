@@ -1518,6 +1518,12 @@
   - ShoesLeather
   - BootsJack
 
+- type: loadoutGroup # WD
+  id: DetectivePDA
+  name: loadout-group-pda
+  loadouts:
+  - DetectivePDA
+
 - type: loadoutGroup
   id: SecurityCadetJumpsuit
   name: loadout-group-jumpsuit

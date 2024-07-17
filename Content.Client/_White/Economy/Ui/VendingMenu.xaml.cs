@@ -68,7 +68,7 @@ public sealed partial class VendingMenu : DefaultWindow
                 longestEntry = itemName;
 
             var price = (int)(entry.Price * priceMultiplier);
-            var vendingItem = new VendingItem($"{itemName} [{entry.Amount}]", price > 0 ? $"{price} \u00a2" : "", icon);
+            var vendingItem = new VendingItem($"{itemName} [{entry.Amount}]", price > 0 ? $"{price} \u00a2" : "выдать", icon);
 
             var j = i;
             vendingItem.VendingItemBuyButton.OnPressed += _ => { OnItemSelected?.Invoke(j); };

@@ -17,7 +17,6 @@
 
 - type: startingGear
   id: JanitorGear
-  equipment:
 
 - type: startingGear
   id: JanitorMaidGear

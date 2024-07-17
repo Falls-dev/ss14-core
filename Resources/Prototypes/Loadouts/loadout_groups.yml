@@ -1767,7 +1767,7 @@
 
 - type: loadoutGroup
   id: MedicalInternPDA
-  name: loadout-group-jumpsuit
+  name: loadout-group-pda
   loadouts:
   - MedicalInternPDA
 

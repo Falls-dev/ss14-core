@@ -958,10 +958,18 @@
   - SalvagePDA
 
 - type: loadoutGroup # WD
-  id: CommonCargoEars
+  id: CommonCargoHeadset
   name: loadout-group-ears
   loadouts:
   - CargoHeadset
+
+- type: loadoutGroup # WD
+  id: CommonCargoJobTrinkets
+  name: loadout-group-job-trinkets
+  minLimit: 0
+  loadouts:
+  - CargoAppraisalTool
+  - Clipboard
 
 # Engineering
 - type: loadoutGroup

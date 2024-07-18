@@ -133,7 +133,10 @@ public sealed class PryingSystem : EntitySystem
         var modEv = new GetPryTimeModifierEvent(user);
 
         RaiseLocalEvent(target, ref modEv);
-        var doAfterArgs = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(modEv.BaseTime * modEv.PryTimeModifier * toolModifier), new DoorPryDoAfterEvent(), target, target, tool)
+
+        var time = TimeSpan.FromSeconds(!TryComp<AirlockComponent>(target, out var airlock) || !airlock.Powered ? 0 : modEv.BaseTime * modEv.PryTimeModifier * toolModifier); // WD EDIT
+
+        var doAfterArgs = new DoAfterArgs(EntityManager, user, time, new DoorPryDoAfterEvent(), target, target, tool)
         {
             BreakOnDamage = true,
             BreakOnMove = true,

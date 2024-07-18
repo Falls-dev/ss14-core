@@ -23,7 +23,7 @@ public sealed partial class PryingComponent : Component
     /// Lower values result in more time.
     /// </summary>
     [DataField("speedModifier")]
-    public float SpeedModifier;
+    public float SpeedModifier = 1.0f;
 
     /// <summary>
     /// What sound to play when prying is finished.

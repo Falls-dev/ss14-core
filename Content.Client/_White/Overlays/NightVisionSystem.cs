@@ -95,7 +95,9 @@ public sealed class NightVisionSystem : SharedNightVisionSystem
 
         var uid = _player.LocalEntity.Value;
         active |= TryComp<NightVisionComponent>(uid, out var nv) && nv.IsActive ||
-                  HasComp<TemporaryNightVisionComponent>(uid);
+                  TryComp<ThermalVisionComponent>(uid, out var thermal) && thermal.IsActive ||
+                  HasComp<TemporaryNightVisionComponent>(uid) ||
+                  HasComp<TemporaryThermalVisionComponent>(uid);
         if (active)
             _overlayMan.AddOverlay(_overlay);
         else

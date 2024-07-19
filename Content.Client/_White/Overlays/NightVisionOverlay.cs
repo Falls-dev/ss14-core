@@ -42,9 +42,17 @@ namespace Content.Client._White.Overlays
             {
                 color = SetParameters(component);
             }
+            else if (_entityManager.TryGetComponent<ThermalVisionComponent>(uid, out var thermal) && thermal.IsActive)
+            {
+                color = SetParameters(thermal);
+            }
             else if (_entityManager.TryGetComponent<TemporaryNightVisionComponent>(uid, out var tempNvComp))
             {
                 color = SetParameters(tempNvComp);
+            }
+            else if (_entityManager.TryGetComponent<TemporaryThermalVisionComponent>(uid, out var tempThermal))
+            {
+                color = SetParameters(tempThermal);
             }
 
             if (color == null)

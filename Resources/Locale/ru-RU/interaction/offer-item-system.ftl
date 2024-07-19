@@ -4,6 +4,6 @@ offer-item-try-give = Вы предлагаете {$item} {$target}
 offer-item-try-give-target = {$user} предлагает вам {$item}
 offer-item-give = Вы передали {$item} {$target}
 offer-item-give-other = {$user} передал {$item} {$target}
-offer-item-give-target = {$user} передал вам ($item)
+offer-item-give-target = {$user} передал вам {$item}
 offer-item-no-give = Вы прекращаете предлагать {$item} {$target}
 offer-item-no-give-target = {$user} прекращает предлагать вам {$item}

@@ -232,9 +232,9 @@
   description: Thermals in the shape of glasses.
   components:
   - type: Sprite
-    sprite: Clothing/Eyes/Glasses/thermal.rsi
+    sprite: White/Clothing/Eyes/Glasses/thermal.rsi
   - type: Clothing
-    sprite: Clothing/Eyes/Glasses/thermal.rsi
+    sprite: White/Clothing/Eyes/Glasses/thermal.rsi
   - type: ClothingGrantComponent
     component:
     - type: ThermalVision

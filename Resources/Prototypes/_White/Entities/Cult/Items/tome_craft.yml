@@ -40,7 +40,6 @@
     - type: ClothingGrantComponent
       component:
       - type: NightVision
-        isActive: true
         toggleAction: null
         activateSound: null
         deactivateSound: null

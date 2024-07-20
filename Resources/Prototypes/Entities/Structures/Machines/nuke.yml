@@ -95,11 +95,13 @@
     bodyType: Dynamic
 
 - type: entity
-  parent: NuclearBomb
+  parent: NuclearBombUnanchored
   id: NuclearBombSyndicate
   suffix: syndicate
   components:
   - type: NuclearBombSyndicate
+  - type: NukeLabel
+    prefix: nuke-label-syndicate
 
 - type: entity
   parent: StorageTank

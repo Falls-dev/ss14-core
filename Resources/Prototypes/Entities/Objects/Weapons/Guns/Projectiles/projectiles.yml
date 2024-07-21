@@ -123,7 +123,6 @@
   - type: StaminaDamageOnCollide
     ignoreResistances: false
     damage: 33 # Wd EDIT
-  - type: StunLock # Wd EDIT
 
 - type: entity
   id: BaseBulletIncendiary
@@ -218,7 +217,6 @@
   - type: Reflective
     reflective:
     - Energy
-  - type: StunLock # WD EDIT
 
 - type: entity
   name : disabler bolt
@@ -261,7 +259,6 @@
     soundHit:
       collection: WeakHit
     forceSound: true
-  - type: StunLock # WD EDIT
 
 - type: entity
   name : disabler bolt practice
@@ -1018,7 +1015,6 @@
     soundHit:
       collection: WeakHit
     forceSound: true
-  - type: StunLock # WD EDIT
 
 - type: entity
   name: tesla gun lightning

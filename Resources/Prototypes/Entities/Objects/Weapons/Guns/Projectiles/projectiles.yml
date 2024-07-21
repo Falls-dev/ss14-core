@@ -122,7 +122,8 @@
       path: /Audio/Weapons/Guns/Hits/snap.ogg
   - type: StaminaDamageOnCollide
     ignoreResistances: false
-    damage: 22 # 5 hits to stun sounds reasonable
+    damage: 33 # Wd EDIT
+  - type: StunLock # Wd EDIT
 
 - type: entity
   id: BaseBulletIncendiary
@@ -217,6 +218,7 @@
   - type: Reflective
     reflective:
     - Energy
+  - type: StunLock # WD EDIT
 
 - type: entity
   name : disabler bolt
@@ -259,6 +261,7 @@
     soundHit:
       collection: WeakHit
     forceSound: true
+  - type: StunLock # WD EDIT
 
 - type: entity
   name : disabler bolt practice
@@ -1014,6 +1017,7 @@
     soundHit:
       collection: WeakHit
     forceSound: true
+  - type: StunLock # WD EDIT
 
 - type: entity
   name: tesla gun lightning

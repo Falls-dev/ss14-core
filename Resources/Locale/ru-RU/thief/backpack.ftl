@@ -62,6 +62,6 @@ thief-backpack-category-slavery-description =
 
 thief-backpack-category-hitech-name = высокотехнологичный набор
 thief-backpack-category-hitech-description =
-    Набор для любителей высоких технологий.
+    Набор для любителей технологий.
     Включает в себя устройство для взлома шлюзов и шкафов,
-    временной маяк и хамелеон проектор.
+    временной маяк, глушитель радио и хамелеон проектор.

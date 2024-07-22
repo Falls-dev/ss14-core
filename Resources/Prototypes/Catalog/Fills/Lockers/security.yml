@@ -19,6 +19,10 @@
       - id: ClothingOuterHardsuitWarden
       - id: OxygenTankFilled
       - id: LightModule
+      - id: WeaponLauncherRiot
+      - id: BoxRiotGrenadeFlash
+      - id: BoxRiotGrenadeSmoke
+      - id: BoxRiotGrenadeBeanbag
 
 - type: entity
   id: LockerWardenFilled
@@ -39,6 +43,10 @@
       - id: MagazinePistol
       - id: BoxMindshield
       - id: LightModule
+      - id: WeaponLauncherRiot
+      - id: BoxRiotGrenadeFlash
+      - id: BoxRiotGrenadeSmoke
+      - id: BoxRiotGrenadeBeanbag
 
 - type: entity
   id: LockerSecurityFilled

@@ -65236,6 +65236,12 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 31.5,-1.5
       parent: 2
+  - uid: 8701
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 33.5,-1.5
+      parent: 2
   - uid: 8702
     components:
     - type: Transform
@@ -74162,7 +74168,7 @@ entities:
     - type: Transform
       pos: 66.5,-59.5
       parent: 2
-- proto: Bola
+- proto: CultBola
   entities:
   - uid: 15785
     components:
@@ -120974,13 +120980,6 @@ entities:
     - type: Transform
       pos: -12.5,22.5
       parent: 2
-- proto: Jukebox
-  entities:
-  - uid: 8701
-    components:
-    - type: Transform
-      pos: 33.5,-1.5
-      parent: 2
 - proto: KitchenKnife
   entities:
   - uid: 15922
@@ -127001,6 +127000,11 @@ entities:
     - type: Transform
       pos: 10.5,-0.5
       parent: 2
+  - uid: 16546
+    components:
+    - type: Transform
+      pos: 27.5,0.5
+      parent: 2
   - uid: 16547
     components:
     - type: Transform
@@ -129817,6 +129821,11 @@ entities:
     components:
     - type: Transform
       pos: 59.5,-2.5
+      parent: 2
+  - uid: 18913
+    components:
+    - type: Transform
+      pos: 4.5,-40.5
       parent: 2
 - proto: ProtolatheMachineCircuitboard
   entities:
@@ -146917,14 +146926,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -59.5,5.5
       parent: 2
-- proto: SurvivalKnife
-  entities:
-  - uid: 19231
-    components:
-    - type: Transform
-      parent: 19230
-    - type: Physics
-      canCollide: False
 - proto: SynthesizerInstrument
   entities:
   - uid: 16
@@ -150693,22 +150694,12 @@ entities:
       parent: 2
 - proto: ToiletEmpty
   entities:
-  - uid: 19230
+  - uid: 16721
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 3.141592653589793 rad
       pos: -35.5,38.5
       parent: 2
-    - type: ContainerContainer
-      containers:
-        stash: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: 19231
-        disposals: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
   - uid: 19840
     components:
     - type: Transform
@@ -174139,6 +174130,12 @@ entities:
       parent: 2
 - proto: WindoorSecureArmoryLocked
   entities:
+  - uid: 18569
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -8.5,50.5
+      parent: 2
   - uid: 23349
     components:
     - type: Transform
@@ -174200,12 +174197,6 @@ entities:
     components:
     - type: Transform
       pos: 11.5,48.5
-      parent: 2
-  - uid: 23358
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -8.5,50.5
       parent: 2
   - uid: 23395
     components:

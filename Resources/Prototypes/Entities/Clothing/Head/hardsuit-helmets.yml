@@ -185,7 +185,6 @@
         Piercing: 0.9
         Heat: 0.9
   - type: FlashImmunity # WD edit
-  - type: FlashSoundSuppression # WD edit
 
 #Brigmedic Hardsuit
 - type: entity
@@ -214,7 +213,6 @@
     highPressureMultiplier: 0.6
     lowPressureMultiplier: 1000
   - type: FlashImmunity # WD edit
-  - type: FlashSoundSuppression # WD edit
 
 #Warden's Hardsuit
 - type: entity
@@ -241,7 +239,6 @@
         Piercing: 0.9
         Heat: 0.9
   - type: FlashImmunity # WD edit
-  - type: FlashSoundSuppression # WD edit
 
 #Captain's Hardsuit
 - type: entity
@@ -259,7 +256,6 @@
     highPressureMultiplier: 0.3
     lowPressureMultiplier: 1000
   - type: FlashImmunity # WD edit
-  - type: FlashSoundSuppression # WD edit
 
 #Inspector's Hardsuit
 - type: entity
@@ -358,7 +354,6 @@
         Piercing: 0.9
         Heat: 0.9
   - type: FlashImmunity
-  - type: FlashSoundSuppression
 
 #Luxury Mining Hardsuit
 - type: entity

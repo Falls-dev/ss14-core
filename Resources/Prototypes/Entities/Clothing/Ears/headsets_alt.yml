@@ -9,7 +9,6 @@
     state: icon_alt
   - type: Clothing
     equippedPrefix: alt
-  - type: FlashSoundSuppression # WD
 
 - type: entity
   parent: ClothingHeadsetAlt

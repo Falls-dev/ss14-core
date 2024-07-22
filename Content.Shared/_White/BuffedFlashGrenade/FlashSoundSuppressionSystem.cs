@@ -21,8 +21,19 @@ public sealed class FlashSoundSuppressionSystem : EntitySystem
         args.Args.Protected = true;
     }
 
-    public void Stun(EntityUid target, float duration)
+    public void Stun(EntityUid target, float duration, float distance, float range)
     {
+        if (range <= 0)
+            return;
+        if (distance < 0)
+            distance = 0;
+        if (distance > range)
+            distance = range;
+
+        var stunTime = float.Lerp(duration, 0f, distance / range);
+        if (stunTime <= 0f)
+            return;
+
         if (HasComp<FlashSoundSuppressionComponent>(target))
             return;
 
@@ -31,7 +42,7 @@ public sealed class FlashSoundSuppressionSystem : EntitySystem
         if (ev.Protected)
             return;
 
-        _stunSystem.TryParalyze(target, TimeSpan.FromSeconds(duration / 1000f), true);
+        _stunSystem.TryParalyze(target, TimeSpan.FromSeconds(stunTime / 1000f), true);
     }
 }
 

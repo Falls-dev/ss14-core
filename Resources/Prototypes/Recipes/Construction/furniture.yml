@@ -237,6 +237,63 @@
   conditions:
     - !type:TileNotBlocked
 
+# WD edit start
+
+- type: construction
+  name: brown comfy chair
+  id: BrownChairComfy
+  graph: Seat
+  startNode: start
+  targetNode: brownChairComfy
+  category: construction-category-furniture
+  description: It looks comfy.
+  icon:
+    sprite: Structures/Furniture/chairs.rsi
+    state: comfy-greyscale
+    color: "#AE6716"
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  name: light blue comfy chair
+  id: LightBlueChairComfy
+  graph: Seat
+  startNode: start
+  targetNode: lightBlueChairComfy
+  category: construction-category-furniture
+  description: It looks comfy.
+  icon:
+    sprite: Structures/Furniture/chairs.rsi
+    state: comfy-greyscale
+    color: "#52B4E9"
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  name: comfy chair
+  id: ChairComfy
+  graph: Seat
+  startNode: start
+  targetNode: chairComfy
+  category: construction-category-furniture
+  description: It looks comfy.
+  icon:
+    sprite: Structures/Furniture/chairs.rsi
+    state: comfy-greyscale
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+# WD edit end
+
 - type: construction
   name: pilots chair
   id: chairPilotSeat

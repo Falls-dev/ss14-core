@@ -153,7 +153,7 @@
               doAfter: 1
             - material: WoodPlank
               amount: 1
-              doAfter: 1              
+              doAfter: 1
         - to: pinkPaddedStool
           steps:
             - material: Cloth
@@ -161,7 +161,7 @@
               doAfter: 1
             - material: WoodPlank
               amount: 1
-              doAfter: 1              
+              doAfter: 1
         - to: purplePaddedStool
           steps:
             - material: Cloth
@@ -169,7 +169,7 @@
               doAfter: 1
             - material: WoodPlank
               amount: 1
-              doAfter: 1              
+              doAfter: 1
         - to: redPaddedStool
           steps:
             - material: Cloth
@@ -177,7 +177,7 @@
               doAfter: 1
             - material: WoodPlank
               amount: 1
-              doAfter: 1              
+              doAfter: 1
         - to: whitePaddedStool
           steps:
             - material: Cloth
@@ -185,7 +185,7 @@
               doAfter: 1
             - material: WoodPlank
               amount: 1
-              doAfter: 1              
+              doAfter: 1
 
     - node: chair
       entity: Chair
@@ -351,6 +351,46 @@
             - tool: Screwing
               doAfter: 1
 
+    # WD edit starts
+
+    - node: brownChairComfy
+      entity: BrownComfyChair
+      edges:
+      - to: start
+        completed:
+        - !type:SpawnPrototype
+          prototype: SheetSteel1
+          amount: 2
+        steps:
+        - tool: Screwing
+          doAfter: 1
+
+    - node: lightBlueChairComfy
+      entity: LightBlueComfyChair
+      edges:
+      - to: start
+        completed:
+        - !type:SpawnPrototype
+          prototype: SheetSteel1
+          amount: 2
+        steps:
+        - tool: Screwing
+          doAfter: 1
+
+    - node: chairComfy
+      entity: ComfyChair
+      edges:
+      - to: start
+        completed:
+        - !type:SpawnPrototype
+          prototype: SheetSteel1
+          amount: 2
+        steps:
+        - tool: Screwing
+          doAfter: 1
+
+    # WD edit end
+
     - node: chairPilotSeat
       entity: ChairPilotSeat
       edges:
@@ -485,7 +525,7 @@
               amount: 3
             - !type:SpawnPrototype
               prototype: MaterialWoodPlank1
-              amount: 1              
+              amount: 1
           steps:
             - tool: Cutting
               doAfter: 1
@@ -500,7 +540,7 @@
               amount: 3
             - !type:SpawnPrototype
               prototype: MaterialWoodPlank1
-              amount: 1              
+              amount: 1
           steps:
             - tool: Cutting
               doAfter: 1
@@ -515,7 +555,7 @@
               amount: 3
             - !type:SpawnPrototype
               prototype: MaterialWoodPlank1
-              amount: 1              
+              amount: 1
           steps:
             - tool: Cutting
               doAfter: 1
@@ -530,7 +570,7 @@
               amount: 3
             - !type:SpawnPrototype
               prototype: MaterialWoodPlank1
-              amount: 1              
+              amount: 1
           steps:
             - tool: Cutting
               doAfter: 1
@@ -545,7 +585,7 @@
               amount: 3
             - !type:SpawnPrototype
               prototype: MaterialWoodPlank1
-              amount: 1              
+              amount: 1
           steps:
             - tool: Cutting
               doAfter: 1
@@ -560,7 +600,7 @@
               amount: 3
             - !type:SpawnPrototype
               prototype: MaterialWoodPlank1
-              amount: 1              
+              amount: 1
           steps:
             - tool: Cutting
               doAfter: 1
@@ -575,7 +615,7 @@
               amount: 3
             - !type:SpawnPrototype
               prototype: MaterialWoodPlank1
-              amount: 1              
+              amount: 1
           steps:
             - tool: Cutting
               doAfter: 1

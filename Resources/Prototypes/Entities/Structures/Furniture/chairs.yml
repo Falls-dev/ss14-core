@@ -263,7 +263,7 @@
     color: "#563968"
   - type: Construction
     graph: Seat
-    node: purpleChairComfy
+    node: purpleChairComfyf
 
 - type: entity
   name: red comfy chair
@@ -292,6 +292,51 @@
   - type: Construction
     graph: Seat
     node: whiteChairComfy
+
+# WD edit start
+
+- type: entity
+  name: brown comfy chair
+  id: BrownComfyChair
+  parent: ChairBase
+  description: It looks comfy.
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/chairs.rsi
+    state: comfy-greyscale
+    color: "#AE6716"
+  - type: Construction
+    graph: Seat
+    node: brownChairComfy
+
+- type: entity
+  name: light blue comfy chair
+  id: LightBlueComfyChair
+  parent: ChairBase
+  description: It looks comfy.
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/chairs.rsi
+    state: comfy-greyscale
+    color: "#52B4E9"
+  - type: Construction
+    graph: Seat
+    node: lightBlueChairComfy
+
+- type: entity
+  name: comfy chair
+  id: ComfyChair
+  parent: ChairBase
+  description: It looks comfy.
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/chairs.rsi
+    state: comfy-greyscale
+  - type: Construction
+    graph: Seat
+    node: chairComfy
+
+# WD edit end
 
 - type: entity
   name: pilot seat

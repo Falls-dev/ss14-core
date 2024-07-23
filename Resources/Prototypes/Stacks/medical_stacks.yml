@@ -38,7 +38,7 @@
   name: tourniquet
   icon: { sprite: "/Textures/Objects/Specific/Medical/medical.rsi", state: tourniquet }
   spawn: Tourniquet
-  maxCount: 2
+  maxCount: 3 # WD
   itemSize: 1
 
 - type: stack

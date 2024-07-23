@@ -358,6 +358,12 @@ namespace Content.Server.Communications
                 }
 
                 _roundEndSystem.RequestRoundEnd(uid, text: "round-end-system-shuttle-called-announcement-reason", reason: message);
+
+                //WD-start
+                var ttsEv = new TTSAnnouncementEvent(message, comp.TtsVoiceId, uid, comp.Global);
+                RaiseLocalEvent(ttsEv);
+                //WD-end
+
                 _adminLogger.Add(LogType.Action, LogImpact.Extreme, $"{ToPrettyString(mob):player} has called the shuttle.");
             });
         }

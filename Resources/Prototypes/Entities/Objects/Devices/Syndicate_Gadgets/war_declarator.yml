@@ -14,7 +14,7 @@
     - type: ActivatableUI
       inHandsOnly: true
       singleUser: true
-      requireActiveHand: false
+      closeOnHandDeselect: false
       key: enum.WarDeclaratorUiKey.Key
     - type: UserInterface
       interfaces:

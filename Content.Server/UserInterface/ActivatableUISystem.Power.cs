@@ -1,11 +1,13 @@
+using Content.Server.PowerCell;
 using Content.Shared.PowerCell;
+using Content.Shared.UserInterface;
 using Robust.Shared.Containers;
 
-namespace Content.Shared.UserInterface;
+namespace Content.Server.UserInterface;
 
 public sealed partial class ActivatableUISystem
 {
-    [Dependency] private readonly SharedPowerCellSystem _cell = default!;
+    [Dependency] private readonly PowerCellSystem _cell = default!;
 
     private void InitializePower()
     {
@@ -20,19 +22,12 @@ public sealed partial class ActivatableUISystem
     {
         _cell.SetPowerCellDrawEnabled(uid, false);
 
-        if (!HasComp<ActivatableUIRequiresPowerCellComponent>(uid) ||
-            !TryComp(uid, out ActivatableUIComponent? activatable))
+        if (HasComp<ActivatableUIRequiresPowerCellComponent>(uid) &&
+            TryComp<ActivatableUIComponent>(uid, out var activatable) &&
+            activatable.Key != null)
         {
-            return;
+            _uiSystem.TryCloseAll(uid, activatable.Key);
         }
-
-        if (activatable.Key == null)
-        {
-            Log.Error($"Encountered null key in activatable ui on entity {ToPrettyString(uid)}");
-            return;
-        }
-
-        _uiSystem.CloseUi(uid, activatable.Key);
     }
 
     private void OnBatteryOpened(EntityUid uid, ActivatableUIRequiresPowerCellComponent component, BoundUIOpenedEvent args)
@@ -62,19 +57,13 @@ public sealed partial class ActivatableUISystem
     /// </summary>
     public void CheckUsage(EntityUid uid, ActivatableUIComponent? active = null, ActivatableUIRequiresPowerCellComponent? component = null, PowerCellDrawComponent? draw = null)
     {
-        if (!Resolve(uid, ref component, ref draw, ref active, false))
+        if (!Resolve(uid, ref component, ref draw, ref active, false) || active.Key == null)
             return;
 
-        if (active.Key == null)
-        {
-            Log.Error($"Encountered null key in activatable ui on entity {ToPrettyString(uid)}");
-            return;
-        }
-
-        if (_cell.HasActivatableCharge(uid))
+        if (_cell.HasCharge(uid, draw.UseRate))
             return;
 
-        _uiSystem.CloseUi(uid, active.Key);
+        _uiSystem.TryCloseAll(uid, active.Key);
     }
 
     private void OnBatteryOpenAttempt(EntityUid uid, ActivatableUIRequiresPowerCellComponent component, ActivatableUIOpenAttemptEvent args)
@@ -83,11 +72,10 @@ public sealed partial class ActivatableUISystem
             return;
 
         // Check if we have the appropriate drawrate / userate to even open it.
-        if (args.Cancelled ||
-            !_cell.HasActivatableCharge(uid, draw, user: args.User) ||
-            !_cell.HasDrawCharge(uid, draw, user: args.User))
+        if (args.Cancelled || !_cell.HasCharge(uid, MathF.Max(draw.DrawRate, draw.UseRate), user: args.User))
         {
             args.Cancel();
+            return;
         }
     }
 }

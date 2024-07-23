@@ -18,7 +18,7 @@
   - type: ActivatableUI
     key: enum.ForensicScannerUiKey.Key
     inHandsOnly: true
-    requireActiveHand: false
+    closeOnHandDeselect: false
   - type: UserInterface
     interfaces:
     - key: enum.ForensicScannerUiKey.Key

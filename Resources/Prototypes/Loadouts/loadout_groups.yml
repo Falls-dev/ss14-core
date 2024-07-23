@@ -373,8 +373,11 @@
 - type: loadoutGroup # WD edit
   id: ChaplainJobTrinkets
   name: loadout-group-job-trinkets
+  minLimit: 2
+  maxLimit: 2
   loadouts:
   - ArmamentsBeacon
+  - Bible
 
 - type: loadoutGroup
   id: ChaplainPDA

@@ -1593,12 +1593,6 @@
   - RedTie
 
 - type: loadoutGroup # WD
-  id: CommonSecurityHeadset
-  name: loadout-group-ears
-  loadouts:
-  - SecurityHeadset
-
-- type: loadoutGroup # WD
   id: CommonSecurityCommandHeadset
   name: loadout-group-ears
   loadouts:

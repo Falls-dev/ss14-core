@@ -539,7 +539,7 @@
       - state: icon-syndicate
     - type: ItemBorgModule
       items:
-      - EnergySwordBorg
+      - CyborgEnergySwordDouble
       - PinpointerSyndicateNuclear
 
 - type: entity

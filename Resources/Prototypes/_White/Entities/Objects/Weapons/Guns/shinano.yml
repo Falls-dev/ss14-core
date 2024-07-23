@@ -1,18 +1,18 @@
 - type: entity
-  name: Riot Launcher
+  name: Shinano
   parent: BaseItem
-  id: WeaponLauncherRiot
-  description: ShitSec Launcher
+  id: WeaponLauncherShinano
+  description: A single-shot grenade launcher, which is equipped with colonial police, security units and mercenaries wherever there is a Nanotrain influence. He is notorious among picketers and revolutionaries, as BLUP is the first thing they hear before violence begins.
   components:
   - type: Sprite
-    sprite: White/Objects/Weapons/Guns/Launchers/china_lake-icons.rsi
+    sprite: White/Objects/Weapons/Guns/Launchers/shinano-icons.rsi
     layers:
       - state: icon
         map: ["enum.GunVisualLayers.Base"]
   - type: Item
-    sprite: White/Objects/Weapons/Guns/Launchers/china_lake-inhands.rsi
+    sprite: White/Objects/Weapons/Guns/Launchers/shinano-inhands.rsi
   - type: Clothing
-    sprite: White/Objects/Weapons/Guns/Launchers/china_lake-inhands.rsi
+    sprite: White/Objects/Weapons/Guns/Launchers/shinano-inhands.rsi
     slots:
     - Back
     - suitStorage
@@ -29,9 +29,9 @@
   - type: BallisticAmmoProvider
     whitelist:
       tags:
-        - RiotGrenade
+        - ShinanoGrenade
     capacity: 1
-    proto: RiotGrenadeFlash
+    proto: ShinanoGrenadeFlash
     soundInsert:
       path: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
     autoCycle: false

@@ -1,23 +1,23 @@
 - type: entity
-  id: BaseRiotGrenade
-  name: base riot grenade
+  id: BaseShinanoGrenade
+  name: base shinano grenade
   parent: BaseItem
   abstract: true
   components:
   - type: Tag
     tags:
-    - RiotGrenade
+    - ShinanoGrenade
   - type: Item
     size: Small
   - type: Sprite
 
 - type: entity
-  id: RiotGrenadeFlash
-  name: riot flash grenade
-  parent: BaseRiotGrenade
+  id: ShinanoGrenadeFlash
+  name: shinano flash grenade
+  parent: BaseShinanoGrenade
   components:
   - type: CartridgeAmmo
-    proto: RiotBulletGrenadeFlash
+    proto: ShinanoBulletGrenadeFlash
   - type: Sprite
     sprite: Objects/Weapons/Guns/Ammunition/Explosives/explosives.rsi
     layers:
@@ -29,12 +29,12 @@
     suffix: false
 
 - type: entity
-  id: RiotGrenadeSmoke
-  name: riot smoke grenade
-  parent: BaseRiotGrenade
+  id: ShinanoGrenadeSmoke
+  name: shinano smoke grenade
+  parent: BaseShinanoGrenade
   components:
   - type: CartridgeAmmo
-    proto: RiotBulletGrenadeSmoke
+    proto: ShinanoBulletGrenadeSmoke
   - type: Sprite
     sprite: Objects/Weapons/Guns/Ammunition/Explosives/explosives.rsi
     layers:
@@ -46,12 +46,12 @@
     suffix: false
 
 - type: entity
-  id: RiotGrenadeBeanbag
-  name: beanbag riot grenade
-  parent: BaseRiotGrenade
+  id: ShinanoGrenadeBeanbag
+  name: beanbag shinano grenade
+  parent: BaseShinanoGrenade
   components:
   - type: CartridgeAmmo
-    proto: RiotBulletGrenadeBeanbag
+    proto: ShinanoBulletGrenadeBeanbag
   - type: Sprite
     sprite: Objects/Weapons/Guns/Ammunition/Explosives/explosives.rsi
     layers:

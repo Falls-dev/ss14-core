@@ -1,6 +1,6 @@
 - type: entity
-  id: BaseBulletRiotGranade
-  name: base roit granade
+  id: BaseBulletShinanoGranade
+  name: base shinano granade
   abstract: true
   components:
   - type: MovedByPressure
@@ -30,9 +30,9 @@
   - type: TriggerOnLand
 
 - type: entity
-  id: RiotBulletGrenadeFlash
-  name: flash riot grenade
-  parent: BaseBulletRiotGranade
+  id: ShinanoBulletGrenadeFlash
+  name: flash shinano grenade
+  parent: BaseBulletShinanoGranade
   noSpawn: true
   components:
   - type: Sprite
@@ -45,9 +45,9 @@
     proto: GrenadeFlashEffect
 
 - type: entity
-  id: RiotBulletGrenadeSmoke
-  name: smoke riot grenade
-  parent: BaseBulletRiotGranade
+  id: ShinanoBulletGrenadeSmoke
+  name: smoke shinano grenade
+  parent: BaseBulletShinanoGranade
   noSpawn: true
   components:
   - type: Sprite
@@ -66,8 +66,8 @@
     sound: /Audio/Items/smoke_grenade_smoke.ogg
 
 - type: entity
-  id: RiotBulletGrenadeBeanbag
-  name: beanbag riot grenade
+  id: ShinanoBulletGrenadeBeanbag
+  name: beanbag shinano grenade
   noSpawn: true
   parent: [BaseBullet, BaseBulletTrail]
   components:

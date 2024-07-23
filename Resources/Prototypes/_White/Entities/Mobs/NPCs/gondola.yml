@@ -6,8 +6,8 @@
     - MobBloodstream
     - MobFlammable
   id: MobGondola
-  name: Гондола
-  description: Не имея рук, он воплощает даосский принцип у-вэй (бездействия), а выражение его улыбающегося лица показывает его полное принятие мира таким, какой он есть.
+  name: Gondola
+  description: Something about Jesus.
   components:
   - type: FloatingVisuals
   - type: RotationVisuals

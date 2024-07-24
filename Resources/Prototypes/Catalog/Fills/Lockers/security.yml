@@ -124,7 +124,7 @@
       - id: ClothingHeadHatFedoraBrown
       - id: ClothingNeckTieDet
       - id: ClothingOuterVestDetective
-      - id: ClothingOuterCoatDetective
+      - id: ClothingOuterCoatDetectiveLoadout
       - id: FlashlightSeclite
       - id: ForensicScanner
       - id: LogProbeCartridge

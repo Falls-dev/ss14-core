@@ -166,7 +166,6 @@ public sealed partial class SalvageSystem
             _dungeon,
             _metaData,
             _transform,
-            _mapSystem,
             station,
             coordinatesDisk,
             missionParams,

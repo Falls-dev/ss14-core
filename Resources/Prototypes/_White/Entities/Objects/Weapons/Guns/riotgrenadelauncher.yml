@@ -1,7 +1,7 @@
 - type: entity
-  name: Riot Launcher
   parent: BaseItem
   id: RiotWeaponLauncher
+  name: Riot Launcher
   description: ShitSec Launcher
   components:
   - type: Sprite
@@ -37,10 +37,10 @@
     autoCycle: false
 
 - type: entity
-  id: BaseRiotGrenade
-  name: base riot grenade
   parent: BaseItem
+  id: BaseRiotGrenade
   abstract: true
+  name: base riot grenade
   components:
   - type: Tag
     tags:
@@ -50,9 +50,9 @@
   - type: Sprite
 
 - type: entity
+  parent: BaseRiotGrenade
   id: RiotGrenadeFlash
   name: riot flash grenade
-  parent: BaseRiotGrenade
   components:
   - type: CartridgeAmmo
     proto: RiotBulletGrenadeFlash
@@ -67,9 +67,9 @@
     suffix: false
 
 - type: entity
+  parent: BaseRiotGrenade
   id: RiotGrenadeSmoke
   name: riot smoke grenade
-  parent: BaseRiotGrenade
   components:
   - type: CartridgeAmmo
     proto: RiotBulletGrenadeSmoke
@@ -85,8 +85,8 @@
 
 - type: entity
   id: BaseBulletRiotGranade
-  name: base roit granade
   abstract: true
+  name: base roit granade
   components:
   - type: MovedByPressure
   - type: FlyBySound
@@ -115,10 +115,10 @@
   - type: TriggerOnLand
 
 - type: entity
-  id: RiotBulletGrenadeFlash
-  name: flash riot grenade
   parent: BaseBulletRiotGranade
+  id: RiotBulletGrenadeFlash
   noSpawn: true
+  name: flash riot grenade
   components:
   - type: Sprite
     sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
@@ -131,10 +131,10 @@
     proto: GrenadeFlashEffect
 
 - type: entity
-  id: RiotBulletGrenadeSmoke
-  name: smoke riot grenade
   parent: BaseBulletRiotGranade
+  id: RiotBulletGrenadeSmoke
   noSpawn: true
+  name: smoke riot grenade
   components:
   - type: Sprite
     sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi

@@ -87,6 +87,7 @@
   - type: GuideHelp
     guides:
     - Security
+  - type: StunLock # Wd EDIT
 
 - type: entity
   name: truncheon
@@ -138,8 +139,8 @@
         shader: unshaded
     - type: Flash
     - type: LimitedCharges
-      maxCharges: 5
-      charges: 5
+      maxCharges: 7
+      charges: 7
     - type: MeleeWeapon
       canHeavyAttack: false
       wideAnimationRotation: 180
@@ -148,7 +149,7 @@
           Blunt: 0 # melee weapon to allow flashing individual targets
       angle: 10
     - type: Item
-      size: Small
+      size: Tiny
       sprite: Objects/Weapons/Melee/flash.rsi
     - type: UseDelay
     - type: StaticPrice

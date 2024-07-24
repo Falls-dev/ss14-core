@@ -10,6 +10,7 @@
   - CaptainJumpsuit
   - CaptainBackpack
   - CaptainOuterClothing
+  - CaptainGloves # WD
   - CaptainShoes
   - CaptainPDA # WD
   - Trinkets
@@ -96,7 +97,7 @@
   - CommonBackpack
   - CommonShoes # WD
   - LibrarianPDA
-  - InhandCane
+  - ItemCane # WD
   - Trinkets
 
 - type: roleLoadout
@@ -172,6 +173,7 @@
   - MimeJumpsuit
   - MimeBackpack
   - MimeOuterClothing
+  - MimeGloves # WD
   - CommonShoes # WD
   - MimePDA
   - Trinkets
@@ -204,13 +206,14 @@
   - CommonGloves # WD
   - QuartermasterShoes
   - QuartermasterPDA # WD
+  - CommonCargoJobTrinkets
   - Trinkets
 
 - type: roleLoadout
   id: JobCargoTechnician
   groups:
   - CargoTechnicianHead
-  - CommonCargoEars # WD
+  - CommonCargoHeadset # WD
   - CommonGlasses # WD
   - CargoTechnicianJumpsuit
   - CargoTechnicianBackpack
@@ -218,13 +221,14 @@
   - CommonGloves # WD
   - CargoTechnicianShoes
   - CargoTechnicianPDA
+  - CommonCargoJobTrinkets
   - Trinkets
 
 - type: roleLoadout
   id: JobSalvageSpecialist
   groups:
   - SalvageSpecialistHead # WD
-  - CommonCargoEars # WD
+  - SalvageSpecialistHeadset # WD
   - SalvageSpecialistEyes # WD
   - SalvageSpecialistMask # WD
   - SalvageSpecialistJumpsuit # WD
@@ -370,59 +374,69 @@
   - CommonSecurityCommandMask # WD
   - HeadofSecurityNeck
   - HeadofSecurityJumpsuit
+  - CommonGloves # WD
+  - CommonSecurityBelt # WD
   - CommonSecurityBackpack
-  - HeadofSecurityOuterClothing
   - CommonSecurityShoes
   - HeadofSecurityPDA
+  - CommonSecurityJobTrinkets # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobWarden
   groups:
   - WardenHead
-  - CommonSecurityCommandHeadset # WD
+  - CommonSecurityHeadsetFull # WD
   - CommonSecurityCommandMask # WD
   - CommonSecurityNeck
   - WardenJumpsuit
   - CommonSecurityBackpack
+  - CommonGloves # WD
+  - CommonSecurityBelt # WD
   - CommonSecurityShoes
   - WardenPDA
+  - CommonSecurityJobTrinkets # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobSeniorOfficer
   groups:
   - CommonSecurityHead
-  - CommonSecurityHeadset # WD
+  - CommonSecurityHeadsetFull # WD
   - CommonSecurityCommandMask # WD
   - CommonSecurityNeck
   - SeniorOfficerJumpsuit
   - CommonSecurityBackpack
   - SecurityOuterClothing
+  - CommonSecurityBelt # WD
+  - CommonGloves # WD
   - CommonSecurityShoes
   - SeniorOfficerPDA
+  - CommonSecurityJobTrinkets # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobSecurityOfficer
   groups:
   - CommonSecurityHead
-  - CommonSecurityHeadset # WD
+  - CommonSecurityHeadsetFull # WD
   - CommonSecurityMask # WD
   - CommonSecurityNeck # WD
   - SecurityJumpsuit
   - CommonSecurityBackpack
   - SecurityOuterClothing
+  - CommonSecurityBelt # WD
+  - CommonGloves # WD
   - CommonSecurityShoes
   - SecurityPDA
-  - SecurityBelt
+  - CommonSecurityJobTrinkets # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobDetective
   groups:
   - DetectiveHead
-  - CommonSecurityHeadset # WD
+  - CommonSecurityHeadsetFull # WD
   - CommonMaskCigarette # WD
   - CommonSecurityNeck
   - DetectiveJumpsuit
@@ -430,18 +444,22 @@
   - DetectiveOuterClothing
   - DetectiveGloves
   - DetectiveShoes
+  - DetectivePDA # WD
+  - CommonSecurityJobTrinkets # WD
   - Trinkets
 
 - type: roleLoadout
   id: JobSecurityCadet
   groups:
   - CommonSecurityHead
-  - CommonSecurityHeadset # WD
+  - CommonSecurityHeadsetFull # WD
   - CommonSecurityNeck
   - SecurityCadetJumpsuit
   - CommonSecurityBackpack
+  - CommonGloves # WD
   - CommonSecurityShoes
   - SecurityCadetPDA
+  - CommonSecurityJobTrinkets # WD
   - Trinkets
 
 # Medical
@@ -449,7 +467,7 @@
   id: JobChiefMedicalOfficer
   groups:
   - ChiefMedicalOfficerHead
-  - ChiefMedicalOfficerEars # WD
+  - ChiefMedicalOfficerHeadset # WD
   - CommonMedicalMask # WD
   - ChiefMedicalOfficerNeck
   - ChiefMedicalOfficerJumpsuit
@@ -481,12 +499,11 @@
   - CommonMedicalHeadset # WD
   - CommonMedicalMask # WD
   - MedicalDoctorJumpsuit
-  - MedicalGloves
   - MedicalBackpack
   - MedicalDoctorOuterClothing
-  - CommonMedicalShoes
-  - CommonMedicalGloves
-  - MedicalDoctorPDA
+  - CommonMedicalShoes # WD
+  - CommonMedicalGloves # WD
+  - MedicalDoctorPDA # WD
   - Trinkets
 
 - type: roleLoadout
@@ -511,10 +528,9 @@
   - ChemistEyes
   - CommonMedicalMask # WD
   - ChemistJumpsuit
-  - MedicalGloves
   - ChemistBackpack
   - ChemistOuterClothing
-  - CommonMedicalGloves
+  - CommonMedicalGloves # WD
   - ChemistShoes
   - ChemistPDA
   - Trinkets
@@ -579,6 +595,7 @@
   - CommonGlasses # WD
   - ZookeeperJumpsuit # WD
   - CommonBackpack
+  - CommonShoes # WD
   - ZookeeperPDA # WD
   - Trinkets
 
@@ -592,6 +609,7 @@
   - ReporterJumpsuit
   - CommonGloves # WD
   - CommonBackpack
+  - CommonShoes # WD
   - ReporterPDA # WD
   - Trinkets
 

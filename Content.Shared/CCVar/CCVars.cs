@@ -1041,13 +1041,13 @@ namespace Content.Shared.CCVar
         ///     Divisor from maxForce (pressureDifference * 2.25f) to force applied on objects.
         /// </summary>
         public static readonly CVarDef<float> SpaceWindPressureForceDivisorThrow =
-            CVarDef.Create("atmos.space_wind_pressure_force_divisor_throw", 15f, CVar.SERVERONLY);
+            CVarDef.Create("atmos.space_wind_pressure_force_divisor_throw", 10f, CVar.SERVERONLY);
 
         /// <summary>
         ///     Divisor from maxForce (pressureDifference * 2.25f) to force applied on objects.
         /// </summary>
         public static readonly CVarDef<float> SpaceWindPressureForceDivisorPush =
-            CVarDef.Create("atmos.space_wind_pressure_force_divisor_push", 2500f, CVar.SERVERONLY);
+            CVarDef.Create("atmos.space_wind_pressure_force_divisor_push", 10f, CVar.SERVERONLY);
 
         /// <summary>
         ///     The maximum velocity (not force) that may be applied to an object by atmospheric pressure differences.
@@ -1072,14 +1072,14 @@ namespace Content.Shared.CCVar
         ///     And maybe do your part to fix that? :)
         /// </remarks>
         public static readonly CVarDef<float> SpaceWindMinimumCalculatedMass =
-            CVarDef.Create("atmos.space_wind_minimum_calculated_mass", 10f, CVar.SERVERONLY);
+            CVarDef.Create("atmos.space_wind_minimum_calculated_mass", 5f, CVar.SERVERONLY);
 
         /// <summary>
         /// 	Calculated as 1/Mass, where Mass is the physics.Mass of the desired threshold.
         /// 	If an object's inverse mass is lower than this, it is capped at this. Basically, an upper limit to how heavy an object can be before it stops resisting space wind more.
         /// </summary>
         public static readonly CVarDef<float> SpaceWindMaximumCalculatedInverseMass =
-            CVarDef.Create("atmos.space_wind_maximum_calculated_inverse_mass", 0.04f, CVar.SERVERONLY);
+            CVarDef.Create("atmos.space_wind_maximum_calculated_inverse_mass", 1f, CVar.SERVERONLY);
 
         /// <summary>
         ///     Whether monstermos tile equalization is enabled.
@@ -1130,7 +1130,7 @@ namespace Content.Shared.CCVar
         ///     1.0 for instant spacing, 0.2 means 20% of remaining air lost each time
         /// </summary>
         public static readonly CVarDef<float> AtmosSpacingEscapeRatio =
-            CVarDef.Create("atmos.mmos_spacing_speed", 0.9f, CVar.SERVERONLY);
+            CVarDef.Create("atmos.mmos_spacing_speed", 0.7f, CVar.SERVERONLY);
 
         /// <summary>
         ///     Minimum amount of air allowed on a spaced tile before it is reset to 0 immediately in kPa
@@ -1215,7 +1215,7 @@ namespace Content.Shared.CCVar
         ///     This multiplier is added after all other checks are made, and applies to both throwing force, and how easy it is for an entity to be thrown.
         /// </summary>
         public static readonly CVarDef<float> AtmosHumanoidThrowMultiplier =
-            CVarDef.Create("atmos.humanoid_throw_multiplier", 2f, CVar.SERVERONLY);
+            CVarDef.Create("atmos.humanoid_throw_multiplier", 8f, CVar.SERVERONLY);
 
         /*
          * MIDI instruments

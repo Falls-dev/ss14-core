@@ -25,7 +25,7 @@
     - type: CultItem
 
 - type: entity
-  parent: ClothingEyesBase
+  parent: [ClothingEyesBase, ShowSecurityIcons]
   id: CultClothingBlindfold
   name: zealot's blindfold
   description: A blindfold endowed with a strange power.
@@ -50,7 +50,6 @@
     - type: ShowHealthIcons
       damageContainers:
       - Biological
-    - type: ShowSecurityIcons
 
 - type: entity
   name: veil shifter

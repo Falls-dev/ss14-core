@@ -614,7 +614,7 @@ namespace Content.Shared.Preferences
                 : FormattedMessage.RemoveMarkup(FlavorText);
 
             // WD-EDIT
-            var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, BodyType, sponsorMarkings);
+            var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, BodyType, sponsorMarkings, sex);
             // WD-EDIT
 
             var prefsUnavailableMode = PreferenceUnavailable switch

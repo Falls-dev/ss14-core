@@ -96,6 +96,13 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance
     {
     }
 
+    public static string DefaultWithBodyType(string species)
+    {
+        var speciesPrototype = IoCManager.Resolve<IPrototypeManager>().Index<SpeciesPrototype>(species);
+
+        return speciesPrototype.BodyTypes.First();
+    }
+
     public static HumanoidCharacterAppearance DefaultWithSpecies(string species)
     {
         var speciesPrototype = IoCManager.Resolve<IPrototypeManager>().Index<SpeciesPrototype>(species);
@@ -181,7 +188,7 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance
         return new(color.RByte, color.GByte, color.BByte);
     }
 
-    public static HumanoidCharacterAppearance EnsureValid(HumanoidCharacterAppearance appearance, string species, Sex sex)
+    public static HumanoidCharacterAppearance EnsureValid(HumanoidCharacterAppearance appearance, string species, string bodyType, string[] sponsorMarkings, Sex sex)
     {
         var hairStyleId = appearance.HairStyleId;
         var facialHairStyleId = appearance.FacialHairStyleId;
@@ -192,6 +199,22 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance
 
         var proto = IoCManager.Resolve<IPrototypeManager>();
         var markingManager = IoCManager.Resolve<MarkingManager>();
+
+        // WD-EDIT
+        if (proto.TryIndex(hairStyleId, out MarkingPrototype? hairProto) &&
+            hairProto.SponsorOnly &&
+            !sponsorMarkings.Contains(hairStyleId))
+        {
+            hairStyleId = HairStyles.DefaultHairStyle;
+        }
+
+        if (proto.TryIndex(facialHairStyleId, out MarkingPrototype? facialHairProto) &&
+            facialHairProto.SponsorOnly &&
+            !sponsorMarkings.Contains(facialHairStyleId))
+        {
+            facialHairStyleId = HairStyles.DefaultFacialHairStyle;
+        }
+        // WD-EDIT
 
         if (!markingManager.MarkingsByCategory(MarkingCategories.Hair).ContainsKey(hairStyleId))
         {
@@ -215,7 +238,10 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance
                 skinColor = Humanoid.SkinColor.ValidSkinTone(speciesProto.SkinColoration, skinColor);
             }
 
-            markingSet.EnsureSpecies(species, skinColor, markingManager);
+            markingSet.EnsureSpecies(species, bodyType, skinColor, markingManager);
+            // WD-EDIT
+            markingSet.FilterSponsor(sponsorMarkings, markingManager);
+            // WD-EDIT
             markingSet.EnsureSexes(sex, markingManager);
         }
 

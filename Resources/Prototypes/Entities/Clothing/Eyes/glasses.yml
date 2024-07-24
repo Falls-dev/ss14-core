@@ -266,7 +266,7 @@
     - type: NightVision
 
 - type: entity
-  parent: ClothingEyesBase
+  parent: [ClothingEyesBase, ShowSecurityIcons]
   id: ClothingEyesGlassesInspector
   name: inspector's sunglasses
   description: Inspector's sunglasses. The same as usual, but cooler.
@@ -280,4 +280,3 @@
       tags:
         - HamsterWearable
         - WhitelistChameleon
-    - type: ShowSecurityIcons

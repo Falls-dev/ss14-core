@@ -452,6 +452,7 @@
   - type: EyeProtection # WD edit
   - type: FlashImmunity # WD
   - type: FlashSoundSuppression
+    maxRange: 2
 
 #Syndicate Elite Hardsuit
 - type: entity
@@ -482,6 +483,7 @@
   - type: EyeProtection # WD edit
   - type: FlashImmunity # WD
   - type: FlashSoundSuppression
+    maxRange: 2
 
 #Syndicate Commander Hardsuit
 - type: entity
@@ -510,6 +512,7 @@
   - type: EyeProtection # WD edit
   - type: FlashImmunity # WD
   - type: FlashSoundSuppression
+    maxRange: 2
 
 #Cybersun Juggernaut Hardsuit
 - type: entity
@@ -536,6 +539,7 @@
   - type: EyeProtection # WD edit
   - type: FlashImmunity # WD
   - type: FlashSoundSuppression
+    maxRange: 2
 
 #Wizard Hardsuit
 - type: entity

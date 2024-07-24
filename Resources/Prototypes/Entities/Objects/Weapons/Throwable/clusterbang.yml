@@ -142,6 +142,9 @@
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container
+  - type: Tag
+    tags:
+    - ShinanoGrenade
 
 - type: entity
   parent: GrenadeBase

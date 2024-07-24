@@ -20,9 +20,6 @@
       - id: OxygenTankFilled
       - id: LightModule
       - id: WeaponLauncherShinano
-      - id: BoxShinanoGrenadeFlash
-      - id: BoxShinanoGrenadeSmoke
-      - id: BoxShinanoGrenadeBeanbag
 
 - type: entity
   id: LockerWardenFilled
@@ -44,9 +41,6 @@
       - id: BoxMindshield
       - id: LightModule
       - id: WeaponLauncherShinano
-      - id: BoxShinanoGrenadeFlash
-      - id: BoxShinanoGrenadeSmoke
-      - id: BoxShinanoGrenadeBeanbag
 
 - type: entity
   id: LockerSecurityFilled

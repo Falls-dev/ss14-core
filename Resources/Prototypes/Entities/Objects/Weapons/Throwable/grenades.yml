@@ -81,6 +81,9 @@
   - type: GuideHelp
     guides:
     - Security
+  - type: Tag
+    tags:
+    - ShinanoGrenade
 
 - type: entity
   id: GrenadeFlashEffect
@@ -364,6 +367,9 @@
   - type: TimerTriggerVisuals
     primingSound:
       path: /Audio/Items/smoke_grenade_prime.ogg
+  - type: Tag
+    tags:
+    - ShinanoGrenade
 
 - type: entity
   parent: SmokeGrenade
@@ -398,6 +404,9 @@
       reagents:
       - ReagentId: TearGas
         Quantity: 50
+  - type: Tag
+    tags:
+    - ShinanoGrenade
 
 # Non-explosive "dummy" grenades to use as a distraction.
 

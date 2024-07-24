@@ -215,9 +215,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (_actionsSystem == null)
             return false;
 
-        var coords = args.Coordinates;
-
-        if (!_actionsSystem.ValidateWorldTarget(user, coords, (actionId, action)))
+        if (!_actionsSystem.ValidateWorldTarget(user, coordinates, (actionId, action)))
         {
             // Invalid target.
             if (action.DeselectOnMiss)
@@ -260,9 +258,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (_actionsSystem == null)
             return false;
 
-        var entity = args.EntityUid;
-
-        if (!_actionsSystem.ValidateEntityTarget(user, entity, (actionId, action)))
+        if (!_actionsSystem.ValidateEntityTarget(user, uid, (actionId, action)))
         {
             if (action.DeselectOnMiss)
                 StopTargeting();

@@ -66,8 +66,7 @@ public sealed class HolosignSystem : EntitySystem
         if (args.Handled || !args.CanReach || args.Target != null)
             return;
 
-        var hasDelay = TryComp(uid, out UseDelayComponent? useDelay);
-        if (hasDelay && _useDelay.IsDelayed((uid, useDelay!)))
+        if (TryComp(uid, out UseDelayComponent? useDelay) && !_useDelay.TryResetDelay((uid, useDelay), true))
             return;
 
         if (component.Signs.Count >= component.Uses) // wd edit
@@ -85,8 +84,6 @@ public sealed class HolosignSystem : EntitySystem
 
         args.Handled = true;
         component.Signs.Add(holoUid); // WD EDIT
-        if (hasDelay)
-            _useDelay.SetDelay((uid, useDelay!), component.UseDelay);
     }
 
     private void OnComponentRemove(EntityUid uid, HolosignProjectorComponent comp, ComponentRemove args) // wd edit

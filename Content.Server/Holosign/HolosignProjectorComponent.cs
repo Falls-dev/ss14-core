@@ -18,8 +18,5 @@ namespace Content.Server.Holosign
 
         [ViewVariables(VVAccess.ReadWrite), DataField]
         public List<EntityUid?> Signs = new();
-
-        [ViewVariables(VVAccess.ReadWrite), DataField]
-        public TimeSpan UseDelay = TimeSpan.FromSeconds(0.5);
     }
 }

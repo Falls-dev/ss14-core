@@ -4,6 +4,7 @@ using Content.Server._White.Cult.GameRule;
 using Content.Server._White.Mood;
 using Content.Server._White.Other.FastAndFuriousSystem;
 using Content.Server._White.Wizard;
+using Content.Server.Abilities.Felinid;
 using Content.Server.Administration.Systems;
 using Content.Server.Bible.Components;
 using Content.Server.Body.Components;
@@ -1007,6 +1008,8 @@ public sealed partial class ChangelingSystem
         _implantSystem.TransferImplants(target, polymorphEntity.Value);
         _actionContainerSystem.TransferAllActionsFiltered(target, polymorphEntity.Value, polymorphEntity.Value);
         _action.GrantContainedActions(polymorphEntity.Value, polymorphEntity.Value);
+        if (TryComp(polymorphEntity.Value, out FelinidComponent? felinid))
+            _action.SetCharges(felinid.HairballAction, 0);
 
         return polymorphEntity;
     }

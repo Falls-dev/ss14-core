@@ -226,6 +226,7 @@
   - type: ShowHealthIcons
     damageContainers:
     - Biological
+  - type: SolutionScanner
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepHoverBorg
@@ -336,6 +337,14 @@
       noMindState: synd_medical
     - type: Construction
       node: syndicatemedical
+    - type: ShowHealthBars
+      damageContainers:
+      - Biological
+    - type: InteractionPopup
+      interactSuccessString: petting-success-syndicate-cyborg
+      interactFailureString: petting-failure-syndicate-cyborg
+      interactSuccessSound:
+        path: /Audio/Ambience/Objects/periodic_beep.ogg
 
 - type: entity
   id: BorgChassisSyndicateSaboteur

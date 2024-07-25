@@ -230,7 +230,8 @@ public abstract partial class SharedGunSystem : EntitySystem
     private void AttemptShoot(EntityUid user, EntityUid gunUid, GunComponent gun)
     {
         if (gun.FireRateModified <= 0f ||
-            !_actionBlockerSystem.CanAttack(user))
+            !_actionBlockerSystem.CanAttack(user) || TryComp(gunUid, out UseDelayComponent? useDelay) &&
+            _useDelay.IsDelayed((gunUid, useDelay))) // WD EDIT
             return;
 
         var toCoordinates = gun.ShootCoordinates;

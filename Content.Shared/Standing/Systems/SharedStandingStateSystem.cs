@@ -186,7 +186,7 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
             return false;
         }
 
-        Down(uid, true, behavior != DropHeldItemsBehavior.NoDrop, standingState);
+        Down(uid, true, behavior != DropHeldItemsBehavior.NoDrop, true, standingState);
         return true;
     }
     // WD EDIT END

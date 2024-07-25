@@ -1,10 +1,10 @@
-ent-BaseShinanoGrenade = Граната (40мм)
+ent-BaseShinanoGrenade = граната (40мм)
     .desc = { ent-BaseCartridge.desc }
-ent-ShinanoGrenadeFlash = Светошумовая граната (40мм)
+ent-ShinanoGrenadeFlash = светошумовая граната (40мм)
     .desc = { ent-BaseShinanoGrenade.desc }
-ent-ShinanoGrenadeSmoke = Слезоточивая граната (40мм)
+ent-ShinanoGrenadeSmoke = слезоточивая граната (40мм)
     .desc = { ent-BaseShinanoGrenade.desc }
-ent-ShinanoGrenadeStinger = Травматическая граната (40мм)
+ent-ShinanoGrenadeStinger = травматическая граната (40мм)
     .desc = { ent-BaseShinanoGrenade.desc }
-ent-ShinanoGrenadeBeanbag = Травматическая пуля (40мм)
+ent-ShinanoGrenadeBeanbag = травматическая пуля (40мм)
     .desc = { ent-BaseShinanoGrenade.desc }

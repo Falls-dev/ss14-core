@@ -69,7 +69,7 @@
 
 - type: entity
   id: ShinanoBulletGrenadeStinger
-  name: Stinger shinano grenade
+  name: stinger shinano grenade
   parent: BaseBulletShinanoGranade
   noSpawn: true
   components:

@@ -1008,8 +1008,12 @@ public sealed partial class ChangelingSystem
         _implantSystem.TransferImplants(target, polymorphEntity.Value);
         _actionContainerSystem.TransferAllActionsFiltered(target, polymorphEntity.Value, polymorphEntity.Value);
         _action.GrantContainedActions(polymorphEntity.Value, polymorphEntity.Value);
-        if (TryComp(polymorphEntity.Value, out FelinidComponent? felinid))
-            _action.SetCharges(felinid.HairballAction, 0);
+
+        if (!TryComp(polymorphEntity.Value, out FelinidComponent? felinid))
+            return polymorphEntity;
+        
+        _action.SetCharges(felinid.HairballAction, 0);
+        _action.SetEnabled(felinid.HairballAction, false);
 
         return polymorphEntity;
     }

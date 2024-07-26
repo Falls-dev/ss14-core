@@ -2,6 +2,7 @@ using Content.Server.DeviceNetwork;
 using Content.Server.DeviceNetwork.Components;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Power.Components;
+using Content.Server.SurveillanceCamera;
 using Content.Shared.ActionBlocker;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.SurveillanceCamera;
@@ -257,6 +258,8 @@ public sealed class SurveillanceCameraRouterSystem : EntitySystem
         {
             return;
         }
+
+        payload[SurveillanceCameraSystem.CameraSubnetData] = router.SubnetFrequencyId;
 
         foreach (var address in router.MonitorRoutes)
         {

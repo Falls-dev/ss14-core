@@ -539,7 +539,7 @@ public sealed partial class CultSystem : EntitySystem
             return false;
 
         _stunSystem.TryStun(target, TimeSpan.FromSeconds(2f), false);
-        _ruleSystem.AdminMakeCultist(target);
+        _ruleSystem.TryMakeCultist(target);
         HealCultist(target);
 
         if (TryComp(target, out CuffableComponent? cuffs) && cuffs.Container.ContainedEntities.Count >= 1)

@@ -1,5 +1,6 @@
+using Content.Shared._White.Mood;
 using Content.Shared.Dataset;
-﻿using Content.Shared.NPC.Prototypes;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.Random;
 using Content.Shared.Roles;
 using Robust.Shared.Audio;
@@ -30,6 +31,11 @@ public sealed partial class TraitorRuleComponent : Component
 
     [DataField]
     public ProtoId<DatasetPrototype> CodewordVerbs = "verbs";
+
+    // WD edit start
+    [DataField]
+    public ProtoId<MoodEffectPrototype> MoodBuffEffect = "TraitorFocused";
+    // WD edit end
 
     public int TotalTraitors => TraitorMinds.Count;
     public string[] Codewords = new string[3];

@@ -25,11 +25,19 @@
   parent: MarkerBase
   name: wizard spawn point (ghost role)
   components:
-  - type: GhostRole
-    raffle:
-      settings: default
   - type: GhostRoleAntagSpawner
-    rule: Wizard
+    definitions:
+    - prefRoles: [ WizardRole ]
+      briefing:
+        text: wizard-welcome
+        color: Aqua
+      startingGear: WizardGear
+      components:
+      - type: Wizard
+      - type: RandomHumanoidAppearance
+      mindComponents:
+      - type: WizardRole
+        prototype: WizardRole
   - type: Sprite
     layers:
     - state: green

@@ -21,9 +21,6 @@ public sealed partial class ChangelingRuleComponent : Component
         Started = 2,
     }
 
-    public SelectionState SelectionStatus = SelectionState.WaitingForSpawn;
-    public TimeSpan AnnounceAt = TimeSpan.Zero;
-
     /// <summary>
     ///     Path to antagonist alert sound.
     /// </summary>

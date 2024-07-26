@@ -27,6 +27,7 @@ using Robust.Shared.Random;
 using System.Linq;
 using Content.Server._Miracle.GulagSystem;
 using Content.Shared.Chat;
+using Content.Shared.Mind;
 using Robust.Shared.Enums;
 
 namespace Content.Server.Antag;

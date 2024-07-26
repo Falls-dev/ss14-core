@@ -62,6 +62,11 @@ public sealed partial class AdminVerbSystem
         if (!HasComp<MindContainerComponent>(args.Target))
             return;
 
+        if (!TryComp<ActorComponent>(args.Target, out var tActorComponent))
+            return;
+
+        var target = tActorComponent.PlayerSession;
+
         Verb traitor = new()
         {
             Text = Loc.GetString("admin-verb-text-make-traitor"),
@@ -69,7 +74,7 @@ public sealed partial class AdminVerbSystem
             Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/Structures/Wallmounts/posters.rsi"), "poster5_contraband"),
             Act = () =>
             {
-                _antag.ForceMakeAntag<TraitorRuleComponent>(player, DefaultTraitorRule);
+                _antag.ForceMakeAntag<TraitorRuleComponent>(target, DefaultTraitorRule);
             },
             Impact = LogImpact.High,
             Message = Loc.GetString("admin-verb-make-traitor"),
@@ -98,7 +103,7 @@ public sealed partial class AdminVerbSystem
             Icon = new SpriteSpecifier.Rsi(new("/Textures/Structures/Wallmounts/signs.rsi"), "radiation"),
             Act = () =>
             {
-                _antag.ForceMakeAntag<NukeopsRuleComponent>(player, DefaultNukeOpRule);
+                _antag.ForceMakeAntag<NukeopsRuleComponent>(target, DefaultNukeOpRule);
             },
             Impact = LogImpact.High,
             Message = Loc.GetString("admin-verb-make-nuclear-operative"),
@@ -127,7 +132,7 @@ public sealed partial class AdminVerbSystem
             Icon = new SpriteSpecifier.Rsi(new("/Textures/Interface/Misc/job_icons.rsi"), "HeadRevolutionary"),
             Act = () =>
             {
-                _antag.ForceMakeAntag<RevolutionaryRuleComponent>(player, DefaultRevsRule);
+                _antag.ForceMakeAntag<RevolutionaryRuleComponent>(target, DefaultRevsRule);
             },
             Impact = LogImpact.High,
             Message = Loc.GetString("admin-verb-make-head-rev"),
@@ -141,7 +146,7 @@ public sealed partial class AdminVerbSystem
             Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/Clothing/Hands/Gloves/Color/black.rsi"), "icon"),
             Act = () =>
             {
-                _antag.ForceMakeAntag<ThiefRuleComponent>(player, DefaultThiefRule);
+                _antag.ForceMakeAntag<ThiefRuleComponent>(target, DefaultThiefRule);
             },
             Impact = LogImpact.High,
             Message = Loc.GetString("admin-verb-make-thief"),
@@ -156,7 +161,7 @@ public sealed partial class AdminVerbSystem
             Icon = new SpriteSpecifier.Rsi(new ("/Textures/White/Cult/interface.rsi"), "icon"),
             Act = () =>
             {
-                _antag.ForceMakeAntag<CultRuleComponent>(player, DefaultCultRule);
+                _antag.ForceMakeAntag<CultRuleComponent>(target, DefaultCultRule);
             },
             Impact = LogImpact.High,
             Message = Loc.GetString("Сделать культистом"),
@@ -170,7 +175,7 @@ public sealed partial class AdminVerbSystem
             Icon = new SpriteSpecifier.Texture(new ("/Textures/White/Actions/changeling.rsi/absorb.png")),
             Act = () =>
             {
-                _antag.ForceMakeAntag<ChangelingRuleComponent>(player, DefaultChangelingRule);
+                _antag.ForceMakeAntag<ChangelingRuleComponent>(target, DefaultChangelingRule);
             },
             Impact = LogImpact.High,
             Message = Loc.GetString("admin-verb-make-changeling"),
@@ -184,7 +189,7 @@ public sealed partial class AdminVerbSystem
             Icon = new SpriteSpecifier.Texture(new ("/Textures/Clothing/Head/Hats/wizardhat.rsi/icon.png")),
             Act = () =>
             {
-                _antag.ForceMakeAntag<WizardRuleComponent>(player, DefaultWizardRule);
+                _antag.ForceMakeAntag<WizardRuleComponent>(target, DefaultWizardRule);
             },
             Impact = LogImpact.High,
             Message = Loc.GetString("admin-verb-make-wizard"),

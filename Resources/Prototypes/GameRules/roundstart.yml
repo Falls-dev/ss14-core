@@ -140,9 +140,6 @@
   components:
   - type: GameRule
     minPlayers: 5
-    delay:
-      min: 240
-      max: 420
   - type: TraitorRule
   - type: AntagSelection
     definitions:
@@ -159,9 +156,15 @@
   parent: BaseGameRule
   noSpawn: true
   components:
-    - type: ChangelingRule
-#    - type: TraitorRule
-#      ruleChance: 0.6
+  - type: GameRule
+    minPlayers: 15
+  - type: ChangelingRule
+  - type: AntagSelection
+    definitions:
+    - prefRoles: [ Changeling ]
+      max: 8
+      playerRatio: 10
+      lateJoinAdditional: true
 
 - type: entity
   id: Revolutionary
@@ -255,10 +258,20 @@
   parent: BaseGameRule
   noSpawn: true
   components:
-    - type: CultRule
-      startingItems:
-        - RitualDagger
-        - CultRunicMetal20
+  - type: GameRule
+    minPlayers: 30
+  - type: CultRule
+    startingItems:
+      - RitualDagger
+      - CultRunicMetal20
+  - type: AntagSelection
+    definitions:
+    - prefRoles: [ Cultist ]
+      max: 3
+    briefing:
+      text: cult-role-greeting
+      color: Cyan
+      sound: /Audio/White/Cult/blood_cult_greeting.ogg
 
 - type: entity
   id: Wizard
@@ -280,6 +293,7 @@
       startingGear: WizardGear
       components:
       - type: Wizard
+      - type: RandomHumanoidAppearance
       mindComponents:
       - type: WizardRole
         prototype: WizardRole

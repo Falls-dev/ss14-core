@@ -161,6 +161,9 @@ public partial struct AntagSelectionDefinition()
     /// </remarks>
     [DataField]
     public EntProtoId? SpawnerPrototype;
+
+    [DataField]
+    public bool AddAntagMoodEffect; // WD
 }
 
 /// <summary>

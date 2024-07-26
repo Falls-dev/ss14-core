@@ -22,9 +22,6 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
     [Dependency] private readonly ObjectivesSystem _objectives = default!;
     [Dependency] private readonly ChangelingNameGenerator _nameGenerator = default!;
 
-    private const int PlayersPerChangeling = 15;
-    private const int MaxChangelings = 4;
-
     private const int ChangelingMaxDifficulty = 5;
     private const int ChangelingMaxPicks = 20;
 
@@ -38,13 +35,6 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         SubscribeLocalEvent<ChangelingRuleComponent, ObjectivesTextGetInfoEvent>(OnObjectivesTextGetInfo);
 
         SubscribeLocalEvent<ChangelingRoleComponent, GetBriefingEvent>(OnGetBriefing);
-    }
-
-    protected override void Added(EntityUid uid, ChangelingRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
-    {
-        base.Added(uid, component, gameRule, args);
-
-        gameRule.MinPlayers = PlayersPerChangeling;
     }
 
     private void OnGetBriefing(Entity<ChangelingRoleComponent> ent, ref GetBriefingEvent args)
@@ -74,15 +64,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
     public bool MakeChangeling(EntityUid changeling, ChangelingRuleComponent rule, bool giveObjectives = true)
     {
         if (!_mindSystem.TryGetMind(changeling, out var mindId, out var mind))
-        {
             return false;
-        }
-
-        if (HasComp<ChangelingRoleComponent>(mindId))
-        {
-            Log.Error($"Player {mind.CharacterName} is already a changeling.");
-            return false;
-        }
 
         var briefing = Loc.GetString("changeling-role-greeting");
         _antagSelection.SendBriefing(changeling, briefing, null, rule.GreetSoundNotification);

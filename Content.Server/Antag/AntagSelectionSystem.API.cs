@@ -13,6 +13,7 @@ namespace Content.Server.Antag;
 
 public sealed partial class AntagSelectionSystem
 {
+
     /// <summary>
     /// Tries to get the next non-filled definition based on the current amount of selected minds and other factors.
     /// </summary>

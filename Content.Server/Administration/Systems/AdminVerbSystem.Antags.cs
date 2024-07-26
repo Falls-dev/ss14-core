@@ -26,7 +26,7 @@ public sealed partial class AdminVerbSystem
     private const string DefaultTraitorRule = "Traitor";
 
     [ValidatePrototypeId<EntityPrototype>]
-    private const string DefaultNukeOpRule = "LoneOpsSpawn";
+    private const string DefaultNukeOpRule = "Nukeops";
 
     [ValidatePrototypeId<EntityPrototype>]
     private const string DefaultRevsRule = "Revolutionary";
@@ -62,10 +62,12 @@ public sealed partial class AdminVerbSystem
         if (!HasComp<MindContainerComponent>(args.Target))
             return;
 
+        // WD edit start - fix admin verbs
         if (!TryComp<ActorComponent>(args.Target, out var tActorComponent))
             return;
 
         var target = tActorComponent.PlayerSession;
+        // WD edit end - fix admin verbs
 
         Verb traitor = new()
         {

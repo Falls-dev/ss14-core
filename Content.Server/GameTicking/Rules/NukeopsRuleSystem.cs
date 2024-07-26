@@ -282,6 +282,7 @@ public sealed class NukeopsRuleSystem : GameRuleSystem<NukeopsRuleComponent>
 
     private void OnComponentRemove(EntityUid uid, NukeOperativeComponent component, ComponentRemove args)
     {
+        RemComp<GlobalAntagonistComponent>(uid); // WD
         CheckRoundShouldEnd();
     }
 

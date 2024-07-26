@@ -294,7 +294,7 @@ public sealed partial class AntagSelectionSystem
             return (uid, comp);
         }
         var ruleEnt = GameTicker.AddGameRule(id);
-        RemComp<LoadMapRuleComponent>(ruleEnt);
+        //RemComp<LoadMapRuleComponent>(ruleEnt); Схуяли
         var antag = Comp<AntagSelectionComponent>(ruleEnt);
         antag.SelectionsComplete = true; // don't do normal selection.
         GameTicker.StartGameRule(ruleEnt);

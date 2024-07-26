@@ -1032,6 +1032,204 @@
   itemDrop: FloorTileItemGlassFrame
   heatCapacity: 10000
 
+- type: tile
+  id: FloorSteelYellow
+  name: tiles-steel-yellow-floor
+  sprite: /Textures/Tiles/steel_yellow.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemSteelYellow
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorSteelRed
+  name: tiles-steel-red-floor
+  sprite: /Textures/Tiles/steel_red.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemSteelRed
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorSteelGreen
+  name: tiles-steel-green-floor
+  sprite: /Textures/Tiles/steel_green.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemSteelGreen
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorSteelBlue
+  name: tiles-steel-blue-floor
+  sprite: /Textures/Tiles/steel_Blue.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemSteelBlue
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorPlasticYellow
+  name: tiles-plastic-yellow-floor
+  sprite: /Textures/Tiles/plastic_yellow.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemPlasticYellow
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorPlasticRed
+  name: tiles-plastic-red-floor
+  sprite: /Textures/Tiles/plastic_red.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemPlasticRed
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorPlasticGreen
+  name: tiles-plastic-green-floor
+  sprite: /Textures/Tiles/plastic_green.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemPlasticGreen
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorPlasticBlue
+  name: tiles-plastic-blue-floor
+  sprite: /Textures/Tiles/plastic_Blue.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemPlasticBlue
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorShielding
+  name: tiles-shielding-floor
+  sprite: /Textures/Tiles/shielding.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShielding
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorReinforcedGlassFrame
+  name: tiles-reinforced-glass-frame-floor
+  sprite: /Textures/Tiles/rglass_frame.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemReinforcedGlassFrame
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorGlassFrame
+  name: tiles-glass-frame-floor
+  sprite: /Textures/Tiles/glass_frame.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemGlassFrame
+  heatCapacity: 10000
+
 # Departamental
 - type: tile
   id: FloorFreezer
@@ -1051,6 +1249,24 @@
   itemDrop: FloorTileItemFreezer
   heatCapacity: 10000
   tileRipResistance: 100
+
+- type: tile
+  id: FloorSterile
+  name: tiles-sterile
+  sprite: /Textures/Tiles/sterile.png
+  baseTurf: Plating
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepHull
+  itemDrop: FloorTileItemSterile
+  heatCapacity: 10000
 
 - type: tile
   id: FloorSterile
@@ -1671,6 +1887,18 @@
   itemDrop: FloorTileItemShuttleRed
   heatCapacity: 10000
   tileRipResistance: 4500
+
+- type: tile
+  id: FloorShuttleSyndie
+  name: tiles-syndie-shuttle-floor
+  sprite: /Textures/Tiles/shuttlesyndie.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleSyndie
+  heatCapacity: 10000
 
 - type: tile
   id: FloorShuttleSyndie

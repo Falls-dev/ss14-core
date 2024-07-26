@@ -1,8 +1,6 @@
-using System.Linq;
 using Content.Server.Antag;
-using Content.Server.GameTicking;
+using Content.Server.GameTicking.Components;
 using Content.Server.GameTicking.Rules;
-using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Mind;
 using Content.Server.Objectives;
 using Content.Server.Roles;
@@ -12,29 +10,20 @@ using Content.Shared.GameTicking;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Roles;
-using Robust.Server.Player;
-using Robust.Shared.Random;
-using Robust.Shared.Timing;
 
 namespace Content.Server.Changeling;
 
 public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponent>
 {
     [Dependency] private readonly AntagSelectionSystem _antagSelection = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly SharedRoleSystem _roleSystem = default!;
     [Dependency] private readonly ObjectivesSystem _objectives = default!;
     [Dependency] private readonly ChangelingNameGenerator _nameGenerator = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     private const int PlayersPerChangeling = 15;
     private const int MaxChangelings = 4;
-
-    private const float ChangelingStartDelay = 3f * 60;
-    private const float ChangelingStartDelayVariance = 3f * 60;
 
     private const int ChangelingMaxDifficulty = 5;
     private const int ChangelingMaxPicks = 20;
@@ -42,10 +31,8 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<ChangelingRuleComponent, AfterAntagEntitySelectedEvent>(AfterEntitySelected);
 
-        SubscribeLocalEvent<RoundStartAttemptEvent>(OnStartAttempt);
-        SubscribeLocalEvent<RulePlayerJobsAssignedEvent>(OnPlayersSpawned);
-        SubscribeLocalEvent<PlayerSpawnCompleteEvent>(HandleLatejoin);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(ClearUsedNames);
 
         SubscribeLocalEvent<ChangelingRuleComponent, ObjectivesTextGetInfoEvent>(OnObjectivesTextGetInfo);
@@ -65,79 +52,9 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         args.Append(Loc.GetString("changeling-role-briefing-short"));
     }
 
-    protected override void ActiveTick(
-        EntityUid uid,
-        ChangelingRuleComponent component,
-        GameRuleComponent gameRule,
-        float frameTime)
+    private void AfterEntitySelected(Entity<ChangelingRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
     {
-        base.ActiveTick(uid, component, gameRule, frameTime);
-
-        if (component.SelectionStatus < ChangelingRuleComponent.SelectionState.Started &&
-            component.AnnounceAt < _gameTiming.CurTime)
-        {
-            DoChangelingStart(component);
-            component.SelectionStatus = ChangelingRuleComponent.SelectionState.Started;
-        }
-    }
-
-    private void OnStartAttempt(RoundStartAttemptEvent ev)
-    {
-        TryRoundStartAttempt(ev, Loc.GetString("changeling-title"));
-    }
-
-    private void OnPlayersSpawned(RulePlayerJobsAssignedEvent ev)
-    {
-        var query = QueryActiveRules();
-        while (query.MoveNext(out _, out var changeling, out _))
-        {
-            var delay = TimeSpan.FromSeconds(ChangelingStartDelay +
-                _random.NextFloat(0f, ChangelingStartDelayVariance));
-
-            changeling.AnnounceAt = _gameTiming.CurTime + delay;
-
-            changeling.SelectionStatus = ChangelingRuleComponent.SelectionState.ReadyToStart;
-        }
-    }
-
-    private void HandleLatejoin(PlayerSpawnCompleteEvent ev)
-    {
-        var query = QueryActiveRules();
-        while (query.MoveNext(out _, out var changeling, out _))
-        {
-            if (changeling.TotalChangelings >= MaxChangelings)
-                continue;
-
-            if (!ev.LateJoin)
-                continue;
-
-            if (!_antagSelection.IsPlayerEligible(ev.Player, changeling.ChangelingPrototypeId))
-                continue;
-
-            // Before the announcement is made, late-joiners are considered the same as players who readied.
-            if (changeling.SelectionStatus < ChangelingRuleComponent.SelectionState.Started)
-                continue;
-
-            var target = PlayersPerChangeling * changeling.TotalChangelings + 1;
-            var chance = 1f / PlayersPerChangeling;
-
-            if (ev.JoinOrder < target)
-            {
-                chance /= (target - ev.JoinOrder);
-            }
-            else
-            {
-                chance *= ev.JoinOrder + 1 - target;
-            }
-
-            if (chance > 1)
-                chance = 1;
-
-            if (_random.Prob(chance))
-            {
-                MakeChangeling(ev.Mob, changeling);
-            }
-        }
+        MakeChangeling(args.EntityUid, ent);
     }
 
     private void ClearUsedNames(RoundRestartCleanupEvent ev)
@@ -152,42 +69,6 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
     {
         args.Minds = comp.ChangelingMinds;
         args.AgentName = Loc.GetString("changeling-round-end-agent-name");
-    }
-
-    private void DoChangelingStart(ChangelingRuleComponent component)
-    {
-        var eligiblePlayers =
-            _antagSelection.GetEligiblePlayers(_playerManager.Sessions, component.ChangelingPrototypeId);
-
-        if (eligiblePlayers.Count == 0)
-        {
-            return;
-        }
-
-        var changelingsToSelect =
-            _antagSelection.CalculateAntagCount(_playerManager.PlayerCount, PlayersPerChangeling, MaxChangelings);
-
-        var selectedChangelings = _antagSelection.ChooseAntags(changelingsToSelect, eligiblePlayers);
-
-        foreach (var changeling in selectedChangelings)
-        {
-            MakeChangeling(changeling, component);
-        }
-    }
-
-    public void AdminMakeChangeling(EntityUid entity)
-    {
-        var changelingRule = EntityQuery<ChangelingRuleComponent>().FirstOrDefault();
-        if (changelingRule == null)
-        {
-            GameTicker.StartGameRule("Changeling", out var ruleEntity);
-            changelingRule = Comp<ChangelingRuleComponent>(ruleEntity);
-        }
-
-        if (HasComp<ChangelingRuleComponent>(entity))
-            return;
-
-        MakeChangeling(entity, changelingRule);
     }
 
     public bool MakeChangeling(EntityUid changeling, ChangelingRuleComponent rule, bool giveObjectives = true)

@@ -150,6 +150,16 @@ public sealed class NukeopsRuleSystem : GameRuleSystem<NukeopsRuleComponent>
 
                         nukeops.WinConditions.Add(WinCondition.NukeExplodedOnCorrectStation);
 
+                        // WD EDIT START
+
+                        MapId? targetStationMap = null;
+                        if (nukeops.TargetStation != null && TryComp(nukeops.TargetStation, out StationDataComponent? stationData))
+                        {
+                            var stationGrid = stationData.Grids.FirstOrNull();
+                            targetStationMap = stationGrid != null
+                                ? Transform(stationGrid.Value).MapID
+                                : null;
+                        }
 
                         var operatives = EntityQuery<NukeOperativeComponent, TransformComponent>(true);
                         var operativesAlive = operatives
@@ -162,7 +172,7 @@ public sealed class NukeopsRuleSystem : GameRuleSystem<NukeopsRuleComponent>
                             nukeops.WinConditions.Add(WinCondition.AllNukiesDead);
                             SetWinType((uid, nukeops), WinType.OpsMinor);
                         }
-                        // WD EDIT
+                        // WD EDIT END
 
                         correctStation = true;
                     }
@@ -558,5 +568,15 @@ public sealed class NukeopsRuleSystem : GameRuleSystem<NukeopsRuleComponent>
         }
 
         return null;
+    }
+
+    // WD ADDED
+    public void TransferRole(EntityUid transferFrom, EntityUid transferTo)
+    {
+        if (!HasComp<NukeOperativeComponent>(transferFrom))
+            return;
+
+        EnsureComp<NukeOperativeComponent>(transferTo);
+        RemComp<NukeOperativeComponent>(transferFrom);
     }
 }

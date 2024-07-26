@@ -4,6 +4,7 @@ using Content.Server.Actions;
 using Content.Server.Antag;
 using Content.Server.Bible.Components;
 using Content.Server.GameTicking;
+using Content.Server.GameTicking.Components;
 using Content.Server.GameTicking.Rules;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Objectives.Components;
@@ -65,9 +66,6 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         _minStartingCultists = _cfg.GetCVar(WhiteCVars.CultMinStartingPlayers);
         _maxStartingCultists = _cfg.GetCVar(WhiteCVars.CultMaxStartingPlayers);
 
-        SubscribeLocalEvent<RoundStartAttemptEvent>(OnStartAttempt);
-        SubscribeLocalEvent<RulePlayerJobsAssignedEvent>(OnPlayersSpawned);
-        SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndText);
         SubscribeLocalEvent<CultNarsieSummoned>(OnNarsieSummon);
 
         SubscribeLocalEvent<CultistComponent, ComponentInit>(OnCultistComponentInit);
@@ -94,38 +92,6 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     {
         args.Append(Loc.GetString("cult-role-briefing-short"));
         args.Append(Loc.GetString("cult-role-briefing-hint"));
-    }
-
-    private void OnStartAttempt(RoundStartAttemptEvent ev)
-    {
-        TryRoundStartAttempt(ev, "CULT");
-    }
-
-    private void OnPlayersSpawned(RulePlayerJobsAssignedEvent ev)
-    {
-        var query = QueryActiveRules();
-        while (query.MoveNext(out _, out var cult, out _))
-        {
-            DoCultistsStart(cult);
-        }
-    }
-
-    private void OnRoundEndText(RoundEndTextAppendEvent ev)
-    {
-        var query = QueryActiveRules();
-        while (query.MoveNext(out _, out var cult, out _))
-        {
-            var winText = Loc.GetString($"cult-condition-{cult.WinCondition.ToString().ToLower()}");
-            ev.AddLine(winText);
-
-            ev.AddLine(Loc.GetString("cultists-list-start"));
-
-            foreach (var (entityName, ckey) in cult.CultistsCache)
-            {
-                var lising = Loc.GetString("cultists-list-name", ("name", entityName), ("user", ckey));
-                ev.AddLine(lising);
-            }
-        }
     }
 
     private void OnNarsieSummon(CultNarsieSummoned ev)
@@ -226,30 +192,6 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         if (ev.NewMobState == MobState.Dead)
         {
             CheckRoundShouldEnd();
-        }
-    }
-
-    private void DoCultistsStart(CultRuleComponent rule)
-    {
-        var eligiblePlayers = _antagSelection.GetEligiblePlayers(_playerManager.Sessions, rule.CultistRolePrototype,
-            customExcludeCondition: HasComp<BibleUserComponent>);
-
-        if (eligiblePlayers.Count == 0)
-        {
-            return;
-        }
-
-        var cultistsToSelect =
-            Math.Clamp(_playerManager.PlayerCount / PlayerPerCultist, _minStartingCultists, _maxStartingCultists);
-
-        var selectedCultists = _antagSelection.ChooseAntags(cultistsToSelect, eligiblePlayers);
-
-        var potentialTargets = FindPotentialTargets(selectedCultists);
-        rule.CultTarget = _random.PickAndTake(potentialTargets).Mind;
-
-        foreach (var cultist in selectedCultists)
-        {
-            MakeCultist(cultist, rule);
         }
     }
 

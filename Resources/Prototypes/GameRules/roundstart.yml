@@ -265,7 +265,24 @@
   parent: BaseGameRule
   noSpawn: true
   components:
+  - type: GameRule
+    minPlayers: 20
+  - type: RandomMetadata
+  - type: LoadMapRule
+    gameMap: WizardShuttle
   - type: WizardRule
+  - type: AntagSelection
+    definitions:
+    - prefRoles: [ WizardRole ]
+      briefing:
+        text: wizard-welcome
+        color: Aqua
+      startingGear: WizardGear
+      components:
+      - type: Wizard
+      mindComponents:
+      - type: WizardRole
+        prototype: WizardRole
 
 # variation passes
 - type: entity

@@ -179,8 +179,6 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         component.SelectionsComplete = true;
     }
 
-    #region Eligible Player Selection
-
     /// <summary>
     /// Chooses antagonists from the current selection of players
     /// </summary>

@@ -17,9 +17,6 @@ public sealed partial class WizardRuleComponent : Component
     [ViewVariables]
     public EntityUid? TargetStation;
 
-    [DataField("minPlayers")]
-    public int MinPlayers = 20;
-
     [DataField("announcementOnWizardDeath")]
     public bool AnnouncementOnWizardDeath = true;
 
@@ -43,9 +40,6 @@ public sealed partial class WizardRuleComponent : Component
 
     [DataField]
     public EntityUid? ShuttleMap;
-
-    [DataField("shuttlePath")]
-    public string ShuttlePath = "/Maps/White/Shuttles/wizard.yml";
 
     [DataField]
     public ProtoId<NpcFactionPrototype> Faction = "Wizard";

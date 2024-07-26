@@ -28,8 +28,8 @@
   - type: GhostRole
     raffle:
       settings: default
-  - type: GhostRoleMobSpawner
-    prototype: MobHumanSpaceWiz
+  - type: GhostRoleAntagSpawner
+    rule: Wizard
   - type: Sprite
     layers:
     - state: green

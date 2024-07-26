@@ -296,4 +296,26 @@ public sealed class RevolutionaryRuleSystem : GameRuleSystem<RevolutionaryRuleCo
         // revs lost and heads died
         "rev-stalemate"
     };
+
+    // WD ADDED
+    public void TransferRole(EntityUid transferFrom, EntityUid transferTo)
+    {
+        if (HasComp<CommandStaffComponent>(transferFrom))
+        {
+            EnsureComp<CommandStaffComponent>(transferTo);
+            RemComp<CommandStaffComponent>(transferFrom);
+        }
+
+        if (HasComp<HeadRevolutionaryComponent>(transferFrom))
+        {
+            EnsureComp<HeadRevolutionaryComponent>(transferTo);
+            RemComp<HeadRevolutionaryComponent>(transferFrom);
+        }
+
+        if (!HasComp<RevolutionaryComponent>(transferFrom))
+            return;
+
+        EnsureComp<RevolutionaryComponent>(transferTo);
+        RemComp<RevolutionaryComponent>(transferFrom);
+    }
 }

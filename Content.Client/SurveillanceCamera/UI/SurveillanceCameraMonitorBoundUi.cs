@@ -30,7 +30,6 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
     {
         base.Open();
 
-        // Sunrise-start
         EntityUid? gridUid = null;
 
         if (_entManager.TryGetComponent<TransformComponent>(Owner, out var xform))
@@ -39,7 +38,6 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
         }
 
         _window = new SurveillanceCameraMonitorWindow(gridUid);
-        // Sunrise-end
 
         if (State != null)
         {
@@ -49,6 +47,7 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
         _window.OpenCentered();
 
         _window.CameraSelected += OnCameraSelected;
+        _window.SubnetOpened += OnSubnetRequest;
         _window.CameraRefresh += OnCameraRefresh;
         _window.SubnetRefresh += OnSubnetRefresh;
         _window.OnClose += Close;
@@ -59,6 +58,11 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
     private void OnCameraSelected(string cameraAddress, string subnetAddress)
     {
         SendMessage(new SurveillanceCameraMonitorSwitchMessage(cameraAddress, subnetAddress));
+    }
+
+    private void OnSubnetRequest(string subnet)
+    {
+        SendMessage(new SurveillanceCameraMonitorSubnetRequestMessage(subnet));
     }
 
     private void OnCameraSwitchTimer()

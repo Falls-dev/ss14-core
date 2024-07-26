@@ -12,7 +12,7 @@ public sealed partial class SurveillanceCameraNavMapControl : NavMapControl
     private Label _trackedEntityLabel;
     private PanelContainer _trackedEntityPanel;
 
-    public SurveillanceCameraNavMapControl()
+    public SurveillanceCameraNavMapControl() : base()
     {
         WallColor = new Color(192, 122, 196);
         TileColor = new(71, 42, 72);
@@ -33,17 +33,14 @@ public sealed partial class SurveillanceCameraNavMapControl : NavMapControl
                 BackgroundColor = BackgroundColor,
             },
 
-            Margin = new Thickness(5f, 45f),
+            Margin = new Thickness(5f, 10f),
             HorizontalAlignment = HAlignment.Left,
             VerticalAlignment = VAlignment.Bottom,
             Visible = false,
         };
 
         _trackedEntityPanel.AddChild(_trackedEntityLabel);
-        AddChild(_trackedEntityPanel);
-        VerticalExpand = true;
-        VerticalAlignment = VAlignment.Stretch;
-
+        this.AddChild(_trackedEntityPanel);
     }
 
     protected override void Draw(DrawingHandleScreen handle)

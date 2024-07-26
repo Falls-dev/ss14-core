@@ -30,7 +30,6 @@ public sealed class SurveillanceCameraMonitorUiState : BoundUserInterfaceState
     }
 }
 
-// Sunrise-start
 [Serializable, NetSerializable]
 [DataDefinition]
 public partial class CameraData
@@ -39,9 +38,7 @@ public partial class CameraData
     public string SubnetAddress { get; set; }
     public string Name { get; set; }
     public NetCoordinates Coordinates { get; set; }
-    public Color SubnetColor { get; set; }
 }
-// Sunrise-end
 
 [Serializable, NetSerializable]
 public sealed class SurveillanceCameraMonitorSwitchMessage : BoundUserInterfaceMessage

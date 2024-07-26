@@ -50,7 +50,6 @@ public sealed class SurveillanceCameraSystem : EntitySystem
     public const string CameraUid = "surveillance_camera_data_uid";
     public const string CameraNameData = "surveillance_camera_data_name";
     public const string CameraSubnetData = "surveillance_camera_data_subnet";
-    public const string CameraSubnetColor = "surveillance_camera_color_subnet";
 
     public const int CameraNameLimit = 32;
 
@@ -87,7 +86,6 @@ public sealed class SurveillanceCameraSystem : EntitySystem
                 { CameraAddressData, deviceNet.Address },
                 { CameraNameData, component.CameraId },
                 { CameraSubnetData, string.Empty },
-                { CameraSubnetColor, new Color() },
                 { CameraUid, uid.ToString() }
             };
 
@@ -119,16 +117,8 @@ public sealed class SurveillanceCameraSystem : EntitySystem
                         return;
                     }
 
-                    // Sunrise-start
-                    if (!args.Data.TryGetValue(CameraSubnetColor, out Color color))
-                    {
-                        return;
-                    }
-                    // Sunrise-end
-
                     dest = args.SenderAddress;
                     payload[CameraSubnetData] = subnet;
-                    payload[CameraSubnetColor] = color;
                     payload[CameraUid] = uid.ToString();
                     payload[DeviceNetworkConstants.Command] = CameraDataMessage;
                     break;

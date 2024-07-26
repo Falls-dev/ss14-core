@@ -2,7 +2,6 @@ using System.Linq;
 using Content.Server.DeviceNetwork;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Power.Components;
-using Content.Server.SurveillanceCamera;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.UserInterface;
 using Content.Shared.SurveillanceCamera;
@@ -31,7 +30,6 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
             subs.Event<SurveillanceCameraRefreshCamerasMessage>(OnRefreshCamerasMessage);
             subs.Event<SurveillanceCameraRefreshSubnetsMessage>(OnRefreshSubnetsMessage);
             subs.Event<SurveillanceCameraDisconnectMessage>(OnDisconnectMessage);
-            // subs.Event<SurveillanceCameraMonitorSubnetRequestMessage>(OnSubnetRequest);
             subs.Event<SurveillanceCameraMonitorSwitchMessage>(OnSwitchMessage);
             subs.Event<BoundUIClosedEvent>(OnBoundUiClose);
         });
@@ -122,21 +120,18 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
                     if (!args.Data.TryGetValue(SurveillanceCameraSystem.CameraNameData, out string? name)
                         || !args.Data.TryGetValue(SurveillanceCameraSystem.CameraSubnetData, out string? subnetData)
                         || !args.Data.TryGetValue(SurveillanceCameraSystem.CameraAddressData, out string? address)
-                        || !args.Data.TryGetValue(SurveillanceCameraSystem.CameraUid, out string? camera))
+                        || !args.Data.TryGetValue(SurveillanceCameraSystem.CameraUid, out string? camera)
+                        || !args.Data.TryGetValue(SurveillanceCameraSystem.CameraSubnetColor, out Color color))
                     {
                         return;
                     }
-
-                    // if (component.ActiveSubnet != subnetData)
-                    // {
-                    //     DisconnectFromSubnet(uid, subnetData);
-                    // }
 
                     if (!component.KnownSubnets.TryGetValue(subnetData, out var subnetAddress))
                     {
                         return;
                     }
 
+                    // Sunrise-start
                     EntityUid cameraUid;
                     EntityUid.TryParse(camera, out cameraUid);
                     var netEntCamera = GetNetEntity(cameraUid);
@@ -150,9 +145,7 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
                         {
                             if (transform.GridUid != null)
                             {
-                                coordinates = new EntityCoordinates(transform.GridUid.Value,
-                                    _transform.GetInvWorldMatrix(xformQuery.GetComponent(transform.GridUid.Value), xformQuery)
-                                        .Transform(_transform.GetWorldPosition(transform, xformQuery)));
+                                coordinates = transform.Coordinates;
                             }
                             else if (transform.MapUid != null)
                             {
@@ -161,8 +154,16 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
                             }
                         }
 
-                        component.KnownCameras.Add(netEntCamera, new CameraData{Name = name, CameraAddress = address, SubnetAddress = subnetAddress, Coordinates = GetNetCoordinates(coordinates)});
+                        component.KnownCameras.Add(netEntCamera,
+                            new CameraData{
+                                Name = name,
+                                CameraAddress = address,
+                                SubnetAddress = subnetAddress,
+                                SubnetColor = color,
+                                Coordinates = GetNetCoordinates(coordinates)
+                            });
                     }
+                    // Sunrise-end
 
                     UpdateUserInterface(uid, component);
                     break;
@@ -183,6 +184,7 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
         SurveillanceCameraDisconnectMessage message)
     {
         DisconnectCamera(uid, true, component);
+        // Sunrise-start
         foreach (var subnet in component.KnownSubnets)
         {
             DisconnectFromSubnet(uid, subnet.Key);
@@ -190,11 +192,13 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
             UpdateUserInterface(uid, component);
             ConnectToSubnet(uid, subnet.Key);
         }
+        // Sunrise-end
     }
 
     private void OnRefreshCamerasMessage(EntityUid uid, SurveillanceCameraMonitorComponent component,
         SurveillanceCameraRefreshCamerasMessage message)
     {
+        // Sunrise-start
         foreach (var subnet in component.KnownSubnets)
         {
             DisconnectFromSubnet(uid, subnet.Key);
@@ -203,6 +207,7 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
             UpdateUserInterface(uid, component);
             ConnectToSubnet(uid, subnet.Key);
         }
+        // Sunrise-end
     }
 
     private void OnRefreshSubnetsMessage(EntityUid uid, SurveillanceCameraMonitorComponent component,
@@ -242,13 +247,9 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
 
     private void OnBoundUiClose(EntityUid uid, SurveillanceCameraMonitorComponent component, BoundUIClosedEvent args)
     {
-        if (args.Session.AttachedEntity == null)
-        {
-            return;
-        }
-
-        RemoveViewer(uid, args.Session.AttachedEntity.Value, component);
+        RemoveViewer(uid, args.Actor, component);
     }
+
     #endregion
 
     private void SendHeartbeat(EntityUid uid, SurveillanceCameraMonitorComponent? monitor = null)
@@ -432,7 +433,9 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
         UpdateUserInterface(uid, monitor);
     }
 
-    private void TrySwitchCameraByAddress(EntityUid uid, string camera, string subnet,
+    private void TrySwitchCameraByAddress(EntityUid uid,
+        string camera,
+        string subnet,
         SurveillanceCameraMonitorComponent? monitor = null)
     {
         if (!Resolve(uid, ref monitor))
@@ -503,6 +506,6 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
         }
 
         var state = new SurveillanceCameraMonitorUiState(GetNetEntity(monitor.ActiveCamera), monitor.KnownSubnets.Keys.ToHashSet(), monitor.ActiveCameraAddress, monitor.KnownCameras);
-        _userInterface.TrySetUiState(uid, SurveillanceCameraMonitorUiKey.Key, state);
+        _userInterface.SetUiState(uid, SurveillanceCameraMonitorUiKey.Key, state);
     }
 }

@@ -23,7 +23,6 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
     private readonly IEntityManager _entManager;
 
     public event Action<string, string>? CameraSelected;
-    public event Action<string>? SubnetOpened;
     public event Action? CameraRefresh;
     public event Action? SubnetRefresh;
     public event Action? CameraSwitchTimer;
@@ -33,7 +32,6 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
     private bool _isSwitching;
     private readonly FixedEye _defaultEye = new();
     private Dictionary<NetEntity, CameraData> _cameras = new();
-    private readonly Dictionary<string, int> _subnetMap = new();
     private Texture? _blipTexture;
     private NetEntity? _trackedEntity;
 
@@ -72,6 +70,7 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
             NavMap.Visible = false;
     }
 
+    // Sunrise-start
     private void SetTrackedEntityFromNavMap(NetEntity? netEntity)
     {
         NavMap.Focus = _trackedEntity;
@@ -97,10 +96,9 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
             if (NavMap.Visible && _blipTexture != null)
             {
                 NavMap.TrackedEntities.TryAdd(camera.Key,
-                    new NavMapBlip
-                    (coordinates,
+                    new NavMapBlip(coordinates,
                         _blipTexture,
-                        (_trackedEntity == null || camera.Key == _trackedEntity) ? Color.LimeGreen : Color.LimeGreen * Color.DimGray,
+                        (camera.Key == _trackedEntity) ? Color.LimeGreen : camera.Value.SubnetColor,
                         camera.Key == _trackedEntity));
 
                 NavMap.Focus = _trackedEntity;
@@ -111,6 +109,7 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
         if (monitorCoords != null)
             NavMap.TrackedCoordinates.Add(monitorCoords.Value, (true, StyleNano.PointMagenta));
     }
+    // Sunrise-end
 
 
     // The UI class should get the eye from the entity, and then

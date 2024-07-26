@@ -831,10 +831,10 @@
   baseTurf: Plating
   variants: 4
   placementVariants:
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
   isSubfloor: false
   deconstructTools: [ Prying ]
   footstepSounds:

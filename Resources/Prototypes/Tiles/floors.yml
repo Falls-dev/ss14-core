@@ -963,7 +963,7 @@
 - type: tile
   id: FloorPlasticBlue
   name: tiles-plastic-blue-floor
-  sprite: /Textures/Tiles/plastic_Blue.png
+  sprite: /Textures/Tiles/plastic_blue.png
   variants: 4
   placementVariants:
   - 1.0

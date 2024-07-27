@@ -2,6 +2,8 @@ using System.Linq;
 using Content.Server.DeviceNetwork;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Power.Components;
+using Content.Server.SurveillanceCamera.Components;
+using Content.Server.SurveillanceCamera.Systems;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.UserInterface;
 using Content.Shared.SurveillanceCamera;
@@ -9,14 +11,13 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Player;
 using Robust.Shared.Map;
 
-namespace Content.Server.SurveillanceCamera;
+namespace Content.Server.SurveillanceCamera.Systems;
 
 public sealed class SurveillanceCameraMonitorSystem : EntitySystem
 {
     [Dependency] private readonly SurveillanceCameraSystem _surveillanceCameras = default!;
     [Dependency] private readonly UserInterfaceSystem _userInterface = default!;
     [Dependency] private readonly DeviceNetworkSystem _deviceNetworkSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
@@ -131,7 +132,6 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
                         return;
                     }
 
-                    // Sunrise-start
                     var netEntCamera = GetNetEntity(cameraUid);
 
                     if (!component.KnownCameras.ContainsKey(netEntCamera))
@@ -155,7 +155,6 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
                                 Coordinates = GetNetCoordinates(coordinates)
                             });
                     }
-                    // Sunrise-end
 
                     UpdateUserInterface(uid, component);
                     break;
@@ -212,7 +211,7 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
         // there would be a null check here, but honestly
         // whichever one is the "latest" switch message gets to
         // do the switch
-        TrySwitchCameraByAddress(uid, message.CameraAddress, message.SubnetAddress, component);
+        TrySwitchCameraByUid(uid, GetEntity(message.CameraNetEntity), component);
     }
 
     private void OnPowerChanged(EntityUid uid, SurveillanceCameraMonitorComponent component, ref PowerChangedEvent args)

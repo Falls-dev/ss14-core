@@ -3,6 +3,7 @@ using Content.Server.DeviceNetwork.Components;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Power.Components;
 using Content.Server.SurveillanceCamera;
+using Content.Server.SurveillanceCamera.Systems;
 using Content.Shared.ActionBlocker;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.SurveillanceCamera;
@@ -11,7 +12,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.SurveillanceCamera;
+namespace Content.Server.SurveillanceCamera.Systems;
 
 public sealed class SurveillanceCameraRouterSystem : EntitySystem
 {
@@ -246,7 +247,7 @@ public sealed class SurveillanceCameraRouterSystem : EntitySystem
         {
             { DeviceNetworkConstants.Command, SurveillanceCameraSystem.CameraPingMessage },
             { SurveillanceCameraSystem.CameraSubnetData, router.SubnetName },
-            { SurveillanceCameraSystem.CameraSubnetColor, router.SubnetColor} // Sunrise-edit
+            { SurveillanceCameraSystem.CameraSubnetColor, router.SubnetColor}
         };
 
         _deviceNetworkSystem.QueuePacket(uid, null, payload, router.SubnetFrequency);
@@ -259,8 +260,8 @@ public sealed class SurveillanceCameraRouterSystem : EntitySystem
         {
             return;
         }
-        payload[SurveillanceCameraSystem.CameraSubnetData] = router.SubnetFrequencyId; // Sunrise-edit
-        payload[SurveillanceCameraSystem.CameraSubnetColor] = router.SubnetColor; // Sunrise-edit
+        payload[SurveillanceCameraSystem.CameraSubnetData] = router.SubnetFrequencyId;
+        payload[SurveillanceCameraSystem.CameraSubnetColor] = router.SubnetColor;
 
         payload[SurveillanceCameraSystem.CameraSubnetData] = router.SubnetFrequencyId;
 

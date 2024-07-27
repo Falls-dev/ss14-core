@@ -46,13 +46,11 @@ public partial class CameraData
 [Serializable, NetSerializable]
 public sealed class SurveillanceCameraMonitorSwitchMessage : BoundUserInterfaceMessage
 {
-    public string CameraAddress { get; }
-    public string SubnetAddress { get; }
+    public NetEntity CameraNetEntity { get; }
 
-    public SurveillanceCameraMonitorSwitchMessage(string cameraAddress, string subnetAddress)
+    public SurveillanceCameraMonitorSwitchMessage(NetEntity camera)
     {
-        CameraAddress = cameraAddress;
-        SubnetAddress = subnetAddress;
+        CameraNetEntity = camera;
     }
 }
 

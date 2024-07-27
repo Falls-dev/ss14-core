@@ -54,9 +54,9 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
         _window.CameraDisconnect += OnCameraDisconnect;
     }
 
-    private void OnCameraSelected(string cameraAddress, string subnetAddress)
+    private void OnCameraSelected(NetEntity camera)
     {
-        SendMessage(new SurveillanceCameraMonitorSwitchMessage(cameraAddress, subnetAddress));
+        SendMessage(new SurveillanceCameraMonitorSwitchMessage(camera));
     }
 
     private void OnCameraSwitchTimer()

@@ -22,7 +22,7 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
     private readonly IPrototypeManager _prototypeManager;
     private readonly IEntityManager _entManager;
 
-    public event Action<string, string>? CameraSelected;
+    public event Action<NetEntity>? CameraSelected;
     public event Action? CameraRefresh;
     public event Action? SubnetRefresh;
     public event Action? CameraSwitchTimer;
@@ -75,9 +75,9 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
     {
         NavMap.Focus = _trackedEntity;
 
-        if (netEntity != null && _cameras.TryGetValue(netEntity.Value, out var data))
+        if (netEntity != null)
         {
-            CameraSelected!(data.CameraAddress, data.SubnetAddress);
+            CameraSelected!(netEntity.Value);
         }
     }
 

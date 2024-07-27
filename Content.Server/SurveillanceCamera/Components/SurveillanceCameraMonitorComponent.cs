@@ -1,6 +1,7 @@
+using Content.Server.SurveillanceCamera.Systems;
 using Content.Shared.SurveillanceCamera;
 
-namespace Content.Server.SurveillanceCamera;
+namespace Content.Server.SurveillanceCamera.Components;
 
 [RegisterComponent]
 [Access(typeof(SurveillanceCameraMonitorSystem))]
@@ -34,7 +35,7 @@ public sealed partial class SurveillanceCameraMonitorComponent : Component
     // Known cameras in this subnet by address with name values.
     // This is cleared when the subnet is changed.
     [ViewVariables]
-    public Dictionary<NetEntity, CameraData> KnownCameras { get; } = new(); // Sunrise-edit
+    public Dictionary<NetEntity, CameraData> KnownCameras { get; } = new();
 
     [ViewVariables]
     // The subnets known by this camera monitor.

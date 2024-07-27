@@ -838,7 +838,7 @@ namespace Content.Shared.CCVar
         /// de-admin them.
         /// </summary>
         public static readonly CVarDef<bool> AdminDeadminOnJoin =
-            CVarDef.Create("admin.deadmin_on_join", false, CVar.SERVERONLY);
+            CVarDef.Create("admin.deadmin_on_join", true, CVar.SERVERONLY);
 
         /// <summary>
         ///     Overrides the name the client sees in ahelps. Set empty to disable.
@@ -851,7 +851,7 @@ namespace Content.Shared.CCVar
         ///     If 0, appearing as a new player is disabled.
         /// </summary>
         public static readonly CVarDef<int> NewPlayerThreshold =
-            CVarDef.Create("admin.new_player_threshold", 0, CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
+            CVarDef.Create("admin.new_player_threshold", 1440, CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
 
         /// <summary>
         /// How long an admin client can go without any input before being considered AFK.
@@ -1346,7 +1346,7 @@ namespace Content.Shared.CCVar
 
         /// <summary>
         ///     Config for when the restart vote should be allowed to be called based on percentage of ghosts.
-        ///
+        /// </summary>
         public static readonly CVarDef<int> VoteRestartGhostPercentage =
             CVarDef.Create("vote.restart_ghost_percentage", 75, CVar.SERVERONLY);
 

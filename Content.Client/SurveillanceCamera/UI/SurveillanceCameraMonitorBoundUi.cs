@@ -22,8 +22,6 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
         _surveillanceCameraMonitorSystem = EntMan.System<SurveillanceCameraMonitorSystem>();
         IoCManager.InjectDependencies(this);
         _entManager = IoCManager.Resolve<IEntityManager>();
-        _eyeLerpingSystem = _entManager.EntitySysManager.GetEntitySystem<EyeLerpingSystem>();
-        _surveillanceCameraMonitorSystem = _entManager.EntitySysManager.GetEntitySystem<SurveillanceCameraMonitorSystem>();
     }
 
     protected override void Open()

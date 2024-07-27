@@ -98,7 +98,7 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
                 NavMap.TrackedEntities.TryAdd(camera.Key,
                     new NavMapBlip(coordinates,
                         _blipTexture,
-                        (camera.Key == _trackedEntity) ? Color.LimeGreen : camera.Value.SubnetColor,
+                        camera.Key == _trackedEntity ? Color.LimeGreen : camera.Value.SubnetColor,
                         camera.Key == _trackedEntity));
 
                 NavMap.Focus = _trackedEntity;

@@ -891,7 +891,7 @@
 - type: tile
   id: FloorSteelBlue
   name: tiles-steel-blue-floor
-  sprite: /Textures/Tiles/steel_Blue.png
+  sprite: /Textures/Tiles/steel_blue.png
   variants: 4
   placementVariants:
   - 1.0

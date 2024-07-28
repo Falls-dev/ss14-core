@@ -61,6 +61,14 @@ public sealed class PylonSystem : EntitySystem
 
     private void OnInit(EntityUid uid, SharedPylonComponent component, ComponentInit args)
     {
+        var coords = Transform(uid).Coordinates;
+        if (SharedPylonComponent.CheckForStructure(coords, EntityManager, uid))
+        {
+            QueueDel(uid);
+            _popupSystem.PopupCoordinates(Loc.GetString("cult-structure-craft-another-structure-nearby"),
+                coords, PopupType.MediumCaution);
+            return;
+        }
         UpdateAppearance(uid, component);
     }
 

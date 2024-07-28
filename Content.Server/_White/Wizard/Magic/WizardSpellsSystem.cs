@@ -174,6 +174,12 @@ public sealed class WizardSpellsSystem : EntitySystem
             return;
         }
 
+        if (HasComp<CultistComponent>(target))
+        {
+            _popupSystem.PopupEntity(Loc.GetString("mindswap-cultist-failed"), uid, uid, PopupType.MediumCaution);
+            return;
+        }
+
         var userHasMind = _mindSystem.TryGetMind(uid, out var mindId, out var mind);
         var targetHasMind = _mindSystem.TryGetMind(target, out var targetMindId, out var targetMind);
 
@@ -183,8 +189,6 @@ public sealed class WizardSpellsSystem : EntitySystem
         SwapComponent<WizardComponent>(uid, target);
         SwapComponent<RevolutionaryComponent>(uid, target);
         SwapComponent<HeadRevolutionaryComponent>(uid, target);
-        SwapComponent<PentagramComponent>(uid, target);
-        SwapComponent<CultistComponent>(uid, target);
         SwapComponent<GlobalAntagonistComponent>(uid, target);
 
         _mindSystem.TransferTo(mindId, target, mind: mind);

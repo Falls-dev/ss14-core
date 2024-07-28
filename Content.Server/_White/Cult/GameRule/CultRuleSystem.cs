@@ -177,6 +177,8 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
             if (TryComp<ActorComponent>(uid, out var actor))
             {
                 cult.CultistsCache.TryAdd(name, actor.PlayerSession.Name);
+                _mindSystem.TryGetMind(actor.PlayerSession.UserId, out var mind);
+                component.OriginalMind = mind;
             }
 
             UpdateCultistsAppearance(cult);

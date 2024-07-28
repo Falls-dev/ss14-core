@@ -1,4 +1,4 @@
-﻿using Content.Shared.Damage;
+using Content.Shared.Damage;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
@@ -66,10 +66,10 @@ public sealed partial class SharedPylonComponent : Component
     [DataField("wallConvertEffect")]
     public string WallConvertEffect = "CultWallGlow";
 
-    public static bool CheckForStructure(EntityCoordinates coordinates, IEntityManager entMan, EntityUid? pylon = null)
+    public static bool CheckForStructure(EntityCoordinates coordinates, IEntityManager entMan, float range, EntityUid? pylon = null)
     {
         var lookupSystem = entMan.System<EntityLookupSystem>();
-        var entities = lookupSystem.GetEntitiesInRange(coordinates, 10f);
+        var entities = lookupSystem.GetEntitiesInRange(coordinates, range);
         foreach (var ent in entities)
         {
             if (ent == pylon)

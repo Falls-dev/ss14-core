@@ -22,7 +22,7 @@ public sealed class CultPylonPlacementHijack(ConstructionPrototype? prototype, I
         if (prototype == null)
             return true;
 
-        if (SharedPylonComponent.CheckForStructure(coordinates, entMan))
+        if (SharedPylonComponent.CheckForStructure(coordinates, entMan, 10f))
         {
             var popup = entMan.System<SharedPopupSystem>();
             popup.PopupClient(Loc.GetString("cult-structure-craft-another-structure-nearby"), player, player);

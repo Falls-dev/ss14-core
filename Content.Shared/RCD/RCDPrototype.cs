@@ -1,3 +1,4 @@
+using Content.Shared._White.RCD;
 using Content.Shared.Physics;
 using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Prototypes;
@@ -30,7 +31,7 @@ public sealed class RCDPrototype : IPrototype
     /// The name of the radial container that this prototype will be listed under on the RCD menu
     /// </summary>
     [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public string Category { get; private set; } = "Undefined";
+    public ProtoId<RCDCategoryPrototype> Category { get; private set; } = "WallsAndFlooring"; // WD
 
     /// <summary>
     /// Texture path for this prototypes menu icon

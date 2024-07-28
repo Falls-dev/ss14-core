@@ -1,0 +1,13 @@
+﻿- type: rcd
+  id: PipeStraight
+  category: Pipes
+  sprite: /Textures/Structures/Piping/Atmospherics/pipe.rsi/pipeStraight.png
+  mode: ConstructObject
+  prototype: GasPipeStraight
+  cost: 1
+  delay: 0
+  collisionMask: InteractImpassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct0

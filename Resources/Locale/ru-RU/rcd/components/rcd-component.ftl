@@ -34,12 +34,14 @@ rcd-component-cannot-build-identical-tile = Эта плитка уже суще�
 
 ### Category names
 
-rcd-component-walls-and-flooring = Стены и пол
-rcd-component-windows-and-grilles = Окна и решётки
-rcd-component-airlocks = Шлюзы
-rcd-component-electrical = Электрика
-rcd-component-lighting = Освещение
+rcd-category-WallsAndFlooring = Стены и пол
+rcd-category-WindowsAndGrilles = Окна и решётки
+rcd-category-Airlocks = Шлюзы
+rcd-category-Electrical = Электрика
+rcd-category-Lighting = Освещение
 
+rcd-category-Pipes = Освещение
+rcd-category-GasDevices = Освещение
 
 ### Prototype names (note: constructable items will be puralized)
 

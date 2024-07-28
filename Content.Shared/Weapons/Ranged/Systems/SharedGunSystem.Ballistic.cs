@@ -58,8 +58,7 @@ public abstract partial class SharedGunSystem
 
         component.Entities.Add(entity);
         if (_netManager.IsServer || doInsert)
-            if (_netManager.IsServer || doInsert)
-                Containers.Insert(entity, component.Container); // WD EDIT END
+            Containers.Insert(entity, component.Container); // WD EDIT END
         // Not predicted so
         Audio.PlayPredicted(component.SoundInsert, uid, args.User);
         args.Handled = true;

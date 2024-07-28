@@ -1,5 +1,4 @@
 using Content.Shared._White.Cult.Components;
-using Content.Shared._White.Cult.Interfaces;
 
 namespace Content.Shared._White.Cult.Systems;
 
@@ -18,12 +17,12 @@ public sealed class CultistSystem : EntitySystem
         SubscribeLocalEvent<CultistComponent, ComponentShutdown>(OnRemove);
     }
 
-    private void OnInit(EntityUid uid, ICultChat component, ComponentStartup args)
+    private void OnInit<T>(EntityUid uid, T component, ComponentStartup args)
     {
         RaiseLocalEvent(new EventCultistComponentState(true));
     }
 
-    private void OnRemove(EntityUid uid, ICultChat component, ComponentShutdown args)
+    private void OnRemove<T>(EntityUid uid, T component, ComponentShutdown args)
     {
         RaiseLocalEvent(new EventCultistComponentState(false));
     }

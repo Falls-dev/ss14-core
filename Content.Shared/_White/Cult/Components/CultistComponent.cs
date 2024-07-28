@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using Content.Shared._White.Cult.Interfaces;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mind;
 using Robust.Shared.Audio;
@@ -12,7 +11,7 @@ namespace Content.Shared._White.Cult.Components;
 /// This is used for tagging a mob as a cultist.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class CultistComponent : Component, IShowCultHud, ICultChat
+public sealed partial class CultistComponent : Component
 {
     [DataField("greetSound", customTypeSerializer: typeof(SoundSpecifierTypeSerializer))]
     public SoundSpecifier? CultistGreetSound = new SoundPathSpecifier("/Audio/CultSounds/fart.ogg");

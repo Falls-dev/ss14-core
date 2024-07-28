@@ -41,7 +41,7 @@ public sealed partial class CultistComponent : Component
 
     public static string CultSummonCombatEquipmentAction = "ActionCultSummonCombatEquipment";
 
-    public static string CultStunAction = "ActionCultStun";
+    public static string CultStunAction = "InstantActionCultStun";
 
     public static string CultShadowShacklesAction = "ActionCultShadowShackles";
 

@@ -60,20 +60,16 @@
       removeOnNoCharges: true
 
 - type: entity
-  id: ActionCultStun
+  id: InstantActionCultStun
   name: Stun
   description: A potent spell that will stun and mute victims.
   noSpawn: true
   components:
-    - type: EntityTargetAction
-      whitelist:
-        components:
-          - HumanoidAppearance
-      canTargetSelf: false
+    - type: InstantAction
       icon:
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: stun
-      event: !type:CultStunTargetActionEvent
+      event: !type:CultStunActionEvent
       itemIconStyle: BigAction
       charges: 1
       temporary: true

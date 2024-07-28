@@ -858,13 +858,12 @@ public sealed class WizardSpellsSystem : EntitySystem
                !_statusEffectsSystem.HasStatusEffect(msg.Performer, "Incorporeal");
     }
 
-    public void Speak(BaseActionEvent args)
+    public void Speak(BaseActionEvent args, InGameICChatType type = InGameICChatType.Speak)
     {
         if (args is not ISpeakSpell speak || string.IsNullOrWhiteSpace(speak.Speech))
             return;
 
-        _chat.TrySendInGameICMessage(args.Performer, Loc.GetString(speak.Speech),
-            InGameICChatType.Speak, false);
+        _chat.TrySendInGameICMessage(args.Performer, Loc.GetString(speak.Speech), type, false);
     }
 
     private void SetCooldown(EntityUid action, ActionUseType useType)

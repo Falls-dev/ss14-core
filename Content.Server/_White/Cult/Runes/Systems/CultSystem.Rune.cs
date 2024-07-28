@@ -407,7 +407,7 @@ public sealed partial class CultSystem : EntitySystem
 
         foreach (var cultist in cultists)
         {
-            _chat.TrySendInGameICMessage(cultist, component.InvokePhrase, InGameICChatType.Speak, false, false, null,
+            _chat.TrySendInGameICMessage(cultist, component.InvokePhrase, component.InvokeChatType, false, false, null,
                 null, null, false);
         }
     }

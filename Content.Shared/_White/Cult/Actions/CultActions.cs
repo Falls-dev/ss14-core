@@ -15,7 +15,7 @@ public sealed partial class CultSummonDaggerActionEvent : InstantActionEvent, IS
     public string? Speech { get; private set; }
 }
 
-public sealed partial class CultStunTargetActionEvent : EntityTargetActionEvent
+public sealed partial class CultStunActionEvent : InstantActionEvent
 {
 }
 

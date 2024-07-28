@@ -343,7 +343,12 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         var cultistsCount = cultRuleComponent.CurrentCultists.Count;
         var constructsCount = cultRuleComponent.Constructs.Count;
         var totalCultMembers = cultistsCount + constructsCount;
-        if (totalCultMembers < cultRuleComponent.ReadEyeThreshold)
+        if (totalCultMembers >= cultRuleComponent.PentagramThreshold)
+            cultRuleComponent.Stage = CultStage.Pentagram;
+        else if (totalCultMembers >= cultRuleComponent.ReadEyeThreshold && cultRuleComponent.Stage == CultStage.Normal)
+            cultRuleComponent.Stage = CultStage.RedEyes;
+
+        if (cultRuleComponent.Stage == CultStage.Normal)
             return;
 
         foreach (var cultistComponent in cultRuleComponent.CurrentCultists)
@@ -354,7 +359,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
                 Dirty(cultistComponent.Owner, appearanceComponent);
             }
 
-            if (totalCultMembers < cultRuleComponent.PentagramThreshold)
+            if (cultRuleComponent.Stage != CultStage.Pentagram)
                 return;
 
             EnsureComp<PentagramComponent>(cultistComponent.Owner);

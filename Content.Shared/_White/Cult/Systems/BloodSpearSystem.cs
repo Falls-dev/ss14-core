@@ -38,8 +38,7 @@ public sealed class BloodSpearSystem : EntitySystem
 
     private void OnThrowDoHit(Entity<BloodSpearComponent> ent, ref ThrowDoHitEvent args)
     {
-        if (HasComp<CultistComponent>(args.Target) || HasComp<ConstructComponent>(args.Target) ||
-            _holy.IsHoldingHolyWeapon(args.Target))
+        if (HasComp<CultistComponent>(args.Target) || HasComp<ConstructComponent>(args.Target))
         {
             args.Handled = true;
             return;
@@ -48,8 +47,11 @@ public sealed class BloodSpearSystem : EntitySystem
         if (!TryComp(args.Target, out StatusEffectsComponent? status))
             return;
 
-        if(!_stunSystem.TryParalyze(args.Target, TimeSpan.FromSeconds(4), true, status))
-            return;
+        if (!_holy.IsHoldingHolyWeapon(args.Target))
+        {
+            if(!_stunSystem.TryParalyze(args.Target, TimeSpan.FromSeconds(4), true, status))
+                return;
+        }
 
         if (_net.IsClient)
             return;

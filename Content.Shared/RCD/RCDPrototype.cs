@@ -51,7 +51,7 @@ public sealed class RCDPrototype : IPrototype
     public int Cost { get; private set; } = 1;
 
     /// <summary>
-    /// The length of the operation 
+    /// The length of the operation
     /// </summary>
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public float Delay { get; private set; } = 1f;
@@ -75,7 +75,7 @@ public sealed class RCDPrototype : IPrototype
     public CollisionGroup CollisionMask { get; private set; } = CollisionGroup.None;
 
     /// <summary>
-    /// Specifies a set of custom collision bounds for determining whether the entity prototype will fit into a target tile 
+    /// Specifies a set of custom collision bounds for determining whether the entity prototype will fit into a target tile
     /// </summary>
     /// <remarks>
     /// Should be set assuming that the entity faces south.
@@ -106,7 +106,7 @@ public sealed class RCDPrototype : IPrototype
     private Box2? _collisionBounds = null;
 
     /// <summary>
-    /// The polygon shape associated with the prototype CollisionBounds (if set) 
+    /// The polygon shape associated with the prototype CollisionBounds (if set)
     /// </summary>
     [ViewVariables(VVAccess.ReadOnly)]
     public PolygonShape? CollisionPolygon { get; private set; } = null;

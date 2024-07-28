@@ -420,6 +420,8 @@
     - MVCable
     - HVCable
     - CableTerminal
+    - APC # WD
+    - Camera # WD
     - Deconstruct
   - type: LimitedCharges
     maxCharges: 30

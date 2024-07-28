@@ -10,6 +10,7 @@
         sprite: /Textures/Objects/Materials/Sheets/metal.rsi
         state: steel
       event: !type:CultTwistedConstructionActionEvent
+        speech: "Ethra p'ni dedol!"
       itemIconStyle: BigAction
       charges: 1
       temporary: true
@@ -31,6 +32,7 @@
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: teleport
       event: !type:CultTeleportTargetActionEvent
+        speech: "Sas'so c'arta forbici!"
       itemIconStyle: BigAction
       charges: 1
       temporary: true
@@ -92,6 +94,7 @@
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: shackles
       event: !type:CultShadowShacklesTargetActionEvent
+        speech: "In'totum Lig'abis!"
       itemIconStyle: BigAction
       charges: 4
       temporary: true
@@ -108,6 +111,7 @@
         sprite: /Textures/White/Cult/interface.rsi
         state: icon
       event: !type:CultSummonDaggerActionEvent
+        speech: "Wur d'dai leev'mai k'sagan!"
       charges: 1
       temporary: true
       removeOnNoCharges: true
@@ -123,6 +127,7 @@
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: blood_rites
       event: !type:CultBloodRitesInstantActionEvent
+        speech: "Fel'th Dol Ab'orod!"
       charges: 5
       temporary: true
       removeOnNoCharges: true
@@ -138,6 +143,7 @@
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: emp
       event: !type:CultElectromagneticPulseInstantActionEvent
+        speech: "Ta'gh fara'qha fel d'amar det!"
       charges: 1
       temporary: true
       removeOnNoCharges: true
@@ -153,12 +159,15 @@
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: gone
       event: !type:CultConcealInstantActionEvent
+        speech: "Kla'atu barada nikt'o!"
       charges: 10
       temporary: true
       removeOnNoCharges: true
     - type: ConcealPresenceSpell
       concealEvent: !type:CultConcealInstantActionEvent
+        speech: "Kla'atu barada nikt'o!"
       revealEvent: !type:CultRevealInstantActionEvent
+        speech: "Kla'atu barada nikt'o!"
       concealIcon:
         sprite: /Textures/White/Cult/actions_cult.rsi
         state: gone

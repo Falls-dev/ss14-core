@@ -854,7 +854,7 @@ public sealed class WizardSpellsSystem : EntitySystem
                !_statusEffectsSystem.HasStatusEffect(msg.Performer, "Incorporeal");
     }
 
-    private void Speak(BaseActionEvent args)
+    public void Speak(BaseActionEvent args)
     {
         if (args is not ISpeakSpell speak || string.IsNullOrWhiteSpace(speak.Speech))
             return;

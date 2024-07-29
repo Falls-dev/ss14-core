@@ -7,11 +7,8 @@
     "y": 32
   },
   "states": [
-    {
-      "name": "Bochka"
-    },
-    {
-      "name": "Bochka-top"
-    }
+	{
+	  "name": "Bochka_Beer"
+	}
   ]
 }

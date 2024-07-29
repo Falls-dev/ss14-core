@@ -41,8 +41,6 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
 
         rule.ChangelingMinds.Add(mindId);
 
-        RaiseLocalEvent(changeling, new MoodEffectEvent("TraitorFocused"));
-
         if (!giveObjectives)
             return;
 

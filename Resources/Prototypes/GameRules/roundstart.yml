@@ -85,6 +85,7 @@
       max: 1
       playerRatio: 10
       startingGear: SyndicateCommanderGearFull
+      moodEffect: TraitorFocused # WD
       components:
       - type: NukeOperative
       - type: RandomMetadata
@@ -102,6 +103,7 @@
       max: 1
       playerRatio: 10
       startingGear: SyndicateOperativeMedicFull
+      moodEffect: TraitorFocused # WD
       components:
       - type: NukeOperative
       - type: RandomMetadata
@@ -120,6 +122,7 @@
       max: 3
       playerRatio: 10
       startingGear: SyndicateOperativeGearFull
+      moodEffect: TraitorFocused # WD
       components:
       - type: NukeOperative
       - type: RandomMetadata
@@ -147,36 +150,14 @@
       max: 12
       playerRatio: 10
       lateJoinAdditional: true
+      moodEffect: TraitorFocused # WD
+      components: # WD
+      - type: NpcFactionMember
+        factions:
+        - Syndicate
       mindComponents:
       - type: TraitorRole
         prototype: Traitor
-
-- type: entity
-  id: Changeling
-  parent: BaseGameRule
-  noSpawn: true
-  components:
-  - type: GameRule
-    minPlayers: 15
-  - type: ChangelingRule
-  - type: AntagSelection
-    definitions:
-    - prefRoles: [ Changeling ]
-      max: 8
-      playerRatio: 10
-      lateJoinAdditional: true
-      briefing:
-        text: changeling-role-greeting
-        color: Red
-        sound: /Audio/Ambience/Antag/changeling_start.ogg
-      components:
-      - type: Changeling
-      - type: NpcFactionMember
-        factions:
-        - Changeling
-      mindComponents:
-      - type: ChangelingRole
-        prototype: ChangelingRole
 
 - type: entity
   id: Revolutionary
@@ -191,6 +172,7 @@
     - prefRoles: [ HeadRev ]
       max: 3
       playerRatio: 15
+      moodEffect: RevolutionFocused # WD
       briefing:
         text: head-rev-role-greeting
         color: CornflowerBlue
@@ -277,6 +259,7 @@
     definitions:
     - prefRoles: [ Cultist ]
       max: 3
+      moodEffect: CultFocused
       briefing:
         text: cult-role-greeting
         color: Red
@@ -305,6 +288,7 @@
   - type: AntagSelection
     definitions:
     - prefRoles: [ WizardRole ]
+      moodEffect: WizardFocused
       briefing:
         text: wizard-welcome
         color: Aqua
@@ -320,6 +304,34 @@
       mindComponents:
       - type: WizardRole
         prototype: WizardRole
+
+- type: entity
+  id: Changeling
+  parent: BaseGameRule
+  noSpawn: true
+  components:
+  - type: GameRule
+    minPlayers: 15
+  - type: ChangelingRule
+  - type: AntagSelection
+    definitions:
+    - prefRoles: [ Changeling ]
+      max: 8
+      playerRatio: 10
+      lateJoinAdditional: true
+      moodEffect: TraitorFocused
+      briefing:
+        text: changeling-role-greeting
+        color: Red
+        sound: /Audio/Ambience/Antag/changeling_start.ogg
+      components:
+      - type: Changeling
+      - type: NpcFactionMember
+        factions:
+        - Changeling
+      mindComponents:
+      - type: ChangelingRole
+        prototype: ChangelingRole
 
 # variation passes
 - type: entity

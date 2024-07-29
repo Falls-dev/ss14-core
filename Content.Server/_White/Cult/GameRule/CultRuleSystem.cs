@@ -273,8 +273,6 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         _mindSystem.TryAddObjective(mindId, mind, "KillCultTargetObjective");
 
-        RaiseLocalEvent(cultist, new MoodEffectEvent("CultFocused"));
-
         if (!TryComp<CultistComponent>(cultist, out var cultistComponent))
             return;
 

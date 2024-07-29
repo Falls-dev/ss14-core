@@ -125,12 +125,6 @@ public sealed class TraitorRuleSystem : GameRuleSystem<TraitorRuleComponent>
         if (richAspect) // WD
             TraitorRichAspect.NotifyTraitor(mind, _chatManager);
 
-        // Change the faction
-        _npcFaction.RemoveFaction(traitor, component.NanoTrasenFaction, false);
-        _npcFaction.AddFaction(traitor, component.SyndicateFaction);
-
-        RaiseLocalEvent(traitor, new MoodEffectEvent("TraitorFocused")); // WD edit
-
         // Give traitors their objectives
         if (giveObjectives)
         {

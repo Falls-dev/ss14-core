@@ -71,8 +71,6 @@ public sealed class WizardRuleSystem : GameRuleSystem<WizardRuleComponent>
         if (!_mind.TryGetMind(wizard, out var mindId, out var mind))
             return;
 
-        RaiseLocalEvent(wizard, new MoodEffectEvent("WizardFocused"));
-
         component.WizardMinds.Add(mindId);
 
         if (!giveObjectives)

@@ -851,7 +851,7 @@ namespace Content.Shared.CCVar
         ///     If 0, appearing as a new player is disabled.
         /// </summary>
         public static readonly CVarDef<int> NewPlayerThreshold =
-            CVarDef.Create("admin.new_player_threshold", 1440, CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
+            CVarDef.Create("admin.new_player_threshold", 4320, CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
 
         /// <summary>
         /// How long an admin client can go without any input before being considered AFK.

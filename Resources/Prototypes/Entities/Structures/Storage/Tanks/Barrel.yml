@@ -79,7 +79,7 @@
   id: Barrel_Beer_Empty
   parent: [StorageTank, StructureWheeled]
   name: бочка пива
-  description: Где пиво, Олег?
+  description: Изготовлено древними дворфами
   suffix: Empty
   components:
   - type: StaticPrice

@@ -470,26 +470,6 @@
   components:
   - type: LimitedCharges
     charges: 0
-  - type: RCD
-    categoryPrototypes: # WD
-    - WallsAndFlooring # WD
-    - WindowsAndGrilles # WD
-    - Airlocks # WD
-    - Electrical # WD
-    - Lighting # WD
-    availablePrototypes:
-    - WallSolid
-    - FloorSteel
-    - Plating
-    - Catwalk
-    - Grille
-    - Window
-    - WindowDirectional
-    - WindowReinforcedDirectional
-    - ReinforcedWindow
-    - Airlock
-    - AirlockGlass
-    - Firelock
 
 - type: entity # WD
   id: RapidPipeDispenser
@@ -574,6 +554,7 @@
   description: A cartridge of raw matter compacted by bluespace technology. Used in rapid construction devices.
   components:
   - type: RCDAmmo
+    chargeCountModifier: 1.5
   - type: Sprite
     sprite: Objects/Tools/rcd.rsi
     state: ammo

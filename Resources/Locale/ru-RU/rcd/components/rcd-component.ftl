@@ -1,12 +1,12 @@
-### WD EDIT ALL
+# WD EDIT ALL
 
-### UI
+# UI
 
 rcd-component-examine-mode-details = Текущий режим: '{$mode}'.
 rcd-component-examine-build-details = Текущий режим строительства: {$name}.
 
 
-### Interaction Messages
+## Interaction Messages
 
 # Mode change
 rcd-component-change-mode = РЦД переключён в режим '{$mode}'.
@@ -34,17 +34,26 @@ rcd-component-cannot-build-identical-tile = Эта плитка уже суще�
 
 ### Category names
 
+# RCD
 rcd-category-WallsAndFlooring = Стены и пол
 rcd-category-WindowsAndGrilles = Окна и решётки
 rcd-category-Airlocks = Шлюзы
 rcd-category-Electrical = Электрика
 rcd-category-Lighting = Освещение
 
-rcd-category-Pipes = Освещение
-rcd-category-GasDevices = Освещение
+# RPD
+rcd-category-Pipes = Трубы
+rcd-category-GasDevices = Атмосферные приборы
+rcd-category-DisposalPipes = Мусорные трубы
+rcd-category-DisposalUnits = Мусорные приборы
 
 ### Prototype names (note: constructable items will be puralized)
 
 rcd-component-deconstruct = демонтаж
 rcd-component-floor-steel = стальная плитка
 rcd-component-plating = лист обшивки
+
+# RPD naming
+
+ent-RapidPipeDispenser = РПД
+    .desc = Новейшее ручное строительное устройство, которое может быстро размещать трубы и атмосферные приборы.

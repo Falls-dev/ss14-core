@@ -495,13 +495,54 @@
   id: RapidPipeDispenser
   parent: BaseRCD
   components:
+  - type: Sprite
+    sprite: White/Items/Tools/rpd.rsi
+  - type: Item
+    size: Normal
+    shape:
+    - 0, 0, 1, 0
+  - type: Clothing
+    sprite: White/Items/Tools/rpd.rsi
+    quickEquip: false
+    slots:
+    - Belt
   - type: RCD
     categoryPrototypes:
     - Pipes
     - GasDevices
-    - Disposal
+    - DisposalPipes
+    - DisposalUnits
     availablePrototypes:
-    - PipeStraight
+    - PipeStraight # pipes
+    - PipeBend
+    - PipeTJunction
+    - PipeFourway
+    - GasCanisterPort # gas devices
+    - GasFilter
+    - GasMixer
+    - GasOutletInjector
+    - GasPressurePump
+    - GasVolumePump
+    - GasValve
+    - SignalControlledValve
+    - PressureControlledValve
+    - GasVentScrubber
+    - GasVentPump
+    - GasPassiveVent
+    - DisposalPipe # disposal pipes
+    - DisposalBend
+    - DisposalJunction
+    - DisposalJunctionFlipped
+    - DisposalYJunction
+    - DisposalRouter
+    - DisposalRouterFlipped
+    - DisposalTagger
+    - DisposalSignalRouter
+    - DisposalSignalRouterFlipped
+    - DisposalTrunk
+    - DisposalUnit # disposal units
+    - MailingUnit
+    - ToiletEmpty
 
 - type: entity
   id: RCDRecharging

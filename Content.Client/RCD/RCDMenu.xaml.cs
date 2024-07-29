@@ -11,8 +11,10 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Prototypes;
 using System.Numerics;
-using Content.Shared._White.RCD;
-using Robust.Client.Utility;
+using Robust.Client.Graphics;
+using Robust.Shared.Graphics.RSI;
+using Robust.Shared.Serialization.Manager.Exceptions;
+using Robust.Shared.Utility;
 
 namespace Content.Client.RCD;
 
@@ -59,7 +61,7 @@ public sealed partial class RCDMenu : RadialMenu
 
             var parent = Children.First(c => c.Name == proto.Category.Id);
 
-            var tooltip = Loc.GetString(proto.SetName);
+            var tooltip = Loc.GetString(proto.Name);
 
             if ((proto.Mode == RcdMode.ConstructTile || proto.Mode == RcdMode.ConstructObject) &&
                 proto.Prototype != null && _protoManager.TryIndex(proto.Prototype, out var entProto))
@@ -76,19 +78,19 @@ public sealed partial class RCDMenu : RadialMenu
                 ToolTip = tooltip,
                 ProtoId = protoId,
             };
+
             if (proto.Sprite != null)
             {
-                var tex = new TextureRect()
+                var tex = new TextureRect
                 {
                     VerticalAlignment = VAlignment.Center,
                     HorizontalAlignment = HAlignment.Center,
-                    Texture = proto.Sprite.DirFrame0().TextureFor(Direction.North),
+                    Texture = GetSprite(proto.Sprite),
                     TextureScale = new Vector2(2f, 2f),
                 };
 
                 button.AddChild(tex);
             }
-
             parent.AddChild(button);
 
             // Ensure that the button that transitions the menu to the associated category layer
@@ -138,7 +140,7 @@ public sealed partial class RCDMenu : RadialMenu
                 VerticalAlignment = VAlignment.Center,
                 HorizontalAlignment = HAlignment.Center,
                 TextureScale = new Vector2(2, 2),
-                Texture = category.SpritePath.DirFrame0().TextureFor(Direction.North)
+                Texture = GetSprite(category.SpritePath)
             };
 
             button.AddChild(texture);
@@ -146,7 +148,7 @@ public sealed partial class RCDMenu : RadialMenu
 
             var container = new RadialContainer
             {
-                Name = categoryId.ToString(),
+                Name = categoryId,
                 VerticalExpand = true,
                 HorizontalExpand = true,
                 Radius = 64
@@ -154,6 +156,11 @@ public sealed partial class RCDMenu : RadialMenu
 
             AddChild(container);
         }
+    }
+
+    private Texture GetSprite(SpriteSpecifier specifier)
+    {
+        return _spriteSystem.Frame0(specifier);
     }
 
     private void AddRCDMenuButtonOnClickActions(Control control)
@@ -177,11 +184,11 @@ public sealed partial class RCDMenu : RadialMenu
                 if (_playerManager.LocalSession?.AttachedEntity != null &&
                     _protoManager.TryIndex(castChild.ProtoId, out var proto))
                 {
-                    var msg = Loc.GetString("rcd-component-change-mode", ("mode", Loc.GetString(proto.SetName)));
+                    var msg = Loc.GetString("rcd-component-change-mode", ("mode", Loc.GetString(proto.Name)));
 
                     if (proto.Mode == RcdMode.ConstructTile || proto.Mode == RcdMode.ConstructObject)
                     {
-                        var name = Loc.GetString(proto.SetName);
+                        var name = Loc.GetString(proto.Name);
 
                         if (proto.Prototype != null &&
                             _protoManager.TryIndex(proto.Prototype, out var entProto))

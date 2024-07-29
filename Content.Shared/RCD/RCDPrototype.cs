@@ -24,8 +24,8 @@ public sealed class RCDPrototype : IPrototype
     /// <summary>
     /// The name associated with the prototype
     /// </summary>
-    [DataField("name"), ViewVariables(VVAccess.ReadOnly)]
-    public string SetName { get; private set; } = "Unknown";
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public string Name { get; private set; } = "Unknown";
 
     /// <summary>
     /// The name of the radial container that this prototype will be listed under on the RCD menu
@@ -43,7 +43,7 @@ public sealed class RCDPrototype : IPrototype
     /// The entity prototype that will be constructed (mode dependent)
     /// </summary>
     [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public string? Prototype { get; private set; } = string.Empty;
+    public ProtoId<EntityPrototype>? Prototype { get; private set; } = null;
 
     /// <summary>
     /// Number of charges consumed when the operation is completed

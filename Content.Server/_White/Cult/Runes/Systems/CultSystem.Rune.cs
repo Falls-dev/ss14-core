@@ -1381,6 +1381,7 @@ public sealed partial class CultSystem : EntitySystem
         var shard = _entityManager.SpawnEntity("SoulShard", transform.Value);
 
         _mindSystem.TransferTo(mindComponent.Mind.Value, shard);
+        _mindSystem.UnVisit(mindComponent.Mind.Value);
 
         _bodySystem.GibBody(target);
 

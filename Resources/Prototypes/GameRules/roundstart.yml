@@ -293,7 +293,10 @@
       startingGear: WizardGear
       components:
       - type: Wizard
-      - type: RandomHumanoidAppearance
+      - type: WizardAppearance
+      - type: NpcFactionMember
+        factions:
+        - Wizard
       mindComponents:
       - type: WizardRole
         prototype: WizardRole

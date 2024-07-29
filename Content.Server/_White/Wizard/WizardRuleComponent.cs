@@ -14,37 +14,16 @@ public sealed partial class WizardRuleComponent : Component
 {
     public readonly List<EntityUid> WizardMinds = new();
 
-    [ViewVariables]
-    public EntityUid? TargetStation;
-
-    [DataField("announcementOnWizardDeath")]
-    public bool AnnouncementOnWizardDeath = true;
-
     [DataField("points")]
     public int Points = 10; //TODO: wizard shop prototype
+
+    [DataField] public int MinObjectives = 5;
+    [DataField] public int MaxObjectives = 5;
 
     [DataField("wizardRoleProto")]
     public ProtoId<AntagPrototype> WizardRoleProto = "WizardRole";
 
-    [DataField("wizardSpawnPointProto")]
-    public EntProtoId SpawnPointProto = "SpawnPointWizard";
-
-    [DataField]
-    public EntProtoId GhostSpawnPointProto = "SpawnPointGhostWizard";
-
-    [DataField("startingGear")]
-    public ProtoId<StartingGearPrototype> StartingGear = "WizardGear";
-
-    [DataField("spawnShuttle")]
-    public bool SpawnShuttle = true;
-
-    [DataField]
-    public EntityUid? ShuttleMap;
-
-    [DataField]
-    public ProtoId<NpcFactionPrototype> Faction = "Wizard";
-
-    public RoundEndBehavior RoundEndBehavior = RoundEndBehavior.InstantEnd;
+    public readonly RoundEndBehavior RoundEndBehavior = RoundEndBehavior.InstantEnd;
 
     [DataField]
     public string RoundEndTextSender = "comms-console-announcement-title-centcom";

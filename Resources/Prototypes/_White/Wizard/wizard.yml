@@ -25,6 +25,12 @@
   parent: MarkerBase
   name: wizard spawn point (ghost role)
   components:
+  - type: GhostRole
+    name: ghost-role-information-loneop-name
+    description: ghost-role-information-loneop-description
+    rules: ghost-role-information-loneop-rules
+    raffle:
+      settings: default
   - type: GhostRoleAntagSpawner
     definitions:
     - prefRoles: [ WizardRole ]

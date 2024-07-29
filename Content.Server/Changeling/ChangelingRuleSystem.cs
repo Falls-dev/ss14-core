@@ -1,10 +1,9 @@
+using Content.Server._Miracle.GulagSystem;
 using Content.Server.Antag;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Mind;
 using Content.Server.Objectives;
 using Content.Shared._White.Mood;
-using Content.Shared.Changeling;
-using Content.Shared.GameTicking;
 using Content.Shared.Objectives.Components;
 
 namespace Content.Server.Changeling;
@@ -14,10 +13,6 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
     [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly ObjectivesSystem _objectives = default!;
 
-
-    private const int ChangelingMaxDifficulty = 5;
-    private const int ChangelingMaxPicks = 20;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -25,7 +20,6 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
 
         SubscribeLocalEvent<ChangelingRuleComponent, ObjectivesTextGetInfoEvent>(OnObjectivesTextGetInfo);
     }
-
     private void AfterEntitySelected(Entity<ChangelingRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
     {
         MakeChangeling(args.EntityUid, ent);
@@ -53,7 +47,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
             return;
 
         var difficulty = 0f;
-        for (var pick = 0; pick < ChangelingMaxPicks && ChangelingMaxDifficulty > difficulty; pick++)
+        for (var pick = 0; pick < rule.ChangelingMaxPicks && rule.ChangelingMaxDifficulty > difficulty; pick++)
         {
             var objective = _objectives.GetRandomObjective(mindId, mind, "ChangelingObjectiveGroups");
             if (objective == null)

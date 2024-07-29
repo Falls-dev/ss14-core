@@ -1,6 +1,8 @@
 using System.Linq;
+using Content.Server._Miracle.GulagSystem;
 using Content.Server.Actions;
 using Content.Server.Antag;
+using Content.Server.GameTicking.Components;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Hands.Systems;
 using Content.Server.Objectives.Components;
@@ -21,8 +23,8 @@ using Content.Shared._White.Cult.Systems;
 using Content.Shared._White.Mood;
 using Content.Shared.Cloning;
 using Content.Shared.Mind;
-using Content.Shared.NPC.Systems;
 using Robust.Server.Containers;
+using Robust.Shared.Random;
 
 namespace Content.Server._White.Cult.GameRule;
 
@@ -38,6 +40,8 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     [Dependency] private readonly BloodSpearSystem _bloodSpear = default!;
     [Dependency] private readonly ContainerSystem _container = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
+    [Dependency] private readonly GulagSystem _gulag = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -50,6 +54,14 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         SubscribeLocalEvent<CultistComponent, ComponentRemove>(OnCultistComponentRemoved);
         SubscribeLocalEvent<CultistComponent, MobStateChangedEvent>(OnCultistsStateChanged);
         SubscribeLocalEvent<CultistComponent, CloningEvent>(OnClone);
+    }
+
+    protected override void Added(EntityUid uid, CultRuleComponent rule, GameRuleComponent gameRule, GameRuleAddedEvent args)
+    {
+        base.Added(uid, rule, gameRule, args);
+
+        var potentialTargets = FindPotentialTargets();
+        rule.CultTarget = _random.PickAndTake(potentialTargets).Mind;
     }
 
     private void OnClone(Entity<CultistComponent> ent, ref CloningEvent args)
@@ -317,5 +329,31 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         EnsureComp<CultistComponent>(transferTo);
         RemComp<CultistComponent>(transferFrom);
+    }
+
+    private List<MindContainerComponent> FindPotentialTargets()
+    {
+        var querry =
+            EntityManager.EntityQueryEnumerator<MindContainerComponent, HumanoidAppearanceComponent, ActorComponent>();
+
+        var potentialTargets = new List<MindContainerComponent>();
+
+        while (querry.MoveNext(out var uid, out var mind, out _, out var actor))
+        {
+            var entity = mind.Mind;
+
+            if (entity == default)
+                continue;
+
+            if (_gulag.IsUserGulagged(actor.PlayerSession.UserId, out _))
+                continue;
+
+            if (HasComp<CultistComponent>(entity))
+                continue;
+
+            potentialTargets.Add(mind);
+        }
+
+        return potentialTargets;
     }
 }

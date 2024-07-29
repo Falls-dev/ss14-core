@@ -1,7 +1,5 @@
 using Content.Server.RoundEnd;
-using Content.Shared.NPC.Prototypes;
 using Content.Shared.Random;
-using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._White.Wizard;
@@ -13,15 +11,6 @@ namespace Content.Server._White.Wizard;
 public sealed partial class WizardRuleComponent : Component
 {
     public readonly List<EntityUid> WizardMinds = new();
-
-    [DataField("points")]
-    public int Points = 10; //TODO: wizard shop prototype
-
-    [DataField] public int MinObjectives = 5;
-    [DataField] public int MaxObjectives = 5;
-
-    [DataField("wizardRoleProto")]
-    public ProtoId<AntagPrototype> WizardRoleProto = "WizardRole";
 
     public readonly RoundEndBehavior RoundEndBehavior = RoundEndBehavior.InstantEnd;
 

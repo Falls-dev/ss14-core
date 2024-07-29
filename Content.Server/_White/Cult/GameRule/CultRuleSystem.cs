@@ -1,15 +1,11 @@
 using System.Linq;
-using Content.Server._Miracle.GulagSystem;
 using Content.Server.Actions;
 using Content.Server.Antag;
 using Content.Server.GameTicking.Rules;
-using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Hands.Systems;
 using Content.Server.Objectives.Components;
-using Content.Server.Roles;
 using Content.Server.RoundEnd;
 using Content.Server.StationEvents.Components;
-using Content.Server.Storage.EntitySystems;
 using Content.Shared.Body.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -33,16 +29,12 @@ namespace Content.Server._White.Cult.GameRule;
 public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 {
     [Dependency] private readonly InventorySystem _inventorySystem = default!;
-    [Dependency] private readonly StorageSystem _storageSystem = default!;
-    [Dependency] private readonly NpcFactionSystem _factionSystem = default!;
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly RoundEndSystem _roundEndSystem = default!;
     [Dependency] private readonly SharedBodySystem _bodySystem = default!;
     [Dependency] private readonly SharedRoleSystem _roleSystem = default!;
     [Dependency] private readonly SharedMindSystem _mindSystem = default!;
     [Dependency] private readonly ActionsSystem _actions = default!;
-    [Dependency] private readonly AntagSelectionSystem _antagSelection = default!;
-    [Dependency] private readonly GulagSystem _gulag = default!;
     [Dependency] private readonly BloodSpearSystem _bloodSpear = default!;
     [Dependency] private readonly ContainerSystem _container = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
@@ -55,23 +47,14 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
 
         SubscribeLocalEvent<CultNarsieSummoned>(OnNarsieSummon);
 
-        SubscribeLocalEvent<CultistComponent, ComponentInit>(OnCultistComponentInit);
         SubscribeLocalEvent<CultistComponent, ComponentRemove>(OnCultistComponentRemoved);
         SubscribeLocalEvent<CultistComponent, MobStateChangedEvent>(OnCultistsStateChanged);
         SubscribeLocalEvent<CultistComponent, CloningEvent>(OnClone);
-
-        SubscribeLocalEvent<CultistRoleComponent, GetBriefingEvent>(OnGetBriefing);
     }
 
     private void OnClone(Entity<CultistComponent> ent, ref CloningEvent args)
     {
         RemoveObjectiveAndRole(ent);
-    }
-
-    private void OnGetBriefing(Entity<CultistRoleComponent> ent, ref GetBriefingEvent args)
-    {
-        args.Append(Loc.GetString("cult-role-briefing-short"));
-        args.Append(Loc.GetString("cult-role-briefing-hint"));
     }
 
     private void OnNarsieSummon(CultNarsieSummoned ev)
@@ -104,28 +87,6 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
             }
 
             return;
-        }
-    }
-
-    private void OnCultistComponentInit(EntityUid uid, CultistComponent component, ComponentInit args)
-    {
-        RaiseLocalEvent(uid, new MoodEffectEvent("CultFocused"));
-
-        var query = QueryActiveRules();
-        while (query.MoveNext(out _, out var cult, out _))
-        {
-            cult.CurrentCultists.Add(component);
-
-            var name = Name(uid);
-
-            if (TryComp<ActorComponent>(uid, out var actor))
-            {
-                cult.CultistsCache.TryAdd(name, actor.PlayerSession.Name);
-                _mindSystem.TryGetMind(actor.PlayerSession.UserId, out var mind);
-                component.OriginalMind = mind;
-            }
-
-            UpdateCultistsAppearance(cult);
         }
     }
 
@@ -288,89 +249,35 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         }
     }
 
-    private List<MindContainerComponent> FindPotentialTargets(List<EntityUid> exclude = null!)
-    {
-        var querry =
-            EntityManager.EntityQueryEnumerator<MindContainerComponent, HumanoidAppearanceComponent, ActorComponent>();
-
-        var potentialTargets = new List<MindContainerComponent>();
-
-        while (querry.MoveNext(out var uid, out var mind, out _, out var actor))
-        {
-            var entity = mind.Mind;
-
-            if (entity == default)
-                continue;
-
-            if (_gulag.IsUserGulagged(actor.PlayerSession.UserId, out _))
-                continue;
-
-            if (exclude?.Contains(uid) is true)
-            {
-                continue;
-            }
-
-            potentialTargets.Add(mind);
-        }
-
-        return potentialTargets;
-    }
-
     private void AfterEntitySelected(Entity<CultRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
     {
-        TryMakeCultist(args.EntityUid, ent);
+        MakeCultist(args.EntityUid, ent);
     }
 
-    public bool TryMakeCultist(EntityUid cultist, CultRuleComponent? rule = null)
+    public void MakeCultist(EntityUid cultist, CultRuleComponent rule)
     {
-        rule ??= EntityQuery<CultRuleComponent>().FirstOrDefault();
-
         if (!_mindSystem.TryGetMind(cultist, out var mindId, out var mind))
-        {
-            Log.Info("Failed getting mind for picked cultist.");
-            return false;
-        }
-
-        if (HasComp<CultistRoleComponent>(mindId))
-        {
-            Log.Error($"Player {mind.CharacterName} is already a cultist.");
-            return false;
-        }
-
-        MakeCultist(cultist, rule!, mindId, mind);
-
-        return true;
-    }
-
-    public void MakeCultist(EntityUid cultist, CultRuleComponent rule, EntityUid mindId, MindComponent mind)
-    {
-        var briefing = Loc.GetString("cult-role-greeting");
-        _antagSelection.SendBriefing(cultist, briefing, null, rule!.GreetingsSound);
-
-        _roleSystem.MindAddRole(mindId, new CultistRoleComponent
-        {
-            PrototypeId = rule.CultistRolePrototype
-        });
-
-        EnsureComp<CultistComponent>(cultist);
-
-        _factionSystem.RemoveFaction(cultist, "NanoTrasen", false);
-        _factionSystem.AddFaction(cultist, "Cultist");
-
-        if (_inventorySystem.TryGetSlotEntity(cultist, "back", out var backPack))
-        {
-            foreach (var itemPrototype in rule.StartingItems)
-            {
-                var itemEntity = Spawn(itemPrototype, Transform(cultist).Coordinates);
-
-                if (backPack != null)
-                {
-                    _storageSystem.Insert(backPack.Value, itemEntity, out _);
-                }
-            }
-        }
+            return;
 
         _mindSystem.TryAddObjective(mindId, mind, "KillCultTargetObjective");
+
+        RaiseLocalEvent(cultist, new MoodEffectEvent("CultFocused"));
+
+        if (!TryComp<CultistComponent>(cultist, out var cultistComponent))
+            return;
+
+        rule.CurrentCultists.Add(cultistComponent);
+
+        var name = Name(cultist);
+
+        if (TryComp<ActorComponent>(cultist, out var actor))
+        {
+            rule.CultistsCache.TryAdd(name, actor.PlayerSession.Name);
+            _mindSystem.TryGetMind(actor.PlayerSession.UserId, out var mindEnt);
+            cultistComponent.OriginalMind = mindEnt;
+        }
+
+        UpdateCultistsAppearance(rule);
     }
 
     private void RemoveAllCultistItems(EntityUid uid)

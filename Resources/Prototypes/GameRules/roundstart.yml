@@ -261,17 +261,23 @@
   - type: GameRule
     minPlayers: 30
   - type: CultRule
-    startingItems:
-      - RitualDagger
-      - CultRunicMetal20
   - type: AntagSelection
     definitions:
     - prefRoles: [ Cultist ]
       max: 3
-    briefing:
-      text: cult-role-greeting
-      color: Cyan
-      sound: /Audio/White/Cult/blood_cult_greeting.ogg
+      briefing:
+        text: cult-role-greeting
+        color: Red
+        sound: /Audio/White/Cult/blood_cult_greeting.ogg
+      startingGear: CultGear
+      components:
+      - type: Cultist
+      - type: NpcFactionMember
+        factions:
+        - Cultist
+      mindComponents:
+      - type: CultistRole
+        prototype: CultistRole
 
 - type: entity
   id: Wizard
@@ -294,6 +300,8 @@
       components:
       - type: Wizard
       - type: WizardAppearance
+      - type: GlobalAntagonist
+        antagonistPrototype: globalAntagonistWizard
       - type: NpcFactionMember
         factions:
         - Wizard

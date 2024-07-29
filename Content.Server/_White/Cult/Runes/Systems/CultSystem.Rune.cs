@@ -11,6 +11,7 @@ using Content.Server.Weapons.Ranged.Systems;
 using Content.Server._White.Cult.GameRule;
 using Content.Server._White.Cult.Runes.Comps;
 using Content.Server._White.Cult.UI;
+using Content.Server.Antag;
 using Content.Server.Bible.Components;
 using Content.Server.Chemistry.Components;
 using Content.Server.Chemistry.Containers.EntitySystems;
@@ -80,6 +81,8 @@ public sealed partial class CultSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MobThresholdSystem _thresholdSystem = default!;
     [Dependency] private readonly NavMapSystem _navMap = default!;
+    [Dependency] private readonly AntagSelectionSystem _antag = default!;
+    [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
 
     public override void Initialize()
     {
@@ -105,11 +108,9 @@ public sealed partial class CultSystem : EntitySystem
         SubscribeLocalEvent<RuneDrawerProviderComponent, ActivatableUIOpenAttemptEvent>(OnRuneDrawAttempt);
         SubscribeLocalEvent<RuneDrawerProviderComponent, BeforeActivatableUIOpenEvent>(BeforeRuneDraw);
         SubscribeLocalEvent<RuneDrawerProviderComponent, ListViewItemSelectedMessage>(OnRuneSelected);
-        SubscribeLocalEvent<CultTeleportRuneProviderComponent, TeleportRunesListWindowItemSelectedMessage>(
-            OnTeleportRuneSelected);
+        SubscribeLocalEvent<CultTeleportRuneProviderComponent, TeleportRunesListWindowItemSelectedMessage>(OnTeleportRuneSelected);
 
-        SubscribeLocalEvent<CultRuneSummoningProviderComponent, SummonCultistListWindowItemSelectedMessage>(
-            OnCultistSelected);
+        SubscribeLocalEvent<CultRuneSummoningProviderComponent, SummonCultistListWindowItemSelectedMessage>(OnCultistSelected);
 
         // Rune drawing/erasing
         SubscribeLocalEvent<CultistComponent, CultDrawEvent>(OnDraw);
@@ -402,7 +403,7 @@ public sealed partial class CultSystem : EntitySystem
 
     private void OnAfterInvoke(EntityUid rune, HashSet<EntityUid> cultists)
     {
-        if (!_entityManager.TryGetComponent<CultRuneBaseComponent>(rune, out var component))
+        if (!TryComp<CultRuneBaseComponent>(rune, out var component))
             return;
 
         foreach (var cultist in cultists)
@@ -438,7 +439,7 @@ public sealed partial class CultSystem : EntitySystem
         if (victim == null)
             return;
 
-        _entityManager.TryGetComponent<MobStateComponent>(victim.Value, out var state);
+        TryComp<MobStateComponent>(victim.Value, out var state);
 
         if (state == null)
             return;
@@ -447,24 +448,24 @@ public sealed partial class CultSystem : EntitySystem
 
         if (state.CurrentState != MobState.Dead)
         {
-            var canBeConverted = _entityManager.TryGetComponent<MindContainerComponent>(victim.Value, out var mind) &&
-                                 mind.Mind != null && !IsTarget(mind.Mind.Value);
-
-            // Выполнение действия в зависимости от условий
-            if (canBeConverted && !HasComp<BibleUserComponent>(victim.Value) &&
-                !HasComp<MindShieldComponent>(victim.Value))
+            // Выполнение действия в зависимости от условий - ахуеть а я не думал, это чатгпт писал?
+            if (TryComp<MindContainerComponent>(victim.Value, out var mind) &&
+                mind.Mind != null &&
+                !HasComp<BibleUserComponent>(victim.Value) &&
+                !HasComp<MindShieldComponent>(victim.Value) &&
+                !IsTarget(mind.Mind.Value) &&
+                _playerManager.TryGetSessionByEntity(victim.Value, out var session) )
             {
-                result = Convert(uid, victim.Value, args.User, args.Cultists);
+                result = Convert(uid, victim.Value, args.User, session, args.Cultists);
             }
             else
             {
                 result = Sacrifice(uid, victim.Value, args.User, args.Cultists);
             }
         }
-        else
+        else // Жертва мертва, выполняется альтернативное действие
         {
-            // Жертва мертва, выполняется альтернативное действие
-            result = SacrificeNonObjectiveDead(uid, victim.Value, args.User, args.Cultists);
+            result = Sacrifice(uid, victim.Value, args.User, args.Cultists, true);
         }
 
         args.Result = result;
@@ -483,53 +484,30 @@ public sealed partial class CultSystem : EntitySystem
         EntityUid rune,
         EntityUid target,
         EntityUid user,
-        HashSet<EntityUid> cultists)
+        HashSet<EntityUid> cultists,
+        bool isDead = false)
     {
-        if (!_entityManager.TryGetComponent<CultRuneOfferingComponent>(rune, out var offering))
+        if (!TryComp<CultRuneOfferingComponent>(rune, out var offering))
             return false;
 
-        if (cultists.Count < offering.SacrificeMinCount)
+        var requiredCount = isDead ? offering.SacrificeDeadMinCount : offering.SacrificeMinCount;
+
+        if (cultists.Count < requiredCount)
         {
             _popupSystem.PopupEntity(Loc.GetString("cult-sacrifice-not-enough-cultists"), user, user);
             return false;
         }
 
         if (!SpawnShard(target))
-        {
             _bodySystem.GibBody(target);
-        }
 
         AddChargesToReviveRune();
         return true;
     }
 
-    private bool SacrificeNonObjectiveDead(
-        EntityUid rune,
-        EntityUid target,
-        EntityUid user,
-        HashSet<EntityUid> cultists)
+    private bool Convert(EntityUid rune, EntityUid target, EntityUid user, ICommonSession session, HashSet<EntityUid> cultists)
     {
-        if (!_entityManager.TryGetComponent<CultRuneOfferingComponent>(rune, out var offering))
-            return false;
-
-        if (cultists.Count < offering.SacrificeDeadMinCount)
-        {
-            _popupSystem.PopupEntity(Loc.GetString("cult-sacrifice-not-enough-cultists"), user, user);
-            return false;
-        }
-
-        if (!SpawnShard(target))
-        {
-            _bodySystem.GibBody(target);
-        }
-
-        AddChargesToReviveRune();
-        return true;
-    }
-
-    private bool Convert(EntityUid rune, EntityUid target, EntityUid user, HashSet<EntityUid> cultists)
-    {
-        if (!_entityManager.TryGetComponent<CultRuneOfferingComponent>(rune, out var offering))
+        if (!TryComp<CultRuneOfferingComponent>(rune, out var offering))
             return false;
 
         if (cultists.Count < offering.ConvertMinCount)
@@ -542,7 +520,9 @@ public sealed partial class CultSystem : EntitySystem
             return false;
 
         _stunSystem.TryStun(target, TimeSpan.FromSeconds(2f), false);
-        _ruleSystem.TryMakeCultist(target);
+
+        _antag.ForceMakeAntag<CultRuleComponent>(session, "Cult");
+
         HealCultist(target);
 
         if (TryComp(target, out CuffableComponent? cuffs) && cuffs.Container.ContainedEntities.Count >= 1)
@@ -585,7 +565,7 @@ public sealed partial class CultSystem : EntitySystem
         if (victim == null)
             return;
 
-        _entityManager.TryGetComponent<MobStateComponent>(victim.Value, out var state);
+        TryComp<MobStateComponent>(victim.Value, out var state);
 
         var result = false;
 
@@ -1276,7 +1256,7 @@ public sealed partial class CultSystem : EntitySystem
 
     private EntityUid? FindNearestTarget(EntityUid uid, List<EntityUid> targets)
     {
-        if (!_entityManager.TryGetComponent<TransformComponent>(uid, out var runeTransform))
+        if (!TryComp<TransformComponent>(uid, out var runeTransform))
             return null;
 
         var range = 999f;
@@ -1284,7 +1264,7 @@ public sealed partial class CultSystem : EntitySystem
 
         foreach (var target in targets)
         {
-            if (!_entityManager.TryGetComponent<TransformComponent>(target, out var targetTransform))
+            if (!TryComp<TransformComponent>(target, out var targetTransform))
                 continue;
 
             runeTransform.Coordinates.TryDistance(_entityManager, targetTransform.Coordinates, out var newRange);
@@ -1322,7 +1302,7 @@ public sealed partial class CultSystem : EntitySystem
             var teleportRuneEntity = _entityManager.SpawnEntity(rune, transform.Value);
             _xform.AttachToGridOrMap(teleportRuneEntity);
 
-            _entityManager.TryGetComponent<CultRuneTeleportComponent>(teleportRuneEntity, out var sex);
+            TryComp<CultRuneTeleportComponent>(teleportRuneEntity, out var sex);
             {
                 if (sex == null)
                     return;
@@ -1344,7 +1324,7 @@ public sealed partial class CultSystem : EntitySystem
 
         if (rune == ApocalypseRunePrototypeId)
         {
-            if (!_entityManager.TryGetComponent(uid, out TransformComponent? transComp))
+            if (!TryComp(uid, out TransformComponent? transComp))
             {
                 return;
             }
@@ -1363,7 +1343,7 @@ public sealed partial class CultSystem : EntitySystem
 
     private bool SpawnShard(EntityUid target)
     {
-        if (!_entityManager.TryGetComponent<MindContainerComponent>(target, out var mindComponent))
+        if (!TryComp<MindContainerComponent>(target, out var mindComponent))
             return false;
 
         var transform = CompOrNull<TransformComponent>(target)?.Coordinates;

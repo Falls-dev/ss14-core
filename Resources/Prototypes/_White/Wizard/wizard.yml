@@ -71,3 +71,5 @@
   components:
     - type: Wizard
     - type: RandomHumanoidAppearance
+    - type: GlobalAntagonist
+      antagonistPrototype: globalAntagonistWizard

@@ -33,9 +33,6 @@ public sealed partial class CultRuleComponent : Component
     public int PentagramThreshold = 8;
 
     [DataField]
-    public List<ProtoId<EntityPrototype>> StartingItems = new();
-
-    [DataField]
     public ProtoId<AntagPrototype> CultistRolePrototype = "Cultist";
 
     /// <summary>

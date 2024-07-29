@@ -67,6 +67,13 @@ public sealed class WizardRuleSystem : GameRuleSystem<WizardRuleComponent>
         //SubscribeLocalEvent<WizardRuleComponent, AntagSelectLocationEvent>(OnObjectivesTextGetInfo);
     }
 
+    protected override void Added(EntityUid uid, WizardRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
+    {
+        base.Added(uid, component, gameRule, args);
+
+        gameRule.MinPlayers = component.MinPlayers;
+    }
+
     private void OnObjectivesTextGetInfo(Entity<WizardRuleComponent> ent, ref ObjectivesTextGetInfoEvent args)
     {
         args.Minds = ent.Comp.WizardMinds;

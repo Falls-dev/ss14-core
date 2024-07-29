@@ -3,6 +3,8 @@ using Content.Server._Miracle.GulagSystem;
 using Content.Server.Actions;
 using Content.Server.Antag;
 using Content.Server.GameTicking.Rules;
+using Content.Server.GameTicking.Rules.Components;
+using Content.Server.Hands.Systems;
 using Content.Server.Objectives.Components;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
@@ -43,6 +45,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     [Dependency] private readonly GulagSystem _gulag = default!;
     [Dependency] private readonly BloodSpearSystem _bloodSpear = default!;
     [Dependency] private readonly ContainerSystem _container = default!;
+    [Dependency] private readonly HandsSystem _hands = default!;
 
     public override void Initialize()
     {
@@ -118,6 +121,8 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
             if (TryComp<ActorComponent>(uid, out var actor))
             {
                 cult.CultistsCache.TryAdd(name, actor.PlayerSession.Name);
+                _mindSystem.TryGetMind(actor.PlayerSession.UserId, out var mind);
+                component.OriginalMind = mind;
             }
 
             UpdateCultistsAppearance(cult);
@@ -258,7 +263,12 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         var cultistsCount = cultRuleComponent.CurrentCultists.Count;
         var constructsCount = cultRuleComponent.Constructs.Count;
         var totalCultMembers = cultistsCount + constructsCount;
-        if (totalCultMembers < cultRuleComponent.ReadEyeThreshold)
+        if (totalCultMembers >= cultRuleComponent.PentagramThreshold)
+            cultRuleComponent.Stage = CultStage.Pentagram;
+        else if (totalCultMembers >= cultRuleComponent.ReadEyeThreshold && cultRuleComponent.Stage == CultStage.Normal)
+            cultRuleComponent.Stage = CultStage.RedEyes;
+
+        if (cultRuleComponent.Stage == CultStage.Normal)
             return;
 
         foreach (var cultistComponent in cultRuleComponent.CurrentCultists)
@@ -270,7 +280,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
                 Dirty(cultist, appearanceComponent);
             }
 
-            if (totalCultMembers < cultRuleComponent.PentagramThreshold)
+            if (cultRuleComponent.Stage != CultStage.Pentagram)
                 return;
 
             EnsureComp<PentagramComponent>(cultist);
@@ -374,6 +384,13 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
             {
                 _container.Remove(container.ContainedEntity.Value, container, true, true);
             }
+        }
+
+        foreach (var item in _hands.EnumerateHeld(uid))
+        {
+            if (TryComp(item, out CultItemComponent? cultItem) && !cultItem.CanPickUp &&
+                !_hands.TryDrop(uid, item, null, false, false))
+                QueueDel(item);
         }
     }
 

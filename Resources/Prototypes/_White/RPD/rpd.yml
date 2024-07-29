@@ -447,10 +447,10 @@
   mode: ConstructObject
   prototype: DisposalUnit
   cost: 2
-  delay: 1
+  delay: 2
   collisionMask: InteractImpassable
   rotation: User
-  fx: EffectRCDConstruct1
+  fx: EffectRCDConstruct2
 
 - type: rcd
   id: MailingUnit
@@ -461,10 +461,10 @@
   mode: ConstructObject
   prototype: MailingUnit
   cost: 2
-  delay: 1
+  delay: 2
   collisionMask: InteractImpassable
   rotation: User
-  fx: EffectRCDConstruct1
+  fx: EffectRCDConstruct2
 
 - type: rcd
   id: ToiletEmpty
@@ -475,8 +475,8 @@
   mode: ConstructObject
   prototype: ToiletEmpty
   cost: 2
-  delay: 1
+  delay: 2
   collisionMask: InteractImpassable
   rotation: User
-  fx: EffectRCDConstruct1
+  fx: EffectRCDConstruct2
 

@@ -29,10 +29,11 @@ public sealed class RCDAmmoSystem : EntitySystem
     // WD edit start
     private void OnInit(EntityUid uid, RCDAmmoComponent rcdAmmoComponent, ComponentInit _)
     {
-        if (!TryComp<StackComponent>(uid, out var stackComponent))
-            return;
+        if (TryComp<StackComponent>(uid, out var stackComponent))
+            rcdAmmoComponent.Charges = (int) (stackComponent.Count * rcdAmmoComponent.ChargeCountModifier);
+        else
+            rcdAmmoComponent.Charges = (int) (rcdAmmoComponent.Charges * rcdAmmoComponent.ChargeCountModifier);
 
-        rcdAmmoComponent.Charges = (int) (stackComponent.Count * rcdAmmoComponent.ChargeCountModifier);
     }
     // WD edit end
 

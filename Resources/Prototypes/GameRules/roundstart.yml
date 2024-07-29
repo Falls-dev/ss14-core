@@ -165,6 +165,18 @@
       max: 8
       playerRatio: 10
       lateJoinAdditional: true
+      briefing:
+        text: changeling-role-greeting
+        color: Red
+        sound: /Audio/Ambience/Antag/changeling_start.ogg
+      components:
+      - type: Changeling
+      - type: NpcFactionMember
+        factions:
+        - Changeling
+      mindComponents:
+      - type: ChangelingRole
+        prototype: ChangelingRole
 
 - type: entity
   id: Revolutionary

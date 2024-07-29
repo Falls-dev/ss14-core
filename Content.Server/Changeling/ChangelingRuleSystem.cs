@@ -1,26 +1,19 @@
 using Content.Server.Antag;
-using Content.Server.GameTicking.Components;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Mind;
 using Content.Server.Objectives;
-using Content.Server.Roles;
 using Content.Shared._White.Mood;
 using Content.Shared.Changeling;
 using Content.Shared.GameTicking;
-using Content.Shared.NPC.Systems;
 using Content.Shared.Objectives.Components;
-using Content.Shared.Roles;
 
 namespace Content.Server.Changeling;
 
 public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponent>
 {
-    [Dependency] private readonly AntagSelectionSystem _antagSelection = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
     [Dependency] private readonly MindSystem _mindSystem = default!;
-    [Dependency] private readonly SharedRoleSystem _roleSystem = default!;
     [Dependency] private readonly ObjectivesSystem _objectives = default!;
-    [Dependency] private readonly ChangelingNameGenerator _nameGenerator = default!;
+
 
     private const int ChangelingMaxDifficulty = 5;
     private const int ChangelingMaxPicks = 20;
@@ -30,26 +23,12 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         base.Initialize();
         SubscribeLocalEvent<ChangelingRuleComponent, AfterAntagEntitySelectedEvent>(AfterEntitySelected);
 
-        SubscribeLocalEvent<RoundRestartCleanupEvent>(ClearUsedNames);
-
         SubscribeLocalEvent<ChangelingRuleComponent, ObjectivesTextGetInfoEvent>(OnObjectivesTextGetInfo);
-
-        SubscribeLocalEvent<ChangelingRoleComponent, GetBriefingEvent>(OnGetBriefing);
-    }
-
-    private void OnGetBriefing(Entity<ChangelingRoleComponent> ent, ref GetBriefingEvent args)
-    {
-        args.Append(Loc.GetString("changeling-role-briefing-short"));
     }
 
     private void AfterEntitySelected(Entity<ChangelingRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
     {
         MakeChangeling(args.EntityUid, ent);
-    }
-
-    private void ClearUsedNames(RoundRestartCleanupEvent ev)
-    {
-        _nameGenerator.ClearUsed();
     }
 
     private void OnObjectivesTextGetInfo(
@@ -61,34 +40,17 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         args.AgentName = Loc.GetString("changeling-round-end-agent-name");
     }
 
-    public bool MakeChangeling(EntityUid changeling, ChangelingRuleComponent rule, bool giveObjectives = true)
+    public void MakeChangeling(EntityUid changeling, ChangelingRuleComponent rule, bool giveObjectives = true)
     {
         if (!_mindSystem.TryGetMind(changeling, out var mindId, out var mind))
-            return false;
-
-        var briefing = Loc.GetString("changeling-role-greeting");
-        _antagSelection.SendBriefing(changeling, briefing, null, rule.GreetSoundNotification);
+            return;
 
         rule.ChangelingMinds.Add(mindId);
-
-        _roleSystem.MindAddRole(mindId, new ChangelingRoleComponent
-        {
-            PrototypeId = rule.ChangelingPrototypeId
-        }, mind);
-
-        // Change the faction
-        _npcFaction.RemoveFaction(changeling, "NanoTrasen", false);
-        _npcFaction.AddFaction(changeling, "Changeling");
-
-        EnsureComp<ChangelingComponent>(changeling, out var readyChangeling);
-
-        readyChangeling.HiveName = _nameGenerator.GetName();
-        Dirty(changeling, readyChangeling);
 
         RaiseLocalEvent(changeling, new MoodEffectEvent("TraitorFocused"));
 
         if (!giveObjectives)
-            return true;
+            return;
 
         var difficulty = 0f;
         for (var pick = 0; pick < ChangelingMaxPicks && ChangelingMaxDifficulty > difficulty; pick++)
@@ -102,7 +64,6 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
             difficulty += adding;
             Log.Debug($"Added objective {ToPrettyString(objective):objective} with {adding} difficulty");
         }
-
-        return true;
     }
+
 }

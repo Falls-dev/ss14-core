@@ -550,10 +550,6 @@
       sprite:
     - type: VoiceMasker
       default: ClothingMaskGas
-    - type: UserInterface
-      interfaces:
-        - key: enum.InstrumentUiKey.Key
-          type: InstrumentBoundUserInterface
     - type: ClothingMidi
       midiAction: MidiActionKoitorra
     - type: Instrument
@@ -561,7 +557,11 @@
       handheld: false
       bank: 1
       program: 2
-
+# TODO: Требует починить систему и переделать логику работы с УИ. Хранить УИ в компоненте это пиздец
+#    - type: UserInterface
+#      interfaces:
+#        enum.InstrumentUiKey.Key:
+#          type: InstrumentBoundUserInterface
 
 - type: entity
   id: MidiActionKoitorra

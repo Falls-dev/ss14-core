@@ -1,3 +1,4 @@
+using Content.Shared._White.NiceIdCards;
 using Content.Shared.Access.Components;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -16,6 +17,7 @@ public abstract class SharedIdCardSystem : EntitySystem
     [Dependency] private readonly InventorySystem _inventorySystem = default!;
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly SharedAppearanceSystem _sharedAppearance = default!;
 
     public override void Initialize()
     {
@@ -134,6 +136,17 @@ public abstract class SharedIdCardSystem : EntitySystem
             _adminLogger.Add(LogType.Identity, LogImpact.Low,
                 $"{ToPrettyString(player.Value):player} has changed the job icon of {ToPrettyString(uid):entity} to {jobIcon} ");
         }
+
+        return true;
+    }
+
+    public bool TryChangeVisuals(EntityUid uid, string jobIconName, IdCardComponent? id = null)
+    {
+        if (!Resolve(uid, ref id))
+            return false;
+
+        var name = jobIconName.Replace("JobIcon", "");
+        _sharedAppearance.SetData(uid, IdVisuals.State, name);
 
         return true;
     }

@@ -145,7 +145,7 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         if (newJobIcon != null && _prototype.TryIndex<StatusIconPrototype>(newJobIcon, out var jobIcon)) // WD EDIT END
         {
             _idCard.TryChangeJobIcon(targetId, jobIcon, player: player);
-            _idCard.TryChangeVisuals(targetId, newJobIcon);
+            _idCard.TryChangeVisuals(targetId, newJobIcon); // WD
         }
 
         if (job != null)

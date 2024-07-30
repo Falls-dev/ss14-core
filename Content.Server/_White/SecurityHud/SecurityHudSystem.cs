@@ -76,14 +76,11 @@ public sealed class SecurityHudSystem : EntitySystem
 
     private void SetWanted(EntityUid uid, EntityUid target, EntityUid hud, ShowCriminalRecordIconsComponent component)
     {
-        if (!TryComp<ActorComponent>(uid, out var actor))
+        if (!HasComp<ActorComponent>(uid))
             return;
 
-        if (_ui.TryGetUi(hud, SecurityHudUiKey.Key, out var bui))
-        {
-            _ui.SetUiState(bui, new SecurityHudBUIState(component.Status, GetNetEntity(uid), GetNetEntity(target)));
-            _ui.OpenUi(bui, actor.PlayerSession);
-        }
+        _ui.SetUiState(hud, SecurityHudUiKey.Key, new SecurityHudBUIState(component.Status, GetNetEntity(uid), GetNetEntity(target)));
+        _ui.OpenUi(hud, SecurityHudUiKey.Key, uid);
     }
 
     private void OnStatusSelected(EntityUid uid, ShowCriminalRecordIconsComponent component, SecurityHudStatusSelectedMessage args)

@@ -75,7 +75,9 @@ public sealed partial class CultSystem
 
     private void OnGetVerbs(Entity<CultistComponent> ent, ref GetVerbsEvent<Verb> args)
     {
-        if (ent.Owner != args.User || !TryComp<ActorComponent>(args.User, out var actor))
+        var user = args.User;
+
+        if (ent.Owner != args.User || !HasComp<ActorComponent>(user))
             return;
 
         var createSpellVerb = new Verb
@@ -85,7 +87,7 @@ public sealed partial class CultSystem
             Category = VerbCategory.Cult,
             Act = () =>
             {
-                _ui.TryOpen(ent, CultEmpowerUiKey.Key, actor.PlayerSession);
+                _ui.OpenUi(ent.Owner, CultEmpowerUiKey.Key, user);
             }
         };
 
@@ -96,7 +98,7 @@ public sealed partial class CultSystem
             Category = VerbCategory.Cult,
             Act = () =>
             {
-                RemoveSpell(ent, actor.PlayerSession);
+                RemoveSpell(ent, user);
             }
         };
 
@@ -107,11 +109,8 @@ public sealed partial class CultSystem
             Category = VerbCategory.Cult,
             Act = () =>
             {
-                if (!_ui.TryGetUi(ent, BloodRitesUi.Key, out var bui))
-                    return;
-
-                _ui.SetUiState(bui, new CultistFactoryBUIState(ent.Comp.BloodRites));
-                _ui.OpenUi(bui, actor.PlayerSession);
+                _ui.SetUiState(ent.Owner, BloodRitesUi.Key, new CultistFactoryBUIState(ent.Comp.BloodRites));
+                _ui.OpenUi(ent.Owner, BloodRitesUi.Key, user);
             }
         };
 
@@ -120,7 +119,7 @@ public sealed partial class CultSystem
         args.Verbs.Add(bloodRitesVerb);
     }
 
-    private void RemoveSpell(Entity<CultistComponent> ent, ICommonSession session)
+    private void RemoveSpell(Entity<CultistComponent> ent, EntityUid user)
     {
         if (ent.Comp.SelectedEmpowers.Count == 0)
         {
@@ -128,7 +127,7 @@ public sealed partial class CultSystem
             return;
         }
 
-        _ui.TryOpen(ent, CultEmpowerRemoveUiKey.Key, session);
+        _ui.OpenUi(ent.Owner, CultEmpowerRemoveUiKey.Key, user);
     }
 
     private void OnBloodRitesSelected(Entity<CultistComponent> ent, ref CultistFactoryItemSelectedMessage args)

@@ -567,7 +567,7 @@
     key: enum.BodyScannerConsoleUIKey.Key
   - type: UserInterface
     interfaces:
-      - key: enum.BodyScannerConsoleUIKey.Key
+      enum.BodyScannerConsoleUIKey.Key:
         type: BodyScannerConsoleBoundUserInterface
   - type: Damageable
     damageContainer: StructuralInorganic

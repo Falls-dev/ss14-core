@@ -77,8 +77,7 @@ public sealed partial class SpaceVillainArcadeSystem : EntitySystem
         if (!TryComp<ApcPowerReceiverComponent>(uid, out var power) || !power.Powered)
             return;
 
-        if (msg.Session.AttachedEntity != null)
-            RaiseLocalEvent(msg.Session.AttachedEntity.Value, new MoodEffectEvent("ArcadePlay")); //WD edit
+        RaiseLocalEvent(msg.Actor, new MoodEffectEvent("ArcadePlay")); //WD edit
 
         switch (msg.PlayerAction)
         {

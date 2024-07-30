@@ -33,19 +33,13 @@ public partial class CultSystem
 
     private void OnShellSelected(EntityUid uid, ConstructShellComponent component, ConstructFormSelectedEvent args)
     {
-        var ent = args.Session.AttachedEntity;
+        var construct = Spawn(args.SelectedForm, _transform.GetMapCoordinates(args.Actor));
+        var mind = Comp<MindContainerComponent>(args.Actor);
 
-        if (ent != null)
-        {
-            var construct = Spawn(args.SelectedForm, Transform(ent.Value).MapPosition);
-            var mind = Comp<MindContainerComponent>(args.Session.AttachedEntity!.Value);
+        if (!mind.HasMind)
+            return;
 
-            if(!mind.HasMind)
-                return;
-
-            _mindSystem.TransferTo(mind.Mind.Value, construct);
-        }
-
+        _mindSystem.TransferTo(mind.Mind.Value, construct);
         Del(uid);
     }
 
@@ -61,7 +55,7 @@ public partial class CultSystem
 
     private void OnShardInsertAttempt(EntityUid uid, ConstructShellComponent component, ContainerIsInsertingAttemptEvent args)
     {
-        if (!TryComp<MindContainerComponent>(args.EntityUid, out var mindContainer) || !mindContainer.HasMind || !TryComp<ActorComponent>(args.EntityUid, out var actor))
+        if (!TryComp<MindContainerComponent>(args.EntityUid, out var mindContainer) || !mindContainer.HasMind || !HasComp<ActorComponent>(args.EntityUid))
         {
             _popupSystem.PopupEntity("Нет души", uid);
             args.Cancel();
@@ -69,6 +63,6 @@ public partial class CultSystem
         }
 
         _slotsSystem.SetLock(uid, component.ShardSlotId, true);
-        _ui.TryOpen(uid, SelectConstructUi.Key, actor.PlayerSession);
+        _ui.OpenUi(uid, SelectConstructUi.Key, args.EntityUid);
     }
 }

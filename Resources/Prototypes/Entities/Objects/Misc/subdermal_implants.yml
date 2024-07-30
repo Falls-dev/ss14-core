@@ -177,7 +177,7 @@
       preset: StorePresetChangeling
     - type: UserInterface
       interfaces:
-        - key: enum.StoreUiKey.Key
+        enum.StoreUiKey.Key:
           type: StoreBoundUserInterface
 
 - type: entity

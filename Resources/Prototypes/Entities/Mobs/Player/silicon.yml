@@ -91,10 +91,10 @@
   - type: InputMover
   - type: UserInterface
     interfaces:
-    - key: enum.StrippingUiKey.Key
-      type: StrippableBoundUserInterface
-    - key: enum.SiliconLawsUiKey.Key
-      type: SiliconLawBoundUserInterface
+      enum.StrippingUiKey.Key:
+        type: StrippableBoundUserInterface
+      enum.SiliconLawsUiKey.Key:
+        type: SiliconLawBoundUserInterface
   #- type: GhostRole
   #  makeSentient: true
   #  name: Maintenance Drone
@@ -192,8 +192,8 @@
       - id: WeaponXrayCannon
   - type: UserInterface
     interfaces:
-    - key: enum.StrippingUiKey.Key
-      type: StrippableBoundUserInterface
+      enum.StrippingUiKey.Key:
+        type: StrippableBoundUserInterface
   - type: GhostRole
     makeSentient: true
     name: ghost-role-information-onestar-mecha-name

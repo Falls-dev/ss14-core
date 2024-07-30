@@ -16,5 +16,5 @@
     - CriminalRecordIconRemove
   - type: UserInterface
     interfaces:
-    - key: enum.SecurityHudUiKey.Key
-      type: SecurityHudBUI
+      enum.SecurityHudUiKey.Key:
+        type: SecurityHudBUI

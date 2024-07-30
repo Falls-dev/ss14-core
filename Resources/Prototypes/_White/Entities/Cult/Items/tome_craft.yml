@@ -113,8 +113,8 @@
     - type: TorchCultistsProvider
     - type: UserInterface
       interfaces:
-          - key: enum.CultTeleporterUiKey.Key
-            type: TorchWindowBUI
+        enum.CultTeleporterUiKey.Key:
+          type: TorchWindowBUI
     - type: CultItem
 
 - type: cultistFactoryProduction
@@ -170,7 +170,7 @@
     - type: RunicMetal
     - type: UserInterface
       interfaces:
-        - key: enum.CultStructureCraftUiKey.Key
+        enum.CultStructureCraftUiKey.Key:
           type: StructureCraftBoundUserInterface
     - type: Item
       size: Small

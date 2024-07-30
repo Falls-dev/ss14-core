@@ -292,8 +292,7 @@ namespace Content.Server.Communications
             RaiseLocalEvent(ttsEv);
             //WD-end
 
-            if (message.Session.AttachedEntity != null)
-                _adminLogger.Add(LogType.Chat, LogImpact.Low, $"{ToPrettyString(message.Actor):player} has sent the following station announcement: {msg}");
+            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"{ToPrettyString(message.Actor):player} has sent the following station announcement: {msg}");
         }
 
         private void OnBroadcastMessage(EntityUid uid, CommunicationsConsoleComponent component, CommunicationsConsoleBroadcastMessage message)
@@ -321,7 +320,7 @@ namespace Content.Server.Communications
             //WD-EDIT
             if (!OnStationCallOrRecall(uid))
             {
-                _popupSystem.PopupEntity(Loc.GetString("comms-console-no-connection"), uid, message.Session);
+                _popupSystem.PopupEntity(Loc.GetString("comms-console-no-connection"), uid, message.Actor);
                 return;
             }
             //WD-EDIT

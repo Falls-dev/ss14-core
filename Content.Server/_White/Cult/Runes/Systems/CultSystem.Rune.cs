@@ -170,19 +170,15 @@ public sealed partial class CultSystem : EntitySystem
 
     private void BeforeRuneDraw(Entity<RuneDrawerProviderComponent> ent, ref BeforeActivatableUIOpenEvent args)
     {
-        if (_ui.TryGetUi(ent, ListViewSelectorUiKey.Key, out var bui))
-            _ui.SetUiState(bui, new ListViewBUIState(ent.Comp.RunePrototypes, true));
+        _ui.SetUiState(ent.Owner, ListViewSelectorUiKey.Key, new ListViewBUIState(ent.Comp.RunePrototypes, true));
     }
 
     private void OnRuneSelected(EntityUid uid, RuneDrawerProviderComponent component, ListViewItemSelectedMessage args)
     {
-        if (args.Session.AttachedEntity == null)
-            return;
-
         var runePrototype = args.SelectedItem;
-        var whoCalled = args.Session.AttachedEntity.Value;
+        var whoCalled = args.Actor;
 
-        if (!TryComp<ActorComponent>(whoCalled, out _))
+        if (!HasComp<ActorComponent>(whoCalled))
             return;
 
         TryDraw(whoCalled, runePrototype);
@@ -246,13 +242,10 @@ public sealed partial class CultSystem : EntitySystem
 
         if (rune == TeleportRunePrototypeId)
         {
-            if (!TryComp<ActorComponent>(user, out var actorComponent))
+            if (!HasComp<ActorComponent>(user))
                 return;
 
-            if (_ui.TryGetUi(user, NameSelectorUIKey.Key, out var bui))
-            {
-                _ui.OpenUi(bui, actorComponent.PlayerSession);
-            }
+            _ui.OpenUi(user, NameSelectorUIKey.Key, user);
 
             return;
         }
@@ -262,13 +255,10 @@ public sealed partial class CultSystem : EntitySystem
 
     private void OnChoose(EntityUid uid, CultistComponent component, NameSelectorMessage args)
     {
-        if (!TryComp<ActorComponent>(uid, out var actorComponent))
+        if (!HasComp<ActorComponent>(uid))
             return;
 
-        if (_ui.TryGetUi(uid, NameSelectorUIKey.Key, out var bui))
-        {
-            _ui.CloseUi(bui, actorComponent.PlayerSession);
-        }
+        _ui.CloseUi(uid, NameSelectorUIKey.Key, uid);
 
         SpawnRune(uid, TeleportRunePrototypeId, true, args.Name);
     }
@@ -649,23 +639,15 @@ public sealed partial class CultSystem : EntitySystem
         if (!TryComp<ActorComponent>(user, out var actorComponent))
             return false;
 
-        var ui = _ui.GetUiOrNull(user, RuneTeleporterUiKey.Key);
-
-        if (ui == null)
-            return false;
-
         if (list.Count == 0)
         {
             _popupSystem.PopupEntity(Loc.GetString("cult-teleport-rune-not-found"), user, user);
             return false;
         }
 
-        _ui.SetUiState(ui, new TeleportRunesListWindowBUIState(list, labels));
+        _ui.SetUiState(user, RuneTeleporterUiKey.Key, new TeleportRunesListWindowBUIState(list, labels));
 
-        if (_ui.IsUiOpen(user, ui.UiKey))
-            return false;
-
-        _ui.ToggleUi(ui, actorComponent.PlayerSession);
+        _ui.TryToggleUi(user, RuneTeleporterUiKey.Key, actorComponent.PlayerSession);
         return true;
     }
 
@@ -675,14 +657,14 @@ public sealed partial class CultSystem : EntitySystem
         TeleportRunesListWindowItemSelectedMessage args)
     {
         var targets = component.Targets;
-        var user = args.Session.AttachedEntity;
+        var user = args.Actor;
         var selectedRune = new EntityUid(args.SelectedItem);
         var baseRune = component.BaseRune;
 
         if (targets is null || targets.Count == 0)
             return;
 
-        if (user == null || baseRune == null)
+        if (baseRune == null)
             return;
 
         if (!TryComp<TransformComponent>(selectedRune, out var xFormSelected) ||
@@ -700,9 +682,9 @@ public sealed partial class CultSystem : EntitySystem
         _audio.PlayPvs(_teleportInSound, xFormSelected.Coordinates);
         _audio.PlayPvs(_teleportOutSound, xFormBase.Coordinates);
 
-        if (HasComp<CultTeleportRuneProviderComponent>(user.Value))
+        if (HasComp<CultTeleportRuneProviderComponent>(user))
         {
-            RemComp<CultTeleportRuneProviderComponent>(user.Value);
+            RemComp<CultTeleportRuneProviderComponent>(user);
         }
     }
 
@@ -994,11 +976,6 @@ public sealed partial class CultSystem : EntitySystem
         if (!TryComp<ActorComponent>(user, out var actorComponent))
             return false;
 
-        var ui = _ui.GetUiOrNull(user, SummonCultistUiKey.Key);
-
-        if (ui == null)
-            return false;
-
         if (list.Count == 0)
         {
             _popupSystem.PopupEntity(Loc.GetString("cult-cultists-not-found"), user, user);
@@ -1008,12 +985,9 @@ public sealed partial class CultSystem : EntitySystem
         _entityManager.EnsureComponent<CultRuneSummoningProviderComponent>(user, out var providerComponent);
         providerComponent.BaseRune = rune;
 
-        _ui.SetUiState(ui, new SummonCultistListWindowBUIState(list, labels));
+        _ui.SetUiState(user, SummonCultistUiKey.Key, new SummonCultistListWindowBUIState(list, labels));
 
-        if (_ui.IsUiOpen(user, ui.UiKey))
-            return false;
-
-        _ui.ToggleUi(ui, actorComponent.PlayerSession);
+        _ui.TryToggleUi(user, SummonCultistUiKey.Key, actorComponent.PlayerSession);
         return true;
     }
 
@@ -1022,7 +996,7 @@ public sealed partial class CultSystem : EntitySystem
         CultRuneSummoningProviderComponent component,
         SummonCultistListWindowItemSelectedMessage args)
     {
-        var user = args.Session.AttachedEntity;
+        var user = args.Actor;
         var target = new EntityUid(args.SelectedItem);
         var baseRune = component.BaseRune;
 
@@ -1032,7 +1006,7 @@ public sealed partial class CultSystem : EntitySystem
         if (!TryComp<CuffableComponent>(target, out var cuffableComponent))
             return;
 
-        if (user == null || baseRune == null)
+        if (baseRune == null)
             return;
 
         if (!TryComp<TransformComponent>(baseRune, out var xFormBase))
@@ -1043,13 +1017,13 @@ public sealed partial class CultSystem : EntitySystem
 
         if (isPulled)
         {
-            _popupSystem.PopupEntity("Его кто-то держит!", user.Value);
+            _popupSystem.PopupEntity("Его кто-то держит!", user);
             return;
         }
 
         if (isCuffed)
         {
-            _popupSystem.PopupEntity("Он в наручниках!", user.Value);
+            _popupSystem.PopupEntity("Он в наручниках!", user);
             return;
         }
 
@@ -1059,9 +1033,9 @@ public sealed partial class CultSystem : EntitySystem
 
         _audio.PlayPvs(_teleportInSound, xFormBase.Coordinates);
 
-        if (HasComp<CultRuneSummoningProviderComponent>(user.Value))
+        if (HasComp<CultRuneSummoningProviderComponent>(user))
         {
-            RemComp<CultRuneSummoningProviderComponent>(user.Value);
+            RemComp<CultRuneSummoningProviderComponent>(user);
         }
     }
 
@@ -1199,26 +1173,23 @@ public sealed partial class CultSystem : EntitySystem
 
     private void OnActiveInWorld(EntityUid uid, CultEmpowerComponent component, ActivateInWorldEvent args)
     {
-        if (!component.IsRune || !TryComp<CultistComponent>(args.User, out _) ||
-            !TryComp<ActorComponent>(args.User, out var actor))
+        if (!component.IsRune || !TryComp<CultistComponent>(args.User, out _) || !HasComp<ActorComponent>(args.User))
             return;
 
-        _ui.TryOpen(uid, CultEmpowerUiKey.Key, actor.PlayerSession);
+        _ui.OpenUi(uid, CultEmpowerUiKey.Key, args.User);
     }
 
     private void OnUseInHand(EntityUid uid, CultEmpowerComponent component, UseInHandEvent args)
     {
-        if (!TryComp<CultistComponent>(args.User, out _) || !TryComp<ActorComponent>(args.User, out var actor))
+        if (!HasComp<CultistComponent>(args.User) || !HasComp<ActorComponent>(args.User))
             return;
 
-        _ui.TryOpen(uid, CultEmpowerUiKey.Key, actor.PlayerSession);
+        _ui.OpenUi(uid, CultEmpowerUiKey.Key, args.User);
     }
 
     private void OnEmpowerSelected(EntityUid uid, CultEmpowerComponent component, CultEmpowerSelectedBuiMessage args)
     {
-        var playerEntity = args.Session.AttachedEntity;
-
-        if (!playerEntity.HasValue || !TryComp<CultistComponent>(playerEntity, out var comp))
+        if (!TryComp<CultistComponent>(args.Actor, out var comp))
             return;
 
         var action = CultistComponent.CultistActions.FirstOrDefault(x => x.Equals(args.ActionType));
@@ -1234,13 +1205,13 @@ public sealed partial class CultSystem : EntitySystem
                 return;
             }
 
-            comp.SelectedEmpowers.Add(GetNetEntity(_actionsSystem.AddAction(playerEntity.Value, action)));
-            Dirty(playerEntity.Value, comp);
+            comp.SelectedEmpowers.Add(GetNetEntity(_actionsSystem.AddAction(args.Actor, action)));
+            Dirty(args.Actor, comp);
         }
         else if (comp.SelectedEmpowers.Count < component.MinRequiredCultistActions)
         {
-            comp.SelectedEmpowers.Add(GetNetEntity(_actionsSystem.AddAction(playerEntity.Value, action)));
-            Dirty(playerEntity.Value, comp);
+            comp.SelectedEmpowers.Add(GetNetEntity(_actionsSystem.AddAction(args.Actor, action)));
+            Dirty(args.Actor, comp);
         }
     }
 

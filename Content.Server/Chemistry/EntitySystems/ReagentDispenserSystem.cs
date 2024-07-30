@@ -39,7 +39,7 @@ namespace Content.Server.Chemistry.EntitySystems
         [Dependency] private readonly DeviceLinkSystem _signalSystem = default!; // WD
         [Dependency] private readonly ChemMasterSystem _chemMasterSystem = default!; // WD
         [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-        
+
         public override void Initialize()
         {
             base.Initialize();
@@ -108,9 +108,9 @@ namespace Content.Server.Chemistry.EntitySystems
         }
 
         public void UpdateConnection(
-            EntityUid dispenser, 
+            EntityUid dispenser,
             EntityUid chemMaster,
-            ReagentDispenserComponent? dispenserComp = null, 
+            ReagentDispenserComponent? dispenserComp = null,
             ChemMasterComponent? chemMasterComp = null)
         {
             if (!Resolve(dispenser, ref dispenserComp) || !Resolve(chemMaster, ref chemMasterComp))
@@ -228,7 +228,7 @@ namespace Content.Server.Chemistry.EntitySystems
 
             var outputContainer = _itemSlotsSystem.GetItemOrNull(reagentDispenser, SharedReagentDispenser.OutputSlotName);
             if (outputContainer is not { Valid: true } || !_solutionContainerSystem.TryGetFitsInDispenser(outputContainer.Value, out var solution, out _))
-            { 
+            {
                 // WD EDIT START
                 var chemMasterUid = reagentDispenser.Comp.ChemMaster;
                 if (!reagentDispenser.Comp.ChemMasterInRange ||
@@ -245,11 +245,10 @@ namespace Content.Server.Chemistry.EntitySystems
                 return;
             } // WD EDIT END
 
-            if (_solutionContainerSystem.TryAddReagent(solution.Value, message.ReagentId, (int) reagentDispenser.Comp.DispenseAmount, out var dispensedAmount)
-                && message.Session.AttachedEntity is not null)
+            if (_solutionContainerSystem.TryAddReagent(solution.Value, message.ReagentId, (int) reagentDispenser.Comp.DispenseAmount, out var dispensedAmount))
             {
                 _adminLogger.Add(LogType.ChemicalReaction, LogImpact.Medium,
-                    $"{ToPrettyString(message.Session.AttachedEntity.Value):player} dispensed {dispensedAmount}u of {message.ReagentId} into {ToPrettyString(outputContainer.Value):entity}");
+                    $"{ToPrettyString(message.Actor):player} dispensed {dispensedAmount}u of {message.ReagentId} into {ToPrettyString(outputContainer.Value):entity}");
             }
 
             UpdateUiState(reagentDispenser);

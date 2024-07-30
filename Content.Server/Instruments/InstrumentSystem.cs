@@ -283,10 +283,10 @@ public sealed partial class InstrumentSystem : SharedInstrumentSystem
             RaiseNetworkEvent(new InstrumentStopMidiEvent(netUid));
         }
 
-        if (instrument.TimeStartedPlaying != null && instrument.InstrumentPlayer != null)
+        if (instrument.TimeStartedPlaying != null && instrument.InstrumentPlayer.HasValue)
         {
-            var username = instrument.InstrumentPlayer.Name;
-            var entity = instrument.InstrumentPlayer.AttachedEntity;
+            var username = Name(instrument.InstrumentPlayer.Value);
+            var entity = instrument.InstrumentPlayer;
             var name = entity != null ? MetaData((EntityUid) entity).EntityName : "Unknown";
 
             RaiseLocalEvent(new InstrumentPlayedStatEvent(name, (TimeSpan) (_gameTiming.CurTime - instrument.TimeStartedPlaying), username));

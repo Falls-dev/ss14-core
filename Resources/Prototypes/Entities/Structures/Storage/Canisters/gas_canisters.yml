@@ -38,7 +38,7 @@
       interfaces:
         enum.GasCanisterUiKey.Key:
           type: GasCanisterBoundUserInterface
-        - key: enum.PolymorphableCanisterUiKey.Key
+        enum.PolymorphableCanisterUiKey.Key:
           type: PolymorphableCanisterBUI
     - type: Destructible
       thresholds:

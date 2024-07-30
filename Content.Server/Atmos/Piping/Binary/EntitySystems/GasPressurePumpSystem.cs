@@ -123,14 +123,13 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
         private void OnToggleStatusMessage(EntityUid uid, GasPressurePumpComponent pump, GasPressurePumpToggleStatusMessage args)
         {
             pump.Enabled = args.Enabled;
-            var player = args.Session.AttachedEntity!.Value;
             _adminLogger.Add(LogType.AtmosPowerChanged, LogImpact.Medium,
                 $"{ToPrettyString(args.Actor):player} set the power on {ToPrettyString(uid):device} to {args.Enabled}");
 
-            if (Name(uid) == "plasma pump" && args.Enabled)
+            if (Name(uid) == "plasma pump" && args.Enabled) // WD
             {
                 _chatManager.SendAdminAnnouncement(Loc.GetString("admin-chatalert-plasma-pump-enabled",
-                    ("pump", ToPrettyString(uid)), ("player", ToPrettyString(player))));
+                    ("pump", ToPrettyString(uid)), ("player", ToPrettyString(args.Actor))));
             }
 
 
@@ -141,14 +140,13 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
         private void OnOutputPressureChangeMessage(EntityUid uid, GasPressurePumpComponent pump, GasPressurePumpChangeOutputPressureMessage args)
         {
             pump.TargetPressure = Math.Clamp(args.Pressure, 0f, Atmospherics.MaxOutputPressure);
-            var player = args.Session.AttachedEntity!.Value;
             _adminLogger.Add(LogType.AtmosPressureChanged, LogImpact.Medium,
                 $"{ToPrettyString(args.Actor):player} set the pressure on {ToPrettyString(uid):device} to {args.Pressure}kPa");
 
             if (Name(uid) == "plasma pump")
             {
                 _chatManager.SendAdminAnnouncement(Loc.GetString("admin-chatalert-plasma-pump-pressure-change",
-                    ("pump", ToPrettyString(uid)), ("player", ToPrettyString(player)), ("pressure", args.Pressure)));
+                    ("pump", ToPrettyString(uid)), ("player", ToPrettyString(args.Actor)), ("pressure", args.Pressure)));
             }
 
             DirtyUI(uid, pump);

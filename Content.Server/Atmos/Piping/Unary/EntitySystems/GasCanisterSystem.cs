@@ -139,12 +139,11 @@ public sealed class GasCanisterSystem : EntitySystem
             containedGasDict.Add((Gas)i, canister.Air[i]);
         }
 
-        var player = args.Session.AttachedEntity.GetValueOrDefault();
         _adminLogger.Add(LogType.CanisterValve, impact, $"{ToPrettyString(args.Actor):player} set the valve on {ToPrettyString(uid):canister} to {args.Valve:valveState} while it contained [{string.Join(", ", containedGasDict)}]");
         if (args.Valve && containedGasDict[Gas.Plasma] >= _plasmaThreshold)
         {
             _chatManager.SendAdminAnnouncement(Loc.GetString("admin-chatalert-plasma-canister-opened",
-                ("player", ToPrettyString(player)), ("canister", ToPrettyString(uid))));
+                ("player", ToPrettyString(args.Actor)), ("canister", ToPrettyString(uid))));
         }
 
         canister.ReleaseValve = args.Valve;

@@ -237,8 +237,7 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
 
         if (Containers.TryGetOuterContainer(user, Transform(user), out var container) &&
-            HasComp<ShootBlockerContainerComponent>(container.Owner) ||
-            TryComp(user, out PseudoItemComponent? pseudoItem) && pseudoItem.Active) // WD
+            HasComp<ShootBlockerContainerComponent>(container.Owner)) // WD
             return;
 
         var toCoordinates = gun.ShootCoordinates;

@@ -30,15 +30,6 @@ public sealed class ThrowInsertContainerSystem : EntitySystem
         if (!_containerSystem.CanInsert(args.Thrown, container))
             return;
 
-
-        var rand = _random.NextFloat();
-        if (_random.Prob(ent.Comp.Probability))
-        {
-            _audio.PlayPvs(ent.Comp.MissSound, ent);
-            _popup.PopupEntity(Loc.GetString(ent.Comp.MissLocString), ent);
-            return;
-        }
-
         if (!_containerSystem.Insert(args.Thrown, container))
             throw new InvalidOperationException("Container insertion failed but CanInsert returned true");
 

@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared._White.Containers;
 using Content.Shared._White.Events;
+using Content.Shared._White.Item.PseudoItem;
 using Content.Shared._White.WeaponModules;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
@@ -236,7 +237,8 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
 
         if (Containers.TryGetOuterContainer(user, Transform(user), out var container) &&
-            HasComp<ShootBlockerContainerComponent>(container.Owner)) // WD
+            HasComp<ShootBlockerContainerComponent>(container.Owner) ||
+            TryComp(user, out PseudoItemComponent? pseudoItem) && pseudoItem.Active) // WD
             return;
 
         var toCoordinates = gun.ShootCoordinates;

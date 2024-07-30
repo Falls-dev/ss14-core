@@ -1,4 +1,4 @@
-using Content.Shared.Inventory.VirtualItem;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 
 namespace Content.Shared._White.Item.PseudoItem;
@@ -10,6 +10,13 @@ public abstract class SharedPseudoItemSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<PseudoItemComponent, GettingPickedUpAttemptEvent>(OnGettingPickedUpAttempt);
+        SubscribeLocalEvent<PseudoItemComponent, AttackAttemptEvent>(OnAttackAttempt);
+    }
+
+    private void OnAttackAttempt(Entity<PseudoItemComponent> ent, ref AttackAttemptEvent args)
+    {
+        if (ent.Comp.Active)
+            args.Cancel();
     }
 
     private void OnGettingPickedUpAttempt(Entity<PseudoItemComponent> ent, ref GettingPickedUpAttemptEvent args)

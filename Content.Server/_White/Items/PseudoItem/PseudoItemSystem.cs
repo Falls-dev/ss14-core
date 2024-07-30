@@ -7,7 +7,6 @@ using Content.Server.Item;
 using Content.Server.Popups;
 using Content.Server.Resist;
 using Content.Shared._White.Item.PseudoItem;
-using Content.Shared.Interaction.Events;
 using Content.Shared.Resist;
 using Content.Shared.Storage;
 using Robust.Server.GameObjects;
@@ -29,16 +28,9 @@ public sealed class PseudoItemSystem : SharedPseudoItemSystem
         SubscribeLocalEvent<PseudoItemComponent, EntGotRemovedFromContainerMessage>(OnEntRemoved);
         SubscribeLocalEvent<PseudoItemComponent, DropAttemptEvent>(OnDropAttempt);
         SubscribeLocalEvent<PseudoItemComponent, EscapeInventoryEvent>(OnEscape);
-        SubscribeLocalEvent<PseudoItemComponent, AttackAttemptEvent>(OnAttackAttempt);
         SubscribeLocalEvent<StorageComponent, GetVerbsEvent<AlternativeVerb>>(AddAltVerb);
         SubscribeLocalEvent<StorageComponent, GetVerbsEvent<Verb>>(AddVerb);
         SubscribeLocalEvent<StorageComponent, PseudoItemInteractEvent>(OnInteract);
-    }
-
-    private void OnAttackAttempt(Entity<PseudoItemComponent> ent, ref AttackAttemptEvent args)
-    {
-        if (ent.Comp.Active)
-            args.Cancel();
     }
 
     private void OnInteract(Entity<StorageComponent> ent, ref PseudoItemInteractEvent args)

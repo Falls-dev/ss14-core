@@ -24,12 +24,11 @@
   tier: 1
   cost: 10000
   recipeUnlocks:
-  - BoxShotgunIncendiary
-  - MagazineRifleIncendiary
-  - MagazinePistolIncendiary
-  - MagazineLightRifleIncendiary
-  - SpeedLoaderMagnumIncendiary
-  - MagazineShotgunIncendiary
+  - ShellShotgunIncendiary
+  - CartridgePistolIncendiary
+  - CartridgeMagnumIncendiary
+  - CartridgeLightRifleIncendiary
+  - CartridgeRifleIncendiary
   - MagazineBoxPistolIncendiary
   - MagazineBoxMagnumIncendiary
   - MagazineBoxLightRifleIncendiary
@@ -69,9 +68,6 @@
   - ShinanoGrenadeFlashRecipe
   - ShinanoGrenadeSmokeRecipe
   - ShinanoGrenadeStingerRecipe
-  - ShellTranquilizer
-  - BoxBeanbag
-  - WeaponDisabler
 
 - type: technology
   id: UraniumMunitions
@@ -83,15 +79,15 @@
   tier: 1
   cost: 7500
   recipeUnlocks:
-  - MagazineRifleUranium
-  - MagazinePistolUranium
-  - MagazineLightRifleUranium
-  - SpeedLoaderMagnumUranium
+  - ShellShotgunUranium
+  - CartridgePistolUranium
+  - CartridgeMagnumUranium
+  - CartridgeLightRifleUranium
+  - CartridgeRifleUranium
   - MagazineBoxPistolUranium
   - MagazineBoxMagnumUranium
   - MagazineBoxLightRifleUranium
   - MagazineBoxRifleUranium
-  - BoxShotgunUranium
 
 - type: technology
   id: AdvancedRiotControl

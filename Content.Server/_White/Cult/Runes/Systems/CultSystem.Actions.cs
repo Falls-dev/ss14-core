@@ -115,22 +115,14 @@ public partial class CultSystem
             !TryComp<ActorComponent>(uid, out var actor))
             return;
 
-        if (_holyWeapon.IsHoldingHolyWeapon(args.Target))
+        if (!HasComp<CultistComponent>(args.Target))
         {
-            _popupSystem.PopupEntity(Loc.GetString("cult-magic-holy"), args.Performer, args.Performer,
+            _popupSystem.PopupEntity("Цель должна быть культистом.", args.Performer, args.Performer,
                 PopupType.MediumCaution);
             return;
         }
 
-        if (!HasComp<CultistComponent>(args.Target) && !HasComp<ConstructComponent>(args.Target) &&
-            _actionBlocker.CanInteract(args.Target, null))
-        {
-            _popupSystem.PopupEntity("Цель должна быть культистом, быть скованной или парализованной.", args.Performer,
-                args.Performer, PopupType.MediumCaution);
-            return;
-        }
-
-        _bloodstreamSystem.TryModifyBloodLevel(uid, -5, bloodstream, createPuddle: false);
+        _bloodstreamSystem.TryModifyBloodLevel(uid, -7, bloodstream, createPuddle: false);
 
         var eui = new CultTeleportSpellEui(args.Performer, args.Target);
         _euiManager.OpenEui(eui, actor.PlayerSession);
@@ -367,12 +359,15 @@ public partial class CultSystem
         if (!TryComp(args.Target, out CuffableComponent? cuffs) || cuffs.Container.ContainedEntities.Count > 0)
             return;
 
-        _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.Performer, TimeSpan.FromSeconds(2),
-            new ShacklesEvent(), args.Performer, args.Target)
+        var doAfterArgs = new DoAfterArgs(EntityManager, args.Performer, TimeSpan.FromSeconds(2), new ShacklesEvent(),
+            args.Performer, args.Target)
         {
             BreakOnMove = true,
             BreakOnDamage = true
-        });
+        };
+
+        if (!_doAfterSystem.TryStartDoAfter(doAfterArgs))
+            return;
 
         Speak(args);
         args.Handled = true;

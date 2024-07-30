@@ -8,14 +8,9 @@ using Content.Server._White.Cult.UI;
 using Content.Server._White.Wizard.Magic;
 using Content.Server.Chat.Systems;
 using Content.Shared._White.Chaplain;
-using Content.Shared.Chemistry.Components;
-using Content.Shared.Damage;
-using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
-using Content.Shared.Fluids.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Stacks;
-using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
 using Content.Shared._White.Cult.Actions;
 using Content.Shared._White.Cult.Components;
@@ -25,8 +20,8 @@ using Content.Shared.Actions;
 using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.DoAfter;
+using Content.Shared.Doors.Components;
 using Content.Shared.Maps;
-using Content.Shared.Mindshield.Components;
 using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
@@ -72,6 +67,21 @@ public partial class CultSystem
         SubscribeLocalEvent<CultistComponent, CultStunActionEvent>(OnStun);
         SubscribeLocalEvent<CultistComponent, ActionGettingRemovedEvent>(OnActionRemoved);
         SubscribeLocalEvent<CultistComponent, ShacklesEvent>(OnShackles);
+        SubscribeLocalEvent<CultistComponent, TwistedConstructionEvent>(OnTwistedConstruction);
+    }
+
+    private void OnTwistedConstruction(Entity<CultistComponent> ent, ref TwistedConstructionEvent args)
+    {
+        if (args.Cancelled)
+            QueueDel(GetEntity(args.Effect));
+
+        if (args.Handled || args.Cancelled)
+            return;
+
+        args.Handled = true;
+
+        Del(args.Target);
+        Spawn(args.RunicDoor, GetCoordinates(args.Location));
     }
 
     private void OnShackles(Entity<CultistComponent> ent, ref ShacklesEvent args)
@@ -373,6 +383,37 @@ public partial class CultSystem
         args.Handled = true;
     }
 
+    private void ConvertDoor(EntityUid uid, EntityUid target, BloodstreamComponent bloodstream,
+        CultTwistedConstructionActionEvent args)
+    {
+        var meta = MetaData(target);
+        if (meta.EntityPrototype?.ID == args.RunicDoor.Id)
+            return;
+
+        var xform = Transform(target);
+        if (!xform.Anchored)
+            return;
+
+        var effect = Spawn(args.Effect, xform.Coordinates);
+        var ev = new TwistedConstructionEvent(GetNetEntity(effect), args.RunicDoor, GetNetCoordinates(xform.Coordinates));
+        var doAfterArgs = new DoAfterArgs(EntityManager, uid, args.Delay, ev, uid, target)
+        {
+            BreakOnDamage = true,
+            BreakOnMove = true,
+        };
+
+        if (!_doAfterSystem.TryStartDoAfter(doAfterArgs))
+        {
+            QueueDel(effect);
+            return;
+        }
+
+        _audio.PlayPvs(args.Sound, xform.Coordinates);
+        _bloodstreamSystem.TryModifyBloodLevel(uid, -12, bloodstream, createPuddle: false);
+        Speak(args);
+        args.Handled = true;
+    }
+
     private void OnTwistedConstructionAction(
         EntityUid uid,
         CultistComponent component,
@@ -383,6 +424,12 @@ public partial class CultSystem
 
         if (!TryComp<BloodstreamComponent>(args.Performer, out var bloodstreamComponent))
             return;
+
+        if (HasComp<DoorComponent>(args.Target))
+        {
+            ConvertDoor(uid, args.Target, bloodstreamComponent, args);
+            return;
+        }
 
         if (!_entityManager.TryGetComponent<StackComponent>(args.Target, out var stack))
             return;

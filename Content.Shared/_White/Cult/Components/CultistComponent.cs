@@ -2,7 +2,6 @@
 using Content.Shared.FixedPoint;
 using Content.Shared.Mind;
 using Robust.Shared.GameStates;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 
 namespace Content.Shared._White.Cult.Components;
 
@@ -45,13 +44,6 @@ public sealed partial class CultistComponent : Component
     {
         SummonCultDaggerAction, BloodRitesAction, CultTwistedConstructionAction, CultTeleportAction,
         CultSummonCombatEquipmentAction, CultStunAction, EmpPulseAction, ConcealPresenceAction, CultShadowShacklesAction
-    };
-
-    [DataField("bloodRites", customTypeSerializer: typeof(PrototypeIdListSerializer<CultistFactoryProductionPrototype>))]
-    public List<string> BloodRites = new ()
-    {
-        "FactoryCultBloodSpear",
-        "FactoryCultBloodBarrage"
     };
 
     [ViewVariables, NonSerialized]

@@ -221,8 +221,6 @@
         type: SpellSelectorBUI
       enum.CultEmpowerRemoveUiKey.Key:
         type: SpellRemoverBUI
-      enum.BloodRitesUi.Key:
-        type: CultistFactoryBUI
       # WD-EDIT END
   - type: Puller
   - type: Butcherable

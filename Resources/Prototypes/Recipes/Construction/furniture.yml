@@ -1240,7 +1240,7 @@
   description: Wooden mannequin designed for clothing displaying
   graph: Mannequin
   startNode: start
-  targetNode: mannequin
+  targetNode: mannequin_woman
   category: construction-category-furniture
   icon:
     sprite: Structures/Decoration/mannequin.rsi

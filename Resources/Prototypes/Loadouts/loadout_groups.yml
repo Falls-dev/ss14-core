@@ -1530,7 +1530,6 @@
 - type: loadoutGroup
   id: DetectiveShoes
   name: loadout-group-shoes
-  minLimit: 0
   loadouts:
   - BootsLaceup
   - ShoesLeather
@@ -1603,6 +1602,12 @@
   name: loadout-group-ears
   loadouts:
   - SecurityHeadsetFull
+
+- type: loadoutGroup # WD
+  id: BasicSecurityHeadset
+  name: loadout-group-ears
+  loadouts:
+  - SecurityHeadset
 
 - type: loadoutGroup # WD
   id: CommonSecurityBackpack

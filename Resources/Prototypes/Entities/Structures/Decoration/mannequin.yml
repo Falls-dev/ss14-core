@@ -103,6 +103,10 @@
   - type: Sprite
     sprite: Structures/Decoration/mannequin.rsi
     state: mannequin_woman
+    layers:
+    - map: [ "mannequin" ]
+      sprite: Structures/Decoration/mannequin.rsi
+      state: mannequin_woman
   - type: Construction
     graph: Mannequin
     node: mannequin_woman

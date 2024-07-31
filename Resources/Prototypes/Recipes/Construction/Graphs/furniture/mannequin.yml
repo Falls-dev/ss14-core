@@ -15,6 +15,16 @@
             - material: MetalRod
               amount: 2
               doAfter: 2
+        - to: mannequin_woman
+          completed:
+            - !type:SnapToGrid { }
+          steps:
+            - material: WoodPlank
+              amount: 5
+            - material: MetalRod
+              amount: 2
+              doAfter: 2
+
     - node: mannequin
       entity: Mannequin
       edges:
@@ -29,6 +39,7 @@
           steps:
             - tool: Screwing
               doAfter: 3
+
     - node: mannequin_woman
       entity: MannequinWoman
       edges:

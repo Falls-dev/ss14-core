@@ -227,7 +227,7 @@ public abstract class SharedStorageSystem : EntitySystem
 
         if (TryComp<VirtualItemComponent>(args.Used, out var virtualItem)) // WD
         {
-            RaiseLocalEvent(uid, new PseudoItemInteractEvent(virtualItem.BlockingEntity, args.User));
+            RaiseLocalEvent(uid, new PseudoItemInteractEvent(virtualItem.BlockingEntity, args.User, args.Used));
             return;
         }
 
@@ -515,6 +515,9 @@ public abstract class SharedStorageSystem : EntitySystem
         }
 
         if (!ActionBlocker.CanInteract(player, itemEnt))
+            return;
+
+        if (HasComp<PseudoItemComponent>(itemEnt)) // WD
             return;
 
         TransformSystem.DropNextTo(itemEnt, player);

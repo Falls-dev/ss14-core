@@ -11,4 +11,7 @@ ent-EnergyBola = энергобола
 
 action-name-insert-self = Залезть внутрь.
 action-name-insert-other = Засунуть внутрь.
+action-start-insert-self = Вы начинаете залазить в {$storage}.
+action-start-insert-other = {$user} начинает засовывать вас в {$storage}.
+action-insert-escaping = Невозможно засунуть в контейнер, цель пытается сбежать!
 carry-start = { $carrier } пытается взять вас на руки!

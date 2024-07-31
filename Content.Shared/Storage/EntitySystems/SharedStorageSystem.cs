@@ -684,6 +684,8 @@ public abstract class SharedStorageSystem : EntitySystem
 
         foreach (var entity in entities.ToArray())
         {
+            if (HasComp<PseudoItemComponent>(entity)) // WD
+                continue;
             Insert(target, entity, out _, user: user, targetComp, playSound: false);
         }
 

@@ -32,7 +32,6 @@ public sealed class PseudoItemSystem : SharedPseudoItemSystem
     {
         base.Initialize();
         SubscribeLocalEvent<PseudoItemComponent, EntGotRemovedFromContainerMessage>(OnEntRemoved);
-        SubscribeLocalEvent<PseudoItemComponent, EscapeInventoryEvent>(OnEscape);
         SubscribeLocalEvent<PseudoItemComponent, PseudoItemInsertEvent>(OnInsert);
         SubscribeLocalEvent<PseudoItemComponent, CarryDoAfterEvent>(OnCarryEvent,
             after: new[] {typeof(CarryingSystem)});
@@ -73,11 +72,6 @@ public sealed class PseudoItemSystem : SharedPseudoItemSystem
             return;
 
         TryStartInsertDoAfter(ent.Owner, args.Used, args.User, pseudoItem, ent.Comp, args.VirtualItem);
-    }
-
-    private void OnEscape(Entity<PseudoItemComponent> ent, ref EscapeInventoryEvent args)
-    {
-        NoLongerInContainer(ent.Owner, ent.Comp);
     }
 
     private void AddAltVerb(Entity<StorageComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
@@ -139,7 +133,13 @@ public sealed class PseudoItemSystem : SharedPseudoItemSystem
 
     private void OnEntRemoved(EntityUid uid, PseudoItemComponent component, EntGotRemovedFromContainerMessage args)
     {
-        NoLongerInContainer(uid, component);
+        if (!component.Active)
+            return;
+
+        RemComp<CanEscapeInventoryComponent>(uid);
+        RemComp<ItemComponent>(uid);
+        component.Active = false;
+        Dirty(uid, component);
     }
 
     private void TryStartInsertDoAfter(EntityUid storageUid,
@@ -152,12 +152,6 @@ public sealed class PseudoItemSystem : SharedPseudoItemSystem
         if (!FitsInContainer(storageUid, storage, component))
         {
             _popupSystem.PopupEntity(Loc.GetString("comp-storage-too-big"), user, user);
-            return;
-        }
-
-        if (TryComp(toInsert, out CanEscapeInventoryComponent? canEscape) && canEscape.IsEscaping)
-        {
-            _popupSystem.PopupEntity(Loc.GetString("action-insert-escaping"), user, user);
             return;
         }
 
@@ -199,11 +193,8 @@ public sealed class PseudoItemSystem : SharedPseudoItemSystem
         PseudoItemComponent component,
         StorageComponent storage)
     {
-        if (TryComp(toInsert, out CanEscapeInventoryComponent? canEscape) && canEscape.IsEscaping)
-        {
-            _popupSystem.PopupEntity(Loc.GetString("action-insert-escaping"), user, user);
-            return false;
-        }
+        if (TryComp(toInsert, out CanEscapeInventoryComponent? canEscape) && canEscape.DoAfter != null)
+            _doAfter.Cancel(canEscape.DoAfter);
 
         var item = EnsureComp<ItemComponent>(toInsert);
         _itemSystem.SetSize(toInsert, component.Size, item);
@@ -221,17 +212,6 @@ public sealed class PseudoItemSystem : SharedPseudoItemSystem
         component.Active = true;
         EnsureComp<CanEscapeInventoryComponent>(toInsert).BaseResistTime = 3f;
         return true;
-    }
-
-    private void NoLongerInContainer(EntityUid uid, PseudoItemComponent component)
-    {
-        if (!component.Active)
-            return;
-
-        RemCompDeferred<CanEscapeInventoryComponent>(uid);
-        RemCompDeferred<ItemComponent>(uid);
-        component.Active = false;
-        Dirty(uid, component);
     }
 
     private bool FitsInContainer(EntityUid storageUid, StorageComponent storage, PseudoItemComponent pseudoItem)

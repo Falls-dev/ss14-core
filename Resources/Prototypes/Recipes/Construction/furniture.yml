@@ -1233,4 +1233,22 @@
   canBuildInImpassable: false
   conditions:
   - !type:TileNotBlocked
+
+- type: construction
+  id: MannequinWoman
+  name: mannequin woman
+  description: Wooden mannequin designed for clothing displaying
+  graph: Mannequin
+  startNode: start
+  targetNode: mannequin
+  category: construction-category-furniture
+  icon:
+    sprite: Structures/Decoration/mannequin.rsi
+    state: mannequin_woman
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
 # WD edit end

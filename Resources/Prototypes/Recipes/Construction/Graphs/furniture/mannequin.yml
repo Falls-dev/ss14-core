@@ -29,3 +29,17 @@
           steps:
             - tool: Screwing
               doAfter: 3
+    - node: mannequin_woman
+      entity: MannequinWoman
+      edges:
+        - to: start
+          completed:
+            - !type:SpawnPrototype
+              prototype: MaterialWoodPlank
+              amount: 5
+            - !type:SpawnPrototype
+              prototype: PartRodMetal
+              amount: 2
+          steps:
+            - tool: Screwing
+              doAfter: 3

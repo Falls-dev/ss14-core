@@ -1,6 +1,6 @@
 - type: entity
-  id: Mannequin
   parent: BaseStructureDynamic
+  id: Mannequin
   name: mannequin
   description: It can wear any clothing with style.
   components:
@@ -93,3 +93,16 @@
         ent: null
   - type: Inventory
     templateId: mannequin
+
+- type: entity
+  parent: Mannequin
+  id: MannequinWoman
+  name: mannequin woman
+  description: It can wear any clothing with style.
+  components:
+  - type: Sprite
+    sprite: Structures/Decoration/mannequin.rsi
+    state: mannequin_woman
+  - type: Construction
+    graph: Mannequin
+    node: mannequin_woman

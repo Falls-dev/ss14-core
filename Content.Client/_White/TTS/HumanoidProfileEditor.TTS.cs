@@ -85,13 +85,12 @@ public sealed partial class HumanoidProfileEditor
 
     private void PlayTTS()
     {
-        if (Profile is null)
-            return;
-
-        var controller = UserInterfaceManager.GetUIController<LobbyUIController>();
-        var dummy = controller.GetPreviewDummy();
+        var dummy = _controller?.GetPreviewDummy();
 
         if (!dummy.HasValue)
+            return;
+
+        if (Profile == null)
             return;
 
         _ttsSys.StopCurrentTTS(dummy.Value);

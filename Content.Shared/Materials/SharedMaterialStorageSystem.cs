@@ -147,6 +147,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (!CanTakeVolume(uid, volume, component, gridUid:gridUid, gridStorage:gridStorage))
             return false;
 
+        // WD edit - added checkWhitelist bool
         if (checkWhitelist && component.MaterialWhiteList != null && !component.MaterialWhiteList.Contains(materialId))
             return false;
 
@@ -199,6 +200,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return false;
 
+        // WD edit - added checkWhitelist bool
         if (!CanChangeMaterialAmount(uid, materialId, volume, component, gridUid:gridUid, gridStorage:gridStorage, checkWhitelist: checkWhitelist))
             return false;
 

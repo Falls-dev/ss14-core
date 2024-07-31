@@ -1616,7 +1616,7 @@
   - SecurityBackpack
   - SecuritySatchel
   - SecurityDuffel
-  - CommonSatchelLeather
+  - CommonSatchelLeatherSecurity
 
 - type: loadoutGroup # WD
   id: CommonSecurityBelt

@@ -133,7 +133,13 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     /// <param name="volume"></param>
     /// <param name="component"></param>
     /// <returns>If the amount can be changed</returns>
-    public bool CanChangeMaterialAmount(EntityUid uid, string materialId, int volume, MaterialStorageComponent? component, EntityUid? gridUid = null, MaterialStorageComponent? gridStorage = null)
+    public bool CanChangeMaterialAmount(EntityUid uid,
+        string materialId,
+        int volume,
+        MaterialStorageComponent? component,
+        EntityUid? gridUid = null,
+        MaterialStorageComponent? gridStorage = null,
+        bool checkWhitelist = true)
     {
         if (!Resolve(uid, ref component))
             return false;
@@ -141,7 +147,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (!CanTakeVolume(uid, volume, component, gridUid:gridUid, gridStorage:gridStorage))
             return false;
 
-        if (component.MaterialWhiteList != null && !component.MaterialWhiteList.Contains(materialId))
+        if (checkWhitelist && component.MaterialWhiteList != null && !component.MaterialWhiteList.Contains(materialId))
             return false;
 
         var amount = gridStorage != null
@@ -181,12 +187,19 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     /// <param name="component"></param>
     /// <param name="dirty"></param>
     /// <returns>If it was successful</returns>
-    public bool TryChangeMaterialAmount(EntityUid uid, string materialId, int volume, MaterialStorageComponent? component = null, bool dirty = true, EntityUid? gridUid = null, MaterialStorageComponent? gridStorage = null)
+    public bool TryChangeMaterialAmount(EntityUid uid,
+        string materialId,
+        int volume,
+        MaterialStorageComponent? component = null,
+        bool dirty = true,
+        EntityUid? gridUid = null,
+        MaterialStorageComponent? gridStorage = null,
+        bool checkWhitelist = true)
     {
         if (!Resolve(uid, ref component))
             return false;
 
-        if (!CanChangeMaterialAmount(uid, materialId, volume, component, gridUid:gridUid, gridStorage:gridStorage))
+        if (!CanChangeMaterialAmount(uid, materialId, volume, component, gridUid:gridUid, gridStorage:gridStorage, checkWhitelist: checkWhitelist))
             return false;
 
         var rightStorage = gridStorage ?? component;

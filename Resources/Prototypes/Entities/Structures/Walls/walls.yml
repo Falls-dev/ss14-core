@@ -52,6 +52,7 @@
   - type: BlockWeather
   - type: WallMark
   - type: ReflectAspectMark
+  - type: WallSpriteGenerate
 
 - type: entity
   parent: BaseWall

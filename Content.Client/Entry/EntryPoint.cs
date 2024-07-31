@@ -4,6 +4,7 @@ using Content.Client._White.Jukebox;
 using Content.Client._White.Overlays;
 using Content.Client._White.Reputation;
 using Content.Client._White.Sponsors;
+using Content.Client._White.StackSpriting;
 using Content.Client._White.Stalin;
 using Content.Client._White.TTS;
 using Content.Client.Administration.Managers;
@@ -88,6 +89,7 @@ namespace Content.Client.Entry
         [Dependency] private readonly TTSManager _ttsManager = default!;
         [Dependency] private readonly ReputationManager _reputationManager = default!;
         [Dependency] private readonly IChatAbbreviationManager _chatAbbreviationManager = default!;
+        [Dependency] private readonly StackSpritingManager _stackSpritingManager = default!;
         //WD-EDIT
 
         public override void Init()
@@ -196,6 +198,7 @@ namespace Content.Client.Entry
             _jukeboxSyncManager.Initialize();
             _ttsManager.Initialize();
             _reputationManager.Initialize();
+            _stackSpritingManager.Initialize();
             //WD-EDIT
 
             _baseClient.RunLevelChanged += (_, args) =>

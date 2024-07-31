@@ -399,4 +399,11 @@ public sealed class WhiteCVars
 
     public static readonly CVarDef<string> TimeTrackerApiKey =
         CVarDef.Create("white.time_tracker_key", "", CVar.SERVERONLY | CVar.CONFIDENTIAL | CVar.ARCHIVE);
+
+    /*
+     * STACKSPRITING
+     */
+
+    public static readonly CVarDef<int> StackByOneLayer = CVarDef.Create("stacksprite.layer_count", 2, CVar.CLIENT);
+
 }

@@ -3,6 +3,7 @@ using Content.Client._White.JoinQueue;
 using Content.Client._White.Jukebox;
 using Content.Client._White.Reputation;
 using Content.Client._White.Sponsors;
+using Content.Client._White.StackSpriting;
 using Content.Client._White.Stalin;
 using Content.Client._White.Trail.Line.Manager;
 using Content.Client._White.TTS;
@@ -71,6 +72,7 @@ namespace Content.Client.IoC
             IoCManager.Register<ITrailLineManager, TrailSplineManager>();
             IoCManager.Register<ReputationManager>();
             IoCManager.Register<IChatAbbreviationManager,ChatAbbreviationManager>();
+            IoCManager.Register<StackSpritingManager>();
             //WD-EDIT
         }
     }

@@ -377,9 +377,6 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     {
         var curTime = Timing.CurTime;
 
-        if (weapon.NextAttack > curTime)
-            return false;
-
         if (!CombatMode.IsInCombatMode(user))
             return false;
 
@@ -442,16 +439,29 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         var swings = 0;
 
-        // TODO: If we get autoattacks then probably need a shotcounter like guns so we can do timing properly.
-        if (weapon.NextAttack < curTime)
-            weapon.NextAttack = curTime;
-
         // WD EDIT START
-        if (weapon.NextMobAttack < curTime)
-            weapon.NextMobAttack = curTime;
+        switch(update)
+        {
+            case UpdateNextAttack.Mob:
+                if (weapon.NextMobAttack > curTime)
+                    return false;
+                break;
+            case UpdateNextAttack.NonMob:
+                if (weapon.NextAttack > curTime)
+                    return false;
+                break;
+            default:
+                if (weapon.NextAttack > curTime || weapon.NextMobAttack > curTime)
+                    return false;
+                break;
+        }
 
         if (update != UpdateNextAttack.Mob)
         {
+            // TODO: If we get autoattacks then probably need a shotcounter like guns so we can do timing properly.
+            if (weapon.NextAttack < curTime)
+                weapon.NextAttack = curTime;
+
             while (weapon.NextAttack <= curTime)
             {
                 weapon.NextAttack += fireRate;
@@ -461,6 +471,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         if (update != UpdateNextAttack.NonMob)
         {
+            if (weapon.NextMobAttack < curTime)
+                weapon.NextMobAttack = curTime;
+
             while (weapon.NextMobAttack <= curTime)
             {
                 weapon.NextMobAttack += fireRate;

@@ -149,7 +149,7 @@
   id: Ensnared
   onClick: !type:RemoveEnsnare  { }
   icons:
-  - sprite: /Textures/Interface/Alerts/ensnared.rsi
+  - sprite: /Textures/White/Interface/Alerts/ensnared.rsi
     state: ensnared
   name: alerts-ensnared-name
   description: alerts-ensnared-desc

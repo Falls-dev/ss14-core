@@ -70,13 +70,21 @@ public sealed partial class MeleeWeaponComponent : Component
     public bool CanAttackSelf = true;
 
     [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
-    public bool CanMiss = true;
+    public bool CanMiss;
 
     [DataField]
     public EntityWhitelist? AttackWhitelist;
 
     [DataField]
     public EntityWhitelist? AttackBlacklist;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]
+    [ViewVariables(VVAccess.ReadWrite)]
+    [AutoPausedField]
+    public TimeSpan NextMobAttack;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
+    public float? EquipCooldown;
 
     [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
     public bool IgnoreResistances;

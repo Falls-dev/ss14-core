@@ -222,6 +222,22 @@
   rotation: User
   fx: EffectRCDConstruct0
 
+- type: rcd # WD
+  id: EmergencyLight
+  category: Lighting
+  sprite:
+    sprite: Structures\Wallmounts\Lighting\emergency_light.rsi
+    state: icon-base
+    color: "#FF4020"
+  mode: ConstructObject
+  prototype: EmergencyLight
+  cost: 1
+  delay: 0
+  collisionMask: TabletopMachineMask
+  collisionBounds: "-0.23,-0.49,0.23,-0.36"
+  rotation: User
+  fx: EffectRCDConstruct0
+
 # Electrical
 - type: rcd
   id: LVCable

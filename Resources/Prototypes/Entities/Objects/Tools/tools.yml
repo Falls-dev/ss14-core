@@ -455,6 +455,7 @@
     - Firelock
     - TubeLight
     - BulbLight
+    - EmergencyLight # WD
     - LVCable
     - MVCable
     - HVCable

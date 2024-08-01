@@ -345,7 +345,7 @@
   id: Thirsty
   category: Thirst
   icons:
-  - sprite: /Textures/Interface/Alerts/thirst.rsi
+  - sprite: /Textures/White/Interface/Alerts/thirst.rsi
     state: thirsty
   name: alerts-thirsty-name
   description: alerts-thirsty-desc
@@ -354,7 +354,7 @@
   id: Parched
   category: Thirst
   icons:
-  - sprite: /Textures/Interface/Alerts/thirst.rsi
+  - sprite: /Textures/White/Interface/Alerts/thirst.rsi
     state: parched
   name: alerts-parched-name
   description: alerts-parched-desc

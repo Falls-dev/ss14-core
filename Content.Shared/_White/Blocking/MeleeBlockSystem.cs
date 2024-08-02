@@ -2,6 +2,7 @@ using Content.Shared._White.BetrayalDagger;
 using Content.Shared.Blocking;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Examine;
 using Content.Shared.Hands.Components;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Popups;
@@ -30,6 +31,12 @@ public sealed class MeleeBlockSystem : EntitySystem
         SubscribeLocalEvent<MeleeWeaponComponent, MeleeHitEvent>(OnHit,
             before: new[] {typeof(StaminaSystem), typeof(MeleeThrowOnHitSystem)},
             after: new[] {typeof(BackstabSystem)});
+        SubscribeLocalEvent<MeleeBlockComponent, ExaminedEvent>(OnExamine);
+    }
+
+    private void OnExamine(Entity<MeleeBlockComponent> ent, ref ExaminedEvent args)
+    {
+        args.PushMarkup(Loc.GetString("melee-block-component-delay", ("delay", ent.Comp.Delay.TotalSeconds)));
     }
 
     private void OnHit(Entity<MeleeWeaponComponent> ent, ref MeleeHitEvent args)

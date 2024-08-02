@@ -37,6 +37,7 @@
     damage:
       types:
         Blunt: 0
+    bluntStaminaDamageFactor: 0.0 # so blunt doesn't deal stamina damage at all
   - type: StaminaDamageOnHit
     damage: 55
     sound: /Audio/White/Weapons/woodhit.ogg

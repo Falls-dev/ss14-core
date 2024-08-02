@@ -144,6 +144,7 @@
       maxCharges: 7
       charges: 7
     - type: MeleeWeapon
+      canBeBlocked: false
       canHeavyAttack: false
       wideAnimationRotation: 180
       damage:

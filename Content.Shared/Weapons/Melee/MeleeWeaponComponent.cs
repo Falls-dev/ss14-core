@@ -70,6 +70,9 @@ public sealed partial class MeleeWeaponComponent : Component
     public bool CanAttackSelf = true;
 
     [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
+    public bool CanBeBlocked = true;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
     public bool CanMiss;
 
     [DataField]

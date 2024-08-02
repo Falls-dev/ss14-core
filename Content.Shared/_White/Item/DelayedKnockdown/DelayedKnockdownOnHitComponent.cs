@@ -10,7 +10,7 @@ public sealed partial class DelayedKnockdownOnHitComponent : Component
     public TimeSpan KnockdownTime = TimeSpan.FromSeconds(5);
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public TimeSpan StutterTime = TimeSpan.FromSeconds(12);
+    public TimeSpan StutterTime = TimeSpan.FromSeconds(16);
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan JitterTime = TimeSpan.FromSeconds(40);

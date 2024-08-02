@@ -62,6 +62,7 @@ namespace Content.Server.IoC
             IoCManager.Register<ISharedAdminLogManager, AdminLogManager>();
             IoCManager.Register<IAdminLogManager, AdminLogManager>();
             IoCManager.Register<PlayTimeTrackingManager>();
+            IoCManager.Register<GlobalPlayTimeTrackingManager>();
             IoCManager.Register<UserDbDataManager>();
             IoCManager.Register<ServerInfoManager>();
             IoCManager.Register<PoissonDiskSampler>();

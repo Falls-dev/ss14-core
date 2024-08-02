@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Preferences.Managers;
+using Content.Shared.Players.PlayTimeTracking;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
@@ -19,7 +20,7 @@ namespace Content.Server.Database;
 public sealed class UserDbDataManager
 {
     [Dependency] private readonly IServerPreferencesManager _prefs = default!;
-    [Dependency] private readonly IPlayTimeTrackingManager _playTimeTracking = default!;
+    [Dependency] private readonly GlobalPlayTimeTrackingManager _playTimeTracking = default!;
 
     private readonly Dictionary<NetUserId, UserData> _users = new();
 

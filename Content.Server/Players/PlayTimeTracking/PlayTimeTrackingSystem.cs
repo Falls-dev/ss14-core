@@ -31,7 +31,7 @@ public sealed class PlayTimeTrackingSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly MindSystem _minds = default!;
-    [Dependency] private readonly IPlayTimeTrackingManager _tracking = default!;
+    [Dependency] private readonly GlobalPlayTimeTrackingManager _tracking = default!;
     [Dependency] private readonly IAdminManager _adminManager = default!;
 
     public override void Initialize()

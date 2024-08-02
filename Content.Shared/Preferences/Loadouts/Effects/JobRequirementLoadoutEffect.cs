@@ -17,8 +17,8 @@ public sealed partial class JobRequirementLoadoutEffect : LoadoutEffect
 
     public override bool Validate(RoleLoadout loadout, ICommonSession session, IDependencyCollection collection, [NotNullWhen(false)] out FormattedMessage? reason)
     {
-        var manager = collection.Resolve<ISharedPlaytimeManager>();
-        var playtimes = manager.GetPlayTimes(session);
+        var manager = collection.Resolve<IPlayTimeTrackingManager>();
+        var playtimes = manager.GetTrackerTimes(session);
         return JobRequirements.TryRequirementMet(Requirement, playtimes, out reason,
             collection.Resolve<IEntityManager>(),
             collection.Resolve<IPrototypeManager>());

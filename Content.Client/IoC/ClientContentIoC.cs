@@ -58,9 +58,11 @@ namespace Content.Client.IoC
             collection.Register<GhostKickManager>();
             collection.Register<ExtendedDisconnectInformationManager>();
             collection.Register<JobRequirementsManager>();
+            collection.Register<ClientPlayTimeTrackingManager>();
             collection.Register<DocumentParsingManager>();
             collection.Register<ContentReplayPlaybackManager, ContentReplayPlaybackManager>();
             collection.Register<ISharedPlaytimeManager, JobRequirementsManager>();
+            collection.Register<IPlayTimeTrackingManager, ClientPlayTimeTrackingManager>();
 
             //WD-EDIT
             IoCManager.Register<JoinQueueManager>();

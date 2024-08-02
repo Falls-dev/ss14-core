@@ -15,7 +15,7 @@
     requirement:
       !type:DepartmentTimeRequirement
       department: Cargo
-      time: 9999999999 #5 hours of being a space trucker 18000
+      time: 0 #5 hours of being a space trucker 18000
 
 # Basic options
 # Glasses

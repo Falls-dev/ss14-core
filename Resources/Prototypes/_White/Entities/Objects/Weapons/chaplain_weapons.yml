@@ -265,7 +265,7 @@
   - type: MeleeWeapon
     soundHit:
       path: /Audio/White/Items/hit/chainhit.ogg
-    range: 2.5
+    range: 2.2
     damage:
       types:
         Blunt: 18
@@ -348,7 +348,6 @@
     animation: WeaponArcThrust
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
-    range: 2
   - type: DamageOtherOnHit
     damage:
       types:

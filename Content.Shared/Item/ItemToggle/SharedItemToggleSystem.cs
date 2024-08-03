@@ -242,11 +242,10 @@ public abstract class SharedItemToggleSystem : EntitySystem
     /// </summary>
     private void UpdateActiveSound(EntityUid uid, ItemToggleActiveSoundComponent activeSound, ref ItemToggledEvent args)
     {
-        if (!_timing.IsFirstTimePredicted) // WD
-            return;
-
         if (args.Activated)
         {
+            if (!_timing.IsFirstTimePredicted) // WD
+                return;
             if (activeSound.ActiveSound != null && activeSound.PlayingStream == null)
             {
                 if (args.Predicted)

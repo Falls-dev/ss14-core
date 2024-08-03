@@ -128,13 +128,18 @@ namespace Content.Client.ContextMenu.UI
                 return;
             }
 
-            if (args.Function == EngineKeyFunctions.Use && EntityManager.HasComponent<MobStateComponent>(entity))
+            // WD START
+            var localEntity = _playerManager.LocalEntity;
+            if (args.Function == EngineKeyFunctions.Use &&
+                EntityManager.HasComponent<MobStateComponent>(entity.Value) && entity.Value != localEntity)
             {
                 _popup.PopupClient(Loc.GetString("context-menu-cant-interact"),
-                    entity.Value, _playerManager.LocalEntity, PopupType.MediumCaution);
+                    entity.Value, localEntity, PopupType.MediumCaution);
+                _context.Close();
                 args.Handle();
                 return;
             }
+            // WD END
 
             // do some other server-side interaction?
             if (args.Function == EngineKeyFunctions.Use ||

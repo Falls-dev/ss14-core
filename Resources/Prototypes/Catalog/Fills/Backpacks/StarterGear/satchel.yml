@@ -102,8 +102,6 @@
   - type: StorageFill
     contents:
       - id: BoxSurvival
-      - id: Flash
-      - id: TelescopicBaton # WD
       #- name: StationCharter
 
 - type: entity
@@ -114,8 +112,6 @@
   - type: StorageFill
     contents:
       - id: BoxSurvivalEngineering
-      - id: Flash
-      - id: TelescopicBaton # WD
 
 - type: entity
   noSpawn: true
@@ -125,8 +121,6 @@
   - type: StorageFill
     contents:
       - id: BoxSurvival
-      - id: Flash
-      - id: TelescopicBaton # WD
 
 - type: entity
   noSpawn: true
@@ -136,8 +130,6 @@
   - type: StorageFill
     contents:
       - id: BoxSurvival
-      - id: Flash
-      - id: TelescopicBaton # WD
 
 - type: entity
   noSpawn: true
@@ -147,8 +139,6 @@
   - type: StorageFill
     contents:
       - id: BoxSurvivalMedical
-      - id: Flash
-      - id: TelescopicBaton # WD
 
 - type: entity
   noSpawn: true
@@ -158,8 +148,6 @@
   - type: StorageFill
     contents:
       - id: BoxSurvival
-      - id: Flash
-      - id: TelescopicBaton # WD
 
 - type: entity
   noSpawn: true
@@ -169,7 +157,6 @@
   - type: StorageFill
     contents:
       - id: BoxSurvivalSecurity
-      - id: Flash
 
 - type: entity
   parent: ClothingBackpackSatchelInspector
@@ -180,8 +167,6 @@
   - type: StorageFill
     contents:
     - id: BoxSurvivalSecurity
-    - id: Flash
-    - id: TelescopicBaton # WD
 
 - type: entity
   noSpawn: true

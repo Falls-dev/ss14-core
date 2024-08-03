@@ -229,6 +229,10 @@ public sealed class MagicHandSystem : EntitySystem
 
         var (uid, comp) = ent;
 
+        if (uid == target || !TryComp(target, out StatusEffectsComponent? status) ||
+            HasComp<CultistComponent>(target) || HasComp<ConstructComponent>(target))
+            return;
+
         QueueDel(uid);
         Spawn("CultStunFlashEffect", Transform(target).Coordinates);
         Speak(args.User, comp);
@@ -244,8 +248,8 @@ public sealed class MagicHandSystem : EntitySystem
         var halo = HasComp<PentagramComponent>(args.User);
 
         _statusEffects.TryAddStatusEffect(target, "Muted", halo ? comp.HaloMuteDuration : comp.MuteDuration, true,
-            "Muted");
-        _stun.TryParalyze(target, halo ? comp.HaloDuration : comp.Duration, true);
+            "Muted", status);
+        _stun.TryParalyze(target, halo ? comp.HaloDuration : comp.Duration, true, status);
     }
 
     private void Popup(string msg, EntityUid user, PopupType type = PopupType.Small)

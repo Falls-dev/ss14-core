@@ -207,6 +207,9 @@ public abstract class SharedStunSystem : EntitySystem
         if (_statusEffect.HasStatusEffect(uid, "Stun"))
             time = TimeSpan.FromSeconds(6);
 
+        if (_standingState.IsDown(uid)) // WD
+            RaiseLocalEvent(uid, new DropHandItemsEvent());
+
         return TryKnockdown(uid, time, refresh, status) && TryStun(uid, time, refresh, status);
     }
 

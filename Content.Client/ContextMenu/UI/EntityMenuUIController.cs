@@ -3,12 +3,15 @@ using System.Numerics;
 using Content.Client.CombatMode;
 using Content.Client.Examine;
 using Content.Client.Gameplay;
+using Content.Client.Popups;
 using Content.Client.Verbs;
 using Content.Client.Verbs.UI;
 using Content.Shared.CCVar;
 using Content.Shared.Examine;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Popups;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -50,6 +53,7 @@ namespace Content.Client.ContextMenu.UI
         [UISystemDependency] private readonly ExamineSystem _examineSystem = default!;
         [UISystemDependency] private readonly TransformSystem _xform = default!;
         [UISystemDependency] private readonly CombatModeSystem _combatMode = default!;
+        [UISystemDependency] private readonly PopupSystem _popup = default!; // WD EDIT
 
         private bool _updating;
 
@@ -120,6 +124,14 @@ namespace Content.Client.ContextMenu.UI
             if (args.Function == ContentKeyFunctions.ExamineEntity)
             {
                 _systemManager.GetEntitySystem<ExamineSystem>().DoExamine(entity.Value);
+                args.Handle();
+                return;
+            }
+
+            if (args.Function == EngineKeyFunctions.Use && EntityManager.HasComponent<MobStateComponent>(entity))
+            {
+                _popup.PopupClient(Loc.GetString("context-menu-cant-interact"),
+                    entity.Value, _playerManager.LocalEntity, PopupType.MediumCaution);
                 args.Handle();
                 return;
             }

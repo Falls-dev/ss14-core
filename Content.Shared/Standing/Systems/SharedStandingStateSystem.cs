@@ -11,7 +11,6 @@ using Content.Shared._White.Wizard.Timestop;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Mobs;
-using Content.Shared.Movement.Events;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Physics;
@@ -29,10 +28,8 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!; // WD EDIT
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!; // WD EDIT
-    [Dependency] private readonly SharedStunSystem _stun = default!; // WD EDIT
     [Dependency] private readonly MobStateSystem _mobState = default!; // WD EDIT
     [Dependency] private readonly SharedBuckleSystem _buckle = default!; // WD EDIT
-    [Dependency] private readonly SharedTransformSystem _transform = default!; // WD EDIT
     [Dependency] private readonly SharedRotationVisualsSystem _rotation = default!; // WD EDIT
 
     // If StandingCollisionLayer value is ever changed to more than one layer, the logic needs to be edited.
@@ -53,7 +50,6 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
 
         SubscribeLocalEvent<StandingStateComponent, StandingUpDoAfterEvent>(OnStandingUpDoAfter);
         SubscribeLocalEvent<StandingStateComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeed);
-        SubscribeLocalEvent<StandingStateComponent, TileFrictionEvent>(OnTileFriction);
         SubscribeLocalEvent<StandingStateComponent, SlipAttemptEvent>(OnSlipAttempt);
 
         InitializeColliding();
@@ -112,12 +108,6 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
             args.ModifySpeed(0.4f, 0.4f);
         else
             args.ModifySpeed(1f, 1f);
-    }
-
-    private void OnTileFriction(Entity<StandingStateComponent> ent, ref TileFrictionEvent args)
-    {
-        if (IsDown(ent))
-            args.Modifier *= SharedStunSystem.KnockDownModifier;
     }
 
     private void OnSlipAttempt(EntityUid uid, StandingStateComponent component, SlipAttemptEvent args)

@@ -109,7 +109,6 @@
     proto: robot
   - type: ZombieImmune
   - type: Penetrated
-  - type: StepTriggerImmune
   - type: NoSlip
   - type: Insulated
 

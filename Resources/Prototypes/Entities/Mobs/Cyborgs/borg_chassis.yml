@@ -85,6 +85,8 @@
     interactFailureString: petting-failure-salvage-cyborg
     interactSuccessSound:
       path: /Audio/Ambience/Objects/periodic_beep.ogg
+  - type: Speech # WD
+    speechSounds: BorgUpgraded
 
 - type: entity
   id: BorgChassisEngineer
@@ -133,6 +135,8 @@
     interactFailureString: petting-failure-engineer-cyborg
     interactSuccessSound:
       path: /Audio/Ambience/Objects/periodic_beep.ogg
+  - type: Speech # WD
+    speechSounds: BorgUpgraded
 
 - type: entity
   id: BorgChassisJanitor
@@ -189,6 +193,8 @@
     interactFailureString: petting-failure-janitor-cyborg
     interactSuccessSound:
       path: /Audio/Ambience/Objects/periodic_beep.ogg
+  - type: Speech # WD
+    speechSounds: BorgUpgraded
 
 - type: entity
   id: BorgChassisMedical
@@ -257,6 +263,8 @@
     interactFailureString: petting-failure-medical-cyborg
     interactSuccessSound:
       path: /Audio/Ambience/Objects/periodic_beep.ogg
+  - type: Speech # WD
+    speechSounds: BorgUpgraded
 
 - type: entity
   id: BorgChassisService
@@ -305,6 +313,8 @@
     interactFailureString: petting-failure-service-cyborg
     interactSuccessSound:
       path: /Audio/Ambience/Objects/periodic_beep.ogg
+  - type: Speech # WD
+    speechSounds: BorgUpgraded
 
 - type: entity
   id: BorgChassisSyndicateAssault

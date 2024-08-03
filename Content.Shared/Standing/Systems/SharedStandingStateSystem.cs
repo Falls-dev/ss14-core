@@ -171,7 +171,7 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
         return true;
     }
 
-    public enum DropHeldItemsBehavior
+    public enum DropHeldItemsBehavior : byte
     {
         NoDrop,
         DropIfStanding,

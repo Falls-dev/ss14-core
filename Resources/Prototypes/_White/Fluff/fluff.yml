@@ -375,33 +375,6 @@
     - type: Clothing
       sprite: White/Fluff/HSKveez/contactor_batton.rsi
 
-#Omntns
-- type: entity
-  parent: BaseItem
-  id: OmntnsHammer
-  name: Молоток судьи.
-  suffix: fluff
-  description: Порядок, порядок! Никаких бомб в здании моего суда.
-  components:
-    - type: Sprite
-      sprite: White/Fluff/Omntns/gavel_hammer.rsi
-      state: icon
-    - type: Item
-      sprite: White/Fluff/Omntns/gavel_hammer.rsi
-      size: Small
-    - type: EmitSoundOnUse
-      sound:
-        path: /Audio/White/Fluff/Omntns/gavel.ogg
-    - type: UseDelay
-      delay: 2
-    - type: MeleeWeapon
-      canBeBlocked: false
-      soundHit:
-        path: /Audio/White/Fluff/Omntns/gavel.ogg
-      damage:
-        types:
-          Blunt: 0
-
 # Pets book
 - type: entity
   parent: BookBase

@@ -336,22 +336,6 @@
   entity: ClothingEyesDealGlassesMedic
   sponsorOnly: true
 
-# Oleg_Tinkoff
-- type: sponsorLoadout
-  id: TinkoffGopHelmet
-  entity: ClothingHeadHelmetGopTinkoff
-  sponsorOnly: true
-
-- type: sponsorLoadout
-  id: TinkoffShoesGop
-  entity: ClothingShoesGopTinkoff
-  sponsorOnly: true
-
-- type: sponsorLoadout
-  id: TinkoffSuitGop
-  entity: ClothingUniformGopTinkoff
-  sponsorOnly: true
-
 # Zilendorie
 - type: sponsorLoadout
   id: ZilendorieFurazhka

@@ -24,6 +24,7 @@ using Content.Shared._White.Antag;
 using Content.Shared._White.BetrayalDagger;
 using Content.Shared._White.Cult.Components;
 using Content.Shared._White.Events;
+using Content.Shared._White.Item.PseudoItem;
 using Content.Shared._White.Wizard;
 using Content.Shared._White.Wizard.Magic;
 using Content.Shared.Actions;
@@ -174,6 +175,12 @@ public sealed class WizardSpellsSystem : EntitySystem
             return;
         }
 
+        if (HasComp<CultistComponent>(target))
+        {
+            _popupSystem.PopupEntity(Loc.GetString("mindswap-cultist-failed"), uid, uid, PopupType.MediumCaution);
+            return;
+        }
+
         var userHasMind = _mindSystem.TryGetMind(uid, out var mindId, out var mind);
         var targetHasMind = _mindSystem.TryGetMind(target, out var targetMindId, out var targetMind);
 
@@ -183,8 +190,6 @@ public sealed class WizardSpellsSystem : EntitySystem
         SwapComponent<WizardComponent>(uid, target);
         SwapComponent<RevolutionaryComponent>(uid, target);
         SwapComponent<HeadRevolutionaryComponent>(uid, target);
-        SwapComponent<PentagramComponent>(uid, target);
-        SwapComponent<CultistComponent>(uid, target);
         SwapComponent<GlobalAntagonistComponent>(uid, target);
 
         _mindSystem.TransferTo(mindId, target, mind: mind);
@@ -850,17 +855,19 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     public bool CanCast(BaseActionEvent msg)
     {
+        if (TryComp(msg.Performer, out PseudoItemComponent? pseudoItem) && pseudoItem.Active)
+            return false;
+
         return !msg.Handled && CheckRequirements(msg.Action, msg.Performer) &&
                !_statusEffectsSystem.HasStatusEffect(msg.Performer, "Incorporeal");
     }
 
-    private void Speak(BaseActionEvent args)
+    public void Speak(BaseActionEvent args, InGameICChatType type = InGameICChatType.Speak)
     {
         if (args is not ISpeakSpell speak || string.IsNullOrWhiteSpace(speak.Speech))
             return;
 
-        _chat.TrySendInGameICMessage(args.Performer, Loc.GetString(speak.Speech),
-            InGameICChatType.Speak, false);
+        _chat.TrySendInGameICMessage(args.Performer, Loc.GetString(speak.Speech), type, false);
     }
 
     private void SetCooldown(EntityUid action, ActionUseType useType)

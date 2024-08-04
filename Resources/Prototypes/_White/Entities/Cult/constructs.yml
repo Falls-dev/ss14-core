@@ -7,8 +7,8 @@
       context: "human"
     - type: InputMover
     - type: MovementSpeedModifier
-      baseWalkSpeed: 2.5
-      baseSprintSpeed: 2.5
+      baseWalkSpeed: 3
+      baseSprintSpeed: 3
     - type: DamageOnHighSpeedImpact
       damage:
         types:
@@ -61,6 +61,8 @@
     - type: ContentEye
     - type: Actions
     - type: Hands
+    - type: Puller
+      needsHands: false
     - type: ShowCultHud
     - type: IsDeadIC
     - type: NightVision
@@ -82,6 +84,7 @@
       group: Construct
     - type: GlobalAntagonist
       antagonistPrototype: globalAntagonistCult
+    - type: ThermalBlocker
 
 - type: entity
   id: JuggernautConstruct
@@ -138,8 +141,6 @@
       baseWalkSpeed: 3
       baseSprintSpeed: 3
     - type: MovementIgnoreGravity
-    - type: Puller
-      needsHands: false
     - type: MeleeWeapon
       canHeavyAttack: false
       hidden: true
@@ -202,8 +203,6 @@
         150: Dead
     - type: Sprite
       state: harvester
-    - type: Puller
-      needsHands: false
     - type: MeleeWeapon
       canHeavyAttack: false
       hidden: true

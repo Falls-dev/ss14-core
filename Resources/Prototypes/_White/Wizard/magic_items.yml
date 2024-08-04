@@ -24,6 +24,8 @@
     storedRotation: 44
     shape:
     - 0, 0, 3, 0
+  - type: MeleeBlock
+    delay: 6.1
 
 - type: entity
   name: клинок заклинаний
@@ -55,6 +57,8 @@
     inHandsOnly: true
     closeOnHandDeselect: true
   - type: SpellBlade
+  - type: MeleeBlock
+    delay: 6.1
 
 - type: entity
   name: мьёльнир
@@ -133,5 +137,7 @@
   - type: BasicEntityAmmoProvider
     proto: ArcaneBolt
     capacity: 30
+  - type: DeleteOnDropAttempt
+    message: bolt-barrage-component-extra-message
   - type: BoltBarrage
   - type: GiftIgnore

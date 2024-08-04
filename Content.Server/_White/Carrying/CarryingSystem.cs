@@ -11,6 +11,7 @@ using Content.Shared.Climbing.Events;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Mobs;
@@ -207,9 +208,9 @@ public sealed class CarryingSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void StartCarryDoAfter(EntityUid carrier, EntityUid carried, CarriableComponent component)
+    public void StartCarryDoAfter(EntityUid carrier, EntityUid carried, CarriableComponent component)
     {
-        var length = TimeSpan.FromSeconds(6); // т.к. удалили систему разницы масс увеличу время с 3 до 6
+        var length = component.DoAfterLength; // т.к. удалили систему разницы масс увеличу время с 3 до 6
         if (length >= TimeSpan.FromSeconds(9))
         {
             _popupSystem.PopupEntity(Loc.GetString("carry-too-heavy"), carried, carrier,
@@ -226,11 +227,16 @@ public sealed class CarryingSystem : EntitySystem
         var ev = new CarryDoAfterEvent();
         var args = new DoAfterArgs(EntityManager, carrier, length, ev, carried, target: carried)
         {
+            BreakOnDamage = true,
             BreakOnMove = true,
             NeedHand = true
         };
 
-        _doAfterSystem.TryStartDoAfter(args);
+        if (_doAfterSystem.TryStartDoAfter(args))
+        {
+            _popupSystem.PopupEntity(Loc.GetString("carry-start", ("carrier", Identity.Entity(carrier, EntityManager))),
+                carried, carried, Shared.Popups.PopupType.SmallCaution);
+        }
     }
 
     private void Carry(EntityUid carrier, EntityUid carried)
@@ -260,17 +266,22 @@ public sealed class CarryingSystem : EntitySystem
         _actionBlockerSystem.UpdateCanMove(carried);
     }
 
-    public void DropCarried(EntityUid carrier, EntityUid carried)
+    public void DropCarried(EntityUid carrier,
+        EntityUid carried,
+        bool attachToGridOrMap = true,
+        bool removeCanEscape = true)
     {
         RemComp<CarryingComponent>(carrier); // get rid of this first so we don't recusrively fire that event
         RemComp<CarryingSlowdownComponent>(carrier);
         RemComp<BeingCarriedComponent>(carried);
         RemComp<KnockedDownComponent>(carried);
-        RemComp<CanEscapeInventoryComponent>(carried);
+        if (removeCanEscape)
+            RemComp<CanEscapeInventoryComponent>(carried);
 
         _actionBlockerSystem.UpdateCanMove(carried);
         _virtualItemSystem.DeleteInHandsMatching(carrier, carried);
-        _transform.AttachToGridOrMap(carried);
+        if (attachToGridOrMap)
+            _transform.AttachToGridOrMap(carried);
         _movementSpeed.RefreshMovementSpeedModifiers(carrier);
     }
 

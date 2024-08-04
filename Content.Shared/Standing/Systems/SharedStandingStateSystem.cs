@@ -28,10 +28,8 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!; // WD EDIT
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!; // WD EDIT
-    [Dependency] private readonly SharedStunSystem _stun = default!; // WD EDIT
     [Dependency] private readonly MobStateSystem _mobState = default!; // WD EDIT
     [Dependency] private readonly SharedBuckleSystem _buckle = default!; // WD EDIT
-    [Dependency] private readonly SharedTransformSystem _transform = default!; // WD EDIT
     [Dependency] private readonly SharedRotationVisualsSystem _rotation = default!; // WD EDIT
 
     // If StandingCollisionLayer value is ever changed to more than one layer, the logic needs to be edited.
@@ -76,7 +74,7 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
 
         RaiseNetworkEvent(new CheckAutoGetUpEvent()); // WD EDIT
 
-        if (_stun.IsParalyzed(uid))
+        if (HasComp<KnockedDownComponent>(uid))
         {
             return;
         }
@@ -98,12 +96,9 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
 
     private void OnStandingUpDoAfter(EntityUid uid, StandingStateComponent component, StandingUpDoAfterEvent args)
     {
-        if (args.Handled || _stun.IsParalyzed(uid)) // WD EDIT
-        {
+        if (args.Handled || args.Cancelled || HasComp<KnockedDownComponent>(uid) ||
+            _mobState.IsIncapacitated(uid) || !Stand(uid)) // WD EDIT
             component.CurrentState = StandingState.Lying;
-            return;
-        }
-        Stand(uid);
     }
 
     private void OnRefreshMovementSpeed(EntityUid uid, StandingStateComponent component,
@@ -166,7 +161,7 @@ public abstract partial class SharedStandingStateSystem : EntitySystem
         return true;
     }
 
-    public enum DropHeldItemsBehavior
+    public enum DropHeldItemsBehavior : byte
     {
         NoDrop,
         DropIfStanding,

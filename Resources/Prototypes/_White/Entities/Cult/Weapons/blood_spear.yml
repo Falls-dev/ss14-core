@@ -19,7 +19,7 @@
             - 0.30,0.40
         density: 20
         mask:
-        - ItemMask
+        - BulletImpassable
         restitution: 0.3
         friction: 0.2
   - type: Sharp
@@ -42,7 +42,10 @@
         Piercing: 40
   - type: Item
     sprite: White/Cult/Entities/blood_spear.rsi
-    size: Ginormous
+    storedRotation: 44
+    size: Huge
+    shape:
+    - 0,0,5,0
   - type: Clothing
     slots:
     - back

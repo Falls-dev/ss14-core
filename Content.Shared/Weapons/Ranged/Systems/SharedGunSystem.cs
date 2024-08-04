@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared._White.Containers;
 using Content.Shared._White.Events;
+using Content.Shared._White.Item.PseudoItem;
 using Content.Shared._White.WeaponModules;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
@@ -119,11 +120,23 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (!TryComp<MeleeWeaponComponent>(uid, out var melee))
             return;
 
+        // WD EDIT START
+        var dirty = false;
         if (melee.NextAttack > component.NextFire)
         {
             component.NextFire = melee.NextAttack;
-            Dirty(uid, component);
+            dirty = true;
         }
+
+        if (melee.NextMobAttack > component.NextFire)
+        {
+            component.NextFire = melee.NextMobAttack;
+            dirty = true;
+        }
+
+        if (dirty)
+            Dirty(uid, component);
+        // WD EDIT END
     }
 
     private void OnShootRequest(RequestShootEvent msg, EntitySessionEventArgs args)

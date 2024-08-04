@@ -16,6 +16,7 @@
   - type: Sprite
     state: icon
   - type: MeleeWeapon
+    canBeBlocked: false
     soundNoDamage:
       path: "/Audio/Effects/Fluids/splat.ogg"
     damage:
@@ -82,7 +83,9 @@
   - type: EmitSoundOnDrop
     sound:
       path: /Audio/White/Items/handling/drinkglass_drop.ogg
-
+  - type: Tag
+    tags:
+      - DrinkGlass
 # Transformable container - normal glass
 - type: entity
   name: metamorphic glass

@@ -46,7 +46,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: углерод
+      currentLabel: reagent-name-carbon
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -61,7 +61,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: йод
+      currentLabel: reagent-name-iodine
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -76,7 +76,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: фтор
+      currentLabel: reagent-name-fluorine
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -91,7 +91,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: хлор
+      currentLabel: reagent-name-chlorine
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -106,7 +106,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: алюминий
+      currentLabel: reagent-name-aluminium
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -121,7 +121,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: фосфор
+      currentLabel: reagent-name-phosphorus
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -136,7 +136,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: сера
+      currentLabel: reagent-name-sulfur
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -151,7 +151,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: кремний
+      currentLabel: reagent-name-silicon
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -166,7 +166,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: водород
+      currentLabel: reagent-name-hydrogen
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -181,7 +181,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: литий
+      currentLabel: reagent-name-lithium
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -196,7 +196,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: натрий
+      currentLabel: reagent-name-sodium
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -211,7 +211,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: калий
+      currentLabel: reagent-name-potassium
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -226,7 +226,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: радий
+      currentLabel: reagent-name-radium
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -241,7 +241,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: железо
+      currentLabel: reagent-name-iron
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -256,7 +256,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: медь
+      currentLabel: reagent-name-copper
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -271,7 +271,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: золото
+      currentLabel: reagent-name-gold
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -286,7 +286,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: ртуть
+      currentLabel: reagent-name-mercury
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -301,7 +301,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: серебро
+      currentLabel: reagent-name-silver
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -316,7 +316,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: этанол
+      currentLabel: reagent-name-ethanol
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -331,7 +331,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: сахар
+      currentLabel: reagent-name-sugar
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -346,7 +346,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: азот
+      currentLabel: reagent-name-nitrogen
     - type: SolutionContainerManager
       solutions:
         beaker:
@@ -361,7 +361,7 @@
   noSpawn: true
   components:
     - type: Label
-      currentLabel: кислород
+      currentLabel: reagent-name-oxygen
     - type: SolutionContainerManager
       solutions:
         beaker:

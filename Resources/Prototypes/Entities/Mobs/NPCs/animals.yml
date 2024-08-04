@@ -375,7 +375,8 @@
         damageType: Blunt
         damage: 10
       behaviors:
-      - !type:GibBehavior { }
+      - !type:GibBehavior
+        recursive: false
   - type: NonSpreaderZombie
 
 - type: entity
@@ -529,7 +530,8 @@
         damageType: Blunt
         damage: 60
       behaviors:
-      - !type:GibBehavior { }
+      - !type:GibBehavior
+        recursive: false
   - type: FireVisuals
     sprite: Mobs/Effects/onfire.rsi
     normalState: Mouse_burning
@@ -2256,7 +2258,7 @@
       layers:
       - map: ["enum.DamageStateVisualLayers.Base"]
         state: clown
-        sprite: Mobs/Animals/clownspider.rsi
+        sprite: White/Mobs/Animals/clownspider.rsi
     - type: Butcherable
       spawned:
         - id: MaterialBananium1

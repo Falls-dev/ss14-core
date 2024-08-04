@@ -258,13 +258,6 @@
   entity: DeusJumpskirt
   sponsorOnly: true
 
-# GusMopsik
-
-- type: sponsorLoadout
-  id: GusMopsikJumpsuitLoadout
-  entity: GusMopsikJumpsuit
-  sponsorOnly: true
-
 # JUKEBOX LOADOUT
 
 - type: sponsorLoadout

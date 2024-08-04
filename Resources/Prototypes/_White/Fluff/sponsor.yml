@@ -153,13 +153,6 @@
   sponsorOnly: true
   whitelistJobs: [ AtmosphericTechnician, StationEngineer ]
 
-
-#Omntns
-- type: sponsorLoadout
-  id: OmntnsHammerLoadout
-  entity: OmntnsHammer
-  sponsorOnly: true
-
 # Pets summon book
 - type: sponsorLoadout
   id: PetsSummonBookLoadout

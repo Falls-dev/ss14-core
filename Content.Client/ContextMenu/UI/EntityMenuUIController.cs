@@ -1,12 +1,15 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client.Actions;
 using Content.Client.CombatMode;
 using Content.Client.Examine;
 using Content.Client.Gameplay;
 using Content.Client.Popups;
+using Content.Client.UserInterface.Systems.Actions;
 using Content.Client.Verbs;
 using Content.Client.Verbs.UI;
 using Content.Shared._White.Item;
+using Content.Shared.Actions;
 using Content.Shared.CCVar;
 using Content.Shared.Examine;
 using Content.Shared.Hands.Components;
@@ -51,12 +54,14 @@ namespace Content.Client.ContextMenu.UI
         [Dependency] private readonly IEyeManager _eyeManager = default!;
         [Dependency] private readonly ContextMenuUIController _context = default!;
         [Dependency] private readonly VerbMenuUIController _verb = default!;
+        [Dependency] private readonly ActionUIController _controller = default!; // WD EDIT
 
         [UISystemDependency] private readonly VerbSystem _verbSystem = default!;
         [UISystemDependency] private readonly ExamineSystem _examineSystem = default!;
         [UISystemDependency] private readonly TransformSystem _xform = default!;
         [UISystemDependency] private readonly CombatModeSystem _combatMode = default!;
         [UISystemDependency] private readonly PopupSystem _popup = default!; // WD EDIT
+        [UISystemDependency] private readonly ActionsSystem _actions = default!; // WD EDIT
 
         private bool _updating;
 
@@ -185,6 +190,13 @@ namespace Content.Client.ContextMenu.UI
             if (!EntityManager.HasComponent<MobStateComponent>(entity) || entity == localEntity.Value)
                 return true;
 
+            if (_controller.SelectingTargetFor is { } actionId &&
+                _actions.TryGetActionData(actionId, out var baseAction) && baseAction is EntityTargetActionComponent)
+            {
+                InteractFailPopup(entity, localEntity.Value);
+                return false;
+            }
+
             var held = hands.ActiveHandEntity;
             if (held != null)
             {
@@ -194,10 +206,14 @@ namespace Content.Client.ContextMenu.UI
             else if (!EntityManager.HasComponent<StunProviderComponent>(localEntity.Value))
                 return true;
 
+            InteractFailPopup(entity, localEntity.Value);
+            return false;
+        }
+
+        private void InteractFailPopup(EntityUid entity, EntityUid localEntity)
+        {
             _popup.PopupClient(Loc.GetString("context-menu-cant-interact"), entity, localEntity,
                 PopupType.MediumCaution);
-
-            return false;
         }
         // WD END
 

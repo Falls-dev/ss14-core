@@ -655,7 +655,7 @@ namespace Content.Client.Preferences.UI
                         Margin = new Thickness(3f, 3f, 3f, 0f),
                     };
 
-                    if (!_requirements.IsAllowed(job, out var reason))
+                    if (!_requirements.IsAllowed(job, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
                     {
                         selector.LockRequirements(reason);
                     }

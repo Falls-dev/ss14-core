@@ -16,6 +16,8 @@
     - !type:DepartmentTimeRequirement
       department: Command
       time: 3600
+    - !type:AgeRequirement
+      requiredAge: 20
   weight: 20
   icon: "JobIconHeadOfPersonnel"
   requireAdminNotify: true

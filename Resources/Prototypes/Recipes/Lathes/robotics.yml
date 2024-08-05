@@ -450,18 +450,19 @@
     Gold: 50
 
 - type: latheRecipe
-  id: BorgModuleConstruction
-  result: BorgModuleConstruction
+  id: BorgModuleAtmospherics
+  result: BorgModuleAtmospherics
   category: Robotics
   completetime: 3
   materials:
     Steel: 500
     Glass: 500
     Plastic: 250
+    Gold: 50
 
 - type: latheRecipe
-  id: BorgModuleRCD
-  result: BorgModuleRCD
+  id: BorgModuleConstruction
+  result: BorgModuleConstruction
   category: Robotics
   completetime: 3
   materials:

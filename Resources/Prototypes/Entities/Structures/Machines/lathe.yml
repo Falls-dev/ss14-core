@@ -545,6 +545,7 @@
     - BorgModuleRadiationDetection
     - BorgModuleTool
     - BorgModuleAppraisal
+    - BorgModuleAtmospherics # WD
     - BorgModuleConstruction
     - BorgModuleService
     - BorgModuleTreatment
@@ -592,7 +593,6 @@
     - BorgModuleGrapplingGun
     - BorgModuleAdvancedTool
     - BorgModuleGPS
-    - BorgModuleRCD
     - BorgModuleArtifact
     - BorgModuleAnomaly
     - BorgModuleGardening

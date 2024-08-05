@@ -236,20 +236,18 @@
     - state: icon-tools-adv
   - type: ItemBorgModule
     items:
-    - Omnitool
-    - WelderExperimental
-    - NetworkConfigurator
-    - RemoteSignaller
-    - GasAnalyzer
-    - GeigerCounter
-    - RemoteSignaller
-    - GasAnalyzer
+    - JawsOfLife # WD
+    - PowerDrill # WD
+    - WelderExperimental # WD
+    - Tricorder # WD
+    - AccessConfigurator # WD
+    - trayScanner # WD
     - GeigerCounter
 
 - type: entity
-  id: BorgModuleConstruction
+  id: BorgModuleAtmospherics # WD
   parent: [ BaseBorgModuleEngineering, BaseProviderBorgModule ]
-  name: construction cyborg module
+  name: atmospherics cyborg module
   components:
   - type: Sprite
     layers:
@@ -257,15 +255,15 @@
     - state: icon-construction
   - type: ItemBorgModule
     items:
-    - SheetSteelLingering0
-    - SheetGlassLingering0
-    - PartRodMetalLingering0
-    - FloorTileItemSteelLingering0
+    - HolofanProjector # WD
+    - RapidPipeDispenserRecharging # WD
+    - trayScanner # WD
+    - GasAnalyzer # WD
 
 - type: entity
-  id: BorgModuleRCD
+  id: BorgModuleConstruction # WD
   parent: [ BaseBorgModuleEngineering, BaseProviderBorgModule ]
-  name: RCD cyborg module
+  name: construction cyborg module
   components:
   - type: Sprite
     layers:

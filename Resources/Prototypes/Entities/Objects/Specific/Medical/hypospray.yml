@@ -79,6 +79,14 @@
   - type: UseDelay
     delay: 0.5
   - type: ContextMenuInteractionBlocker
+  - type: AutoRegenReagent
+    solution: hypospray
+    reagents:
+    - Epinephrine
+    - Tricordrazine
+    - Dylovene
+    - Bicaridine
+    - Kelotane
 
 - type: entity
   name: experimental hypospray

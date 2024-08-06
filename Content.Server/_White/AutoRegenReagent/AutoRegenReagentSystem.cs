@@ -1,9 +1,6 @@
-using Content.Server.Chemistry.Components;
 using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Chemistry.EntitySystems;
 using Content.Server.Popups;
-using Content.Shared.Chemistry.Components;
-using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Verbs;
@@ -11,6 +8,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._White.AutoRegenReagent
 {
+    /// <summary>
+    /// So we have a solution name in AutoRegenReagent comp. We will try to get it and start generating reagents. When we switch reagents we clear the solution and start generating different reagent.
+    /// </summary>
     public sealed class AutoRegenReagentSystem : EntitySystem
     {
         [Dependency] private readonly SolutionContainerSystem _solutionSystem = default!;
@@ -20,11 +20,39 @@ namespace Content.Server._White.AutoRegenReagent
         public override void Initialize()
         {
             base.Initialize();
-            SubscribeLocalEvent<AutoRegenReagentComponent, ComponentInit>(OnInit);
+
+            SubscribeLocalEvent<AutoRegenReagentComponent, ComponentInit>(OnCompInit);
             SubscribeLocalEvent<AutoRegenReagentComponent, GetVerbsEvent<AlternativeVerb>>(AddSwitchVerb);
             SubscribeLocalEvent<AutoRegenReagentComponent, ExaminedEvent>(OnExamined);
             SubscribeLocalEvent<AutoRegenReagentComponent, UseInHandEvent>(OnUseInHand,
                 before: new[] { typeof(ChemistrySystem) });
+        }
+
+        public override void Update(float frameTime)
+        {
+            base.Update(frameTime);
+            var query = EntityQueryEnumerator<AutoRegenReagentComponent>();
+            while (query.MoveNext(out var uid, out var autoComp))
+            {
+                if (_timing.CurTime < autoComp.NextUpdate)
+                    return;
+
+                autoComp.NextUpdate += autoComp.Interval;
+
+                if (autoComp.Solution == null)
+                    TryGetSolution(uid, autoComp);
+
+                if (autoComp.Solution == null)
+                    return;
+
+                _solutionSystem.TryAddReagent(autoComp.Solution.Value, autoComp.CurrentReagent, autoComp.UnitsPerInterval);
+            }
+        }
+
+        private void OnCompInit(EntityUid uid, AutoRegenReagentComponent component, ComponentInit args)
+        {
+            component.NextUpdate = _timing.CurTime + component.Interval;
+            SwitchReagent(component);
         }
 
         private void OnUseInHand(EntityUid uid, AutoRegenReagentComponent component, UseInHandEvent args)
@@ -39,13 +67,9 @@ namespace Content.Server._White.AutoRegenReagent
             args.Handled = true;
         }
 
-        private void OnInit(EntityUid uid, AutoRegenReagentComponent component, ComponentInit args)
+        private void OnExamined(EntityUid uid, AutoRegenReagentComponent component, ExaminedEvent args)
         {
-            if (component.SolutionName == null)
-                return;
-            if (_solutionSystem.TryGetSolution(uid, component.SolutionName, out var solution))
-                component.Solution = solution;
-            component.CurrentReagent = component.Reagents[component.CurrentIndex];
+            args.PushMarkup(Loc.GetString("reagent-name", ("reagent", component.CurrentReagent)));
         }
 
         private void AddSwitchVerb(EntityUid uid, AutoRegenReagentComponent component,
@@ -69,8 +93,20 @@ namespace Content.Server._White.AutoRegenReagent
             args.Verbs.Add(verb);
         }
 
+        private void TryGetSolution(EntityUid uid, AutoRegenReagentComponent component)
+        {
+            if (component.SolutionName == null)
+                return;
 
-        private string SwitchReagent(AutoRegenReagentComponent component, EntityUid user)
+            if (!_solutionSystem.TryGetSolution(uid, component.SolutionName, out var solution))
+                return;
+
+            component.Solution = solution;
+
+            component.CurrentReagent = component.Reagents[component.CurrentIndex];
+        }
+
+        private string SwitchReagent(AutoRegenReagentComponent component, EntityUid? user = null)
         {
             if (component.CurrentIndex + 1 == component.Reagents.Count)
                 component.CurrentIndex = 0;
@@ -80,37 +116,12 @@ namespace Content.Server._White.AutoRegenReagent
             if (component.Solution != null)
                 _solutionSystem.RemoveAllSolution(component.Solution.Value);
 
-
             component.CurrentReagent = component.Reagents[component.CurrentIndex];
 
-            _popups.PopupEntity(Loc.GetString("autoregen-switched", ("reagent", component.CurrentReagent)), user, user);
+            if (user != null)
+                _popups.PopupEntity(Loc.GetString("autoregen-switched", ("reagent", component.CurrentReagent)), user.Value, user.Value);
 
             return component.CurrentReagent;
-        }
-
-        private void OnExamined(EntityUid uid, AutoRegenReagentComponent component, ExaminedEvent args)
-        {
-            args.PushMarkup(Loc.GetString("reagent-name", ("reagent", component.CurrentReagent)));
-        }
-
-        public override void Update(float frameTime)
-        {
-            base.Update(frameTime);
-            var query = EntityQueryEnumerator<AutoRegenReagentComponent, SolutionComponent>();
-            while (query.MoveNext(out var uid, out var autoComp, out _))
-            {
-                if (autoComp.Solution == null)
-                    return;
-
-                var time = _timing.CurTime;
-
-                if (autoComp.NextUpdate >= time)
-                    return;
-
-                autoComp.NextUpdate = time + autoComp.Interval;
-
-                _solutionSystem.TryAddReagent(autoComp.Solution.Value, autoComp.CurrentReagent, autoComp.UnitsPerInterval);
-            }
         }
     }
 }

@@ -1,5 +1,6 @@
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reagent;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Server._White.AutoRegenReagent
 {
@@ -12,16 +13,19 @@ namespace Content.Server._White.AutoRegenReagent
         [DataField("reagents", required: true)]
         public List<string> Reagents = default!;
 
+        [DataField]
         public string CurrentReagent = "";
 
+        [DataField]
         public int CurrentIndex = 0;
 
         public Entity<SolutionComponent>? Solution = default!;
 
         [DataField("interval")]
-        public TimeSpan Interval = TimeSpan.FromSeconds(1);
+        public TimeSpan Interval = TimeSpan.FromSeconds(10);
 
-        public TimeSpan NextUpdate = TimeSpan.Zero;
+        [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
+        public TimeSpan NextUpdate;
 
         [DataField("unitsPerInterval")]
         public float UnitsPerInterval = 1f;

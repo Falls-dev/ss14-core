@@ -2,6 +2,7 @@
 using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Chemistry.EntitySystems;
 using Content.Server.Popups;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Examine;
@@ -21,7 +22,8 @@ namespace Content.Server._White.Chemistry
         public override void Initialize()
         {
             base.Initialize();
-            SubscribeLocalEvent<AutoRegenReagentComponent, ComponentInit>(OnInit);
+
+
             SubscribeLocalEvent<AutoRegenReagentComponent, GetVerbsEvent<AlternativeVerb>>(AddSwitchVerb);
             SubscribeLocalEvent<AutoRegenReagentComponent, ExaminedEvent>(OnExamined);
             SubscribeLocalEvent<AutoRegenReagentComponent, UseInHandEvent>(OnUseInHand,
@@ -33,6 +35,8 @@ namespace Content.Server._White.Chemistry
             if (args.Handled)
                 return;
 
+            Init(component);
+
             if (component.Reagents.Count <= 1)
                 return;
 
@@ -40,9 +44,12 @@ namespace Content.Server._White.Chemistry
             args.Handled = true;
         }
 
-        private void OnInit(EntityUid uid, AutoRegenReagentComponent component, ComponentInit args)
+        private void Init(AutoRegenReagentComponent component)
         {
-            if (_solutionSystem.TryGetSolution(uid, component.SolutionName, out var _, out var solution))
+            if (component.Generated != null)
+                return;
+
+            if (_solutionSystem.TryGetSolution(component.Owner, component.SolutionName, out var _, out var solution))
                 component.Generated = solution;
 
             component.CurrentReagent = component.Reagents[component.CurrentIndex];
@@ -53,6 +60,8 @@ namespace Content.Server._White.Chemistry
         {
             if (!args.CanInteract || !args.CanAccess)
                 return;
+
+            Init(component);
 
             if (component.Reagents.Count <= 1)
                 return;
@@ -87,6 +96,8 @@ namespace Content.Server._White.Chemistry
 
         private void OnExamined(EntityUid uid, AutoRegenReagentComponent component, ExaminedEvent args)
         {
+            Init(component);
+
             args.PushMarkup(Loc.GetString("reagent-name", ("reagent", component.CurrentReagent)));
         }
 
@@ -108,13 +119,16 @@ namespace Content.Server._White.Chemistry
                 if (regen.Generated == null)
                     continue;
 
-                var amount = FixedPoint2.Min(solution.AvailableVolume, regen.Generated.Volume);
-                if (amount <= FixedPoint2.Zero)
-                    continue;
-
-                var generated = amount == regen.Generated.Volume ? regen.Generated : regen.Generated.Clone().SplitSolution(amount);
-
-                _solutionSystem.TryAddSolution(regen.Solution.Value, generated);
+                Solution generated;
+                if (regen.RegenAmout == solution.Volume)
+                {
+                    solution = solution;
+                }
+                else
+                {
+                    solution = solution.Clone().SplitSolution(regen.RegenAmout);
+                }
+                _solutionSystem.TryAddSolution(regen.Solution.Value, solution);
             }
         }
     }

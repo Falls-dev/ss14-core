@@ -1,14 +1,23 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client.Actions;
 using Content.Client.CombatMode;
 using Content.Client.Examine;
 using Content.Client.Gameplay;
+using Content.Client.Popups;
+using Content.Client.UserInterface.Systems.Actions;
 using Content.Client.Verbs;
 using Content.Client.Verbs.UI;
+using Content.Shared._White.Item;
+using Content.Shared.Actions;
 using Content.Shared.CCVar;
 using Content.Shared.Examine;
+using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Ninja.Components;
+using Content.Shared.Popups;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -45,11 +54,14 @@ namespace Content.Client.ContextMenu.UI
         [Dependency] private readonly IEyeManager _eyeManager = default!;
         [Dependency] private readonly ContextMenuUIController _context = default!;
         [Dependency] private readonly VerbMenuUIController _verb = default!;
+        [Dependency] private readonly ActionUIController _controller = default!; // WD EDIT
 
         [UISystemDependency] private readonly VerbSystem _verbSystem = default!;
         [UISystemDependency] private readonly ExamineSystem _examineSystem = default!;
         [UISystemDependency] private readonly TransformSystem _xform = default!;
         [UISystemDependency] private readonly CombatModeSystem _combatMode = default!;
+        [UISystemDependency] private readonly PopupSystem _popup = default!; // WD EDIT
+        [UISystemDependency] private readonly ActionsSystem _actions = default!; // WD EDIT
 
         private bool _updating;
 
@@ -124,6 +136,15 @@ namespace Content.Client.ContextMenu.UI
                 return;
             }
 
+            // WD START
+            if (args.Function == EngineKeyFunctions.Use && !CheckForUseBlocker(entity.Value))
+            {
+                _context.Close();
+                args.Handle();
+                return;
+            }
+            // WD END
+
             // do some other server-side interaction?
             if (args.Function == EngineKeyFunctions.Use ||
                 args.Function == ContentKeyFunctions.ActivateItemInWorld ||
@@ -158,6 +179,43 @@ namespace Content.Client.ContextMenu.UI
                 args.Handle();
             }
         }
+
+        // WD START
+        private bool CheckForUseBlocker(EntityUid entity)
+        {
+            var localEntity = _playerManager.LocalEntity;
+            if (!EntityManager.TryGetComponent(localEntity, out HandsComponent? hands))
+                return true;
+
+            if (!EntityManager.HasComponent<MobStateComponent>(entity) || entity == localEntity.Value)
+                return true;
+
+            if (_controller.SelectingTargetFor is { } actionId &&
+                _actions.TryGetActionData(actionId, out var baseAction) && baseAction is EntityTargetActionComponent)
+            {
+                InteractFailPopup(entity, localEntity.Value);
+                return false;
+            }
+
+            var held = hands.ActiveHandEntity;
+            if (held != null)
+            {
+                if (!EntityManager.HasComponent<ContextMenuInteractionBlockerComponent>(held.Value))
+                    return true;
+            }
+            else if (!EntityManager.HasComponent<StunProviderComponent>(localEntity.Value))
+                return true;
+
+            InteractFailPopup(entity, localEntity.Value);
+            return false;
+        }
+
+        private void InteractFailPopup(EntityUid entity, EntityUid localEntity)
+        {
+            _popup.PopupClient(Loc.GetString("context-menu-cant-interact"), entity, localEntity,
+                PopupType.MediumCaution);
+        }
+        // WD END
 
         private bool HandleOpenEntityMenu(in PointerInputCmdHandler.PointerInputCmdArgs args)
         {

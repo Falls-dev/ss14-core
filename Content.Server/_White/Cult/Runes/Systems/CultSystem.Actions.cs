@@ -5,15 +5,12 @@ using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Emp;
 using Content.Server.EUI;
 using Content.Server._White.Cult.UI;
+using Content.Server._White.Wizard.Magic;
+using Content.Server.Chat.Systems;
 using Content.Shared._White.Chaplain;
-using Content.Shared.Chemistry.Components;
-using Content.Shared.Damage;
-using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
-using Content.Shared.Fluids.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Stacks;
-using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
 using Content.Shared._White.Cult.Actions;
 using Content.Shared._White.Cult.Components;
@@ -23,8 +20,8 @@ using Content.Shared.Actions;
 using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.DoAfter;
+using Content.Shared.Doors.Components;
 using Content.Shared.Maps;
-using Content.Shared.Mindshield.Components;
 using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
@@ -50,6 +47,7 @@ public partial class CultSystem
     [Dependency] private readonly PhysicsSystem _physics = default!;
     [Dependency] private readonly HolyWeaponSystem _holyWeapon = default!;
     [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private readonly WizardSpellsSystem _spells = default!;
 
     private const string TileId = "CultFloor";
     private const string ConcealedTileId = "CultFloorConcealed";
@@ -66,9 +64,24 @@ public partial class CultSystem
         SubscribeLocalEvent<CultistComponent, CultBloodRitesInstantActionEvent>(OnBloodRites);
         SubscribeLocalEvent<CultistComponent, CultBloodSpearRecallInstantActionEvent>(OnBloodSpearRecall);
         SubscribeLocalEvent<CultistComponent, CultTeleportTargetActionEvent>(OnTeleport);
-        SubscribeLocalEvent<CultistComponent, CultStunTargetActionEvent>(OnStunTarget);
+        SubscribeLocalEvent<CultistComponent, CultStunActionEvent>(OnStun);
         SubscribeLocalEvent<CultistComponent, ActionGettingRemovedEvent>(OnActionRemoved);
         SubscribeLocalEvent<CultistComponent, ShacklesEvent>(OnShackles);
+        SubscribeLocalEvent<CultistComponent, TwistedConstructionEvent>(OnTwistedConstruction);
+    }
+
+    private void OnTwistedConstruction(Entity<CultistComponent> ent, ref TwistedConstructionEvent args)
+    {
+        if (args.Cancelled)
+            QueueDel(GetEntity(args.Effect));
+
+        if (args.Handled || args.Cancelled)
+            return;
+
+        args.Handled = true;
+
+        Del(args.Target);
+        Spawn(args.RunicDoor, GetCoordinates(args.Location));
     }
 
     private void OnShackles(Entity<CultistComponent> ent, ref ShacklesEvent args)
@@ -84,6 +97,13 @@ public partial class CultSystem
         if (_cuffable.TryAddNewCuffs(args.Target.Value, args.User, cuffs, cuffable, handcuffComponent))
         {
             SharedCuffableSystem.SetUsed(handcuffComponent, true);
+            if (_statusEffectsSystem.TryAddStatusEffect(args.Target.Value, "Muted", TimeSpan.FromSeconds(10),
+                    true, "Muted"))
+            {
+                _popupSystem.PopupEntity("Цель обезмолвлена.", args.User, args.User);
+            }
+            if (args.Speech != null)
+                _chat.TrySendInGameICMessage(args.User, args.Speech, InGameICChatType.Whisper, false);
             return;
         }
 
@@ -96,33 +116,9 @@ public partial class CultSystem
         Dirty(ent);
     }
 
-    private void OnStunTarget(EntityUid uid, CultistComponent component, CultStunTargetActionEvent args)
+    private void OnStun(EntityUid uid, CultistComponent component, CultStunActionEvent args)
     {
-        if (args.Target == uid || !TryComp<BloodstreamComponent>(args.Performer, out var bloodstream) ||
-            !TryComp<StatusEffectsComponent>(args.Target, out var status))
-            return;
-
-        if (_holyWeapon.IsHoldingHolyWeapon(args.Target))
-        {
-            _popupSystem.PopupEntity("Сила священного оружия препятствует магии.", args.Performer, args.Performer,
-                PopupType.MediumCaution);
-            return;
-        }
-
-        if (HasComp<MindShieldComponent>(args.Target))
-        {
-            _popupSystem.PopupEntity("Он имплантирован чипом защиты разума.", args.Performer, args.Performer,
-                PopupType.MediumCaution);
-            return;
-        }
-
-        if (!_stunSystem.TryParalyze(args.Target, TimeSpan.FromSeconds(6), true, status) &
-            !_statusEffectsSystem.TryAddStatusEffect(args.Target, "Muted", TimeSpan.FromSeconds(12), true, "Muted",
-                status))
-            return;
-
-        _bloodstreamSystem.TryModifyBloodLevel(uid, -10, bloodstream, createPuddle: false);
-        args.Handled = true;
+        GrantItem(uid, "StunHand", args);
     }
 
     private void OnTeleport(EntityUid uid, CultistComponent component, CultTeleportTargetActionEvent args)
@@ -131,86 +127,26 @@ public partial class CultSystem
             !TryComp<ActorComponent>(uid, out var actor))
             return;
 
-        if (_holyWeapon.IsHoldingHolyWeapon(args.Target))
+        if (!HasComp<CultistComponent>(args.Target))
         {
-            _popupSystem.PopupEntity("Сила священного оружия препятствует магии.", args.Performer, args.Performer,
+            _popupSystem.PopupEntity("Цель должна быть культистом.", args.Performer, args.Performer,
                 PopupType.MediumCaution);
             return;
         }
 
-        if (!HasComp<CultistComponent>(args.Target) && !HasComp<ConstructComponent>(args.Target) &&
-            _actionBlocker.CanInteract(args.Target, null))
-        {
-            _popupSystem.PopupEntity("Цель должна быть культистом, быть скованной или парализованной.", args.Performer,
-                args.Performer, PopupType.MediumCaution);
-            return;
-        }
-
-        _bloodstreamSystem.TryModifyBloodLevel(uid, -5, bloodstream, createPuddle: false);
+        _bloodstreamSystem.TryModifyBloodLevel(uid, -7, bloodstream, createPuddle: false);
 
         var eui = new CultTeleportSpellEui(args.Performer, args.Target);
         _euiManager.OpenEui(eui, actor.PlayerSession);
         eui.StateDirty();
 
+        Speak(args);
         args.Handled = true;
     }
 
     private void OnBloodRites(EntityUid uid, CultistComponent component, CultBloodRitesInstantActionEvent args)
     {
-        if (!TryComp<BloodstreamComponent>(args.Performer, out var bloodstreamComponent))
-            return;
-
-        var bruteDamageGroup = _prototypeManager.Index<DamageGroupPrototype>("Brute");
-        var burnDamageGroup = _prototypeManager.Index<DamageGroupPrototype>("Burn");
-
-        var xform = Transform(uid);
-
-        var entitiesInRange = _lookup.GetEntitiesInRange(_transform.GetMapCoordinates(xform), 1.5f);
-
-        FixedPoint2 totalBloodAmount = 0f;
-
-        var breakLoop = false;
-        foreach (var solutionEntity in entitiesInRange.ToList())
-        {
-            if (breakLoop)
-                break;
-
-            if (!TryComp<PuddleComponent>(solutionEntity, out var puddleComponent))
-                continue;
-
-            if (!_solutionSystem.TryGetSolution(solutionEntity, puddleComponent.SolutionName, out var solution))
-                continue;
-
-            foreach (var solutionContent in solution.Value.Comp.Solution.Contents.ToList())
-            {
-                if (solutionContent.Reagent.Prototype != "Blood")
-                    continue;
-
-                totalBloodAmount += solutionContent.Quantity;
-
-                _bloodstreamSystem.TryModifyBloodLevel(uid, solutionContent.Quantity / 6f, bloodstreamComponent);
-                _solutionSystem.RemoveReagent((Entity<SolutionComponent>) solution, "Blood", FixedPoint2.MaxValue);
-
-                /*if (GetMissingBloodValue(bloodstreamComponent) == 0)
-                {
-                    breakLoop = true;
-                }*/
-            }
-        }
-
-        if (totalBloodAmount == 0f)
-            return;
-
-        component.RitesBloodAmount += totalBloodAmount;
-
-        _audio.PlayPvs("/Audio/White/Cult/enter_blood.ogg", uid, AudioParams.Default);
-        _damageableSystem.TryChangeDamage(uid, new DamageSpecifier(bruteDamageGroup, -20));
-        _damageableSystem.TryChangeDamage(uid, new DamageSpecifier(burnDamageGroup, -20));
-
-        _popupSystem.PopupEntity(Loc.GetString("verb-blood-rites-message", ("blood", component.RitesBloodAmount)), uid,
-            uid);
-
-        args.Handled = true;
+        GrantItem(uid, "RitesHand", args);
     }
 
     private static FixedPoint2 GetMissingBloodValue(BloodstreamComponent bloodstreamComponent)
@@ -342,6 +278,7 @@ public partial class CultSystem
             _audio.PlayPvs(conceal ? "/Audio/White/Cult/smoke.ogg" : "/Audio/White/Cult/enter_blood.ogg", uid,
                 AudioParams.Default.WithMaxDistance(5f));
             _bloodstreamSystem.TryModifyBloodLevel(uid, -2, bloodstream, createPuddle: false);
+            Speak(args);
             args.Handled = true;
         }
 
@@ -420,6 +357,7 @@ public partial class CultSystem
 
         _empSystem.EmpPulse(_transform.GetMapCoordinates(uid), 5, 100000, 10f);
 
+        Speak(args);
         args.Handled = true;
     }
 
@@ -430,23 +368,50 @@ public partial class CultSystem
 
         _bloodstreamSystem.TryModifyBloodLevel(uid, -5, bloodstream, createPuddle: false);
 
-        if (!_holyWeapon.IsHoldingHolyWeapon(args.Target) &&
-            _statusEffectsSystem.TryAddStatusEffect(args.Target, "Muted", TimeSpan.FromSeconds(10), true, "Muted"))
-        {
-            _popupSystem.PopupEntity("Цель обезмолвлена.", args.Performer, args.Performer);
-            args.Handled = true;
-        }
-
         if (!TryComp(args.Target, out CuffableComponent? cuffs) || cuffs.Container.ContainedEntities.Count > 0)
             return;
 
-        _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.Performer, TimeSpan.FromSeconds(2),
-            new ShacklesEvent(), args.Performer, args.Target)
+        var doAfterArgs = new DoAfterArgs(EntityManager, args.Performer, TimeSpan.FromSeconds(2),
+            new ShacklesEvent(args.Speech), args.Performer, args.Target)
         {
             BreakOnMove = true,
             BreakOnDamage = true
-        });
+        };
 
+        if (!_doAfterSystem.TryStartDoAfter(doAfterArgs))
+            return;
+
+        args.Handled = true;
+    }
+
+    private void ConvertDoor(EntityUid uid, EntityUid target, BloodstreamComponent bloodstream,
+        CultTwistedConstructionActionEvent args)
+    {
+        var meta = MetaData(target);
+        if (meta.EntityPrototype?.ID == args.RunicDoor.Id)
+            return;
+
+        var xform = Transform(target);
+        if (!xform.Anchored)
+            return;
+
+        var effect = Spawn(args.Effect, xform.Coordinates);
+        var ev = new TwistedConstructionEvent(GetNetEntity(effect), args.RunicDoor, GetNetCoordinates(xform.Coordinates));
+        var doAfterArgs = new DoAfterArgs(EntityManager, uid, args.Delay, ev, uid, target)
+        {
+            BreakOnDamage = true,
+            BreakOnMove = true,
+        };
+
+        if (!_doAfterSystem.TryStartDoAfter(doAfterArgs))
+        {
+            QueueDel(effect);
+            return;
+        }
+
+        _audio.PlayPvs(args.Sound, xform.Coordinates);
+        _bloodstreamSystem.TryModifyBloodLevel(uid, -12, bloodstream, createPuddle: false);
+        Speak(args);
         args.Handled = true;
     }
 
@@ -460,6 +425,12 @@ public partial class CultSystem
 
         if (!TryComp<BloodstreamComponent>(args.Performer, out var bloodstreamComponent))
             return;
+
+        if (HasComp<DoorComponent>(args.Target))
+        {
+            ConvertDoor(uid, args.Target, bloodstreamComponent, args);
+            return;
+        }
 
         if (!_entityManager.TryGetComponent<StackComponent>(args.Target, out var stack))
             return;
@@ -482,6 +453,7 @@ public partial class CultSystem
         stackNew.Count = count;
 
         _popupSystem.PopupEntity("Конвертируем сталь в руинический металл!", args.Performer, args.Performer);
+        Speak(args);
         args.Handled = true;
     }
 
@@ -498,6 +470,25 @@ public partial class CultSystem
 
         _bloodstreamSystem.TryModifyBloodLevel(args.Performer, -10, bloodstreamComponent, false);
         _handsSystem.TryPickupAnyHand(args.Performer, dagger);
+        Speak(args);
+        args.Handled = true;
+    }
+
+    private void Speak(BaseActionEvent args)
+    {
+        _spells.Speak(args, InGameICChatType.Whisper);
+    }
+
+    public void GrantItem(EntityUid uid, string proto, InstantActionEvent args)
+    {
+        var entity = Spawn(proto, Transform(uid).Coordinates);
+        if (!_handsSystem.TryPickupAnyHand(uid, entity))
+        {
+            _popupSystem.PopupEntity(Loc.GetString("cult-magic-no-empty-hand"), uid, uid);
+            QueueDel(entity);
+            _actionsSystem.SetCooldown(args.Action, TimeSpan.FromSeconds(1));
+            return;
+        }
         args.Handled = true;
     }
 }

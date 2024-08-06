@@ -3,7 +3,6 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Mind;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 
 namespace Content.Shared._White.Cult.Components;
 
@@ -11,7 +10,7 @@ namespace Content.Shared._White.Cult.Components;
 /// This is used for tagging a mob as a cultist.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class CultistComponent : ShowCultHudComponent
+public sealed partial class CultistComponent : Component
 {
     [DataField("greetSound", customTypeSerializer: typeof(SoundSpecifierTypeSerializer))]
     public SoundSpecifier? CultistGreetSound = new SoundPathSpecifier("/Audio/CultSounds/fart.ogg");
@@ -41,7 +40,7 @@ public sealed partial class CultistComponent : ShowCultHudComponent
 
     public static string CultSummonCombatEquipmentAction = "ActionCultSummonCombatEquipment";
 
-    public static string CultStunAction = "ActionCultStun";
+    public static string CultStunAction = "InstantActionCultStun";
 
     public static string CultShadowShacklesAction = "ActionCultShadowShackles";
 
@@ -49,13 +48,6 @@ public sealed partial class CultistComponent : ShowCultHudComponent
     {
         SummonCultDaggerAction, BloodRitesAction, CultTwistedConstructionAction, CultTeleportAction,
         CultSummonCombatEquipmentAction, CultStunAction, EmpPulseAction, ConcealPresenceAction, CultShadowShacklesAction
-    };
-
-    [DataField("bloodRites", customTypeSerializer: typeof(PrototypeIdListSerializer<CultistFactoryProductionPrototype>))]
-    public List<string> BloodRites = new ()
-    {
-        "FactoryCultBloodSpear",
-        "FactoryCultBloodBarrage"
     };
 
     [ViewVariables, NonSerialized]

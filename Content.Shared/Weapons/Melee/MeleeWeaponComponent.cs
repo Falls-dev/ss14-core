@@ -1,5 +1,6 @@
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
+using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -26,6 +27,7 @@ public sealed partial class MeleeWeaponComponent : Component
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField]
+    [AutoNetworkedField] // WD EDIT
     public bool Hidden;
 
     /// <summary>
@@ -62,19 +64,42 @@ public sealed partial class MeleeWeaponComponent : Component
     public bool Attacking = false;
 
     // WD START
-    [ViewVariables(VVAccess.ReadWrite), DataField]
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
     public bool CanHeavyAttack = true;
 
-    [ViewVariables(VVAccess.ReadWrite), DataField]
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
+    public bool CanAttackSelf = true;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
+    public bool CanBeBlocked = true;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
+    public bool CanMiss;
+
+    [DataField, AutoNetworkedField]
+    public EntityWhitelist? AttackWhitelist;
+
+    [DataField, AutoNetworkedField]
+    public EntityWhitelist? AttackBlacklist;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]
+    [ViewVariables(VVAccess.ReadWrite)]
+    [AutoPausedField]
+    public TimeSpan NextMobAttack;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
+    public float? EquipCooldown;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
     public bool IgnoreResistances;
 
-    [ViewVariables(VVAccess.ReadWrite), DataField]
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
     public float HeavyAttackStaminaCost = 8;
 
-    [ViewVariables(VVAccess.ReadWrite), DataField]
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
     public EntProtoId MissAnimation = "WeaponArcPunch";
 
-    [ViewVariables(VVAccess.ReadWrite), DataField]
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
     public EntProtoId DisarmAnimation = "WeaponArcDisarm";
     // WD END
 
@@ -101,7 +126,6 @@ public sealed partial class MeleeWeaponComponent : Component
     [ViewVariables(VVAccess.ReadWrite), DataField]
     public FixedPoint2 ClickDamageModifier = FixedPoint2.New(1);
 
-    // TODO: Temporarily 1.5 until interactionoutline is adjusted to use melee, then probably drop to 1.2
     /// <summary>
     /// Nearest edge range to hit an entity.
     /// </summary>

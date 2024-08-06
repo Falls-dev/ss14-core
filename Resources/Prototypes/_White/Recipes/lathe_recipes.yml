@@ -167,3 +167,19 @@
   completetime: 3
   materials:
      Steel: 800
+
+- type: latheRecipe
+  id: RapidPipeDispenserRecipe
+  result: RapidPipeDispenserEmpty
+  completetime: 1
+  materials:
+    Steel: 500
+    Glass: 500
+
+- type: latheRecipe
+  id: RCDRecipe
+  result: RCDEmpty
+  completetime: 1
+  materials:
+    Steel: 500
+    Glass: 500

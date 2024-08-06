@@ -65,7 +65,7 @@
       types:
         Heat: 18
   - type: Item
-    size: Normal
+    size: Ginormous
     sprite: White/Objects/Weapons/Chaplain/godhand.rsi
   - type: Unremoveable
     deleteOnDrop: true
@@ -309,6 +309,7 @@
   - type: UseDelay
   - type: DisarmMalus
   - type: MeleeBlock
+    delay: 6.1
   - type: HolyWeapon
 
 - type: entity
@@ -340,6 +341,7 @@
     sprite: White/Objects/Weapons/Chaplain/pitchfork.rsi
     state: icon
   - type: MeleeWeapon
+    range: 2
     wideAnimationRotation: -135
     damage:
       types:
@@ -348,7 +350,6 @@
     animation: WeaponArcThrust
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
-    range: 2
   - type: DamageOtherOnHit
     damage:
       types:

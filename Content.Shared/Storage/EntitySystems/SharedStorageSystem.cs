@@ -1,6 +1,7 @@
 using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared._White.Item.PseudoItem;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Coordinates;
@@ -10,6 +11,7 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Implants.Components;
 using Content.Shared.Interaction;
+using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Item;
 using Content.Shared.Lock;
 using Content.Shared.Materials;
@@ -222,6 +224,12 @@ public abstract class SharedStorageSystem : EntitySystem
 
         if (HasComp<PlaceableSurfaceComponent>(uid))
             return;
+
+        if (TryComp<VirtualItemComponent>(args.Used, out var virtualItem)) // WD
+        {
+            RaiseLocalEvent(uid, new PseudoItemInteractEvent(virtualItem.BlockingEntity, args.User, args.Used));
+            return;
+        }
 
         PlayerInsertHeldEntity(uid, args.User, storageComp);
         // Always handle it, even if insertion fails.
@@ -509,6 +517,9 @@ public abstract class SharedStorageSystem : EntitySystem
         if (!ActionBlocker.CanInteract(player, itemEnt))
             return;
 
+        if (HasComp<PseudoItemComponent>(itemEnt)) // WD
+            return;
+
         TransformSystem.DropNextTo(itemEnt, player);
         Audio.PlayPredicted(storageComp.StorageRemoveSound, storageEnt, player);
     }
@@ -673,6 +684,8 @@ public abstract class SharedStorageSystem : EntitySystem
 
         foreach (var entity in entities.ToArray())
         {
+            if (HasComp<PseudoItemComponent>(entity)) // WD
+                continue;
             Insert(target, entity, out _, user: user, targetComp, playSound: false);
         }
 
@@ -1072,7 +1085,7 @@ public abstract class SharedStorageSystem : EntitySystem
             for (int i = 0; i < list.Count; i++)
             {
                 var saved = list[i];
-                
+
                 if (saved == location)
                 {
                     list.Remove(location);

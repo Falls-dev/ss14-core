@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Numerics;
-using Content.Server._White.Cult;
 using Content.Server._White.IncorporealSystem;
+using Content.Server._White.Other.FastAndFuriousSystem;
 using Content.Server._White.Wizard.Charging;
 using Content.Server._White.Wizard.Magic.Amaterasu;
 using Content.Server._White.Wizard.Magic.Other;
@@ -24,6 +24,7 @@ using Content.Shared._White.Antag;
 using Content.Shared._White.BetrayalDagger;
 using Content.Shared._White.Cult.Components;
 using Content.Shared._White.Events;
+using Content.Shared._White.Item.PseudoItem;
 using Content.Shared._White.Wizard;
 using Content.Shared._White.Wizard.Magic;
 using Content.Shared.Actions;
@@ -47,6 +48,7 @@ using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Revolutionary.Components;
 using Content.Shared.StatusEffect;
+using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -87,6 +89,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
     [Dependency] private readonly ChargingSystem _charging = default!;
+    [Dependency] private readonly SharedStunSystem _stun = default!;
 
     #endregion
 
@@ -174,6 +177,12 @@ public sealed class WizardSpellsSystem : EntitySystem
             return;
         }
 
+        if (HasComp<CultistComponent>(target))
+        {
+            _popupSystem.PopupEntity(Loc.GetString("mindswap-cultist-failed"), uid, uid, PopupType.MediumCaution);
+            return;
+        }
+
         var userHasMind = _mindSystem.TryGetMind(uid, out var mindId, out var mind);
         var targetHasMind = _mindSystem.TryGetMind(target, out var targetMindId, out var targetMind);
 
@@ -183,9 +192,8 @@ public sealed class WizardSpellsSystem : EntitySystem
         SwapComponent<WizardComponent>(uid, target);
         SwapComponent<RevolutionaryComponent>(uid, target);
         SwapComponent<HeadRevolutionaryComponent>(uid, target);
-        SwapComponent<PentagramComponent>(uid, target);
-        SwapComponent<CultistComponent>(uid, target);
         SwapComponent<GlobalAntagonistComponent>(uid, target);
+        SwapComponent<FastAndFuriousComponent>(uid, target);
 
         _mindSystem.TransferTo(mindId, target, mind: mind);
 
@@ -733,8 +741,8 @@ public sealed class WizardSpellsSystem : EntitySystem
             return false;
         }
 
+        _stun.TryKnockdown(msg.TargetUid, TimeSpan.FromSeconds(4), true);
         _throwingSystem.TryThrow(msg.TargetUid, Transform(msg.Performer).Coordinates, 5f);
-        _standing.TryLieDown(msg.TargetUid);
 
         return true;
     }
@@ -850,17 +858,19 @@ public sealed class WizardSpellsSystem : EntitySystem
 
     public bool CanCast(BaseActionEvent msg)
     {
+        if (TryComp(msg.Performer, out PseudoItemComponent? pseudoItem) && pseudoItem.Active)
+            return false;
+
         return !msg.Handled && CheckRequirements(msg.Action, msg.Performer) &&
                !_statusEffectsSystem.HasStatusEffect(msg.Performer, "Incorporeal");
     }
 
-    private void Speak(BaseActionEvent args)
+    public void Speak(BaseActionEvent args, InGameICChatType type = InGameICChatType.Speak)
     {
         if (args is not ISpeakSpell speak || string.IsNullOrWhiteSpace(speak.Speech))
             return;
 
-        _chat.TrySendInGameICMessage(args.Performer, Loc.GetString(speak.Speech),
-            InGameICChatType.Speak, false);
+        _chat.TrySendInGameICMessage(args.Performer, Loc.GetString(speak.Speech), type, false);
     }
 
     private void SetCooldown(EntityUid action, ActionUseType useType)
@@ -927,6 +937,10 @@ public sealed class WizardSpellsSystem : EntitySystem
         }
 
         if (hasReqs)
+            return;
+
+        if (_inventory.TryGetSlotEntity(args.Performer, "outerClothing", out var entity) &&
+            comp.ClothingWhitelist?.IsValid(entity.Value) is true)
             return;
 
         args.Cancelled = true;

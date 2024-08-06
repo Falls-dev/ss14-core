@@ -22,7 +22,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Players.PlayTimeTracking;
 
-public sealed class GlobalPlayTimeTrackingManager : IPlayTimeTrackingManager
+public sealed class GlobalPlayTimeTrackingManager : ISharedPlayTimeManager
 {
     [Dependency] private readonly IServerDbManager _db = default!;
     [Dependency] private readonly IServerNetManager _net = default!;
@@ -435,6 +435,11 @@ public sealed class GlobalPlayTimeTrackingManager : IPlayTimeTrackingManager
         }
 
         return data;
+    }
+
+    public IReadOnlyDictionary<string, TimeSpan> GetPlayTimes(ICommonSession session)
+    {
+        return GetTrackerTimes(session);
     }
 
     /// <summary>

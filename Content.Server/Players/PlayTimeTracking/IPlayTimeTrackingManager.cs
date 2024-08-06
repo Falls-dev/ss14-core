@@ -5,7 +5,7 @@ using Robust.Shared.Player;
 
 namespace Content.Server.Players.PlayTimeTracking;
 
-public interface IPlayTimeTrackingManager
+public interface ISharedPlayTimeManager
 {
     event CalcPlayTimeTrackersCallback? CalcTrackers;
 

@@ -36,6 +36,7 @@ using Content.Server._White.PandaSocket.Main;
 using Content.Server._White.Sponsors;
 using Content.Server._White.Stalin;
 using Content.Server._White.TTS;
+using Content.Shared.Players.PlayTimeTracking;
 
 namespace Content.Server.Entry
 {
@@ -47,7 +48,7 @@ namespace Content.Server.Entry
         private EuiManager _euiManager = default!;
         private IVoteManager _voteManager = default!;
         private ServerUpdateManager _updateManager = default!;
-        private IPlayTimeTrackingManager? _playTimeTracking;
+        private PlayTimeTrackingManager? _playTimeTracking;
         private IServerDbManager? _dbManager;
 
         /// <inheritdoc />
@@ -94,7 +95,7 @@ namespace Content.Server.Entry
             _euiManager = IoCManager.Resolve<EuiManager>();
             _voteManager = IoCManager.Resolve<IVoteManager>();
             _updateManager = IoCManager.Resolve<ServerUpdateManager>();
-            _playTimeTracking = IoCManager.Resolve<IPlayTimeTrackingManager>();
+            _playTimeTracking = IoCManager.Resolve<PlayTimeTrackingManager>();
             IoCManager.Resolve<IEntitySystemManager>();
             _dbManager = IoCManager.Resolve<IServerDbManager>();
 

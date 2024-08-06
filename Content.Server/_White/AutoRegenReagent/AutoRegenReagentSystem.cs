@@ -45,7 +45,7 @@ namespace Content.Server._White.AutoRegenReagent
                 return;
             if (_solutionSystem.TryGetSolution(uid, component.SolutionName, out var solution))
                 component.Solution = solution;
-            component.CurrentReagent = component.Reagents[component.CurrentIndex].Prototype;
+            component.CurrentReagent = component.Reagents[component.CurrentIndex];
         }
 
         private void AddSwitchVerb(EntityUid uid, AutoRegenReagentComponent component,
@@ -81,7 +81,7 @@ namespace Content.Server._White.AutoRegenReagent
                 _solutionSystem.RemoveAllSolution(component.Solution.Value);
 
 
-            component.CurrentReagent = component.Reagents[component.CurrentIndex].ToString();
+            component.CurrentReagent = component.Reagents[component.CurrentIndex];
 
             _popups.PopupEntity(Loc.GetString("autoregen-switched", ("reagent", component.CurrentReagent)), user, user);
 

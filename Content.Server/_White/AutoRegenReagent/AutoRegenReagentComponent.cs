@@ -10,7 +10,7 @@ namespace Content.Server._White.AutoRegenReagent
         public string? SolutionName = null; // we'll fail during tests otherwise
 
         [DataField("reagents", required: true)]
-        public List<ReagentId> Reagents = default!;
+        public List<string> Reagents = default!;
 
         public string CurrentReagent = "";
 

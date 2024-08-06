@@ -22,5 +22,5 @@ public sealed partial class MessagesServerComponent : Component
     /// Dictionary translating uids to readable names
     /// </summary>
     [DataField]
-    public Dictionary<int, string> NameDict = [];
+    public Dictionary<int, MessagesUser> NameDict = [];
 }

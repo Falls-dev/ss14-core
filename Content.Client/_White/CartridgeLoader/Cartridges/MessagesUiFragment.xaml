@@ -8,7 +8,8 @@
             <Button Name="BackButton" Text="{Loc 'messages-pda-ui-back'}" HorizontalExpand="False"/>
             <Label Name="HeaderLabel"/>
         </BoxContainer>
-        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="True">
+        <LineEdit Name="SearchBar" PlaceHolder="Search" HorizontalExpand="True" Margin="0 4" />
+        <ScrollContainer Name="MessagesScroll" HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="True">
             <BoxContainer Orientation="Vertical" Name="MessageContainer" HorizontalExpand="True" VerticalExpand="True"/>
         </ScrollContainer>
         <LineEdit Name="Input" HorizontalExpand="True" SetHeight="32"/>

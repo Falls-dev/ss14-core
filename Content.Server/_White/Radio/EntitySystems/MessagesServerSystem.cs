@@ -31,12 +31,12 @@ public sealed class MessagesServerSystem : EntitySystem
             if (!TryComp(entityUid, out CartridgeComponent? cartComponent))
                 continue;
 
-            _messagesSystem.TryGetUserName(cartComponent, out var name);
+            _messagesSystem.TryGetMessagesUser(cartComponent, out var messagesUser);
 
-            if (cartridge.UserUid == null)
+            if (cartridge.UserUid == null || messagesUser.Name == Loc.GetString("messages-pda-unknown-name"))
                 continue;
 
-            component.NameDict[cartridge.UserUid.Value] = name;
+            component.NameDict[cartridge.UserUid.Value] = messagesUser;
             cartridge.LastServer = uid;
         }
     }
@@ -48,9 +48,9 @@ public sealed class MessagesServerSystem : EntitySystem
     {
         if (!_singletonServerSystem.IsActiveServer(uid))
             return;
-        if (args.Data.TryGetValue<string>(MessagesNetworkKeys.NewName, out var name) && args.Data.TryGetValue<int>(MessagesNetworkKeys.UserId, out var userId))
+        if (args.Data.TryGetValue<MessagesUser>(MessagesNetworkKeys.NewUser, out var messagesUser) && args.Data.TryGetValue<int>(MessagesNetworkKeys.UserId, out var userId))
         {
-            component.NameDict[userId] = name;
+            component.NameDict[userId] = messagesUser;
 
             var packet = new NetworkPayload();
             _deviceNetworkSystem.QueuePacket(uid, args.SenderAddress, packet);
@@ -75,31 +75,31 @@ public sealed class MessagesServerSystem : EntitySystem
     }
 
     /// <summary>
-    /// Returns the name of a given user
+    /// Returns user
     /// </summary>
-    public bool TryGetNameFromDict(EntityUid? uid, int key, out string name)
+    public bool TryGetUserFromDict(EntityUid? uid, int key, out MessagesUser messagesUser)
     {
         if (!TryComp(uid, out MessagesServerComponent? component))
         {
-            name = Loc.GetString("messages-pda-connection-error");
+            messagesUser = new MessagesUser(Loc.GetString("messages-pda-connection-error"), Loc.GetString("messages-pda-unknown-job"), "Specific");
             return false;
         }
         if (component.NameDict.TryGetValue(key, out var keyValue))
         {
-            name = keyValue;
+            messagesUser = keyValue;
             return true;
         }
-        name = Loc.GetString("messages-pda-user-missing");
+        messagesUser = new MessagesUser(Loc.GetString("messages-pda-user-missing"), Loc.GetString("messages-pda-unknown-job"), "Specific");
         return false;
     }
 
     /// <summary>
     /// Returns the name dictionary cache
     /// </summary>
-    public Dictionary<int, string> GetNameDict(EntityUid? uid)
+    public Dictionary<int, MessagesUser> GetNameDict(EntityUid? uid)
     {
         if (!TryComp(uid, out MessagesServerComponent? component))
-            return new Dictionary<int, string>();
+            return new Dictionary<int, MessagesUser>();
         return component.NameDict;
     }
 
@@ -122,7 +122,7 @@ public sealed class MessagesServerSystem : EntitySystem
 
 public static class MessagesNetworkKeys
 {
-    public const string NewName = "new_name";
+    public const string NewUser = "new_user";
     public const string UserId = "user_id";
     public const string Message = "message";
 }

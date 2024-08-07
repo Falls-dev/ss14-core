@@ -26,8 +26,8 @@ public sealed partial class DepartmentPrototype : IPrototype
     [DataField(required: true)]
     public Color Color = default!;
 
-    [ViewVariables(VVAccess.ReadWrite), DataField(customTypeSerializer: typeof(PrototypeIdListSerializer<JobPrototype>))]
-    public List<string> Roles = new();
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    public List<ProtoId<JobPrototype>> Roles = new();
 
     /// <summary>
     /// Whether this is a primary department or not.

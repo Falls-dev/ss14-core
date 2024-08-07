@@ -11,6 +11,10 @@
       time: 108000
     - !type:AgeRequirement
       requiredAge: 20
+    - !type:SpeciesRequirement
+      species:
+      - Human
+      - Felinid
   weight: 10
   icon: "JobIconResearchDirector"
   requireAdminNotify: true

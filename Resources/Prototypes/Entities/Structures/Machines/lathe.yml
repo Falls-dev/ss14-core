@@ -536,12 +536,11 @@
   - type: Lathe
     idleState: fab-idle
     runningState: fab-active
-    staticRecipes:
+    staticRecipes: # WD edit - removed BorgModuleFireExtinguisher
     - MMI
     - PositronicBrain
     - SciFlash
     - BorgModuleCable
-    - BorgModuleFireExtinguisher
     - BorgModuleRadiationDetection
     - BorgModuleTool
     - BorgModuleAppraisal

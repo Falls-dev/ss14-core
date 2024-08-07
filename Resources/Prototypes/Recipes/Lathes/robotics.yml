@@ -367,15 +367,7 @@
     Glass: 250
     Plastic: 250
 
-- type: latheRecipe
-  id: BorgModuleFireExtinguisher
-  result: BorgModuleFireExtinguisher
-  category: Robotics
-  completetime: 3
-  materials:
-    Steel: 250
-    Glass: 250
-    Plastic: 250
+# WD edit - removed BorgModuleFireExtinguisher
 
 - type: latheRecipe
   id: BorgModuleGPS

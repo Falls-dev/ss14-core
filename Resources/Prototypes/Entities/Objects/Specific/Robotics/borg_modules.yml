@@ -121,19 +121,6 @@
     - trayScanner
 
 - type: entity
-  id: BorgModuleFireExtinguisher
-  parent: [ BaseBorgModule, BaseProviderBorgModule ]
-  name: fire extinguisher cyborg module
-  components:
-  - type: Sprite
-    layers:
-    - state: generic
-    - state: icon-fire-extinguisher
-  - type: ItemBorgModule
-    items:
-    - FireExtinguisher
-
-- type: entity
   id: BorgModuleGPS
   parent: [ BaseBorgModule, BaseProviderBorgModule ]
   name: GPS cyborg module
@@ -178,6 +165,7 @@
     - Wirecutter
     - Multitool
     - WelderIndustrial
+    - FireExtinguisher
 
 # cargo modules
 - type: entity

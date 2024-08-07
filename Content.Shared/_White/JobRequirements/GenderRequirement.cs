@@ -1,8 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared.Humanoid;
+using System.Text;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using JetBrains.Annotations;
+using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
@@ -14,7 +15,7 @@ namespace Content.Shared._White.JobRequirements;
 public sealed partial class GenderRequirement : JobRequirement
 {
     [DataField(required: true)]
-    public Sex RequiredSex;
+    public HashSet<Gender> RequiredGenders;
 
     public override bool Check(IEntityManager entManager,
         IPrototypeManager protoManager,
@@ -27,33 +28,41 @@ public sealed partial class GenderRequirement : JobRequirement
         if (profile is null)
             return true;
 
+        var sb = new StringBuilder();
+        sb.Append("[color=yellow]");
+        foreach (var g in RequiredGenders)
+        {
+            sb.Append(GenderToString(g) + " ");
+        }
+
+        sb.Append("[/color]");
+
         if (!Inverted)
         {
-            reason = FormattedMessage.FromMarkupPermissive(Loc.GetString("role-timer-sex-whitelisted",
-                ("sex", SexToString())));
+            reason = FormattedMessage.FromMarkupPermissive($"{Loc.GetString("role-timer-gender-whitelisted")}\n{sb}");
 
-            if (profile.Sex != RequiredSex)
+            if (!RequiredGenders.Contains(profile.Gender))
                 return false;
         }
         else
         {
-            reason = FormattedMessage.FromMarkupPermissive(Loc.GetString("role-timer-sex-blacklisted",
-                ("sex", SexToString())));
+            reason = FormattedMessage.FromMarkupPermissive($"{Loc.GetString("role-timer-gender-blacklisted")}\n{sb}");
 
-            if (profile.Sex == RequiredSex)
+            if (RequiredGenders.Contains(profile.Gender))
                 return false;
         }
 
         return true;
     }
 
-    private string SexToString()
+    private string GenderToString(Gender gender)
     {
-        return RequiredSex switch
+        return gender switch
         {
-            Sex.Male => Loc.GetString("role-timer-sex-male"),
-            Sex.Female => Loc.GetString("role-timer-sex-female"),
-            _ => Loc.GetString("role-timer-sex-unsexed")
+            Gender.Male => Loc.GetString("humanoid-profile-editor-pronouns-male-text"),
+            Gender.Female => Loc.GetString("humanoid-profile-editor-pronouns-female-text"),
+            Gender.Epicene => Loc.GetString("humanoid-profile-editor-pronouns-epicene-text"),
+            _ => Loc.GetString("humanoid-profile-editor-pronouns-neuter-text")
         };
     }
 }

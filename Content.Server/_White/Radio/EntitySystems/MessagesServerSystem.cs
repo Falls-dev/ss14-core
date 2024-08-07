@@ -1,9 +1,12 @@
 ﻿using System.Linq;
 using Content.Server._White.CartridgeLoader.Cartridges;
 using Content.Server._White.Radio.Components;
+using Content.Server.Administration.Logs;
+using Content.Server.Chat.Systems;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Shared._White.CartridgeLoader.Cartridges;
 using Content.Shared.CartridgeLoader;
+using Content.Shared.Database;
 using Content.Shared.DeviceNetwork;
 
 
@@ -14,6 +17,8 @@ public sealed class MessagesServerSystem : EntitySystem
     [Dependency] private readonly DeviceNetworkSystem _deviceNetworkSystem = default!;
     [Dependency] private readonly SingletonDeviceNetServerSystem _singletonServerSystem = default!;
     [Dependency] private readonly MessagesCartridgeSystem _messagesSystem = default!;
+    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
 
     public override void Initialize()
     {
@@ -65,6 +70,9 @@ public sealed class MessagesServerSystem : EntitySystem
     private void SendMessage(EntityUid uid, MessagesServerComponent component, MessagesMessageData message)
     {
         component.Messages.Add(message);
+
+        _adminLogger.Add(LogType.DeviceNetwork, $"{Loc.GetString("chat-manager-send-message", ("sender", component.NameDict[message.SenderId].Name + $" ({message.SenderId})"), ("receiver", component.NameDict[message.ReceiverId].Name + $" ({message.ReceiverId})"), ("message", message.Content))}");
+        _chat.SendNetworkChat(uid, Loc.GetString("chat-manager-send-message", ("sender", component.NameDict[message.SenderId].Name), ("receiver", component.NameDict[message.ReceiverId].Name), ("message", message.Content)), false);
 
         var packet = new NetworkPayload()
         {

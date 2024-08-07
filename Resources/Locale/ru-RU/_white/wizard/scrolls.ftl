@@ -19,6 +19,7 @@ scroll-component-smite = кару
 scroll-component-mindswap = подмену сознания
 scroll-component-timestop = остановку времени
 scroll-component-barrage = магический залп
+scroll-component-rodform = форма стержня
 
 ent-BaseScroll = магический свиток
     .desc = Этот древний пергамент, ставший реликвией в арканных преданиях, хранит в себе бесчисленные мистические заклятия и забытые заклинания.
@@ -57,4 +58,7 @@ ent-ScrollMindswap = свиток подмены сознания
 ent-ScrollTimestop = свиток остановки времени
     .desc = { ent-BaseScroll.desc }
 ent-ScrollArcaneBarrage = свиток магического залпа
+    .desc = { ent-BaseScroll.desc }
+
+ent-ScrollScrollRodForm = свиток формы стержня
     .desc = { ent-BaseScroll.desc }

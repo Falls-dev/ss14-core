@@ -17,6 +17,7 @@ using Content.Server.EUI;
 using Content.Server.Lightning;
 using Content.Server.Magic;
 using Content.Server.Mind;
+using Content.Server.Polymorph.Systems;
 using Content.Server.Singularity.EntitySystems;
 using Content.Server.Standing;
 using Content.Server.Weapons.Ranged.Systems;
@@ -44,7 +45,9 @@ using Content.Shared.Magic;
 using Content.Shared.Maps;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Movement.Components;
 using Content.Shared.Physics;
+using Content.Shared.Polymorph;
 using Content.Shared.Popups;
 using Content.Shared.Revolutionary.Components;
 using Content.Shared.StatusEffect;
@@ -90,6 +93,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
     [Dependency] private readonly ChargingSystem _charging = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly PolymorphSystem _polymorph = default!;
 
     #endregion
 
@@ -113,6 +117,7 @@ public sealed class WizardSpellsSystem : EntitySystem
         SubscribeLocalEvent<FireballSpellEvent>(OnFireballSpell);
         SubscribeLocalEvent<ForceSpellEvent>(OnForceSpell);
         SubscribeLocalEvent<ArcSpellEvent>(OnArcSpell);
+        SubscribeLocalEvent<RodFormSpellEvent>(OnRodFormSpell);
 
         SubscribeLocalEvent<MagicComponent, BeforeCastSpellEvent>(OnBeforeCastSpell);
     }
@@ -834,6 +839,35 @@ public sealed class WizardSpellsSystem : EntitySystem
                             spawnCoords.ToMapPos(EntityManager, _transformSystem);
             _gunSystem.ShootProjectile(ent, direction, userVelocity, msg.Performer, msg.Performer);
         }
+    }
+
+    #endregion
+
+    #region Rod Form
+
+    private void OnRodFormSpell(RodFormSpellEvent msg)
+    {
+        if (!CanCast(msg))
+            return;
+
+        var config = new PolymorphConfiguration
+        {
+            Entity = "ImmovableRodWizard",
+            Duration = 2,
+            Forced = true,
+            TransferDamage = true
+        };
+
+        var rod = _polymorph.PolymorphEntity(msg.Performer, config);
+        var angle = _transformSystem.GetWorldRotation(msg.Performer).ToWorldVec();
+
+        if (rod.HasValue)
+        {
+            RemComp<InputMoverComponent>(rod.Value);
+            _throwingSystem.TryThrow(rod.Value, angle, 20, msg.Performer);
+        }
+
+        Cast(msg);
     }
 
     #endregion

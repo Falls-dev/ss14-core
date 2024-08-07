@@ -383,3 +383,20 @@
         state: arcane_barrage
       event: !type:ArcaneBarrageSpellEvent
         prototype: ArcaneBarrage
+
+- type: entity
+  id: ActionRodFormSpell
+  name: Rod Form
+  noSpawn: true
+  components:
+    - type: Magic
+      requiresClothes: true
+    - type: InstantAction
+      useDelay: 30
+      itemIconStyle: BigAction
+      checkCanInteract: false
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: rod_form
+      event: !type:RodFormSpellEvent
+        speech: "SCYAR NILA!"

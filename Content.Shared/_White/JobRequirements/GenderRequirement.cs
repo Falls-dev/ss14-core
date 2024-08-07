@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Humanoid;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
@@ -19,7 +20,7 @@ public sealed partial class GenderRequirement : JobRequirement
         IPrototypeManager protoManager,
         HumanoidCharacterProfile? profile,
         IReadOnlyDictionary<string, TimeSpan> playTimes,
-        out FormattedMessage? reason)
+        [NotNullWhen(false)] out FormattedMessage? reason)
     {
         reason = new FormattedMessage();
 

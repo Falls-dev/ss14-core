@@ -322,20 +322,6 @@
 
 # medical modules
 - type: entity
-  id: BorgModuleDiagnosis # todo: reuse when med refractor is finished
-  parent: [ BaseBorgModuleMedical, BaseProviderBorgModule ]
-  name: diagnosis cyborg module
-  components:
-  - type: Sprite
-    layers:
-    - state: medical
-    - state: icon-diagnosis
-  - type: ItemBorgModule
-    items:
-    - HandheldHealthAnalyzerUnpowered
-    - ClothingNeckStethoscope
-
-- type: entity
   id: BorgModuleTreatment
   parent: [ BaseBorgModuleMedical, BaseProviderBorgModule ]
   name: treatment cyborg module
@@ -347,11 +333,23 @@
   - type: ItemBorgModule
     items:
     - HandheldHealthAnalyzerUnpowered
-    - Brutepack10Lingering
-    - Ointment10Lingering
-    - Gauze10Lingering
-    - Bloodpack10Lingering
+    - BorgHypo # WD
     - Syringe
+
+- type: entity # WD
+  id: BorgModuleResque
+  parent: [ BaseBorgModuleMedical, BaseProviderBorgModule ]
+  name: treatment cyborg module
+  components:
+  - type: Sprite
+    layers:
+    - state: medical
+    - state: icon-treatment
+  - type: ItemBorgModule
+    items:
+    - HandheldHealthAnalyzerUnpowered
+    - BorgHypoParamedic
+    - HandheldCrewMonitor
 
 - type: entity
   id: BorgModuleDefibrillator
@@ -378,10 +376,10 @@
   - type: ItemBorgModule
     items:
     - HandheldHealthAnalyzerUnpowered
+    - BorgHypoAdvanced # WD
     - Beaker
     - Beaker
     - BorgDropper
-    - BorgHypo
 
 # science modules
 # todo: if science ever gets their own custom robot, add more "sci" modules.

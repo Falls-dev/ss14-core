@@ -585,7 +585,7 @@
     - RightLegBorgService
     - HeadBorgService
     - TorsoBorgService
-    dynamicRecipes:
+    dynamicRecipes: # WD edit - removed BorgModuleDiagnosis
     - ProximitySensor
     - BorgModuleLightReplacer
     - BorgModuleAdvancedCleaning
@@ -599,7 +599,6 @@
     - BorgModuleHarvesting
     - BorgModuleMusique
     - BorgModuleClowning
-    - BorgModuleDiagnosis
     - BorgModuleDefibrillator
     - BorgModuleAdvancedTreatment
     - RipleyHarness

@@ -502,15 +502,7 @@
     Plastic: 250
     Gold: 50
 
-- type: latheRecipe
-  id: BorgModuleDiagnosis
-  result: BorgModuleDiagnosis
-  category: Robotics
-  completetime: 3
-  materials:
-    Steel: 250
-    Glass: 250
-    Plastic: 250
+# WD edit - removed BorgModuleDiagnosis
 
 - type: latheRecipe
   id: BorgModuleTreatment
@@ -543,6 +535,16 @@
     Glass: 500
     Plastic: 250
     Gold: 50
+
+- type: latheRecipe
+  id: BorgModuleResque
+  result: BorgModuleResque
+  category: Robotics
+  completetime: 3
+  materials:
+    Steel: 250
+    Glass: 250
+    Plastic: 250
 
 - type: latheRecipe
   id: BorgModuleArtifact

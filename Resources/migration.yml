@@ -275,3 +275,4 @@ OmntnsHammer: JudgeHammer
 
 # 2024-08-07 WD
 BorgModuleDiagnosis: null
+BorgModuleRCD: BorgModuleConstruction

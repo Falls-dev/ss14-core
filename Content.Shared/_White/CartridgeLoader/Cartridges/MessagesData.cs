@@ -12,7 +12,6 @@ public struct MessagesMessageData
     public int SenderId;
     public int ReceiverId;
     public string Content;
-    public bool Read;
     public TimeSpan Time;
 }
 

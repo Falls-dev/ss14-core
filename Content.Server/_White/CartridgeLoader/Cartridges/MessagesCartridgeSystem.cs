@@ -1,4 +1,5 @@
-﻿using Content.Server._White.Radio.Components;
+﻿using System.Linq;
+using Content.Server._White.Radio.Components;
 using Content.Server._White.Radio.EntitySystems;
 using Content.Server.CartridgeLoader;
 using Content.Shared.CartridgeLoader;
@@ -239,14 +240,16 @@ public sealed class MessagesCartridgeSystem : EntitySystem
         {
             List<(MessagesUserData, int?)> userList = [];
 
-            var nameDict = _messagesServerSystem.GetNameDict(component.LastServer);
+            var dictionary = _messagesServerSystem.GetNameDict(component.LastServer);
 
-            foreach (var nameEntry in nameDict.Keys)
+            foreach (var nameEntry in dictionary.Keys)
             {
                 if (nameEntry == currentUserId)
                     continue;
-                userList.Add((nameDict[nameEntry], nameEntry));
+                userList.Add((dictionary[nameEntry], nameEntry));
             }
+
+            userList.Sort((a, b) => TimeSpan.Compare(b.Item1.Messages.LastOrDefault().Time, a.Item1.Messages.LastOrDefault().Time));
 
             state = new MessagesUiState(MessagesUiStateMode.UserList, userList);
         }

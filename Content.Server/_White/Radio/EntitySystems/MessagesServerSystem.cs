@@ -83,7 +83,6 @@ public sealed class MessagesServerSystem : EntitySystem
         };
 
         _deviceNetworkSystem.QueuePacket(uid, null, packet);
-        Log.Error($"{GetMessages(uid, message.SenderId, message.ReceiverId)[0].Content}");
     }
 
     /// <summary>

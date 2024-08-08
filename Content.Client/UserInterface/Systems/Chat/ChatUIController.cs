@@ -580,7 +580,7 @@ public sealed class ChatUIController : UIController
         if (_entities.HasComponent<NetworkChatComponent>(localEnt))
         {
             FilterableChannels |= ChatChannel.Network;
-            CanSendChannels |= ChatSelectChannel.Changeling;
+            CanSendChannels |= ChatSelectChannel.Network;
         }
         // WD EDIT END
 

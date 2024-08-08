@@ -7,7 +7,6 @@ using Content.Client._White.Stalin;
 using Content.Client._White.Trail.Line.Manager;
 using Content.Client._White.TTS;
 using Content.Client.Administration.Managers;
-using Content.Client.Audio;
 using Content.Client.Changelog;
 using Content.Client.Chat.Managers;
 using Content.Client.Clickable;
@@ -72,7 +71,6 @@ namespace Content.Client.IoC
             IoCManager.Register<ITrailLineManager, TrailSplineManager>();
             IoCManager.Register<ReputationManager>();
             IoCManager.Register<IChatAbbreviationManager,ChatAbbreviationManager>();
-            IoCManager.Register<UIAudioManager>();
             //WD-EDIT
         }
     }

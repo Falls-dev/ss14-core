@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Numerics;
 using Content.Server.Administration;
 using Content.Shared.Administration;
@@ -37,7 +36,7 @@ Possible modes are:\n
             return;
         }
 
-        if (!uint.TryParse(args[1], NumberStyles.Any, CultureInfo.InvariantCulture, out var uid))
+        if (!uint.TryParse(args[1], out var uid))
         {
             shell.WriteError($"Failed parsing uid '{args[1]}'.");
             return;
@@ -59,7 +58,7 @@ Possible modes are:\n
                     return;
                 }
 
-                if (!float.TryParse(args[3], NumberStyles.Any, CultureInfo.InvariantCulture, out var x) || !float.TryParse(args[4], NumberStyles.Any, CultureInfo.InvariantCulture, out var y))
+                if (!float.TryParse(args[3], out var x) || !float.TryParse(args[4], out var y))
                 {
                     shell.WriteError("Failed parsing position.");
                     return;
@@ -107,7 +106,7 @@ Possible modes are:\n
                     return;
                 }
 
-                if (!double.TryParse(args[3], NumberStyles.Any, CultureInfo.InvariantCulture, out var degrees))
+                if (!double.TryParse(args[3], out var degrees))
                 {
                     shell.WriteError("Failed parsing degrees.");
                     return;
@@ -125,7 +124,7 @@ Possible modes are:\n
                     return;
                 }
 
-                if (!int.TryParse(args[3], NumberStyles.Any, CultureInfo.InvariantCulture, out var zIndex))
+                if (!int.TryParse(args[3], out var zIndex))
                 {
                     shell.WriteError("Failed parsing zIndex.");
                     return;

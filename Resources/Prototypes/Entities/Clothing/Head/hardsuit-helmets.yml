@@ -186,8 +186,6 @@
         Heat: 0.9
   - type: FlashImmunity # WD edit
   - type: FlashSoundSuppression
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #Brigmedic Hardsuit
 - type: entity
@@ -262,8 +260,6 @@
     lowPressureMultiplier: 1000
   - type: FlashImmunity # WD edit
   - type: FlashSoundSuppression
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #Inspector's Hardsuit
 - type: entity
@@ -273,16 +269,13 @@
   name: inspector's hardsuit helmet
   description: Lightweight hardsuit helmet that doesn't restrict your head movements. Belongs to the HoP.
   components:
-  - type: Sprite
-    sprite: Clothing/Head/Hardsuits/inspector.rsi
-  - type: Clothing
-    sprite: Clothing/Head/Hardsuits/inspector.rsi
-  - type: PressureProtection
-    highPressureMultiplier: 0.3
-    lowPressureMultiplier: 1000
-  - type: HelmetOverlay
-    radiationSensor: true
-
+    - type: Sprite
+      sprite: Clothing/Head/Hardsuits/inspector.rsi
+    - type: Clothing
+      sprite: Clothing/Head/Hardsuits/inspector.rsi
+    - type: PressureProtection
+      highPressureMultiplier: 0.3
+      lowPressureMultiplier: 1000
 
 #Chief Engineer's Hardsuit
 - type: entity
@@ -321,8 +314,6 @@
   - type: PressureProtection
     highPressureMultiplier: 0.6
     lowPressureMultiplier: 1000
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #Research Director's Hardsuit
 - type: entity
@@ -341,8 +332,6 @@
   - type: PressureProtection
     highPressureMultiplier: 0.60
     lowPressureMultiplier: 1000
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #Head of Security's hardsuit
 - type: entity
@@ -390,8 +379,6 @@
     radius: 7
     energy: 3
   - type: EyeProtection # WD edit
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #Head of Personnel's Hardsuit WD
 - type: entity
@@ -437,8 +424,6 @@
   - type: EyeProtection # WD edit
   - type: FlashImmunity # WD
   - type: FlashSoundSuppression
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #Blood-red Medic Hardsuit
 - type: entity
@@ -467,8 +452,6 @@
   - type: EyeProtection # WD edit
   - type: FlashImmunity # WD
   - type: FlashSoundSuppression
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #Syndicate Elite Hardsuit
 - type: entity
@@ -527,8 +510,6 @@
   - type: EyeProtection # WD edit
   - type: FlashImmunity # WD
   - type: FlashSoundSuppression
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #Cybersun Juggernaut Hardsuit
 - type: entity
@@ -584,8 +565,6 @@
   - type: EyeProtection
   - type: FlashImmunity
   - type: FlashSoundSuppression
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #Organic Space Suit
 - type: entity
@@ -602,8 +581,6 @@
   - type: PressureProtection
     highPressureMultiplier: 0.225
     lowPressureMultiplier: 1000
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #Pirate EVA Suit (Deep Space EVA Suit)
 - type: entity
@@ -621,8 +598,6 @@
   - type: PressureProtection
     highPressureMultiplier: 0.3
     lowPressureMultiplier: 1000
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #Pirate Captain Hardsuit
 - type: entity
@@ -640,8 +615,6 @@
   - type: PressureProtection
     highPressureMultiplier: 0.3
     lowPressureMultiplier: 1000
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #CENTCOMM / ERT HARDSUITS
 #ERT Leader Hardsuit
@@ -668,8 +641,6 @@
   - type: EyeProtection # WD edit
   - type: FlashImmunity # WD
   - type: FlashSoundSuppression
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #ERT Chaplain Hardsuit
 - type: entity
@@ -753,8 +724,6 @@
   - type: EyeProtection # WD edit
   - type: FlashImmunity # WD
   - type: FlashSoundSuppression
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #ERT Janitor Hardsuit
 - type: entity
@@ -815,8 +784,6 @@
   - type: EyeProtection # WD edit
   - type: FlashImmunity # WD
   - type: FlashSoundSuppression
-  - type: HelmetOverlay
-    radiationSensor: true
 
 #Deathsquad Hardsuit
 - type: entity

@@ -69,9 +69,6 @@ namespace Content.Shared.CCVar
         public static readonly CVarDef<float> AmbienceVolume =
             CVarDef.Create("ambience.volume", 1.5f, CVar.ARCHIVE | CVar.CLIENTONLY);
 
-        public static readonly CVarDef<float> UIVolume =
-            CVarDef.Create("ui.volume", 0.0f, CVar.ARCHIVE | CVar.CLIENTONLY);
-
         /// <summary>
         /// Ambience music volume.
         /// </summary>
@@ -80,21 +77,15 @@ namespace Content.Shared.CCVar
 
         /// <summary>
         /// Lobby / round end music volume.
-        /// Whether to play the station ambience music.
         /// </summary>
         public static readonly CVarDef<float> LobbyMusicVolume =
             CVarDef.Create("ambience.lobby_music_volume", 0.50f, CVar.ARCHIVE | CVar.CLIENTONLY);
-        public static readonly CVarDef<bool> AmbienceMusicEnabled =
-            CVarDef.Create("ambience.music", true, CVar.ARCHIVE | CVar.CLIENTONLY);
 
         /// <summary>
         /// UI volume.
-        /// Ambience music volume.
         /// </summary>
         public static readonly CVarDef<float> InterfaceVolume =
             CVarDef.Create("audio.interface_volume", 0.50f, CVar.ARCHIVE | CVar.CLIENTONLY);
-        public static readonly CVarDef<float> AmbienceMusicVolume =
-            CVarDef.Create("ambience.music_volume", 0.0f, CVar.ARCHIVE | CVar.CLIENTONLY);
 
         /*
          * Status
@@ -2100,17 +2091,6 @@ namespace Content.Shared.CCVar
 
         public static readonly CVarDef<bool> GatewayGeneratorEnabled =
             CVarDef.Create("gateway.generator_enabled", true);
-
-        /*
-        * GRAPHICS
-        */
-
-        public static readonly CVarDef<bool> Shaders =
-            CVarDef.Create("graphics.shaders", true, CVar.CLIENTONLY | CVar.ARCHIVE);
-
-        public static readonly CVarDef<bool> FilmGrain =
-            CVarDef.Create("graphics.film_grain", true, CVar.CLIENTONLY | CVar.ARCHIVE);
-
 
         /*
          * DEBUG

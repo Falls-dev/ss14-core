@@ -7,10 +7,10 @@ using Content.Client._White.Sponsors;
 using Content.Client._White.Stalin;
 using Content.Client._White.TTS;
 using Content.Client.Administration.Managers;
-using Content.Client.Audio;
 using Content.Client.Changelog;
 using Content.Client.Chat.Managers;
 using Content.Client.Eui;
+using Content.Client.Flash;
 using Content.Client.Fullscreen;
 using Content.Client.GhostKick;
 using Content.Client.Guidebook;
@@ -19,12 +19,10 @@ using Content.Client.Input;
 using Content.Client.IoC;
 using Content.Client.Launcher;
 using Content.Client.MainMenu;
-using Content.Client.Overlays;
 using Content.Client.Parallax.Managers;
 using Content.Client.Players.PlayTimeTracking;
 using Content.Client.Preferences;
 using Content.Client.Radiation.Overlays;
-using Content.Client.Reflection;
 using Content.Client.Replay;
 using Content.Client.Screenshot;
 using Content.Client.Singularity;
@@ -40,11 +38,10 @@ using Robust.Client.Input;
 using Robust.Client.Replays.Loading;
 using Robust.Client.State;
 using Robust.Client.UserInterface;
+using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Reflection;
-using Robust.Shared;
 using Robust.Shared.Replays;
 
 namespace Content.Client.Entry
@@ -91,11 +88,6 @@ namespace Content.Client.Entry
         [Dependency] private readonly TTSManager _ttsManager = default!;
         [Dependency] private readonly ReputationManager _reputationManager = default!;
         [Dependency] private readonly IChatAbbreviationManager _chatAbbreviationManager = default!;
-
-        [Dependency] private readonly IReflectionManager _refl = default!;
-        [Dependency] private readonly UIAudioManager _uiAudio = default!;
-
-        public const int NetBufferSizeOverride = 2;
         //WD-EDIT
 
         public override void Init()
@@ -188,8 +180,8 @@ namespace Content.Client.Entry
 
             _overlayManager.AddOverlay(new SingularityOverlay());
             _overlayManager.AddOverlay(new RadiationPulseOverlay());
-            _overlayManager.AddOverlay(new GrainOverlay());
-
+            // _overlayManager.AddOverlay(new GrainOverlay());
+            // _overlayManager.AddOverlay(new AtmOverlay());
             _chatManager.Initialize();
             _clientPreferencesManager.Initialize();
             _euiManager.Initialize();
@@ -204,12 +196,11 @@ namespace Content.Client.Entry
             _jukeboxSyncManager.Initialize();
             _ttsManager.Initialize();
             _reputationManager.Initialize();
-            _uiAudio.Initialize();
             //WD-EDIT
 
             _baseClient.RunLevelChanged += (_, args) =>
             {
-                if (args.NewLevel == ClientRunLevel.Initialize && args.OldLevel != ClientRunLevel.SinglePlayerGame)
+                if (args.NewLevel == ClientRunLevel.Initialize)
                 {
                     SwitchToDefaultState(args.OldLevel == ClientRunLevel.Connected ||
                                          args.OldLevel == ClientRunLevel.InGame);
@@ -246,14 +237,12 @@ namespace Content.Client.Entry
                 var state = (LauncherConnecting) _stateManager.CurrentState;
 
                 if (disconnected)
+                {
                     state.SetDisconnected();
+                }
             }
             else
             {
-                // Calling this in integration tests causes to fail some of them.
-                if (!_refl.IsInIntegrationTest())
-                    _baseClient.StartSinglePlayer();
-
                 _stateManager.RequestStateChange<MainScreen>();
             }
         }

@@ -60,7 +60,6 @@ namespace Content.Client.Stylesheets
             progressBarForeground.SetContentMarginOverride(StyleBox.Margin.Vertical, 14.5f);
 
             var textureInvertedTriangle = resCache.GetTexture("/Textures/Interface/Nano/inverted_triangle.svg.png");
-            var styleBase = new StyleBase(resCache);
 
             var tabContainerPanel = new StyleBoxTexture();
             tabContainerPanel.SetPatchMargin(StyleBox.Margin.All, 2);
@@ -70,7 +69,7 @@ namespace Content.Client.Stylesheets
             var tabContainerBoxInactive = new StyleBoxFlat {BackgroundColor = new Color(32, 32, 32)};
             tabContainerBoxInactive.SetContentMarginOverride(StyleBox.Margin.Horizontal, 5);
 
-            Stylesheet = new Stylesheet(styleBase.Stylesheet.Rules.Concat(new StyleRule[]
+            Stylesheet = new Stylesheet(BaseRules.Concat(new StyleRule[]
             {
                 Element<Label>().Class(StyleClassLabelHeading)
                     .Prop(Label.StylePropertyFont, notoSansBold16)

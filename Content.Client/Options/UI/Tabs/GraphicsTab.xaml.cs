@@ -75,8 +75,6 @@ namespace Content.Client.Options.UI.Tabs
             FpsCounterCheckBox.OnToggled += OnCheckBoxToggled;
             LogInChatCheckBox.OnToggled += OnCheckBoxToggled;
             ShowTrailsCheckBox.OnToggled += OnCheckBoxToggled;
-            FilmGrainCheckBox.OnToggled += OnFilmGrainCheckBoxToggled;
-            ShadersCheckBox.OnToggled += OnShadersCheckBoxToggled;
             ApplyButton.OnPressed += OnApplyButtonPressed;
             VSyncCheckBox.Pressed = _cfg.GetCVar(CVars.DisplayVSync);
             FullscreenCheckBox.Pressed = ConfigIsFullscreen;
@@ -91,8 +89,6 @@ namespace Content.Client.Options.UI.Tabs
             LogInChatCheckBox.Pressed = _cfg.GetCVar(WhiteCVars.LogChatActions);
             ShowTrailsCheckBox.Pressed = _cfg.GetCVar(WhiteCVars.ShowTrails);
             ViewportWidthSlider.Value = _cfg.GetCVar(CCVars.ViewportWidth);
-            FilmGrainCheckBox.Pressed = _cfg.GetCVar(CCVars.FilmGrain);
-            ShadersCheckBox.Pressed = _cfg.GetCVar(CCVars.Shaders);
 
             _cfg.OnValueChanged(CCVars.ViewportMinimumWidth, _ => UpdateViewportWidthRange());
             _cfg.OnValueChanged(CCVars.ViewportMaximumWidth, _ => UpdateViewportWidthRange());
@@ -100,17 +96,6 @@ namespace Content.Client.Options.UI.Tabs
             UpdateViewportWidthRange();
             UpdateViewportWidthDisplay();
             UpdateViewportScale();
-            UpdateApplyButton();
-        }
-
-
-        private void OnShadersCheckBoxToggled(BaseButton.ButtonToggledEventArgs obj)
-        {
-            UpdateApplyButton();
-        }
-
-        private void OnFilmGrainCheckBoxToggled(BaseButton.ButtonToggledEventArgs obj)
-        {
             UpdateApplyButton();
         }
 
@@ -138,8 +123,6 @@ namespace Content.Client.Options.UI.Tabs
             _cfg.SetCVar(WhiteCVars.LogChatActions, LogInChatCheckBox.Pressed);
             _cfg.SetCVar(WhiteCVars.ShowTrails, ShowTrailsCheckBox.Pressed);
             _cfg.SetCVar(CCVars.ViewportWidth, (int) ViewportWidthSlider.Value);
-            _cfg.SetCVar(CCVars.FilmGrain, FilmGrainCheckBox.Pressed);
-            _cfg.SetCVar(CCVars.Shaders, ShadersCheckBox.Pressed);
 
             _cfg.SaveToFile();
             UpdateApplyButton();
@@ -171,9 +154,6 @@ namespace Content.Client.Options.UI.Tabs
             var isLogInChatSame = LogInChatCheckBox.Pressed == _cfg.GetCVar(WhiteCVars.LogChatActions);
             var isShowTrailsSame = ShowTrailsCheckBox.Pressed == _cfg.GetCVar(WhiteCVars.ShowTrails);
             var isWidthSame = (int) ViewportWidthSlider.Value == _cfg.GetCVar(CCVars.ViewportWidth);
-            var isLayoutSame = HudLayoutOption.SelectedMetadata is string opt && opt == _cfg.GetCVar(CCVars.UILayout);
-            var isFilmGrainSame = FilmGrainCheckBox.Pressed == _cfg.GetCVar(CCVars.FilmGrain);
-            var isShaderSame = ShadersCheckBox.Pressed == _cfg.GetCVar(CCVars.Shaders);
 
             ApplyButton.Disabled = isVSyncSame &&
                                    isFullscreenSame &&
@@ -186,9 +166,6 @@ namespace Content.Client.Options.UI.Tabs
                                    isPLQSame &&
                                    isFpsCounterVisibleSame &&
                                    isWidthSame &&
-                                   isLayoutSame &&
-                                   isFilmGrainSame &&
-                                   isShaderSame &&
                                    isLogInChatSame &&
                                    isShowTrailsSame;
         }

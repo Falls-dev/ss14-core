@@ -1,13 +1,10 @@
 using System.Text.RegularExpressions;
-using Content.Client.Audio;
 using Content.Client.MainMenu.UI;
 using Content.Client.UserInterface.Systems.EscapeMenu;
 using Robust.Client;
-using Robust.Client.Audio;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared;
-using Robust.Shared.Audio;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Utility;
@@ -26,11 +23,9 @@ namespace Content.Client.MainMenu
         [Dependency] private readonly IConfigurationManager _configurationManager = default!;
         [Dependency] private readonly IGameController _controllerProxy = default!;
         [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
-        [Dependency] private readonly UIAudioManager _uiAudio = default!;
 
         private MainMenuControl _mainMenuControl = default!;
         private bool _isConnecting;
-        private AudioSystem.PlayingStream? _ambient;
 
         // ReSharper disable once InconsistentNaming
         private static readonly Regex IPv6Regex = new(@"\[(.*:.*:.*)](?::(\d+))?");
@@ -48,7 +43,6 @@ namespace Content.Client.MainMenu
             _mainMenuControl.ChangelogButton.OnPressed += ChangelogButtonPressed;
 
             _client.RunLevelChanged += RunLevelChanged;
-            _ambient = _uiAudio.Play("/Audio/UI/main_menu_ambient.ogg", AudioParams.Default.WithLoop(true).WithVolume(-5f));
         }
 
         /// <inheritdoc />
@@ -58,7 +52,6 @@ namespace Content.Client.MainMenu
             _netManager.ConnectFailed -= _onConnectFailed;
 
             _mainMenuControl.Dispose();
-            _ambient?.Stop();
         }
 
         private void ChangelogButtonPressed(BaseButton.ButtonEventArgs args)
@@ -115,7 +108,6 @@ namespace Content.Client.MainMenu
             _netManager.ConnectFailed += _onConnectFailed;
             try
             {
-                _client.StopSinglePlayer();
                 ParseAddress(address, out var ip, out var port);
                 _client.ConnectToServer(ip, port);
             }
@@ -125,7 +117,6 @@ namespace Content.Client.MainMenu
                 Logger.Warning(e.ToString());
                 _netManager.ConnectFailed -= _onConnectFailed;
                 _setConnectingState(false);
-                _client.StartSinglePlayer();
             }
         }
 
@@ -186,7 +177,6 @@ namespace Content.Client.MainMenu
             _userInterfaceManager.Popup(Loc.GetString("main-menu-failed-to-connect",("reason", args.Reason)));
             _netManager.ConnectFailed -= _onConnectFailed;
             _setConnectingState(false);
-            _client.StartSinglePlayer();
         }
 
         private void _setConnectingState(bool state)

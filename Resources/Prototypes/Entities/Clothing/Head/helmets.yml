@@ -160,10 +160,8 @@
     tags:
     - HidesHair
     - WhitelistChameleon
-  - type: IdentityBlocker
   - type: IngestionBlocker
-  - type: HelmetOverlay
-    texture: "/Textures/Interface/Overlays/helmet_overlay.png"
+  - type: IdentityBlocker
 
 #Templar Helmet
 - type: entity

@@ -1,25 +1,14 @@
 # Хз куда это
 #- /Audio/Lobby/itachi.ogg
 #- /Audio/Lobby/bobby.ogg
-#- /Audio/Lobby/guts.ogg
-#- /Audio/Lobby/fear.ogg
-#- /Audio/Lobby/all_that_i_can_see.ogg
-#- /Audio/Lobby/crokett_39_s_theme.ogg
-#- /Audio/Lobby/delirium.ogg
-#- /Audio/Lobby/end.ogg
-#- /Audio/Lobby/magicfly.ogg
-#- /Audio/Lobby/space.ogg
-#- /Audio/Lobby/space_oddity.ogg
-#- /Audio/Lobby/title1.ogg
-#- /Audio/Lobby/title2.ogg
 
 - type: soundCollection
   id: LobbyMusicMeme
   files:
-  - /Audio/Lobby/Meme/Govnovoz1.ogg
-  - /Audio/Lobby/Meme/Govnovoz2.ogg
-  - /Audio/Lobby/Meme/Govnovoz3.ogg
-  - /Audio/Lobby/Meme/Govnovoz.ogg
+   - /Audio/Lobby/Meme/Govnovoz1.ogg
+   - /Audio/Lobby/Meme/Govnovoz2.ogg
+   - /Audio/Lobby/Meme/Govnovoz3.ogg
+   - /Audio/Lobby/Meme/Govnovoz.ogg
 
 - type: soundCollection
   id: LobbyMusicSongs
@@ -35,13 +24,13 @@
 - type: soundCollection
   id: LobbyMusicWhite
   files:
-  - /Audio/Lobby/White/thunderdome.ogg
-  - /Audio/Lobby/White/singuloose.ogg
-  - /Audio/Lobby/White/lasers_rip_apart_the_bulkhead.ogg
-  - /Audio/Lobby/White/every_light_is_blinking_at_once.ogg
-  - /Audio/Lobby/White/atomicamnesiammx.ogg
-  - /Audio/Lobby/White/Spac_Stac.ogg
-  - /Audio/Lobby/White/comet_haley.ogg
+    - /Audio/Lobby/White/thunderdome.ogg
+    - /Audio/Lobby/White/singuloose.ogg
+    - /Audio/Lobby/White/lasers_rip_apart_the_bulkhead.ogg
+    - /Audio/Lobby/White/every_light_is_blinking_at_once.ogg
+    - /Audio/Lobby/White/atomicamnesiammx.ogg
+    - /Audio/Lobby/White/Spac_Stac.ogg
+    - /Audio/Lobby/White/comet_haley.ogg
 
 - type: soundCollection
   id: LobbyMusicWhitePack
@@ -61,9 +50,9 @@
 - type: soundCollection
   id: LobbyMusicSS13
   files:
-  - /Audio/Lobby/SS13/title2.ogg
-  - /Audio/Lobby/SS13/title3.ogg
-  - /Audio/Lobby/SS13/absconditus.ogg
-  - /Audio/Lobby/SS13/endless_space.ogg
-  - /Audio/Lobby/SS13/mod.flip-flap.ogg
-  - /Audio/Lobby/SS13/pwmur.ogg
+    - /Audio/Lobby/SS13/title2.ogg
+    - /Audio/Lobby/SS13/title3.ogg
+    - /Audio/Lobby/SS13/absconditus.ogg
+    - /Audio/Lobby/SS13/endless_space.ogg
+    - /Audio/Lobby/SS13/mod.flip-flap.ogg
+    - /Audio/Lobby/SS13/pwmur.ogg

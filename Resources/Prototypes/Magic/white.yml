@@ -392,11 +392,28 @@
     - type: Magic
       requiresClothes: true
     - type: InstantAction
-      useDelay: 30
+      useDelay: 60
       itemIconStyle: BigAction
       checkCanInteract: false
       icon:
         sprite: Objects/Magic/magicactions.rsi
         state: rod_form
       event: !type:RodFormSpellEvent
-        speech: "SCYAR NILA!"
+        speech: "CLANG!"
+
+- type: entity
+  id: ActionBlindSpell
+  name: Blind
+  noSpawn: true
+  components:
+    - type: Magic
+      requiresClothes: true
+    - type: InstantAction
+      useDelay: 30
+      itemIconStyle: BigAction
+      checkCanInteract: false
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: blind
+      event: !type:BlindSpellEvent
+        speech: "STI KALY!"

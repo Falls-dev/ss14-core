@@ -187,3 +187,12 @@
   - type: Scroll
     actionId: ActionRodFormSpell
     learnPopup: scroll-component-rodform
+
+- type: entity
+  id: ScrollBlind
+  parent: BaseScroll
+  name: "Blind scroll"
+  components:
+  - type: Scroll
+    actionId: ActionBlindSpell
+    learnPopup: scroll-component-blind

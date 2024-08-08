@@ -34,6 +34,7 @@ using Content.Shared.Cluwne;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
@@ -45,6 +46,7 @@ using Content.Shared.Magic;
 using Content.Shared.Maps;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
 using Content.Shared.Physics;
 using Content.Shared.Polymorph;
@@ -94,6 +96,7 @@ public sealed class WizardSpellsSystem : EntitySystem
     [Dependency] private readonly ChargingSystem _charging = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly PolymorphSystem _polymorph = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
 
     #endregion
 
@@ -118,6 +121,7 @@ public sealed class WizardSpellsSystem : EntitySystem
         SubscribeLocalEvent<ForceSpellEvent>(OnForceSpell);
         SubscribeLocalEvent<ArcSpellEvent>(OnArcSpell);
         SubscribeLocalEvent<RodFormSpellEvent>(OnRodFormSpell);
+        SubscribeLocalEvent<BlindSpellEvent>(OnBlindSpell);
 
         SubscribeLocalEvent<MagicComponent, BeforeCastSpellEvent>(OnBeforeCastSpell);
     }
@@ -865,6 +869,30 @@ public sealed class WizardSpellsSystem : EntitySystem
         {
             RemComp<InputMoverComponent>(rod.Value);
             _throwingSystem.TryThrow(rod.Value, angle, 20, msg.Performer);
+        }
+
+        Cast(msg);
+    }
+
+    #endregion
+
+    #region Blind
+
+   private void OnBlindSpell(BlindSpellEvent msg)
+    {
+        foreach (var e in _lookup.GetEntitiesInRange(msg.Performer, 8))
+        {
+            var wizardQuery = GetEntityQuery<WizardComponent>();
+            var humanoidQuery = GetEntityQuery<HumanoidAppearanceComponent>();
+
+            if (!humanoidQuery.HasComponent(e) || !_mobState.IsAlive(e) ||
+                wizardQuery.HasComponent(e))
+                continue;
+
+            _statusEffectsSystem.TryAddStatusEffect<TemporaryBlindnessComponent>(e, "TemporaryBlindness",
+                TimeSpan.FromSeconds(5), false);
+
+            _chat.TryEmoteWithChat(e, "Scream");
         }
 
         Cast(msg);

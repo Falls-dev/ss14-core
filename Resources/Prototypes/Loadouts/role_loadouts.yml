@@ -15,8 +15,8 @@
   - CaptainPDA # WD
   - SelfDefenceDevices # WD
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
+  - CommonUnderwearBottomCaptain
+  - CommonUnderwearBraCaptain
   - CommonUnderwearSocks
 
 - type: roleLoadout
@@ -35,8 +35,8 @@
   - HoPPDA # WD
   - SelfDefenceDevices # WD
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
+  - CommonUnderwearBottomHOP
+  - CommonUnderwearBraHOP
   - CommonUnderwearSocks
 
 # Civilian
@@ -250,8 +250,8 @@
   - SelfDefenceDevices # WD
   - CommonCargoJobTrinkets
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
+  - CommonUnderwearBottomQM
+  - CommonUnderwearBraQM
   - CommonUnderwearSocks
 
 - type: roleLoadout
@@ -290,7 +290,6 @@
   - CommonUnderwearBottom
   - CommonUnderwearBra
   - CommonUnderwearSocks
-  -
 # Engineering
 - type: roleLoadout
   id: JobChiefEngineer
@@ -306,8 +305,8 @@
   - ChiefEngineerPDA # WD
   - SelfDefenceDevices # WD
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
+  - CommonUnderwearBottomCE
+  - CommonUnderwearBraCE
   - CommonUnderwearSocks
 
 - type: roleLoadout
@@ -389,8 +388,8 @@
   - ResearchDirectorPDA
   - SelfDefenceDevices # WD
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
+  - CommonUnderwearBottomRD
+  - CommonUnderwearBraRD
   - CommonUnderwearSocks
 
 - type: roleLoadout
@@ -462,8 +461,8 @@
   - SelfDefenceDevices # WD
   - CommonSecurityJobTrinkets # WD
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
+  - CommonUnderwearBottomHOS
+  - CommonUnderwearBraHOS
   - CommonUnderwearSocks
 
 - type: roleLoadout
@@ -577,8 +576,8 @@
   - ChiefMedicalOfficerPDA
   - SelfDefenceDevices # WD
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
+  - CommonUnderwearBottomCMO
+  - CommonUnderwearBraCMO
   - CommonUnderwearSocks
 
 - type: roleLoadout
@@ -688,8 +687,8 @@
   - SelfDefenceDevices # WD
   - InspectorJobTrinkets
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
+  - CommonUnderwearBottomInspector
+  - CommonUnderwearBraInspector
   - CommonUnderwearSocks
 
 - type: roleLoadout

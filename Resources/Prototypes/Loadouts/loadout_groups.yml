@@ -2230,9 +2230,8 @@
 #Bottom
 - type: loadoutGroup # WD
   id: CommonUnderwearBottom
-  name: loadout-group-underwear-common-bottom
+  name: loadout-group-underwear-bottom
   minLimit: 0
-  maxLimit: 1
   loadouts:
   - WhiteBoxer # WD
   - HeartBoxer # WD
@@ -2253,9 +2252,8 @@
 #Bra
 - type: loadoutGroup # WD
   id: CommonUnderwearBra
-  name: loadout-group-underwear-general-bra
+  name: loadout-group-underwear-bra
   minLimit: 0
-  maxLimit: 1
   loadouts:
   - WhiteBra # WD
   - StripedBra # WD
@@ -2277,9 +2275,8 @@
 #Socks
 - type: loadoutGroup # WD
   id: CommonUnderwearSocks
-  name: loadout-group-underwear-general-socks
+  name: loadout-group-underwear-socks
   minLimit: 0
-  maxLimit: 1
   loadouts:
   - Socks1White # WD
   - Socks2White # WD
@@ -2300,3 +2297,387 @@
   - Stockings6Orange # WD
   - Stockings7Blue # WD
   - Stockings8Yellow # WD
+
+#BottomCaptain
+- type: loadoutGroup # WD
+  id: CommonUnderwearBottomCaptain
+  name: loadout-group-underwear-bottom-captain
+  minLimit: 0
+  loadouts:
+  - CaptainBoxers # WD
+  - CaptainPanties # WD
+  - WhiteBoxer # WD
+  - HeartBoxer # WD
+  - StripedBoxer # WD
+  - Briefs # WD
+  - Jockstrap # WD
+  - Mankini # WD
+  - BeeShorts # WD
+  - WhitePanties # WD
+  - StripedPanties # WD
+  - SlimPanties # WD
+  - SwimmingPanties # WD
+  - ThongPanties # WD
+  - ThinPanties # WD
+  - NekoPanties # WD
+  - BeePanties # WD
+
+#BraCaptain
+- type: loadoutGroup # WD
+  id: CommonUnderwearBraCaptain
+  name: loadout-group-underwear-bra-captain
+  minLimit: 0
+  loadouts:
+  - CaptainBra # WD
+  - WhiteBra # WD
+  - StripedBra # WD
+  - BinderBra # WD
+  - SportBra # WD
+  - SportBraAlt # WD
+  - SwimmingBra # WD
+  - SwimmingBraAlt # WD
+  - TubetopBra # WD
+  - BinderStraplessBra # WD
+  - StraplessBra # WD
+  - StraplessBraAlt # WD
+  - HalterneckBra # WD
+  - ThinBra # WD
+  - NekoBra # WD
+  - BeeBra # WD
+  - CowBra # WD
+
+#BottomCE
+- type: loadoutGroup # WD
+  id: CommonUnderwearBottomCE
+  name: loadout-group-underwear-bottom-CE
+  minLimit: 0
+  loadouts:
+  - CEBoxers # WD
+  - CEPanties # WD
+  - WhiteBoxer # WD
+  - HeartBoxer # WD
+  - StripedBoxer # WD
+  - Briefs # WD
+  - Jockstrap # WD
+  - Mankini # WD
+  - BeeShorts # WD
+  - WhitePanties # WD
+  - StripedPanties # WD
+  - SlimPanties # WD
+  - SwimmingPanties # WD
+  - ThongPanties # WD
+  - ThinPanties # WD
+  - NekoPanties # WD
+  - BeePanties # WD
+
+#BraCE
+- type: loadoutGroup # WD
+  id: CommonUnderwearBraCE
+  name: loadout-group-underwear-bra-CE
+  minLimit: 0
+  loadouts:
+  - CEBra # WD
+  - WhiteBra # WD
+  - StripedBra # WD
+  - BinderBra # WD
+  - SportBra # WD
+  - SportBraAlt # WD
+  - SwimmingBra # WD
+  - SwimmingBraAlt # WD
+  - TubetopBra # WD
+  - BinderStraplessBra # WD
+  - StraplessBra # WD
+  - StraplessBraAlt # WD
+  - HalterneckBra # WD
+  - ThinBra # WD
+  - NekoBra # WD
+  - BeeBra # WD
+  - CowBra # WD
+
+#BottomCMO
+- type: loadoutGroup # WD
+  id: CommonUnderwearBottomCMO
+  name: loadout-group-underwear-bottom-CMO
+  minLimit: 0
+  loadouts:
+  - CMOBoxers # WD
+  - CMOPanties # WD
+  - WhiteBoxer # WD
+  - HeartBoxer # WD
+  - StripedBoxer # WD
+  - Briefs # WD
+  - Jockstrap # WD
+  - Mankini # WD
+  - BeeShorts # WD
+  - WhitePanties # WD
+  - StripedPanties # WD
+  - SlimPanties # WD
+  - SwimmingPanties # WD
+  - ThongPanties # WD
+  - ThinPanties # WD
+  - NekoPanties # WD
+  - BeePanties # WD
+
+#BraCMO
+- type: loadoutGroup # WD
+  id: CommonUnderwearBraCMO
+  name: loadout-group-underwear-bra-CMO
+  minLimit: 0
+  loadouts:
+  - CMOBra # WD
+  - WhiteBra # WD
+  - StripedBra # WD
+  - BinderBra # WD
+  - SportBra # WD
+  - SportBraAlt # WD
+  - SwimmingBra # WD
+  - SwimmingBraAlt # WD
+  - TubetopBra # WD
+  - BinderStraplessBra # WD
+  - StraplessBra # WD
+  - StraplessBraAlt # WD
+  - HalterneckBra # WD
+  - ThinBra # WD
+  - NekoBra # WD
+  - BeeBra # WD
+  - CowBra # WD
+
+#BottomHOP
+- type: loadoutGroup # WD
+  id: CommonUnderwearBottomHOP
+  name: loadout-group-underwear-bottom-HOP
+  minLimit: 0
+  loadouts:
+  - HOPBoxers # WD
+  - HOPPanties # WD
+  - WhiteBoxer # WD
+  - HeartBoxer # WD
+  - StripedBoxer # WD
+  - Briefs # WD
+  - Jockstrap # WD
+  - Mankini # WD
+  - BeeShorts # WD
+  - WhitePanties # WD
+  - StripedPanties # WD
+  - SlimPanties # WD
+  - SwimmingPanties # WD
+  - ThongPanties # WD
+  - ThinPanties # WD
+  - NekoPanties # WD
+  - BeePanties # WD
+
+#BraHOP
+- type: loadoutGroup # WD
+  id: CommonUnderwearBraHOP
+  name: loadout-group-underwear-bra-HOP
+  minLimit: 0
+  loadouts:
+  - HOPBra # WD
+  - WhiteBra # WD
+  - StripedBra # WD
+  - BinderBra # WD
+  - SportBra # WD
+  - SportBraAlt # WD
+  - SwimmingBra # WD
+  - SwimmingBraAlt # WD
+  - TubetopBra # WD
+  - BinderStraplessBra # WD
+  - StraplessBra # WD
+  - StraplessBraAlt # WD
+  - HalterneckBra # WD
+  - ThinBra # WD
+  - NekoBra # WD
+  - BeeBra # WD
+  - CowBra # WD
+
+#BottomHOS
+- type: loadoutGroup # WD
+  id: CommonUnderwearBottomHOS
+  name: loadout-group-underwear-bottom-HOS
+  minLimit: 0
+  loadouts:
+  - HOSBoxers # WD
+  - HOSPanties # WD
+  - WhiteBoxer # WD
+  - HeartBoxer # WD
+  - StripedBoxer # WD
+  - Briefs # WD
+  - Jockstrap # WD
+  - Mankini # WD
+  - BeeShorts # WD
+  - WhitePanties # WD
+  - StripedPanties # WD
+  - SlimPanties # WD
+  - SwimmingPanties # WD
+  - ThongPanties # WD
+  - ThinPanties # WD
+  - NekoPanties # WD
+  - BeePanties # WD
+
+#BraHOS
+- type: loadoutGroup # WD
+  id: CommonUnderwearBraHOS
+  name: loadout-group-underwear-bra-HOS
+  minLimit: 0
+  loadouts:
+  - HOSBra # WD
+  - WhiteBra # WD
+  - StripedBra # WD
+  - BinderBra # WD
+  - SportBra # WD
+  - SportBraAlt # WD
+  - SwimmingBra # WD
+  - SwimmingBraAlt # WD
+  - TubetopBra # WD
+  - BinderStraplessBra # WD
+  - StraplessBra # WD
+  - StraplessBraAlt # WD
+  - HalterneckBra # WD
+  - ThinBra # WD
+  - NekoBra # WD
+  - BeeBra # WD
+  - CowBra # WD
+
+#InspectorCaptain
+- type: loadoutGroup # WD
+  id: CommonUnderwearBottomInspector
+  name: loadout-group-underwear-bottom-Inspector
+  minLimit: 0
+  loadouts:
+  - InspectorBoxers # WD
+  - InspectorPanties # WD
+  - WhiteBoxer # WD
+  - HeartBoxer # WD
+  - StripedBoxer # WD
+  - Briefs # WD
+  - Jockstrap # WD
+  - Mankini # WD
+  - BeeShorts # WD
+  - WhitePanties # WD
+  - StripedPanties # WD
+  - SlimPanties # WD
+  - SwimmingPanties # WD
+  - ThongPanties # WD
+  - ThinPanties # WD
+  - NekoPanties # WD
+  - BeePanties # WD
+
+#BraInspector
+- type: loadoutGroup # WD
+  id: CommonUnderwearBraInspector
+  name: loadout-group-underwear-bra-Inspector
+  minLimit: 0
+  loadouts:
+  - InspectorBra # WD
+  - WhiteBra # WD
+  - StripedBra # WD
+  - BinderBra # WD
+  - SportBra # WD
+  - SportBraAlt # WD
+  - SwimmingBra # WD
+  - SwimmingBraAlt # WD
+  - TubetopBra # WD
+  - BinderStraplessBra # WD
+  - StraplessBra # WD
+  - StraplessBraAlt # WD
+  - HalterneckBra # WD
+  - ThinBra # WD
+  - NekoBra # WD
+  - BeeBra # WD
+  - CowBra # WD
+
+#BottomQM
+- type: loadoutGroup # WD
+  id: CommonUnderwearBottomQM
+  name: loadout-group-underwear-bottom-QM
+  minLimit: 0
+  loadouts:
+  - QMBoxers # WD
+  - QMPanties # WD
+  - WhiteBoxer # WD
+  - HeartBoxer # WD
+  - StripedBoxer # WD
+  - Briefs # WD
+  - Jockstrap # WD
+  - Mankini # WD
+  - BeeShorts # WD
+  - WhitePanties # WD
+  - StripedPanties # WD
+  - SlimPanties # WD
+  - SwimmingPanties # WD
+  - ThongPanties # WD
+  - ThinPanties # WD
+  - NekoPanties # WD
+  - BeePanties # WD
+
+#BraQM
+- type: loadoutGroup # WD
+  id: CommonUnderwearBraQM
+  name: loadout-group-underwear-bra-QM
+  minLimit: 0
+  loadouts:
+  - QMBra # WD
+  - WhiteBra # WD
+  - StripedBra # WD
+  - BinderBra # WD
+  - SportBra # WD
+  - SportBraAlt # WD
+  - SwimmingBra # WD
+  - SwimmingBraAlt # WD
+  - TubetopBra # WD
+  - BinderStraplessBra # WD
+  - StraplessBra # WD
+  - StraplessBraAlt # WD
+  - HalterneckBra # WD
+  - ThinBra # WD
+  - NekoBra # WD
+  - BeeBra # WD
+  - CowBra # WD
+
+#BottomRD
+- type: loadoutGroup # WD
+  id: CommonUnderwearBottomRD
+  name: loadout-group-underwear-bottom-RD
+  minLimit: 0
+  loadouts:
+  - RDBoxers # WD
+  - RDPanties # WD
+  - WhiteBoxer # WD
+  - HeartBoxer # WD
+  - StripedBoxer # WD
+  - Briefs # WD
+  - Jockstrap # WD
+  - Mankini # WD
+  - BeeShorts # WD
+  - WhitePanties # WD
+  - StripedPanties # WD
+  - SlimPanties # WD
+  - SwimmingPanties # WD
+  - ThongPanties # WD
+  - ThinPanties # WD
+  - NekoPanties # WD
+  - BeePanties # WD
+
+#BraRD
+- type: loadoutGroup # WD
+  id: CommonUnderwearBraRD
+  name: loadout-group-underwear-bra-RD
+  minLimit: 0
+  loadouts:
+  - RDBra # WD
+  - WhiteBra # WD
+  - StripedBra # WD
+  - BinderBra # WD
+  - SportBra # WD
+  - SportBraAlt # WD
+  - SwimmingBra # WD
+  - SwimmingBraAlt # WD
+  - TubetopBra # WD
+  - BinderStraplessBra # WD
+  - StraplessBra # WD
+  - StraplessBraAlt # WD
+  - HalterneckBra # WD
+  - ThinBra # WD
+  - NekoBra # WD
+  - BeeBra # WD
+  - CowBra # WD

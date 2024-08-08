@@ -36,12 +36,12 @@ public sealed class MessagesServerSystem : EntitySystem
             if (!TryComp(entityUid, out CartridgeComponent? cartComponent))
                 continue;
 
-            _messagesSystem.TryGetMessagesUser(cartComponent, out var messagesUser);
+            _messagesSystem.TryGetMessagesUser(cartridge, cartComponent, out var messagesUser);
 
             if (cartridge.UserUid == null || messagesUser.Name == Loc.GetString("messages-pda-unknown-name"))
                 continue;
 
-            component.NameDict[cartridge.UserUid.Value] = messagesUser;
+            component.Dictionary[cartridge.UserUid.Value] = messagesUser;
             cartridge.LastServer = uid;
         }
     }
@@ -53,13 +53,15 @@ public sealed class MessagesServerSystem : EntitySystem
     {
         if (!_singletonServerSystem.IsActiveServer(uid))
             return;
-        if (args.Data.TryGetValue<MessagesUser>(MessagesNetworkKeys.NewUser, out var messagesUser) && args.Data.TryGetValue<int>(MessagesNetworkKeys.UserId, out var userId))
+
+        if (args.Data.TryGetValue<MessagesUserData>(MessagesNetworkKeys.NewUser, out var messagesUser) && args.Data.TryGetValue<int>(MessagesNetworkKeys.UserId, out var userId))
         {
-            component.NameDict[userId] = messagesUser;
+            component.Dictionary[userId] = messagesUser;
 
             var packet = new NetworkPayload();
             _deviceNetworkSystem.QueuePacket(uid, args.SenderAddress, packet);
         }
+
         if (args.Data.TryGetValue<MessagesMessageData>(MessagesNetworkKeys.Message, out var message))
             SendMessage(uid, component, message);
     }
@@ -69,10 +71,11 @@ public sealed class MessagesServerSystem : EntitySystem
     /// </summary>
     private void SendMessage(EntityUid uid, MessagesServerComponent component, MessagesMessageData message)
     {
-        component.Messages.Add(message);
+        component.Dictionary[message.ReceiverId].Messages.Add(message);
+        component.Dictionary[message.SenderId].Messages.Add(message);
 
-        _adminLogger.Add(LogType.DeviceNetwork, $"{Loc.GetString("chat-manager-send-message", ("sender", component.NameDict[message.SenderId].Name + $" ({message.SenderId})"), ("receiver", component.NameDict[message.ReceiverId].Name + $" ({message.ReceiverId})"), ("message", message.Content))}");
-        _chat.SendNetworkChat(uid, Loc.GetString("chat-manager-send-message", ("sender", component.NameDict[message.SenderId].Name), ("receiver", component.NameDict[message.ReceiverId].Name), ("message", message.Content)), false);
+        _adminLogger.Add(LogType.DeviceNetwork, $"{Loc.GetString("chat-manager-send-message", ("sender", component.Dictionary[message.SenderId].Name + $" ({message.SenderId})"), ("receiver", component.Dictionary[message.ReceiverId].Name + $" ({message.ReceiverId})"), ("message", message.Content))}");
+        _chat.SendNetworkChat(uid, Loc.GetString("chat-manager-send-message", ("sender", component.Dictionary[message.SenderId].Name), ("receiver", component.Dictionary[message.ReceiverId].Name), ("message", message.Content)), false);
 
         var packet = new NetworkPayload()
         {
@@ -80,35 +83,29 @@ public sealed class MessagesServerSystem : EntitySystem
         };
 
         _deviceNetworkSystem.QueuePacket(uid, null, packet);
+        Log.Error($"{GetMessages(uid, message.SenderId, message.ReceiverId)[0].Content}");
     }
 
     /// <summary>
     /// Returns user
     /// </summary>
-    public bool TryGetUserFromDict(EntityUid? uid, int key, out MessagesUser messagesUser)
+    public bool TryGetUserFromDict(EntityUid? uid, int key, out MessagesUserData messagesUserData)
     {
-        if (!TryComp(uid, out MessagesServerComponent? component))
-        {
-            messagesUser = new MessagesUser(Loc.GetString("messages-pda-connection-error"), Loc.GetString("messages-pda-unknown-job"), "Specific");
+        messagesUserData = new MessagesUserData();
+
+        if (!TryComp(uid, out MessagesServerComponent? component) || !component.Dictionary.TryGetValue(key, out var keyValue))
             return false;
-        }
-        if (component.NameDict.TryGetValue(key, out var keyValue))
-        {
-            messagesUser = keyValue;
-            return true;
-        }
-        messagesUser = new MessagesUser(Loc.GetString("messages-pda-user-missing"), Loc.GetString("messages-pda-unknown-job"), "Specific");
-        return false;
+
+        messagesUserData = keyValue;
+        return true;
     }
 
     /// <summary>
-    /// Returns the name dictionary cache
+    /// Returns the user dictionary cache
     /// </summary>
-    public Dictionary<int, MessagesUser> GetNameDict(EntityUid? uid)
+    public Dictionary<int, MessagesUserData> GetNameDict(EntityUid? uid)
     {
-        if (!TryComp(uid, out MessagesServerComponent? component))
-            return new Dictionary<int, MessagesUser>();
-        return component.NameDict;
+        return !TryComp(uid, out MessagesServerComponent? component) ? new Dictionary<int, MessagesUserData>() : component.Dictionary;
     }
 
     /// <summary>
@@ -118,9 +115,11 @@ public sealed class MessagesServerSystem : EntitySystem
     {
         if (!TryComp(uid, out MessagesServerComponent? component))
             return [];
+
         return
         [
-            ..component.Messages.Where(message =>
+            ..component.Dictionary[id1]
+                .Messages.Where(message =>
                 message.SenderId == id1 && message.ReceiverId == id2 ||
                 message.SenderId == id2 && message.ReceiverId == id1)
         ];

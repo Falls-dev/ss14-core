@@ -1,0 +1,28 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Body parts by @Kilath",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "haven_tone1",
+            "directions": 4
+        },
+        {
+            "name": "haven_tone2",
+            "directions": 4
+        },
+        {
+            "name": "forked_long",
+            "directions": 4
+        },
+        {
+            "name": "swallow_tail",
+            "directions": 4
+        }
+
+    ]
+}

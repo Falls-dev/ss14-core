@@ -2301,7 +2301,7 @@
 #BottomCaptain
 - type: loadoutGroup # WD
   id: CommonUnderwearBottomCaptain
-  name: loadout-group-underwear-bottom-captain
+  name: loadout-group-underwear-bottom
   minLimit: 0
   loadouts:
   - CaptainBoxers # WD
@@ -2325,7 +2325,7 @@
 #BraCaptain
 - type: loadoutGroup # WD
   id: CommonUnderwearBraCaptain
-  name: loadout-group-underwear-bra-captain
+  name: loadout-group-underwear-bra
   minLimit: 0
   loadouts:
   - CaptainBra # WD
@@ -2349,7 +2349,7 @@
 #BottomCE
 - type: loadoutGroup # WD
   id: CommonUnderwearBottomCE
-  name: loadout-group-underwear-bottom-CE
+  name: loadout-group-underwear-bottom
   minLimit: 0
   loadouts:
   - CEBoxers # WD
@@ -2373,7 +2373,7 @@
 #BraCE
 - type: loadoutGroup # WD
   id: CommonUnderwearBraCE
-  name: loadout-group-underwear-bra-CE
+  name: loadout-group-underwear-bra
   minLimit: 0
   loadouts:
   - CEBra # WD
@@ -2397,7 +2397,7 @@
 #BottomCMO
 - type: loadoutGroup # WD
   id: CommonUnderwearBottomCMO
-  name: loadout-group-underwear-bottom-CMO
+  name: loadout-group-underwear-bottom
   minLimit: 0
   loadouts:
   - CMOBoxers # WD
@@ -2421,7 +2421,7 @@
 #BraCMO
 - type: loadoutGroup # WD
   id: CommonUnderwearBraCMO
-  name: loadout-group-underwear-bra-CMO
+  name: loadout-group-underwear-bra
   minLimit: 0
   loadouts:
   - CMOBra # WD
@@ -2445,7 +2445,7 @@
 #BottomHOP
 - type: loadoutGroup # WD
   id: CommonUnderwearBottomHOP
-  name: loadout-group-underwear-bottom-HOP
+  name: loadout-group-underwear-bottom
   minLimit: 0
   loadouts:
   - HOPBoxers # WD
@@ -2469,7 +2469,7 @@
 #BraHOP
 - type: loadoutGroup # WD
   id: CommonUnderwearBraHOP
-  name: loadout-group-underwear-bra-HOP
+  name: loadout-group-underwear-bra
   minLimit: 0
   loadouts:
   - HOPBra # WD
@@ -2493,7 +2493,7 @@
 #BottomHOS
 - type: loadoutGroup # WD
   id: CommonUnderwearBottomHOS
-  name: loadout-group-underwear-bottom-HOS
+  name: loadout-group-underwear-bottom
   minLimit: 0
   loadouts:
   - HOSBoxers # WD
@@ -2517,7 +2517,7 @@
 #BraHOS
 - type: loadoutGroup # WD
   id: CommonUnderwearBraHOS
-  name: loadout-group-underwear-bra-HOS
+  name: loadout-group-underwear-bra
   minLimit: 0
   loadouts:
   - HOSBra # WD
@@ -2541,7 +2541,7 @@
 #InspectorCaptain
 - type: loadoutGroup # WD
   id: CommonUnderwearBottomInspector
-  name: loadout-group-underwear-bottom-Inspector
+  name: loadout-group-underwear-bottom
   minLimit: 0
   loadouts:
   - InspectorBoxers # WD
@@ -2565,7 +2565,7 @@
 #BraInspector
 - type: loadoutGroup # WD
   id: CommonUnderwearBraInspector
-  name: loadout-group-underwear-bra-Inspector
+  name: loadout-group-underwear-bra
   minLimit: 0
   loadouts:
   - InspectorBra # WD
@@ -2589,7 +2589,7 @@
 #BottomQM
 - type: loadoutGroup # WD
   id: CommonUnderwearBottomQM
-  name: loadout-group-underwear-bottom-QM
+  name: loadout-group-underwear-bottom
   minLimit: 0
   loadouts:
   - QMBoxers # WD
@@ -2613,7 +2613,7 @@
 #BraQM
 - type: loadoutGroup # WD
   id: CommonUnderwearBraQM
-  name: loadout-group-underwear-bra-QM
+  name: loadout-group-underwear-bra
   minLimit: 0
   loadouts:
   - QMBra # WD
@@ -2637,7 +2637,7 @@
 #BottomRD
 - type: loadoutGroup # WD
   id: CommonUnderwearBottomRD
-  name: loadout-group-underwear-bottom-RD
+  name: loadout-group-underwear-bottom
   minLimit: 0
   loadouts:
   - RDBoxers # WD
@@ -2661,7 +2661,7 @@
 #BraRD
 - type: loadoutGroup # WD
   id: CommonUnderwearBraRD
-  name: loadout-group-underwear-bra-RD
+  name: loadout-group-underwear-bra
   minLimit: 0
   loadouts:
   - RDBra # WD

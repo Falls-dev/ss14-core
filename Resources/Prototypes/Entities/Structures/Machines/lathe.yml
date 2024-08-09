@@ -196,8 +196,11 @@
        - MagazineBoxRifle
        - MagazineBoxLightRifle
        - GrenadeBlast
-       - LightModule
-       - FlameHiderModule
+       - LightModuleRecipe
+       - LaserModuleRecipe
+       - FlameHiderModuleRecipe
+       - SilencerModuleRecipe
+       - AcceleratorModuleRecipe
        - ShinanoGrenadeBeanbagRecipe
     emagDynamicRecipes:
       - CartridgePistolRubber
@@ -232,11 +235,6 @@
       - MagazineGrenadeEmpty
       - GrenadeEMP
       - GrenadeFlash
-      - SilencerModule
-      - LaserModule
-      - AcceleratorModule
-      - HolographicSightModule
-      - TelescopicSightModule
   - type: BluespaceStorage
 
 - type: entity
@@ -736,8 +734,11 @@
       - ShellShotgunPractice
       - WeaponLaserCarbinePractice
       - WeaponDisablerPractice
-      - LightModule
-      - FlameHiderModule
+      - LightModuleRecipe
+      - LaserModuleRecipe
+      - FlameHiderModuleRecipe
+      - SilencerModuleRecipe
+      - AcceleratorModuleRecipe
       - ShinanoGrenadeBeanbagRecipe
     dynamicRecipes:
       - CartridgeLightRifleIncendiary
@@ -798,11 +799,6 @@
       - ShinanoGrenadeFlashRecipe
       - ShinanoGrenadeSmokeRecipe
       - ShinanoGrenadeStingerRecipe
-      - SilencerModule
-      - LaserModule
-      - AcceleratorModule
-      - HolographicSightModule
-      - TelescopicSightModule
   - type: EmagLatheRecipes
     emagStaticRecipes:
      - MagazineLightRifleBox

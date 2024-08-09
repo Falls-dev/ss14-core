@@ -11,8 +11,6 @@ namespace Content.Shared.Roles;
 [Serializable, NetSerializable]
 public sealed partial class DepartmentTimeRequirement : JobRequirement
 {
-    public override bool IgnoreIfAdmin => true; // WD
-
     /// <summary>
     /// Which department needs the required amount of time.
     /// </summary>

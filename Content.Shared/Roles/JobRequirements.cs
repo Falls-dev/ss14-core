@@ -14,8 +14,7 @@ public static class JobRequirements
         [NotNullWhen(false)] out FormattedMessage? reason,
         IEntityManager entManager,
         IPrototypeManager protoManager,
-        HumanoidCharacterProfile? profile,
-        bool isAdmin)
+        HumanoidCharacterProfile? profile)
     {
         var sys = entManager.System<SharedRoleSystem>();
         var requirements = sys.GetJobRequirement(job);
@@ -25,9 +24,6 @@ public static class JobRequirements
 
         foreach (var requirement in requirements)
         {
-            if (isAdmin && requirement.IgnoreIfAdmin)
-                continue;
-
             if (!requirement.Check(entManager, protoManager, profile, playTimes, out reason))
                 return false;
         }
@@ -45,8 +41,6 @@ public abstract partial class JobRequirement
 {
     [DataField]
     public bool Inverted;
-
-    public virtual bool IgnoreIfAdmin => false; // WD
 
     public abstract bool Check(
         IEntityManager entManager,

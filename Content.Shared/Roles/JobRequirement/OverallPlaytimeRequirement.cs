@@ -12,8 +12,6 @@ namespace Content.Shared.Roles;
 [Serializable, NetSerializable]
 public sealed partial class OverallPlaytimeRequirement : JobRequirement
 {
-    public override bool IgnoreIfAdmin => true; // WD
-
     /// <inheritdoc cref="DepartmentTimeRequirement.Time"/>
     [DataField(required: true)]
     public TimeSpan Time;

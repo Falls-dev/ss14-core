@@ -208,7 +208,7 @@
           map: [ "enum.ModuleVisualState.HandGuardModule" ]
         - state: aim_module
           visible: false
-          sprite: White/Objects/Weapons/modulesOnWeapon.rsi
+          sprite: White/Objects/Weapons/modulesOnSMGs.rsi
           map: [ "enum.ModuleVisualState.AimModule" ]
     - type: Clothing
       sprite: White/Objects/Weapons/Guns/SMG/drozd-inhands.rsi
@@ -354,7 +354,7 @@
         map: [ "enum.ModuleVisualState.HandGuardModule" ]
       - state: aim_module
         visible: false
-        sprite: White/Objects/Weapons/modulesOnWeapon.rsi
+        sprite: White/Objects/Weapons/modulesOnSMGs.rsi
         map: [ "enum.ModuleVisualState.AimModule" ]
   - type: Clothing
     sprite: White/Objects/Weapons/Guns/SMG/wt550-inhands.rsi

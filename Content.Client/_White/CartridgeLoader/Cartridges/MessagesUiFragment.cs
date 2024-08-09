@@ -29,10 +29,10 @@ public sealed partial class MessagesUiFragment : BoxContainer
         BackButton.OnPressed += _ => OnButtonPressed?.Invoke(null);
         SearchBar.OnTextChanged += OnSearchTextChanged;
 
-        UpdateState(MessagesUiStateMode.UserList, [], [], null);
+        UpdateState(MessagesUiStateMode.UserList, [], null);
     }
 
-    public void UpdateState(MessagesUiStateMode mode, List<(MessagesUserData, int?)>? users, List<(string, int?)>? messages, string? name)
+    public void UpdateState(MessagesUiStateMode mode, List<(MessagesUser, int?)>? contents, string? name)
     {
         MessageContainer.DisposeAllChildren();
         Input.Orphan();
@@ -40,13 +40,16 @@ public sealed partial class MessagesUiFragment : BoxContainer
 
         SearchBar.Visible = false;
 
-        if (mode == MessagesUiStateMode.Chat && messages != null)
+        if (contents == null)
+            return;
+
+        if (mode == MessagesUiStateMode.Chat)
         {
             HeaderLabel.Text = name;
 
-            foreach (var (senderName, message) in messages)
+            foreach (var (senderName, message) in contents)
             {
-                AddNote($"{senderName} {message}");
+                AddNote($"{senderName.Name} {message}");
             }
 
             OverContainer.AddChild(Input);
@@ -58,11 +61,11 @@ public sealed partial class MessagesUiFragment : BoxContainer
             HeaderLabel.Text = Loc.GetString("messages-pda-error-header");
             AddNote(Loc.GetString("messages-pda-error-message"));
         }
-        else if (mode == MessagesUiStateMode.UserList && users != null)
+        else
         {
             SearchBar.Visible = true;
             HeaderLabel.Text = Loc.GetString("messages-pda-chat-choice");
-            foreach (var (messagesUser, userUid) in users)
+            foreach (var (messagesUser, userUid) in contents)
             {
                 AddButton(userUid, messagesUser.Name + ", " +  messagesUser.Job, messagesUser.Department);
             }
@@ -120,6 +123,7 @@ public sealed partial class MessagesUiFragment : BoxContainer
         _searchText = args.Text;
 
         UpdateVisibleButtons();
+        // Reset scroll bar so they can see the relevant results.
         MessagesScroll.SetScrollValue(Vector2.Zero);
     }
 }

@@ -13,8 +13,14 @@ namespace Content.Server._White.Radio.Components;
 public sealed partial class MessagesServerComponent : Component
 {
     /// <summary>
-    /// Dictionary translating IDs to MessagesUser
+    /// The list of messages cached by the server.
     /// </summary>
     [DataField]
-    public Dictionary<int, MessagesUserData> Dictionary = new();
+    public List<MessagesMessageData> Messages = [];
+
+    /// <summary>
+    /// Dictionary translating uids to readable names
+    /// </summary>
+    [DataField]
+    public Dictionary<int, MessagesUser> NameDict = [];
 }

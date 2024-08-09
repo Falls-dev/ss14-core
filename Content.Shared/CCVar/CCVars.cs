@@ -1,5 +1,3 @@
-using Content.Shared.Maps;
-using Content.Shared.Roles;
 using Robust.Shared;
 using Robust.Shared.Configuration;
 
@@ -236,12 +234,6 @@ namespace Content.Shared.CCVar
         /// </summary>
         public static readonly CVarDef<bool>
             GameRoleTimers = CVarDef.Create("game.role_timers", true, CVar.SERVER | CVar.REPLICATED);
-
-        /// <summary>
-        /// Override default role requirements using a <see cref="JobRequirementOverridePrototype"/>
-        /// </summary>
-        public static readonly CVarDef<string>
-            GameRoleTimerOverride = CVarDef.Create("game.role_timer_override", "", CVar.SERVER | CVar.REPLICATED);
 
         /// <summary>
         /// Whether or not disconnecting inside of a cryopod should remove the character or just store them until they reconnect.

@@ -122,6 +122,7 @@ public sealed class WizardSpellsSystem : EntitySystem
         SubscribeLocalEvent<ArcSpellEvent>(OnArcSpell);
         SubscribeLocalEvent<RodFormSpellEvent>(OnRodFormSpell);
         SubscribeLocalEvent<BlindSpellEvent>(OnBlindSpell);
+        SubscribeAllEvent<MutateSpellEvent>(OnMutateSpell);
 
         SubscribeLocalEvent<MagicComponent, BeforeCastSpellEvent>(OnBeforeCastSpell);
     }
@@ -880,6 +881,9 @@ public sealed class WizardSpellsSystem : EntitySystem
 
    private void OnBlindSpell(BlindSpellEvent msg)
     {
+        if (!CanCast(msg))
+            return;
+
         foreach (var e in _lookup.GetEntitiesInRange(msg.Performer, 8))
         {
             var wizardQuery = GetEntityQuery<WizardComponent>();
@@ -899,6 +903,30 @@ public sealed class WizardSpellsSystem : EntitySystem
     }
 
     #endregion
+
+    #region Mutate
+
+    private void OnMutateSpell(MutateSpellEvent msg)
+    {
+        if (!CanCast(msg))
+            return;
+
+        var config = new PolymorphConfiguration
+        {
+            Entity = "MobHulk",
+            Duration = 30,
+            Forced = true,
+            TransferDamage = true
+        };
+
+        _polymorph.PolymorphEntity(msg.Performer, config);
+
+        Cast(msg);
+    }
+
+
+    #endregion
+
 
     #region Helpers
 

@@ -214,4 +214,10 @@ public sealed partial class BlindSpellEvent : InstantActionEvent, ISpeakSpell
     public string? Speech { get; private set; }
 }
 
+public sealed partial class MutateSpellEvent : InstantActionEvent, ISpeakSpell
+{
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}
+
 #endregion

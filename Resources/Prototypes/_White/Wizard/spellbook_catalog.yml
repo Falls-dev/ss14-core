@@ -353,3 +353,19 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
+
+- type: listing
+  id: SpellBookMutate
+  name: spellbook-mutate-name
+  description: spellbook-mutate-desc
+  productEntity: ScrollMutate
+  icon:
+    sprite: Objects/Magic/magicactions.rsi
+    state: mutate
+  cost:
+    SpellPoint: 3
+  categories:
+  - AttackSpells
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1

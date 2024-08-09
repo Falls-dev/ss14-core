@@ -72,6 +72,9 @@
       },
       {
           "name": "blind"
+      },
+      {
+          "name": "mutate"
       }
   ]
 }

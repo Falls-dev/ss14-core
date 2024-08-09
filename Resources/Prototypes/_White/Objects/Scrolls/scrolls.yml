@@ -196,3 +196,12 @@
   - type: Scroll
     actionId: ActionBlindSpell
     learnPopup: scroll-component-blind
+
+- type: entity
+  id: ScrollMutate
+  parent: BaseScroll
+  name: "Mutate scroll"
+  components:
+  - type: Scroll
+    actionId: ActionMutateSpell
+    learnPopup: scroll-component-mutate

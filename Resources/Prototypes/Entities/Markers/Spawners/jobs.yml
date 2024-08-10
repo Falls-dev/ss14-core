@@ -270,7 +270,7 @@
   - type: Sprite
     layers:
     - state: green
-    - state: lawyer
+    - state: bomzh
 
 - type: entity
   id: SpawnPointMaid
@@ -282,7 +282,7 @@
   - type: Sprite
     layers:
     - state: green
-    - state: lawyer
+    - state: maid
 
 #WHITE END
 

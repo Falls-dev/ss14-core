@@ -136,6 +136,6 @@ ent-ResearchAssistantPDA = ПДА научного ассистента
 ent-MaidPDA = ПДА прислуги
     .desc = Сияет от собственной чистоты.
     .suffix = { "" }
-ent-BomzhPDA = Убитый ПДА
+ent-BomzhPDA = убитый ПДА
     .desc = Жизнь прошла, и все что остаётся делать - это двигаться вперед.
     .suffix = { "" }

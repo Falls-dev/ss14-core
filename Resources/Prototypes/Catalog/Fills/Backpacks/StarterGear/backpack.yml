@@ -28,6 +28,16 @@
 
 - type: entity
   noSpawn: true
+  parent: ClothingBackpackSatchelBrigmedic
+  id: ClothingBackpackBrigmedicFilled
+  components:
+  - type: StorageFill
+    contents:
+    - id: Flash
+    - id: BoxSurvivalSecurity
+
+- type: entity
+  noSpawn: true
   parent: ClothingBackpackSecurity
   id: ClothingBackpackSecurityFilledDetective
   components:

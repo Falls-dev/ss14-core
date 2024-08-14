@@ -531,6 +531,24 @@
   - CommonUnderwearSocks
 
 - type: roleLoadout
+  id: JobBrigmedic
+  groups:
+  - BrigmedicHead
+  - BrigmedicHeadset
+  - BrigmedicUniform
+  - BrigmedicBackpack
+  - BrigmedicOuterClothing
+  - BrigmedicGloves
+  - BrigmedicShoes
+  - BrigmedicMask
+  - BrigmedicPDA
+  - CommonSecurityJobTrinkets # WD
+  - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
+
+- type: roleLoadout
   id: JobSecurityOfficer
   groups:
   - CommonSecurityHead

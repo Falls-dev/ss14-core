@@ -27,6 +27,7 @@
   roles:
   - HeadOfSecurity
   - Warden
+  - Brigmedic
   - SeniorOfficer
   - SecurityOfficer
   - Detective

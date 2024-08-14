@@ -32637,7 +32637,7 @@ entities:
     - type: Transform
       pos: 67.39722,4.505884
       parent: 2
-- proto: ClothingMaskBreathMedicalSecurity
+- proto: ClothingMaskBrigmedic
   entities:
   - uid: 7757
     components:

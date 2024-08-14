@@ -2154,7 +2154,6 @@
   id: MaidSelfDefenceDevices
   name: loadout-group-self-defence-devices
   minLimit: 0
-  maxLimit: 1
   loadouts:
   - Flash
 
@@ -2225,7 +2224,6 @@
   id: BomzhHead
   name: loadout-group-head
   minLimit: 0
-  maxLimit: 1
   loadouts:
   - BomzhHeadHat
   - BomzhHeadCap

@@ -1505,14 +1505,6 @@
   loadouts:
   - BrigmedicWhiteJumpsuit
   - BrigmedicWhiteJumpskirt
-  - BrigmedicSkirtofLife
-
-- type: loadoutGroup # WD
-  id: BrigmedicMask
-  name: loadout-group-mask
-  minLimit: 0
-  loadouts:
-  - SterileMaskBrigmedic
 
 - type: loadoutGroup # WD
   id: BrigmedicBackpack
@@ -1521,6 +1513,7 @@
   - BackpackBrigmedic
   - SatchelBrigmedic
   - DuffelBrigmedic
+  - CommonSatchelLeatherSecurity
 
 - type: loadoutGroup # WD
   id: BrigmedicOuterClothing
@@ -1529,14 +1522,6 @@
   loadouts:
   - ArmorCoatBrigmedic
   - LabcoatBasic
-
-- type: loadoutGroup
-  id: BrigmedicGloves
-  name: loadout-group-gloves
-  minLimit: 0
-  loadouts:
-  - NitrileGlovesBrigmedic
-  - LatexGlovesBrigmedic
 
 - type: loadoutGroup # WD
   id: BrigmedicShoes

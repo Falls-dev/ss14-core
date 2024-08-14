@@ -269,7 +269,7 @@
 
 - type: sponsorLoadout
   id: MaskSerbwoLoadoutSO
-  entity: ClothingMaskBrigmedic
+  entity: ClothingMaskBreathMedicalSecurity
   sponsorOnly: true
   whitelistJobs: [Captain, HeadOfSecurity, ResearchDirector, ChiefEngineer, AtmosphericTechnician, StationEngineer, TechnicalAssistant, CargoTechnician, Quartermaster, SalvageSpecialist, ResearchAssistant, Scientist]
 

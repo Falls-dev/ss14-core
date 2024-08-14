@@ -41,14 +41,6 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtBrigmedic
 
-- type: itemLoadout # WD
-  id: BrigmedicSkirtofLife
-  equipment: BrigmedicSkirtofLife
-- type: startingGear
-  id: BrigmedicSkirtofLife
-  equipment:
-    jumpsuit: ClothingUniformJumpskirtOfLife
-
 # Back
 - type: itemLoadout # WD
   id: BackpackBrigmedic
@@ -107,32 +99,6 @@
   id: RedShoesBrigmedic
   equipment:
     shoes: ClothingShoesColorRed
-
-# Hands
-- type: itemLoadout # WD
-  id: NitrileGlovesBrigmedic
-  equipment: NitrileGlovesBrigmedic
-- type: startingGear
-  id: NitrileGlovesBrigmedic
-  equipment:
-    hands: ClothingHandsGlovesNitrile
-
-- type: itemLoadout
-  id: LatexGlovesBrigmedic # WD
-  equipment: LatexGlovesBrigmedic
-- type: startingGear
-  id: LatexGlovesBrigmedic
-  equipment:
-    hands: ClothingHandsGlovesLatex
-
-# Mask
-- type: itemLoadout # WD
-  id: SterileMaskBrigmedic
-  equipment: SterileMaskBrigmedic
-- type: startingGear
-  id: SterileMaskBrigmedic
-  equipment:
-    mask: ClothingMaskSterile
 
 # PDA
 - type: itemLoadout

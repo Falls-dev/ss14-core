@@ -1,6 +1,6 @@
 ent-ClothingHeadHelmetHardsuitBasic = базовый шлем скафандра
    .desc = Стандартный жесткий шлем, обеспечивающий незначительную защиту от большинства источников повреждений.
-ent-ClothingHeadHelmetHardsuitBrigmedic = шлем охранно-медицинского скафандра
+ent-ClothingHeadHelmetHardsuitBrigmedic = шлем скафандра бригмедика
    .desc = Легкий шлем скафандра. Защищает от вирусов и клоунов.
 ent-EffectEmpPulse = ""
    .desc = ""

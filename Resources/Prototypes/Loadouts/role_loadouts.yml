@@ -538,11 +538,10 @@
   - BrigmedicUniform
   - BrigmedicBackpack
   - BrigmedicOuterClothing
-  - BrigmedicGloves
+  - CommonMedicalGloves
   - BrigmedicShoes
-  - BrigmedicMask
+  - CommonMedicalMask
   - BrigmedicPDA
-  - CommonSecurityJobTrinkets # WD
   - Trinkets
   - CommonUnderwearBottom
   - CommonUnderwearBra

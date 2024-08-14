@@ -192,7 +192,7 @@
   parent: ClothingHeadHardsuitWithLightBase
   id: ClothingHeadHelmetHardsuitBrigmedic
   name: brigmedic hardsuit helmet
-  description: The lightweight helmet of the sec-medical hardsuit. Protects against viruses, and clowns.
+  description: The lightweight helmet of the brigmedic hardsuit. Protects against viruses, and clowns.
   components:
   - type: BreathMask
   - type: Sprite

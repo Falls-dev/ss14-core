@@ -85,7 +85,7 @@
     contents:
       - id: WeaponDisabler
       - id: TrackingImplanter
-      - id: BrigmedicHypo
+      - id: BrigmedicHypospray
       - id: ClothingHeadHatBeretBrigmedic
       - id: ClothingMaskSterile
       - id: ClothingOuterCoatAMG
@@ -104,6 +104,8 @@
         prob: 0.3
       - id: MedkitBurnFilled
         prob: 0.7
+      - id: ClothingNeckCloakMoth #bзззз, молепокалипсис
+        prob: 0.15
 
 - type: entity
   id: LockerDetectiveFilled

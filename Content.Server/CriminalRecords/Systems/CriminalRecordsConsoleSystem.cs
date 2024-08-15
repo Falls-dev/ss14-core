@@ -127,10 +127,18 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
             (_, SecurityStatus.Suspected) => "suspected",
             // released on parole
             (_, SecurityStatus.Paroled) => "paroled",
-            // prisoner did their time
-            (_, SecurityStatus.Discharged) => "released",
+            // person was demoted
+            (_, SecurityStatus.Demote) => "demoted", // WD start
             // going from any other state to wanted, AOS or prisonbreak / lazy secoff never set them to released and they reoffended
             (_, SecurityStatus.Wanted) => "wanted",
+            // Person is xenos
+            (_, SecurityStatus.Execute) => "execute",
+            // Person requires supervision
+            (_, SecurityStatus.Monitoring) => "monitoring",
+            // Person works in cargo
+            (_, SecurityStatus.Search) => "search",
+            // Released
+            (_, SecurityStatus.Released) => "released",
             // person is no longer sus
             (SecurityStatus.Suspected, SecurityStatus.None) => "not-suspected",
             // going from wanted to none, must have been a mistake
@@ -139,6 +147,14 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
             (SecurityStatus.Detained, SecurityStatus.None) => "released",
             // criminal is no longer on parole
             (SecurityStatus.Paroled, SecurityStatus.None) => "not-parole",
+            // person dont require supervision
+            (SecurityStatus.Monitoring, SecurityStatus.None) => "not-monitoring",
+            // person was searched
+            (SecurityStatus.Search, SecurityStatus.None) => "not-search",
+            // person was demoted
+            (SecurityStatus.Demote, SecurityStatus.None) => "not-demoted",
+            // person is not xenos
+            (SecurityStatus.Execute, SecurityStatus.None) => "not-execute", // WD end
             // this is impossible
             _ => "not-wanted"
         };

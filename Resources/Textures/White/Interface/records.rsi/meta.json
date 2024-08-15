@@ -5,23 +5,31 @@
     "size": { "y": 8, "x": 8 },
     "states": [
         {
-            "name": "wanted"
+            "name": "hud_demote"
         },
         {
-            "name": "suspected"
+            "name": "hud_execute"
         },
         {
-            "name": "released"
+            "name": "hud_incarcerated"
         },
         {
-            "name": "parolled"
+            "name": "hud_monitoring"
         },
         {
-            "name": "incarcerated"
+            "name": "hud_paroled"
         },
         {
-            "name": "discharged"
+            "name": "hud_released"
+        },
+        {
+            "name": "hud_search"
+        },
+        {
+            "name": "hud_suspected"
+        },
+        {
+            "name": "hud_wanted"
         }
-
     ]
 }

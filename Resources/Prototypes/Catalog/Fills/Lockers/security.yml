@@ -97,7 +97,6 @@
       - id: ClothingHandsGlovesNitrile
       - id: ClothingBeltMedicalRig
       - id: MedkitFilled
-        prob: 0.3
       - id: MedkitOxygenFilled
         prob: 0.3
       - id: MedkitBruteFilled

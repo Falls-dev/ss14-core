@@ -156,6 +156,8 @@
     - id: NitrogenTankFilled
     - id: ClothingOuterHardsuitBrigmedic
     - id: ClothingMaskBreathMedicalSecurity
+  - type: AccessReader
+    access: [["Medical"]]
 
 #CE's hardsuit
 - type: entity

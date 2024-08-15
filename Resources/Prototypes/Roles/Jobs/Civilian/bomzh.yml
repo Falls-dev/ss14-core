@@ -26,6 +26,28 @@
   canBeAntag: true
   access:
   - Maintenance
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: BomzhAccent
+    - type: Thirst
+      startingThirst: 25
+    - type: SolutionContainerManager
+      solutions:
+        chemicals:
+          maxVol: 250
+          reagents:
+          - ReagentId: Ethanol
+            Quantity: 18
+    - type: InjectableSolution
+      solution: chemicals
+    - type: Bloodstream
+      bloodlossDamage:
+        types:
+          Bloodloss: 0.5
+      bloodlossHealDamage:
+        types:
+          Bloodloss: -1
 
 - type: startingGear
   id: BomzhGear

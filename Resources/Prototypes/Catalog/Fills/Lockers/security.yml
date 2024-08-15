@@ -98,6 +98,8 @@
       - id: MedkitFilled
       - id: MedkitOxygenFilled
         prob: 0.3
+      - id: ClothingOuterHardsuitBrigmedic
+        prob: 0.5
       - id: MedkitBruteFilled
         prob: 0.3
       - id: MedkitToxinFilled

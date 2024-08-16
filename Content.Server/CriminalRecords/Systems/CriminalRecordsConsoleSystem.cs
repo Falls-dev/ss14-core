@@ -75,7 +75,11 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
     {
         // prevent malf client violating wanted/reason nullability
         if (msg.Status == SecurityStatus.Wanted != (msg.Reason != null) &&
-            msg.Status == SecurityStatus.Suspected != (msg.Reason != null))
+            msg.Status == SecurityStatus.Suspected != (msg.Reason != null) &&
+            msg.Status == SecurityStatus.Demote != (msg.Reason != null) && // WD start
+            msg.Status == SecurityStatus.Monitoring != (msg.Reason != null) &&
+            msg.Status == SecurityStatus.Paroled != (msg.Reason != null) &&
+            msg.Status == SecurityStatus.Execute != (msg.Reason != null)) // WD end
             return;
 
         if (!CheckSelected(ent, msg.Session, out var mob, out var key))

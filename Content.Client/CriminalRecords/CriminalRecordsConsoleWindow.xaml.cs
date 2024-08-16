@@ -219,7 +219,8 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
 
     private void SetStatus(SecurityStatus status)
     {
-        if (status == SecurityStatus.Wanted || status == SecurityStatus.Suspected)
+        if (status == SecurityStatus.Wanted || status == SecurityStatus.Suspected || status == SecurityStatus.Demote ||
+            status == SecurityStatus.Monitoring || status == SecurityStatus.Paroled || status == SecurityStatus.Execute) // WD end
         {
             GetReason(status);
             return;

@@ -23,7 +23,7 @@ criminal-records-console-suspected-reason = [color=gray]Причина подо�
 criminal-records-console-demote-reason = [color=gray]Причина понижения[/color]
 criminal-records-console-monitoring-reason = [color=gray]Причина слежки[/color]
 criminal-records-console-paroled-reason = [color=gray]Основание УДО[/color]
-criminal-records-console-execute-reason = [color=red]Причина устранения (Внимание! Сотрудник может быть безвозвратно уничтожен!)[/color]
+criminal-records-console-execute-reason = [color=gray]Причина устранения[/color]
 criminal-records-console-reason = Причина
 criminal-records-console-reason-placeholder = Например: {$placeholder}
 

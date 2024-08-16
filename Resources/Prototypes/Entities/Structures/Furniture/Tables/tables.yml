@@ -451,9 +451,9 @@
   description: Do not apply fire to this. Rumour says it burns easily.
   components:
   - type: Sprite
-    sprite: Structures/Furniture/Tables/wood.rsi
+    sprite: White/Structures/Furniture/Tables/wood.rsi
   - type: Icon
-    sprite: Structures/Furniture/Tables/wood.rsi
+    sprite: White/Structures/Furniture/Tables/wood.rsi
   - type: Damageable
     damageModifierSet: Wood
   - type: Destructible
@@ -498,9 +498,9 @@
   description: Play em' cowboy.
   components:
   - type: Sprite
-    sprite: Structures/Furniture/Tables/carpet.rsi
+    sprite: White/Structures/Furniture/Tables/carpet.rsi
   - type: Icon
-    sprite: Structures/Furniture/Tables/carpet.rsi
+    sprite: White/Structures/Furniture/Tables/carpet.rsi
   - type: Damageable
     damageModifierSet: Wood
   - type: Destructible
@@ -788,9 +788,9 @@
   description: Do not apply fire to this. Rumour says it burns easily.
   components:
   - type: Sprite
-    sprite: Structures/Furniture/Tables/counterwood.rsi
+    sprite: White/Structures/Furniture/Tables/counterwood.rsi
   - type: Icon
-    sprite: Structures/Furniture/Tables/counterwood.rsi
+    sprite: White/Structures/Furniture/Tables/counterwood.rsi
     state: full
   - type: Damageable
     damageContainer: StructuralInorganic

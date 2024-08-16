@@ -5,9 +5,9 @@
   abstract: true
   components:
   - type: Sprite
-    sprite: Objects/Tiles/tile.rsi
+    sprite: White/Objects/Tiles/tile.rsi
   - type: Item
-    sprite: Objects/Tiles/tile.rsi
+    sprite: White/Objects/Tiles/tile.rsi
     size: Normal
   - type: DamageOtherOnHit
     damage:
@@ -212,6 +212,54 @@
       - FloorMono
   - type: Stack
     stackType: FloorTileMono
+
+- type: entity
+  name: white linoleum floor
+  parent: FloorTileItemBase
+  id: FloorTileItemLinoWhite
+  components:
+  - type: Sprite
+    state: lino-white
+  - type: Item
+    heldPrefix: steel
+  - type: FloorTile
+    outputs:
+      - Plating
+      - FloorLinoWhite
+  - type: Stack
+    stackType: FloorTileLino
+
+- type: entity
+  name: grey linoleum floor
+  parent: FloorTileItemBase
+  id: FloorTileItemLinoGrey
+  components:
+  - type: Sprite
+    state: lino-grey
+  - type: Item
+    heldPrefix: steel
+  - type: FloorTile
+    outputs:
+      - Plating
+      - FloorLinoGrey
+  - type: Stack
+    stackType: FloorTileLino
+
+- type: entity
+  name: dark linoleum floor
+  parent: FloorTileItemBase
+  id: FloorTileItemLinoDark
+  components:
+  - type: Sprite
+    state: lino-dark
+  - type: Item
+    heldPrefix: steel
+  - type: FloorTile
+    outputs:
+      - Plating
+      - FloorLinoDark
+  - type: Stack
+    stackType: FloorTileLino
 
 - type: entity
   name: linoleum floor
@@ -1283,6 +1331,18 @@
       - FloorShielding
 
 - type: entity
+  name: mono shielding floor
+  parent: FloorTileItemSteel
+  id: FloorTileItemShieldingMono
+  components:
+  - type: Sprite
+    state: shielding-mono
+  - type: FloorTile
+    outputs:
+      - Plating
+      - FloorShieldingMono
+
+- type: entity
   name: shuttle syndie floor
   parent: FloorTileItemSteel
   id: FloorTileItemShuttleSyndie
@@ -1305,6 +1365,18 @@
     outputs:
       - Plating
       - FloorSterile
+
+- type: entity
+  name: dark sterile floor
+  parent: FloorTileItemSteel
+  id: FloorTileItemSterileDark
+  components:
+  - type: Sprite
+    state: sterile
+  - type: FloorTile
+    outputs:
+      - Plating
+      - FloorSterileDark
 
 - type: entity
   name: reinforced glass frame floor

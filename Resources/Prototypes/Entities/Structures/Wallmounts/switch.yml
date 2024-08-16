@@ -50,8 +50,9 @@
     arc: 360
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch.rsi
+    sprite: White/Structures/Wallmounts/switch.rsi
     state: on
+    shader: unshaded
   - type: SignalSwitch
   - type: Rotatable
   - type: Construction
@@ -88,7 +89,7 @@
     arc: 360
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch.rsi
+    sprite: White/Structures/Wallmounts/switch.rsi
     state: dead
   - type: SignalSwitch
     onPort: Pressed
@@ -147,8 +148,9 @@
       anchored: true
     - type: Sprite
       drawdepth: SmallObjects
-      sprite: Structures/Wallmounts/switch.rsi
+      sprite: White/Structures/Wallmounts/switch.rsi
       state: on
+      shader: unshaded
     - type: Rotatable
     - type: ExtensionCableReceiver
     - type: DeviceNetwork
@@ -248,7 +250,7 @@
   - type: AccessReader
   - type: Sprite
     drawdepth: WallMountedItems
-    sprite: Structures/Wallmounts/locked_switch.rsi
+    sprite: White/Structures/Wallmounts/locked_switch.rsi
     layers:
     - state: base
     - state: locked
@@ -514,7 +516,7 @@
     canCollide: false
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f1.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f1.rsi
     state: grey
   - type: Rotatable
   - type: Fixtures
@@ -526,7 +528,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f1.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f1.rsi
     state: grey
 
 - type: entity
@@ -536,7 +538,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f1.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f1.rsi
     state: caution
 
 - type: entity
@@ -546,7 +548,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f1.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f1.rsi
     state: caution_security
 
 - type: entity
@@ -556,7 +558,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f1.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f1.rsi
     layers:
      - state: exit
      - state: exit_glow
@@ -570,7 +572,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f1.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f1.rsi
     state: janitor
 
 # button frames 2
@@ -592,7 +594,7 @@
     canCollide: false
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f2.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f2.rsi
     state: grey
   - type: Rotatable
   - type: Fixtures
@@ -604,7 +606,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f2.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f2.rsi
     state: grey
 
 - type: entity
@@ -614,7 +616,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f2.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f2.rsi
     state: caution
 
 - type: entity
@@ -624,7 +626,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f2.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f2.rsi
     state: caution_security
 
 - type: entity
@@ -634,7 +636,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f2.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f2.rsi
     layers:
      - state: exit
      - state: exit_glow
@@ -648,7 +650,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f2.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f2.rsi
     state: janitor
 
     # button frames 3
@@ -670,7 +672,7 @@
     canCollide: false
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f3.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f3.rsi
     state: grey
   - type: Rotatable
   - type: Fixtures
@@ -682,7 +684,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f3.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f3.rsi
     state: grey
 
 - type: entity
@@ -692,7 +694,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f3.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f3.rsi
     state: caution
 
 - type: entity
@@ -702,7 +704,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f3.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f3.rsi
     state: caution_security
 
 - type: entity
@@ -712,7 +714,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f3.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f3.rsi
     layers:
      - state: exit
      - state: exit_glow
@@ -726,7 +728,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f3.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f3.rsi
     state: janitor
 
     # button frames 4
@@ -748,7 +750,7 @@
     canCollide: false
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f4.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f4.rsi
     state: grey
   - type: Rotatable
   - type: Fixtures
@@ -760,7 +762,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f4.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f4.rsi
     state: grey
 
 - type: entity
@@ -770,7 +772,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f4.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f4.rsi
     state: caution
 
 - type: entity
@@ -780,7 +782,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f4.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f4.rsi
     state: caution_security
 
 - type: entity
@@ -790,7 +792,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f4.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f4.rsi
     layers:
      - state: exit
      - state: exit_glow
@@ -804,7 +806,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f4.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f4.rsi
     state: janitor
 
     # button frames 5
@@ -826,7 +828,7 @@
     canCollide: false
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f5.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f5.rsi
     state: grey
   - type: Rotatable
   - type: Fixtures
@@ -838,7 +840,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f5.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f5.rsi
     state: grey
 
 - type: entity
@@ -848,7 +850,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f5.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f5.rsi
     state: caution
 
 - type: entity
@@ -858,7 +860,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f5.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f5.rsi
     state: caution_security
 
 - type: entity
@@ -868,7 +870,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f5.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f5.rsi
     layers:
      - state: exit
      - state: exit_glow
@@ -882,7 +884,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f5.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f5.rsi
     state: janitor
 
     # button frames 6
@@ -904,7 +906,7 @@
     canCollide: false
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f6.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f6.rsi
     state: grey
   - type: Rotatable
   - type: Fixtures
@@ -916,7 +918,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f6.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f6.rsi
     state: grey
 
 - type: entity
@@ -926,7 +928,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f6.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f6.rsi
     state: caution
 
 - type: entity
@@ -936,7 +938,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f6.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f6.rsi
     state: caution_security
 
 - type: entity
@@ -946,7 +948,7 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f6.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f6.rsi
     layers:
      - state: exit
      - state: exit_glow
@@ -960,5 +962,5 @@
   components:
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch_frame/f6.rsi
+    sprite: White/Structures/Wallmounts/switch_frame/f6.rsi
     state: janitor

@@ -2,12 +2,16 @@
 
 ent-CultBola = магическая { ent-Bola }
     .desc = { ent-Bola.desc }
-    .suffic = культ
+    .suffix = культ
 
 # Energy bola
 
 ent-EnergyBola = энергобола
     .desc = Соверешенное слияние технологии и справедливости для отлова преступников.
+
+ent-DrinkShakerEphedrineInfinite = { ent-DrinkShaker }
+    .desc = { ent-DrinkShaker.desc }
+    .suffix = Эфедрин, Бесконечный
 
 action-name-insert-self = Залезть внутрь.
 action-name-insert-other = Засунуть внутрь.
@@ -17,6 +21,9 @@ carry-start = { $carrier } пытается взять вас на руки!
 
 alerts-knockdown-name = Лежу
 alerts-knockdown-desc = Не могу встать.
+
+alerts-blood-spells-name = Заклинания крови
+alerts-blood-spells-desc = Нажмите, чтобы создать или удалить заклинания крови.
 
 melee-block-event-blocked = заблокировал!
 alerts-blocked-name = Атака заблокирована

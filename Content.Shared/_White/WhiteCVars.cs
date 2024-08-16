@@ -140,7 +140,7 @@ public sealed class WhiteCVars
     public static readonly CVarDef<bool> StalinEnabled =
         CVarDef.Create("stalin.enabled", true, CVar.SERVERONLY | CVar.ARCHIVE);
     public static readonly CVarDef<float> StalinDiscordMinimumAge =
-        CVarDef.Create("stalin.minimal_discord_age_minutes", 10080.0f, CVar.SERVERONLY | CVar.ARCHIVE);
+        CVarDef.Create("stalin.minimal_discord_age_minutes", 604800.0f, CVar.SERVERONLY | CVar.ARCHIVE);
 
 
     /*
@@ -164,7 +164,7 @@ public sealed class WhiteCVars
      */
 
     public static readonly CVarDef<bool> FanaticXenophobiaEnabled =
-        CVarDef.Create("white.fanatic_xenophobia", true, CVar.SERVERONLY | CVar.ARCHIVE);
+        CVarDef.Create("white.fanatic_xenophobia", false, CVar.SERVERONLY | CVar.ARCHIVE);
 
     /*
    * MeatyOre
@@ -319,6 +319,12 @@ public sealed class WhiteCVars
     /// </summary>
     public static readonly CVarDef<bool> AutoGetUp =
         CVarDef.Create("white.auto_get_up", true, CVar.CLIENT | CVar.ARCHIVE | CVar.REPLICATED);
+
+    /// <summary>
+    ///     Determines whether telescope functions by holing a button or via toggle
+    /// </summary>
+    public static readonly CVarDef<bool> HoldLookUp =
+        CVarDef.Create("white.hold_look_up", false, CVar.CLIENT | CVar.ARCHIVE);
 
     /*
      * Aspects

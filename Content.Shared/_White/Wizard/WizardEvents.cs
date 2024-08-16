@@ -31,11 +31,11 @@ public struct BeforeCastSpellEvent
 [Serializable, NetSerializable]
 public sealed partial class AddWizardChargeEvent : EntityEventArgs
 {
-    public string ChargeProto;
+    public NetEntity Spell;
 
-    public AddWizardChargeEvent(string chargeProto)
+    public AddWizardChargeEvent(NetEntity spell)
     {
-        ChargeProto = chargeProto;
+        Spell = spell;
     }
 }
 
@@ -198,6 +198,24 @@ public sealed partial class ArcaneBarrageSpellEvent : InstantActionEvent, ISpeak
     [DataField("prototype", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string Prototype = default!;
 
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}
+
+public sealed partial class RodFormSpellEvent : InstantActionEvent, ISpeakSpell
+{
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}
+
+public sealed partial class BlindSpellEvent : InstantActionEvent, ISpeakSpell
+{
+    [DataField("speech")]
+    public string? Speech { get; private set; }
+}
+
+public sealed partial class MutateSpellEvent : InstantActionEvent, ISpeakSpell
+{
     [DataField("speech")]
     public string? Speech { get; private set; }
 }

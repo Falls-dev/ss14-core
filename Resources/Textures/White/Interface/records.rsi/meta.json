@@ -8,9 +8,6 @@
             "name": "hud_demote"
         },
         {
-            "name": "hud_execute"
-        },
-        {
             "name": "hud_incarcerated"
         },
         {
@@ -30,6 +27,13 @@
         },
         {
             "name": "hud_wanted"
+        },
+        {
+            "name": "hud_execute",
+            "delays":
+            [
+                [0.5, 0.5, 1.0]
+            ]
         }
     ]
 }

@@ -8,7 +8,7 @@
     access: [["Security"]]
   - type: SecurityHud
     criminalrecords:
-    - SecurityIconDemote  # WD start
+    - SecurityIconDemote
     - SecurityIconParoled
     - SecurityIconSuspected
     - SecurityIconWanted
@@ -16,7 +16,7 @@
     - SecurityIconExecute
     - SecurityIconMonitoring
     - SecurityIconSearch
-    - SecurityIconReleased # WD end
+    - SecurityIconReleased
     - CriminalRecordIconRemove
   - type: UserInterface
     interfaces:

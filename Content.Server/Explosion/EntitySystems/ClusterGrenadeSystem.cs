@@ -1,8 +1,6 @@
 using System.Numerics;
 using Content.Server.Explosion.Components;
-using Robust.Shared.Spawners;
 using Content.Server.Weapons.Ranged.Systems;
-using Content.Shared._RMC14.Explosion;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Flash.Components;
 using Content.Shared.Interaction;
@@ -23,8 +21,6 @@ public sealed class ClusterGrenadeSystem : EntitySystem
     [Dependency] private readonly GunSystem _gun = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
     [Dependency] private readonly ContainerSystem _containerSystem = default!;
-
-    private readonly List<EntityUid> _spawned = new();
 
     public override void Initialize()
     {
@@ -88,10 +84,8 @@ public sealed class ClusterGrenadeSystem : EntitySystem
                 var segmentAngle = 360 / grenadesInserted;
                 var grenadeDelay = 0f;
 
-                _spawned.Clear();
                 while (TryGetGrenade(uid, clug, out var grenade))
                 {
-                    _spawned.Add(grenade);
                     // var distance = random.NextFloat() * _throwDistance;
                     var angleMin = segmentAngle * thrownCount;
                     var angleMax = segmentAngle * (thrownCount + 1);
@@ -121,9 +115,8 @@ public sealed class ClusterGrenadeSystem : EntitySystem
                     }
                 }
 
-                var clusterEv = new CMClusterSpawnedEvent(_spawned);
-                RaiseLocalEvent(uid, ref clusterEv);
-                QueueDel(uid);
+                // delete the empty shell of the clusterbomb
+                Del(uid);
             }
         }
     }

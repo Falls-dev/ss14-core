@@ -1,20 +1,20 @@
 ﻿using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._RMC14.Explosion;
+namespace Content.Shared._White.Explosion;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(SharedCMExplosionSystem))]
-public sealed partial class CMExplosionEffectComponent : Component
+[Access(typeof(SharedExplosionSystem))]
+public sealed partial class ExplosionEffectComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public EntProtoId Explosion = "CMExplosionEffectGrenade";
+    public EntProtoId Explosion = "ExplosionEffectGrenade";
 
     [DataField, AutoNetworkedField]
-    public EntProtoId ShockWave = "RMCExplosionEffectGrenadeShockWave";
+    public EntProtoId ShockWave = "ExplosionEffectGrenadeShockWave";
 
     [DataField, AutoNetworkedField]
-    public List<EntProtoId> ShrapnelEffects = new() { "CMExplosionEffectShrapnel1", "CMExplosionEffectShrapnel2" };
+    public List<EntProtoId> ShrapnelEffects = new() { "ExplosionEffectShrapnel1", "ExplosionEffectShrapnel2" };
 
     [DataField, AutoNetworkedField]
     public int MinShrapnel = 5;

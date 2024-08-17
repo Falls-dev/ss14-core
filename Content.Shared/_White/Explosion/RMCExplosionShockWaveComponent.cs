@@ -1,11 +1,11 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._RMC14.Explosion.Components
+namespace Content.Shared._White.Explosion
 {
     [RegisterComponent, NetworkedComponent]
     [AutoGenerateComponentState]
-    [Access(typeof(SharedCMExplosionSystem))]
-    public sealed partial class RMCExplosionShockWaveComponent : Component
+    [Access(typeof(SharedExplosionSystem))]
+    public sealed partial class ExplosionShockWaveComponent : Component
     {
         /// <summary>
         ///     The rate at which the wave fades, lower values means it's active for longer.

@@ -1,18 +1,17 @@
-using Content.Shared._RMC14.Explosion.Components;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
-using System.Collections.Generic;
 using System.Numerics;
+using Content.Shared._White.Explosion;
 
-namespace Content.Client._RMC14.Explosion;
+namespace Content.Client._White.Explosion;
 
-public sealed class RMCExplosionShockWaveOverlay : Overlay, IEntityEventSubscriber
+public sealed class ExplosionShockWaveOverlay : Overlay, IEntityEventSubscriber
 {
     [Dependency] private readonly IEntityManager _entMan = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
-    private SharedTransformSystem? _xformSystem = null;
+    private SharedTransformSystem? _xformSystem;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
@@ -22,25 +21,25 @@ public sealed class RMCExplosionShockWaveOverlay : Overlay, IEntityEventSubscrib
     /// <summary>
     ///     Maximum number of distortions that can be shown on screen at a time.
     /// </summary>
-    public const int MaxCount = 10;
+    public const int MaxCount = 30;
 
-    public RMCExplosionShockWaveOverlay()
+    public ExplosionShockWaveOverlay()
     {
         IoCManager.InjectDependencies(this);
-        _shader = _prototypeManager.Index<ShaderPrototype>("RMCShockWave").Instance().Duplicate();
+        _shader = _prototypeManager.Index<ShaderPrototype>("ShockWave").Instance().Duplicate();
     }
 
     private readonly Vector2[] _positions = new Vector2[MaxCount];
     private readonly float[] _falloffPower = new float[MaxCount];
     private readonly float[] _sharpness = new float[MaxCount];
     private readonly float[] _width = new float[MaxCount];
-    private int _count = 0;
+    private int _count;
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
         if (args.Viewport.Eye == null || _xformSystem is null && !_entMan.TrySystem(out _xformSystem))
             return false;
 
-        var query = _entMan.EntityQueryEnumerator<RMCExplosionShockWaveComponent, TransformComponent>();
+        var query = _entMan.EntityQueryEnumerator<ExplosionShockWaveComponent, TransformComponent>();
 
         _count = 0;
 
@@ -65,7 +64,7 @@ public sealed class RMCExplosionShockWaveOverlay : Overlay, IEntityEventSubscrib
 
             if (_count == MaxCount)
                 break;
-            }
+        }
 
         return _count > 0;
     }

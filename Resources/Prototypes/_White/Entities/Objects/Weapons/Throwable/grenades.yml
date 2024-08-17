@@ -52,6 +52,7 @@
   - type: Sprite
     state: shrapnel_bright2
 
+# Не работает каким-то хуем
 - type: entity
   parent: BaseBullet
   id: ProjectileShrapnel
@@ -88,4 +89,4 @@
         Piercing: 12
     deleteOnCollide: true
   - type: TimedDespawn
-    lifetime: 0.25
+    lifetime: 0.5

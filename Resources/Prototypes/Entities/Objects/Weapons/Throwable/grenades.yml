@@ -64,11 +64,6 @@
         volume: 5
     initialBeepDelay: 0
     beepInterval: 2 # 2 beeps total (at 0 and 2)
-  - type: ClusterGrenade # WD
-    fillPrototype: ProjectileShrapnel
-    maxGrenadesCount: 24
-    grenadeType: enum.GrenadeType.Shoot
-    triggerGrenades: false
   - type: ExplosionEffect
     maxShrapnel: 12
 

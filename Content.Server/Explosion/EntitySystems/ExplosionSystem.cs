@@ -177,8 +177,10 @@ public sealed partial class ExplosionSystem
             totalIntensity ??= RadiusToIntensity((float) radius, explosive.IntensitySlope, explosive.MaxIntensity);
         totalIntensity ??= explosive.TotalIntensity;
 
+        // WD edit start
         var ev = new ExplosiveTriggeredEvent();
         RaiseLocalEvent(uid, ref ev);
+        // WD edit end
 
         QueueExplosion(uid,
             explosive.ExplosionType,

@@ -45,6 +45,11 @@
     bodyType: KinematicController
     bodyStatus: InAir
   - type: CanMoveInAir
+  - type: ShowSecurityIcons # WD start
+  - type: ShowHealthBars
+    damageContainers:
+      - Biological
+      - Inorganic # WD end
   - type: Tag
     tags:
     - BypassInteractionRangeChecks

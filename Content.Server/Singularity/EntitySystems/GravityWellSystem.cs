@@ -1,7 +1,9 @@
+using Content.Server._White.Other;
 using Content.Server.Atmos.Components;
 using Content.Server.Singularity.Components;
 using Content.Server.Stunnable;
 using Content.Shared.Ghost;
+using Content.Shared.Singularity.Components;
 using Content.Shared.Singularity.EntitySystems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -102,7 +104,7 @@ public sealed class GravityWellSystem : SharedGravityWellSystem
         if (gravWell.MaxRange < 0.0f || !Resolve(uid, ref xform))
             return;
 
-        var scale = (float)frameTime.TotalSeconds;
+        var scale = (float) frameTime.TotalSeconds;
         GravPulse(uid, gravWell.MaxRange, gravWell.MinRange, gravWell.BaseRadialAcceleration * scale, gravWell.BaseTangentialAcceleration * scale, xform);
     }
 
@@ -191,19 +193,32 @@ public sealed class GravityWellSystem : SharedGravityWellSystem
         var bodyQuery = GetEntityQuery<PhysicsComponent>();
         var xformQuery = GetEntityQuery<TransformComponent>();
 
-        foreach(var entity in _lookup.GetEntitiesInRange(mapPos.MapId, epicenter, maxRange, flags: LookupFlags.Dynamic | LookupFlags.Sundries))
+        foreach(var entity in _lookup.GetEntitiesInRange(mapPos.MapId, epicenter, maxRange, flags: LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries))
         {
             if (ignore?.Contains(entity) is true)
                 continue;
 
-            if (!bodyQuery.TryGetComponent(entity, out var physics) || physics.BodyType == BodyType.Static)
+            if (!bodyQuery.TryGetComponent(entity, out var physics)) // WD edit
                 continue;
 
-            if (TryComp<MovedByPressureComponent>(entity, out var movedPressure) && !movedPressure.Enabled) //Ignore magboots users
+            // WD added start
+            var xform = Transform(entity);
+
+            if (HasComp<ContainmentFieldGeneratorComponent>(entity))
+                continue;
+
+            if (xform.Anchored && HasComp<RadiationCollectorComponent>(entity))
+                continue;
+            // WD added end
+
+            if (TryComp<MovedByPressureComponent>(entity, out var movedPressure) && !movedPressure.Enabled) // Ignore magboots users
                 continue;
 
             if (!CanGravPulseAffect(entity))
                 continue;
+
+            if (xform.Anchored) // WD added
+                _transform.Unanchor(entity, xform);
 
             var displacement = epicenter - _transform.GetWorldPosition(entity, xformQuery);
             var distance2 = displacement.LengthSquared();

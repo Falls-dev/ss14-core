@@ -4,6 +4,7 @@ using Content.Shared.Anomaly.Components;
 using Content.Shared.Anomaly.Effects;
 using Content.Shared.Anomaly.Effects.Components;
 using Content.Shared.Radiation.Components;
+using Content.Shared.Singularity.Components;
 
 namespace Content.Server.Anomaly.Effects;
 

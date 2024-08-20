@@ -67,7 +67,6 @@
   - type: GuideHelp
     guides: [ Singularity, Power ]
 
-
 - type: entity
   id: ContainmentField
   name: containment field

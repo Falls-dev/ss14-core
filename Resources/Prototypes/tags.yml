@@ -263,7 +263,7 @@
 
 - type: Tag
   id: CannonBall
-  
+
 - type: Tag
   id: CannonRestrict
 
@@ -1334,3 +1334,6 @@
 
 - type: Tag
   id: WriteIgnoreStamps
+
+- type: Tag # WD
+  id: GravityWellAllowStatic

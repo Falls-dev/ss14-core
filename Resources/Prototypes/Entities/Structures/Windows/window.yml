@@ -18,6 +18,7 @@
     tags:
       - ForceFixRotations
       - Window
+      - GravityWellAllowStatic # WD
   - type: Sprite
     drawdepth: WallTops
     sprite: Structures/Windows/window.rsi
@@ -93,7 +94,7 @@
   - type: WindowMark
     replacementProto: WallSolid
   - type: BlockWeather
-  
+
 - type: entity
   id: WindowRCDResistant
   parent: Window
@@ -197,7 +198,7 @@
   - type: ReflectAspectMark
 
 - type: entity
-  id: WindowDirectionalRCDResistant  
+  id: WindowDirectionalRCDResistant
   parent: WindowDirectional
   abstract: true
   components:

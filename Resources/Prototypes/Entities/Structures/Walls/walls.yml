@@ -21,6 +21,7 @@
   - type: Tag
     tags:
     - Wall
+    - GravityWellAllowStatic # WD
   - type: Sprite
     drawdepth: Walls
   - type: Icon
@@ -879,9 +880,6 @@
   id: WallSolid
   name: solid wall
   components:
-  - type: Tag
-    tags:
-      - Wall
   - type: Sprite
     sprite: Structures/Walls/solid.rsi
   - type: WallReplacementMarker

@@ -16,6 +16,7 @@
     - type: Tag
       tags:
         - DeleteWithWindows
+        - GravityWellAllowStatic # WD
     - type: CanBuildWindowOnTop
     - type: Sprite
       drawdepth: Walls

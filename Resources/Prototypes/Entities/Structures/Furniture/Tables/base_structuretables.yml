@@ -38,6 +38,9 @@
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepHull
+  - type: Tag
+    tags:
+    - GravityWellAllowStatic # WD
 
 - type: entity
   id: CounterBase

@@ -146,6 +146,7 @@
   - type: Tag
     tags:
       - Airlock
+      - GravityWellAllowStatic # WD
       # This tag is used to nagivate the Airlock construction graph. It's needed because the construction graph is shared between Airlock, AirlockGlass, and HighSecDoor
   - type: PryUnpowered
   - type: BlockWeather

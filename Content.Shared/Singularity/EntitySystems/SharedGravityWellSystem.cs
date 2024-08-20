@@ -5,6 +5,7 @@ using Content.Shared.Stunnable;
 using Content.Shared.Tag;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
@@ -32,7 +33,7 @@ public abstract class SharedGravityWellSystem : EntitySystem
     /// </summary>
     public const float MinGravPulseRange = 0.00001f;
 
-    private const string BlockTagID = "GravityWellAllowStatic";
+    private const string AllowTagID = "GravityWellAllowStatic";
 
     /// <summary>
     /// Causes a gravitational pulse, shoving around all entities within some distance of an epicenter.
@@ -64,7 +65,7 @@ public abstract class SharedGravityWellSystem : EntitySystem
             if (!TryComp(entity, out TransformComponent? xform))
                 continue;
 
-            if (xform.Anchored && TryComp<TagComponent>(entity, out var tag) && tag.Tags.Contains(BlockTagID))
+            if (physics.BodyType == BodyType.Static && TryComp<TagComponent>(entity, out var tag) && !tag.Tags.Contains(AllowTagID))
                 continue;
             // WD added end
 

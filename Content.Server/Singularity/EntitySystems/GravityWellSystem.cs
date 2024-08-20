@@ -195,14 +195,18 @@ public sealed class GravityWellSystem : SharedGravityWellSystem
 
         foreach(var entity in _lookup.GetEntitiesInRange(mapPos.MapId, epicenter, maxRange, flags: LookupFlags.Dynamic | LookupFlags.Sundries))
         {
+            if (!entity.Valid)
+                continue;
+
             if (ignore?.Contains(entity) is true)
                 continue;
 
-            if (!bodyQuery.TryGetComponent(entity, out var physics)) // WD edit
+            // WD added start
+            if (!TryComp<PhysicsComponent>(entity, out var physics)) // WD edit
                 continue;
 
-            // WD added start
-            var xform = Transform(entity);
+            if (!TryComp(entity, out TransformComponent? xform))
+                continue;
 
             if (HasComp<ContainmentFieldGeneratorComponent>(entity))
                 continue;
@@ -220,7 +224,7 @@ public sealed class GravityWellSystem : SharedGravityWellSystem
             if (xform.Anchored) // WD added
                 _transform.Unanchor(entity, xform);
 
-            var displacement = epicenter - _transform.GetWorldPosition(entity, xformQuery);
+            var displacement = epicenter - _transform.GetWorldPosition(entity);
             var distance2 = displacement.LengthSquared();
 
             if (distance2 < minRange2)

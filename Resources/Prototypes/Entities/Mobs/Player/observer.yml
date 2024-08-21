@@ -115,3 +115,15 @@
       state: icon
     iconOn: Interface/Actions/ghostHearingToggled.png
     event: !type:ToggleGhostHearingActionEvent
+
+- type: entity # WD
+  id: ActionToggleGhostHud
+  name: ghost-gui-toggle-hud-name
+  description: ghost-gui-toggle-hud-desc
+  noSpawn: true
+  components:
+  - type: InstantAction
+    icon: Interface/VerbIcons/vv.svg.192dpi.png
+    clientExclusive: true
+    checkCanInteract: false
+    event: !type:ToggleGhostHudActionEvent # WD

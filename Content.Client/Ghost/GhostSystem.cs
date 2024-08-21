@@ -67,6 +67,7 @@ namespace Content.Client.Ghost
             SubscribeLocalEvent<EyeComponent, ToggleLightingActionEvent>(OnToggleLighting);
             SubscribeLocalEvent<EyeComponent, ToggleFoVActionEvent>(OnToggleFoV);
             SubscribeLocalEvent<GhostComponent, ToggleGhostsActionEvent>(OnToggleGhosts);
+            SubscribeLocalEvent<GhostComponent, ToggleGhostHudActionEvent>(OnToggleGhostHud); // WD
         }
 
         private void OnStartup(EntityUid uid, GhostComponent component, ComponentStartup args)
@@ -82,6 +83,14 @@ namespace Content.Client.Ghost
 
             Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-lighting-manager-popup"), args.Performer);
             _contentEye.RequestToggleLight(uid, component);
+            args.Handled = true;
+        }
+
+        private void OnToggleGhostHud(EntityUid uid, ToggleGhostHudActionEvent args) // WD start
+        {
+            if (args.Handled)
+                return;
+
             args.Handled = true;
         }
 

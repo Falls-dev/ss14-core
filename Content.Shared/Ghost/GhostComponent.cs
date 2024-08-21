@@ -39,6 +39,12 @@ public sealed partial class GhostComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? BooActionEntity;
 
+    [DataField] // WD start
+    public EntProtoId ToggleGhostHudAction = "ActionToggleGhostHud";
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? ToggleGhostHudActionEntity; // WD end
+
     // End actions
 
     [ViewVariables(VVAccess.ReadWrite), DataField]
@@ -102,3 +108,5 @@ public sealed partial class ToggleLightingActionEvent : InstantActionEvent { }
 public sealed partial class ToggleGhostHearingActionEvent : InstantActionEvent { }
 
 public sealed partial class BooActionEvent : InstantActionEvent { }
+
+public sealed partial class ToggleGhostHudActionEvent : InstantActionEvent { }

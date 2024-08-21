@@ -86,7 +86,9 @@ public partial class ArtifactSystem
         foreach (var artifact in items)
         {
             var entity = artifact.Owner;
-            msg.AppendFormat("{0}: {1}\n", entity, Name(entity));
+            var effects = string.Join(", ", artifact.NodeTree.ToArray().Select(x => x.Effect));
+
+            msg.AppendFormat("{0}: {1}, {2}\n\n", Name(entity), effects, entity);
         }
 
         shell.WriteLine(msg.ToString());

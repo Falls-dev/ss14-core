@@ -32,6 +32,12 @@ public sealed class RandomArtifactsSystem : EntitySystem
         if (!_artifactsEnabled)
             return;
 
+        // Removing old artifact-items and replace it with new funny stealthy items
+        foreach (var oldArtifact in EntityQuery<ArtifactComponent>())
+        {
+            QueueDel(oldArtifact.Owner);
+        }
+
         var items = EntityQuery<ItemComponent>().ToList();
         _random.Shuffle(items);
 

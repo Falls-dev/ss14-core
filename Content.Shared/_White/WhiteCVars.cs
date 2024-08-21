@@ -409,4 +409,7 @@ public sealed class WhiteCVars
 
     public static readonly CVarDef<bool> EnableRandomArtifacts =
         CVarDef.Create("white.random_artifacts_enabled", true, CVar.SERVERONLY);
+
+    public static readonly CVarDef<float> ItemToArtifactRatio =
+        CVarDef.Create("white.random_artifacts_ratio", 0.7f, CVar.SERVERONLY);
 }

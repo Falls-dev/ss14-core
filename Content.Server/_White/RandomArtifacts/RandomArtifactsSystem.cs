@@ -14,7 +14,7 @@ public sealed class RandomArtifactsSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IConfigurationManager _configurationManager = default!;
 
-    private const float ItemToArtifactRatio = 0.7f; // from 0 to 100. In % percents
+    private float _itemToArtifactRatio; // from 0 to 100. In % percents. Default is 0.7%
     private bool _artifactsEnabled;
 
     public override void Initialize()
@@ -22,6 +22,7 @@ public sealed class RandomArtifactsSystem : EntitySystem
         base.Initialize();
 
         _configurationManager.OnValueChanged(WhiteCVars.EnableRandomArtifacts, b => OnCvarChanged(b), true);
+        _configurationManager.OnValueChanged(WhiteCVars.ItemToArtifactRatio, r => _itemToArtifactRatio = r, true);
 
         SubscribeLocalEvent<RoundStartedEvent>(OnRoundStart);
     }
@@ -34,7 +35,7 @@ public sealed class RandomArtifactsSystem : EntitySystem
         var items = EntityQuery<ItemComponent>().ToList();
         _random.Shuffle(items);
 
-        var selectedItems = GetPercentageOfHashSet(items, ItemToArtifactRatio);
+        var selectedItems = GetPercentageOfHashSet(items, _itemToArtifactRatio);
 
         foreach (var item in selectedItems)
         {

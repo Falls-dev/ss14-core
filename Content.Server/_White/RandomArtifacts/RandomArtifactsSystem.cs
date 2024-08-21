@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using Content.Server.Xenoarchaeology.XenoArtifacts;
+using Content.Shared._White;
 using Content.Shared.GameTicking;
 using Content.Shared.Item;
+using Robust.Shared.Configuration;
 using Robust.Shared.Random;
 
 namespace Content.Server._White.RandomArtifacts;
@@ -10,18 +12,25 @@ public sealed class RandomArtifactsSystem : EntitySystem
 {
     [Dependency] private readonly ArtifactSystem _artifactsSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IConfigurationManager _configurationManager = default!;
 
-    private const float ItemToArtifactRatio = 0.7f; // from 0 to 100
+    private const float ItemToArtifactRatio = 0.7f; // from 0 to 100. In % percents
+    private bool _artifactsEnabled;
 
     public override void Initialize()
     {
         base.Initialize();
+
+        _configurationManager.OnValueChanged(WhiteCVars.EnableRandomArtifacts, b => OnCvarChanged(b), true);
 
         SubscribeLocalEvent<RoundStartedEvent>(OnRoundStart);
     }
 
     private void OnRoundStart(RoundStartedEvent ev)
     {
+        if (!_artifactsEnabled)
+            return;
+
         var items = EntityQuery<ItemComponent>().ToList();
         _random.Shuffle(items);
 
@@ -42,6 +51,22 @@ public sealed class RandomArtifactsSystem : EntitySystem
 
         return sourceList.Where(x => !Transform(x.Owner).Anchored).Take(countToAdd).ToHashSet();
     }
+
+    private void OnCvarChanged(bool enabled)
+    {
+        if (_artifactsEnabled != enabled && !enabled)
+        {
+            var items = EntityQuery<ItemComponent, ArtifactComponent>();
+
+            foreach (var (_, artifact) in items)
+            {
+                RemComp<ArtifactComponent>(artifact.Owner);
+            }
+        }
+
+        _artifactsEnabled = enabled;
+    }
+
 }
 
 /*

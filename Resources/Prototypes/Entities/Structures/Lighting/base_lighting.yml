@@ -10,7 +10,6 @@
   description: "An always powered light."
   suffix: Always powered
   components:
-  - type: LightingOverlay
   - type: MeleeSound
     soundGroups:
       Brute:
@@ -71,6 +70,7 @@
       - !type:PlaySoundBehavior
         sound:
           collection: GlassBreak
+  - type: LightingOverlay # WD
   - type: LightMark
   placement:
     mode: SnapgridCenter

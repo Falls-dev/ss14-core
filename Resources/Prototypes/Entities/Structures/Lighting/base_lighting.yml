@@ -33,9 +33,9 @@
     state: base
   - type: PointLight
     color: "#FFE4CE" # 5000K color temp
-    energy: 0.8
-    radius: 10
-    softness: 1
+    energy: 0.65
+    radius: 6
+    softness: 3
     offset: "0, -0.5"
   - type: Damageable
     damageContainer: StructuralInorganic
@@ -155,9 +155,9 @@
       types:
         Heat: 5
   - type: PointLight
-    radius: 15
-    energy: 1
-    softness: 0.9
+    radius: 10
+    energy: 0.7
+    softness: 3
     color: "#EEEEFF"
 
 - type: entity
@@ -167,8 +167,8 @@
   components:
   - type: PointLight
     radius: 10
-    energy: 2.5
-    softness: 0.9
+    energy: 0.7
+    softness: 3
     color: "#EEEEFF"
 
 #Exterior lights
@@ -190,9 +190,9 @@
   suffix: Always Powered, Blue
   components:
   - type: PointLight
-    radius: 12
-    energy: 4.5
-    softness: 0.5
+    radius: 10
+    energy: 0.7
+    softness: 3
     color: "#B4FCF0"
 
 #Sodium lights
@@ -209,8 +209,8 @@
         Heat: 5
   - type: PointLight
     radius: 10
-    energy: 2.5
-    softness: 0.9
+    energy: 0.7
+    softness: 3
     color: "#FFAF38"
 
 - type: entity
@@ -220,8 +220,8 @@
   components:
   - type: PointLight
     radius: 10
-    energy: 4
-    softness: 0.5
+    energy: 0.7
+    softness: 3
     color: "#FFAF38"
 
 #Small lights
@@ -241,9 +241,9 @@
       sprite: Structures/Wallmounts/Lighting/light_small.rsi
       state: base
     - type: PointLight
-      energy: 1.0
-      radius: 6
-      softness: 1.1
+      radius: 4
+      energy: 0.7
+      softness: 3
       enabled: true
     - type: Damageable
       damageContainer: StructuralInorganic
@@ -325,8 +325,8 @@
   - type: PointLight
     enabled: true
     radius: 8
-    energy: 1
-    softness: 1
+    energy: 0.7
+    softness: 3
     color: "#EEEEFF"
   - type: PoweredLight
     hasLampOnSpawn: LedLightBulb

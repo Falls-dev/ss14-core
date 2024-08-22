@@ -61,6 +61,9 @@ public sealed class LightingOverlay : Overlay
 
             var color = component.Color;
 
+            if (color == null && _entityManager.TryGetComponent<PointLightComponent>(uid, out var pointLight))
+                color = pointLight.Color;
+
             var (_, _, worldMatrix) = xform.GetWorldPositionRotationMatrix(xformCompQuery);
             handle.SetTransform(worldMatrix);
 

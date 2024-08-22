@@ -23,5 +23,5 @@ public sealed partial class LightingOverlayComponent : Component
     public float Offsety = 0.5f;
 
     [DataField]
-    public Color Color = Color.White;
+    public Color? Color;
 }

@@ -1,7 +1,9 @@
 ﻿using System.Numerics;
+using Content.Shared._White;
 using Content.Shared._White.Lighting.Shaders;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -15,11 +17,13 @@ public sealed class LightingOverlay : Overlay
     private readonly EntityManager _entityManager;
     private readonly SpriteSystem _spriteSystem;
     private readonly TransformSystem _transformSystem;
+    private readonly IConfigurationManager _cfg;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceEntities;
     public override bool RequestScreenTexture => true;
 
     private readonly ShaderInstance _shader;
+    private bool _enableGlowing;
 
     public LightingOverlay(EntityManager entityManager, IPrototypeManager prototypeManager)
     {
@@ -27,6 +31,9 @@ public sealed class LightingOverlay : Overlay
         _spriteSystem = entityManager.EntitySysManager.GetEntitySystem<SpriteSystem>();
         _prototypeManager = prototypeManager;
         _transformSystem = entityManager.EntitySysManager.GetEntitySystem<TransformSystem>();
+        _cfg = IoCManager.Resolve<IConfigurationManager>();
+        _cfg.OnValueChanged(WhiteCVars.EnableLightsGlowing, val => _enableGlowing = val, true);
+
         IoCManager.InjectDependencies(this);
 
         _shader = _prototypeManager.Index<ShaderPrototype>("LightingOverlay").InstanceUnique();
@@ -35,6 +42,9 @@ public sealed class LightingOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
+        if (!_enableGlowing)
+            return;
+
         if (ScreenTexture == null)
             return;
 

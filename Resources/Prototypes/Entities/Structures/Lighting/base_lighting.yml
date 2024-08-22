@@ -35,7 +35,7 @@
     color: "#FFE4CE" # 5000K color temp
     energy: 0.65
     radius: 6
-    softness: 3
+    softness: 1
     offset: "0, -0.5"
   - type: Damageable
     damageContainer: StructuralInorganic
@@ -157,7 +157,7 @@
   - type: PointLight
     radius: 10
     energy: 0.7
-    softness: 3
+    softness: 1
     color: "#EEEEFF"
 
 - type: entity
@@ -168,7 +168,7 @@
   - type: PointLight
     radius: 10
     energy: 0.7
-    softness: 3
+    softness: 1
     color: "#EEEEFF"
 
 #Exterior lights
@@ -192,7 +192,7 @@
   - type: PointLight
     radius: 10
     energy: 0.7
-    softness: 3
+    softness: 1
     color: "#B4FCF0"
 
 #Sodium lights
@@ -210,7 +210,7 @@
   - type: PointLight
     radius: 10
     energy: 0.7
-    softness: 3
+    softness: 1
     color: "#FFAF38"
 
 - type: entity
@@ -221,7 +221,7 @@
   - type: PointLight
     radius: 10
     energy: 0.7
-    softness: 3
+    softness: 1
     color: "#FFAF38"
 
 #Small lights
@@ -243,7 +243,7 @@
     - type: PointLight
       radius: 4
       energy: 0.7
-      softness: 3
+      softness: 1
       enabled: true
     - type: Damageable
       damageContainer: StructuralInorganic
@@ -326,7 +326,7 @@
     enabled: true
     radius: 8
     energy: 0.7
-    softness: 3
+    softness: 1
     color: "#EEEEFF"
   - type: PoweredLight
     hasLampOnSpawn: LedLightBulb

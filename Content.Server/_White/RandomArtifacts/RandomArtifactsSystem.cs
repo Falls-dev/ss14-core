@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Content.Server.Xenoarchaeology.XenoArtifacts;
 using Content.Shared._White;
-using Content.Shared.GameTicking;
 using Content.Shared.Item;
 using Robust.Shared.Configuration;
 using Robust.Shared.Random;

@@ -24,10 +24,10 @@ public sealed class RandomArtifactsSystem : EntitySystem
         _configurationManager.OnValueChanged(WhiteCVars.EnableRandomArtifacts, b => OnCvarChanged(b), true);
         _configurationManager.OnValueChanged(WhiteCVars.ItemToArtifactRatio, r => _itemToArtifactRatio = r, true);
 
-        SubscribeLocalEvent<RoundStartedEvent>(OnRoundStart);
+        SubscribeLocalEvent<MainMapInitEvent>(OnRoundStart);
     }
 
-    private void OnRoundStart(RoundStartedEvent ev)
+    private void OnRoundStart(MainMapInitEvent ev)
     {
         if (!_artifactsEnabled)
             return;
@@ -73,6 +73,8 @@ public sealed class RandomArtifactsSystem : EntitySystem
 
         _artifactsEnabled = enabled;
     }
+
+    public sealed class MainMapInitEvent : EntityEventArgs { }
 
 }
 

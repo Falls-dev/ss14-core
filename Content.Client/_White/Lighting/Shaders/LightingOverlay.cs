@@ -35,10 +35,9 @@ public sealed class LightingOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        if(ScreenTexture == null)
+        if (ScreenTexture == null)
             return;
 
-        var lightCompQuery = _entityManager.GetEntityQuery<PointLightComponent>();
         var xformCompQuery = _entityManager.GetEntityQuery<TransformComponent>();
 
         var handle = args.WorldHandle;
@@ -52,24 +51,27 @@ public sealed class LightingOverlay : Overlay
             if (xform.MapID != args.MapId)
                 continue;
 
-            var worldPos = _transformSystem.GetWorldPosition(xform, xformCompQuery);
-
-            if(!bounds.Contains(worldPos))
+            if (!component.Enabled)
                 continue;
 
-            Color color = Color.White;
-            SpriteSpecifier sprite = component.Sprite;
+            var worldPos = _transformSystem.GetWorldPosition(xform, xformCompQuery);
+
+            if (!bounds.Contains(worldPos))
+                continue;
+
+            var color = component.Color;
 
             var (_, _, worldMatrix) = xform.GetWorldPositionRotationMatrix(xformCompQuery);
             handle.SetTransform(worldMatrix);
 
-            Texture texture = _spriteSystem.Frame0(sprite);
-            float xOffset = component.Offsetx - (texture.Width / 2) / EyeManager.PixelsPerMeter;
-            float yOffset = component.Offsety - (texture.Height / 2) / EyeManager.PixelsPerMeter;
+            var mask = _spriteSystem.Frame0(component.Sprite); // mask
 
-            Vector2 textureVector = new Vector2(xOffset, yOffset);
+            var xOffset = component.Offsetx - (mask.Width / 2) / EyeManager.PixelsPerMeter;
+            var yOffset = component.Offsety - (mask.Height / 2) / EyeManager.PixelsPerMeter;
 
-            handle.DrawTexture(texture, textureVector, color);
+            var textureVector = new Vector2(xOffset, yOffset);
+
+            handle.DrawTexture(mask, textureVector, color);
 
             handle.UseShader(_shader);
         }

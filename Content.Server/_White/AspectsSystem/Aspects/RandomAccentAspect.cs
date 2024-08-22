@@ -23,6 +23,7 @@ public sealed class RandomAccentAspect : AspectSystem<RandomAccentAspectComponen
     {
         base.Started(uid, component, gameRule, args);
         var query = EntityQueryEnumerator<MindContainerComponent>();
+
         while (query.MoveNext(out var ent, out _))
         {
             ApplyRandomAccent(ent);
@@ -67,8 +68,10 @@ public sealed class RandomAccentAspect : AspectSystem<RandomAccentAspectComponen
     private void ApplyRandomAccent(EntityUid uid)
     {
         var allAccents = Enum.GetValues(typeof(AccentType)).Cast<AccentType>().ToList();
+
         var randomIndex = _random.Next(allAccents.Count);
         var selectedAccent = allAccents[randomIndex];
+
         ApplyAccent(uid, selectedAccent);
     }
 
@@ -100,9 +103,11 @@ public sealed class RandomAccentAspect : AspectSystem<RandomAccentAspectComponen
             case AccentType.Lizard:
                 EntityManager.EnsureComponent<LizardAccentComponent>(uid);
                 break;
+            /* Not funny
             case AccentType.Backwards:
                 EntityManager.EnsureComponent<BackwardsAccentComponent>(uid);
                 break;
+            */
             case AccentType.Bark:
                 EntityManager.EnsureComponent<BarkAccentComponent>(uid);
                 break;

@@ -83,37 +83,6 @@
 
 - type: entity
   parent: CMSurgeryStepBase
-  id: CMSurgeryStepCutLarvaRoots
-  name: Cut larva roots
-  components:
-  - type: CMSurgeryStep
-    skill: 2
-    tool:
-    - type: CMScalpel
-  - type: CMSurgeryCutLarvaRootsStep
-  - type: Sprite
-    sprite: _CM14/Objects/Medical/Surgery/scalpel.rsi
-    state: scalpel
-  - type: CMSurgeryOperatingTableCondition
-
-- type: entity
-  parent: CMSurgeryStepBase
-  id: CMSurgeryStepRemoveLarva
-  name: Remove larva
-  components:
-  - type: CMSurgeryStep
-    skill: 2
-    tool:
-    - type: CMHemostat
-    bodyRemove:
-    - type: VictimHugged
-  - type: Sprite
-    sprite: _CM14/Objects/Medical/Surgery/hemostat.rsi
-    state: hemostat
-  - type: CMSurgeryOperatingTableCondition
-
-- type: entity
-  parent: CMSurgeryStepBase
   id: CMSurgeryStepCloseBones
   name: Close bones
   components:

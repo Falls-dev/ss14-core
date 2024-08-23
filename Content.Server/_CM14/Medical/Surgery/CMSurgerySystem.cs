@@ -6,12 +6,15 @@ using Content.Shared._CM14.Medical.Surgery;
 using Content.Shared._CM14.Medical.Surgery.Conditions;
 using Content.Shared._CM14.Medical.Surgery.Effects.Step;
 using Content.Shared._CM14.Medical.Surgery.Tools;
+using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared.Interaction;
 using Content.Shared.Prototypes;
 using Robust.Server.GameObjects;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using CMSurgeryBuiState = Content.Shared._CM14.Medical.Surgery.CMSurgeryBuiState;
+using CMSurgeryUIKey = Content.Shared._CM14.Medical.Surgery.CMSurgeryUIKey;
 
 namespace Content.Server._CM14.Medical.Surgery;
 

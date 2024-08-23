@@ -1,4 +1,4 @@
-﻿using Content.Shared._CM14.Medical.Surgery;
+﻿using Content.Shared._RMC14.Medical.Surgery;
 
 namespace Content.Client._CM14.Medical.Surgery;
 

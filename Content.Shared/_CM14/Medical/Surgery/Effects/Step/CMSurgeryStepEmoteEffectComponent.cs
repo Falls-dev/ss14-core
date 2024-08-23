@@ -1,4 +1,5 @@
-﻿using Content.Shared.Chat.Prototypes;
+﻿using Content.Shared._RMC14.Medical.Surgery;
+using Content.Shared.Chat.Prototypes;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 

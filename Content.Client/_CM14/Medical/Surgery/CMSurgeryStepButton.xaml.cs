@@ -5,7 +5,7 @@ using Robust.Client.UserInterface.XAML;
 namespace Content.Client._CM14.Medical.Surgery;
 
 [GenerateTypedNameReferences]
-public sealed partial class CMSurgeryStepButton : XenoChoiceControl
+public sealed partial class CMSurgeryStepButton : BaseButtonForSurgery
 {
     public EntityUid Step { get; set; }
 

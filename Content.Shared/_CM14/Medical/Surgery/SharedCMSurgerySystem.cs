@@ -1,23 +1,22 @@
 ﻿using System.Linq;
+using Content.Shared._CM14.Medical.Surgery;
 using Content.Shared._CM14.Medical.Surgery.Conditions;
-using Content.Shared._CM14.Medical.Surgery.Effects.Complete;
 using Content.Shared._CM14.Medical.Surgery.Steps.Parts;
-using Content.Shared._CM14.Xenos.Hugger;
 using Content.Shared.Body.Part;
 using Content.Shared.Buckle.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Inventory;
+using Content.Shared.Interaction;
 using Content.Shared.Popups;
-using Content.Shared.Standing;
+using Content.Shared.Standing.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CM14.Medical.Surgery;
+namespace Content.Shared._RMC14.Medical.Surgery;
 
 public abstract partial class SharedCMSurgerySystem : EntitySystem
 {
@@ -28,8 +27,9 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly RotateToFaceSystem _rotateToFace = default!;
+    [Dependency] private readonly SharedStandingStateSystem _standing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private readonly Dictionary<EntProtoId, EntityUid> _surgeries = new();
 
@@ -42,10 +42,7 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
         SubscribeLocalEvent<CMSurgeryTargetComponent, CMSurgeryDoAfterEvent>(OnTargetDoAfter);
 
         SubscribeLocalEvent<CMSurgeryCloseIncisionConditionComponent, CMSurgeryValidEvent>(OnCloseIncisionValid);
-        SubscribeLocalEvent<CMSurgeryLarvaConditionComponent, CMSurgeryValidEvent>(OnLarvaValid);
         SubscribeLocalEvent<CMSurgeryPartConditionComponent, CMSurgeryValidEvent>(OnPartConditionValid);
-
-        SubscribeLocalEvent<CMSurgeryRemoveLarvaComponent, CMSurgeryCompletedEvent>(OnRemoveLarva);
 
         InitializeSteps();
     }
@@ -60,15 +57,15 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
         if (args.Cancelled ||
             args.Handled ||
             args.Target is not { } target ||
-            !IsSurgeryValid(target, args.Part, args.Surgery, args.Step, out var surgery, out var part, out var step) ||
-            !PreviousStepsComplete(target, part, surgery, args.Step) ||
+            !IsSurgeryValid(ent, target, args.Surgery, args.Step, out var surgery, out var part, out var step) ||
+            !PreviousStepsComplete(ent, part, surgery, args.Step) ||
             !CanPerformStep(args.User, ent, part.Comp.PartType, step, false))
         {
             Log.Warning($"{ToPrettyString(args.User)} tried to start invalid surgery.");
             return;
         }
 
-        var ev = new CMSurgeryStepEvent(args.User, target, part, GetTools(args.User));
+        var ev = new CMSurgeryStepEvent(args.User, ent, part, GetTools(args.User));
         RaiseLocalEvent(step, ref ev);
 
         RefreshUI(ent);
@@ -84,24 +81,13 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
         }
     }
 
-    private void OnLarvaValid(Entity<CMSurgeryLarvaConditionComponent> ent, ref CMSurgeryValidEvent args)
-    {
-        if (!HasComp<VictimHuggedComponent>(args.Body))
-            args.Cancelled = true;
-    }
-
     private void OnPartConditionValid(Entity<CMSurgeryPartConditionComponent> ent, ref CMSurgeryValidEvent args)
     {
         if (CompOrNull<BodyPartComponent>(args.Part)?.PartType != ent.Comp.Part)
             args.Cancelled = true;
     }
 
-    private void OnRemoveLarva(Entity<CMSurgeryRemoveLarvaComponent> ent, ref CMSurgeryCompletedEvent args)
-    {
-        RemCompDeferred<VictimHuggedComponent>(ent);
-    }
-
-    protected bool IsSurgeryValid(EntityUid body, NetEntity netPart, EntProtoId surgery, EntProtoId stepId, out Entity<CMSurgeryComponent> surgeryEnt, out Entity<BodyPartComponent> part, out EntityUid step)
+    protected bool IsSurgeryValid(EntityUid body, EntityUid targetPart, EntProtoId surgery, EntProtoId stepId, out Entity<CMSurgeryComponent> surgeryEnt, out Entity<BodyPartComponent> part, out EntityUid step)
     {
         surgeryEnt = default;
         part = default;
@@ -109,8 +95,7 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
 
         if (!HasComp<CMSurgeryTargetComponent>(body) ||
             !IsLyingDown(body) ||
-            GetEntity(netPart) is not { Valid: true } netPartEnt ||
-            !TryComp(netPartEnt, out BodyPartComponent? partComp) ||
+            !TryComp(targetPart, out BodyPartComponent? partComp) ||
             GetSingleton(surgery) is not { } surgeryEntId ||
             !TryComp(surgeryEntId, out CMSurgeryComponent? surgeryComp) ||
             !surgeryComp.Steps.Contains(stepId) ||
@@ -119,7 +104,7 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
             return false;
         }
 
-        var ev = new CMSurgeryValidEvent(body, netPartEnt);
+        var ev = new CMSurgeryValidEvent(body, targetPart);
         RaiseLocalEvent(stepEnt, ref ev);
         RaiseLocalEvent(surgeryEntId, ref ev);
 
@@ -127,7 +112,7 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
             return false;
 
         surgeryEnt = (surgeryEntId, surgeryComp);
-        part = (netPartEnt, partComp);
+        part = (targetPart, partComp);
         step = stepEnt;
         return true;
     }

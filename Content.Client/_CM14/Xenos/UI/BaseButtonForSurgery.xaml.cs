@@ -8,9 +8,9 @@ namespace Content.Client._CM14.Xenos.UI;
 
 [GenerateTypedNameReferences]
 [Virtual]
-public partial class XenoChoiceControl : Control
+public partial class BaseButtonForSurgery : Control
 {
-    public XenoChoiceControl()
+    public BaseButtonForSurgery()
     {
         RobustXamlLoader.Load(this);
     }

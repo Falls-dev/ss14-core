@@ -1,9 +1,8 @@
-﻿using Content.Shared._CM14.Marines.Skills;
+﻿using Content.Shared._CM14.Medical.Surgery;
 using Content.Shared._CM14.Medical.Surgery.Conditions;
 using Content.Shared._CM14.Medical.Surgery.Steps;
 using Content.Shared._CM14.Medical.Surgery.Tools;
-using Content.Shared._CM14.Xenos.Hugger;
-using Content.Shared.Armor;
+using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared.Body.Part;
 using Content.Shared.Buckle.Components;
 using Content.Shared.DoAfter;
@@ -11,7 +10,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CM14.Medical.Surgery;
+namespace Content.Shared._RMC14.Medical.Surgery;
 
 public abstract partial class SharedCMSurgerySystem
 {
@@ -21,14 +20,9 @@ public abstract partial class SharedCMSurgerySystem
         SubscribeLocalEvent<CMSurgeryStepComponent, CMSurgeryStepCompleteCheckEvent>(OnToolCheck);
         SubscribeLocalEvent<CMSurgeryStepComponent, CMSurgeryCanPerformStepEvent>(OnToolCanPerform);
 
-        SubSurgery<CMSurgeryCutLarvaRootsStepComponent>(OnCutLarvaRootsStep, OnCutLarvaRootsCheck);
-
-        SubscribeLocalEvent<InventoryComponent, CMSurgeryCanPerformStepEvent>(_inventory.RelayEvent);
-        SubscribeLocalEvent<ArmorComponent, InventoryRelayedEvent<CMSurgeryCanPerformStepEvent>>(OnArmorCanPerformStep);
-
-        Subs.BuiEvents<CMSurgeryTargetComponent>(CMSurgeryUIKey.Key, sub =>
+        Subs.BuiEvents<CMSurgeryTargetComponent>(CMSurgeryUIKey.Key, subs =>
         {
-            sub.Event<CMSurgeryStepChosenBuiMessage>(OnSurgeryTargetStepChosen);
+            subs.Event<CMSurgeryStepChosenBuiMsg>(OnSurgeryTargetStepChosen);
         });
     }
 
@@ -127,13 +121,6 @@ public abstract partial class SharedCMSurgerySystem
 
     private void OnToolCanPerform(Entity<CMSurgeryStepComponent> ent, ref CMSurgeryCanPerformStepEvent args)
     {
-        if (!TryComp(args.User, out SkillsComponent? skills) ||
-            skills.Surgery < ent.Comp.Skill)
-        {
-            args.Invalid = StepInvalidReason.MissingSkills;
-            return;
-        }
-
         if (HasComp<CMSurgeryOperatingTableConditionComponent>(ent))
         {
             if (!TryComp(args.Body, out BuckleComponent? buckle) ||
@@ -170,32 +157,16 @@ public abstract partial class SharedCMSurgerySystem
         }
     }
 
-    private void OnCutLarvaRootsStep(Entity<CMSurgeryCutLarvaRootsStepComponent> ent, ref CMSurgeryStepEvent args)
+    private void OnSurgeryTargetStepChosen(Entity<CMSurgeryTargetComponent> ent, ref CMSurgeryStepChosenBuiMsg args)
     {
-        if (TryComp(args.Body, out VictimHuggedComponent? hugged) &&
-            hugged.BurstAt > _timing.CurTime)
-        {
-            hugged.RootsCut = true;
-        }
-    }
+        var user = args.Session.AttachedEntity;
 
-    private void OnCutLarvaRootsCheck(Entity<CMSurgeryCutLarvaRootsStepComponent> ent, ref CMSurgeryStepCompleteCheckEvent args)
-    {
-        if (!TryComp(args.Body, out VictimHuggedComponent? hugged) || !hugged.RootsCut)
-            args.Cancelled = true;
-    }
+        if (user == null)
+            return;
 
-    private void OnArmorCanPerformStep(Entity<ArmorComponent> ent, ref InventoryRelayedEvent<CMSurgeryCanPerformStepEvent> args)
-    {
-        if (args.Args.Invalid == StepInvalidReason.None)
-            args.Args.Invalid = StepInvalidReason.Armor;
-    }
-
-    private void OnSurgeryTargetStepChosen(Entity<CMSurgeryTargetComponent> ent, ref CMSurgeryStepChosenBuiMessage args)
-    {
-        if (args.Session.AttachedEntity is not { } user ||
-            GetEntity(args.Entity) is not { Valid: true } body ||
-            !IsSurgeryValid(body, args.Part, args.Surgery, args.Step, out var surgery, out var part, out var step))
+        if (GetEntity(args.Entity) is not { Valid: true } body ||
+            GetEntity(args.Part) is not { Valid: true } targetPart ||
+            !IsSurgeryValid(body, targetPart, args.Surgery, args.Step, out var surgery, out var part, out var step))
         {
             return;
         }
@@ -206,7 +177,7 @@ public abstract partial class SharedCMSurgerySystem
             return;
         }
 
-        if (!CanPerformStep(user, body, part.Comp.PartType, step, true, out _, out _, out var validTools))
+        if (!CanPerformStep(user.Value, body, part.Comp.PartType, step, true, out _, out _, out var validTools))
             return;
 
         if (_net.IsServer && validTools?.Count > 0)
@@ -216,15 +187,18 @@ public abstract partial class SharedCMSurgerySystem
                 if (TryComp(tool, out CMSurgeryToolComponent? toolComp) &&
                     toolComp.EndSound != null)
                 {
-                    _audio.PlayEntity(toolComp.StartSound, user, tool);
+                    _audio.PlayEntity(toolComp.StartSound, user.Value, tool);
                 }
             }
         }
 
-        var ev = new CMSurgeryDoAfterEvent(GetNetEntity(part), args.Surgery, args.Step);
-        var doAfter = new DoAfterArgs(EntityManager, user, 2, ev, body, body)
+        if (TryComp(body, out TransformComponent? xform))
+            _rotateToFace.TryFaceCoordinates(user.Value, _transform.GetMapCoordinates(body, xform).Position);
+
+        var ev = new CMSurgeryDoAfterEvent(args.Surgery, args.Step);
+        var doAfter = new DoAfterArgs(EntityManager, user.Value, 2, ev, body, part)
         {
-            BreakOnMove = true
+            BreakOnMove = true,
         };
         _doAfter.TryStartDoAfter(doAfter);
     }
@@ -263,7 +237,7 @@ public abstract partial class SharedCMSurgerySystem
 
     public bool PreviousStepsComplete(EntityUid body, EntityUid part, Entity<CMSurgeryComponent> surgery, EntProtoId step)
     {
-        // TODO CM14 use index instead of the prototype id
+        // TODO RMC14 use index instead of the prototype id
         if (surgery.Comp.Requirement is { } requirement)
         {
             if (GetSingleton(requirement) is not { } requiredEnt ||

@@ -2,8 +2,6 @@
 using Content.Client.Administration.UI.CustomControls;
 using Content.Shared._CM14.Medical.Surgery;
 using Content.Shared.Body.Part;
-using Content.Shared.Rotation;
-using Content.Shared.Standing;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
@@ -160,7 +158,7 @@ public sealed class CMSurgeryBui : BoundUserInterface
             var netPart = _entities.GetNetEntity(part.Owner);
             var surgeries = state.Choices[netPart];
             var partName = _entities.GetComponent<MetaDataComponent>(part).EntityName;
-            var partButton = new XenoChoiceControl();
+            var partButton = new BaseButtonForSurgery();
 
             partButton.Set(partName, null);
             partButton.Button.OnPressed += _ => OnPartPressed(netPart, surgeries);
@@ -219,7 +217,7 @@ public sealed class CMSurgeryBui : BoundUserInterface
 
         if (surgery.Comp.Requirement is { } requirementId && _system.GetSingleton(requirementId) is { } requirement)
         {
-            var label = new XenoChoiceControl();
+            var label = new BaseButtonForSurgery();
             label.Button.OnPressed += _ =>
             {
                 _previousSurgeries.Add(surgeryId);
@@ -279,7 +277,7 @@ public sealed class CMSurgeryBui : BoundUserInterface
 
         foreach (var surgery in surgeries)
         {
-            var surgeryButton = new XenoChoiceControl();
+            var surgeryButton = new BaseButtonForSurgery();
             surgeryButton.Set(surgery.Name, null);
 
             surgeryButton.Button.OnPressed += _ => OnSurgeryPressed(surgery.Ent, netPart, surgery.Id);

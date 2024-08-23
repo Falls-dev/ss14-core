@@ -5,6 +5,7 @@
   id: BaseAlertOrder
   order:
     - category: Health
+    - alertType: BloodSpells
     - alertType: Bleeding
     - category: Mood # WD edit
     - category: Stamina
@@ -19,6 +20,8 @@
     - category: Piloting
     - alertType: Corporeal
     - alertType: Stun
+    - alertType: Knockdown
+    - alertType: RecentlyBlocked
     - category: Breathing # Vox gang not calling this oxygen
     - category: Pressure
     - alertType: Bleed
@@ -149,7 +152,7 @@
   id: Ensnared
   onClick: !type:RemoveEnsnare  { }
   icons:
-  - sprite: /Textures/Interface/Alerts/ensnared.rsi
+  - sprite: /Textures/White/Interface/Alerts/ensnared.rsi
     state: ensnared
   name: alerts-ensnared-name
   description: alerts-ensnared-desc
@@ -345,7 +348,7 @@
   id: Thirsty
   category: Thirst
   icons:
-  - sprite: /Textures/Interface/Alerts/thirst.rsi
+  - sprite: /Textures/White/Interface/Alerts/thirst.rsi
     state: thirsty
   name: alerts-thirsty-name
   description: alerts-thirsty-desc
@@ -354,7 +357,7 @@
   id: Parched
   category: Thirst
   icons:
-  - sprite: /Textures/Interface/Alerts/thirst.rsi
+  - sprite: /Textures/White/Interface/Alerts/thirst.rsi
     state: parched
   name: alerts-parched-name
   description: alerts-parched-desc
@@ -396,27 +399,27 @@
 - type: alert
   id: Bleed
   icons:
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
+  - sprite: /Textures/White/Interface/Alerts/bleed.rsi
     state: bleed0
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
+  - sprite: /Textures/White/Interface/Alerts/bleed.rsi
     state: bleed1
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
+  - sprite: /Textures/White/Interface/Alerts/bleed.rsi
     state: bleed2
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
+  - sprite: /Textures/White/Interface/Alerts/bleed.rsi
     state: bleed3
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
+  - sprite: /Textures/White/Interface/Alerts/bleed.rsi
     state: bleed4
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
+  - sprite: /Textures/White/Interface/Alerts/bleed.rsi
     state: bleed5
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
+  - sprite: /Textures/White/Interface/Alerts/bleed.rsi
     state: bleed6
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
+  - sprite: /Textures/White/Interface/Alerts/bleed.rsi
     state: bleed7
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
+  - sprite: /Textures/White/Interface/Alerts/bleed.rsi
     state: bleed8
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
+  - sprite: /Textures/White/Interface/Alerts/bleed.rsi
     state: bleed9
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
+  - sprite: /Textures/White/Interface/Alerts/bleed.rsi
     state: bleed10
   name: alerts-bleed-name
   description: alerts-bleed-desc
@@ -479,11 +482,26 @@
   name: Debug6
   description: Debug
 
+# WD-EDIT
 - type: alert
   id: CultBuffed
   icons: [ /Textures/Interface/Alerts/buff.png ]
   name: alerts-cult-buff-name
   description: alerts-cult-buff-desc
+
+# WD-EDIT
+- type: alert
+  id: Knockdown
+  icons: [ /Textures/White/Interface/Alerts/knockdown.png ]
+  name: alerts-knockdown-name
+  description: alerts-knockdown-desc
+
+# WD-EDIT
+- type: alert
+  id: RecentlyBlocked
+  icons: [ /Textures/Objects/Weapons/Melee/shields.rsi/buckler-icon.png ]
+  name: alerts-blocked-name
+  description: alerts-blocked-desc
 
 # WD-EDIT
 - type: alert
@@ -501,3 +519,13 @@
     state: offer_item
   name: alerts-offer-name
   description: alerts-offer-desc
+
+# WD-EDIT
+- type: alert
+  id: BloodSpells
+  onClick: !type:OpenBloodSpellsUi {}
+  icons:
+  - sprite: /Textures/White/Cult/actions_cult.rsi
+    state: blood_spells
+  name: alerts-blood-spells-name
+  description: alerts-blood-spells-desc

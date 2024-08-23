@@ -98,7 +98,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      10: Dead
+      5: Dead
   - type: Stamina
     critThreshold: 10
   - type: DamageStateVisuals
@@ -375,7 +375,8 @@
         damageType: Blunt
         damage: 10
       behaviors:
-      - !type:GibBehavior { }
+      - !type:GibBehavior
+        recursive: false
   - type: NonSpreaderZombie
 
 - type: entity
@@ -505,9 +506,9 @@
     accent: zombieMoth
   - type: Vocal
     sounds:
-      Male: UnisexMoth
-      Female: UnisexMoth
-      Unsexed: UnisexMoth
+      Male: AnimalMoth
+      Female: AnimalMoth
+      Unsexed: AnimalMoth
     wilhelmProbability: 0.001
   - type: MobPrice
     price: 150
@@ -531,7 +532,8 @@
         damageType: Blunt
         damage: 60
       behaviors:
-      - !type:GibBehavior { }
+      - !type:GibBehavior
+        recursive: false
   - type: FireVisuals
     sprite: Mobs/Effects/onfire.rsi
     normalState: Mouse_burning
@@ -1358,9 +1360,9 @@
     speechVerb: Reptilian
   - type: Vocal
     sounds:
-      Male: MaleReptilian
-      Female: FemaleReptilian
-      Unsexed: MaleReptilian
+      Male: AnimalReptilian
+      Female: AnimalReptilian
+      Unsexed: AnimalReptilian
   - type: TypingIndicator
     proto: lizard
   - type: InteractionPopup
@@ -2253,9 +2255,9 @@
     speechSounds: Arachnid
   - type: Vocal
     sounds:
-      Male: UnisexArachnid
-      Female: UnisexArachnid
-      Unsexed: UnisexArachnid
+      Male: AnimalArachnid
+      Female: AnimalArachnid
+      Unsexed: AnimalArachnid
   - type: TypingIndicator
     proto: spider
   - type: Tag
@@ -2336,7 +2338,7 @@
       layers:
       - map: ["enum.DamageStateVisualLayers.Base"]
         state: clown
-        sprite: Mobs/Animals/clownspider.rsi
+        sprite: White/Mobs/Animals/clownspider.rsi
     - type: Butcherable
       spawned:
         - id: MaterialBananium1

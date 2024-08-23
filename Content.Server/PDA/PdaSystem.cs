@@ -15,6 +15,7 @@ using Content.Shared.Light;
 using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
 using Content.Shared.PDA;
+using Content.Shared.Roles;
 using Robust.Server.Containers;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
@@ -92,9 +93,21 @@ namespace Content.Server.PDA
             UpdatePdaUi(uid, pda);
         }
 
-        public void SetOwner(EntityUid uid, PdaComponent pda, string ownerName)
+        public void SetOwnerName(EntityUid uid, PdaComponent pda, string ownerName)
         {
             pda.OwnerName = ownerName;
+            UpdatePdaUi(uid, pda);
+        }
+
+        public void SetOwnerJob(EntityUid uid, PdaComponent pda, string ownerJob)
+        {
+            pda.OwnerJob = ownerJob;
+            UpdatePdaUi(uid, pda);
+        }
+
+        public void SetOwnerDepartment(EntityUid uid, PdaComponent pda, string ownerDepartment)
+        {
+            pda.OwnerDepartment = ownerDepartment;
             UpdatePdaUi(uid, pda);
         }
 
@@ -174,6 +187,7 @@ namespace Content.Server.PDA
                 new PdaIdInfoText
                 {
                     ActualOwnerName = pda.OwnerName,
+                    ActualOwnerJob = pda.OwnerJob, // WD EDIT
                     IdOwner = id?.FullName,
                     JobTitle = id?.JobTitle,
                     StationAlertLevel = pda.StationAlertLevel,

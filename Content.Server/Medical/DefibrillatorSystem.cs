@@ -8,6 +8,7 @@ using Content.Server.Popups;
 using Content.Server.PowerCell;
 using Content.Server.Traits.Assorted;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Events;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
@@ -54,7 +55,26 @@ public sealed class DefibrillatorSystem : EntitySystem
         SubscribeLocalEvent<DefibrillatorComponent, PowerCellSlotEmptyEvent>(OnPowerCellSlotEmpty);
         SubscribeLocalEvent<DefibrillatorComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<DefibrillatorComponent, DefibrillatorZapDoAfterEvent>(OnDoAfter);
+
+        SubscribeLocalEvent<DefibrillatorComponent, StaminaDamageOnHitAttemptEvent>(OnStaminaHitAttempt); // WD
     }
+
+    // WD START
+    private void OnStaminaHitAttempt(Entity<DefibrillatorComponent> ent, ref StaminaDamageOnHitAttemptEvent args)
+    {
+        var (uid, comp) = ent;
+        if (comp.Enabled && _powerCell.TryUseActivatableCharge(uid))
+        {
+            if (!_powerCell.HasActivatableCharge(uid))
+                TryDisable(uid, comp);
+            comp.NextZapTime = _timing.CurTime + TimeSpan.FromSeconds(3);
+            _appearance.SetData(uid, DefibrillatorVisuals.Ready, false);
+            return;
+        }
+
+        args.Cancelled = true;
+    }
+    // WD END
 
     private void OnUseInHand(EntityUid uid, DefibrillatorComponent component, UseInHandEvent args)
     {
@@ -159,8 +179,8 @@ public sealed class DefibrillatorSystem : EntitySystem
         if (!_powerCell.HasActivatableCharge(uid, user: user))
             return false;
 
-        if (_mobState.IsAlive(target, mobState))
-            return false;
+        // if (_mobState.IsAlive(target, mobState))
+        //    return false;
 
         return true;
     }
@@ -177,6 +197,8 @@ public sealed class DefibrillatorSystem : EntitySystem
         return _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, component.DoAfterDuration, new DefibrillatorZapDoAfterEvent(),
             uid, target, uid)
             {
+                BreakOnMove = user == target, // WD EDIT
+                DuplicateCondition = DuplicateConditions.None, // WD EDIT
                 BlockDuplicate = true,
                 BreakOnHandChange = true,
                 NeedHand = true
@@ -206,7 +228,13 @@ public sealed class DefibrillatorSystem : EntitySystem
         ICommonSession? session = null;
 
         var dead = true;
-        if (_rotting.IsRotten(target))
+        // WD EDIT START
+        var alive = false;
+        if (_mobState.IsAlive(target))
+        {
+            alive = true;
+        }
+        else if (_rotting.IsRotten(target)) // WD EDIT END
         {
             _chatManager.TrySendInGameICMessage(uid, Loc.GetString("defibrillator-rotten"),
                 InGameICChatType.Speak, true);
@@ -246,7 +274,7 @@ public sealed class DefibrillatorSystem : EntitySystem
             }
         }
 
-        var sound = dead || session == null
+        var sound = !alive && (dead || session == null) // WD EDIT
             ? component.FailureSound
             : component.SuccessSound;
         _audio.PlayPvs(sound, uid);

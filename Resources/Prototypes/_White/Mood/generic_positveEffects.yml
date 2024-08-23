@@ -63,7 +63,7 @@
   description: "Я ЧУВСТВУЮ ЭТО, В МОЕЙ КРОВИ НАХОДИТСЯ ЧТО-ТО НЕОБЫЧНОЕ!!"
   moodChange: enum.MoodChangeLevel.Medium
   positive: true
-  timeout: 2
+  timeout: 1
 
 - type: moodEffect
   id: WizardFocused

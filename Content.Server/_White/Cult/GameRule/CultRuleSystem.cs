@@ -21,6 +21,7 @@ using Content.Shared._White.Antag;
 using Content.Shared._White.Cult.Components;
 using Content.Shared._White.Cult.Systems;
 using Content.Shared._White.Mood;
+using Content.Shared.Alert;
 using Content.Shared.Cloning;
 using Content.Shared.Mind;
 using Robust.Server.Containers;
@@ -42,6 +43,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     [Dependency] private readonly HandsSystem _hands = default!;
     [Dependency] private readonly GulagSystem _gulag = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly AlertsSystem _alertsSystem = default!;
 
     public override void Initialize()
     {
@@ -130,6 +132,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
             RemoveAllCultistItems(uid);
             RemoveCultistAppearance(uid);
             RaiseLocalEvent(uid, new MoodRemoveEffectEvent("CultFocused"));
+            _alertsSystem.ClearAlert(uid, AlertType.BloodSpells);
         }
 
         _bloodSpear.DetachSpearFromUser((uid, component));
@@ -277,6 +280,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
             return;
 
         rule.CurrentCultists.Add(cultistComponent);
+        _alertsSystem.ShowAlert(uid, AlertType.BloodSpells);
 
         var name = Name(cultist);
 

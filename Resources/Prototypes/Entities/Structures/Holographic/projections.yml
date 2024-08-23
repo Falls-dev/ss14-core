@@ -23,6 +23,12 @@
         behaviors:
           - !type:DoActsBehavior
             acts: [ "Destruction" ]
+  - type: Clickable # WD EDIT
+  - type: MeleeSound # WD EDIT
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Weapons/egloves.ogg"
 
 - type: entity
   id: HoloFan
@@ -64,14 +70,11 @@
             - TableMask
           layer:
             - TableLayer
-    - type: TimedDespawn
-      lifetime: 180
     - type: PointLight
       enabled: true
       radius: 3
       color: red
     - type: Climbable
-    - type: Clickable
 
 - type: entity
   id: HolosignForcefield
@@ -95,8 +98,6 @@
         - FullTileMask
         layer:
         - GlassLayer
-  - type: TimedDespawn
-    lifetime: 180
   - type: PointLight
     enabled: true
     radius: 3

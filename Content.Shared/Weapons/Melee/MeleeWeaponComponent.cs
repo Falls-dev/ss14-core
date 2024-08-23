@@ -27,6 +27,7 @@ public sealed partial class MeleeWeaponComponent : Component
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField]
+    [AutoNetworkedField] // WD EDIT
     public bool Hidden;
 
     /// <summary>
@@ -70,13 +71,24 @@ public sealed partial class MeleeWeaponComponent : Component
     public bool CanAttackSelf = true;
 
     [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
-    public bool CanMiss = true;
+    public bool CanBeBlocked = true;
 
-    [DataField]
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
+    public bool CanMiss;
+
+    [DataField, AutoNetworkedField]
     public EntityWhitelist? AttackWhitelist;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public EntityWhitelist? AttackBlacklist;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]
+    [ViewVariables(VVAccess.ReadWrite)]
+    [AutoPausedField]
+    public TimeSpan NextMobAttack;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
+    public float? EquipCooldown;
 
     [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
     public bool IgnoreResistances;
@@ -114,7 +126,6 @@ public sealed partial class MeleeWeaponComponent : Component
     [ViewVariables(VVAccess.ReadWrite), DataField]
     public FixedPoint2 ClickDamageModifier = FixedPoint2.New(1);
 
-    // TODO: Temporarily 1.5 until interactionoutline is adjusted to use melee, then probably drop to 1.2
     /// <summary>
     /// Nearest edge range to hit an entity.
     /// </summary>

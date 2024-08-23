@@ -67,6 +67,7 @@
   buttonText: Свистнуть
   chatMessages: [ свистит ]
   chatTriggers:
+  - свистит
   - свистнул
   - свистнула
   - свистнуло
@@ -159,11 +160,12 @@
 - type: emote
   id: Salute
   category: Hands
-  buttonText: Отдать честь
-  chatMessages: [ отдает честь ]
+  buttonText: Салютовать
+  chatMessages: [ салютует ]
   chatTriggers:
   - салютует
   - отдаёт честь
+  - отдает честь
   allowMenu: true
 
 - type: emote
@@ -216,10 +218,22 @@
   allowMenu: true
 
 - type: emote
+  id: Gasp
+  name: chat-emote-name-gasp
+  whitelist:
+    components:
+    - Respirator
+  chatMessages: ["chat-emote-msg-gasp"]
+  chatTriggers:
+  - задыхается
+
+- type: emote
   id: DefaultDeathgasp
   chatMessages: [ "emote-deathgasp" ]
   chatTriggers:
-  - задыхается
+  - отключается и бессильно падает, его глаза становятся пустыми и безжизненными...
+  - отключается и бессильно падает, её глаза становятся пустыми и безжизненными...
+  - отключается и бессильно падает, их глаза становятся пустыми и безжизненными...
 
 - type: emote
   id: Buzz

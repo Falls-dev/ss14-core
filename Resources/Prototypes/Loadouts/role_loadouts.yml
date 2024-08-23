@@ -13,7 +13,11 @@
   - CaptainGloves # WD
   - CaptainShoes
   - CaptainPDA # WD
+  - SelfDefenceDevices # WD
   - Trinkets
+  - CommonUnderwearBottomCaptain
+  - CommonUnderwearBraCaptain
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobHeadOfPersonnel
@@ -29,7 +33,28 @@
   - HoPOuterClothing
   - HoPShoes
   - HoPPDA # WD
+  - SelfDefenceDevices # WD
   - Trinkets
+  - CommonUnderwearBottomHOP
+  - CommonUnderwearBraHOP
+  - CommonUnderwearSocks
+
+- type: roleLoadout
+  id: JobMaid
+  groups:
+  - MaidGlasses # WD
+  - CommonCommandHeadset # WD
+  - MaidHead
+  - MaidJumpsuit
+  - MaidGloves # WD
+  - MaidBackpack
+  - MaidShoes
+  - MaidPDA # WD
+  - MaidSelfDefenceDevices # WD
+  - MaidJobTrinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 # Civilian
 - type: roleLoadout
@@ -46,6 +71,9 @@
   - CommonShoes # WD
   - AssistantPDA # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobBartender
@@ -60,6 +88,9 @@
   - CommonShoes # WD
   - BartenderPDA
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobServiceWorker
@@ -72,6 +103,9 @@
   - CommonShoes # WD
   - ServiceWorkerPDA # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobChef
@@ -86,6 +120,9 @@
   - CommonShoes # WD
   - ChefPDA # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobLibrarian
@@ -99,6 +136,9 @@
   - LibrarianPDA
   - ItemCane # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobChaplain
@@ -117,6 +157,9 @@
   - ChaplainPDA # WD
   - ChaplainJobTrinkets # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobJanitor
@@ -132,6 +175,9 @@
   - CommonShoes # WD
   - JanitorPDA # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobBotanist
@@ -147,6 +193,9 @@
   - CommonShoes # WD
   - BotanistPDA # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobClown
@@ -163,6 +212,9 @@
   - ClownPDA # WD
   - ClownTrinkets # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobMime
@@ -177,6 +229,9 @@
   - CommonShoes # WD
   - MimePDA
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobMusician
@@ -191,6 +246,20 @@
   - CommonShoes # WD
   - Trinkets
   - Instruments
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
+
+- type: roleLoadout
+  id: JobBomzh
+  groups:
+  - BomzhJumpsuit
+  - BomzhPDA
+  - BomzhHead
+  - BomzhOuterclothing
+  - BomzhJobTrinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
 
 # Cargo
 - type: roleLoadout
@@ -206,8 +275,12 @@
   - CommonGloves # WD
   - QuartermasterShoes
   - QuartermasterPDA # WD
+  - SelfDefenceDevices # WD
   - CommonCargoJobTrinkets
   - Trinkets
+  - CommonUnderwearBottomQM
+  - CommonUnderwearBraQM
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobCargoTechnician
@@ -223,6 +296,9 @@
   - CargoTechnicianPDA
   - CommonCargoJobTrinkets
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobSalvageSpecialist
@@ -239,7 +315,9 @@
   - SalvageSpecialistShoes
   - SalvagePDA # WD
   - Trinkets
-
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 # Engineering
 - type: roleLoadout
   id: JobChiefEngineer
@@ -253,7 +331,11 @@
   - CommonGloves # WD
   - ChiefEngineerShoes
   - ChiefEngineerPDA # WD
+  - SelfDefenceDevices # WD
   - Trinkets
+  - CommonUnderwearBottomCE
+  - CommonUnderwearBraCE
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobSeniorEngineer
@@ -267,6 +349,9 @@
   - StationEngineerShoes
   - SeniorEngineerPDA
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobTechnicalAssistant
@@ -280,6 +365,9 @@
   - StationEngineerShoes
   - TechnicalAssistantPDA
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobStationEngineer
@@ -293,6 +381,9 @@
   - StationEngineerShoes
   - StationEngineerPDA
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobAtmosphericTechnician
@@ -306,6 +397,9 @@
   - AtmosphericTechnicianShoes
   - AtmosphericTechnicianPDA
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 # Science
 - type: roleLoadout
@@ -320,7 +414,11 @@
   - ResearchDirectorShoes
   - CommonScienceGloves
   - ResearchDirectorPDA
+  - SelfDefenceDevices # WD
   - Trinkets
+  - CommonUnderwearBottomRD
+  - CommonUnderwearBraRD
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobSeniorResearcher
@@ -335,6 +433,9 @@
   - ScientistShoes
   - SeniorResearcherPDA
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobScientist
@@ -350,6 +451,9 @@
   - ScientistPDA
   - CommonGlasses # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobResearchAssistant
@@ -363,6 +467,9 @@
   - ScientistShoes
   - ResearchAssistantPDA
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 # Security
 - type: roleLoadout
@@ -379,8 +486,12 @@
   - CommonSecurityBackpack
   - CommonSecurityShoes
   - HeadofSecurityPDA
+  - SelfDefenceDevices # WD
   - CommonSecurityJobTrinkets # WD
   - Trinkets
+  - CommonUnderwearBottomHOS
+  - CommonUnderwearBraHOS
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobWarden
@@ -397,6 +508,9 @@
   - WardenPDA
   - CommonSecurityJobTrinkets # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobSeniorOfficer
@@ -414,6 +528,26 @@
   - SeniorOfficerPDA
   - CommonSecurityJobTrinkets # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
+
+- type: roleLoadout
+  id: JobBrigmedic
+  groups:
+  - BrigmedicHead
+  - BrigmedicHeadset
+  - BrigmedicUniform
+  - BrigmedicBackpack
+  - BrigmedicOuterClothing
+  - CommonMedicalGloves
+  - BrigmedicShoes
+  - CommonMedicalMask
+  - BrigmedicPDA
+  - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobSecurityOfficer
@@ -431,6 +565,9 @@
   - SecurityPDA
   - CommonSecurityJobTrinkets # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobDetective
@@ -447,6 +584,9 @@
   - DetectivePDA # WD
   - CommonSecurityJobTrinkets # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobSecurityCadet
@@ -461,6 +601,9 @@
   - SecurityCadetPDA
   - CommonSecurityJobTrinkets # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 # Medical
 - type: roleLoadout
@@ -476,7 +619,11 @@
   - CommonMedicalGloves
   - ChiefMedicalOfficerShoes
   - ChiefMedicalOfficerPDA
+  - SelfDefenceDevices # WD
   - Trinkets
+  - CommonUnderwearBottomCMO
+  - CommonUnderwearBraCMO
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobSeniorPhysician
@@ -491,6 +638,9 @@
   - CommonMedicalGloves
   - SeniorPhysicianPDA
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobMedicalDoctor
@@ -505,6 +655,9 @@
   - CommonMedicalGloves # WD
   - MedicalDoctorPDA # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobMedicalIntern
@@ -519,6 +672,9 @@
   - CommonMedicalShoes
   - MedicalInternPDA
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobChemist
@@ -534,6 +690,9 @@
   - ChemistShoes
   - ChemistPDA
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobParamedic
@@ -549,6 +708,9 @@
   - CommonMedicalShoes # WD
   - ParamedicPDA # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 # Justice
 
@@ -567,15 +729,19 @@
   - InspectorShoes
   - InspectorPDA
   - BriefcaseInhand
+  - SelfDefenceDevices # WD
   - InspectorJobTrinkets
   - Trinkets
+  - CommonUnderwearBottomInspector
+  - CommonUnderwearBraInspector
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobLawyer
   groups:
   - LawyerHead # WD
   - CommonGlasses # WD
-  - CommonSecurityHeadset
+  - BasicSecurityHeadset # WD
   - CommonMaskCigarette # WD
   - LawyerNeck
   - LawyerJumpsuit
@@ -585,6 +751,9 @@
   - BriefcaseInhand # WD
   - LawyerJobTrinkets # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 # Wildcards
 - type: roleLoadout
@@ -598,6 +767,9 @@
   - CommonShoes # WD
   - ZookeeperPDA # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobReporter
@@ -612,6 +784,9 @@
   - CommonShoes # WD
   - ReporterPDA # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobPsychologist
@@ -627,6 +802,9 @@
   - CommonMedicalShoes # WD
   - PsychologistPDA # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobBoxer
@@ -640,3 +818,6 @@
   - CommonShoes # WD
   - BoxerPDA # WD
   - Trinkets
+  - CommonUnderwearBottom
+  - CommonUnderwearBra
+  - CommonUnderwearSocks

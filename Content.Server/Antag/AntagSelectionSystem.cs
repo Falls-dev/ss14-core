@@ -468,3 +468,6 @@ public record struct AntagSelectLocationEvent(ICommonSession? Session, Entity<An
 /// </summary>
 [ByRefEvent]
 public readonly record struct AfterAntagEntitySelectedEvent(ICommonSession? Session, EntityUid EntityUid, Entity<AntagSelectionComponent> GameRule, AntagSelectionDefinition Def);
+
+#endregion
+}

@@ -38,8 +38,11 @@ namespace Content.Shared.Alert
         VeryGood,
         VeryVeryGood,
         MoodDead,
-        //WD end
         CultBuffed,
+        BloodSpells,
+        Knockdown,
+        RecentlyBlocked,
+        //WD end
         PilotingShuttle,
         Peckish,
         Starving,

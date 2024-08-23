@@ -165,6 +165,7 @@
   - HellfireFreezerMachineCircuitBoard
   - PortableScrubberMachineCircuitBoard
   - HolofanProjector
+  - BorgModuleAtmospherics # WD
 
 - type: technology
   id: AdvancedToolsTechnology
@@ -180,7 +181,7 @@
     - PowerDrill
     - JawsOfLife
     - BorgModuleAdvancedTool
-    - BorgModuleRCD
+    - BorgModuleConstruction # WD
 
 # Tier 3
 

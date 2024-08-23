@@ -14,6 +14,7 @@ using Content.Client.UserInterface.Systems.Chat;
 using Content.Client.Voting;
 using Robust.Client;
 using Robust.Client.Console;
+using Robust.Client.GameObjects;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -206,6 +207,7 @@ namespace Content.Client.Lobby
         private void LobbyStatusUpdated()
         {
             UpdateLobbyUi();
+            UpdateLobbyBackground();
         }
 
         private void LobbyLateJoinStatusUpdated()
@@ -242,7 +244,7 @@ namespace Content.Client.Lobby
                 _lobby!.ServerInfo.SetInfoBlob(_gameTicker.ServerInfoBlob);
             }
 
-            _lobby!.LabelName.SetMarkup("[font=\"Bedstead\" size=20] White Dream [/font]");
+            _lobby!.LabelName.SetMarkup("[font=\"Bedstead\" size=20] Giedi Prime [/font]");
             _lobby!.ChangelogLabel.SetMarkup("Список изменений:");
         }
 
@@ -278,14 +280,7 @@ namespace Content.Client.Lobby
         private void UpdateLobbyBackground()
         {
             if (_gameTicker.LobbyBackground != null)
-            {
-                _lobby!.Background.Texture = _resourceCache.GetResource<TextureResource>(_gameTicker.LobbyBackground );
-            }
-            else
-            {
-                _lobby!.Background.Texture = null;
-            }
-
+                _lobby!.Background.SetRSI(_resourceCache.GetResource<RSIResource>(_gameTicker.LobbyBackground).RSI);
         }
 
         private void SetReady(bool newReady)

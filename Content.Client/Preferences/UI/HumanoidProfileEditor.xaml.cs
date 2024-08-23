@@ -108,6 +108,7 @@ namespace Content.Client.Preferences.UI
         public int CharacterSlot;
         public HumanoidCharacterProfile? Profile;
         private MarkingSet _markingSet = new(); // storing this here feels iffy but a few things need it this high up
+        private static LobbyUIController? _controller;
 
         public event Action<HumanoidCharacterProfile, int>? OnProfileChanged;
 
@@ -124,10 +125,12 @@ namespace Content.Client.Preferences.UI
             _preferencesManager = preferencesManager;
             _markingManager = IoCManager.Resolve<MarkingManager>();
             _entMan = IoCManager.Resolve<IEntityManager>(); // WD
-            var controller = UserInterfaceManager.GetUIController<LobbyUIController>();
-            controller.PreviewDummyUpdated += OnDummyUpdate;
 
-            _previewSpriteView.SetEntity(controller.GetPreviewDummy());
+            _controller = UserInterfaceManager.GetUIController<LobbyUIController>();
+
+            _controller.PreviewDummyUpdated += OnDummyUpdate;
+
+            _previewSpriteView.SetEntity(_controller.GetPreviewDummy());
 
             #region Left
 
@@ -513,15 +516,16 @@ namespace Content.Client.Preferences.UI
 
             UpdateSpeciesGuidebookIcon();
 
-            IsDirty = false;
-            controller.UpdateProfile();
+            SetDirty();
         }
 
         private void SetDirty()
         {
-            var controller = UserInterfaceManager.GetUIController<LobbyUIController>();
-            controller.UpdateProfile(Profile);
-            controller.ReloadCharacterUI();
+            if (_controller == null)
+                return;
+
+            _controller.UpdateProfile(Profile);
+            _controller.ReloadCharacterUI();
             IsDirty = true;
         }
 
@@ -553,12 +557,16 @@ namespace Content.Client.Preferences.UI
             _antagPreferences.Clear();
             var btnGroup = new ButtonGroup();
 
+            var character = (HumanoidCharacterProfile?) _preferencesManager.Preferences?.SelectedCharacter;
+            if (character == null)
+                return;
+
             foreach (var antag in _prototypeManager.EnumeratePrototypes<AntagPrototype>().OrderBy(a => Loc.GetString(a.Name)))
             {
                 if (!antag.SetPreference)
                     continue;
 
-                var selector = new AntagPreferenceSelector(antag, btnGroup)
+                var selector = new AntagPreferenceSelector(antag, btnGroup, character)
                 {
                     Margin = new Thickness(3f, 3f, 3f, 0f),
                 };
@@ -585,6 +593,10 @@ namespace Content.Client.Preferences.UI
             _jobPriorities.Clear();
             _jobCategories.Clear();
             var firstCategory = true;
+
+            var character = (HumanoidCharacterProfile?) _preferencesManager.Preferences?.SelectedCharacter;
+            if (character == null)
+                return;
 
             var departments = _prototypeManager.EnumeratePrototypes<DepartmentPrototype>().ToArray();
             Array.Sort(departments, DepartmentUIComparer.Instance);
@@ -646,12 +658,12 @@ namespace Content.Client.Preferences.UI
                     // Clone so we don't modify the underlying loadout.
                     Profile?.Loadouts.TryGetValue(LoadoutSystem.GetJobPrototype(job.ID), out loadout);
                     loadout = loadout?.Clone();
-                    var selector = new JobPrioritySelector(loadout, job, jobLoadoutGroup, _prototypeManager)
+                    var selector = new JobPrioritySelector(loadout, job, jobLoadoutGroup, _prototypeManager, character)
                     {
                         Margin = new Thickness(3f, 3f, 3f, 0f),
                     };
 
-                    if (!_requirements.IsAllowed(job, out var reason))
+                    if (!_requirements.IsAllowed(job, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
                     {
                         selector.LockRequirements(reason);
                     }
@@ -711,66 +723,45 @@ namespace Content.Client.Preferences.UI
                 return;
 
             Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithMarkings(markings.GetForwardEnumerator().ToList()));
-            IsDirty = true;
-            var controller = UserInterfaceManager.GetUIController<LobbyUIController>();
-            controller.UpdateProfile(Profile);
-            controller.ReloadProfile();
+
+            SetDirty();
         }
 
         private void OnSkinColorOnValueChanged()
         {
-            if (Profile is null) return;
+            if (Profile is null)
+                return;
 
             var skin = _prototypeManager.Index<SpeciesPrototype>(Profile.Species).SkinColoration;
 
             switch (skin)
             {
                 case HumanoidSkinColor.HumanToned:
-                {
-                    if (!_skinColor.Visible)
-                    {
-                        _skinColor.Visible = true;
-                        _rgbSkinColorContainer.Visible = false;
-                    }
-
-                    var color = SkinColor.HumanSkinTone((int) _skinColor.Value);
-
-                    CMarkings.CurrentSkinColor = color;
-                    Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(color));//
+                    _skinColor.Visible = true;
+                    _rgbSkinColorContainer.Visible = false;
+                    ApplySkinColor(Profile, SkinColor.HumanSkinTone((int)_skinColor.Value));
                     break;
-                }
+
                 case HumanoidSkinColor.Hues:
-                {
-                    if (!_rgbSkinColorContainer.Visible)
-                    {
-                        _skinColor.Visible = false;
-                        _rgbSkinColorContainer.Visible = true;
-                    }
-
-                    CMarkings.CurrentSkinColor = _rgbSkinColorSelector.Color;
-                    Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(_rgbSkinColorSelector.Color));
-                    break;
-                }
                 case HumanoidSkinColor.TintedHues:
-                {
-                    if (!_rgbSkinColorContainer.Visible)
-                    {
-                        _skinColor.Visible = false;
-                        _rgbSkinColorContainer.Visible = true;
-                    }
+                    _skinColor.Visible = false;
+                    _rgbSkinColorContainer.Visible = true;
 
-                    var color = SkinColor.TintedHues(_rgbSkinColorSelector.Color);
+                    var color = skin == HumanoidSkinColor.Hues
+                        ? _rgbSkinColorSelector.Color
+                        : SkinColor.TintedHues(_rgbSkinColorSelector.Color);
 
-                    CMarkings.CurrentSkinColor = color;
-                    Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(color));
+                    ApplySkinColor(Profile, color);
                     break;
-                }
             }
 
-            IsDirty = true;
-            var controller = UserInterfaceManager.GetUIController<LobbyUIController>();
-            controller.UpdateProfile(Profile);
-            controller.ReloadProfile();
+            SetDirty();
+        }
+
+        private void ApplySkinColor(HumanoidCharacterProfile profile, Color color)
+        {
+            CMarkings.CurrentSkinColor = color;
+            Profile = profile.WithCharacterAppearance(profile.Appearance.WithSkinColor(color));
         }
 
         protected override void Dispose(bool disposing)
@@ -779,8 +770,10 @@ namespace Content.Client.Preferences.UI
             if (!disposing)
                 return;
 
-            var controller = UserInterfaceManager.GetUIController<LobbyUIController>();
-            controller.PreviewDummyUpdated -= OnDummyUpdate;
+            if (_controller == null)
+                return;
+
+            _controller.PreviewDummyUpdated -= OnDummyUpdate;
             _requirements.Updated -= UpdateAntagRequirements;
             _requirements.Updated -= UpdateRoleRequirements;
             _preferencesManager.OnServerDataLoaded -= LoadServerData;

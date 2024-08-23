@@ -38,6 +38,7 @@
       enum.TransferAmountUiKey.Key:
         type: TransferAmountBoundUserInterface
   - type: MeleeWeapon
+    canBeBlocked: false
     soundNoDamage:
       path: "/Audio/Effects/Fluids/splat.ogg"
     damage:

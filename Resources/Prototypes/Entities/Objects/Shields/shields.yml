@@ -30,6 +30,7 @@
           Slash: 1
           Piercing: 1
           Heat: 1
+    - type: MeleeBlock
     - type: Damageable
       damageContainer: Shield
     - type: Destructible
@@ -69,6 +70,32 @@
   id: RiotShield
   description: A large tower shield. Good for controlling crowds.
   components:
+    - type: Sprite # WD start
+      state: riot-icon
+    - type: Item
+      heldPrefix: riot
+    - type: Blocking
+      passiveBlockModifier:
+        coefficients:
+          Blunt: 0.7
+          Slash: 0.7
+          Piercing: 0.5
+      activeBlockModifier:
+        coefficients:
+          Blunt: 0.6
+          Slash: 0.6
+          Piercing: 0.4
+        flatReductions:
+          Blunt: 1.5
+          Piercing: 1.5
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 160
+        behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
     - type: StaticPrice
       price: 90
 
@@ -91,8 +118,16 @@
           Heat: 0.7
         flatReductions:
           Heat: 2
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 120
+        behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
     - type: Reflect
-      reflectProb: 0.25
+      reflectProb: 0.5
       reflects:
         - Energy
 
@@ -110,14 +145,24 @@
       passiveBlockModifier:
         coefficients:
           Blunt: 0.8
+          Slash: 0.8
           Piercing: 0.8
       activeBlockModifier:
         coefficients:
           Blunt: 0.7
+          Slash: 0.7
           Piercing: 0.7
         flatReductions:
           Blunt: 1.5
           Piercing: 1.5
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 220
+        behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ] # WD end
 
 #Changeling shield
 - type: entity
@@ -412,6 +457,7 @@
   description: Exotic energy shield, when folded, can even fit in your pocket.
   components:
     - type: ItemToggle
+      predictable: false # WD EDIT
       soundActivate:
         path: /Audio/Weapons/ebladeon.ogg
       soundDeactivate:
@@ -420,10 +466,9 @@
         path: /Audio/Machines/button.ogg
         params:
           variation: 0.250
-   # Causes sound issues in combination with Rechargeable
-   #- type: ItemToggleActiveSound
-   #  activeSound:
-   #    path: /Audio/Weapons/ebladehum.ogg
+    - type: ItemToggleActiveSound
+      activeSound:
+        path: /Audio/Weapons/ebladehum.ogg
     - type: ItemToggleSize
       activatedSize: Huge
     - type: ItemToggleDisarmMalus
@@ -480,6 +525,7 @@
         flatReductions:
           Heat: 1
           Piercing: 1
+    - type: MeleeBlock
     - type: Appearance
     - type: Damageable
       damageContainer: Shield

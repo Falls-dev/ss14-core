@@ -656,6 +656,36 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitWizard
+  - type: ContainerContainer
+    containers:
+      cell_slot: !type:ContainerSlot
+      toggleable-clothing: !type:ContainerSlot
+  - type: PowerCellSlot
+    cellSlotId: cell_slot
+    fitsInCharger: false
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellMicroreactor
+        disableEject: true
+        whitelist:
+          tags:
+            - PowerCell
+            - PowerCellSmall
+  - type: EnergyDomeGenerator
+    canInteractUse: false
+    damageEnergyDraw: 15
+    domePrototype: EnergyDomeSmallPink
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  - type: PowerCellDraw
+    drawRate: 8
+    useRate: 0
+  - type: UseDelay
+    delay: 10.0
+  - type: WizardClothes
 
 #Ling Space Suit
 - type: entity
@@ -920,9 +950,9 @@
   description: A custom-made clown hardsuit.
   components:
   - type: Sprite
-    sprite: Clothing/OuterClothing/Hardsuits/clown.rsi
+    sprite: White/Clothing/OuterClothing/Hardsuits/clown.rsi
   - type: Clothing
-    sprite: Clothing/OuterClothing/Hardsuits/clown.rsi
+    sprite: White/Clothing/OuterClothing/Hardsuits/clown.rsi
   - type: PressureProtection
     highPressureMultiplier: 0.5
     lowPressureMultiplier: 1000

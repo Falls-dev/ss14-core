@@ -74,6 +74,7 @@
     preinstalled:
       - CrewManifestCartridge
       - NotekeeperCartridge
+      - MessagesCartridge
       - NewsReaderCartridge
       - BankCartridge
     cartridgeSlot:
@@ -412,7 +413,7 @@
   - type: Icon
     state: pda-lawyer
 
-#WHITE
+#WHITE START
 - type: entity
   parent: BasePDA
   id: InspectorPDA
@@ -422,6 +423,28 @@
   - type: Pda
     id: InspectorIDCard
     state: pda-inspector
+
+- type: entity
+  parent: BasePDA
+  id: BomzhPDA
+  name: bomzh PDA
+  description: Life has passed and all that's left to do is move forward.
+  components:
+  - type: Pda
+    id: BomzhIDCard
+    state: pda-bomzh
+
+- type: entity
+  parent: BasePDA
+  id: MaidPDA
+  name: maid PDA
+  description: Shining from her own purity.
+  components:
+  - type: Pda
+    id: MaidIDCard
+    state: pda-maid
+
+#WHITE END
 
 - type: entity
   parent: BasePDA
@@ -678,6 +701,7 @@
     scanDelay: 0
   - type: CartridgeLoader
     uiKey: enum.PdaUiKey.Key
+    notificationsEnabled: false
     preinstalled:
       - CrewManifestCartridge
       - NotekeeperCartridge
@@ -765,6 +789,7 @@
     uiKey: enum.PdaUiKey.Key
     preinstalled:
       - NotekeeperCartridge
+      - MessagesCartridgeSyndicate
     cartridgeSlot:
       priority: -1
       name: Cartridge
@@ -1066,6 +1091,7 @@
     uiKey: enum.PdaUiKey.Key
     preinstalled:
       - NotekeeperCartridge
+      - MessagesCartridgeSyndicate
     cartridgeSlot:
       priority: -1
       name: Cartridge

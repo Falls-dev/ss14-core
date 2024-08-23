@@ -375,32 +375,6 @@
     - type: Clothing
       sprite: White/Fluff/HSKveez/contactor_batton.rsi
 
-#Omntns
-- type: entity
-  parent: BaseItem
-  id: OmntnsHammer
-  name: Молоток судьи.
-  suffix: fluff
-  description: Порядок, порядок! Никаких бомб в здании моего суда.
-  components:
-    - type: Sprite
-      sprite: White/Fluff/Omntns/gavel_hammer.rsi
-      state: icon
-    - type: Item
-      sprite: White/Fluff/Omntns/gavel_hammer.rsi
-      size: Small
-    - type: EmitSoundOnUse
-      sound:
-        path: /Audio/White/Fluff/Omntns/gavel.ogg
-    - type: UseDelay
-      delay: 2
-    - type: MeleeWeapon
-      soundHit:
-        path: /Audio/White/Fluff/Omntns/gavel.ogg
-      damage:
-        types:
-          Blunt: 0
-
 # Pets book
 - type: entity
   parent: BookBase
@@ -460,7 +434,7 @@
 
 #Hskveez Atmospherics Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitBase
+  parent: ClothingOuterHardsuitAtmos
   id: ClothingOuterHardsuitHskveezAtmos
   name: "старый скафандр атмос-техника"
   suffix: fluff
@@ -470,32 +444,13 @@
       sprite: White/Fluff/HSKveez/hardsuit.rsi
     - type: Clothing
       sprite: White/Fluff/HSKveez/hardsuit.rsi
-    - type: PressureProtection
-      highPressureMultiplier: 0.02
-      lowPressureMultiplier: 10000
-    - type: ClothingSpeedModifier
-      walkModifier: 0.8
-      sprintModifier: 0.8
-    - type: Armor
-      modifiers:
-        coefficients:
-          Blunt: 0.95
-          Slash: 0.95
-          Piercing: 0.95
-          Heat: 0.35
-          Radiation: 0.8
-          Caustic: 0.85
-    - type: TemperatureProtection
-      coefficient: 0.001
-    - type: ExplosionResistance
-      damageCoefficient: 0.90
     - type: ToggleableClothing
       clothingPrototype: ClothingHeadHelmetHardsuitHskveezAtmos
     - type: GiftIgnore
 
 #Hskveez Atmospherics Hardsuit
 - type: entity
-  parent: ClothingHeadHardsuitWithLightBase
+  parent: ClothingHeadHelmetHardsuitAtmos
   id: ClothingHeadHelmetHardsuitHskveezAtmos
   suffix: fluff
   noSpawn: true
@@ -504,35 +459,10 @@
   components:
     - type: Sprite
       sprite: White/Fluff/HSKveez/helmet.rsi
-      layers:
-        - state: icon
-        - state: icon-unshaded
-          shader: unshaded
-        - state: light-overlay
-          visible: false
-          shader: unshaded
-          map: ["light"]
-    - type: HandheldLight
-      addPrefix: false
-    - type: ToggleableLightVisuals
-      spriteLayer: light
-      clothingVisuals:
-        head:
-          - state: equipped-head-light
-            shader: unshaded
     - type: Clothing
-      clothingVisuals:
-        head:
-          - state: equipped-head
-          - state: equipped-head-unshaded
-            shader: unshaded
+      sprite: White/Fluff/HSKveez/hardsuit.rsi
     - type: PointLight
       color: "#ffffff"
-    - type: PressureProtection
-      highPressureMultiplier: 0.08
-      lowPressureMultiplier: 10000
-    - type: TemperatureProtection
-      coefficient: 0.005
 
 #koitorra
 - type: entity
@@ -726,6 +656,7 @@
               Quantity: 1
           maxVol: 1
     - type: MeleeWeapon
+      canBeBlocked: false
       damage:
         types:
           Blunt: 0 #this feels hacky, but is needed for burn damage while active (i think)
@@ -774,19 +705,6 @@
       sprite: White/Fluff/deus/deus_jumpsuit.rsi
     - type: Clothing
       sprite: White/Fluff/deus/deus_jumpsuit.rsi
-
-# GusMopsik
-- type: entity
-  parent: ClothingUniformBase
-  id: GusMopsikJumpsuit
-  name: Форма 404
-  suffix: fluff
-  description: Обычная форма обычного сотрудника "СБ"
-  components:
-  - type: Sprite
-    sprite: White/Fluff/GusMopsik/ss_uniform.rsi
-  - type: Clothing
-    sprite: White/Fluff/GusMopsik/ss_uniform.rsi
 
 # Vtergot
 - type: entity
@@ -940,43 +858,6 @@
       sprite: White/Fluff/Medicgaming/deal_glasses.rsi
     - type: Clothing
       sprite: White/Fluff/Medicgaming/deal_glasses.rsi
-
-# Oleg_Tinkoff
-- type: entity
-  parent: ClothingHeadBase
-  id: ClothingHeadHelmetGopTinkoff
-  name: шлем с забралом "Маска-1"
-  description: Защитный шлем «Маска-1» появился на вооружении в давних временах, как замена шлему «Сфера».
-  suffix: fluff
-  components:
-    - type: Sprite
-      sprite: White/Fluff/Oleg_Tinkoff/helmet_gop.rsi
-    - type: Clothing
-      sprite: White/Fluff/Oleg_Tinkoff/helmet_gop.rsi
-
-- type: entity
-  parent: ClothingShoesBaseButcherable
-  id: ClothingShoesGopTinkoff
-  name: cпортивные кроссовки "ГОП ПАК"
-  description: Предназначены для спорта и гоп стопа.
-  suffix: fluff
-  components:
-    - type: Sprite
-      sprite: White/Fluff/Oleg_Tinkoff/shoes_gop.rsi
-    - type: Clothing
-      sprite: White/Fluff/Oleg_Tinkoff/shoes_gop.rsi
-
-- type: entity
-  parent: ClothingUniformBase
-  id: ClothingUniformGopTinkoff
-  name: cпортивный костюм "ГОП ПАК"
-  description: От костюма пахнет семечками, порохом и криминалом.
-  suffix: fluff
-  components:
-    - type: Sprite
-      sprite: White/Fluff/Oleg_Tinkoff/uniform_gop.rsi
-    - type: Clothing
-      sprite: White/Fluff/Oleg_Tinkoff/uniform_gop.rsi
 
 # Zilendorie
 - type: entity

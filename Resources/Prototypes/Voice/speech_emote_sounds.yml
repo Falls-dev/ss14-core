@@ -244,28 +244,6 @@
       collection: MaleDeathGasp
 
 - type: emoteSounds
-  id: FemaleReptilian
-  params:
-    variation: 0.125
-  sounds:
-    Scream:
-      path: /Audio/Voice/Reptilian/reptilian_scream.ogg
-    Laugh:
-      path: /Audio/Animals/lizard_happy.ogg
-    Honk:
-      collection: BikeHorn
-    Whistle:
-      collection: Whistles
-    Crying:
-      collection: MaleCrying
-    Weh:
-      collection: Weh
-    Gasp:
-      collection: FemaleGasp
-    DefaultDeathgasp:
-      collection: FemaleDeathGasp
-
-- type: emoteSounds
   id: AnimalReptilian
   params:
     variation: 0.125

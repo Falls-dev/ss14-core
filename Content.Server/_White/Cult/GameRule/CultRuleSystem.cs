@@ -280,7 +280,7 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
             return;
 
         rule.CurrentCultists.Add(cultistComponent);
-        _alertsSystem.ShowAlert(uid, AlertType.BloodSpells);
+        _alertsSystem.ShowAlert(cultist, AlertType.BloodSpells);
 
         var name = Name(cultist);
 

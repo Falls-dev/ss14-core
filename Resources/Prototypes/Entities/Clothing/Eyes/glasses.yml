@@ -300,7 +300,7 @@
         - WhitelistChameleon
 
 - type: entity
-  parent: ClothingEyesBase
+  parent: [ClothingEyesBase, ShowSecurityIcons]
   id: ClothingEyesGlassesMaid
   name: maid's sunglasses
   description: Maid's sunglasses. Clean and cute.
@@ -313,4 +313,3 @@
   - type: Tag
     tags:
     - WhitelistChameleon
-  - type: ShowSecurityIcons

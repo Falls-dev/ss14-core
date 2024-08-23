@@ -677,9 +677,6 @@
     canInteractUse: false
     damageEnergyDraw: 15
     domePrototype: EnergyDomeSmallPink
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
   - type: PowerCellDraw
     drawRate: 8
     useRate: 0

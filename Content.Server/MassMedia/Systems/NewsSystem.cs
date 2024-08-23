@@ -164,7 +164,7 @@ public sealed class NewsSystem : SharedNewsSystem
             );
 
         _chatManager.SendAdminAnnouncement(Loc.GetString("news-publish-admin-announcement",
-            ("actor", msg.Session.AttachedEntity),
+            ("actor", msg.Actor),
             ("title", article.Title),
             ("author", article.Author ?? Loc.GetString("news-read-ui-no-author"))
             ));

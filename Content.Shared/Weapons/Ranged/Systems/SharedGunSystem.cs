@@ -154,6 +154,7 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
 
         gun.ShootCoordinates = GetCoordinates(msg.Coordinates);
+        gun.Target = GetEntity(msg.Target);
         AttemptShoot(user.Value, ent, gun);
     }
 

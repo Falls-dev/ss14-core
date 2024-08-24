@@ -27,6 +27,7 @@ public abstract class SharedCriminalRecordsSystem : EntitySystem
         }
     }
 
+
     /// <summary>
     /// Decides the icon that should be displayed on the entity based on the security status
     /// </summary>
@@ -41,8 +42,14 @@ public abstract class SharedCriminalRecordsSystem : EntitySystem
             SecurityStatus.Paroled => "SecurityIconParoled",
             SecurityStatus.Wanted => "SecurityIconWanted",
             SecurityStatus.Detained => "SecurityIconIncarcerated",
-            SecurityStatus.Discharged => "SecurityIconDischarged",
+            SecurityStatus.Demote => "SecurityIconDemote",
             SecurityStatus.Suspected => "SecurityIconSuspected",
+            // WD start
+            SecurityStatus.Execute => "SecurityIconExecute",
+            SecurityStatus.Released => "SecurityIconReleased",
+            SecurityStatus.Monitoring => "SecurityIconMonitoring",
+            SecurityStatus.Search => "SecurityIconSearch",
+            // WD end
             _ => record.StatusIcon
         };
 

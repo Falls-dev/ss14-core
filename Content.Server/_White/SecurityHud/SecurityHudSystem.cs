@@ -3,7 +3,6 @@ using Content.Server.CriminalRecords.Systems;
 using Content.Server.Popups;
 using Content.Server.Radio.EntitySystems;
 using Content.Server.StationRecords.Systems;
-using Content.Shared._Miracle.Components;
 using Content.Shared._White.SecurityHud;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
@@ -13,7 +12,6 @@ using Content.Shared.Inventory;
 using Content.Shared.Overlays;
 using Content.Shared.Popups;
 using Content.Shared.Security;
-using Content.Shared.Security.Components;
 using Content.Shared.StationRecords;
 using Content.Shared.Verbs;
 using Robust.Server.GameObjects;
@@ -25,7 +23,6 @@ public sealed class SecurityHudSystem : EntitySystem
 {
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly CriminalRecordsSystem _criminalRecordsSystem = default!;
-    [Dependency] private readonly CriminalRecordsConsoleSystem _criminalRecordsConsoleSystem = default!;
     [Dependency] private readonly StationRecordsSystem _stationRecordsSystem = default!;
     [Dependency] private readonly IdCardSystem _idCardSystem = default!;
     [Dependency] private readonly RadioSystem _radio = default!;
@@ -42,16 +39,16 @@ public sealed class SecurityHudSystem : EntitySystem
 
     private void OnAltVerb(GetVerbsEvent<AlternativeVerb> args)
     {
-        if(!HasComp<HumanoidAppearanceComponent>(args.Target))
+        if (!HasComp<HumanoidAppearanceComponent>(args.Target))
             return;
 
-        if(!_invSlotsSystem.TryGetSlotEntity(args.User, "eyes", out var ent))
+        if (!_invSlotsSystem.TryGetSlotEntity(args.User, "eyes", out var ent))
             return;
 
-        if(!TryComp<ShowCriminalRecordIconsComponent>(ent, out var component))
+        if (!TryComp<ShowCriminalRecordIconsComponent>(ent, out var component))
             return;
 
-        if(!TryComp<AccessReaderComponent>(ent, out var accessReaderComponent))
+        if (!TryComp<AccessReaderComponent>(ent, out var accessReaderComponent))
             return;
 
         if (!_accessReaderSystem.IsAllowed(args.User, (EntityUid) ent, accessReaderComponent))
@@ -94,7 +91,7 @@ public sealed class SecurityHudSystem : EntitySystem
             return;
         }
 
-        if(!TryComp<StationRecordKeyStorageComponent>(idCard, out var stationRecordKeyComp))
+        if (!TryComp<StationRecordKeyStorageComponent>(idCard, out var stationRecordKeyComp))
             return;
 
         if (stationRecordKeyComp.Key == null)
@@ -148,7 +145,7 @@ public sealed class SecurityHudSystem : EntitySystem
         };
 
         _radio.SendRadioMessage(hud, Loc.GetString($"criminal-records-console-{statusString}", locArgs), securityChannel, hud);
-        _criminalRecordsConsoleSystem.UpdateCriminalIdentity(name, status);
+        _criminalRecordsSystem.UpdateCriminalIdentity(name, status);
 
         return true;
     }

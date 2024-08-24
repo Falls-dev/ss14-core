@@ -24,6 +24,7 @@ using Content.Shared._White.Cult.Components;
 using Content.Shared._White.Utils;
 using Content.Shared._White.Cult.Systems;
 using Content.Shared._White.Radio;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;

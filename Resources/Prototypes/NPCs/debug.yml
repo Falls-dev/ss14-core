@@ -60,7 +60,6 @@
           targetKey: Count
           minAmount: 0
           maxAmount: 100
-
       - !type:HTNPrimitiveTask
         operator: !type:SayKeyOperator
           key: Count
@@ -68,23 +67,18 @@
           - !type:KeyFloatLessPrecondition
             key: Count
             value: 50
-      
       - !type:HTNPrimitiveTask
           operator: !type:RandomOperator
             targetKey: IdleTime
             minKey: MinimumIdleTime
             maxKey: MaximumIdleTime
-
       - !type:HTNPrimitiveTask
         operator: !type:WaitOperator
           key: IdleTime
         preconditions:
           - !type:KeyExistsPrecondition
             key: IdleTime
-
-    - tasks:
       - !type:HTNPrimitiveTask
         operator: !type:SpeakOperator
-          speech: "fuck!"
-
- 
+          speech:
+            - "fuck!"

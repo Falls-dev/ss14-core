@@ -20,7 +20,7 @@
 
 # Head
 
-- type: loadout
+- type: itemLoadout
   id: MedicalHeadMirror
   equipment: MedicalHeadMirror
 # WD edit - removed timer from mirror

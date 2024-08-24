@@ -17,7 +17,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtCMO
 
-- type: loadout
+- type: itemLoadout
   id: ChiefMedicalOfficerTurtleneckJumpsuit
   equipment: ChiefMedicalOfficerTurtleneckJumpsuit
 
@@ -26,7 +26,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitCMOTurtle
 
-- type: loadout
+- type: itemLoadout
   id: ChiefMedicalOfficerTurtleneckJumpskirt
   equipment: ChiefMedicalOfficerTurtleneckJumpskirt
 
@@ -45,7 +45,7 @@
   equipment:
     head: ClothingHeadHatBeretCmo
 
-- type: loadout
+- type: itemLoadout
   id: CMOMedicalHeadMirror
   equipment: CMOMedicalHeadMirror
 

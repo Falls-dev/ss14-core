@@ -25,7 +25,7 @@
     anchored: true
   - type: Sprite
     drawdepth: WallMountedItems
-    sprite: Structures/Power/apc.rsi
+    sprite: White/Structures/Power/apc.rsi
     layers:
     - state: base
     - state: panel
@@ -160,7 +160,7 @@
     anchored: true
   - type: Sprite
     drawdepth: WallMountedItems
-    sprite: Structures/Power/apc.rsi
+    sprite: White/Structures/Power/apc.rsi
     state: frame
   - type: Construction
     graph: APC

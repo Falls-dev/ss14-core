@@ -8,7 +8,7 @@
   components:
   - type: Sprite
     drawdepth: WallMountedItems
-    sprite: Structures/Storage/Shelfs/wood.rsi
+    sprite: White/Structures/Storage/Shelfs/wood.rsi
     state: base
   - type: Fixtures
     fixtures:
@@ -63,7 +63,7 @@
   - type: Lock
   - type: LockVisuals
   - type: Sprite
-    sprite: Structures/Storage/Shelfs/wood.rsi
+    sprite: White/Structures/Storage/Shelfs/wood.rsi
     state: base
     layers:
     - state: rbase
@@ -120,7 +120,7 @@
   description: A sturdy place to place, well, anything really.
   components:
   - type: Sprite
-    sprite: Structures/Storage/Shelfs/metal.rsi
+    sprite: White/Structures/Storage/Shelfs/metal.rsi
     state: base
   - type: Damageable
     damageModifierSet: Metallic
@@ -155,7 +155,7 @@
   description: A fragile place to place, well, anything really.
   components:
   - type: Sprite
-    sprite: Structures/Storage/Shelfs/glass.rsi
+    sprite: White/Structures/Storage/Shelfs/glass.rsi
     state: base
   - type: Damageable
     damageModifierSet: Glass
@@ -191,7 +191,7 @@
   description: A safe place to put your favorite bottle of whiskey
   components:
   - type: Sprite
-    sprite: Structures/Storage/Shelfs/wood.rsi
+    sprite: White/Structures/Storage/Shelfs/wood.rsi
     state: base
     layers:
     - state: rbase
@@ -228,7 +228,7 @@
   description: A strong & shiny place to keep all your vials safe
   components:
   - type: Sprite
-    sprite: Structures/Storage/Shelfs/metal.rsi
+    sprite: White/Structures/Storage/Shelfs/metal.rsi
   - type: Destructible
     thresholds:
     - trigger:
@@ -262,7 +262,7 @@
   description: Crystal clear reinforced glass doors to show off all your fancy bottles you definitely didn't sell a co-worker's favorite mothroach for.
   components:
   - type: Sprite
-    sprite: Structures/Storage/Shelfs/glass.rsi
+    sprite: White/Structures/Storage/Shelfs/glass.rsi
   - type: Destructible
     thresholds:
     - trigger:
@@ -297,7 +297,7 @@
   description: Made out of the finest synthetic wood for all alcohol holding needs.
   components:
   - type: Sprite
-    sprite: Structures/Storage/Shelfs/Departments/Service/bar.rsi
+    sprite: White/Structures/Storage/Shelfs/Departments/Service/bar.rsi
     state: base
     layers:
       - state: base
@@ -345,7 +345,7 @@
   description: Holds knifes, spice, and everything nice!
   components:
   - type: Sprite
-    sprite: Structures/Storage/Shelfs/Departments/Service/kitchen.rsi
+    sprite: White/Structures/Storage/Shelfs/Departments/Service/kitchen.rsi
     state: base
     layers:
       - state: base
@@ -407,16 +407,16 @@
   description: Keeps all your chemicals safe and out of the clow- er, public hands!
   components:
   - type: Sprite
-    sprite: Structures/Storage/Shelfs/Departments/Medical/chemistry.rsi
+    sprite: White/Structures/Storage/Shelfs/Departments/Medical/chemistry.rsi
     layers:
     - state: base
       map: ["enum.StorageVisualLayers.Base"]
-    - state: unlocked
-      shader: unshaded
     - state: chem-0
     - map: ["enum.StorageFillLayers.Fill"]
     - state: closed
       map: ["enum.StorageVisualLayers.Door"]
+    - state: unlocked
+      shader: unshaded
     - state: locked
       map: ["enum.LockVisualLayers.Lock"]
       shader: unshaded

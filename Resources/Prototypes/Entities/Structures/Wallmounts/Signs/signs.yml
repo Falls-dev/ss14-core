@@ -11,6 +11,7 @@
 - type: entity
   parent: BaseSign
   id: BaseSignDirectional
+  suffix: directional sign
   abstract: true
   components:
     - type: Sprite
@@ -241,7 +242,28 @@
   description: A sign, indicating an AI is present.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: ai
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignAME
+  name: AME sign
+  description: A sign indicating the AME.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: ame
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignArrivals
+  name: arrivals sign
+  description: A sign indicating the arrivals.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: arrivals
 
 - type: entity
   parent: BaseSign
@@ -250,6 +272,7 @@
   description: A sign indicating the arcade.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: arcade
 
 - type: entity
@@ -259,6 +282,7 @@
   description: A sign indicating the armory.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: armory
 
 - type: entity
@@ -268,6 +292,7 @@
   description: A sign indicating the tool storage room.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: ass
 
 - type: entity
@@ -277,6 +302,7 @@
   description: A sign indicating the xenoarchaeology lab.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: anomaly
 
 - type: entity
@@ -286,6 +312,7 @@
   description: A sign indicating the anomalous research lab.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: anomaly2
 
 - type: entity
@@ -295,6 +322,7 @@
   description: A sign indicating the atmospherics area.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: atmos
 
 - type: entity
@@ -313,6 +341,7 @@
   description: A sign indicating the bar.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: bar
 
 - type: entity
@@ -322,7 +351,28 @@
   description: A sign indicating the barbershop.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: barbershop
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignBoxing
+  name: boxing sign
+  description: A sign indicating the boxing.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: boxing
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignBrig
+  name: brig sign
+  description: A sign indicating the brig.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: brig
 
 - type: entity
   parent: BaseSign
@@ -349,6 +399,7 @@
   description: A sign indicating the bridge.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: bridge
 
 - type: entity
@@ -358,7 +409,18 @@
   description: A sign warning the viewer about pressurised canisters.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: canisters
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignCaptain
+  name: captain sign
+  description: A sign indicating the captain office.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: captain
 
 - type: entity
   parent: BaseSign
@@ -367,6 +429,7 @@
   description: A sign indicating the cargo area.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: cargo
 
 - type: entity
@@ -376,6 +439,7 @@
   description: A sign indicating a cargo dock.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: cargo_dock
 
 - type: entity
@@ -385,6 +449,7 @@
   description: A sign indicating the chapel.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: chapel
 
 - type: entity
@@ -394,6 +459,7 @@
   description: A sign indicating the chemistry lab.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: chem
 
 - type: entity
@@ -421,6 +487,7 @@
   description: A sign indicating the cloning lab.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: cloning
 
 - type: entity
@@ -430,6 +497,7 @@
   description: A sign indicating the conference room.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: conference_room
 
 - type: entity
@@ -439,7 +507,18 @@
   description: A sign labelling the courtroom.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: court
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignCryo
+  name: cryogenics sign
+  description: A sign indicating the cryogenics.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: cryo
 
 - type: entity
   parent: BaseSign
@@ -448,6 +527,7 @@
   description: A sign indicating a disposal area.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: deathsposal
 
 - type: entity
@@ -457,7 +537,18 @@
   description: A sign indicating doors.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: doors
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignDorms
+  name: dorms sign
+  description: A sign indicating the dorms.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: dorms
 
 - type: entity
   parent: BaseSign
@@ -466,6 +557,7 @@
   description: A sign indicating drones.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: drones
 
 - type: entity
@@ -475,7 +567,18 @@
   description: A sign indicating the engine room.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: engine
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignEquip
+  name: equipment sign
+  description: A sign indicating the equipment.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: equip
 
 - type: entity
   parent: BaseSign
@@ -484,6 +587,7 @@
   description: A sign indicating the engineering area.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: eng
 
 - type: entity
@@ -493,6 +597,7 @@
   description: A sign indicating the escape pods.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: pods
 
 - type: entity
@@ -502,7 +607,18 @@
   description: A sign indicating an EVA area. EVA equipment may be required beyond this point.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: eva
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignEvac
+  name: evacuation sign
+  description: A sign indicating the evacuation.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: evac
 
 - type: entity
   parent: BaseSign
@@ -520,6 +636,7 @@
   description: A sign indicating a medical examination room.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: examroom
 
 - type: entity
@@ -538,7 +655,28 @@
   description: A sign indicating the gravity generator.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: gravi
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignGate
+  name: gate sign
+  description: A sign indicating the gate.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: gate
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignGenetics
+  name: genetics sign
+  description: A sign indicating the genetics.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: genetics
 
 - type: entity
   parent: BaseSign
@@ -547,6 +685,7 @@
   description: A sign with a hat on it.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: commander
 
 - type: entity
@@ -576,6 +715,26 @@
   - type: Sprite
     state: hydro3
 
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignHydro
+  name: hydroponics sign
+  description: A sign indicating the hydroponics area.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: hydro
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignHOP
+  name: HOP sign
+  description: A sign indicating the HOP office.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: hop
+
 - type: entity
   parent: BaseSign
   id: SignInterrogation
@@ -583,6 +742,7 @@
   description: A sign indicating an interrogation room.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: interrogation
 
 - type: entity
@@ -592,7 +752,28 @@
   description: A sign labelling an area where the janitor works.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: janitor
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignKitchen
+  name: kitchen sign
+  description: A sign indicating the kitchen.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: kitchen
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignCheckpoint
+  name: checkpoint sign
+  description: A sign indicating the checkpoint.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: kpp
 
 - type: entity
   parent: BaseSign
@@ -601,6 +782,7 @@
   description: A sign indicating the laundromat.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: laundromat
 
 - type: entity
@@ -610,6 +792,7 @@
   description: A sign labelling an area where the Lawyers work.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: law
 
 - type: entity
@@ -619,6 +802,7 @@
   description: A sign indicating the library.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: biblio
 
 - type: entity
@@ -628,6 +812,7 @@
   description: A sign indicating mail.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: mail
 
 - type: entity
@@ -637,6 +822,7 @@
   description: A sign indicating the medical bay.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: medbay
 
 - type: entity
@@ -646,6 +832,7 @@
   description: A sign indicating the miner dock.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: miner_dock
 
 - type: entity
@@ -655,6 +842,7 @@
   description: A sign indicating the morgue.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: morgue
 
 - type: entity
@@ -664,7 +852,18 @@
   description: A sign indicating where the Reporter works.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: news
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignNukeVault
+  name: nuclear vault sign
+  description: A sign indicating the nuclear.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: nukevault
 
 - type: entity
   parent: BaseSign
@@ -682,7 +881,28 @@
   description: A sign indicating the prison.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: prison
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignPA
+  name: PA sign
+  description: A sign indicating the PA.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: pa
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignSMES
+  name: SMES sign
+  description: A sign indicating the SMES room.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: smes
 
 - type: entity
   parent: BaseSign
@@ -691,6 +911,7 @@
   description: A sign labelling an area where the Psychologist works.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: psychology
 
 - type: entity
@@ -700,6 +921,7 @@
   description: A sign indicating the reception.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: reception
 
 - type: entity
@@ -709,6 +931,7 @@
   description: A sign indicating the research and development lab.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: rnd
 
 - type: entity
@@ -718,6 +941,7 @@
   description: A sign indicating the robotics lab.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: robo
 
 - type: entity
@@ -727,6 +951,7 @@
   description: A sign indicating the salvage area.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: salvage
 
 - type: entity
@@ -736,6 +961,7 @@
   description: A sign indicating the science area.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: sci
 
 - type: entity
@@ -763,6 +989,7 @@
   description: A sign with a shield.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: shield
 
 - type: entity
@@ -772,6 +999,7 @@
   description: A sign indicating the ship docking area.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: dock
 
 - type: entity
@@ -781,6 +1009,7 @@
   description: A sign warning that the area ahead is nothing but cold, empty space.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: space
 
 - type: entity
@@ -790,7 +1019,28 @@
   description: A sign indicating the operating theater.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: surgery
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignSolar
+  name: solar pannels sign
+  description: A sign indicating the solar pannels.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: solar
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignStorage
+  name: storage sign
+  description: A sign indicating the storage.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: storage
 
 - type: entity
   parent: BaseSign
@@ -799,7 +1049,28 @@
   description: A sign indicating the telecommunications room.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: telecoms
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignTheatre
+  name: theatre sign
+  description: A sign indicating the theatre.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: theatre
+
+- type: entity #WD edit
+  parent: BaseSign
+  id: SignToilet
+  name: toilet sign
+  description: A sign indicating the toilet.
+  components:
+  - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi
+    state: toilet
 
 - type: entity
   parent: BaseSign
@@ -808,6 +1079,7 @@
   description: A sign indicating the toxin lab.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: toxins
 
 - type: entity
@@ -817,6 +1089,7 @@
   description: A sign indicating the toxin lab.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: toxins2
 
 - type: entity
@@ -826,6 +1099,7 @@
   description: A sign indicating the virology lab.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: virology
 
 - type: entity
@@ -980,6 +1254,7 @@
   description: A sign indicating the xenobiology lab.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: xenolab
 
 - type: entity
@@ -989,6 +1264,7 @@
   description: A sign indicating the zombie lab.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: zomlab
 
 - type: entity
@@ -1227,6 +1503,7 @@
   description: A sign depicting the security insignia.
   components:
   - type: Sprite
+    sprite: White/Structures/Wallmounts/signs.rsi #WD edit
     state: security
 
 - type: entity

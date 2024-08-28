@@ -17,6 +17,9 @@ ghost-gui-toggle-ghost-hearing-name = Переключить видимость 
 ghost-gui-toggle-ghost-hearing-desc = Переключение между прослушиванием всех сообщений и прослушиванием только радиосвязи и ближайших сообщений.
 ghost-gui-toggle-hearing-popup-on = Теперь вы слышите все сообщения.
 ghost-gui-toggle-hearing-popup-off = Теперь вы можете слышать только радиосвязь и ближайшие сообщения.
+ghost-gui-toggle-hud-name = "Переключить HUD"
+ghost-gui-toggle-hud-desc = "Отображает базовые параметры существ"
+ghost-gui-toggle-hud-popup = "Переключена видимость информации о игроках."
 
 
 ghost-target-window-title = Телепорт призрака

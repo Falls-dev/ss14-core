@@ -86,11 +86,12 @@ namespace Content.Client.Ghost
             args.Handled = true;
         }
 
-        private void OnToggleGhostHud(EntityUid uid, ToggleGhostHudActionEvent args) // WD start
+        private void OnToggleGhostHud(EntityUid uid, GhostComponent component, ToggleGhostHudActionEvent args) // WD start
         {
             if (args.Handled)
                 return;
 
+            Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-hud-popup"), args.Performer);
             args.Handled = true;
         }
 
@@ -123,6 +124,7 @@ namespace Content.Client.Ghost
             _actions.RemoveAction(uid, component.ToggleFoVActionEntity);
             _actions.RemoveAction(uid, component.ToggleGhostsActionEntity);
             _actions.RemoveAction(uid, component.ToggleGhostHearingActionEntity);
+            _actions.RemoveAction(uid, component.ToggleGhostHudActionEntity); // WD
 
             if (uid != _playerManager.LocalEntity)
                 return;

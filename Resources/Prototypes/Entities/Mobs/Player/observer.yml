@@ -45,11 +45,6 @@
     bodyType: KinematicController
     bodyStatus: InAir
   - type: CanMoveInAir
-  - type: ShowSecurityIcons # WD start
-  - type: ShowHealthBars
-    damageContainers:
-      - Biological
-      - Inorganic # WD end
   - type: Tag
     tags:
     - BypassInteractionRangeChecks
@@ -123,7 +118,7 @@
   noSpawn: true
   components:
   - type: InstantAction
-    icon: Interface/VerbIcons/vv.svg.192dpi.png
+    icon: Interface/VerbIcons/sentient.svg.192dpi.png
     clientExclusive: true
     checkCanInteract: false
     event: !type:ToggleGhostHudActionEvent # WD

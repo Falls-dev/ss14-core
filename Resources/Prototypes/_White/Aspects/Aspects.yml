@@ -111,6 +111,8 @@
       name: "No engine"
       description: "Какой-то смышлённый агент синдиката решил украсть все ваши генераторы энергии целиком."
       weight: 2
+      forbidden: true
+      hidden: true
       startAudio:
         path: /Audio/White/Aspects/accent.ogg
     - type: NoEngineAspect
@@ -176,6 +178,8 @@
       name: "I Have Two Butts But I must Seat"
       description: "Стулья украли!"
       weight: 3
+      forbidden: true
+      hidden: true
       startAudio:
         path: /Audio/White/Aspects/accent.ogg
     - type: ChairLeakAspect
@@ -282,6 +286,8 @@
       name: "Stolen Floor"
       description: "Рабочие забыли положить плитку при строительстве станции."
       weight: 3
+      forbidden: true
+      hidden: true
       startAudio:
         path: /Audio/White/Aspects/accent.ogg
     - type: StolenFloorAspect
@@ -295,6 +301,8 @@
       name: "Are We In Dungeon"
       description: "В связи с невероятной хрупкостью окон было решено заменить их на стены."
       weight: 3
+      forbidden: true
+      hidden: true
       startAudio:
         path: /Audio/White/Aspects/accent.ogg
     - type: WindowLeakAspect

@@ -65,7 +65,7 @@ public sealed class CMSurgerySystem : SharedCMSurgerySystem
             }
         }
 
-        _ui.TrySetUiState(body, CMSurgeryUIKey.Key, new CMSurgeryBuiState(surgeries));
+        _ui.SetUiState(body, CMSurgeryUIKey.Key, new CMSurgeryBuiState(surgeries));
     }
 
     private void OnToolAfterInteract(Entity<CMSurgeryToolComponent> ent, ref AfterInteractEvent args)
@@ -78,8 +78,7 @@ public sealed class CMSurgerySystem : SharedCMSurgerySystem
             return;
         }
 
-        if (!TryComp(args.User, out SkillsComponent? skills) ||
-            skills.Surgery < 1)
+        if (!TryComp(args.User, out SkillsComponent? skills) || skills.Surgery < 1)
         {
             _popup.PopupEntity("You don't know how to perform surgery!", args.User, args.User);
             return;
@@ -92,7 +91,7 @@ public sealed class CMSurgerySystem : SharedCMSurgerySystem
         }
 
         args.Handled = true;
-        _ui.TryOpen(args.Target.Value, CMSurgeryUIKey.Key, actor.PlayerSession);
+        _ui.OpenUi(args.Target.Value, CMSurgeryUIKey.Key, actor.PlayerSession);
 
         RefreshUI(args.Target.Value);
     }

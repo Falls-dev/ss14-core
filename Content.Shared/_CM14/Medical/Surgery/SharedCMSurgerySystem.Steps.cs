@@ -159,11 +159,6 @@ public abstract partial class SharedCMSurgerySystem
 
     private void OnSurgeryTargetStepChosen(Entity<CMSurgeryTargetComponent> ent, ref CMSurgeryStepChosenBuiMsg args)
     {
-        var user = args.Session.AttachedEntity;
-
-        if (user == null)
-            return;
-
         if (GetEntity(args.Entity) is not { Valid: true } body ||
             GetEntity(args.Part) is not { Valid: true } targetPart ||
             !IsSurgeryValid(body, targetPart, args.Surgery, args.Step, out var surgery, out var part, out var step))
@@ -171,13 +166,10 @@ public abstract partial class SharedCMSurgerySystem
             return;
         }
 
-        if (!PreviousStepsComplete(body, part, surgery, args.Step) ||
-            IsStepComplete(body, part, args.Step))
-        {
+        if (!PreviousStepsComplete(body, part, surgery, args.Step) || IsStepComplete(body, part, args.Step))
             return;
-        }
 
-        if (!CanPerformStep(user.Value, body, part.Comp.PartType, step, true, out _, out _, out var validTools))
+        if (!CanPerformStep(args.Actor, body, part.Comp.PartType, step, true, out _, out _, out var validTools))
             return;
 
         if (_net.IsServer && validTools?.Count > 0)
@@ -187,16 +179,16 @@ public abstract partial class SharedCMSurgerySystem
                 if (TryComp(tool, out CMSurgeryToolComponent? toolComp) &&
                     toolComp.EndSound != null)
                 {
-                    _audio.PlayEntity(toolComp.StartSound, user.Value, tool);
+                    _audio.PlayEntity(toolComp.StartSound, args.Actor, tool);
                 }
             }
         }
 
         if (TryComp(body, out TransformComponent? xform))
-            _rotateToFace.TryFaceCoordinates(user.Value, _transform.GetMapCoordinates(body, xform).Position);
+            _rotateToFace.TryFaceCoordinates(args.Actor, _transform.GetMapCoordinates(body, xform).Position);
 
         var ev = new CMSurgeryDoAfterEvent(args.Surgery, args.Step);
-        var doAfter = new DoAfterArgs(EntityManager, user.Value, 2, ev, body, part)
+        var doAfter = new DoAfterArgs(EntityManager, args.Actor, 2, ev, body, part)
         {
             BreakOnMove = true,
         };

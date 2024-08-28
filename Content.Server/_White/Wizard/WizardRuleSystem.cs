@@ -81,8 +81,7 @@ public sealed class WizardRuleSystem : GameRuleSystem<WizardRuleComponent>
 
         var wizardAppearanceComponent = EnsureComp<WizardAppearanceComponent>(args.Entity.Value);
 
-        // Я мог бы использовать метод Wizardify, вместо создания нового ентити, но тогда остается прототип расы со всеми абилками.
-        // Человекоподобный маг оставляет все приколы рас, что не должно быть
+        // TODO: Пофиксить, что игрун сохраняет свой прототип вместе с расой и остаются абилки расы
 
         var entity = _wizardAppearance.GetWizardEntity(wizardAppearanceComponent);
 

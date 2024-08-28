@@ -19,6 +19,7 @@
   currencyWhitelist:
     - MeatyOreCoin
 
+# This is unused now
 - type: entity
   id: StoreMeatyOreEntity
   name: ThisIsDumb
@@ -30,7 +31,6 @@
         MeatyOreCoin: 0
     - type: UserInterface
       interfaces:
-        - key: enum.StoreUiKey.Key
+        enum.StoreUiKey.Key:
           type: StoreBoundUserInterface
-          range: -1
     - type: IgnorBUIInteractionRange

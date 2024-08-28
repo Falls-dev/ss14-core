@@ -56,8 +56,8 @@
         Radiation: 0.5
         Caustic: 0.5
   - type: ClothingSpeedModifier
-    walkModifier: 0.85
-    sprintModifier: 0.85
+    walkModifier: 0.75
+    sprintModifier: 0.75
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitAtmos
@@ -144,8 +144,8 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.6
-        Slash: 0.6
+        Blunt: 0.7
+        Slash: 0.7
         Piercing: 0.7
         Radiation: 0.3
         Heat: 0.8
@@ -263,34 +263,6 @@
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitWarden
 
-#Head of Security's Hardsuit
-- type: entity
-  parent: ClothingOuterHardsuitSecurity
-  id: ClothingOuterHardsuitSecurityRed
-  name: head of security's hardsuit
-  description: A special suit that protects against hazardous, low pressure environments. Has an additional layer of armor.
-  components:
-  - type: Sprite
-    sprite: Clothing/OuterClothing/Hardsuits/security-red.rsi
-  - type: Clothing
-    sprite: Clothing/OuterClothing/Hardsuits/security-red.rsi
-  - type: PressureProtection
-    highPressureMultiplier: 0.45
-    lowPressureMultiplier: 1000
-  - type: ExplosionResistance
-    damageCoefficient: 0.6
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.6
-        Slash: 0.5
-        Piercing: 0.5
-        Radiation: 0.5
-        Caustic: 0.6
-        Heat: 0.6
-  - type: ToggleableClothing
-    clothingPrototype: ClothingHeadHelmetHardsuitSecurityRed
-
 #Captain's Hardsuit
 - type: entity
   parent: ClothingOuterHardsuitWarden
@@ -319,20 +291,6 @@
     sprintModifier: 0.8
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitCap
-
-#Inspector's Hardsuit
-- type: entity
-  parent: ClothingOuterHardsuitHOP
-  id: ClothingOuterHardsuitInspector
-  name: inspector's hardsuit
-  description: Definitely not for spece assholes.
-  components:
-    - type: Sprite
-      sprite: Clothing/OuterClothing/Hardsuits/inspector.rsi
-    - type: Clothing
-      sprite: Clothing/OuterClothing/Hardsuits/inspector.rsi
-    - type: ToggleableClothing
-      clothingPrototype: ClothingHeadHelmetHardsuitInspector
 
 #Chief Engineer's Hardsuit
 - type: entity
@@ -434,6 +392,37 @@
   - type: StealTarget
     stealGroup: ClothingOuterHardsuitRd
 
+#Head of Security's Hardsuit
+- type: entity
+  parent: ClothingOuterHardsuitSecurity
+  id: ClothingOuterHardsuitSecurityRed
+  name: head of security's hardsuit
+  description: A special suit that protects against hazardous, low pressure environments. Has an additional layer of armor.
+  components:
+  - type: Sprite
+    sprite: Clothing/OuterClothing/Hardsuits/security-red.rsi
+  - type: Clothing
+    sprite: Clothing/OuterClothing/Hardsuits/security-red.rsi
+  - type: PressureProtection
+    highPressureMultiplier: 0.45
+    lowPressureMultiplier: 1000
+  - type: ExplosionResistance
+    damageCoefficient: 0.6
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.5
+        Piercing: 0.5
+        Radiation: 0.5
+        Caustic: 0.6
+  - type: ClothingSpeedModifier
+    walkModifier: 0.8
+    sprintModifier: 0.8
+  - type: HeldSpeedModifier
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitSecurityRed
+
 #Luxury Mining Hardsuit
 - type: entity
   parent: ClothingOuterHardsuitBase
@@ -464,37 +453,6 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitLuxury
-
-#Head of Personnel's Hardsuit WD
-- type: entity
-  parent: ClothingOuterHardsuitBase
-  id: ClothingOuterHardsuitHOP
-  name: head of personnel's hardsuit
-  description: A special suit that protects against hazardous, low pressure environments. Has an additional layer of light armor.
-  components:
-    - type: Sprite
-      sprite: Clothing/OuterClothing/Hardsuits/hop.rsi
-    - type: Clothing
-      sprite: Clothing/OuterClothing/Hardsuits/hop.rsi
-    - type: PressureProtection
-      highPressureMultiplier: 0.45
-      lowPressureMultiplier: 1000
-    - type: ExplosionResistance
-      damageCoefficient: 0.8
-    - type: Armor
-      modifiers:
-        coefficients: # 0.9 -> 10% защиты, блять!
-          Blunt: 0.8
-          Slash: 0.9
-          Piercing: 0.9
-          Radiation: 0.9
-          Caustic: 0.8
-          Heat: 0.9
-    - type: ClothingSpeedModifier
-      walkModifier: 0.9
-      sprintModifier: 0.9
-    - type: ToggleableClothing
-      clothingPrototype: ClothingHeadHelmetHardsuitHOP
 
 #ANTAG HARDSUITS
 #Blood-red Hardsuit

@@ -31,6 +31,15 @@
     Plastic: 300
 
 - type: latheRecipe
+  id: CombatKnife
+  result: CombatKnife
+  category: Weapons
+  completetime: 2
+  materials:
+    Steel: 250
+    Plastic: 100
+
+- type: latheRecipe
   id: WeaponLaserCarbine
   result: WeaponLaserCarbine
   category: Weapons
@@ -381,6 +390,22 @@
   materials:
     Steel: 120
 
+- type: latheRecipe # WD
+  id: MagazineShotgun
+  result: MagazineShotgun
+  category: Ammo
+  completetime: 5
+  materials:
+    Steel: 300
+
+- type: latheRecipe # WD
+  id: MagazineShotgunSlug
+  result: MagazineShotgunSlug
+  category: Ammo
+  completetime: 5
+  materials:
+    Steel: 300
+
 - type: latheRecipe
   id: ShellShotgunIncendiary
   result: ShellShotgunIncendiary
@@ -638,6 +663,17 @@
      Steel: 150
      Plastic: 100
      Glass: 20
+
+- type: latheRecipe
+  id: PortableRecharger
+  result: PortableRecharger
+  completetime: 15
+  materials:
+    Steel: 2000
+    Uranium: 2000
+    Plastic: 1000
+    Plasma: 500
+    Glass: 500
 
 - type: latheRecipe
   id: ClothingHandsGlovesMagnetic

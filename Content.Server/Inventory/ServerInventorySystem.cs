@@ -1,21 +1,18 @@
-using Content.Server.Storage.EntitySystems;
 using Content.Shared.Explosion;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
-using Content.Shared.Inventory.Events;
-using Content.Shared.Storage;
 
 namespace Content.Server.Inventory
 {
     public sealed class ServerInventorySystem : InventorySystem
     {
-        [Dependency] private readonly StorageSystem _storageSystem = default!;
+        [Dependency] private readonly SharedHandsSystem _hands = default!; // WD
 
         public override void Initialize()
         {
             base.Initialize();
 
             SubscribeLocalEvent<InventoryComponent, BeforeExplodeEvent>(OnExploded);
-            SubscribeNetworkEvent<OpenSlotStorageNetworkMessage>(OnOpenSlotStorage);
         }
 
         private void OnExploded(Entity<InventoryComponent> ent, ref BeforeExplodeEvent args)
@@ -26,17 +23,6 @@ namespace Content.Server.Inventory
             {
                 if (slot.ContainedEntity != null)
                     args.Contents.Add(slot.ContainedEntity.Value);
-            }
-        }
-
-        private void OnOpenSlotStorage(OpenSlotStorageNetworkMessage ev, EntitySessionEventArgs args)
-        {
-            if (args.SenderSession.AttachedEntity is not { Valid: true } uid)
-                    return;
-
-            if (TryGetSlotEntity(uid, ev.Slot, out var entityUid) && TryComp<StorageComponent>(entityUid, out var storageComponent))
-            {
-                _storageSystem.OpenStorageUI(entityUid.Value, uid, storageComponent);
             }
         }
 
@@ -60,5 +46,24 @@ namespace Content.Server.Inventory
             }
             // WD EDIT END
         }
+
+
+        // WD edit start - new helper method for drop anything from inventory.
+        public void DropAnything(EntityUid uid)
+        {
+            if (TryGetContainerSlotEnumerator(uid, out var enumerator))
+            {
+                while (enumerator.MoveNext(out var slot))
+                {
+                    TryUnequip(uid, slot.ID, true, true);
+                }
+            }
+
+            foreach (var held in _hands.EnumerateHeld(uid))
+            {
+                _hands.TryDrop(uid, held);
+            }
+        }
+        // WD edit end
     }
 }

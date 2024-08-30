@@ -108,7 +108,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Slash: 17
+        Slash: 15
   - type: Sharp
   - type: MeleeBlock
     delay: 12.1
@@ -136,7 +136,7 @@
       path: /Audio/Weapons/chainsaw.ogg
     damage:
       types:
-        Slash: 22
+        Slash: 21
   - type: Tool
     qualities:
       - Sawing
@@ -182,7 +182,7 @@
     wideAnimationRotation: -135
     damage:
       types:
-        Slash: 16
+        Slash: 13
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: DisarmMalus

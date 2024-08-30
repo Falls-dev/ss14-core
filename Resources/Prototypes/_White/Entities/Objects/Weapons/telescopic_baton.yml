@@ -66,4 +66,3 @@
   - type: StaticPrice
     price: 150
   - type: KnockDownOnHit
-    knockDownBehavior: NoDrop

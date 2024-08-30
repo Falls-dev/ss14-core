@@ -101,6 +101,7 @@
     minLifetime: 0.01
     speed: 20
     stunTime: 1.5
+    fallAfterHit: true
     throwOnThrowHit: true
   - type: DamageOtherOnHit
     sound:

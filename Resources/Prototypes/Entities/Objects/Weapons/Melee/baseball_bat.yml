@@ -11,7 +11,7 @@
     wideAnimationRotation: -135
     damage:
       types:
-        Blunt: 10
+        Blunt: 8 # WD
         Structural: 5
     soundHit:
       path: "/Audio/Weapons/smash.ogg"
@@ -19,7 +19,7 @@
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Blunt: 5
+        Blunt: 4 # WD
         Structural: 10
   - type: Item
     size: Normal
@@ -42,6 +42,11 @@
   - type: Tag
     tags:
     - BaseballBat
+  - type: MeleeThrowOnHit # WD
+    lifetime: 0.2
+    speed: 5
+    fallAfterHit: true
+    requireWield: true
 
 - type: entity
   name: incomplete baseball bat

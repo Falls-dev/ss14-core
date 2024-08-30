@@ -27,6 +27,8 @@
     damage:
       types:
         Blunt: 18
+    soundHit:
+      collection: MetalThud
   - type: Item
     size: Normal
     sprite: White/Objects/Weapons/Chaplain/nullrod.rsi

@@ -1,6 +1,7 @@
 using Content.Shared.Damage.Events;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Stunnable;
+using Content.Shared.Weapons.Melee.Events;
 
 namespace Content.Shared._White.Item.KnockDownOnHit;
 
@@ -15,16 +16,16 @@ public sealed class KnockDownOnHitSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<KnockDownOnHitComponent, StaminaDamageOnHitAttemptEvent>(OnStaminaHitAttempt);
-        SubscribeLocalEvent<KnockDownOnHitComponent, StaminaMeleeHitEvent>(OnHit);
+        SubscribeLocalEvent<KnockDownOnHitComponent, MeleeHitEvent>(OnHit);
     }
 
-    private void OnHit(Entity<KnockDownOnHitComponent> ent, ref StaminaMeleeHitEvent args)
+    private void OnHit(Entity<KnockDownOnHitComponent> ent, ref MeleeHitEvent args)
     {
         var time = ent.Comp.KnockdownTime;
         if (time <= TimeSpan.Zero)
             return;
 
-        foreach (var (uid, _) in args.HitList)
+        foreach (var uid in args.HitEntities)
         {
             _stun.TryKnockdown(uid, time, true, behavior: ent.Comp.KnockDownBehavior);
         }

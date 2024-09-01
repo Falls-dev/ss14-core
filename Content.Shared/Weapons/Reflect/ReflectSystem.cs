@@ -290,17 +290,14 @@ public sealed class ReflectSystem : EntitySystem
 
         // WD edit start
         // Reason for the edit: previously EnableAlert and DisableAlert were given an "EntityUid uid" which
-        // belongs to an item, not to the item user.
+        // belongs to an item, not to the item user. Now its logic corrected and moved to "RefreshReflectUser()".
         // if (comp.Enabled)
         //     EnableAlert(uid);
         // else
         //     DisableAlert(uid);
         if (args.User != null)
         {
-            if (comp.Enabled && comp.InRightPlace)
-                EnableAlert((EntityUid) args.User);
-            else
-                DisableAlert((EntityUid) args.User);
+            RefreshReflectUser((EntityUid) args.User);
         }
         // WD edit end
     }
@@ -316,7 +313,19 @@ public sealed class ReflectSystem : EntitySystem
                 continue;
 
             EnsureComp<ReflectUserComponent>(user);
-            EnableAlert(user);
+
+            // WD edit start
+            // Reason for the edit: to ensure correct display of alert.
+            if (!TryComp<ReflectComponent>(ent, out var component))
+                continue;
+            if (component.Enabled && component.InRightPlace)
+                EnableAlert(user);
+            else
+            {
+                DisableAlert(user);
+                continue;
+            }
+            // WD edit end
 
             return;
         }

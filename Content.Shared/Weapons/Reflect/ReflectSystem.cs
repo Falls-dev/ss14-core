@@ -103,6 +103,7 @@ public sealed class ReflectSystem : EntitySystem
         if (
             !Resolve(reflector, ref reflect, false) ||
             !reflect.Enabled ||
+            !reflect.InRightPlace || // WD
             !TryComp<ReflectiveComponent>(projectile, out var reflective) ||
             (reflect.Reflects & reflective.Reflective) == 0x0 ||
             !TryComp<PhysicsComponent>(projectile, out var physics) ||
@@ -246,7 +247,13 @@ public sealed class ReflectSystem : EntitySystem
 
         EnsureComp<ReflectUserComponent>(args.Equipee);
 
-        if (component.Enabled)
+        if (component.HowToUse == Placement.Body) // WD
+            component.InRightPlace = true;
+
+        if (component.HowToUse == Placement.Hands) // WD
+            component.InRightPlace = false;
+
+        if (component.Enabled && component.InRightPlace) // WD added component.InRightPlace
             EnableAlert(args.Equipee);
     }
 
@@ -261,8 +268,13 @@ public sealed class ReflectSystem : EntitySystem
             return;
 
         EnsureComp<ReflectUserComponent>(args.User);
+        if (component.HowToUse == Placement.Body) // WD
+            component.InRightPlace = false;
 
-        if (component.Enabled)
+        if (component.HowToUse == Placement.Hands) // WD
+            component.InRightPlace = true;
+
+        if (component.Enabled && component.InRightPlace) // WD added component.InRightPlace
             EnableAlert(args.User);
     }
 
@@ -276,10 +288,21 @@ public sealed class ReflectSystem : EntitySystem
         comp.Enabled = args.Activated;
         Dirty(uid, comp);
 
-        if (comp.Enabled)
-            EnableAlert(uid);
-        else
-            DisableAlert(uid);
+        // WD edit start
+        // Reason for the edit: previously EnableAlert and DisableAlert were given an "EntityUid uid" which
+        // belongs to an item, not to the item user.
+        // if (comp.Enabled)
+        //     EnableAlert(uid);
+        // else
+        //     DisableAlert(uid);
+        if (args.User != null)
+        {
+            if (comp.Enabled && comp.InRightPlace)
+                EnableAlert((EntityUid) args.User);
+            else
+                DisableAlert((EntityUid) args.User);
+        }
+        // WD edit end
     }
 
     /// <summary>

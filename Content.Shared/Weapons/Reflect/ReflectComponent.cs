@@ -45,13 +45,13 @@ public sealed partial class ReflectComponent : Component
     /// If the item for reflection needed in hands only - select Hands.
     /// Otherwise it will reflect in any inventory position.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("howToUse")]
-    public Placement HowToUse = Placement.Hands | Placement.Body;
+    [ViewVariables(VVAccess.ReadWrite), DataField]
+    public Placement Placement = Placement.Hands | Placement.Body;
 
     /// <summary>
     /// Can only reflect when placed correctly.
     /// </summary>
-    [DataField("inRightPlace"), ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
+    [DataField, ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
     public bool InRightPlace = true;
     // WD END
 
@@ -88,9 +88,10 @@ public enum ReflectType : byte
     Energy = 1 << 1,
 }
 
-public enum Placement : int
+[Flags]
+public enum Placement : byte
 {
     None = 0,
-    Hands = 1,
-    Body = 2,
+    Hands = 1 << 0,
+    Body = 1 << 1,
 }

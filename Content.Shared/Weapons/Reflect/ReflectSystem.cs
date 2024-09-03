@@ -211,6 +211,7 @@ public sealed class ReflectSystem : EntitySystem
     {
         if (!TryComp<ReflectComponent>(reflector, out var reflect) ||
             !reflect.Enabled ||
+            !reflect.InRightPlace || // WD
             TryComp<StaminaComponent>(reflector, out var staminaComponent) && staminaComponent.Critical ||
             _standing.IsDown(reflector))
         {
@@ -247,11 +248,7 @@ public sealed class ReflectSystem : EntitySystem
 
         EnsureComp<ReflectUserComponent>(args.Equipee);
 
-        if (component.HowToUse == Placement.Body) // WD
-            component.InRightPlace = true;
-
-        if (component.HowToUse == Placement.Hands) // WD
-            component.InRightPlace = false;
+        component.InRightPlace = IsInRightPlace(component, Placement.Body); // WD
 
         if (component.Enabled && component.InRightPlace) // WD added component.InRightPlace
             EnableAlert(args.Equipee);
@@ -268,11 +265,8 @@ public sealed class ReflectSystem : EntitySystem
             return;
 
         EnsureComp<ReflectUserComponent>(args.User);
-        if (component.HowToUse == Placement.Body) // WD
-            component.InRightPlace = false;
 
-        if (component.HowToUse == Placement.Hands) // WD
-            component.InRightPlace = true;
+        component.InRightPlace = IsInRightPlace(component, Placement.Hands); // WD
 
         if (component.Enabled && component.InRightPlace) // WD added component.InRightPlace
             EnableAlert(args.User);
@@ -342,5 +336,16 @@ public sealed class ReflectSystem : EntitySystem
     private void DisableAlert(EntityUid alertee)
     {
         _alerts.ClearAlert(alertee, AlertType.Deflecting);
+    }
+
+    /// <summary>
+    /// Selfdescribing.
+    /// </summary>
+    private static bool IsInRightPlace(ReflectComponent component, Placement placement) // WD
+    {
+        if (component.Placement == (Placement.Hands | Placement.Body))
+            return true;
+        else
+            return (component.Placement & placement) != 0x0;
     }
 }

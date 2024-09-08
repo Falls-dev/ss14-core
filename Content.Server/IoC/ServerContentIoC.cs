@@ -68,7 +68,7 @@ namespace Content.Server.IoC
             IoCManager.Register<DiscordWebhook>();
             IoCManager.Register<ServerDbEntryManager>();
 
-#if !FULL_RELEASE
+#if FULL_RELEASE
             // затерпишь
             IoCManager.Register<IPlayTimeTrackingManager, GlobalPlayTimeTrackingManager>();
             IoCManager.Register<ISharedPlaytimeManager, GlobalPlayTimeTrackingManager>();

@@ -15,6 +15,7 @@
         Structural: 5
     soundHit:
       path: "/Audio/Weapons/smash.ogg"
+    canHeavyAttack: false
   - type: Wieldable
   - type: IncreaseDamageOnWield
     damage:
@@ -45,7 +46,10 @@
   - type: MeleeThrowOnHit # WD
     lifetime: 0.2
     speed: 5
-    fallAfterHit: true
+    requireWield: true
+  - type: KnockDownOnHit
+    knockDownBehavior: NoDrop
+    knockdownTime: 0.5
     requireWield: true
 
 - type: entity

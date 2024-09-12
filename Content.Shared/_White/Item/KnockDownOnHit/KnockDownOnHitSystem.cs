@@ -2,6 +2,7 @@ using Content.Shared.Damage.Events;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Stunnable;
 using Content.Shared.Weapons.Melee.Events;
+using Content.Shared.Wieldable.Components;
 
 namespace Content.Shared._White.Item.KnockDownOnHit;
 
@@ -27,6 +28,15 @@ public sealed class KnockDownOnHitSystem : EntitySystem
 
         foreach (var uid in args.HitEntities)
         {
+            if (ent.Comp.RequireWield)
+            {
+                if (!TryComp<WieldableComponent>(args.Weapon, out var weapon))
+                    continue;
+
+                if (!weapon.Wielded)
+                    continue;
+            }
+
             _stun.TryKnockdown(uid, time, true, behavior: ent.Comp.KnockDownBehavior);
         }
     }

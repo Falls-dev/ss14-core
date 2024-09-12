@@ -11,4 +11,7 @@ public sealed partial class KnockDownOnHitComponent : Component
 
     [DataField]
     public SharedStandingStateSystem.DropHeldItemsBehavior? KnockDownBehavior;
+
+    [DataField]
+    public bool RequireWield;
 }

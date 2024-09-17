@@ -65,9 +65,10 @@ public sealed class RCDAmmoSystem : EntitySystem
         args.Handled = true;
 
         // WD edit start
-        if (TryComp<StackComponent>(uid, out var stackComponentFirst))
+        TryComp<StackComponent>(uid, out var stackComponent);
+        if (stackComponent != null)
         {
-            var realValue = (int) (stackComponentFirst.Count * comp.ChargeCountModifier);
+            var realValue = (int) (stackComponent.Count * comp.ChargeCountModifier);
             comp.Charges = realValue;
             if (realValue == 0)
             {
@@ -87,7 +88,7 @@ public sealed class RCDAmmoSystem : EntitySystem
         _popup.PopupClient(Loc.GetString("rcd-ammo-component-after-interact-refilled"), target, user);
 
         // WD edit start
-        if (TryComp<StackComponent>(uid, out var stackComponent))
+        if (stackComponent != null)
         {
             var spent = (int) (count / comp.ChargeCountModifier) == 0 ? 1 : (int) (count / comp.ChargeCountModifier);
             _stack.SetCount(uid, stackComponent.Count - spent);

@@ -63,6 +63,20 @@ public sealed class RCDAmmoSystem : EntitySystem
 
         var user = args.User;
         args.Handled = true;
+
+        // WD edit start
+        if (TryComp<StackComponent>(uid, out var stackComponentFirst))
+        {
+            var realValue = (int) (stackComponentFirst.Count * comp.ChargeCountModifier);
+            comp.Charges = realValue;
+            if (realValue == 0)
+            {
+                _popup.PopupClient(Loc.GetString("rcd-ammo-component-after-interact-not-enough"), target, user);
+                return;
+            }
+        }
+        // WD edit end
+
         var count = Math.Min(charges.MaxCharges - charges.Charges, comp.Charges);
         if (count <= 0)
         {

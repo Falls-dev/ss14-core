@@ -1,4 +1,5 @@
-﻿using Content.Shared.Access.Components;
+﻿using System.Linq;
+using Content.Shared._White.TTS;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
@@ -7,6 +8,8 @@ using Content.Shared.PowerCell.Components;
 using Content.Shared.Silicons.Borgs.Components;
 using Content.Shared.Wires;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Shared.Silicons.Borgs;
 
@@ -30,9 +33,22 @@ public abstract partial class SharedBorgSystem : EntitySystem
         SubscribeLocalEvent<BorgChassisComponent, EntInsertedIntoContainerMessage>(OnInserted);
         SubscribeLocalEvent<BorgChassisComponent, EntRemovedFromContainerMessage>(OnRemoved);
         SubscribeLocalEvent<BorgChassisComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeedModifiers);
+        SubscribeLocalEvent<SharedTTSComponent, ComponentStartup>(RandomTTS);
 
         InitializeRelay();
     }
+
+    //GOIDA
+    private void RandomTTS(EntityUid uid, SharedTTSComponent component, ComponentStartup args)
+    {
+        if (TryComp<BorgChassisComponent>(uid, out var borgChassis) && borgChassis.Initialized)
+        {
+            var voiceList = IoCManager.Resolve<IPrototypeManager>().EnumeratePrototypes<TTSVoicePrototype>().ToList();
+            var voiceId = IoCManager.Resolve<IRobustRandom>().Pick(voiceList);
+            component.VoicePrototypeId = voiceId.ID;
+        }
+    }
+    //GOIDA
 
     private void OnItemSlotInsertAttempt(EntityUid uid, BorgChassisComponent component, ref ItemSlotInsertAttemptEvent args)
     {

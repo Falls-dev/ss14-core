@@ -34,3 +34,11 @@ public sealed class TTSVoicePrototype : IPrototype
     [DataField]
     public bool BorgVoice { get; }
 }
+
+// BorgTTS
+[Prototype("ttsBorgVoice")]
+public sealed class TTSBorgVoicePrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; } = default!;
+}

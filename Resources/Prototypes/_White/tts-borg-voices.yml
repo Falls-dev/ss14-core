@@ -1,0 +1,131 @@
+﻿- type: ttsBorgVoice
+  id: Aidar
+  name: tts-voice-name-aidar
+  sex: Male
+  speaker: aidar
+
+- type: ttsBorgVoice
+  id: Eugene
+  name: tts-voice-name-eugene
+  sex: Male
+  speaker: eugene
+
+- type: ttsBorgVoice
+  id: Kseniya
+  name: tts-voice-name-kseniya
+  sex: Female
+  speaker: kseniya
+
+- type: ttsBorgVoice
+  id: Bebey
+  name: tts-voice-name-bebey
+  sex: Male
+  speaker: bebey
+
+- type: ttsBorgVoice
+  id: Papa
+  name: tts-voice-name-papa
+  sex: Male
+  speaker: papa
+
+- type: ttsBorgVoice
+  id: Glados
+  name: tts-voice-name-glados
+  sex: Female
+  speaker: glados
+
+- type: ttsBorgVoice
+  id: Sentrybot
+  name: tts-voice-name-sentrybot
+  sex: Male
+  speaker: sentrybot
+
+- type: ttsBorgVoice
+  id: Soldier
+  name: tts-voice-name-soldier
+  sex: Male
+  speaker: soldier
+
+- type: ttsBorgVoice
+  id: Bandit
+  name: tts-voice-name-bandit
+  sex: Male
+  speaker: bandit
+
+- type: ttsBorgVoice
+  id: Geralt
+  name: tts-voice-name-geralt
+  sex: Male
+  speaker: geralt
+
+- type: ttsBorgVoice
+  id: Lambert
+  name: tts-voice-name-lambert
+  sex: Male
+  speaker: lambert
+
+- type: ttsBorgVoice
+  id: Xrenoid
+  name: tts-voice-name-xrenoid
+  sex: Male
+  speaker: xrenoid
+
+- type: ttsBorgVoice
+  id: Strelok
+  name: tts-voice-name-strelok
+  sex: Male
+  speaker: strelok
+
+- type: ttsBorgVoice
+  id: Illidan
+  name: tts-voice-name-illidan
+  sex: Male
+  speaker: illidan
+
+- type: ttsBorgVoice
+  id: TfSpy
+  name: tts-voice-name-tf-spy
+  sex: Male
+  speaker: spy
+
+- type: ttsBorgVoice
+  id: TfDemoman
+  name: tts-voice-name-tf-demoman
+  sex: Male
+  speaker: demoman
+
+- type: ttsBorgVoice
+  id: Nord
+  name: tts-voice-name-nord
+  sex: Male
+  speaker: nord
+
+- type: ttsBorgVoice
+  id: Ulfric
+  name: tts-voice-name-ulfric
+  sex: Male
+  speaker: ulfric
+
+- type: ttsBorgVoice
+  id: Mitch
+  name: tts-voice-name-mitch
+  sex: Male
+  speaker: mitch
+
+- type: ttsBorgVoice
+  id: Skippy
+  name: tts-voice-name-skippy
+  sex: Male
+  speaker: skippy
+
+- type: ttsBorgVoice
+  id: Nazir
+  name: tts-voice-name-nazir
+  sex: Male
+  speaker: nazir
+
+- type: ttsBorgVoice
+  id: Jackie
+  name: tts-voice-name-jackie
+  sex: Male
+  speaker: jackie

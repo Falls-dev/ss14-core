@@ -237,11 +237,11 @@ ghost-role-information-traveling-chef-name = Путешествующий Пов
 ghost-role-information-traveling-chef-description = Вы шеф-повар на путешествующем шаттле экзотической кухни. Порадуйте станцию ​​вкусной едой!
 ghost-role-information-traveling-chef-rules = Действуют обычные правила для персонала станции.
 
-ghost-role-information-disaster-victim-name = Уцелевший Бедствие
-ghost-role-information-disaster-victim-description = Вы спаслись в эвакуационной капсуле с другой станции, потерпевшей ужасную участь. Возможно, вас найдут и спасут.
+ghost-role-information-disaster-victim-name = Потерпевший Бедствие
+ghost-role-information-disaster-victim-description = Вы спаслись в эвакуационной капсуле с другой станции, потерпевшей ужасную трагедию. Возможно, вас найдут и спасут.
 ghost-role-information-disaster-victim-rules = Действуют обычные правила для персонала станции.
 
-ghost-role-information-syndie-disaster-victim-name = Уцелевший Бедствие Синдикат
+ghost-role-information-syndie-disaster-victim-name = Потерпевший Бедствие Синдикат
 ghost-role-information-syndie-disaster-victim-description = Вы обычный рабочий со станции синдиката. К сожалению, эвакуационная капсула забросила вас во вражеский сектор...
 ghost-role-information-syndie-disaster-victim-rules = Действуют обычные правила для персонала станции. Вы [color=red]НЕ[/color] антагонист.
 

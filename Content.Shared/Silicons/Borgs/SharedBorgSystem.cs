@@ -21,8 +21,8 @@ public abstract partial class SharedBorgSystem : EntitySystem
     [Dependency] protected readonly SharedContainerSystem Container = default!;
     [Dependency] protected readonly ItemSlotsSystem ItemSlots = default!;
     [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] protected readonly IPrototypeManager PrototypeManager = default!;
-    [Dependency] protected readonly IRobustRandom RobustRandom = default!;
+    [Dependency] protected readonly IPrototypeManager PrototypeManager = default!; //Giedi EDIT
+    [Dependency] protected readonly IRobustRandom RobustRandom = default!; //Giedi EDIT
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -35,7 +35,9 @@ public abstract partial class SharedBorgSystem : EntitySystem
         SubscribeLocalEvent<BorgChassisComponent, EntInsertedIntoContainerMessage>(OnInserted);
         SubscribeLocalEvent<BorgChassisComponent, EntRemovedFromContainerMessage>(OnRemoved);
         SubscribeLocalEvent<BorgChassisComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeedModifiers);
-        SubscribeLocalEvent<SharedTTSComponent, ComponentStartup>(RandomTTS);
+
+        SubscribeLocalEvent<SharedTTSComponent, ComponentStartup>(RandomTTS); //Giedi EDIT
+
 
         InitializeRelay();
     }
@@ -43,14 +45,14 @@ public abstract partial class SharedBorgSystem : EntitySystem
     //Giedi EDIT
     private void RandomTTS(EntityUid uid, SharedTTSComponent component, ComponentStartup args)
     {
-        if (!TryComp<BorgChassisComponent>(uid, out _))
+        if (HasComp<BorgChassisComponent>(uid))
               return;
 
-        var voiceList = PrototypeManager.EnumeratePrototypes<TTSBorgVoicePrototype>().ToHashSet();
+        var voiceList = PrototypeManager.EnumeratePrototypes<TTSVoicePrototype>().ToHashSet();
 
         var voiceId = RobustRandom.Pick(voiceList);
 
-        component.VoicePrototypeId = voiceId.ID;
+        component.VoicePrototypeId = voiceId.BorgVoice.ToString();
     }
     //Giedi EDIT
 

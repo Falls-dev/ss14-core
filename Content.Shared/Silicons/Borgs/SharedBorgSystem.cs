@@ -43,13 +43,12 @@ public abstract partial class SharedBorgSystem : EntitySystem
 
         InitializeRelay();
         GenerateVoiceList(); // WD edit
-
     }
 
     // Giedi added
     private void EnsureRandomTTS(EntityUid uid, SharedTTSComponent component, ComponentStartup args)
     {
-        if (HasComp<BorgChassisComponent>(uid))
+        if (!HasComp<BorgChassisComponent>(uid))
             return;
 
         var voiceId = RobustRandom.Pick(_voices);

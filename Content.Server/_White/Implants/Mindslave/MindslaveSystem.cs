@@ -88,11 +88,9 @@ public sealed class MindslaveSystem : SharedMindslaveSystem
 
             var popupNoMaster = master == EntityUid.Invalid
                 ? Loc.GetString("mindslave-freed-no-master")
-                : Loc.GetString("mindslave-freed",
-                    ("player", master));
+                : Loc.GetString("mindslave-freed", ("player", master));
 
             Popup.PopupEntity(popupNoMaster, args.Target, args.Target);
-
         }
 
         if (TryComp(master, out MindSlaveComponent? masterMindslave))

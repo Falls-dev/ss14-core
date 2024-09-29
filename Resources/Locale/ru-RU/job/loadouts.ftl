@@ -1,2 +1,2 @@
 loadout-window = Снаряжение
-loadout-none = None
+loadout-none = Ничего

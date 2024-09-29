@@ -80,13 +80,17 @@ public sealed class MindslaveSystem : SharedMindslaveSystem
             return;
         }
 
+        var master = GetEntity(mindslave.Master);
+
         if (Mind.TryGetMind(args.Target, out var mindId, out _))
         {
             _role.MindTryRemoveRole<RoleBriefingComponent>(mindId);
-            Popup.PopupEntity(Loc.GetString("mindslave-freed", ("player", mindslave.Master)), args.Target, args.Target);
+            if (master.Id != 0)
+                Popup.PopupEntity(Loc.GetString("mindslave-freed", ("player", master)), args.Target, args.Target);
+            else
+                Popup.PopupEntity(Loc.GetString("mindslave-freed-no-master"), args.Target, args.Target);
         }
 
-        var master = GetEntity(mindslave.Master);
         if (TryComp(master, out MindSlaveComponent? masterMindslave))
         {
             masterMindslave.Slaves.Remove(GetNetEntity(args.Target));

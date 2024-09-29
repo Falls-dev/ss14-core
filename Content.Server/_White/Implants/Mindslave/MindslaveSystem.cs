@@ -86,11 +86,10 @@ public sealed class MindslaveSystem : SharedMindslaveSystem
         {
             _role.MindTryRemoveRole<RoleBriefingComponent>(mindId);
 
-            string? popupNoMaster;
-            if (master == EntityUid.Invalid)
-                popupNoMaster = Loc.GetString("mindslave-freed-no-master");
-            else
-                popupNoMaster = Loc.GetString("mindslave-freed", ("player", master));
+            var popupNoMaster = master == EntityUid.Invalid
+                ? Loc.GetString("mindslave-freed-no-master")
+                : Loc.GetString("mindslave-freed",
+                    ("player", master));
 
             Popup.PopupEntity(popupNoMaster, args.Target, args.Target);
 

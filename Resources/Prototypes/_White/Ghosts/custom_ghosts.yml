@@ -468,7 +468,7 @@
 #BIG_Zi_348
 - type: customGhost
   id: big_zi_348-ghost
-  ckey: localhost@BIG_Zi_348
+  ckey: BIG_Zi_348
   sprite: White/Ghosts/big_zi_348-ghost.rsi
   alpha: 0.9
   ghostName: BIG_Zi_348

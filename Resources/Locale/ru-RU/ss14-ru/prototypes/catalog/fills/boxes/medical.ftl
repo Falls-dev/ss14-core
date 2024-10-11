@@ -24,4 +24,3 @@ ent-BoxBodyBag = коробка мешков для тел
     .suffix = { "" }
 ent-BoxVial = коробка флаконов
     .desc = Полная коробка флаконов.
-    .suffix = { "" }

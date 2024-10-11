@@ -1,5 +1,6 @@
 ent-Dresser = комод
     .desc = Может хранить в себе вещи, идеально подходит для нижнего белья.
+    .suffix = { "" }
 ent-DresserFilled = { ent-Dresser }
    .desc = { ent-Dresser.desc }
 ent-DresserCaptainFilled = { ent-Dresser }

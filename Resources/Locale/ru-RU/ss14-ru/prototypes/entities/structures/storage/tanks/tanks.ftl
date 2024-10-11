@@ -12,6 +12,7 @@ ent-WaterTankFull = { ent-WaterTank }
     .desc = { ent-WaterTank.desc }
 ent-WaterCooler = кулер с водой
     .desc = Хорошее место, чтобы постоять и потратить время.
+    .suffix = { "" }
 ent-WaterTankHighCapacity = водяной резервуар большой ёмкости
     .desc = Резервуар для воды под высоким давлением, предназначенный для хранения гигантских объемов воды.
     .suffix = Заполненный

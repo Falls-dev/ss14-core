@@ -23,6 +23,7 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
+using Robust.Shared.Timing; // WD
 
 namespace Content.Server.Nuke;
 
@@ -302,7 +303,7 @@ public sealed class NukeSystem : EntitySystem
         // play alert sound if time is running out
         if (nuke.RemainingTime <= nuke.AlertSoundTime && !nuke.PlayedAlertSound)
         {
-            _sound.PlayGlobalOnStation(uid, _audio.GetSound(nuke.AlertSound), new AudioParams{Volume = -5f});
+            _sound.PlayGlobalOnStation(uid, _audio.GetSound(nuke.AlertSound), new AudioParams { Volume = -5f });
             _sound.StopStationEventMusic(uid, StationEventMusicType.Nuke);
             nuke.PlayedAlertSound = true;
             UpdateAppearance(uid, nuke);
@@ -571,7 +572,7 @@ public sealed class NukeSystem : EntitySystem
         _sound.StopStationEventMusic(uid, StationEventMusicType.Nuke);
         Del(uid);
 
-        _roundEndSystem.EndRound(TimeSpan.FromSeconds(30)); //Giedi EDIT
+        Timer.Spawn(TimeSpan.FromSeconds(60), () => _roundEndSystem.EndRound()); //Giedi EDIT
     }
 
     /// <summary>

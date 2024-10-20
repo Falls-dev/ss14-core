@@ -66,6 +66,9 @@
     state: icon
   - type: Item
     size: Normal
+    storedRotation: -44 # WD
+    shape: # WD
+    - 0,0,0,2
   - type: Construction
     graph: WoodenBat
     node: incompleteBat

@@ -1,0 +1,68 @@
+﻿const highp vec2 z = vec2(1.0, 8.0);
+const highp vec2 samples = vec2(3.0, 3.0);
+const highp float complexity = 8.0;
+const highp float density = 0.6; // 0-1
+const highp float sceneswitchspeed = 0.3;
+
+highp vec4 hash42(highp vec2 p)
+{
+    highp vec4 p4 = fract(vec4(p.xyxy) * vec4(0.1031, 0.1030, 0.0973, 0.1099));
+    p4 += dot(p4, p4.wzxy + 33.33);
+    return fract((p4.xxyz + p4.yzzw) * p4.zywx);
+}
+
+highp vec4 tex(highp vec2 C, highp vec2 R) {
+    highp vec4 o2 = vec4(1.0);
+    highp vec2 uv = C / R.xy;
+    highp float t = TIME;
+    t += 100;
+    highp vec4 h = hash42(floor(uv) + floor(t * sceneswitchspeed));
+    uv.y += uv.x * (h.x - 0.5);
+    uv.x *= R.x / R.y;
+    uv *= z;
+    uv += floor(t * sceneswitchspeed) * z * h.y; // adding *h.y so vertical seams are not always in the same place
+    highp float s = 1.0;
+
+    for (float i = 1.0; i <= complexity; ++i) {
+        highp vec2 c = floor(uv + i);
+        highp vec4 h = hash42(c);
+        highp vec2 p = fract(uv + i + (floor((t) / (h.z + 1.0)) * (h.z + 1.0)) * h.y);
+        uv += p * h.z * h.xy * vec2(s, 2.0);
+        s = -s * (1.1 + h.y);
+        if (h.w > density) {
+            o2 *= h;
+        }
+    }
+    o2 = step(0.5, o2);
+    return o2;
+}
+
+void fragment()
+{
+    highp vec2 R = 1.0 / SCREEN_PIXEL_SIZE;
+    highp vec2 uv = FRAGCOORD.xy/R.xy;
+    highp vec2 C = FRAGCOORD.xy;
+
+    highp vec4 o = vec4(0.0);
+    highp float accum = 0.0;
+
+    for (float x = -samples.x; x < samples.x; x += 1.0) {
+        highp vec2 offset = vec2(x, 0.0);
+        highp float weight = abs(samples.x - x);
+        o += tex(C + offset, R) * weight;
+        accum += weight;
+    }
+    for (float y = -samples.y; y < samples.y; y += 1.0) {
+        highp vec2 offset = vec2(0.0, y);
+        highp float weight = abs(samples.y - y);
+        o += tex(C + offset, R) * weight;
+        accum += weight;
+    }
+    o /= accum;
+
+    o = smoothstep(0.2, 0.8, o) * mod(C.x, 3.0) / 2.5;
+    o = clamp(o, 0.0, 1.0);
+    o = pow(o, o - o + 0.5);
+
+    COLOR = o;
+}

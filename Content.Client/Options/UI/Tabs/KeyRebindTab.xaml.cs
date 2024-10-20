@@ -143,7 +143,7 @@ namespace Content.Client.Options.UI.Tabs
                 KeybindsContainer.AddChild(new Label
                 {
                     Text = Loc.GetString(headerContents),
-                    FontColorOverride = StyleNano.NanoGold,
+                    FontColorOverride = StyleNano.Cyberpunk,
                     StyleClasses = { StyleNano.StyleClassLabelKeyText }
                 });
             }
@@ -500,6 +500,7 @@ namespace Content.Client.Options.UI.Tabs
                 var hBox = new BoxContainer
                 {
                     Orientation = LayoutOrientation.Horizontal,
+                    Margin = new Thickness(0, 1, 0, 1),
                     Children =
                     {
                         new Control {MinSize = new Vector2(5, 0)},

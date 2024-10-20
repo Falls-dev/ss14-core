@@ -9,6 +9,10 @@
 
             <Label Name="Title" Text="Giedi Prime" Align="Center" />
 
+            <AnimatedTextureRect Name="Meowker"
+                                 SetSize="64 64"
+                                 Margin="16 0"/>
+
             <Control MinSize="0 4" />
 
             <BoxContainer Orientation="Horizontal" SeparationOverride="4">

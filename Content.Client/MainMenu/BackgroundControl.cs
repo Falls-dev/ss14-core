@@ -16,7 +16,7 @@ public sealed class BackgroundControl : TextureRect
     {
         IoCManager.InjectDependencies(this);
 
-        _glitchShader = _prototype.Index<ShaderPrototype>("Cyberglitch").Instance().Duplicate();
+        _glitchShader = _prototype.Index<ShaderPrototype>("Nanoglitch").Instance().Duplicate();
     }
 
     protected override void Dispose(bool disposing)

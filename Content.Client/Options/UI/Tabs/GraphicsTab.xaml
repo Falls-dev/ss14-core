@@ -46,7 +46,7 @@
             <CheckBox Name="ShowTrailsCheckBox" Text="Отображать трейлы от пуль" />
             <CheckBox Name="EnableLightsGlowingBox" Text="Включить свечение от ламп" />
         </BoxContainer>
-        <controls:StripeBack HasBottomEdge="False" HasMargins="False">
+        <controls:StripeBack HasTopEdge="False" HasBottomEdge="False" HasMargins="False">
             <Button Name="ApplyButton"
                     Text="{Loc 'ui-options-apply'}"
                     TextAlign="Center"

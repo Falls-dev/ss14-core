@@ -4,12 +4,14 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared;
 using Robust.Shared.Configuration;
+using Robust.Shared.Utility;
 
 namespace Content.Client.MainMenu.UI;
 
 [GenerateTypedNameReferences]
 public sealed partial class MainMenuControl : Control
 {
+    private static readonly SpriteSpecifier Sprite = new SpriteSpecifier.Rsi(new ResPath("/Textures/Mobs/Silicon/Bots/mommi.rsi"), "wiggle");
     public MainMenuControl(IConfigurationManager configMan)
     {
         RobustXamlLoader.Load(this);
@@ -19,6 +21,9 @@ public sealed partial class MainMenuControl : Control
         LayoutContainer.SetAnchorPreset(VBox, LayoutContainer.LayoutPreset.Center);
         LayoutContainer.SetGrowHorizontal(VBox, LayoutContainer.GrowDirection.Both);
         LayoutContainer.SetGrowVertical(VBox, LayoutContainer.GrowDirection.Both);
+
+        Meowker.SetFromSpriteSpecifier(Sprite);
+        Meowker.DisplayRect.Stretch = TextureRect.StretchMode.KeepAspectCentered;
 
         var currentUserName = configMan.GetCVar(CVars.PlayerName);
         UsernameBox.Text = currentUserName;

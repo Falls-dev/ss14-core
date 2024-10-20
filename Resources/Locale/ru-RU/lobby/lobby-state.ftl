@@ -20,3 +20,7 @@ lobby-state-player-status-round-time =
        *[other] минут
     }
 lobby-state-preloading = Скоро
+lobby-state-song-text = Играет [color=white]{$songTitle}[/color] от [color=white]{$songArtist}[/color]
+lobby-state-song-no-song-text = Ничего не играет
+lobby-state-song-unknown-title = [color=dimgray]Неизвестный[/color]
+lobby-state-song-unknown-artist = [color=dimgray]Неизвестного[/color]

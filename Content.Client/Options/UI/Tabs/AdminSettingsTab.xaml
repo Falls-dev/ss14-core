@@ -21,7 +21,7 @@
             </BoxContainer>
     </BoxContainer>
         <BoxContainer Orientation="Vertical" >
-        <controls:StripeBack HasBottomEdge="False" HasMargins="False">
+        <controls:StripeBack HasTopEdge="False" HasBottomEdge="False" HasMargins="False">
             <BoxContainer Orientation="Horizontal"
                           Align="End"
                           HorizontalExpand="True"

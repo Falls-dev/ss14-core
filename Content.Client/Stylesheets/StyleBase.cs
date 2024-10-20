@@ -72,44 +72,46 @@ namespace Content.Client.Stylesheets
             {
                 Texture = buttonTex,
             };
-            BaseButton.SetPatchMargin(StyleBox.Margin.All, 10);
-            BaseButton.SetPadding(StyleBox.Margin.All, 1);
+            BaseButton.SetPatchMargin(StyleBox.Margin.All, 13);
+            BaseButton.SetPadding(StyleBox.Margin.All, 0);
             BaseButton.SetContentMarginOverride(StyleBox.Margin.Vertical, 2);
             BaseButton.SetContentMarginOverride(StyleBox.Margin.Horizontal, 14);
 
             BaseButtonOpenRight = new StyleBoxTexture(BaseButton)
             {
-                Texture = new AtlasTexture(buttonTex, UIBox2.FromDimensions(new Vector2(0, 0), new Vector2(14, 24))),
+                Texture = new AtlasTexture(buttonTex, UIBox2.FromDimensions(new Vector2(0, 0), new Vector2(13, 26))),
             };
+            BaseButtonOpenRight.SetPatchMargin(StyleBox.Margin.All, 13);
             BaseButtonOpenRight.SetPatchMargin(StyleBox.Margin.Right, 0);
-            BaseButtonOpenRight.SetContentMarginOverride(StyleBox.Margin.Right, 8);
-            BaseButtonOpenRight.SetPadding(StyleBox.Margin.Right, 2);
+            BaseButtonOpenRight.SetContentMarginOverride(StyleBox.Margin.Right, 13);
+            BaseButtonOpenRight.SetPadding(StyleBox.Margin.Right, 0);
 
             BaseButtonOpenLeft = new StyleBoxTexture(BaseButton)
             {
-                Texture = new AtlasTexture(buttonTex, UIBox2.FromDimensions(new Vector2(10, 0), new Vector2(14, 24))),
+                Texture = new AtlasTexture(buttonTex, UIBox2.FromDimensions(new Vector2(13, 0), new Vector2(13, 26))),
             };
+            BaseButtonOpenLeft.SetPatchMargin(StyleBox.Margin.All, 13);
             BaseButtonOpenLeft.SetPatchMargin(StyleBox.Margin.Left, 0);
-            BaseButtonOpenLeft.SetContentMarginOverride(StyleBox.Margin.Left, 8);
-            BaseButtonOpenLeft.SetPadding(StyleBox.Margin.Left, 1);
+            BaseButtonOpenLeft.SetContentMarginOverride(StyleBox.Margin.Left, 13);
+            BaseButtonOpenLeft.SetPadding(StyleBox.Margin.Left, 0);
 
             BaseButtonOpenBoth = new StyleBoxTexture(BaseButton)
             {
-                Texture = new AtlasTexture(buttonTex, UIBox2.FromDimensions(new Vector2(10, 0), new Vector2(3, 24))),
+                Texture = new AtlasTexture(buttonTex, UIBox2.FromDimensions(new Vector2(13, 0), new Vector2(3, 26))),
             };
             BaseButtonOpenBoth.SetPatchMargin(StyleBox.Margin.Horizontal, 0);
-            BaseButtonOpenBoth.SetContentMarginOverride(StyleBox.Margin.Horizontal, 8);
+            BaseButtonOpenBoth.SetContentMarginOverride(StyleBox.Margin.Horizontal, 13);
             BaseButtonOpenBoth.SetPadding(StyleBox.Margin.Right, 2);
             BaseButtonOpenBoth.SetPadding(StyleBox.Margin.Left, 1);
 
             BaseButtonSquare = new StyleBoxTexture(BaseButton)
             {
-                Texture = new AtlasTexture(buttonTex, UIBox2.FromDimensions(new Vector2(10, 0), new Vector2(3, 24))),
+                Texture = new AtlasTexture(buttonTex, UIBox2.FromDimensions(new Vector2(13, 0), new Vector2(3, 26))),
             };
             BaseButtonSquare.SetPatchMargin(StyleBox.Margin.Horizontal, 0);
-            BaseButtonSquare.SetContentMarginOverride(StyleBox.Margin.Horizontal, 8);
-            BaseButtonSquare.SetPadding(StyleBox.Margin.Right, 2);
-            BaseButtonSquare.SetPadding(StyleBox.Margin.Left, 1);
+            BaseButtonSquare.SetContentMarginOverride(StyleBox.Margin.Horizontal, 13);
+            BaseButtonSquare.SetPadding(StyleBox.Margin.Right, 0);
+            BaseButtonSquare.SetPadding(StyleBox.Margin.Left, 0);
 
             BaseAngleRect = new StyleBoxTexture
             {

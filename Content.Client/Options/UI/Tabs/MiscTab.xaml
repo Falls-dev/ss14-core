@@ -59,7 +59,7 @@
                 <!-- <CheckBox Name="ToggleWalk" Text="{Loc 'ui-options-hotkey-toggle-walk'}" /> -->
             </BoxContainer>
         </ScrollContainer>
-        <controls:StripeBack HasBottomEdge="False" HasMargins="False">
+        <controls:StripeBack HasTopEdge="False" HasBottomEdge="False" HasMargins="False">
             <Button Name="ApplyButton"
                     Text="{Loc 'ui-options-apply'}"
                     TextAlign="Center"

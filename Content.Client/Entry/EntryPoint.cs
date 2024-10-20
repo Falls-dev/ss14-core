@@ -231,7 +231,7 @@ namespace Content.Client.Entry
                 _replayMan.LastLoad = (null, ReplayConstants.ReplayZipFolder.ToRootedPath());
                 _replayLoad.LoadAndStartReplay(reader);
             }
-            else if (_gameController.LaunchState.FromLauncher)
+            else if (!_gameController.LaunchState.FromLauncher)
             {
                 _stateManager.RequestStateChange<LauncherConnecting>();
                 var state = (LauncherConnecting) _stateManager.CurrentState;

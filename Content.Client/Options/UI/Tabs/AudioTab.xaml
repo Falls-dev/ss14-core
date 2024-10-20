@@ -133,7 +133,7 @@
                 <CheckBox Name="AdminSoundsCheckBox" Text="{Loc 'ui-options-admin-sounds'}" />
             </BoxContainer>
         </BoxContainer>
-        <controls:StripeBack HasBottomEdge="False" HasMargins="False">
+        <controls:StripeBack HasTopEdge="False" HasBottomEdge="False" HasMargins="False">
             <BoxContainer Orientation="Horizontal"
                           Align="End"
                           HorizontalExpand="True"

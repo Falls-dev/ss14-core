@@ -93,15 +93,17 @@ namespace Content.Client.Stylesheets
 
         public static readonly Color PanelDark = Color.FromHex("#1E1E22");
 
-        public static readonly Color NanoGold = Color.FromHex("#c1c3c7");
+        public static readonly Color NanoGold = Color.FromHex("#59F2FA");
+        public static readonly Color NanoLine = Color.FromHex("#541A1C");
         public static readonly Color GoodGreenFore = Color.FromHex("#618e71");
         public static readonly Color ConcerningOrangeFore = Color.FromHex("#f1b959");
         public static readonly Color DangerousRedFore = Color.FromHex("#5C4D5B");
         public static readonly Color DisabledFore = Color.FromHex("#26292E");
+        public static readonly Color Cyberpunk = Color.FromHex("#59F2FA");
 
-        public static readonly Color ButtonColorDefault = Color.FromHex("#29282f");
+        public static readonly Color ButtonColorDefault = Color.FromHex("#8E3332");
         public static readonly Color ButtonColorDefaultRed = Color.FromHex("#992327");
-        public static readonly Color ButtonColorHovered = Color.FromHex("#3f3d48");
+        public static readonly Color ButtonColorHovered = Color.FromHex("#52F6FF");
         public static readonly Color ButtonColorHoveredRed = Color.FromHex("#4D5D53");
         public static readonly Color ButtonColorPressed = Color.FromHex("#000000");
         public static readonly Color ButtonColorDisabled = Color.FromHex("#000000");
@@ -206,6 +208,10 @@ namespace Content.Client.Stylesheets
                 ContentMarginBottomOverride = 0,
                 Mode = StyleBoxTexture.StretchMode.Tile
             };
+            windowHeader.SetPatchMargin(StyleBox.Margin.All, 2);
+            windowHeader.SetPadding(StyleBox.Margin.All, 0);
+            windowHeader.SetContentMarginOverride(StyleBox.Margin.All, 0);
+
             var windowHeaderAlertTex = resCache.GetTexture("/Textures/Interface/Nano/window_header_alert.png");
             var windowHeaderAlert = new StyleBoxTexture
             {
@@ -221,8 +227,9 @@ namespace Content.Client.Stylesheets
                 Texture = windowBackgroundTex,
                 Mode = StyleBoxTexture.StretchMode.Tile
             };
-            windowBackground.SetPatchMargin(StyleBox.Margin.All, 6);
-            windowBackground.SetExpandMargin(StyleBox.Margin.All, -1);
+            windowBackground.SetPatchMargin(StyleBox.Margin.All, 13);
+            windowBackground.SetPadding(StyleBox.Margin.All, 0);
+            windowBackground.SetContentMarginOverride(StyleBox.Margin.All, 0);
 
             var borderedWindowBackgroundTex = resCache.GetTexture("/Textures/Interface/Nano/window_background_bordered.png");
             var borderedWindowBackground = new StyleBoxTexture
@@ -259,9 +266,9 @@ namespace Content.Client.Stylesheets
                 Texture = gayShitBackgroundTex,
                 Mode = StyleBoxTexture.StretchMode.Tile
             };
-
-            gayShitBackground.SetPatchMargin(StyleBox.Margin.All, 6);
-            gayShitBackground.SetExpandMargin(StyleBox.Margin.All, -2);
+            gayShitBackground.SetPatchMargin(StyleBox.Margin.All, 13);
+            gayShitBackground.SetPadding(StyleBox.Margin.All, 0);
+            gayShitBackground.SetContentMarginOverride(StyleBox.Margin.All, 0);
 
             var lobbyGayBackgroundTex = resCache.GetTexture("/Textures/Interface/Nano/lobby_gay.png");
             var lobbyGayBackground = new StyleBoxTexture
@@ -270,7 +277,7 @@ namespace Content.Client.Stylesheets
                 Mode = StyleBoxTexture.StretchMode.Tile
             };
 
-            lobbyGayBackground.SetPatchMargin(StyleBox.Margin.All, 24);
+            lobbyGayBackground.SetPatchMargin(StyleBox.Margin.All, 13);
             lobbyGayBackground.SetExpandMargin(StyleBox.Margin.All, -4);
             lobbyGayBackground.SetContentMarginOverride(StyleBox.Margin.All, 8);
 
@@ -371,7 +378,7 @@ namespace Content.Client.Stylesheets
             {
                 Texture = buttonTex,
             };
-            topButtonBase.SetPatchMargin(StyleBox.Margin.All, 10);
+            topButtonBase.SetPatchMargin(StyleBox.Margin.All, 13);
             topButtonBase.SetPadding(StyleBox.Margin.All, 0);
             topButtonBase.SetContentMarginOverride(StyleBox.Margin.All, 0);
 
@@ -398,7 +405,7 @@ namespace Content.Client.Stylesheets
             {
                 Texture = chatChannelButtonTex,
             };
-            chatChannelButton.SetPatchMargin(StyleBox.Margin.All, 5);
+            chatChannelButton.SetPatchMargin(StyleBox.Margin.All, 13);
             chatChannelButton.SetPadding(StyleBox.Margin.All, 2);
 
             var chatFilterButtonTex = resCache.GetTexture("/Textures/Interface/Nano/rounded_button_bordered.svg.96dpi.png");
@@ -406,7 +413,7 @@ namespace Content.Client.Stylesheets
             {
                 Texture = chatFilterButtonTex,
             };
-            chatFilterButton.SetPatchMargin(StyleBox.Margin.All, 5);
+            chatFilterButton.SetPatchMargin(StyleBox.Margin.All, 13);
             chatFilterButton.SetPadding(StyleBox.Margin.All, 2);
 
             var smallButtonTex = resCache.GetTexture("/Textures/Interface/Nano/button_small.svg.96dpi.png");
@@ -422,8 +429,9 @@ namespace Content.Client.Stylesheets
             {
                 Texture = lineEditTex,
             };
-            lineEdit.SetPatchMargin(StyleBox.Margin.All, 3);
-            lineEdit.SetContentMarginOverride(StyleBox.Margin.Horizontal, 5);
+            lineEdit.SetPatchMargin(StyleBox.Margin.All, 13);
+            lineEdit.SetPadding(StyleBox.Margin.All, 0);
+            lineEdit.SetContentMarginOverride(StyleBox.Margin.All, 5);
 
             var chatSubBgTex = resCache.GetTexture("/Textures/Interface/Nano/chat_sub_background.png");
             var chatSubBg = new StyleBoxTexture
@@ -444,21 +452,19 @@ namespace Content.Client.Stylesheets
             var tabContainerPanel = new StyleBoxTexture
             {
                 Texture = tabContainerPanelTex,
-                // WD-EDIT start
                 Mode = StyleBoxTexture.StretchMode.Tile
-                // WD-EDIT end
             };
-            tabContainerPanel.SetPatchMargin(StyleBox.Margin.All, 3);
-            // WD-EDIT start
+            tabContainerPanel.SetPatchMargin(StyleBox.Margin.All, 13);
             tabContainerPanel.SetExpandMargin(StyleBox.Margin.All, -3);
-            // WD-EDIT end
+            tabContainerPanel.SetPadding(StyleBox.Margin.All, 0);
+            tabContainerPanel.SetContentMarginOverride(StyleBox.Margin.All, 0);
 
             var tabContainerBoxActive = new StyleBoxTexture
             {
                 Texture = resCache.GetTexture("/Textures/Interface/Nano/button.svg.96dpi.png"),
                 Modulate = ButtonColorDefault
             };
-            tabContainerBoxActive.SetPatchMargin(StyleBox.Margin.All, 10);
+            tabContainerBoxActive.SetPatchMargin(StyleBox.Margin.All, 13);
             tabContainerBoxActive.SetPadding(StyleBox.Margin.All, 1);
             tabContainerBoxActive.SetContentMarginOverride(StyleBox.Margin.Vertical, 2);
             tabContainerBoxActive.SetContentMarginOverride(StyleBox.Margin.Horizontal, 14);
@@ -468,7 +474,7 @@ namespace Content.Client.Stylesheets
                 Texture = resCache.GetTexture("/Textures/Interface/Nano/button.svg.96dpi.png"),
                 Modulate = ButtonColorPressed
             };
-            tabContainerBoxInactive.SetPatchMargin(StyleBox.Margin.All, 10);
+            tabContainerBoxInactive.SetPatchMargin(StyleBox.Margin.All, 13);
             tabContainerBoxInactive.SetPadding(StyleBox.Margin.All, 1);
             tabContainerBoxInactive.SetContentMarginOverride(StyleBox.Margin.Vertical, 2);
             tabContainerBoxInactive.SetContentMarginOverride(StyleBox.Margin.Horizontal, 14);
@@ -556,9 +562,7 @@ namespace Content.Client.Stylesheets
                 Mode = StyleBoxTexture.StretchMode.Tile
             };
 
-            stripeBack.SetPatchMargin(StyleBox.Margin.All, 2);
-            stripeBack.SetPatchMargin(StyleBox.Margin.Top, 3);
-            stripeBack.SetPatchMargin(StyleBox.Margin.Bottom, 3);
+            stripeBack.SetPatchMargin(StyleBox.Margin.All, 13);
 
             // Slider
             var sliderOutlineTex = resCache.GetTexture("/Textures/Interface/Nano/slider_outline.svg.96dpi.png");
@@ -567,20 +571,17 @@ namespace Content.Client.Stylesheets
 
             var sliderFillBox = new StyleBoxTexture
             {
-                Texture = sliderFillTex,
-                Modulate = Color.FromHex("#050505")
+                Texture = sliderFillTex
             };
 
             var sliderBackBox = new StyleBoxTexture
             {
-                Texture = sliderFillTex,
-                Modulate = Color.FromHex("#1b1b1b")
+                Texture = sliderFillTex
             };
 
             var sliderForeBox = new StyleBoxTexture
             {
-                Texture = sliderOutlineTex,
-                Modulate = Color.FromHex("#1e1e1e")
+                Texture = sliderOutlineTex
             };
 
             var sliderGrabBox = new StyleBoxTexture
@@ -1077,7 +1078,7 @@ namespace Content.Client.Stylesheets
                 new StyleRule(new SelectorElement(typeof(RichTextLabel), new[] {StyleClassLabelKeyText}, null, null), new[]
                 {
                     new StyleProperty(Label.StylePropertyFont, notoSansBold12),
-                    new StyleProperty( Control.StylePropertyModulateSelf, NanoGold)
+                    new StyleProperty( Control.StylePropertyModulateSelf, Cyberpunk)
                 }),
 
                 // alert tooltip
@@ -1215,7 +1216,7 @@ namespace Content.Client.Stylesheets
                 new StyleRule(new SelectorElement(typeof(Label), new[] {StyleClassLabelHeading}, null, null), new[]
                 {
                     new StyleProperty(Label.StylePropertyFont, notoSansBold16),
-                    new StyleProperty(Label.StylePropertyFontColor, NanoGold),
+                    new StyleProperty(Label.StylePropertyFontColor, Cyberpunk),
                 }),
 
                 // Bigger Label
@@ -1223,7 +1224,7 @@ namespace Content.Client.Stylesheets
                     new[]
                     {
                         new StyleProperty(Label.StylePropertyFont, notoSansBold20),
-                        new StyleProperty(Label.StylePropertyFontColor, NanoGold),
+                        new StyleProperty(Label.StylePropertyFontColor, Cyberpunk),
                     }),
 
                 // WD-EDIT start
@@ -1232,7 +1233,7 @@ namespace Content.Client.Stylesheets
                     new[]
                     {
                         new StyleProperty(Label.StylePropertyFont, awesomeBigFuckingFont),
-                        new StyleProperty(Label.StylePropertyFontColor, NanoGold),
+                        new StyleProperty(Label.StylePropertyFontColor, Cyberpunk),
                     }),
                 // WD-EDIT end
 
@@ -1240,21 +1241,21 @@ namespace Content.Client.Stylesheets
                 new StyleRule(new SelectorElement(typeof(Label), new[] {StyleClassLabelSubText}, null, null), new[]
                 {
                     new StyleProperty(Label.StylePropertyFont, notoSans10),
-                    new StyleProperty(Label.StylePropertyFontColor, Color.DarkGray),
+                    new StyleProperty(Label.StylePropertyFontColor, Cyberpunk),
                 }),
 
                 // Label Key
                 new StyleRule(new SelectorElement(typeof(Label), new[] {StyleClassLabelKeyText}, null, null), new[]
                 {
                     new StyleProperty(Label.StylePropertyFont, notoSansBold12),
-                    new StyleProperty(Label.StylePropertyFontColor, NanoGold)
+                    new StyleProperty(Label.StylePropertyFontColor, Cyberpunk)
                 }),
 
                 new StyleRule(new SelectorElement(typeof(Label), new[] {StyleClassLabelSecondaryColor}, null, null),
                     new[]
                     {
                         new StyleProperty(Label.StylePropertyFont, notoSans12),
-                        new StyleProperty(Label.StylePropertyFontColor, Color.DarkGray),
+                        new StyleProperty(Label.StylePropertyFontColor, Cyberpunk),
                     }),
 
                 // Big Button
@@ -1592,7 +1593,7 @@ namespace Content.Client.Stylesheets
                 // Window Headers
                 Element<Label>().Class("FancyWindowTitle")
                     .Prop("font", boxFont13)
-                    .Prop("font-color", NanoGold),
+                    .Prop("font-color", Cyberpunk),
 
                 Element<PanelContainer>().Class("WindowHeadingBackground")
                     .Prop("panel", new StyleBoxTexture(BaseButtonOpenLeft) { Padding = default })
@@ -1764,7 +1765,7 @@ namespace Content.Client.Stylesheets
                 // ---
 
                 Element<Label>().Class("StatusFieldTitle")
-                    .Prop("font-color", NanoGold),
+                    .Prop("font-color", Cyberpunk),
 
                 Element<Label>().Class("Good")
                     .Prop("font-color", GoodGreenFore),

@@ -305,7 +305,7 @@ namespace Content.Client.Lobby
 
         private void MakeButtonJoinGame(OhioLobbyTextButton button)
         {
-            button.ButtonText = "Присоединиться к игре";
+            button.ButtonText = "Присоединиться";
         }
 
         private async void PopulateChangelog()

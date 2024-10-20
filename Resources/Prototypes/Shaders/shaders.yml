@@ -129,3 +129,8 @@
   id: Cyberglitch
   kind: source
   path: "/Textures/Shaders/White/cyberglitch.swsl"
+
+- type: shader
+  id: Nanoglitch
+  kind: source
+  path: "/Textures/Shaders/White/nanoglitch.swsl"

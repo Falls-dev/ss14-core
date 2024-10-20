@@ -572,7 +572,7 @@ public sealed class NukeSystem : EntitySystem
         _sound.StopStationEventMusic(uid, StationEventMusicType.Nuke);
         Del(uid);
 
-        Timer.Spawn(TimeSpan.FromSeconds(60), () => _roundEndSystem.EndRound()); //Giedi EDIT
+        Timer.Spawn(TimeSpan.FromSeconds(60), () => _roundEndSystem.EndRound(TimeSpan.FromSeconds(60))); //Giedi EDIT
     }
 
     /// <summary>

@@ -11,3 +11,7 @@ hypospray-component-empty-message = Он пустой!
 hypospray-component-feel-prick-message = Вы чувствуете слабый укольчик!
 hypospray-component-transfer-already-full-message = { $owner } уже заполнен!
 hypospray-cant-inject = Нельзя сделать инъекцию в { $target }!
+
+hypospray-verb-mode-label = Переключить забор из емкостей
+hypospray-verb-mode-inject-all = Вы больше не можете производить забор из емкостей.
+hypospray-verb-mode-inject-mobs-only = Теперь вы можете производить забор из емкостей.

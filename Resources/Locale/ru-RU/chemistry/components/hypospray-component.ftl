@@ -1,6 +1,10 @@
 ## UI
 
-hypospray-volume-text = Объем: [color=white]{ $currentVolume }/{ $totalVolume }[/color]
+hypospray-all-mode-text = Только ввод
+hypospray-mobs-only-mode-text = Забор и ввод
+hypospray-invalid-text = Ошибка
+hypospray-volume-label = Объем: [color=white]{$currentVolume}/{$totalVolume}u[/color]
+    Mode: [color=white]{$modeString}[/color]
 
 ## Entity
 

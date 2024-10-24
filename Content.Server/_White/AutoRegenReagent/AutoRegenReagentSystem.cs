@@ -121,7 +121,10 @@ namespace Content.Server._White.AutoRegenReagent
 
             component.CurrentReagent = component.Reagents[component.CurrentIndex];
 
-            if (user != null && _prototypeManager.TryIndex(component.CurrentReagent, out var reagentProto))
+            if (user == null)
+                return;
+
+            if (_prototypeManager.TryIndex(component.CurrentReagent, out var reagentProto))
                 _popups.PopupEntity(Loc.GetString("autoregen-switched", ("reagent", reagentProto.LocalizedName)), user.Value, user.Value);
 
         }

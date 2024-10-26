@@ -14,6 +14,8 @@ public sealed class FireProtectionSystem : EntitySystem
 {
     [Dependency] private readonly ExamineSystemShared _examine = default!; // WD
 
+    private const string IconTexture = "/Textures/Interface/VerbIcons/dot.svg.192dpi.png"; // WD
+
     public override void Initialize()
     {
         base.Initialize();
@@ -33,7 +35,7 @@ public sealed class FireProtectionSystem : EntitySystem
         if (!args.CanInteract || !args.CanAccess)
             return;
 
-        var modifierPercentage = MathF.Round(component.Reduction * 100f, 1);
+        var modifierPercentage = MathF.Round(entity.Comp.Reduction * 100f, 1);
 
         if (modifierPercentage == 0.0f)
             return;
@@ -42,8 +44,8 @@ public sealed class FireProtectionSystem : EntitySystem
 
         msg.AddMarkup(Loc.GetString("fire-protection-examine", ("modifier", modifierPercentage)));
 
-        _examine.AddDetailedExamineVerb(args, component, msg,
-            Loc.GetString("fire-protection-examinable-verb-text"), "/Textures/Interface/VerbIcons/dot.svg.192dpi.png",
+        _examine.AddDetailedExamineVerb(args, entity.Comp, msg,
+            Loc.GetString("fire-protection-examinable-verb-text"), IconTexture,
             Loc.GetString("fire-protection-examinable-verb-message"));
     }
     // WD EDIT END

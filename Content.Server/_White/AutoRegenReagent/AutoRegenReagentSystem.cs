@@ -124,8 +124,10 @@ namespace Content.Server._White.AutoRegenReagent
             if (user == null)
                 return;
 
-            if (_prototypeManager.TryIndex(component.CurrentReagent, out var reagentProto))
-                _popups.PopupEntity(Loc.GetString("autoregen-switched", ("reagent", reagentProto.LocalizedName)), user.Value, user.Value);
+            if (!_prototypeManager.TryIndex(component.CurrentReagent, out var reagentProto))
+                return;
+
+            _popups.PopupEntity(Loc.GetString("autoregen-switched", ("reagent", reagentProto.LocalizedName)), user.Value, user.Value);
 
         }
     }

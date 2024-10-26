@@ -37,7 +37,7 @@ public sealed class FireProtectionSystem : EntitySystem
 
         var modifierPercentage = MathF.Round(entity.Comp.Reduction * 100f, 1);
 
-        if (modifierPercentage == 0.0f)
+        if (modifierPercentage == float.NegativeZero)
             return;
 
         var msg = new FormattedMessage();

@@ -96,12 +96,12 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             disciplineText = Loc.GetString(discipline.Name);
             disciplineColor = discipline.Color;
         }
-
-        var msg = new FormattedMessage();
-        msg.AddMarkup(Loc.GetString("research-console-menu-main-discipline",
-            ("name", disciplineText), ("color", disciplineColor)));
-        MainDisciplineLabel.SetMessage(msg);
-
+        // WD EDIT START - in order to make all tier 3 techologies accessible at the same time
+        // var msg = new FormattedMessage();
+        // msg.AddMarkup(Loc.GetString("research-console-menu-main-discipline",
+        //     ("name", disciplineText), ("color", disciplineColor)));
+        // MainDisciplineLabel.SetMessage(msg);
+        // WD EDIT END
         TierDisplayContainer.Children.Clear();
         foreach (var disciplineId in _technologyDatabase.SupportedDisciplines)
         {

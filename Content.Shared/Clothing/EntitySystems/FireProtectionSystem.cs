@@ -28,7 +28,7 @@ public sealed class FireProtectionSystem : EntitySystem
     }
 
     // WD EDIT START
-    private void OnProtectionVerbExamine(EntityUid uid, FireProtectionComponent component, GetVerbsEvent<ExamineVerb> args)
+    private void OnProtectionVerbExamine(Entity<FireProtectionComponent> entity, ref GetVerbsEvent<ExamineVerb> args)
     {
         if (!args.CanInteract || !args.CanAccess)
             return;

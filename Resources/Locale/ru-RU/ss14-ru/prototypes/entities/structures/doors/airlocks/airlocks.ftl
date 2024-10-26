@@ -66,3 +66,8 @@ ent-AirlockHatch = шлюзовый люк
 ent-AirlockHatchMaintenance = { ent-AirlockHatch}
     .desc = { ent-AirlockHatch.desc }
     .suffix = Технический
+
+ent-PinionAirlock = { ent-Airlock }
+    .desc = { ent-Airlock.desc }
+ent-PinionAirlockGlass = { ent-Airlock }
+    .desc = { ent-Airlock.desc }

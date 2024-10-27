@@ -3,108 +3,161 @@ using Robust.Shared.Player;
 using Content.Shared._Miracle.Nya;
 using Robust.Shared.Enums;
 using Robust.Shared.Timing;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 
-namespace Content.Server._Miracle.Nya
+namespace Content.Server._Miracle.Nya;
+
+public sealed class ExpectedReplySystem : EntitySystem
 {
-    public sealed class ExpectedReplySystem : EntitySystem
+    [Dependency] private readonly ISharedPlayerManager _playMan = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IChatManager _chatManager = default!;
+
+    private readonly Dictionary<ICommonSession, PendingReply> _pendingReplies = new();
+
+    private const float ReplyTimeoutSeconds = 5.0f;
+    private readonly HttpClient _httpClient = new();
+
+    private const string WebhookUrl = "https://discord.com/api/webhooks/1300204694395945021/jO_2nmXDXfMm2hKHH019gk1HqujhcHlW8yfmyMBeuScaOvCOiRJK9XurSJLf6AxpHmRv";
+
+    public override void Initialize()
     {
-        [Dependency] private readonly ISharedPlayerManager _playMan = default!;
-        [Dependency] private readonly IGameTiming _timing = default!;
-        [Dependency] private readonly IChatManager _chatManager = default!;
+        base.Initialize();
+        _playMan.PlayerStatusChanged += OnPlayerStatusChanged;
+    }
 
-        private readonly Dictionary<ICommonSession, PendingReply> _pendingReplies = new();
-        private const float ReplyTimeoutSeconds = 5.0f;
-
-        public override void Initialize()
+    private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs e)
+    {
+        if (e is { OldStatus: SessionStatus.InGame, NewStatus: SessionStatus.Disconnected })
         {
-            base.Initialize();
-            _playMan.PlayerStatusChanged += OnPlayerStatusChanged;
-        }
-
-        private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs e)
-        {
-            if (e is { OldStatus: SessionStatus.InGame, NewStatus: SessionStatus.Disconnected })
+            if (_pendingReplies.ContainsKey(e.Session))
             {
+                var warningMsg = $"Игрок отключился во время ожидания ответа!";
+                SendSuspiciousActivityAlert(e.Session, warningMsg, 80);
                 _pendingReplies.Remove(e.Session);
             }
         }
+    }
 
-        public void ExpectReply<TRequest, TResponse>(
-            ICommonSession player,
-            TRequest request,
-            Action<TResponse, EntitySessionEventArgs> handler)
-            where TRequest : ExpectedReplyEntityEventArgs
-            where TResponse : EntityEventArgs
+    public void ExpectReply<TRequest, TResponse>(
+        ICommonSession player,
+        TRequest request,
+        Action<TResponse, EntitySessionEventArgs> handler)
+        where TRequest : ExpectedReplyEntityEventArgs
+        where TResponse : EntityEventArgs
+    {
+        var timeout = _timing.CurTime + TimeSpan.FromSeconds(ReplyTimeoutSeconds);
+
+        void WrapHandler(EntityEventArgs ev, EntitySessionEventArgs args)
         {
-            var timeout = _timing.CurTime + TimeSpan.FromSeconds(ReplyTimeoutSeconds);
-
-            void WrapHandler(EntityEventArgs ev, EntitySessionEventArgs args)
-            {
-                if (ev is TResponse response)
-                    handler(response, args);
-            }
-
-            _pendingReplies[player] = new PendingReply(request, timeout, WrapHandler);
-            RaiseNetworkEvent(request, player.Channel);
+            if (ev is TResponse response)
+                handler(response, args);
         }
 
-        public bool HandleReply(EntityEventArgs ev, EntitySessionEventArgs args)
+        _pendingReplies[player] = new PendingReply(request, timeout, WrapHandler);
+        RaiseNetworkEvent(request, player.Channel);
+    }
+
+    public bool HandleReply(EntityEventArgs ev, EntitySessionEventArgs args)
+    {
+        if (!_pendingReplies.TryGetValue(args.SenderSession, out var pending))
         {
-            if (!_pendingReplies.TryGetValue(args.SenderSession, out var pending))
-            {
-                LogSuspiciousActivity(args.SenderSession, "Unexpected response");
-                return false;
-            }
-
-            if (pending.Request.ExpectedReplyType != ev.GetType())
-            {
-                LogSuspiciousActivity(args.SenderSession, $"Wrong reply type. Expected {pending.Request.ExpectedReplyType}, got {ev.GetType()}");
-                return false;
-            }
-
-            pending.Handler(ev, args);
-            _pendingReplies.Remove(args.SenderSession);
-            return true;
+            var warningMsg = "Получен неожиданный ответ без запроса";
+            SendSuspiciousActivityAlert(args.SenderSession, warningMsg, 70);
+            return false;
         }
 
-        public override void Update(float frameTime)
+        if (pending.Request.ExpectedReplyType != ev.GetType())
         {
-            base.Update(frameTime);
-
-            var currentTime = _timing.CurTime;
-            var timeoutPlayers = new List<ICommonSession>();
-
-            foreach (var (player, pending) in _pendingReplies)
-            {
-                if (currentTime > pending.TimeoutTime)
-                    timeoutPlayers.Add(player);
-            }
-
-            foreach (var player in timeoutPlayers)
-            {
-                HandleTimeout(player);
-                _pendingReplies.Remove(player);
-            }
+            var warningMsg = $"Получен ответ неверного типа. Ожидался {pending.Request.ExpectedReplyType}, получен {ev.GetType()}";
+            SendSuspiciousActivityAlert(args.SenderSession, warningMsg, 75);
+            return false;
         }
 
-        private void HandleTimeout(ICommonSession player)
+        pending.Handler(ev, args);
+        _pendingReplies.Remove(args.SenderSession);
+        return true;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var currentTime = _timing.CurTime;
+        var timeoutPlayers = new List<ICommonSession>();
+
+        foreach (var (player, pending) in _pendingReplies)
         {
-            LogSuspiciousActivity(player, $"No reply within {ReplyTimeoutSeconds} seconds");
+            if (currentTime > pending.TimeoutTime)
+                timeoutPlayers.Add(player);
         }
 
-        private void LogSuspiciousActivity(ICommonSession player, string reason)
+        foreach (var player in timeoutPlayers)
         {
-            var warningMsg = $"[color=red][Anticheat][/color] Внимание! Подозрительная активность:\n" +
-                             $"Игрок {player.Name} возможно читер!\n" +
-                             $"Причина обнаружения: {reason}";
-            _chatManager.SendAdminAnnouncement(warningMsg);
+            HandleTimeout(player);
+            _pendingReplies.Remove(player);
+        }
+    }
+
+    private void HandleTimeout(ICommonSession player)
+    {
+        var warningMsg = $"Не получен ответ в течение {ReplyTimeoutSeconds} секунд";
+        SendSuspiciousActivityAlert(player, warningMsg, 65);
+    }
+
+    private async void SendSuspiciousActivityAlert(ICommonSession player, string reason, int severity)
+    {
+        var color = severity switch
+        {
+            >= 80 => 0xFF0000, // Красный
+            >= 70 => 0xFFA500, // Оранжевый
+            _ => 0xFFFF00 // Желтый
+        };
+
+        var warningMsg = $"⚠️ **Система ожидаемых ответов обнаружила подозрительную активность!**\n\n" +
+                         $"**Игрок:** {player.Name}\n" +
+                         $"**IP:** {player.Channel.RemoteEndPoint}\n" +
+                         $"**Уровень подозрительности:** {severity}%\n" +
+                         $"**Причина:** {reason}";
+
+        var embed = new
+        {
+            title = "⚠️ Подозрительная активность!",
+            description = warningMsg,
+            color = color,
+            timestamp = DateTime.UtcNow.ToString("o")
+        };
+
+        var payload = new
+        {
+            embeds = new[] { embed }
+        };
+
+        var json = JsonSerializer.Serialize(payload);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        try
+        {
+            await _httpClient.PostAsync(WebhookUrl, content);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to send Discord webhook: {e}");
         }
 
-        public override void Shutdown()
-        {
-            base.Shutdown();
-            _playMan.PlayerStatusChanged -= OnPlayerStatusChanged;
-            _pendingReplies.Clear();
-        }
+        var inGameMsg = $"[color=red][Anticheat][/color] Внимание! Подозрительная активность:\n" +
+                        $"Игрок {player.Name} возможно читер!\n" +
+                        $"Причина обнаружения: {reason}";
+
+        _chatManager.SendAdminAnnouncement(inGameMsg);
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        _playMan.PlayerStatusChanged -= OnPlayerStatusChanged;
+        _pendingReplies.Clear();
     }
 }

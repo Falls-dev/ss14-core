@@ -1,0 +1,16 @@
+ent-FoodSnackCandyBlack = конфета
+    .desc = Сладкие конфеты минутных послаблений нейтрализуют горечь несбывшихся надежд.
+ent-FoodSnackCandyGreen = { ent-FoodSnackCandyBlack }
+    .desc = { ent-FoodSnackCandyBlack.desc }
+ent-FoodSnackCandyRed = { ent-FoodSnackCandyBlack }
+    .desc = { ent-FoodSnackCandyBlack.desc }
+ent-FoodSnackCandyTurquoise = { ent-FoodSnackCandyBlack }
+    .desc = { ent-FoodSnackCandyBlack.desc }
+ent-FoodSnackCandyBlackTrash = обёртка от конфеты
+    .desc = Фантик от конфеты, самой конфеты нигде нет.
+ent-FoodSnackCandyGreenTrash = { ent-FoodSnackCandyBlackTrash }
+    .desc = { ent-FoodSnackCandyBlackTrash.desc }
+ent-FoodSnackCandyRedTrash = { ent-FoodSnackCandyBlackTrash }
+    .desc = { ent-FoodSnackCandyBlackTrash.desc }
+ent-FoodSnackCandyTurquoiseTrash = { ent-FoodSnackCandyBlackTrash }
+    .desc = { ent-FoodSnackCandyBlackTrash.desc }

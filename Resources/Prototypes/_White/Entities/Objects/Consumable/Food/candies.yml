@@ -75,7 +75,6 @@
     trash: FoodPacketCandyTurquoiseTrash
 
 - type: entity
-  noSpawn: true
   parent: FoodPacketTrash
   id: FoodPacketCandyBlackTrash
   name: candy wrapper
@@ -89,7 +88,6 @@
     state: black-trash
 
 - type: entity
-  noSpawn: true
   parent: FoodPacketTrash
   id: FoodPacketCandyGreenTrash
   name: candy wrapper
@@ -103,7 +101,6 @@
     state: green-trash
 
 - type: entity
-  noSpawn: true
   parent: FoodPacketTrash
   id: FoodPacketCandyRedTrash
   name: candy wrapper
@@ -117,7 +114,6 @@
     state: red-trash
 
 - type: entity
-  noSpawn: true
   parent: FoodPacketTrash
   id: FoodPacketCandyTurquoiseTrash
   name: candy wrapper

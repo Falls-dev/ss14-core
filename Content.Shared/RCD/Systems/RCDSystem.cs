@@ -405,21 +405,21 @@ public class RCDSystem : EntitySystem
             // Check for existing identical entities in the same tile
             _intersectingEntities.Clear();
             _lookup.GetLocalEntitiesIntersecting(mapGridData.GridUid, mapGridData.Position, _intersectingEntities, -0.05f, LookupFlags.Uncontained);
-
-            if (component.CachedPrototype.Prototype != null)
-            {
-                foreach (var entity in _intersectingEntities)
-                {
-                    // Check if the entity has the same prototype ID
-                    if (MetaData(entity).EntityPrototype?.ID == component.CachedPrototype.Prototype)
-                    {
-                        if (popMsgs)
-                            _popup.PopupClient("An identical object already exists in this location.", uid, user);
-
-                        return false;
-                    }
-                }
-            }
+            // WD EDIT START - Wizden removed it
+            // if (component.CachedPrototype.Prototype != null)
+            // {
+            //     foreach (var entity in _intersectingEntities)
+            //     {
+            //         // Check if the entity has the same prototype ID
+            //         if (MetaData(entity).EntityPrototype?.ID == component.CachedPrototype.Prototype)
+            //         {
+            //             if (popMsgs)
+            //                 _popup.PopupClient("An identical object already exists in this location.", uid, user);
+            //             return false;
+            //         }
+            //     }
+            // }
+            // WD EDIT END - Wizden removed it
 
             var isWindow = component.CachedPrototype.ConstructionRules.Contains(RcdConstructionRule.IsWindow);
             var isCatwalk = component.CachedPrototype.ConstructionRules.Contains(RcdConstructionRule.IsCatwalk);

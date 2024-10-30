@@ -10,13 +10,13 @@
     ClusterBangFull: 1
     Flash: 7
     EnergyBola: 6
-    Tourniquet: 10
+    Tourniquet: 7
     FlashlightSeclite: 4
     ClothingEyesGlassesSunglasses: 2
     ClothingBeltSecurityWebbing: 3
     RiotShield: 4
-    RiotLaserShield: 2
-    RiotBulletShield: 2
+    RiotLaserShield: 1
+    RiotBulletShield: 1
     SecurityWhistle: 5
     CombatKnife: 2
     RadioHandheldSecurity: 5

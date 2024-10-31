@@ -12,9 +12,9 @@
     quickEquip: false
   - type: PhysicalComposition
     materialComposition:
-      Cloth: 30
+      Cloth: 35
   - type: StaticPrice
-    price: 15
+    price: 200
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/White/Web/walk1.ogg

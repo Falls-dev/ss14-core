@@ -26,6 +26,8 @@
         - Pill
         - Patch
         - Healing
+  - type: StaticPrice
+    price: 250
   - type: Appearance
 
 - type: entity
@@ -48,6 +50,8 @@
         - SmokeOnTrigger
         - ClusterGrenade
         - ExplodeOnTrigger
+  - type: StaticPrice
+    price: 125
   - type: Appearance
 
 - type: entity
@@ -78,6 +82,7 @@
         - MagazineShotgun
         - MagazineMagnumSubMachineGun
         - MagazinePistolSubMachineGun
+        - Cartridge
   - type: Appearance
 
 - type: entity
@@ -112,6 +117,8 @@
   - type: StorageContainerVisuals
     maxFillLevels: 1
     fillBaseName: fill-
+  - type: StaticPrice
+    price: 110
   - type: Appearance
 
 - type: entity
@@ -157,4 +164,6 @@
     sprite: Clothing/Pouches/cartridge_belt.rsi
     slots: [pocket, belt]
     quickEquip: false
+  - type: StaticPrice
+    price: 150
   - type: Appearance

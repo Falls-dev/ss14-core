@@ -102,3 +102,32 @@
 
 - type: Tag
   id: ClusterBang
+
+#Honk Edit
+- type: Tag
+  id: EnergyCellСarbine
+
+- type: Tag
+  id: EnergyCellDisabler
+
+- type: Tag
+  id: EnergyCellDisablerSmg
+
+- type: Tag
+  id: EnergyCellLaserCannon
+
+- type: Tag
+  id: EnergyCellLaserRetro
+
+- type: Tag
+  id: EnergyCellMakeshift
+
+- type: Tag
+  id: WeaponResinShotgun
+
+- type: Tag
+  id: MagazineResinShotgun
+
+- type: Tag
+  id: ShellResinShotgun
+#Honk Edit

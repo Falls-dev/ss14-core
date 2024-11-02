@@ -13,4 +13,4 @@
   - type: CartridgeAmmo
     proto: PelletShotgunResinShot
   - type: SpentAmmoVisuals
-    state: "resin"
+    state: rubber

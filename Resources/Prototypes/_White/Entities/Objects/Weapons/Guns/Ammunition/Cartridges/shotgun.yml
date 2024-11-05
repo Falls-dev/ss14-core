@@ -8,7 +8,7 @@
     - ShellResinShotgun
   - type: Sprite
     layers:
-    - state: resin
+    - state: rubber
       map: [ "enum.AmmoVisualLayers.Base" ]
   - type: CartridgeAmmo
     proto: PelletShotgunResinShot

@@ -102,3 +102,9 @@
 
 - type: Tag
   id: ClusterBang
+
+- type: Tag
+  id: Lighting
+
+- type: Tag
+  id: DisposalUnit

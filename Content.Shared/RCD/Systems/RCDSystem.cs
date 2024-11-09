@@ -405,21 +405,40 @@ public class RCDSystem : EntitySystem
             // Check for existing identical entities in the same tile
             _intersectingEntities.Clear();
             _lookup.GetLocalEntitiesIntersecting(mapGridData.GridUid, mapGridData.Position, _intersectingEntities, -0.05f, LookupFlags.Uncontained);
-            // WD EDIT START - Wizden removed it
-            // if (component.CachedPrototype.Prototype != null)
-            // {
-            //     foreach (var entity in _intersectingEntities)
-            //     {
-            //         // Check if the entity has the same prototype ID
-            //         if (MetaData(entity).EntityPrototype?.ID == component.CachedPrototype.Prototype)
-            //         {
-            //             if (popMsgs)
-            //                 _popup.PopupClient("An identical object already exists in this location.", uid, user);
-            //             return false;
-            //         }
-            //     }
-            // }
-            // WD EDIT END - Wizden removed it
+            // WD EDIT START
+            if (component.CachedPrototype.Prototype != null)
+            {
+                foreach (var entity in _intersectingEntities)
+                {
+                    var entityID = MetaData(entity).EntityPrototype?.ID;
+                    if (entityID == null)
+                        continue;
+
+                    // Prevents building many light sources on same tile
+                    if (_tags.HasTag(entity, "Lighting") && component.CachedPrototype.Category == "Lighting")
+                    {
+                        if (popMsgs)
+                            _popup.PopupClient(Loc.GetString("rcd-component-cannot-build-blacklisted-entity"), uid, user);
+                        return false;
+                    }
+                    // Prevents building many disposal units on same tile
+                    if (_tags.HasTag(entity, "DisposalUnit") && component.CachedPrototype.Category == "DisposalUnits")
+                    {
+                        if (popMsgs)
+                            _popup.PopupClient(Loc.GetString("rcd-component-cannot-build-blacklisted-entity"), uid, user);
+                        return false;
+                    }
+                    // Prevents building identical electrical entities on same tile
+                    if (component.CachedPrototype.Category == "Electrical" && entityID == component.CachedPrototype.Prototype)
+                    {
+                        if (popMsgs)
+                            _popup.PopupClient(Loc.GetString("rcd-component-cannot-build-identical-entity"), uid, user);
+
+                        return false;
+                    }
+                }
+            }
+            // WD EDIT END
 
             var isWindow = component.CachedPrototype.ConstructionRules.Contains(RcdConstructionRule.IsWindow);
             var isCatwalk = component.CachedPrototype.ConstructionRules.Contains(RcdConstructionRule.IsCatwalk);

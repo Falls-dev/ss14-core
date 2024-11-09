@@ -64,6 +64,9 @@
   - type: StaticPrice
     price: 62
   - type: PowerSwitch
+  - type: Tag # WD EDIT
+    tags:
+    - DisposalUnit
 
 - type: entity
   id: DisposalUnit

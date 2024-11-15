@@ -77,6 +77,12 @@
   path:
     path: /Audio/White/Jukebox/Music/Nuclear.ogg
 
+- type: jukebox # WD
+  id: MusicMessagesfromtheStars
+  name: "[NEW] Song - Messages from the Stars"
+  path:
+    path: /Audio/White/Jukebox/Music_Messages_from_the_Stars.ogg
+
 # Music
 
 - type: jukebox # WD

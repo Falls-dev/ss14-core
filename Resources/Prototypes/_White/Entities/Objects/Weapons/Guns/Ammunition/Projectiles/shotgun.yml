@@ -1,5 +1,5 @@
 - type: entity
-  id: PelletShotgunResinShot
+  id: PelletShotgunRubberShot
   name: резиновая дробь (.49)
   noSpawn: true
   parent: [BaseBullet, BaseBulletTrail]

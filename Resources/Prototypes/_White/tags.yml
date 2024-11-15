@@ -104,31 +104,13 @@
   id: ClusterBang
 
 - type: Tag
-  id: EnergyCellСarbine
+  id: WeaponRubberShotgun
 
 - type: Tag
-  id: EnergyCellDisabler
+  id: MagazineRubberShotgun
 
 - type: Tag
-  id: EnergyCellDisablerSmg
-
-- type: Tag
-  id: EnergyCellLaserCannon
-
-- type: Tag
-  id: EnergyCellLaserRetro
-
-- type: Tag
-  id: EnergyCellMakeshift
-
-- type: Tag
-  id: WeaponResinShotgun
-
-- type: Tag
-  id: MagazineResinShotgun
-
-- type: Tag
-  id: ShellResinShotgun
+  id: ShellRubberShotgun
 
 - type: Tag
   id: VoiceActivatedBombImplant

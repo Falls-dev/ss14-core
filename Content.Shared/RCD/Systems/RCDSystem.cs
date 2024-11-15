@@ -13,6 +13,7 @@ using Content.Shared.Popups;
 using Content.Shared.RCD.Components;
 using Content.Shared.Tag;
 using Content.Shared.Tiles;
+using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -47,6 +48,7 @@ public class RCDSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly TagSystem _tags = default!;
+    [Dependency] private readonly EntityWhitelistSystem _blacklist = default!;
 
     private readonly int _instantConstructionDelay = 0;
     private readonly EntProtoId _instantConstructionFx = "EffectRCDConstruct0";
@@ -414,20 +416,20 @@ public class RCDSystem : EntitySystem
                     if (entityID == null)
                         continue;
 
-                    // Prevents building many light sources on same tile
-                    if (_tags.HasTag(entity, "Lighting") && component.CachedPrototype.Category == "Lighting")
+                    // Prevents building entities from same construction group on one tile
+                    if (component.BlacklistOnOneTile?.Tags != null)
                     {
-                        if (popMsgs)
-                            _popup.PopupClient(Loc.GetString("rcd-component-cannot-build-blacklisted-entity"), uid, user);
-                        return false;
+                        foreach (var tag in component.BlacklistOnOneTile.Tags)
+                        {
+                            if (_blacklist.IsValid(component.BlacklistOnOneTile, entity) && component.CachedPrototype.Category == tag)
+                            {
+                                if (popMsgs)
+                                    _popup.PopupClient(Loc.GetString("rcd-component-cannot-build-blacklisted-entity"), uid, user);
+                                return false;
+                            }
+                        }
                     }
-                    // Prevents building many disposal units on same tile
-                    if (_tags.HasTag(entity, "DisposalUnit") && component.CachedPrototype.Category == "DisposalUnits")
-                    {
-                        if (popMsgs)
-                            _popup.PopupClient(Loc.GetString("rcd-component-cannot-build-blacklisted-entity"), uid, user);
-                        return false;
-                    }
+
                     // Prevents building identical electrical entities on same tile
                     if (component.CachedPrototype.Category == "Electrical" && entityID == component.CachedPrototype.Prototype)
                     {

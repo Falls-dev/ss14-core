@@ -107,7 +107,7 @@
   id: Lighting
 
 - type: Tag
-  id: DisposalUnit
+  id: DisposalUnits
 
 - type: Tag
   id: VoiceActivatedBombImplant

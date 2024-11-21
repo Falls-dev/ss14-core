@@ -163,7 +163,7 @@
       - type: TraitorRole
         prototype: Traitor
 
-- type: entity
+- type: entity # WD AHEAD OF WIZDEN UPSTREAM
   id: TraitorReinforcement
   parent: Traitor
   components:
@@ -171,6 +171,11 @@
     giveUplink: false
     giveCodewords: false # It would actually give them a different set of codewords than the regular traitors, anyway
     giveBriefing: false
+  - type: AntagSelection
+    definitions:
+    - prefRoles: [ Traitor ]
+      mindRoles:
+      - MindRoleTraitor
 
 - type: entity
   id: Revolutionary

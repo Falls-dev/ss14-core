@@ -1,4 +1,4 @@
-#Changeling
+# Changeling
 changeling-title = Changeling
 changeling-description = A changeling has boarded the station!
 changeling-not-enough-ready-players = Not enough players readied up for the game! There were {$readyPlayersCount} players readied up out of {$minimumPlayers} needed. Can't start Changeling.

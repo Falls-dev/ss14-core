@@ -41,6 +41,14 @@
     size: Normal
     shape:
     - 0,0,0,1
+  # WD edit sounds start
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/White/Items/handling/crowbar_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/crowbar_drop.ogg
+  # WD edit sounds end
 
 # Standard (grey) Crowbar
 - type: entity

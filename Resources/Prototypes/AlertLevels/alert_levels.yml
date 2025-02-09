@@ -39,7 +39,7 @@
       announcement: alert-level-gamma-announcement
       selectable: false
       sound:
-        path: /Audio/Misc/gamma.ogg
+        path: /Audio/Misc/gamma.ogg # WD Holly fuck the original is so horrible
         params:
           volume: -2
       disableSelection: true

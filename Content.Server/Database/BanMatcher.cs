@@ -111,5 +111,11 @@ public static class BanMatcher
         /// True if this player is new and is thus eligible for more bans.
         /// </summary>
         public bool IsNewPlayer;
+
+        /// <summary>
+        /// WD.
+        /// Name of a server where ban is applied.
+        /// </summary>
+        public string ServerName;
     }
 }

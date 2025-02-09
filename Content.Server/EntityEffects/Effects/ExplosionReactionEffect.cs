@@ -63,15 +63,16 @@ public sealed partial class ExplosionReactionEffect : EntityEffect
 
         if (args is EntityEffectReagentArgs reagentArgs)
         {
-            intensity = MathF.Min((float) reagentArgs.Quantity * IntensityPerUnit, MaxTotalIntensity);
+            intensity = MathF.Min((float)reagentArgs.Quantity * IntensityPerUnit, MaxTotalIntensity);
         }
 
-        args.EntityManager.System<ExplosionSystem>()
+        args.EntityManager.System<ExplosionSystem>() // TODO WD Fix
             .QueueExplosion(
             args.TargetEntity,
             ExplosionType,
             intensity,
             IntensitySlope,
-            MaxIntensity);
+            MaxIntensity,
+            canCreateVacuum: false); // WD EDIT
     }
 }

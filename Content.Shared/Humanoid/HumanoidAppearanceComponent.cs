@@ -72,6 +72,7 @@ public sealed partial class HumanoidAppearanceComponent : Component
     /// <summary>
     ///     Current body type.
     /// </summary>
+    /// TODO WD Delete this
     [DataField, AutoNetworkedField]
     public ProtoId<BodyTypePrototype> BodyType = SharedHumanoidAppearanceSystem.DefaultBodyType;
 

@@ -1,0 +1,151 @@
+- type: entityTable
+  id: MaintMoneyTable
+  table: !type:GroupSelector
+    children:
+      - id: SpaceCash100
+        weight: 50
+      - id: SpaceCash500
+        weight: 30
+      - id: SpaceCash1000
+        weight: 10
+      - id: SpaceCash2500
+        weight: 6
+      - id: SpaceCash5000
+        weight: 3
+      - id: SpaceCash10000
+        weight: 1
+
+- type: entityTable
+  id: MaintMedicalTable
+  table: !type:GroupSelector
+    children:
+      - id: MaterialBiomass
+        weight: 10
+      - id: Gauze
+        weight: 10
+      - id: Ointment
+        weight: 10
+      - id: Brutepack
+        weight: 10
+      - id: MedicatedSuture
+        weight: 5
+      - id: RegenerativeMesh
+        weight: 5
+      - id: EmergencyMedipen
+        weight: 30
+      - id: CombatMedipen
+        weight: 0.5
+      - id: AntiPoisonMedipen
+        weight: 0.5
+      - id: ChemicalSynthesisKit
+        weight: 1
+      - id: MedkitFilled
+        weight: 2
+      - id: MedkitCombatFilled
+        weight: 1
+      - id: MedkitToxinFilled
+        weight: 1
+      - id: MedkitRadiationFilled
+        weight: 2
+      - id: MedkitAdvancedFilled
+        weight: 1
+      - id: MedkitBurnFilled
+        weight: 2
+
+- type: entityTable
+  id: MaintSecurityTable
+  table: !type:GroupSelector
+    children:
+      - id: ClothingOuterArmorRiot
+        weight: 5
+      - id: ClothingOuterArmorBasic
+        weight: 5
+      - id: ClothingOuterArmorBulletproof
+        weight: 5
+      - id: ClothingHeadHelmetBasic
+        weight: 5
+      - id: FlashlightSeclite
+        weight: 10
+      - id: Flash
+        weight: 10
+      - id: ClothingEyesGlassesSecurity
+        weight: 10
+      - id: Handcuffs
+        weight: 10
+      - id: GrenadeFlashBang
+        weight: 10
+      - id: TearGasGrenade
+        weight: 10
+      - id: WeaponShotgunEnforcerRubber
+        weight: 5
+      - id: WeaponPistolMk58Nonlethal
+        weight: 5
+      - id: WeaponDisabler
+        weight: 5
+      - id: Stunbaton
+        weight: 5
+
+- type: entityTable
+  id: MaintEncryptionKeysTable
+  table: !type:GroupSelector
+    children:
+      - id: EncryptionKeyService
+        weight: 30
+      - id: EncryptionKeyCargo
+        weight: 20
+      - id: EncryptionKeyMedical
+        weight: 20
+      - id: EncryptionKeyScience
+        weight: 10
+      - id: EncryptionKeyEngineering
+        weight: 10
+      - id: EncryptionKeySecurity
+        weight: 5
+      - id: EncryptionKeyCommand
+        weight: 5
+
+- type: entityTable
+  id: MaintImplantersTable
+  table: !type:GroupSelector
+    children:
+      - id: BikeHornImplanter
+        weight: 20
+      - id: SadTromboneImplanter
+        weight: 20
+      - id: MindShieldImplanter
+        weight: 20
+      - id: TrackingImplanter
+        weight: 10
+      - id: LightImplanter
+        weight: 20
+      - id: EmpImplanter
+        weight: 2
+      - id: SmokeImplanter
+        weight: 2
+      - id: MindSlaveImplanter
+        weight: 1
+      - id: ScramImplanter
+        weight: 1
+      - id: DnaScramblerImplanter
+        weight: 1
+      - id: StorageImplanter
+        weight: 1
+      - id: HardlightSpearImplanter
+        weight: 1
+      - id: FreedomImplanter
+        weight: 1
+
+- type: entityTable
+  id: MaintHardsuitsTable
+  table: !type:GroupSelector
+    children:
+      - id: ClothingOuterHardsuitBasic
+        weight: 30
+      - id: ClothingOuterHardsuitEVA
+        weight: 30
+      - id: ClothingOuterHardsuitEVAPrisoner
+        weight: 30
+      - id: ClothingOuterHardsuitSyndie
+        weight: 5
+      - id: ClothingOuterHardsuitSyndicate
+        weight: 5

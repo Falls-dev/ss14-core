@@ -128,4 +128,11 @@ public sealed partial class ElectrifiedComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool IsWireCut = false;
+
+    // WD EDIT START
+    [DataField, AutoNetworkedField]
+    public bool IgnoreInsulation;
+
+    public EntityUid? Caster;
+    // WD EDIT END
 }

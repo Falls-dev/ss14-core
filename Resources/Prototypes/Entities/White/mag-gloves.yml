@@ -18,8 +18,6 @@
           enum.ToggleVisuals.Layer:
             True: {state: icon-on}
             False: {state: icon}
-    - type: GloveHeatResistance
-      heatResistance: 1400
     - type: Fiber
       fiberMaterial: fibers-nanomachines
     - type: FingerprintMask

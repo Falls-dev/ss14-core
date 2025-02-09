@@ -22,7 +22,7 @@ public sealed class EmotionsUIController : UIController, IOnStateChanged<Gamepla
 
 
     private EmotionsWindow? _window;
-    private MenuButton? EmotionsButton => UIManager.GetActiveUIWidgetOrNull<MenuBar.Widgets.GameTopMenuBar>()?.EmotionsButton;
+    private MenuButton? EmotionsButton => UIManager.GetActiveUIWidgetOrNull<MenuBar.Widgets.GameTopMenuBar>()?.EmotesButton;
 
     private DateTime _lastEmotionTimeUse = DateTime.Now;
     private const float EmoteCooldown = 1.5f;
@@ -35,7 +35,7 @@ public sealed class EmotionsUIController : UIController, IOnStateChanged<Gamepla
         _window.OnClose += OnWindowClosed;
 
         var emotions = _prototypeManager.EnumeratePrototypes<EmotePrototype>().ToList();
-        emotions.Sort((a,b) => string.Compare(a.ButtonText, b.ButtonText.ToString(), StringComparison.Ordinal));
+        emotions.Sort((a, b) => string.Compare(a.ButtonText, b.ButtonText.ToString(), StringComparison.Ordinal));
 
         foreach (var emote in emotions)
         {
@@ -52,7 +52,7 @@ public sealed class EmotionsUIController : UIController, IOnStateChanged<Gamepla
         }
 
         CommandBinds.Builder
-            .Bind(ContentKeyFunctions.OpenEmotionsMenu,
+            .Bind(ContentKeyFunctions.OpenEmotesMenu,
                 InputCmdHandler.FromDelegate(_ => ToggleWindow()))
             .Register<EmotionsUIController>();
     }

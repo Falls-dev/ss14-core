@@ -22,3 +22,11 @@
   category: Quirks
   components:
   - type: Snoring
+
+- type: trait # WD
+  id: Hell
+  name: Высшая добродетель
+  description: Как в страстях, так и в поступках пороки переступают должное либо в сторону избытка, либо в сторону недостатка, добродетель же умеет находить середину и её избирает.
+  category: Quirks
+  components:
+  - type: Hell

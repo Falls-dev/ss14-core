@@ -9,6 +9,11 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Chat.Managers;
 
+/// <summary>
+///     Sanitizes messages!
+///     It currently ony removes the shorthands for emotes (like "lol" or "^-^") from a chat message and returns the last
+///     emote in their message
+/// </summary>
 public sealed class ChatSanitizationManager : IChatSanitizationManager
 {
     [Dependency] private readonly IConfigurationManager _configurationManager = default!;
@@ -16,9 +21,8 @@ public sealed class ChatSanitizationManager : IChatSanitizationManager
 
     private Dictionary<string, string> _slangToNormal = new();
 
-    private static readonly Dictionary<string, string> SmileyToEmote = new()
+    private static readonly Dictionary<string, string> ShorthandToEmote = new()
     {
-        // I could've done this with regex, but felt it wasn't the right idea.
         { ":)", "chatsan-smiles" },
         { ":]", "chatsan-smiles" },
         { "=)", "chatsan-smiles" },
@@ -40,7 +44,7 @@ public sealed class ChatSanitizationManager : IChatSanitizationManager
         { ":D", "chatsan-smiles-widely" },
         { "D:", "chatsan-frowns-deeply" },
         { ":O", "chatsan-surprised" },
-        { ":3", "chatsan-smiles" }, //nope
+        { ":3", "chatsan-smiles" },
         { ":S", "chatsan-uncertain" },
         { ":>", "chatsan-grins" },
         { ":<", "chatsan-pouts" },
@@ -86,19 +90,15 @@ public sealed class ChatSanitizationManager : IChatSanitizationManager
         { ":/", "chatsan-uncertain" },
         { ":\\", "chatsan-uncertain" },
         { "lmao", "chatsan-laughs" },
-        { "lmao.", "chatsan-laughs" },
+        { "lmfao", "chatsan-laughs" },
         { "lol", "chatsan-laughs" },
-        { "lol.", "chatsan-laughs" },
         { "lel", "chatsan-laughs" },
-        { "lel.", "chatsan-laughs" },
         { "kek", "chatsan-laughs" },
-        { "kek.", "chatsan-laughs" },
         { "rofl", "chatsan-laughs" },
         { "o7", "chatsan-salutes" },
         { "07", "chatsan-salutes" },
         { ";_;7", "chatsan-tearfully-salutes"},
         { "idk", "chatsan-shrugs" },
-        { "idk.", "chatsan-shrugs" },
         { ";)", "chatsan-winks" },
         { ";]", "chatsan-winks" },
         { "(;", "chatsan-winks" },
@@ -110,8 +110,10 @@ public sealed class ChatSanitizationManager : IChatSanitizationManager
         { "(':", "chatsan-tearfully-smiles" },
         { "[':", "chatsan-tearfully-smiles" },
         { "('=", "chatsan-tearfully-smiles" },
-        { "['=", "chatsan-tearfully-smiles" },
+        { "['=", "chatsan-tearfully-smiles" }
     };
+
+    [Dependency] private readonly ILocalizationManager _loc = default!;
 
     private bool _doSanitize;
 
@@ -132,30 +134,61 @@ public sealed class ChatSanitizationManager : IChatSanitizationManager
         //WD-EDIT
     }
 
-    public bool TrySanitizeOutSmilies(string input, EntityUid speaker, out string sanitized, [NotNullWhen(true)] out string? emote)
+    /// <summary>
+    ///     Remove the shorthands from the message, returning the last one found as the emote
+    /// </summary>
+    /// <param name="message">The pre-sanitized message</param>
+    /// <param name="speaker">The speaker</param>
+    /// <param name="sanitized">The sanitized message with shorthands removed</param>
+    /// <param name="emote">The localized emote</param>
+    /// <returns>True if emote has been sanitized out</returns>
+    public bool TrySanitizeEmoteShorthands(string message,
+        EntityUid speaker,
+        out string sanitized,
+        [NotNullWhen(true)] out string? emote)
     {
-        if (!_doSanitize)
-        {
-            sanitized = input;
-            emote = null;
-            return false;
-        }
-
-        input = input.TrimEnd();
-
-        foreach (var (smiley, replacement) in SmileyToEmote)
-        {
-            if (input == smiley || input.EndsWith($" {smiley}", true, CultureInfo.InvariantCulture)) // WD EDIT
-            {
-                sanitized = input.Remove(input.Length - smiley.Length).TrimEnd();
-                emote = Loc.GetString(replacement, ("ent", speaker));
-                return true;
-            }
-        }
-
-        sanitized = input;
         emote = null;
-        return false;
+        sanitized = message;
+
+        if (!_doSanitize)
+            return false;
+
+        // -1 is just a canary for nothing found yet
+        var lastEmoteIndex = -1;
+
+        foreach (var (shorthand, emoteKey) in ShorthandToEmote)
+        {
+            // We have to escape it because shorthands like ":)" or "-_-" would break the regex otherwise.
+            var escaped = Regex.Escape(shorthand);
+
+            // So there are 2 cases:
+            // - If there is whitespace before it and after it is either punctuation, whitespace, or the end of the line
+            //   Delete the word and the whitespace before
+            // - If it is at the start of the string and is followed by punctuation, whitespace, or the end of the line
+            //   Delete the word and the punctuation if it exists.
+            var pattern =
+                $@"\s{escaped}(?=\p{{P}}|\s|$)|^{escaped}(?:\p{{P}}|(?=\s|$))";
+
+            var r = new Regex(pattern, RegexOptions.RightToLeft | RegexOptions.IgnoreCase);
+
+            // We're using sanitized as the original message until the end so that we can make sure the indices of
+            // the emotes are accurate.
+            var lastMatch = r.Match(sanitized);
+
+            if (!lastMatch.Success)
+                continue;
+
+            if (lastMatch.Index > lastEmoteIndex)
+            {
+                lastEmoteIndex = lastMatch.Index;
+                emote = _loc.GetString(emoteKey, ("ent", speaker));
+            }
+
+            message = r.Replace(message, string.Empty);
+        }
+
+        sanitized = message.Trim();
+        return emote is not null;
     }
 
     //WD-EDIT
@@ -163,7 +196,7 @@ public sealed class ChatSanitizationManager : IChatSanitizationManager
     {
         var pattern = @"(^\!|^\?|[\p{L}\d'`%-]+)";
 
-        var newMessage = Regex.Replace(input, pattern ,
+        var newMessage = Regex.Replace(input, pattern,
             match => _slangToNormal.ContainsKey(match.Groups[1].Value.ToLower()) ? _slangToNormal[match.Groups[1].Value.ToLower()] : match.Value, RegexOptions.IgnoreCase);
 
         return newMessage;

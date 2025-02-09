@@ -1,5 +1,5 @@
 - type: entity
-  parent: BaseItem
+  parent: [BaseItem, BaseSyndicateContraband]
   id: ChameleonProjector
   name: chameleon projector
   description: Holoparasite technology used to create a hard-light replica of any object around you. Disguise is destroyed when picked up or deactivated.
@@ -12,6 +12,8 @@
       components:
       - Anchorable
       - Item
+      tags:
+      - Bot # for funny bot moments
     blacklist:
       components:
       - ChameleonDisguise # no becoming kleiner
@@ -20,7 +22,7 @@
     disguiseProto: ChameleonDisguise
 
 - type: entity
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   id: ChameleonDisguise
   name: Urist McKleiner
   components:
@@ -37,17 +39,16 @@
 
 # actions
 - type: entity
-  noSpawn: true
   id: ActionDisguiseNoRot
   name: Toggle Rotation
   description: Use this to prevent your disguise from rotating, making it easier to hide in some scenarios.
   components:
   - type: InstantAction
     icon: Interface/VerbIcons/refresh.svg.192dpi.png
+    itemIconStyle: BigAction
     event: !type:DisguiseToggleNoRotEvent
 
 - type: entity
-  noSpawn: true
   id: ActionDisguiseAnchor
   name: Toggle Anchored
   description: For many objects you will want to be anchored to not be completely obvious.
@@ -56,4 +57,5 @@
     icon:
       sprite: Objects/Tools/wrench.rsi
       state: icon
+    itemIconStyle: BigAction
     event: !type:DisguiseToggleAnchoredEvent

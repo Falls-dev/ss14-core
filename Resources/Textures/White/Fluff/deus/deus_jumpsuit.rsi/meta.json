@@ -1,7 +1,11 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
+<<<<<<<< HEAD:Resources/Textures/White/Fluff/deus/deus_jumpsuit.rsi/meta.json
   "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/c838ba21dae97db345e0113f99596decd1d66039",
+========
+  "copyright": "Made by DieselMohawk for use in ss14",
+>>>>>>>> wizden/stable:Resources/Textures/Clothing/Uniforms/Jumpsuit/security_trooper.rsi/meta.json
   "size": {
     "x": 32,
     "y": 32

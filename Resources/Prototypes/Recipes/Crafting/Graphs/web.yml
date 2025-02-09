@@ -48,13 +48,13 @@
         amount: 2
         doAfter: 4
 
-    - to: socks
+    - to: socks # WD
       steps:
       - material: WebSilk
         amount: 2
         doAfter: 2
 
-    - to: panties
+    - to: panties # WD
       steps:
       - material: WebSilk
         amount: 2

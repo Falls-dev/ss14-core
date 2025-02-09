@@ -25,9 +25,6 @@ public sealed partial class TraitorRuleComponent : Component
     public ProtoId<NpcFactionPrototype> SyndicateFaction = "Syndicate";
 
     [DataField]
-    public ProtoId<WeightedRandomPrototype> ObjectiveGroup = "TraitorObjectiveGroups";
-
-    [DataField]
     public ProtoId<DatasetPrototype> CodewordAdjectives = "adjectives";
 
     [DataField]
@@ -35,7 +32,6 @@ public sealed partial class TraitorRuleComponent : Component
 
     [DataField]
     public ProtoId<DatasetPrototype> ObjectiveIssuers = "TraitorCorporations";
-    // WD EDIT START AHEAD OF WIZDEN UPSTREAM
     /// <summary>
     /// Give this traitor an Uplink on spawn.
     /// </summary>
@@ -53,11 +49,9 @@ public sealed partial class TraitorRuleComponent : Component
     /// </summary>
     [DataField]
     public bool GiveBriefing = true;
-    // WD EDIT END AHEAD OF WIZDEN UPSTREAM
-    // WD edit start
-    [DataField]
+
+    [DataField] // WD
     public ProtoId<MoodEffectPrototype> MoodBuffEffect = "TraitorFocused";
-    // WD edit end
 
     public int TotalTraitors => TraitorMinds.Count;
     public string[] Codewords = new string[3];
@@ -96,8 +90,5 @@ public sealed partial class TraitorRuleComponent : Component
     /// The amount of TC traitors start with.
     /// </summary>
     [DataField]
-    public FixedPoint2 StartingBalance = 20; // WD EDIT AHEAD OF WIZDEN UPSTREAM
-
-    [DataField]
-    public int MaxDifficulty = 5;
+    public FixedPoint2 StartingBalance = 20;
 }

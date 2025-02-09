@@ -121,7 +121,7 @@ public abstract class SharedSubdermalImplantSystem : EntitySystem
     /// <returns>
     /// The implant, if it was successfully created. Otherwise, null.
     /// </returns>>
-    public EntityUid? AddImplant(EntityUid uid, String implantId) // WD EDIT AHEAD OF WIZDEN UPSTREAM
+    public EntityUid? AddImplant(EntityUid uid, String implantId)
     {
         var coords = Transform(uid).Coordinates;
         var ent = Spawn(implantId, coords);

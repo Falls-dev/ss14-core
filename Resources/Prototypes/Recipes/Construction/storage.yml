@@ -49,6 +49,25 @@
   canBuildInImpassable: false
   conditions:
     - !type:TileNotBlocked
+
+# ItemCabinets
+- type: construction
+  id: ShowCase
+  name: showcase
+  description: A sturdy showcase for an expensive exhibit.
+  graph: GlassBox
+  startNode: start
+  targetNode: glassBox
+  category: construction-category-storage
+  icon:
+    sprite: Structures/Storage/glassbox.rsi
+    state: icon
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
 # Shelfs
 # Normals
 - type: construction
@@ -167,7 +186,7 @@
 
 - type: construction
   id: ShelfKitchen
-  name: cooking shelf
+  name: kitchen shelf
   description: Holds your knifes, spice, and everything nice!
   graph: Shelf
   startNode: start
@@ -196,21 +215,3 @@
   canBuildInImpassable: true
   conditions:
     - !type:WallmountCondition
-
-# ItemCabinets
-- type: construction
-  id: ShowCase
-  name: showcase
-  description: A sturdy showcase for an expensive exhibit.
-  graph: GlassBox
-  startNode: start
-  targetNode: glassBox
-  category: construction-category-storage
-  icon:
-    sprite: Structures/Storage/glassbox.rsi
-    state: icon
-  objectType: Structure
-  placementMode: SnapgridCenter
-  canBuildInImpassable: false
-  conditions:
-    - !type:TileNotBlocked

@@ -1,89 +1,63 @@
-# Jumpsuit
-- type: itemLoadout
-  id: CaptainJumpsuit
-  equipment: CaptainJumpsuit
+# For mantles
+- type: loadoutEffectGroup
+  id: MasterCap
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobCaptain
+      time: 72000 #20 hrs
 
-- type: startingGear
+# Jumpsuit
+- type: loadout
   id: CaptainJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitCaptain
 
-- type: itemLoadout
-  id: CaptainJumpskirt
-  equipment: CaptainJumpskirt
-
-- type: startingGear
+- type: loadout
   id: CaptainJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtCaptain
 
-- type: itemLoadout
-  id: CaptainFormalSuit
-  equipment: CaptainFormalSuit
-
-- type: startingGear
+- type: loadout
   id: CaptainFormalSuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitCapFormal
 
-- type: itemLoadout
-  id: CaptainFormalSkirt
-  equipment: CaptainFormalSkirt
-
-- type: startingGear
+- type: loadout
   id: CaptainFormalSkirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtCapFormalDress
 
 # Head
-- type: itemLoadout
-  id: CaptainHead
-  equipment: CaptainHead
-
-- type: startingGear
+- type: loadout
   id: CaptainHead
   equipment:
     head: ClothingHeadHatCaptain
 
-- type: itemLoadout
-  id: CaptainCap
-  equipment: CaptainCap
-
-- type: startingGear
+- type: loadout
   id: CaptainCap
   equipment:
     head: ClothingHeadHatCapcap
 
 # Neck
-- type: itemLoadout
-  id: CaptainCloak
-  equipment: CaptainCloak
-
-- type: startingGear
+- type: loadout
   id: CaptainCloak
   equipment:
     neck: ClothingNeckCloakCap
 
-- type: itemLoadout
-  id: CaptainCloakFormal
-  equipment: CaptainCloakFormal
-
-- type: startingGear
+- type: loadout
   id: CaptainCloakFormal
   equipment:
     neck: ClothingNeckCloakCapFormal
 
-- type: itemLoadout # WD
-  id: CaptainCloakLuxurious
-  equipment: CaptainCloakLuxurious
-- type: startingGear
-  id: CaptainCloakLuxurious
-  equipment:
-    neck: ClothingNeckCloakCapLuxurious
-
-- type: itemLoadout
+- type: loadout
   id: CaptainMantle
-  equipment: CaptainMantle
+  equipment:
+    neck: ClothingNeckMantleCap
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MasterCap
 
 - type: startingGear
   id: CaptainMantle
@@ -91,67 +65,28 @@
     neck: ClothingNeckMantleCap
 
 # Back
-- type: itemLoadout
-  id: CaptainBackpack
-  equipment: CaptainBackpack
-
-- type: startingGear
+- type: loadout
   id: CaptainBackpack
   equipment:
-    back: ClothingBackpackCaptainFilled
+    back: ClothingBackpackCaptain
 
-- type: itemLoadout
-  id: CaptainSatchel
-  equipment: CaptainSatchel
-
-- type: startingGear
+- type: loadout
   id: CaptainSatchel
   equipment:
-    back: ClothingBackpackSatchelCaptainFilled
+    back: ClothingBackpackSatchelCaptain
 
-- type: itemLoadout
-  id: CaptainDuffel
-  equipment: CaptainDuffel
-
-- type: startingGear
+- type: loadout
   id: CaptainDuffel
   equipment:
-    back: ClothingBackpackDuffelCaptainFilled
+    back: ClothingBackpackDuffelCaptain
 
 # Outer clothing
-- type: itemLoadout
-  id: CaptainWintercoat
-  equipment: CaptainWintercoat
+- type: loadout
+  id: CaptainOuterClothing
+  equipment:
+    outerClothing: ClothingOuterArmorCaptainCarapace
 
-- type: startingGear
+- type: loadout
   id: CaptainWintercoat
   equipment:
     outerClothing: ClothingOuterWinterCap
-
-# Gloves
-- type: itemLoadout
-  id: CaptainGloves
-  equipment: CaptainGloves
-- type: startingGear
-  id: CaptainGloves
-  equipment:
-    gloves: ClothingHandsGlovesCaptain
-
-# PDA
-
-- type: itemLoadout # WD
-  id: CaptainPDA
-  equipment: CaptainPDA
-- type: startingGear
-  id: CaptainPDA
-  equipment:
-    id: CaptainPDA
-
-# Ears
-- type: itemLoadout # WD
-  id: CaptainEars
-  equipment: CaptainEars
-- type: startingGear
-  id: CaptainEars
-  equipment:
-    id: ClothingHeadsetAltCommand

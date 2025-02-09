@@ -55,6 +55,8 @@
         reagents:
         - ReagentId: Cellulose
           Quantity: 6
+  - type: Item
+    heldPrefix: cardboard
 
 - type: entity
   parent: MaterialCardboard
@@ -118,6 +120,9 @@
   - type: Appearance
   - type: Food
     requiresSpecialDigestion: true
+  - type: FlavorProfile
+    flavors:
+    - fiber
   - type: SolutionContainerManager
     solutions:
       food:
@@ -134,6 +139,8 @@
   - type: Construction
     graph: WebObjects # not sure if I should either keep this here or just make another prototype. Will keep it here just in case.
     node: cloth
+  - type: Item
+    heldPrefix: cloth
 
 - type: entity
   parent: MaterialCloth
@@ -198,6 +205,8 @@
       - ClothMade
       - DroneUsable
       - RawMaterial
+  - type: Item
+    heldPrefix: durathread
 
 - type: entity
   parent: MaterialDurathread
@@ -338,8 +347,7 @@
     sprite: Objects/Materials/materials.rsi
     state: corgihide
   - type: Item
-    sprite: Clothing/Head/Misc/hides.rsi
-    heldPrefix: corgi
+    heldPrefix: corgihide
   - type: Clothing
     sprite: Clothing/Head/Misc/hides.rsi
     equippedPrefix: corgi2
@@ -357,8 +365,17 @@
   components:
   - type: Stack
     stackType: Diamond
+    baseLayer: base
+    layerStates:
+    - diamond
+    - diamond_2
+    - diamond_3
   - type: Sprite
     state: diamond
+    layers:
+    - state: diamond
+      map: ["base"]
+  - type: Appearance
   - type: Item
     heldPrefix: diamond
   - type: Extractable
@@ -369,6 +386,10 @@
         reagents:
         - ReagentId: Carbon
           Quantity: 20
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      Diamond: 100
 
 - type: entity
   parent: MaterialDiamond
@@ -399,6 +420,9 @@
   - type: Appearance
   - type: Food
     requiresSpecialDigestion: true
+  - type: FlavorProfile
+    flavors:
+    - fiber
   - type: SolutionContainerManager
     solutions:
       food:
@@ -416,6 +440,8 @@
       - ClothMade
       - DroneUsable
       - RawMaterial
+  - type: Item
+    heldPrefix: cotton
 
 - type: entity
   parent: MaterialCotton
@@ -468,6 +494,8 @@
     tags:
       - ClothMade
       - RawMaterial
+  - type: Item
+    heldPrefix: pyrotton
 
 - type: entity
   parent: MaterialPyrotton
@@ -501,13 +529,12 @@
     layerStates:
       - bananium
       - bananium_1
-  - type: RadiationSource
-    intensity: 0.1
   - type: FlavorProfile
     flavors:
       - banana
   - type: Food
-    trash: TrashBananiumPeel
+    trash:
+    - TrashBananiumPeel
   - type: BadFood
   - type: SolutionContainerManager
     solutions:
@@ -528,6 +555,8 @@
       - ReagentId: Honk
         Quantity: 5
   - type: Appearance
+  - type: Item
+    heldPrefix: bananium
 
 - type: entity
   parent: MaterialBananium
@@ -579,6 +608,9 @@
       - ClothMade
       - DroneUsable
       - RawMaterial
+  - type: Item
+    sprite: Objects/Materials/silk.rsi
+    heldPrefix: silk
 
 - type: entity
   parent: MaterialWebSilk
@@ -591,6 +623,83 @@
 - type: entity
   parent: MaterialWebSilk
   id: MaterialWebSilk1
+  suffix: 1
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: MaterialBase
+  id: MaterialToothSpaceCarp
+  name: space carp tooth
+  description: Pretty small but plenty nasty. You like them best when they're not sinking into you.
+  suffix: Full
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/Mob/carptooth.rsi
+    layers:
+    - state: tooth
+      map: [ "base" ]
+  - type: Item
+    sprite: Objects/Materials/Mob/carptooth.rsi
+    size: Normal
+  - type: Appearance
+  - type: Stack
+    stackType: SpaceCarpTooth
+    count: 30
+    baseLayer: base
+    layerStates:
+    - tooth
+    - tooth_2
+    - tooth_3
+  - type: StackPrice
+    price: 50
+  - type: Tag
+    tags:
+    - ToothSpaceCarp
+
+- type: entity
+  parent: MaterialToothSpaceCarp
+  id: MaterialToothSpaceCarp1
+  suffix: 1
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: [ MaterialBase, BaseKnife ]
+  id: MaterialToothSharkminnow
+  name: sharkminnow tooth
+  description: Looks sharp. Sharp enough to poke someone's eye out. Holy fuck it's big.
+  suffix: Full
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/Mob/sharktooth.rsi
+    layers:
+    - state: tooth
+      map: [ "base" ]
+  - type: Item
+    sprite: Objects/Materials/Mob/sharktooth.rsi
+    size: Normal
+  - type: Appearance
+  - type: Stack
+    stackType: SharkMinnowTooth
+    count: 30
+    baseLayer: base
+    layerStates:
+    - tooth
+    - tooth_2
+    - tooth_3
+  - type: StackPrice
+    price: 150
+  - type: Tag
+    tags:
+    - Knife
+    - ToothSharkminnow
+
+- type: entity
+  parent: MaterialToothSharkminnow
+  id: MaterialToothSharkminnow1
   suffix: 1
   components:
   - type: Stack
@@ -624,6 +733,8 @@
         reagents:
         - ReagentId: Vitamin
           Quantity: 3
+  - type: Item
+    heldPrefix: bones
 
 - type: entity
   parent: MaterialBones
@@ -661,3 +772,42 @@
   - type: Stack
     stackType: Gunpowder
     count: 60
+
+- type: entity
+  parent: MaterialBase
+  id: MaterialGoliathHide
+  name: goliath hide plates
+  description: Pieces of a goliath's rocky hide, these might be able to make your suit a bit more durable to attack from the local fauna.
+  suffix: Full
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/hide.rsi
+    layers:
+    - state: goliath_hide
+      map: [ "base" ]
+  - type: StaticPrice
+    price: 0
+  - type: StackPrice
+    price: 1500
+  - type: Appearance
+  - type: Stack
+    stackType: GoliathHide
+    baseLayer: base
+    layerStates:
+    - goliath_hide
+    - goliath_hide_2
+    - goliath_hide_3
+  - type: Item
+    size: Large
+    heldPrefix: goliathhide
+    sprite: Objects/Materials/hide.rsi
+    shape:
+    - 0,0,2,2
+
+- type: entity
+  parent: MaterialGoliathHide
+  id: MaterialGoliathHide1
+  suffix: 1
+  components:
+  - type: Stack
+    count: 1

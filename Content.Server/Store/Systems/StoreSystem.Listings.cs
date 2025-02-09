@@ -5,6 +5,8 @@ using Content.Shared.Store;
 using FastAccessors;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using System.Diagnostics.CodeAnalysis;
+using Content.Shared.Store.Components;
 
 namespace Content.Server.Store.Systems;
 
@@ -28,7 +30,7 @@ public sealed partial class StoreSystem
         {
             var sale = GetSale(store.Sales.MinMultiplier, store.Sales.MaxMultiplier);
             var newCost = listing.Cost.ToDictionary(x => x.Key,
-                x => FixedPoint2.New(Math.Max(1, (int) MathF.Round(x.Value.Float() * sale))));
+                x => FixedPoint2.New(Math.Max(1, (int)MathF.Round(x.Value.Float() * sale))));
 
             if (listing.Cost.All(x => x.Value.Int() == newCost[x.Key].Int()))
                 continue;
@@ -37,7 +39,7 @@ public sealed partial class StoreSystem
             listing.OldCost = listing.Cost;
             listing.SaleAmount = 100 - (newCost[key] / listing.Cost[key] * 100).Int();
             listing.Cost = newCost;
-            listing.Categories = new() {store.Sales.SalesCategory};
+            listing.Categories = new() { store.Sales.SalesCategory };
         }
     }
 
@@ -61,25 +63,43 @@ public sealed partial class StoreSystem
     /// <param name="component">The store to refresh</param>
     public void RefreshAllListings(StoreComponent component)
     {
-        component.Listings = GetAllListings();
+        var previousState = component.FullListingsCatalog;
+        var newState = GetAllListings();
+        // if we refresh list with existing cost modifiers - they will be removed,
+        // need to restore them
+        if (previousState.Count != 0)
+        {
+            foreach (var previousStateListingItem in previousState)
+            {
+                if (!previousStateListingItem.IsCostModified
+                    || !TryGetListing(newState, previousStateListingItem.ID, out var found))
+                {
+                    continue;
+                }
+
+                foreach (var (modifierSourceId, costModifier) in previousStateListingItem.CostModifiersBySourceId)
+                {
+                    found.AddCostModifier(modifierSourceId, costModifier);
+                }
+            }
+        }
+
+        component.FullListingsCatalog = newState;
     }
 
     /// <summary>
     /// Gets all listings from a prototype.
     /// </summary>
     /// <returns>All the listings</returns>
-    public HashSet<ListingData> GetAllListings()
+    public HashSet<ListingDataWithCostModifiers> GetAllListings()
     {
-        var allListings = _proto.EnumeratePrototypes<ListingPrototype>();
-
-        var allData = new HashSet<ListingData>();
-
-        foreach (var listing in allListings)
+        var clones = new HashSet<ListingDataWithCostModifiers>();
+        foreach (var prototype in _proto.EnumeratePrototypes<ListingPrototype>())
         {
-            allData.Add((ListingData) listing.Clone());
+            clones.Add(new ListingDataWithCostModifiers(prototype));
         }
 
-        return allData;
+        return clones;
     }
 
     /// <summary>
@@ -87,7 +107,7 @@ public sealed partial class StoreSystem
     /// </summary>
     /// <param name="component">The store to add the listing to</param>
     /// <param name="listingId">The id of the listing</param>
-    /// <returns>Whetehr or not the listing was added successfully</returns>
+    /// <returns>Whether or not the listing was added successfully</returns>
     public bool TryAddListing(StoreComponent component, string listingId)
     {
         if (!_proto.TryIndex<ListingPrototype>(listingId, out var proto))
@@ -95,6 +115,7 @@ public sealed partial class StoreSystem
             Log.Error("Attempted to add invalid listing.");
             return false;
         }
+
         return TryAddListing(component, proto);
     }
 
@@ -104,9 +125,9 @@ public sealed partial class StoreSystem
     /// <param name="component">The store to add the listing to</param>
     /// <param name="listing">The listing</param>
     /// <returns>Whether or not the listing was add successfully</returns>
-    public bool TryAddListing(StoreComponent component, ListingData listing)
+    public bool TryAddListing(StoreComponent component, ListingPrototype listing)
     {
-        return component.Listings.Add(listing);
+        return component.FullListingsCatalog.Add(new ListingDataWithCostModifiers(listing));
     }
 
     /// <summary>
@@ -116,9 +137,9 @@ public sealed partial class StoreSystem
     /// <param name="store"></param>
     /// <param name="component">The store the listings are coming from.</param>
     /// <returns>The available listings.</returns>
-    public IEnumerable<ListingData> GetAvailableListings(EntityUid buyer, EntityUid store, StoreComponent component)
+    public IEnumerable<ListingDataWithCostModifiers> GetAvailableListings(EntityUid buyer, EntityUid store, StoreComponent component)
     {
-        return GetAvailableListings(buyer, component.Listings, component.Categories, store);
+        return GetAvailableListings(buyer, component.FullListingsCatalog, component.Categories, store);
     }
 
     /// <summary>
@@ -129,7 +150,12 @@ public sealed partial class StoreSystem
     /// <param name="categories">What categories to filter by.</param>
     /// <param name="storeEntity">The physial entity of the store. Can be null.</param>
     /// <returns>The available listings.</returns>
-    public IEnumerable<ListingData> GetAvailableListings(EntityUid buyer, HashSet<ListingData>? listings, HashSet<string> categories, EntityUid? storeEntity = null)
+    public IEnumerable<ListingDataWithCostModifiers> GetAvailableListings(
+        EntityUid buyer,
+        IReadOnlyCollection<ListingDataWithCostModifiers>? listings,
+        HashSet<ProtoId<StoreCategoryPrototype>> categories,
+        EntityUid? storeEntity = null
+    )
     {
         listings ??= GetAllListings();
 
@@ -166,13 +192,28 @@ public sealed partial class StoreSystem
     /// <param name="listing">The listing itself.</param>
     /// <param name="categories">The categories to check through.</param>
     /// <returns>If the listing was present in one of the categories.</returns>
-    public bool ListingHasCategory(ListingData listing, HashSet<string> categories)
+    public bool ListingHasCategory(ListingData listing, HashSet<ProtoId<StoreCategoryPrototype>> categories)
     {
         foreach (var cat in categories)
         {
             if (listing.Categories.Contains(cat))
                 return true;
         }
+        return false;
+    }
+
+    private bool TryGetListing(IReadOnlyCollection<ListingDataWithCostModifiers> collection, string listingId, [MaybeNullWhen(false)] out ListingDataWithCostModifiers found)
+    {
+        foreach (var current in collection)
+        {
+            if (current.ID == listingId)
+            {
+                found = current;
+                return true;
+            }
+        }
+
+        found = null!;
         return false;
     }
 }

@@ -1,14 +1,16 @@
 ﻿using Robust.Shared.Audio;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Actions;
 
-// TODO ACTIONS make this a seprate component and remove the inheritance stuff.
+// TODO ACTIONS make this a separate component and remove the inheritance stuff.
 // TODO ACTIONS convert to auto comp state?
 
 // TODO add access attribute. Need to figure out what to do with decal & mapping actions.
 // [Access(typeof(SharedActionsSystem))]
+[EntityCategory("Actions")]
 public abstract partial class BaseActionComponent : Component
 {
     public abstract BaseActionEvent? BaseEvent { get; }
@@ -39,6 +41,16 @@ public abstract partial class BaseActionComponent : Component
     [DataField("iconColor")] public Color IconColor = Color.White;
 
     /// <summary>
+    ///     The original <see cref="IconColor"/> this action was.
+    /// </summary>
+    [DataField] public Color OriginalIconColor;
+
+    /// <summary>
+    ///     The color the action should turn to when disabled
+    /// </summary>
+    [DataField] public Color DisabledIconColor = Color.DimGray;
+
+    /// <summary>
     ///     Keywords that can be used to search for this action in the action menu.
     /// </summary>
     [DataField("keywords")] public HashSet<string> Keywords = new();
@@ -65,6 +77,11 @@ public abstract partial class BaseActionComponent : Component
     public (TimeSpan Start, TimeSpan End)? Cooldown;
 
     /// <summary>
+    ///     If true, the action will have an initial cooldown applied upon addition.
+    /// </summary>
+    [DataField] public bool StartDelay = false;
+
+    /// <summary>
     ///     Time interval between action uses.
     /// </summary>
     [DataField("useDelay")] public TimeSpan? UseDelay;
@@ -85,7 +102,7 @@ public abstract partial class BaseActionComponent : Component
     /// <summary>
     ///     If enabled, charges will regenerate after a <see cref="Cooldown"/> is complete
     /// </summary>
-    [DataField("renewCharges")]public bool RenewCharges;
+    [DataField("renewCharges")] public bool RenewCharges;
 
     /// <summary>
     /// The entity that contains this action. If the action is innate, this may be the user themselves.
@@ -185,6 +202,8 @@ public abstract class BaseActionComponentState : ComponentState
     public SpriteSpecifier? Icon;
     public SpriteSpecifier? IconOn;
     public Color IconColor;
+    public Color OriginalIconColor;
+    public Color DisabledIconColor;
     public HashSet<string> Keywords;
     public bool Enabled;
     public bool Toggled;
@@ -215,6 +234,8 @@ public abstract class BaseActionComponentState : ComponentState
         Icon = component.Icon;
         IconOn = component.IconOn;
         IconColor = component.IconColor;
+        OriginalIconColor = component.OriginalIconColor;
+        DisabledIconColor = component.DisabledIconColor;
         Keywords = component.Keywords;
         Enabled = component.Enabled;
         Toggled = component.Toggled;

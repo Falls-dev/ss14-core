@@ -93,9 +93,9 @@
   sprite: /Textures/Interface/Radial/RCD/grille.png
   mode: ConstructObject
   prototype: Grille
-  cost: 1
-  delay: 1
-  collisionMask: FullTileMask
+  cost: 4
+  delay: 2
+  collisionMask: Impassable
   rotation: Fixed
   fx: EffectRCDConstruct1
 
@@ -106,9 +106,9 @@
   sprite: /Textures/Interface/Radial/RCD/window.png
   mode: ConstructObject
   prototype: Window
-  cost: 2
-  delay: 1
-  collisionMask: FullTileMask
+  cost: 3
+  delay: 2
+  collisionMask: Impassable
   rules:
     - IsWindow
   rotation: Fixed
@@ -136,12 +136,12 @@
   mode: ConstructObject
   prototype: ReinforcedWindow
   cost: 4
-  delay: 2
-  collisionMask: FullTileMask
+  delay: 3
+  collisionMask: Impassable
   rules:
     - IsWindow
   rotation: User
-  fx: EffectRCDConstruct2
+  fx: EffectRCDConstruct3
 
 - type: rcd
   id: WindowReinforcedDirectional
@@ -149,14 +149,14 @@
   sprite: /Textures/Interface/Radial/RCD/directional_reinforced.png
   mode: ConstructObject
   prototype: WindowReinforcedDirectional
-  cost: 2
-  delay: 1
-  collisionMask: FullTileMask
+  cost: 3
+  delay: 2
+  collisionMask: Impassable
   collisionBounds: "-0.23,-0.49,0.23,-0.36"
   rules:
     - IsWindow
   rotation: User
-  fx: EffectRCDConstruct1
+  fx: EffectRCDConstruct2
 
 # Airlocks
 - type: rcd
@@ -231,7 +231,6 @@
   prototype: CableApcExtension
   cost: 1
   delay: 0
-  collisionMask: InteractImpassable
   rules:
   - MustBuildOnSubfloor
   rotation: Fixed
@@ -245,7 +244,6 @@
   prototype: CableMV
   cost: 1
   delay: 0
-  collisionMask: InteractImpassable
   rules:
   - MustBuildOnSubfloor
   rotation: Fixed
@@ -259,7 +257,6 @@
   prototype: CableHV
   cost: 1
   delay: 0
-  collisionMask: InteractImpassable
   rules:
   - MustBuildOnSubfloor
   rotation: Fixed
@@ -273,9 +270,7 @@
   prototype: CableTerminal
   cost: 1
   delay: 0
-  collisionMask: InteractImpassable
-  rules:
-  - MustBuildOnSubfloor
+  collisionMask: Impassable
   rotation: User
   fx: EffectRCDConstruct0
 

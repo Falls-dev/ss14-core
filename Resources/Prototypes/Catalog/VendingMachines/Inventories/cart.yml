@@ -13,6 +13,8 @@
     EncryptionKeyMedical: 3
     EncryptionKeyScience: 3
     EncryptionKeySecurity: 3
+    Envelope: 10
+    HandLabeler: 2
     EncryptionKeyService: 3
   emaggedInventory:
     AgentIDCard: 1

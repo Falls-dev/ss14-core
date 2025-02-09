@@ -24,3 +24,8 @@
     shoes: ClothingShoesBootsWork
     id: EngineerPDA
     ears: ClothingHeadsetEngineering
+    eyes: ClothingEyesGlassesMeson
+    belt: ClothingBeltUtilityEngineering
+  #storage:
+    #back:
+    #- Stuff

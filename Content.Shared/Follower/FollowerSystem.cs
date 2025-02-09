@@ -1,20 +1,22 @@
 using System.Numerics;
+using Content.Shared.Administration.Managers;
 using Content.Shared.Database;
 using Content.Shared.Follower.Components;
 using Content.Shared.Ghost;
 using Content.Shared.Hands;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Pulling.Events;
-using Content.Shared.Movement.Systems;
 using Content.Shared.Tag;
 using Content.Shared.Verbs;
 using Content.Shared._White.Administration;
 using Robust.Shared.Containers;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Events;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Player;
 using Robust.Shared.Utility;
 using InvisibilityComponent = Content.Shared._White.Administration.InvisibilityComponent;
 
@@ -28,6 +30,7 @@ public sealed class FollowerSystem : EntitySystem
     [Dependency] private readonly SharedJointSystem _jointSystem = default!;
     [Dependency] private readonly SharedPhysicsSystem _physicsSystem = default!;
     [Dependency] private readonly INetManager _netMan = default!;
+    [Dependency] private readonly ISharedAdminManager _adminManager = default!;
 
     public override void Initialize()
     {
@@ -38,9 +41,25 @@ public sealed class FollowerSystem : EntitySystem
         SubscribeLocalEvent<FollowerComponent, PullStartedMessage>(OnPullStarted);
         SubscribeLocalEvent<FollowerComponent, EntityTerminatingEvent>(OnFollowerTerminating);
 
+        SubscribeLocalEvent<FollowedComponent, ComponentGetStateAttemptEvent>(OnFollowedAttempt);
         SubscribeLocalEvent<FollowerComponent, GotEquippedHandEvent>(OnGotEquippedHand);
         SubscribeLocalEvent<FollowedComponent, EntityTerminatingEvent>(OnFollowedTerminating);
         SubscribeLocalEvent<BeforeSaveEvent>(OnBeforeSave);
+    }
+
+    private void OnFollowedAttempt(Entity<FollowedComponent> ent, ref ComponentGetStateAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        // Clientside VV stay losing
+        var playerEnt = args.Player?.AttachedEntity;
+
+        if (playerEnt == null ||
+            !ent.Comp.Following.Contains(playerEnt.Value) && !HasComp<GhostComponent>(playerEnt.Value))
+        {
+            args.Cancelled = true;
+        }
     }
 
     private void OnBeforeSave(BeforeSaveEvent ev)
@@ -90,7 +109,7 @@ public sealed class FollowerSystem : EntitySystem
                 Act = () => StartFollowingEntity(ev.Target, ev.User),
                 Impact = LogImpact.Low,
                 Text = Loc.GetString("verb-follow-me-text"),
-                Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/close.svg.192dpi.png")),
+                Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/close.svg.192dpi.png")),
             };
 
             ev.Verbs.Add(verb);
@@ -110,7 +129,7 @@ public sealed class FollowerSystem : EntitySystem
 
     private void OnGotEquippedHand(EntityUid uid, FollowerComponent component, GotEquippedHandEvent args)
     {
-        StopFollowingEntity(uid, component.Following, deparent:false);
+        StopFollowingEntity(uid, component.Following, deparent: false);
     }
 
     private void OnFollowerTerminating(EntityUid uid, FollowerComponent component, ref EntityTerminatingEvent args)
@@ -244,7 +263,7 @@ public sealed class FollowerSystem : EntitySystem
 
         if (_netMan.IsClient)
         {
-            _transform.DetachParentToNull(uid, xform);
+            _transform.DetachEntity(uid, xform);
             return;
         }
 
@@ -256,7 +275,7 @@ public sealed class FollowerSystem : EntitySystem
     ///     Forces all of an entity's followers to stop following it.
     /// </summary>
     public void StopAllFollowers(EntityUid uid,
-        FollowedComponent? followed=null)
+        FollowedComponent? followed = null)
     {
         if (!Resolve(uid, ref followed))
             return;
@@ -268,20 +287,33 @@ public sealed class FollowerSystem : EntitySystem
     }
 
     /// <summary>
-    /// Get the most followed entity.
+    /// Gets the entity with the most non-admin ghosts following it.
     /// </summary>
-    public EntityUid? GetMostFollowed()
+    public EntityUid? GetMostGhostFollowed()
     {
         EntityUid? picked = null;
-        int most = 0;
-        var query = EntityQueryEnumerator<FollowedComponent>();
-        while (query.MoveNext(out var uid, out var comp))
+        var most = 0;
+
+        // Keep a tally of how many ghosts are following each entity
+        var followedEnts = new Dictionary<EntityUid, int>();
+
+        // Look for followers that are ghosts and are player controlled
+        var query = EntityQueryEnumerator<FollowerComponent, GhostComponent, ActorComponent>();
+        while (query.MoveNext(out _, out var follower, out _, out var actor))
         {
-            var count = comp.Following.Count;
-            if (count > most)
+            // Exclude admins
+            if (_adminManager.IsAdmin(actor.PlayerSession))
+                continue;
+
+            var followed = follower.Following;
+            // Add new entry or increment existing
+            followedEnts.TryGetValue(followed, out var currentValue);
+            followedEnts[followed] = currentValue + 1;
+
+            if (followedEnts[followed] > most)
             {
-                picked = uid;
-                most = count;
+                picked = followed;
+                most = followedEnts[followed];
             }
         }
 

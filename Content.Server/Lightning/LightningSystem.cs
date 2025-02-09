@@ -77,31 +77,31 @@ public sealed class LightningSystem : SharedLightningSystem
     /// <param name="triggerLightningEvents">if the lightnings being fired should trigger lightning events.</param>
     public void ShootRandomLightnings(EntityUid user, float range, int boltCount, string lightningPrototype = "Lightning", int arcDepth = 0, bool triggerLightningEvents = true, EntityUid? caster = null) // WD EDIT
     {
-        //To Do: add support to different priority target tablem for different lightning types
-        //To Do: Remove Hardcode LightningTargetComponent (this should be a parameter of the SharedLightningComponent)
-        //To Do: This is still pretty bad for perf but better than before and at least it doesn't re-allocate
+        //TODO: add support to different priority target tablem for different lightning types
+        //TODO: Remove Hardcode LightningTargetComponent (this should be a parameter of the SharedLightningComponent)
+        //TODO: This is still pretty bad for perf but better than before and at least it doesn't re-allocate
         // several hashsets every time
 
-        var targets = _lookup.GetComponentsInRange<LightningTargetComponent>(_transform.GetMapCoordinates(user), range).ToList();
+        var targets = _lookup.GetEntitiesInRange<LightningTargetComponent>(_transform.GetMapCoordinates(user), range).ToList();
         _random.Shuffle(targets);
-        targets.Sort((x, y) => y.Priority.CompareTo(x.Priority));
+        targets.Sort((x, y) => y.Comp.Priority.CompareTo(x.Comp.Priority));
 
         var shootCount = 0;
         var count = -1;
-        while(shootCount < boltCount)
+        while (shootCount < boltCount)
         {
             count++;
 
             if (count >= targets.Count) { break; }
 
             var curTarget = targets[count];
-            if (!_random.Prob(curTarget.HitProbability)) //Chance to ignore target
+            if (!_random.Prob(curTarget.Comp.HitProbability)) //Chance to ignore target
                 continue;
 
             ShootLightning(user, targets[count].Owner, lightningPrototype, triggerLightningEvents, caster); // WD EDIT
-            if (arcDepth - targets[count].LightningResistance > 0)
+            if (arcDepth - targets[count].Comp.LightningResistance > 0)
             {
-                ShootRandomLightnings(targets[count].Owner, range, 1, lightningPrototype, arcDepth - targets[count].LightningResistance, triggerLightningEvents, caster); // WD EDIT
+                ShootRandomLightnings(targets[count].Owner, range, 1, lightningPrototype, arcDepth - targets[count].Comp.LightningResistance, triggerLightningEvents, caster); // WD EDIT
             }
             shootCount++;
         }

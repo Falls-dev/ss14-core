@@ -1,127 +1,55 @@
-# Head
+# For mantles
+- type: loadoutEffectGroup
+  id: MasterRD
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobResearchDirector
+      time: 72000 #20 hrs
 
-- type: itemLoadout
+# Head
+- type: loadout
   id: ResearchDirectorBeret
-  equipment: ScientificBeret
+  startingGear: ScientificBeret
 
 # Neck
-
-- type: itemLoadout
+- type: loadout
   id: ResearchDirectorMantle
-  equipment: ResearchDirectorMantle
+  equipment:
+    neck: ClothingNeckMantleRD
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MasterRD
 
 - type: startingGear
   id: ResearchDirectorMantle
   equipment:
     neck: ClothingNeckMantleRD
 
-- type: itemLoadout
-  id: ResearchDirectorCloak
-  equipment: ResearchDirectorCloak
-
-- type: startingGear
+- type: loadout
   id: ResearchDirectorCloak
   equipment:
     neck: ClothingNeckCloakRd
 
-- type: itemLoadout # WD
-  id: ResearchDirectorCloakLuxurious
-  equipment: ResearchDirectorCloakLuxurious
-- type: startingGear
-  id: ResearchDirectorCloakLuxurious
-  equipment:
-    neck: ClothingNeckCloakRdLuxurious
-
 # Jumpsuit
-- type: itemLoadout
-  id: ResearchDirectorJumpsuit
-  equipment: ResearchDirectorJumpsuit
-
-- type: startingGear
+- type: loadout
   id: ResearchDirectorJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitResearchDirector
 
-- type: itemLoadout
-  id: ResearchDirectorJumpskirt
-  equipment: ResearchDirectorJumpskirt
-
-- type: startingGear
+- type: loadout
   id: ResearchDirectorJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtResearchDirector
 
-# Back
-- type: itemLoadout
-  id: ResearchDirectorBackpack
-  equipment: ResearchDirectorBackpack
-
-- type: startingGear
-  id: ResearchDirectorBackpack
-  equipment:
-    back: ClothingBackpackResearchDirectorFilled
-
-- type: itemLoadout
-  id: ResearchDirectorSatchel
-  equipment: ResearchDirectorSatchel
-
-- type: startingGear
-  id: ResearchDirectorSatchel
-  equipment:
-    back: ClothingBackpackSatchelResearchDirectorFilled
-
-- type: itemLoadout
-  id: ResearchDirectorDuffel
-  equipment: ResearchDirectorDuffel
-
-- type: startingGear
-  id: ResearchDirectorDuffel
-  equipment:
-    back: ClothingBackpackDuffelResearchDirectorFilled
-
 # OuterClothing
-- type: itemLoadout
-  id: ResearchDirectorLabCoat
-  equipment: ResearchDirectorLabCoat
-
-- type: startingGear
+- type: loadout
   id: ResearchDirectorLabCoat
   equipment:
     outerClothing: ClothingOuterCoatRD
 
-- type: itemLoadout
-  id: ResearchDirectorWintercoat
-  equipment: ResearchDirectorWintercoat
-
-- type: startingGear
+- type: loadout
   id: ResearchDirectorWintercoat
   equipment:
     outerClothing: ClothingOuterWinterRD
-
-# pda
-
-- type: itemLoadout # WD
-  id: ResearchDirectorPDA
-  equipment: ResearchDirectorPDA
-- type: startingGear
-  id: ResearchDirectorPDA
-  equipment:
-    id: RnDPDA
-
-# Ears
-
-- type: itemLoadout # WD
-  id: ResearchDirectorHeadsetAlt
-  equipment: ResearchDirectorHeadsetAlt
-- type: startingGear
-  id: ResearchDirectorHeadsetAlt
-  equipment:
-    ears: ClothingHeadsetAltScience
-
-- type: itemLoadout # WD
-  id: ResearchDirectorHeadset
-  equipment: ResearchDirectorHeadset
-- type: startingGear
-  id: ResearchDirectorHeadset
-  equipment:
-    ears: ClothingHeadsetRD

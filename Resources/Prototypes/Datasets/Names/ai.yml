@@ -1,5 +1,5 @@
-﻿- type: dataset
-  id: names_ai
+﻿- type: localizedDataset
+  id: NamesAI
   values:
     - 16-20
     - 790

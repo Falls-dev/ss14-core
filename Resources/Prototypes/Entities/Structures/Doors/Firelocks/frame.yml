@@ -24,11 +24,11 @@
   - type: InteractionOutline
   - type: Damageable
     damageContainer: StructuralInorganic
-    damageModifierSet: Metallic
+    damageModifierSet: StructuralMetallicStrong
   - type: RCDDeconstructable
     cost: 4
     delay: 6
-    fx: EffectRCDDeconstruct6    
+    fx: EffectRCDDeconstruct6
   - type: Destructible
     thresholds:
     - trigger:
@@ -52,5 +52,3 @@
         layer:
         - HighImpassable
         - MidImpassable
-  - type: Transform
-    noRot: true

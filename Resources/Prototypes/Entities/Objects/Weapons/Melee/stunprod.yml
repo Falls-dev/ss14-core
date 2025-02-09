@@ -1,7 +1,7 @@
 - type: entity
   name: stun prod
-  parent: BaseItem
-  id: StunprodBase
+  parent: [BaseItem, BaseMinorContraband]
+  id: StunprodBase # WD
   description: A stun prod for illegal incapacitation.
   abstract: true
   noSpawn: true
@@ -23,7 +23,7 @@
     activatedDamage:
       types:
         Blunt: 0
-  - type: Stunprod
+  - type: Stunprod # WD
     energyPerUse: 70
   - type: DelayedKnockdownOnHit
     delay: 4
@@ -43,6 +43,10 @@
   - type: StaminaDamageOnCollide
     damage: 30
     sound: /Audio/Weapons/egloves.ogg
+  - type: LandAtCursor # it deals stamina damage when thrown
+  - type: Battery
+    maxCharge: 360
+    startingCharge: 360
   - type: UseDelay
   - type: Item
     heldPrefix: off

@@ -74,7 +74,8 @@
     # go wild with sentient chairs with macrobombs
     whitelist: null
     blacklist: null
-    singleUse: false
+    implantTime: 5
+    drawTime: 5
 
 - type: entity
   id: BaseImplantOnlyImplanter
@@ -97,7 +98,8 @@
 
 - type: entity
   id: BaseImplantOnlyImplanterSyndi
-  parent: BaseImplantOnlyImplanter
+  parent: [BaseImplantOnlyImplanter, BaseSyndicateContraband]
+  name: syndicate implanter
   description: A compact disposable syringe exclusively designed for the injection of subdermal implants.
   abstract: true
   components:

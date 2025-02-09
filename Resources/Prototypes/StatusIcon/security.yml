@@ -1,0 +1,87 @@
+- type: securityIcon
+  id: SecurityIcon
+  abstract: true
+  priority: 3
+  offset: 1
+  locationPreference: Right
+  isShaded: true
+
+- type: securityIcon
+  parent: SecurityIcon
+  id: SecurityIconDemote
+  icon:
+    sprite: /Textures/White/Interface/records.rsi
+    state: hud_demote
+
+- type: securityIcon
+  parent: SecurityIcon
+  id: SecurityIconIncarcerated
+  icon:
+    sprite: /Textures/White/Interface/records.rsi
+    state: hud_incarcerated
+
+- type: securityIcon
+  parent: SecurityIcon
+  id: SecurityIconParoled
+  icon:
+    sprite: /Textures/White/Interface/records.rsi
+    state: hud_paroled
+
+- type: securityIcon
+  parent: SecurityIcon
+  id: SecurityIconSuspected
+  icon:
+    sprite: /Textures/White/Interface/records.rsi
+    state: hud_suspected
+
+- type: securityIcon
+  parent: SecurityIcon
+  id: SecurityIconWanted
+  icon:
+    sprite: /Textures/White/Interface/records.rsi
+    state: hud_wanted
+
+- type: securityIcon
+  parent: SecurityIcon
+  id: SecurityIconExecute
+  icon:
+    sprite: /Textures/White/Interface/records.rsi
+    state: hud_execute
+
+- type: securityIcon
+  parent: SecurityIcon
+  id: SecurityIconMonitoring
+  icon:
+    sprite: /Textures/White/Interface/records.rsi
+    state: hud_monitoring
+
+- type: securityIcon
+  parent: SecurityIcon
+  id: SecurityIconReleased
+  icon:
+    sprite: /Textures/White/Interface/records.rsi
+    state: hud_released
+
+- type: securityIcon
+  parent: SecurityIcon
+  id: SecurityIconSearch
+  icon:
+    sprite: /Textures/White/Interface/records.rsi
+    state: hud_search
+
+- type: securityIcon
+  parent: SecurityIcon
+  id: CriminalRecordIconRemove
+  icon:
+    sprite: /Textures/White/Interface/records.rsi
+    state: hud_demote # WD end
+
+- type: securityIcon
+  id: MindShieldIcon
+  priority: 2
+  locationPreference: Right
+  layer: Mod
+  isShaded: true
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: MindShield

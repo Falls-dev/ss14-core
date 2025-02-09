@@ -359,6 +359,10 @@
         key: KnockedDown
         time: 0.75
         type: Remove
+      - !type:GenericStatusEffect
+        key: Adrenaline # Guess what epinephrine is...
+        component: IgnoreSlowOnDamage
+        time: 5 # lingers less than hivemind reagent to give it a niche
 
 - type: reagent
   id: Hyronalin
@@ -1053,7 +1057,7 @@
     Drink:
       effects:
       - !type:SatiateThirst
-        factor: 4
+        factor: 3
     Medicine:
       effects:
       - !type:HealthChange
@@ -1067,8 +1071,8 @@
             Heat: -0.2
             Shock: -0.2
             Cold: -0.2
-      - !type:CureBlight
-      - !type:DeconvertCultist
+      - !type:CureBlight # WD
+      - !type:DeconvertCultist # WD
         conditions:
           - !type:ReagentThreshold
             min: 15
@@ -1077,6 +1081,15 @@
       methods: [ Touch ]
       effects:
       - !type:ExtinguishReaction
+    Acidic:
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        ignoreResistances: false
+        damage:
+          types:
+            Holy: 0.5
   plantMetabolism:
   - !type:PlantAdjustWater
     amount: 1
@@ -1185,6 +1198,27 @@
             mobstate: Dead
 
 - type: reagent
+  id: Opporozidone #Name based of an altered version of the startreck chem "Opporozine"
+  name: reagent-name-opporozidone
+  group: Medicine
+  desc: reagent-desc-opporozidone
+  physicalDesc: reagent-physical-desc-sickly
+  flavor: acid
+  color: "#b5e36d"
+  worksOnTheDead: true
+  metabolisms:
+    Medicine:
+      effects:
+        - !type:ReduceRotting
+          seconds: 20
+          conditions:
+          #Patient must be dead and in a cryo tube (or something cold)
+          - !type:Temperature
+            max: 150.0
+          - !type:MobStateCondition
+            mobstate: Dead
+
+- type: reagent
   id: Necrosol
   name: reagent-name-necrosol
   group: Medicine
@@ -1235,10 +1269,10 @@
             Shock: -3.0
             Caustic: -1.0
 
-- type: reagent
+- type: reagent # WD
   id: Synthflesh
   name: reagent-name-synthflesh
-  group: Medicine # WD
+  group: Medicine
   desc: reagent-desc-synthflesh
   flavor: metallic
   physicalDesc: reagent-physical-desc-gelatinous
@@ -1267,10 +1301,10 @@
             Poison: 1
   slippery: true
 
-- type: reagent
+- type: reagent # WD
   id: SilverSulfadiazine
   name: reagent-name-silversulfadiazine
-  group: Medicine # WD
+  group: Medicine
   desc: reagent-desc-silversulfadiazine
   flavor: medicine
   physicalDesc: reagent-physical-desc-creamy
@@ -1295,10 +1329,10 @@
             Heat: -2.0
             Poison: 0.5
 
-- type: reagent
+- type: reagent # WD
   id: StypticPowder
   name: reagent-name-stypticpowder
-  group: Medicine # WD
+  group: Medicine
   desc: reagent-desc-stypticpowder
   flavor: medicine
   physicalDesc: reagent-physical-desc-powdery

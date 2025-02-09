@@ -1,6 +1,7 @@
 using Content.Client.Eye;
 using Content.Shared.SurveillanceCamera;
 using Robust.Client.GameObjects;
+using Robust.Client.UserInterface;
 
 namespace Content.Client.SurveillanceCamera.UI;
 
@@ -28,7 +29,7 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
     {
         base.Open();
 
-        // Sunrise-start
+        // WD start
         EntityUid? gridUid = null;
 
         if (_entManager.TryGetComponent<TransformComponent>(Owner, out var xform))
@@ -37,7 +38,7 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
         }
 
         _window = new SurveillanceCameraMonitorWindow(gridUid);
-        // Sunrise-end
+        // WD end
 
         if (State != null)
         {
@@ -49,7 +50,6 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
         _window.CameraSelected += OnCameraSelected;
         _window.CameraRefresh += OnCameraRefresh;
         _window.SubnetRefresh += OnSubnetRefresh;
-        _window.OnClose += Close;
         _window.CameraSwitchTimer += OnCameraSwitchTimer;
         _window.CameraDisconnect += OnCameraDisconnect;
     }

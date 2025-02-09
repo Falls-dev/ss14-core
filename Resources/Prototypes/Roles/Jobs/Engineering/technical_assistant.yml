@@ -21,9 +21,10 @@
 - type: startingGear
   id: TechnicalAssistantGear
   equipment:
-    jumpsuit: ClothingUniformJumpsuitColorYellow
-    back: ClothingBackpackEngineeringFilled
     shoes: ClothingShoesBootsWork
     id: TechnicalAssistantPDA
     ears: ClothingHeadsetEngineering
-    pocket1: BookEngineersHandbook
+    pocket2: BookEngineersHandbook
+  #storage:
+    #back:
+    #- Stuff

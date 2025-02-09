@@ -62,7 +62,7 @@
     containers:
       disposals: !type:Container
   - type: StaticPrice
-    price: 62
+    price: 70
   - type: PowerSwitch
   - type: Tag # WD EDIT
     tags:
@@ -87,6 +87,7 @@
       enum.DisposalUnitUiKey.Key:
         type: DisposalUnitBoundUserInterface
   - type: RatKingRummageable
+  - type: RequireProjectileTarget
 
 - type: entity
   id: MailingUnit

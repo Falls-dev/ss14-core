@@ -22,3 +22,8 @@
     shoes: ClothingShoesColorWhite
     id: ChemistryPDA
     ears: ClothingHeadsetMedical
+    belt: ChemBag
+    pocket1: HandLabeler
+  #storage:
+    #back:
+    #- Stuff

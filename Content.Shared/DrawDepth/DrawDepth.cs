@@ -74,21 +74,26 @@ namespace Content.Shared.DrawDepth
         /// </summary>
         Items = DrawDepthTag.Default + 3,
 
-        Mobs = DrawDepthTag.Default + 4,
+        /// <summary>
+        /// Stuff that should be drawn below mobs, but on top of items. Like muzzle flash.
+        /// </summary>
+        BelowMobs = DrawDepthTag.Default + 4,
 
-        OverMobs = DrawDepthTag.Default + 5,
+        Mobs = DrawDepthTag.Default + 5,
 
-        Doors = DrawDepthTag.Default + 6,
+        OverMobs = DrawDepthTag.Default + 6,
+
+        Doors = DrawDepthTag.Default + 7,
 
         /// <summary>
         /// Blast doors and shutters which go over the usual doors.
         /// </summary>
-        BlastDoors = DrawDepthTag.Default + 7,
+        BlastDoors = DrawDepthTag.Default + 8,
 
         /// <summary>
         /// Stuff that needs to draw over most things, but not effects, like Kudzu.
         /// </summary>
-        Overdoors = DrawDepthTag.Default + 8,
+        Overdoors = DrawDepthTag.Default + 9,
 
         /// <summary>
         ///     Explosions, fire, melee swings. Whatever.

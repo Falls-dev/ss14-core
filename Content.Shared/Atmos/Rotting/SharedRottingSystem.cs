@@ -115,6 +115,10 @@ public abstract class SharedRottingSystem : EntitySystem
         if (!Resolve(uid, ref perishable, false))
             return false;
 
+        // Overrides all the other checks.
+        if (perishable.ForceRotProgression)
+            return true;
+
         // only dead things or inanimate objects can rot
         if (TryComp<MobStateComponent>(uid, out var mobState) && !_mobState.IsDead(uid, mobState))
             return false;
@@ -166,6 +170,6 @@ public abstract class SharedRottingSystem : EntitySystem
         if (!Resolve(uid, ref comp, ref perishable))
             return 0;
 
-        return (int) (comp.TotalRotTime.TotalSeconds / perishable.RotAfter.TotalSeconds);
+        return (int)(comp.TotalRotTime.TotalSeconds / perishable.RotAfter.TotalSeconds);
     }
 }

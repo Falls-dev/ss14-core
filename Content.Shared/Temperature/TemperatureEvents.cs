@@ -27,3 +27,18 @@ public sealed class AdjustTemperatureEvent : EntityEventArgs, IInventoryRelayEve
     }
 }
 // WD END
+
+public sealed class OnTemperatureChangeEvent : EntityEventArgs
+{
+    public readonly float CurrentTemperature;
+    public readonly float LastTemperature;
+    public readonly float TemperatureDelta;
+
+    public OnTemperatureChangeEvent(float current, float last, float delta)
+    {
+        CurrentTemperature = current;
+        LastTemperature = last;
+        TemperatureDelta = delta;
+    }
+}
+

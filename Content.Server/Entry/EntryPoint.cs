@@ -14,7 +14,11 @@ using Content.Server.Info;
 using Content.Server.IoC;
 using Content.Server.Maps;
 using Content.Server.NodeContainer.NodeGroups;
+using Content.Server.Objectives;
+using Content.Server.Players;
+using Content.Server.Players.JobWhitelist;
 using Content.Server.Players.PlayTimeTracking;
+using Content.Server.Players.RateLimiting;
 using Content.Server.Preferences.Managers;
 using Content.Server.ServerInfo;
 using Content.Server.ServerUpdates;
@@ -74,13 +78,12 @@ namespace Content.Server.Entry
             factory.RegisterIgnore(IgnoredComponents.List);
 
             prototypes.RegisterIgnore("parallax");
-            prototypes.RegisterIgnore("guideEntry");
 
             ServerContentIoC.Register();
 
             foreach (var callback in TestingCallbacks)
             {
-                var cast = (ServerModuleTestingCallbacks) callback;
+                var cast = (ServerModuleTestingCallbacks)callback;
                 cast.ServerBeforeIoC?.Invoke();
             }
 
@@ -99,9 +102,6 @@ namespace Content.Server.Entry
             IoCManager.Resolve<IEntitySystemManager>();
             _dbManager = IoCManager.Resolve<IServerDbManager>();
 
-            logManager.GetSawmill("Storage").Level = LogLevel.Info;
-            logManager.GetSawmill("db.ef").Level = LogLevel.Info;
-
             IoCManager.Resolve<IAdminLogManager>().Initialize();
             IoCManager.Resolve<IConnectionManager>().Initialize();
             UnsafePseudoIoC.Initialize(); // WD
@@ -111,6 +111,7 @@ namespace Content.Server.Entry
             IoCManager.Resolve<ContentNetworkResourceManager>().Initialize();
             IoCManager.Resolve<GhostKickManager>().Initialize();
             IoCManager.Resolve<ServerInfoManager>().Initialize();
+            IoCManager.Resolve<ServerApi>().Initialize();
 
             //WD-EDIT
             IoCManager.Resolve<SponsorsManager>().Initialize();
@@ -126,6 +127,9 @@ namespace Content.Server.Entry
             _voteManager.Initialize();
             _updateManager.Initialize();
             _playTimeTracking.Initialize();
+            IoCManager.Resolve<JobWhitelistManager>().Initialize();
+            IoCManager.Resolve<PlayerRateLimitManager>().Initialize();
+        }
         }
 
         public override void PostInit()
@@ -168,6 +172,7 @@ namespace Content.Server.Entry
                 IoCManager.Resolve<IGameMapManager>().Initialize();
                 IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>().PostInitialize();
                 IoCManager.Resolve<IBanManager>().Initialize();
+                IoCManager.Resolve<IConnectionManager>().PostInit();
             }
         }
 
@@ -178,11 +183,11 @@ namespace Content.Server.Entry
             switch (level)
             {
                 case ModUpdateLevel.PostEngine:
-                {
-                    _euiManager.SendUpdates();
-                    _voteManager.Update();
-                    break;
-                }
+                    {
+                        _euiManager.SendUpdates();
+                        _voteManager.Update();
+                        break;
+                    }
 
                 case ModUpdateLevel.FramePostEngine:
                     _updateManager.Update();
@@ -195,6 +200,7 @@ namespace Content.Server.Entry
         {
             _playTimeTracking?.Shutdown();
             _dbManager?.Shutdown();
+            IoCManager.Resolve<ServerApi>().Shutdown();
         }
 
         private static void LoadConfigPresets(IConfigurationManager cfg, IResourceManager res, ISawmill sawmill)

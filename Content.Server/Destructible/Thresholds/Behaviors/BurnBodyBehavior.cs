@@ -1,4 +1,5 @@
-﻿using Content.Shared.Inventory;
+using Content.Shared.Body.Components;
+using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using JetBrains.Annotations;
 using Robust.Server.GameObjects;

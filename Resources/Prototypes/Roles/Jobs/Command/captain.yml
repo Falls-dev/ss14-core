@@ -24,7 +24,6 @@
       - Felinid
   weight: 20
   icon: "JobIconCaptain"
-  requireAdminNotify: true
   joinNotifyCrew: true
   arrivalNotificationPrototype: CaptainArrivalNotification
   supervisors: job-supervisors-centcom
@@ -44,8 +43,12 @@
 - type: startingGear
   id: CaptainGear
   equipment:
-    jumpsuit: ClothingUniformJumpsuitCaptain
-    back: ClothingBackpackCaptainFilled
     shoes: ClothingShoesBootsLaceup
     id: CaptainPDA
     ears: ClothingHeadsetAltCommand
+    eyes: ClothingEyesGlassesSunglasses
+    gloves: ClothingHandsGlovesCaptain
+  storage:
+    back:
+    - Flash
+    # - StationCharter

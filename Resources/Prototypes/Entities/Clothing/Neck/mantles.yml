@@ -9,7 +9,7 @@
     storedRotation: -90
 
 - type: entity
-  parent: ClothingNeckMantleBase
+  parent: [ClothingNeckMantleBase, BaseCommandContraband]
   id: ClothingNeckMantleCap
   name: captain's mantle
   description: A comfortable and chique mantle befitting of only the most experienced captain.
@@ -20,7 +20,7 @@
     sprite: Clothing/Neck/mantles/capmantle.rsi
 
 - type: entity
-  parent: ClothingNeckMantleBase
+  parent: [ClothingNeckMantleBase, BaseCommandContraband]
   id: ClothingNeckMantleCE
   name: chief engineer's mantle
   description: High visibility, check. RIG system, check. High capacity cell, check. Everything a chief engineer could need in a stylish mantle.
@@ -31,7 +31,7 @@
     sprite: Clothing/Neck/mantles/cemantle.rsi
 
 - type: entity
-  parent: ClothingNeckMantleBase
+  parent: [ClothingNeckMantleBase, BaseCommandContraband]
   id: ClothingNeckMantleCMO
   name: chief medical officer's mantle
   description: For a CMO that has been in enough medbays to know that more PPE means less central command dry cleaning visits when the shift is over.
@@ -42,7 +42,7 @@
     sprite: Clothing/Neck/mantles/cmomantle.rsi
 
 - type: entity
-  parent: ClothingNeckMantleBase
+  parent: [ClothingNeckMantleBase, BaseCommandContraband]
   id: ClothingNeckMantleHOP
   name: head of personnel's mantle
   description: A good HOP knows that paper pushing is only half the job... petting your dog and looking fashionable is the other half.
@@ -53,7 +53,7 @@
     sprite: Clothing/Neck/mantles/hopmantle.rsi
 
 - type: entity
-  parent: ClothingNeckMantleBase
+  parent: [ClothingNeckMantleBase, BaseCommandContraband]
   id: ClothingNeckMantleHOS
   name: head of security's mantle
   description: Shootouts with nukies are just another Tuesday for this HoS. This mantle is a symbol of commitment to the station.
@@ -64,7 +64,7 @@
     sprite: Clothing/Neck/mantles/hosmantle.rsi
 
 - type: entity
-  parent: ClothingNeckMantleBase
+  parent: [ClothingNeckMantleBase, BaseCommandContraband]
   id: ClothingNeckMantleRD
   name: research director's mantle
   description: For when long days in the office consist of explosives, poisonous gas, murder robots, and a fresh pizza from cargo; this mantle will keep you comfy.
@@ -75,7 +75,7 @@
     sprite: Clothing/Neck/mantles/rdmantle.rsi
 
 - type: entity
-  parent: ClothingNeckMantleBase
+  parent: [ClothingNeckMantleBase, BaseCommandContraband]
   id: ClothingNeckMantleQM
   name: quartermaster's mantle
   description: For the master of goods and materials to rule over the department, a befitting mantle to show off superiority!
@@ -87,6 +87,17 @@
 
 - type: entity
   parent: ClothingNeckMantleBase
+  id: ClothingNeckMantle
+  name: mantle
+  description: A soft mantle, made with the same 'synthetic' animal furs of the iconic winter coat.
+  components:
+  - type: Sprite
+    sprite: Clothing/Neck/mantles/mantle.rsi
+  - type: Clothing
+    sprite: Clothing/Neck/mantles/mantle.rsi
+
+- type: entity # WD
+  parent: [ClothingNeckMantleBase, BaseCommandContraband]
   id: ClothingNeckMantleInspector
   name: inspector's mantle
   description: Dark mantle that highlights your intimidating figure. These are the shoulders!

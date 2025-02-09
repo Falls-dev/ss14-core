@@ -41,8 +41,8 @@ namespace Content.Server.Flash
         [Dependency] private readonly TagSystem _tag = default!;
         [Dependency] private readonly IRobustRandom _random = default!;
         [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
-        [Dependency] private readonly FlashSoundSuppressionSystem _flashSoundSuppressionSystem = default!;
-        [Dependency] private readonly ContainerSystem _container = default!;
+        [Dependency] private readonly FlashSoundSuppressionSystem _flashSoundSuppressionSystem = default!; // WD
+        [Dependency] private readonly ContainerSystem _container = default!; // WD
 
         public override void Initialize()
         {
@@ -158,7 +158,7 @@ namespace Content.Server.Flash
         }
 
         // WD edit
-        public void FlashArea(Entity<FlashComponent?> source, EntityUid? user, float range, float duration, float slowTo = 0.8f, bool displayPopup = false, float probability = 1f, SoundSpecifier? sound = null, float stunTime = 0f, float knockdownTime = 0f)
+        public override void FlashArea(Entity<FlashComponent?> source, EntityUid? user, float range, float duration, float slowTo = 0.8f, bool displayPopup = false, float probability = 1f, SoundSpecifier? sound = null, float stunTime = 0f, float knockdownTime = 0f)
         {
             var transform = Transform(source);
             var mapPosition = _transform.GetMapCoordinates(transform);
@@ -228,7 +228,9 @@ namespace Content.Server.Flash
 
         private void OnPermanentBlindnessFlashAttempt(EntityUid uid, PermanentBlindnessComponent component, FlashAttemptEvent args)
         {
-            args.Cancel();
+            // check for total blindness
+            if (component.Blindness == 0)
+                args.Cancel();
         }
 
         private void OnTemporaryBlindnessFlashAttempt(EntityUid uid, TemporaryBlindnessComponent component, FlashAttemptEvent args)

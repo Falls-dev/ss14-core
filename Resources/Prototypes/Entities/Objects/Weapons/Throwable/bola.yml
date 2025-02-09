@@ -1,6 +1,6 @@
 - type: entity
   name: bola
-  parent: BaseBola
+  parent: [BaseBola, BaseItem, BaseRestrictedContraband] # WD
   id: Bola
   description: Linked together with some spare cuffs and metal.
   components:
@@ -58,6 +58,7 @@
     canThrowTrigger: true
     canMoveBreakout: true
   - type: KnockdownOnCollide
+  - type: LandAtCursor
 
 - type: entity
   parent: BaseBola

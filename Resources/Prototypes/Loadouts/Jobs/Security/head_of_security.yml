@@ -1,137 +1,81 @@
-# Jumpsuit
-- type: itemLoadout
-  id: HeadofSecurityJumpsuit
-  equipment: HeadofSecurityJumpsuit
+# For mantles
+- type: loadoutEffectGroup
+  id: MasterHoS
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobHeadOfSecurity
+      time: 72000 #20 hrs
 
-- type: startingGear
+# Jumpsuit
+- type: loadout
   id: HeadofSecurityJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitHoS
 
-- type: itemLoadout
-  id: HeadofSecurityJumpskirt
-  equipment: HeadofSecurityJumpskirt
-
-- type: startingGear
+- type: loadout
   id: HeadofSecurityJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtHoS
 
-- type: itemLoadout
-  id: HeadofSecurityTurtleneck
-  equipment: HeadofSecurityTurtleneck
-
-- type: startingGear
+- type: loadout
   id: HeadofSecurityTurtleneck
   equipment:
     jumpsuit: ClothingUniformJumpsuitHoSAlt
 
-- type: itemLoadout
-  id: HeadofSecurityTurtleneckSkirt
-  equipment: HeadofSecurityTurtleneckSkirt
-
-- type: startingGear
+- type: loadout
   id: HeadofSecurityTurtleneckSkirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtHoSAlt
 
-- type: itemLoadout
-  id: HeadofSecurityFormalSuit
-  equipment: HeadofSecurityFormalSuit
-
-- type: startingGear
+- type: loadout
   id: HeadofSecurityFormalSuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitHosFormal
 
-- type: itemLoadout
-  id: HeadofSecurityFormalSkirt
-  equipment: HeadofSecurityFormalSkirt
-
-- type: startingGear
+- type: loadout
   id: HeadofSecurityFormalSkirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtHosFormal
 
-- type: itemLoadout # WD
-  id: HeadofSecurityJumpsuitHoSGrey
-  equipment: HeadofSecurityJumpsuitHoSGrey
-- type: startingGear
-  id: HeadofSecurityJumpsuitHoSGrey
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitHoSGrey
-
-- type: itemLoadout # WD
-  id: HeadofSecurityJumpsuitHoSBlue
-  equipment: HeadofSecurityJumpsuitHoSBlue
-- type: startingGear
-  id: HeadofSecurityJumpsuitHoSBlue
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitHoSBlue
-
 # Head
-- type: itemLoadout
-  id: HeadofSecurityHead
-  equipment: HeadofSecurityHead
-
-- type: startingGear
+- type: loadout
   id: HeadofSecurityHead
   equipment:
     head: ClothingHeadHatHoshat
 
-- type: itemLoadout
-  id: HeadofSecurityBeret
-  equipment: HeadofSecurityBeret
-
-- type: startingGear
+- type: loadout
   id: HeadofSecurityBeret
   equipment:
     head: ClothingHeadHatBeretHoS
 
 # Neck
-- type: itemLoadout
-  id: HeadofSecurityCloak
-  equipment: HeadofSecurityCloak
-
-- type: startingGear
+- type: loadout
   id: HeadofSecurityCloak
   equipment:
     neck: ClothingNeckCloakHos
 
-- type: itemLoadout
+- type: loadout
   id: HeadofSecurityMantle
-  equipment: HeadofSecurityMantle
+  equipment:
+    neck: ClothingNeckMantleHOS
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MasterHoS
 
 - type: startingGear
   id: HeadofSecurityMantle
   equipment:
     neck: ClothingNeckMantleHOS
 
-# OuterClothing - removed
-- type: itemLoadout
-  id: HeadofSecurityCoat
-  equipment: HeadofSecurityCoat
-
-- type: startingGear
+# OuterClothing
+- type: loadout
   id: HeadofSecurityCoat
   equipment:
     outerClothing: ClothingOuterCoatHoSTrench
 
-- type: itemLoadout
-  id: HeadofSecurityWinterCoat
-  equipment: HeadofSecurityWinterCoat
-
-- type: startingGear
+- type: loadout
   id: HeadofSecurityWinterCoat
   equipment:
     outerClothing: ClothingOuterWinterHoS
-
-# PDA
-
-- type: itemLoadout # WD
-  id: HeadofSecurityPDA
-  equipment: HeadofSecurityPDA
-- type: startingGear
-  id: HeadofSecurityPDA
-  equipment:
-    id: HoSPDA

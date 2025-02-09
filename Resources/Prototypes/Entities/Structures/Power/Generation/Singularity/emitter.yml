@@ -1,7 +1,7 @@
 - type: entity
   id: Emitter
   name: emitter
-  parent: ConstructibleMachine
+  parent: SmallConstructibleMachine
   description: A heavy duty industrial laser. Shoots non-stop when turned on.
   placement:
     mode: SnapgridCenter
@@ -54,7 +54,7 @@
         nodeGroupID: MVPower
   - type: Damageable
     damageContainer: StructuralInorganic
-    damageModifierSet: StrongMetallic
+    damageModifierSet: StructuralMetallicStrong
   - type: Destructible
     thresholds:
       - trigger:

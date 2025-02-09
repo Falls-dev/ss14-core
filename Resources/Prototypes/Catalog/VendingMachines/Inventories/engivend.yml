@@ -14,5 +14,8 @@
     InflatableDoorStack1: 8
     RCD: 3 # WD
     RCDAmmo: 3 # WD
+    CrowbarYellow: 1
+    BoxInflatable: 2
+    ClothingHeadHatCone: 4
   emaggedInventory:
     PowerCellMicroreactor: 1

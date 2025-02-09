@@ -1,5 +1,5 @@
-﻿using Content.Server.Destructible.Thresholds;
 using Content.Server.StationEvents.Events;
+using Content.Shared.Destructible.Thresholds;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
@@ -48,11 +48,11 @@ public sealed partial class MeteorSwarmComponent : Component
     public Dictionary<EntProtoId, float> Meteors = new();
 
     [DataField]
-    public MinMax Waves = new(2, 4);
+    public MinMax Waves = new(2, 4); // WD
 
     [DataField]
     public MinMax MeteorsPerWave = new(3, 4);
 
     [DataField]
-    public MinMax WaveCooldown = new (30, 60);
+    public MinMax WaveCooldown = new(10, 60);
 }

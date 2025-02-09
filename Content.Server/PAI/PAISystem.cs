@@ -23,7 +23,7 @@ public sealed class PAISystem : SharedPAISystem
     /// <summary>
     /// Possible symbols that can be part of a scrambled pai's name.
     /// </summary>
-    private static readonly char[] SYMBOLS = new[] { '#', '~', '-', '@', '&', '^', '%', '$', '*', ' '};
+    private static readonly char[] SYMBOLS = new[] { '#', '~', '-', '@', '&', '^', '%', '$', '*', ' ' };
 
     public override void Initialize()
     {
@@ -111,7 +111,7 @@ public sealed class PAISystem : SharedPAISystem
         if (TryComp<InstrumentComponent>(uid, out var instrument))
             _instrumentSystem.Clean(uid, instrument);
 
-        if (TryComp<MetaDataComponent>(uid, out var metadata))
+        if (TryComp(uid, out MetaDataComponent? metadata))
         {
             var proto = metadata.EntityPrototype;
             if (proto != null)

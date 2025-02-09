@@ -29,5 +29,14 @@
     tags:
     - ClothMade
     - WhitelistChameleon
-  - type: StaticPrice
-    price: 25
+
+- type: entity
+  abstract: true
+  parent: ClothingNeckBase
+  id: ClothingScarfBase
+  components:
+  - type: Tag
+    tags:
+    - Scarf
+    - ClothMade
+    - WhitelistChameleon

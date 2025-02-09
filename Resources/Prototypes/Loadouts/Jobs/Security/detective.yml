@@ -1,103 +1,53 @@
-# Jumpsuit
-- type: itemLoadout
-  id: DetectiveJumpsuit
-  equipment: DetectiveJumpsuit
+# Head
+- type: loadout
+  id: DetectiveFedora
+  equipment:
+    head: ClothingHeadHatFedoraBrown
 
-- type: startingGear
+- type: loadout
+  id: DetectiveFedoraGrey
+  equipment:
+    head: ClothingHeadHatFedoraGrey
+
+# Neck
+- type: loadout
+  id: DetectiveTie
+  equipment:
+    neck: ClothingNeckTieDet
+
+# Jumpsuit
+- type: loadout
   id: DetectiveJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitDetective
 
-- type: itemLoadout
-  id: DetectiveJumpskirt
-  equipment: DetectiveJumpskirt
-
-- type: startingGear
+- type: loadout
   id: DetectiveJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtDetective
 
-- type: itemLoadout
-  id: NoirJumpsuit
-  equipment: NoirJumpsuit
-
-- type: startingGear
+- type: loadout
   id: NoirJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitDetectiveGrey
 
-- type: itemLoadout
-  id: NoirJumpskirt
-  equipment: NoirJumpskirt
-
-- type: startingGear
+- type: loadout
   id: NoirJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtDetectiveGrey
 
-# Back
-- type: itemLoadout
-  id: DetectiveBackpack
-  equipment: DetectiveBackpack
-
-- type: startingGear
-  id: DetectiveBackpack
-  equipment:
-    back: ClothingBackpackSecurityFilledDetective
-
-- type: itemLoadout
-  id: DetectiveSatchel
-  equipment: DetectiveSatchel
-
-- type: startingGear
-  id: DetectiveSatchel
-  equipment:
-    back: ClothingBackpackSatchelSecurityFilledDetective
-
-- type: itemLoadout
-  id: DetectiveDuffel
-  equipment: DetectiveDuffel
-
-- type: startingGear
-  id: DetectiveDuffel
-  equipment:
-    back: ClothingBackpackDuffelSecurityFilledDetective
-
 # OuterClothing
-- type: itemLoadout
-  id: DetectiveArmorVest
-  equipment: DetectiveArmorVest
-
-- type: startingGear
+- type: loadout
   id: DetectiveArmorVest
   equipment:
     outerClothing: ClothingOuterVestDetective
 
-- type: itemLoadout
-  id: DetectiveCoat
-  equipment: DetectiveCoat
-
-- type: startingGear
+- type: loadout
   id: DetectiveCoat
   equipment:
     outerClothing: ClothingOuterCoatDetectiveLoadout
 
-# Gloves
-
-- type: itemLoadout # WD
-  id: GlovesForensic
-  equipment: GlovesForensic
-- type: startingGear
-  id: GlovesForensic
+- type: loadout
+  id: DetectiveCoatGrey
   equipment:
-    gloves: ClothingHandsGlovesForensic
-
-# PDA
-
-- type: itemLoadout # WD
-  id: DetectivePDA
-  equipment: DetectivePDA
-- type: startingGear
-  id: DetectivePDA
-  equipment:
-    id: DetectivePDA
+    outerClothing: ClothingOuterCoatDetectiveLoadoutGrey

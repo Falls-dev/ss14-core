@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Storage;
 using Robust.Shared.Containers;
@@ -19,6 +20,8 @@ public partial class InventorySystem : EntitySystem
 
         _vvm.GetTypeHandler<InventoryComponent>()
             .AddHandler(HandleViewVariablesSlots, ListViewVariablesSlots);
+
+        SubscribeLocalEvent<InventoryComponent, AfterAutoHandleStateEvent>(AfterAutoState);
     }
 
     private void ShutdownSlots()
@@ -30,7 +33,7 @@ public partial class InventorySystem : EntitySystem
     /// <summary>
     /// Tries to find an entity in the specified slot with the specified component.
     /// </summary>
-    public bool TryGetInventoryEntity<T>(Entity<InventoryComponent?> entity, out EntityUid targetUid)
+    public bool TryGetInventoryEntity<T>(Entity<InventoryComponent?> entity, out Entity<T?> target)
         where T : IComponent, IClothingSlots
     {
         if (TryGetContainerSlotEnumerator(entity.Owner, out var containerSlotEnumerator))
@@ -40,15 +43,15 @@ public partial class InventorySystem : EntitySystem
                 if (!TryComp<T>(item, out var required))
                     continue;
 
-                if ((((IClothingSlots) required).Slots & slot.SlotFlags) == 0x0)
+                if ((((IClothingSlots)required).Slots & slot.SlotFlags) == 0x0)
                     continue;
 
-                targetUid = item;
+                target = (item, required);
                 return true;
             }
         }
 
-        targetUid = EntityUid.Invalid;
+        target = EntityUid.Invalid;
         return false;
     }
 
@@ -68,6 +71,27 @@ public partial class InventorySystem : EntitySystem
         }
     }
 
+    private void AfterAutoState(Entity<InventoryComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        UpdateInventoryTemplate(ent);
+    }
+
+    protected virtual void UpdateInventoryTemplate(Entity<InventoryComponent> ent)
+    {
+        if (ent.Comp.LifeStage < ComponentLifeStage.Initialized)
+            return;
+
+        if (!_prototypeManager.TryIndex(ent.Comp.TemplateId, out InventoryTemplatePrototype? invTemplate))
+            return;
+
+        DebugTools.Assert(ent.Comp.Slots.Length == invTemplate.Slots.Length);
+
+        ent.Comp.Slots = invTemplate.Slots;
+
+        var ev = new InventoryTemplateUpdated();
+        RaiseLocalEvent(ent, ref ev);
+    }
+
     private void OnOpenSlotStorage(OpenSlotStorageNetworkMessage ev, EntitySessionEventArgs args)
     {
         if (args.SenderSession.AttachedEntity is not { Valid: true } uid)
@@ -75,7 +99,7 @@ public partial class InventorySystem : EntitySystem
 
         if (TryGetSlotEntity(uid, ev.Slot, out var entityUid) && TryComp<StorageComponent>(entityUid, out var storageComponent))
         {
-            _storageSystem.OpenStorageUI(entityUid.Value, uid, storageComponent);
+            _storageSystem.OpenStorageUI(entityUid.Value, uid, storageComponent, false);
         }
     }
 
@@ -171,6 +195,31 @@ public partial class InventorySystem : EntitySystem
     }
 
     /// <summary>
+    /// Change the inventory template ID an entity is using. The new template must be compatible.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// For an inventory template to be compatible with another, it must have exactly the same slot names.
+    /// All other changes are rejected.
+    /// </para>
+    /// </remarks>
+    /// <param name="ent">The entity to update.</param>
+    /// <param name="newTemplate">The ID of the new inventory template prototype.</param>
+    /// <exception cref="ArgumentException">
+    /// Thrown if the new template is not compatible with the existing one.
+    /// </exception>
+    public void SetTemplateId(Entity<InventoryComponent> ent, ProtoId<InventoryTemplatePrototype> newTemplate)
+    {
+        var newPrototype = _prototypeManager.Index(newTemplate);
+
+        if (!newPrototype.Slots.Select(x => x.Name).SequenceEqual(ent.Comp.Slots.Select(x => x.Name)))
+            throw new ArgumentException("Incompatible inventory template!");
+
+        ent.Comp.TemplateId = newTemplate;
+        Dirty(ent);
+    }
+
+    /// <summary>
     /// Enumerator for iterating over an inventory's slot containers. Also has methods that skip empty containers.
     /// It should be safe to add or remove items while enumerating.
     /// </summary>
@@ -182,12 +231,12 @@ public partial class InventorySystem : EntitySystem
         private int _nextIdx = 0;
         public static InventorySlotEnumerator Empty = new(Array.Empty<SlotDefinition>(), Array.Empty<ContainerSlot>());
 
-        public InventorySlotEnumerator(InventoryComponent inventory,  SlotFlags flags = SlotFlags.All)
+        public InventorySlotEnumerator(InventoryComponent inventory, SlotFlags flags = SlotFlags.All)
             : this(inventory.Slots, inventory.Containers, flags)
         {
         }
 
-        public InventorySlotEnumerator(SlotDefinition[] slots, ContainerSlot[] containers,  SlotFlags flags = SlotFlags.All)
+        public InventorySlotEnumerator(SlotDefinition[] slots, ContainerSlot[] containers, SlotFlags flags = SlotFlags.All)
         {
             DebugTools.Assert(flags != SlotFlags.NONE);
             DebugTools.AssertEqual(slots.Length, containers.Length);

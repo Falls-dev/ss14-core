@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 using Content.Server._White.GuideGenerator;
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.EntityEffects;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.GuideGenerator;
 
@@ -77,9 +79,7 @@ public sealed class ReactionEntry
     public bool HasMax { get; }
 
     [JsonPropertyName("effects")]
-    public List<ReagentEffectEntry> ExportEffects { get; } = new();
-    [JsonIgnore]
-    public List<ReagentEffect> Effects { get; }
+    public List<EntityEffect> Effects { get; }
 
     public ReactionEntry(ReactionPrototype proto)
     {
@@ -95,7 +95,7 @@ public sealed class ReactionEntry
                 .ToDictionary(x => x.Key, x => x.Value);
         Effects = proto.Effects;
 
-        ExportEffects = proto.Effects.Select(x => new ReagentEffectEntry(x)).ToList();
+        ExportEffects = proto.Effects.Select(x => new ReagentEffectEntry(x)).ToList(); // TODO WD Check
         MinTemp = proto.MinimumTemperature;
         MaxTemp = proto.MaximumTemperature;
         HasMax = !float.IsPositiveInfinity(MaxTemp);

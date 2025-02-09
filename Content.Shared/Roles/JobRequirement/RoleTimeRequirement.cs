@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared.Localizations;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Preferences;
 using Content.Shared.Roles.Jobs;
@@ -19,7 +20,7 @@ public sealed partial class RoleTimeRequirement : JobRequirement
     /// What particular role they need the time requirement with.
     /// </summary>
     [DataField(required: true)]
-    public ProtoId<PlayTimeTrackerPrototype> Role = default!;
+    public ProtoId<PlayTimeTrackerPrototype> Role;
 
     /// <inheritdoc cref="DepartmentTimeRequirement.Time"/>
     [DataField(required: true)]
@@ -36,7 +37,9 @@ public sealed partial class RoleTimeRequirement : JobRequirement
         string proto = Role;
 
         playTimes.TryGetValue(proto, out var roleTime);
-        var roleDiff = Time.TotalMinutes - roleTime.TotalMinutes;
+        var roleDiffSpan = Time - roleTime;
+        var roleDiff = roleDiffSpan.TotalMinutes;
+        var formattedRoleDiff = ContentLocalizationManager.FormatPlaytime(roleDiffSpan);
         var departmentColor = Color.Yellow;
 
         if (entManager.EntitySysManager.TryGetEntitySystem(out SharedJobSystem? jobSystem))
@@ -54,7 +57,7 @@ public sealed partial class RoleTimeRequirement : JobRequirement
 
             reason = FormattedMessage.FromMarkupPermissive(Loc.GetString(
                 "role-timer-role-insufficient",
-                ("time", Math.Ceiling(roleDiff)),
+                ("time", formattedRoleDiff),
                 ("job", Loc.GetString(proto)),
                 ("departmentColor", departmentColor.ToHex())));
             return false;
@@ -64,7 +67,7 @@ public sealed partial class RoleTimeRequirement : JobRequirement
         {
             reason = FormattedMessage.FromMarkupPermissive(Loc.GetString(
                 "role-timer-role-too-high",
-                ("time", -roleDiff),
+                ("time", formattedRoleDiff),
                 ("job", Loc.GetString(proto)),
                 ("departmentColor", departmentColor.ToHex())));
             return false;

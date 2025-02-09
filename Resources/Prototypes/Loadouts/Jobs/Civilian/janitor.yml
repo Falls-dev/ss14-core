@@ -1,119 +1,57 @@
-# Timers
-- type: loadoutEffectGroup # WD
-  id: TimerJanitorFunnyHeads
+- type: loadoutEffectGroup
+  id: SeniorJanitorial
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
       role: JobJanitor
-      time: 36000 # 10 hours
+      time: 187200 #52 hrs (1 hour per week for 1 year)
 
 # Head
-- type: itemLoadout
-  id: JanitorHead
-  equipment: JanitorHead
-
-- type: startingGear
+- type: loadout
   id: JanitorHead
   equipment:
     head: ClothingHeadHatPurplesoft
 
-- type: itemLoadout # WD
-  id: JanitorPlunger
-  equipment: JanitorPlunger
-  effects:
-    - !type:GroupLoadoutEffect
-      proto: TimerJanitorFunnyHeads
-- type: startingGear
-  id: JanitorPlunger
-  equipment:
-    head: Plunger
-
-- type: itemLoadout # WD
-  id: JanitorBucket
-  equipment: JanitorBucket
-  effects:
-    - !type:GroupLoadoutEffect
-      proto: TimerJanitorFunnyHeads
-- type: startingGear
-  id: JanitorBucket
-  equipment:
-    head: Bucket
-
 # Jumpsuit
-- type: itemLoadout
-  id: JanitorJumpsuit
-  equipment: JanitorJumpsuit
-
-- type: startingGear
+- type: loadout
   id: JanitorJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitJanitor
 
-- type: itemLoadout
-  id: JanitorJumpskirt
-  equipment: JanitorJumpskirt
-
-- type: startingGear
+- type: loadout
   id: JanitorJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtJanitor
 
 # Gloves
-- type: itemLoadout
-  id: JanitorGlovesRubber
-  equipment: JanitorGlovesRubber
-
-- type: startingGear
-  id: JanitorGlovesRubber
+- type: loadout
+  id: JanitorRubberGloves
   equipment:
     gloves: ClothingHandsGlovesJanitor
 
-- type: itemLoadout
-  id: JanitorGlovesOrange
-  equipment: JanitorGlovesOrange
-
-- type: startingGear
-  id: JanitorGlovesOrange
+- type: loadout
+  id: OrangeGloves
   equipment:
     gloves: ClothingHandsGlovesColorOrange
 
-- type: itemLoadout
-  id: JanitorGlovesPurple
-  equipment: JanitorGlovesPurple
-
-- type: startingGear
-  id: JanitorGlovesPurple
+- type: loadout
+  id: PurpleGloves
   equipment:
     gloves: ClothingHandsGlovesColorPurple
 
 # Outer clothing
-- type: itemLoadout
-  id: JanitorWintercoat
-  equipment: JanitorWintercoat
-
-- type: startingGear
+- type: loadout
   id: JanitorWintercoat
   equipment:
     outerClothing: ClothingOuterWinterJani
 
-- type: itemLoadout # WD
-  id: JanitorWetFloorSign
-  equipment: JanitorWetFloorSign
+# Misc
+- type: loadout
+  id: JanitorGoldenPlunger
   effects:
-    - !type:GroupLoadoutEffect
-      proto: TimerJanitorFunnyHeads
-- type: startingGear
-  id: JanitorWetFloorSign
-  equipment:
-    outerClothing: WetFloorSign
-
-# PDA
-
-- type: itemLoadout # WD
-  id: JanitorPDA
-  equipment: JanitorPDA
-- type: startingGear
-  id: JanitorPDA
-  equipment:
-    id: JanitorPDA
+  - !type:GroupLoadoutEffect
+    proto: SeniorJanitorial
+  storage:
+    back:
+    - GoldenPlunger

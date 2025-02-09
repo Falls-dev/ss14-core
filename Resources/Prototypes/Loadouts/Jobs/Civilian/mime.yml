@@ -1,112 +1,75 @@
 # Head
-- type: itemLoadout
-  id: MimeCap
-  equipment: MimeCap
+- type: loadout
+  id: MimeHead
+  equipment:
+    head: ClothingHeadHatBeret
 
-- type: startingGear
+- type: loadout
+  id: MimeFrenchBeret
+  equipment:
+    head: ClothingHeadHatBeretFrench
+
+- type: loadout
   id: MimeCap
   equipment:
     head: ClothingHeadHatMimesoft
 
 # Mask
-- type: itemLoadout
-  id: MimeMask
-  equipment: MimeMask
-
-- type: startingGear
+- type: loadout
   id: MimeMask
   equipment:
     mask: ClothingMaskMime
 
-- type: itemLoadout
-  id: MimeMaskSad
-  equipment: MimeMaskSad
-
-- type: startingGear
+- type: loadout
   id: MimeMaskSad
   equipment:
     mask: ClothingMaskSadMime
 
-- type: itemLoadout
-  id: MimeMaskScared
-  equipment: MimeMaskScared
-
-- type: startingGear
+- type: loadout
   id: MimeMaskScared
   equipment:
     mask: ClothingMaskScaredMime
 
-- type: itemLoadout # WD
-  id: MimeMaskSexy
-  equipment: MimeMaskSexy
-- type: startingGear
-  id: MimeMaskSexy
-  equipment:
-    mask: ClothingMaskSexyMime
-
 # Jumpsuit
-- type: itemLoadout
-  id: MimeJumpsuit
-  equipment: MimeJumpsuit
-
-- type: startingGear
+- type: loadout
   id: MimeJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitMime
 
-- type: itemLoadout
-  id: MimeJumpskirt
-  equipment: MimeJumpskirt
-
-- type: startingGear
+- type: loadout
   id: MimeJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtMime
 
 # Back
-- type: itemLoadout
-  id: MimeBackpack
-  equipment: MimeBackpack
-
-- type: startingGear
+- type: loadout
   id: MimeBackpack
   equipment:
-    back: ClothingBackpackMimeFilled
+    back: ClothingBackpackMime
 
-- type: itemLoadout
-  id: MimeSatchel
-  equipment: MimeSatchel
-
-- type: startingGear
+- type: loadout
   id: MimeSatchel
   equipment:
-    back: ClothingBackpackSatchelMimeFilled
+    back: ClothingBackpackSatchelMime
 
-- type: itemLoadout
-  id: MimeDuffel
-  equipment: MimeDuffel
-
-- type: startingGear
+- type: loadout
   id: MimeDuffel
   equipment:
-    back: ClothingBackpackDuffelMimeFilled
+    back: ClothingBackpackDuffelMime
 
 # Outerclothing
-- type: itemLoadout
-  id: MimeWintercoat
-  equipment: MimeWintercoat
-
-- type: startingGear
+- type: loadout
   id: MimeWintercoat
   equipment:
     outerClothing: ClothingOuterWinterMime
 
-# PDA
-
-- type: itemLoadout
-  id: MimePDA
-  equipment: MimePDA
-- type: startingGear
-  id: MimePDA
+# Belt
+- type: loadout
+  id: MimeSuspendersRed
   equipment:
-    id: MimePDA
+    belt: ClothingBeltSuspendersRed
+
+- type: loadout
+  id: MimeSuspendersBlack
+  equipment:
+    belt: ClothingBeltSuspendersBlack

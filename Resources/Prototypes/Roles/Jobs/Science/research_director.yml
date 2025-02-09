@@ -43,4 +43,7 @@
     back: ClothingBackpackResearchDirectorFilled
     shoes: ClothingShoesColorBrown
     id: RnDPDA
-    ears: ClothingHeadsetAltScience
+    ears: ClothingHeadsetAltScience # WD
+  storage:
+    back:
+    - Flash

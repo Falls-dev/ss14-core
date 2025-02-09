@@ -50,8 +50,8 @@
     - state: rods_5
       map: ["base"]
   - type: Item
-    size: Small
-#    heldPrefix: rods
+    size: Small # WD
+    heldPrefix: rods
   - type: Construction
     graph: MetalRod
     node: MetalRod
@@ -63,7 +63,7 @@
   - type: StaticPrice
     price: 0
   - type: StackPrice
-    price: 5
+    price: 7.5
   - type: Extractable
     grindableSolutionName: rod
   - type: SolutionContainerManager

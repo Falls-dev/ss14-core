@@ -50,4 +50,11 @@
     back: ClothingBackpackHOSFilled
     shoes: ClothingShoesBootsCombatFilled
     id: HoSPDA
-    ears: ClothingHeadsetAltSecurityCommand
+    ears: ClothingHeadsetAltSecurityCommand # WD
+    eyes: ClothingEyesGlassesSecurity
+    gloves: ClothingHandsGlovesCombat
+    pocket1: WeaponPistolMk58
+  storage:
+    back:
+    - Flash
+    - MagazinePistol

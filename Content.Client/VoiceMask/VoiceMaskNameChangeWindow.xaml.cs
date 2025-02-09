@@ -19,7 +19,7 @@ public sealed partial class VoiceMaskNameChangeWindow : FancyWindow
 
     private string? _verb;
 
-    public VoiceMaskNameChangeWindow(IPrototypeManager proto)
+    public VoiceMaskNameChangeWindow()
     {
         RobustXamlLoader.Load(this);
 
@@ -32,16 +32,16 @@ public sealed partial class VoiceMaskNameChangeWindow : FancyWindow
         {
             VoiceSelector.SelectId(args.Id);
             if (VoiceSelector.SelectedMetadata != null)
-                OnVoiceChange!((string) VoiceSelector.SelectedMetadata);
+                OnVoiceChange!((string)VoiceSelector.SelectedMetadata);
         };
 
         SpeechVerbSelector.OnItemSelected += args =>
         {
-            OnVerbChange?.Invoke((string?) args.Button.GetItemMetadata(args.Id));
+            OnVerbChange?.Invoke((string?)args.Button.GetItemMetadata(args.Id));
             SpeechVerbSelector.SelectId(args.Id);
         };
 
-        ReloadVoices(proto);
+        ReloadVoices(proto); // TODO WD the fuck is this
         AddVoices();
 
         ReloadVerbs(proto);
@@ -82,7 +82,7 @@ public sealed partial class VoiceMaskNameChangeWindow : FancyWindow
         _verbs.Sort((a, b) => string.Compare(a.Item1, b.Item1, StringComparison.Ordinal));
     }
 
-    private void AddVerbs()
+    public void AddVerbs()
     {
         SpeechVerbSelector.Clear();
 

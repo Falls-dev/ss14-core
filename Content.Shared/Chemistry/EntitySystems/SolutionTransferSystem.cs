@@ -38,11 +38,15 @@ public sealed class SolutionTransferSystem : EntitySystem
 
     private void OnTransferAmountSetValueMessage(Entity<SolutionTransferComponent> ent, ref TransferAmountSetValueMessage message)
     {
-        var newTransferAmount = FixedPoint2.Clamp(message.Value, ent.Comp.MinimumTransferAmount, ent.Comp.MaximumTransferAmount);
-        ent.Comp.TransferAmount = newTransferAmount;
+        var (uid, comp) = ent;
+
+        var newTransferAmount = FixedPoint2.Clamp(message.Value, comp.MinimumTransferAmount, comp.MaximumTransferAmount);
+        comp.TransferAmount = newTransferAmount;
 
         if (message.Actor is { Valid: true } user)
-            _popup.PopupClient(Loc.GetString("comp-solution-transfer-set-amount", ("amount", newTransferAmount)), ent, user);
+            _popup.PopupEntity(Loc.GetString("comp-solution-transfer-set-amount", ("amount", newTransferAmount)), uid, user);
+
+        Dirty(uid, comp);
     }
 
     private void AddSetTransferVerbs(Entity<SolutionTransferComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
@@ -72,13 +76,19 @@ public sealed class SolutionTransferSystem : EntitySystem
         var user = args.User;
         foreach (var amount in DefaultTransferAmounts)
         {
+            if (amount < comp.MinimumTransferAmount || amount > comp.MaximumTransferAmount)
+                continue;
+
             AlternativeVerb verb = new();
             verb.Text = Loc.GetString("comp-solution-transfer-verb-amount", ("amount", amount));
             verb.Category = VerbCategory.SetTransferAmount;
             verb.Act = () =>
             {
                 comp.TransferAmount = amount;
+
                 _popup.PopupClient(Loc.GetString("comp-solution-transfer-set-amount", ("amount", amount)), uid, user);
+
+                Dirty(uid, comp);
             };
 
             // we want to sort by size, not alphabetically by the verb text.
@@ -91,7 +101,7 @@ public sealed class SolutionTransferSystem : EntitySystem
 
     private void OnAfterInteract(Entity<SolutionTransferComponent> ent, ref AfterInteractEvent args)
     {
-        if (!args.CanReach || args.Target is not {} target)
+        if (!args.CanReach || args.Target is not { } target)
             return;
 
         var (uid, comp) = ent;
@@ -106,10 +116,11 @@ public sealed class SolutionTransferSystem : EntitySystem
             var transferAmount = comp.TransferAmount; // This is the player-configurable transfer amount of "uid," not the target reagent tank.
 
             // if the receiver has a smaller transfer limit, use that instead
-            if (refill?.MaxRefill is {} maxRefill)
+            if (refill?.MaxRefill is { } maxRefill)
                 transferAmount = FixedPoint2.Min(transferAmount, maxRefill);
 
             var transferred = Transfer(args.User, target, targetSoln.Value, uid, ownerSoln.Value, transferAmount);
+            args.Handled = true;
             if (transferred > 0)
             {
                 var toTheBrim = ownerRefill.AvailableVolume == 0;
@@ -118,8 +129,6 @@ public sealed class SolutionTransferSystem : EntitySystem
                     : "comp-solution-transfer-fill-normal";
 
                 _popup.PopupClient(Loc.GetString(msg, ("owner", args.Target), ("amount", transferred), ("target", uid)), uid, args.User);
-
-                args.Handled = true;
                 return;
             }
         }
@@ -132,17 +141,15 @@ public sealed class SolutionTransferSystem : EntitySystem
         {
             var transferAmount = comp.TransferAmount;
 
-            if (targetRefill?.MaxRefill is {} maxRefill)
+            if (targetRefill?.MaxRefill is { } maxRefill)
                 transferAmount = FixedPoint2.Min(transferAmount, maxRefill);
 
             var transferred = Transfer(args.User, uid, ownerSoln.Value, target, targetSoln.Value, transferAmount);
-
+            args.Handled = true;
             if (transferred > 0)
             {
                 var message = Loc.GetString("comp-solution-transfer-transfer-solution", ("amount", transferred), ("target", target));
                 _popup.PopupClient(message, uid, args.User);
-
-                args.Handled = true;
             }
         }
     }
@@ -162,7 +169,7 @@ public sealed class SolutionTransferSystem : EntitySystem
 
         // Check if the source is cancelling the transfer
         RaiseLocalEvent(sourceEntity, ref transferAttempt);
-        if (transferAttempt.CancelReason is {} reason)
+        if (transferAttempt.CancelReason is { } reason)
         {
             _popup.PopupClient(reason, sourceEntity, user);
             return FixedPoint2.Zero;
@@ -177,7 +184,7 @@ public sealed class SolutionTransferSystem : EntitySystem
 
         // Check if the target is cancelling the transfer
         RaiseLocalEvent(targetEntity, ref transferAttempt);
-        if (transferAttempt.CancelReason is {} targetReason)
+        if (transferAttempt.CancelReason is { } targetReason)
         {
             _popup.PopupClient(targetReason, targetEntity, user);
             return FixedPoint2.Zero;
@@ -193,7 +200,10 @@ public sealed class SolutionTransferSystem : EntitySystem
         var actualAmount = FixedPoint2.Min(amount, FixedPoint2.Min(sourceSolution.Volume, targetSolution.AvailableVolume));
 
         var solution = _solution.SplitSolution(source, actualAmount);
-        _solution.Refill(targetEntity, target, solution);
+        _solution.AddSolution(target, solution);
+
+        var ev = new SolutionTransferredEvent(sourceEntity, targetEntity, user, actualAmount);
+        RaiseLocalEvent(targetEntity, ref ev);
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
             $"{ToPrettyString(user):player} transferred {SharedSolutionContainerSystem.ToPrettyString(solution)} to {ToPrettyString(targetEntity):target}, which now contains {SharedSolutionContainerSystem.ToPrettyString(targetSolution)}");
@@ -218,3 +228,9 @@ public record struct SolutionTransferAttemptEvent(EntityUid From, EntityUid To, 
         CancelReason = reason;
     }
 }
+
+/// <summary>
+/// Raised on the target entity when a non-zero amount of solution gets transferred.
+/// </summary>
+[ByRefEvent]
+public record struct SolutionTransferredEvent(EntityUid From, EntityUid To, EntityUid User, FixedPoint2 Amount);

@@ -251,9 +251,9 @@ public sealed class BarotraumaSystem : EntitySystem
             pressure = pressure switch
             {
                 // Adjust pressure based on equipment. Works differently depending on if it's "high" or "low".
-                <= Atmospherics.WarningLowPressure  => GetFeltLowPressure(uid, barotrauma, pressure),
+                <= Atmospherics.WarningLowPressure => GetFeltLowPressure(uid, barotrauma, pressure),
                 >= Atmospherics.WarningHighPressure => GetFeltHighPressure(uid, barotrauma, pressure),
-                _                                   => pressure
+                _ => pressure
             };
 
             switch (pressure)
@@ -288,7 +288,7 @@ public sealed class BarotraumaSystem : EntitySystem
         }
 
         RaiseLocalEvent(uid, new MoodRemoveEffectEvent("MobLowPressure")); // WD edit
-        _alertsSystem.ShowAlert(uid, AlertType.LowPressure, 2);
+        _alertsSystem.ShowAlert(uid, AlertType.LowPressure, 2); // TODO WD Fix
     }
 
     private void ActHighPressure(EntityUid uid, BarotraumaComponent barotrauma, float pressure)

@@ -9,6 +9,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.Preferences;
+using Content.Shared.Roles;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,7 @@ using Prometheus;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 using LogLevel = Robust.Shared.Log.LogLevel;
 using MSLogLevel = Microsoft.Extensions.Logging.LogLevel;
 
@@ -24,7 +26,7 @@ namespace Content.Server.Database
 {
     public interface IServerDbManager
     {
-        const string GlobalServerName = "unknown";
+        const string GlobalServerName = "unknown"; // WD
 
         void Init();
 
@@ -47,16 +49,16 @@ namespace Content.Server.Database
         Task<PlayerPreferences?> GetPlayerPreferencesAsync(NetUserId userId, CancellationToken cancel);
         #endregion
 
-#region User Ids
+        #region User Ids
 
         // Username assignment (for guest accounts, so they persist GUID)
         Task AssignUserIdAsync(string name, NetUserId userId);
 
         Task<NetUserId?> GetAssignedUserIdAsync(string name);
 
-#endregion
+        #endregion
 
-#region Bans
+        #region Bans
 
         /// <summary>
         ///     Looks up a ban by id.
@@ -73,13 +75,15 @@ namespace Content.Server.Database
         /// </summary>
         /// <param name="address">The ip address of the user.</param>
         /// <param name="userId">The id of the user.</param>
-        /// <param name="hwId">The hardware ID of the user.</param>
+        /// <param name="hwId">The legacy HWID of the user.</param>
+        /// <param name="modernHWIds">The modern HWIDs of the user.</param>
         /// <returns>The user's latest received un-pardoned ban, or null if none exist.</returns>
         Task<ServerBanDef?> GetServerBanAsync(
             IPAddress? address,
             NetUserId? userId,
             ImmutableArray<byte>? hwId,
-            string serverName = GlobalServerName);
+            ImmutableArray<ImmutableArray<byte>>? modernHWIds,
+            string serverName = GlobalServerName); // WD
 
         /// <summary>
         ///     Looks up an user's ban history.
@@ -87,15 +91,17 @@ namespace Content.Server.Database
         /// </summary>
         /// <param name="address">The ip address of the user.</param>
         /// <param name="userId">The id of the user.</param>
-        /// <param name="hwId">The HWId of the user.</param>
+        /// <param name="hwId">The legacy HWId of the user.</param>
+        /// <param name="modernHWIds">The modern HWIDs of the user.</param>
         /// <param name="includeUnbanned">If true, bans that have been expired or pardoned are also included.</param>
         /// <returns>The user's ban history.</returns>
         Task<List<ServerBanDef>> GetServerBansAsync(
             IPAddress? address,
             NetUserId? userId,
             ImmutableArray<byte>? hwId,
+            ImmutableArray<ImmutableArray<byte>>? modernHWIds,
             bool includeUnbanned = true,
-            string serverName = GlobalServerName);
+            string serverName = GlobalServerName); // WD
 
         Task AddServerBanAsync(ServerBanDef serverBan);
 
@@ -123,11 +129,11 @@ namespace Content.Server.Database
         /// Get current ban exemption flags for a user
         /// </summary>
         /// <returns><see cref="ServerBanExemptFlags.None"/> if the user is not exempt from any bans.</returns>
-        Task<ServerBanExemptFlags> GetBanExemption(NetUserId userId);
+        Task<ServerBanExemptFlags> GetBanExemption(NetUserId userId, CancellationToken cancel = default);
 
-#endregion
+        #endregion
 
-#region Role Bans
+        #region Role Bans
 
         /// <summary>
         ///     Looks up a role ban by id.
@@ -145,14 +151,16 @@ namespace Content.Server.Database
         /// <param name="address">The IP address of the user.</param>
         /// <param name="userId">The NetUserId of the user.</param>
         /// <param name="hwId">The Hardware Id of the user.</param>
+        /// <param name="modernHWIds">The modern HWIDs of the user.</param>
         /// <param name="includeUnbanned">Whether expired and pardoned bans are included.</param>
         /// <returns>The user's role ban history.</returns>
         Task<List<ServerRoleBanDef>> GetServerRoleBansAsync(
             IPAddress? address,
             NetUserId? userId,
             ImmutableArray<byte>? hwId,
+            ImmutableArray<ImmutableArray<byte>>? modernHWIds,
             bool includeUnbanned = true,
-            string serverName = GlobalServerName);
+            string serverName = GlobalServerName); // WD
 
         Task<ServerRoleBanDef> AddServerRoleBanAsync(ServerRoleBanDef serverBan);
 
@@ -166,9 +174,9 @@ namespace Content.Server.Database
             Guid editedBy,
             DateTimeOffset editedAt);
 
-#endregion
+        #endregion
 
-#region Playtime
+        #region Playtime
 
         /// <summary>
         /// Look up a player's role timers.
@@ -184,38 +192,36 @@ namespace Content.Server.Database
         /// <param name="updates">The list of all updates to apply to the database.</param>
         Task UpdatePlayTimes(IReadOnlyCollection<PlayTimeUpdate> updates);
 
-#endregion
+        #endregion
 
-#region Player Records
+        #region Player Records
 
         Task UpdatePlayerRecordAsync(
             NetUserId userId,
             string userName,
             IPAddress address,
-            ImmutableArray<byte> hwId);
-
+            ImmutableTypedHwid? hwId);
         Task<PlayerRecord?> GetPlayerRecordByUserName(string userName, CancellationToken cancel = default);
-
         Task<PlayerRecord?> GetPlayerRecordByUserId(NetUserId userId, CancellationToken cancel = default);
+        #endregion
 
-#endregion
-
-#region Connection Logs
+        #region Connection Logs
 
         /// <returns>ID of newly inserted connection log row.</returns>
         Task<int> AddConnectionLogAsync(
             NetUserId userId,
             string userName,
             IPAddress address,
-            ImmutableArray<byte> hwId,
+            ImmutableTypedHwid? hwId,
+            float trust,
             ConnectionDenyReason? denied,
             int serverId);
 
         Task AddServerBanHitsAsync(int connection, IEnumerable<ServerBanDef> bans);
 
-#endregion
+        #endregion
 
-#region Admin Ranks
+        #region Admin Ranks
 
         Task<Admin?> GetAdminDataForAsync(NetUserId userId, CancellationToken cancel = default);
 
@@ -236,9 +242,9 @@ namespace Content.Server.Database
 
         Task UpdateAdminRankAsync(AdminRank rank, CancellationToken cancel = default);
 
-#endregion
+        #endregion
 
-#region Rounds
+        #region Rounds
 
         Task<int> AddNewRound(Server server, params Guid[] playerIds);
 
@@ -246,9 +252,9 @@ namespace Content.Server.Database
 
         Task AddRoundPlayers(int id, params Guid[] playerIds);
 
-#endregion
+        #endregion
 
-#region Admin Logs
+        #region Admin Logs
 
         Task<Server> AddOrGetServer(string serverName);
 
@@ -262,9 +268,9 @@ namespace Content.Server.Database
 
         Task<int> CountAdminLogs(int round);
 
-#endregion
+        #endregion
 
-#region Whitelist
+        #region Whitelist
 
         Task<bool> GetWhitelistStatusAsync(NetUserId player);
 
@@ -272,25 +278,35 @@ namespace Content.Server.Database
 
         Task RemoveFromWhitelistAsync(NetUserId player);
 
-#endregion
+        #endregion
 
-#region Uploaded Resources Logs
+        #region Blacklist
+
+        Task<bool> GetBlacklistStatusAsync(NetUserId player);
+
+        Task AddToBlacklistAsync(NetUserId player);
+
+        Task RemoveFromBlacklistAsync(NetUserId player);
+
+        #endregion
+
+        #region Uploaded Resources Logs
 
         Task AddUploadedResourceLogAsync(NetUserId user, DateTimeOffset date, string path, byte[] data);
 
         Task PurgeUploadedResourceLogAsync(int days);
 
-#endregion
+        #endregion
 
-#region Rules
+        #region Rules
 
         Task<DateTimeOffset?> GetLastReadRules(NetUserId player);
 
         Task SetLastReadRules(NetUserId player, DateTimeOffset time);
 
-#endregion
+        #endregion
 
-#region Admin Notes
+        #region Admin Notes
 
         Task<int> AddAdminNote(
             int? roundId,
@@ -381,9 +397,9 @@ namespace Content.Server.Database
         /// </param>
         Task MarkMessageAsSeen(int id, bool dismissedToo);
 
-#endregion
+        #endregion
 
-#region Player Reputation (WD edit)
+        #region Player Reputation (WD edit)
 
         /// <summary>
         /// Set player's reputation to the certain value.
@@ -406,12 +422,61 @@ namespace Content.Server.Database
         /// <returns>Value of player's reputation.</returns>
         Task<float> GetPlayerReputation(Guid player);
 
-#endregion
+        #endregion
+
+        #region Job Whitelists
+
+        Task AddJobWhitelist(Guid player, ProtoId<JobPrototype> job);
+
+
+        Task<List<string>> GetJobWhitelists(Guid player, CancellationToken cancel = default);
+        Task<bool> IsJobWhitelisted(Guid player, ProtoId<JobPrototype> job);
+
+        Task<bool> RemoveJobWhitelist(Guid player, ProtoId<JobPrototype> job);
+
+        #endregion
+
+        #region DB Notifications
+
+        void SubscribeToNotifications(Action<DatabaseNotification> handler);
+
+        /// <summary>
+        /// Inject a notification as if it was created by the database. This is intended for testing.
+        /// </summary>
+        /// <param name="notification">The notification to trigger</param>
+        void InjectTestNotification(DatabaseNotification notification);
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Represents a notification sent between servers via the database layer.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Database notifications are a simple system to broadcast messages to an entire server group
+    /// backed by the same database. For example, this is used to notify all servers of new ban records.
+    /// </para>
+    /// <para>
+    /// They are currently implemented  by the PostgreSQL <c>NOTIFY</c> and <c>LISTEN</c> commands.
+    /// </para>
+    /// </remarks>
+    public struct DatabaseNotification
+    {
+        /// <summary>
+        /// The channel for the notification. This can be used to differentiate notifications for different purposes.
+        /// </summary>
+        public required string Channel { get; set; }
+
+        /// <summary>
+        /// The actual contents of the notification. Optional.
+        /// </summary>
+        public string? Payload { get; set; }
     }
 
     public sealed class ServerDbManager : IServerDbManager
     {
-        private const string GlobalServerName = "unknown";
+        private const string GlobalServerName = "unknown"; // WD
 
         public static readonly Counter DbReadOpsMetric = Metrics.CreateCounter(
             "db_read_ops",
@@ -439,6 +504,8 @@ namespace Content.Server.Database
         // This is that connection, close it when we shut down.
         private SqliteConnection? _sqliteInMemoryConnection;
 
+        private readonly List<Action<DatabaseNotification>> _notificationHandlers = [];
+
         public void Init()
         {
             _msLogProvider = new LoggingProvider(_logMgr);
@@ -451,6 +518,7 @@ namespace Content.Server.Database
 
             var engine = _cfg.GetCVar(CCVars.DatabaseEngine).ToLower();
             var opsLog = _logMgr.GetSawmill("db.op");
+            var notifyLog = _logMgr.GetSawmill("db.notify");
             switch (engine)
             {
                 case "sqlite":
@@ -458,17 +526,22 @@ namespace Content.Server.Database
                     _db = new ServerDbSqlite(contextFunc, inMemory, _cfg, _synchronous, opsLog);
                     break;
                 case "postgres":
-                    var pgOptions = CreatePostgresOptions();
-                    _db = new ServerDbPostgres(pgOptions, _cfg, opsLog);
+                    var (pgOptions, conString) = CreatePostgresOptions();
+                    _db = new ServerDbPostgres(pgOptions, conString, _cfg, opsLog, notifyLog);
                     break;
                 default:
                     throw new InvalidDataException($"Unknown database engine {engine}.");
             }
+
+            _db.OnNotificationReceived += HandleDatabaseNotification;
         }
 
         public void Shutdown()
         {
+            _db.OnNotificationReceived -= HandleDatabaseNotification;
+
             _sqliteInMemoryConnection?.Dispose();
+            _db.Shutdown();
         }
 
         public Task<PlayerPreferences> InitPrefsAsync(
@@ -532,21 +605,23 @@ namespace Content.Server.Database
             IPAddress? address,
             NetUserId? userId,
             ImmutableArray<byte>? hwId,
-            string serverName = GlobalServerName)
+            ImmutableArray<ImmutableArray<byte>>? modernHWIds,
+            string serverName = GlobalServerName) // WD
         {
             DbReadOpsMetric.Inc();
-            return RunDbCommand(() => _db.GetServerBanAsync(address, userId, hwId, serverName));
+            return RunDbCommand(() => _db.GetServerBanAsync(address, userId, hwId, modernHWIds, serverName));
         }
 
         public Task<List<ServerBanDef>> GetServerBansAsync(
             IPAddress? address,
             NetUserId? userId,
             ImmutableArray<byte>? hwId,
+            ImmutableArray<ImmutableArray<byte>>? modernHWIds,
             bool includeUnbanned = true,
-            string serverName = GlobalServerName)
+            string serverName = GlobalServerName) // WD
         {
             DbReadOpsMetric.Inc();
-            return RunDbCommand(() => _db.GetServerBansAsync(address, userId, hwId, includeUnbanned, serverName));
+            return RunDbCommand(() => _db.GetServerBansAsync(address, userId, hwId, includeUnbanned, modernHWIds, serverName));
         }
 
         public Task AddServerBanAsync(ServerBanDef serverBan)
@@ -579,13 +654,13 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.UpdateBanExemption(userId, flags));
         }
 
-        public Task<ServerBanExemptFlags> GetBanExemption(NetUserId userId)
+        public Task<ServerBanExemptFlags> GetBanExemption(NetUserId userId, CancellationToken cancel = default)
         {
             DbReadOpsMetric.Inc();
-            return RunDbCommand(() => _db.GetBanExemption(userId));
+            return RunDbCommand(() => _db.GetBanExemption(userId, cancel));
         }
 
-#region Role Ban
+        #region Role Ban
 
         public Task<ServerRoleBanDef?> GetServerRoleBanAsync(int id)
         {
@@ -597,11 +672,12 @@ namespace Content.Server.Database
             IPAddress? address,
             NetUserId? userId,
             ImmutableArray<byte>? hwId,
+            ImmutableArray<ImmutableArray<byte>>? modernHWIds,
             bool includeUnbanned = true,
-            string serverName = GlobalServerName)
+            string serverName = GlobalServerName) // WD
         {
             DbReadOpsMetric.Inc();
-            return RunDbCommand(() => _db.GetServerRoleBansAsync(address, userId, hwId, includeUnbanned, serverName));
+            return RunDbCommand(() => _db.GetServerRoleBansAsync(address, userId, hwId, includeUnbanned, modernHWIds, serverName));
         }
 
         public Task<ServerRoleBanDef> AddServerRoleBanAsync(ServerRoleBanDef serverRoleBan)
@@ -628,9 +704,7 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.EditServerRoleBan(id, reason, severity, expiration, editedBy, editedAt));
         }
 
-#endregion
-
-#region Playtime
+        #endregion
 
         public Task<List<PlayTime>> GetPlayTimes(Guid player, CancellationToken cancel)
         {
@@ -644,9 +718,8 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.UpdatePlayTimes(updates));
         }
 
-#endregion
 
-#region Player Reputation (WD edit)
+        #region Player Reputation (WD edit)
 
         public Task SetPlayerReputation(Guid player, float value)
         {
@@ -666,13 +739,13 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.GetPlayerReputation(player));
         }
 
-#endregion
+        #endregion
 
         public Task UpdatePlayerRecordAsync(
             NetUserId userId,
             string userName,
             IPAddress address,
-            ImmutableArray<byte> hwId)
+            ImmutableTypedHwid? hwId)
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.UpdatePlayerRecord(userId, userName, address, hwId));
@@ -694,12 +767,13 @@ namespace Content.Server.Database
             NetUserId userId,
             string userName,
             IPAddress address,
-            ImmutableArray<byte> hwId,
+            ImmutableTypedHwid? hwId,
+            float trust,
             ConnectionDenyReason? denied,
             int serverId)
         {
             DbWriteOpsMetric.Inc();
-            return RunDbCommand(() => _db.AddConnectionLogAsync(userId, userName, address, hwId, denied, serverId));
+            return RunDbCommand(() => _db.AddConnectionLogAsync(userId, userName, address, hwId, trust, denied, serverId));
         }
 
         public Task AddServerBanHitsAsync(int connection, IEnumerable<ServerBanDef> bans)
@@ -838,6 +912,24 @@ namespace Content.Server.Database
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.RemoveFromWhitelistAsync(player));
+        }
+
+        public Task<bool> GetBlacklistStatusAsync(NetUserId player)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetBlacklistStatusAsync(player));
+        }
+
+        public Task AddToBlacklistAsync(NetUserId player)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.AddToBlacklistAsync(player));
+        }
+
+        public Task RemoveFromBlacklistAsync(NetUserId player)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.RemoveFromBlacklistAsync(player));
         }
 
         public Task AddUploadedResourceLogAsync(NetUserId user, DateTimeOffset date, string path, byte[] data)
@@ -1071,6 +1163,54 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.MarkMessageAsSeen(id, dismissedToo));
         }
 
+        public Task AddJobWhitelist(Guid player, ProtoId<JobPrototype> job)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.AddJobWhitelist(player, job));
+        }
+
+        public Task<List<string>> GetJobWhitelists(Guid player, CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetJobWhitelists(player, cancel));
+        }
+
+        public Task<bool> IsJobWhitelisted(Guid player, ProtoId<JobPrototype> job)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.IsJobWhitelisted(player, job));
+        }
+
+        public Task<bool> RemoveJobWhitelist(Guid player, ProtoId<JobPrototype> job)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.RemoveJobWhitelist(player, job));
+        }
+
+        public void SubscribeToNotifications(Action<DatabaseNotification> handler)
+        {
+            lock (_notificationHandlers)
+            {
+                _notificationHandlers.Add(handler);
+            }
+        }
+
+        public void InjectTestNotification(DatabaseNotification notification)
+        {
+            HandleDatabaseNotification(notification);
+        }
+
+        private async void HandleDatabaseNotification(DatabaseNotification notification)
+        {
+            lock (_notificationHandlers)
+            {
+                foreach (var handler in _notificationHandlers)
+                {
+                    handler(notification);
+                }
+            }
+        }
+
         // Wrapper functions to run DB commands from the thread pool.
         // This will avoid SynchronizationContext capturing and avoid running CPU work on the main thread.
         // For SQLite, this will also enable read parallelization (within limits).
@@ -1126,7 +1266,7 @@ namespace Content.Server.Database
             return enumerable;
         }
 
-        private DbContextOptions<PostgresServerDbContext> CreatePostgresOptions()
+        private (DbContextOptions<PostgresServerDbContext> options, string connectionString) CreatePostgresOptions()
         {
             var host = _cfg.GetCVar(CCVars.DatabasePgHost);
             var port = _cfg.GetCVar(CCVars.DatabasePgPort);
@@ -1148,7 +1288,7 @@ namespace Content.Server.Database
 
             builder.UseNpgsql(connectionString);
             SetupLogging(builder);
-            return builder.Options;
+            return (builder.Options, connectionString);
         }
 
         private void SetupSqlite(out Func<DbContextOptions<SqliteServerDbContext>> contextFunc, out bool inMemory)
@@ -1221,11 +1361,11 @@ namespace Content.Server.Database
                     MSLogLevel.Debug => LogLevel.Debug,
                     // EFCore feels the need to log individual DB commands as "Information" so I'm slapping debug on it.
                     MSLogLevel.Information => LogLevel.Debug,
-                    MSLogLevel.Warning     => LogLevel.Warning,
-                    MSLogLevel.Error       => LogLevel.Error,
-                    MSLogLevel.Critical    => LogLevel.Fatal,
-                    MSLogLevel.None        => LogLevel.Debug,
-                    _                      => LogLevel.Debug
+                    MSLogLevel.Warning => LogLevel.Warning,
+                    MSLogLevel.Error => LogLevel.Error,
+                    MSLogLevel.Critical => LogLevel.Fatal,
+                    MSLogLevel.None => LogLevel.Debug,
+                    _ => LogLevel.Debug
                 };
 
                 sawmill.Log(lvl, formatter(state, exception));

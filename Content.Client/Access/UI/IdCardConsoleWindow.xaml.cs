@@ -35,10 +35,11 @@ namespace Content.Client.Access.UI
         private string? _lastJobProto;
         private string? _lastJobIcon; //WD-EDIT
 
-        public IdCardConsoleWindow(
-            IdCardConsoleBoundUserInterface owner,
-            IPrototypeManager prototypeManager,
-            List<List<ProtoId<AccessLevelPrototype>>> accessLevels)
+        // The job that will be picked if the ID doesn't have a job on the station.
+        private static ProtoId<JobPrototype> _defaultJob = "Passenger";
+
+        public IdCardConsoleWindow(IdCardConsoleBoundUserInterface owner, IPrototypeManager prototypeManager,
+            List<ProtoId<AccessLevelPrototype>> accessLevels)
         {
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
@@ -65,7 +66,7 @@ namespace Content.Client.Access.UI
 
             foreach (var department in _groupAccessButtons.ButtonGroups)
             {
-                var departmentGrid = new GridContainer {};
+                var departmentGrid = new GridContainer { };
                 foreach (var button in department.Values)
                 {
                     departmentGrid.AddChild(button);
@@ -120,7 +121,17 @@ namespace Content.Client.Access.UI
                     _grid.AddChild(newButton);
                 }
 
-                JobIconsGrid.AddChild(_grid);
+                _jobPrototypeIds.Add(job.ID);
+                JobPresetOptionButton.AddItem(Loc.GetString(job.Name), _jobPrototypeIds.Count - 1);
+            }
+
+            JobPresetOptionButton.OnItemSelected += SelectJobPreset;
+            _accessButtons.Populate(accessLevels, prototypeManager);
+            AccessLevelControlContainer.AddChild(_accessButtons);
+
+            foreach (var (id, button) in _accessButtons.ButtonsList)
+            {
+                button.OnPressed += _ => SubmitData();
             }
             //WD-EDIT
         }
@@ -255,6 +266,15 @@ namespace Content.Client.Access.UI
                 button.Pressed = state.TargetIdJobIcon?.Contains(jobIcon) ?? false;
             }
             //WD-EDIT
+            var jobIndex = _jobPrototypeIds.IndexOf(state.TargetIdJobPrototype);
+            // If the job index is < 0 that means they don't have a job registered in the station records.
+            // For example, a new ID from a box would have no job index.
+            if (jobIndex < 0)
+            {
+                jobIndex = _jobPrototypeIds.IndexOf(_defaultJob);
+            }
+
+            JobPresetOptionButton.SelectId(jobIndex);
 
             _lastFullName = state.TargetIdFullName;
             _lastJobTitle = state.TargetIdJobTitle;

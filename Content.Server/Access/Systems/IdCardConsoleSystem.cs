@@ -89,7 +89,7 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
             var jobIcon = targetIdComponent.JobIcon; //WD-EDIT
 
             if (TryComp<StationRecordKeyStorageComponent>(targetId, out var keyStorage)
-                && keyStorage.Key is {} key
+                && keyStorage.Key is { } key
                 && _record.TryGetRecord<GeneralStationRecord>(key, out var record))
             {
                 jobProto = record.JobPrototype;
@@ -101,7 +101,7 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
                 PrivilegedIdIsAuthorized(uid, component),
                 true,
                 targetIdComponent.FullName,
-                targetIdComponent.JobTitle,
+                targetIdComponent.LocalizedJobTitle,
                 targetAccessComponent.Tags.ToList(),
                 possibleAccess,
                 jobProto,
@@ -138,11 +138,8 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         _idCard.TryChangeFullName(targetId, newFullName, player: player);
         _idCard.TryChangeJobTitle(targetId, newJobTitle, player: player);
 
-        // WD EDIT START
-        if (_prototype.TryIndex<JobPrototype>(newJobProto, out var job))
-            newJobIcon ??= job.Icon;
-
-        if (newJobIcon != null && _prototype.TryIndex<StatusIconPrototype>(newJobIcon, out var jobIcon)) // WD EDIT END
+        if (_prototype.TryIndex<JobPrototype>(newJobProto, out var job)
+            && _prototype.TryIndex(job.Icon, out var jobIcon))
         {
             _idCard.TryChangeJobIcon(targetId, jobIcon, player: player);
             _idCard.TryChangeVisuals(targetId, newJobIcon); // WD
@@ -152,6 +149,8 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         {
             _idCard.TryChangeJobDepartment(targetId, job);
         }
+
+        UpdateStationRecord(uid, targetId, newFullName, newJobTitle, job);
 
         if (!newAccessList.TrueForAll(x => component.AccessLevels.Contains(x)))
         {
@@ -189,8 +188,6 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         This current implementation is pretty shit as it logs 27 entries (27 lines) if someone decides to give themselves AA*/
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
             $"{ToPrettyString(player):player} has modified {ToPrettyString(targetId):entity} with the following accesses: [{string.Join(", ", addedTags.Union(removedTags))}] [{string.Join(", ", newAccessList)}]");
-
-        UpdateStationRecord(uid, targetId, newFullName, newJobTitle, job, newJobIcon);
     }
 
     /// <summary>

@@ -2,7 +2,6 @@
   id: ActionKnock
   name: Knock
   description: This spell opens nearby doors.
-  noSpawn: true
   components:
   - type: Magic
     requiresClothes: false
@@ -11,6 +10,8 @@
     itemIconStyle: BigAction
     checkCanInteract: false
     alwaysPlaySound: false
+    sound: !type:SoundPathSpecifier
+      path: /Audio/Magic/knock.ogg
     icon:
       sprite: Objects/Magic/magicactions.rsi
       state: knock

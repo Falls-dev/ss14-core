@@ -1197,7 +1197,6 @@
   conditions:
     - !type:TileNotBlocked
 
-# WD edit start
 - type: construction
   id: NoticeBoard
   name: notice board
@@ -1212,9 +1211,9 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: true
-  canBuildInImpassable: false
+  canBuildInImpassable: true
   conditions:
-  - !type:TileNotBlocked
+    - !type:WallmountCondition
 
 - type: construction
   id: Mannequin
@@ -1232,5 +1231,4 @@
   canRotate: true
   canBuildInImpassable: false
   conditions:
-  - !type:TileNotBlocked
-# WD edit end
+    - !type:TileNotBlocked

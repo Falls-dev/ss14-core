@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Net;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
@@ -12,7 +11,7 @@ namespace Content.Server.Database
         public int? Id { get; }
         public NetUserId? UserId { get; }
         public (IPAddress address, int cidrMask)? Address { get; }
-        public ImmutableArray<byte>? HWId { get; }
+        public ImmutableTypedHwid? HWId { get; }
 
         public DateTimeOffset BanTime { get; }
         public DateTimeOffset? ExpirationTime { get; }
@@ -22,13 +21,14 @@ namespace Content.Server.Database
         public NoteSeverity Severity { get; set; }
         public NetUserId? BanningAdmin { get; }
         public ServerUnbanDef? Unban { get; }
+        public ServerBanExemptFlags ExemptFlags { get; }
 
-        public string ServerName { get; }
+        public string ServerName { get; } // WD
 
         public ServerBanDef(int? id,
             NetUserId? userId,
             (IPAddress, int)? address,
-            ImmutableArray<byte>? hwId,
+            TypedHwid? hwId,
             DateTimeOffset banTime,
             DateTimeOffset? expirationTime,
             int? roundId,
@@ -37,14 +37,15 @@ namespace Content.Server.Database
             NoteSeverity severity,
             NetUserId? banningAdmin,
             ServerUnbanDef? unban,
-            string serverName)
+            string serverName, // WD
+            ServerBanExemptFlags exemptFlags = default)
         {
-            if (userId == null && address == null && hwId ==  null)
+            if (userId == null && address == null && hwId == null)
             {
                 throw new ArgumentException("Must have at least one of banned user, banned address or hardware ID");
             }
 
-            if (address is {} addr && addr.Item1.IsIPv4MappedToIPv6)
+            if (address is { } addr && addr.Item1.IsIPv4MappedToIPv6)
             {
                 // Fix IPv6-mapped IPv4 addresses
                 // So that IPv4 addresses are consistent between separate-socket and dual-stack socket modes.
@@ -63,7 +64,8 @@ namespace Content.Server.Database
             Severity = severity;
             BanningAdmin = banningAdmin;
             Unban = unban;
-            ServerName = serverName;
+            ServerName = serverName; // WD
+            ExemptFlags = exemptFlags;
         }
 
         public string FormatBanMessage(IConfigurationManager cfg, ILocalizationManager loc)

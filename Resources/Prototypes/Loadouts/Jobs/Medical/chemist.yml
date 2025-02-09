@@ -1,85 +1,38 @@
-# Glasses
-
-- type: itemLoadout
-  id: ChemistGlasses
-  equipment: ChemistGlasses
-- type: startingGear
-  id: ChemistGlasses
-  equipment:
-    eyes: ClothingEyesGlassesChemical
-
 # Jumpsuit
-- type: itemLoadout
-  id: ChemistJumpsuit
-  equipment: ChemistJumpsuit
-
-- type: startingGear
+- type: loadout
   id: ChemistJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitChemistry
 
-- type: itemLoadout
-  id: ChemistJumpskirt
-  equipment: ChemistJumpskirt
-
-- type: startingGear
+- type: loadout
   id: ChemistJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtChemistry
 
 # Back
-- type: itemLoadout
-  id: ChemistBackpack
-  equipment: ChemistBackpack
-
-- type: startingGear
+- type: loadout
   id: ChemistBackpack
   equipment:
-    back: ClothingBackpackChemistryFilled
+    back: ClothingBackpackChemistry
 
-- type: itemLoadout
-  id: ChemistSatchel
-  equipment: ChemistSatchel
-
-- type: startingGear
+- type: loadout
   id: ChemistSatchel
   equipment:
-    back: ClothingBackpackSatchelChemistryFilled
+    back: ClothingBackpackSatchelChemistry
 
-- type: itemLoadout
-  id: ChemistDuffel
-  equipment: ChemistDuffel
-
-- type: startingGear
+- type: loadout
   id: ChemistDuffel
   equipment:
-    back: ClothingBackpackDuffelChemistryFilled
+    back: ClothingBackpackDuffelChemistry
 
 # Outer clothing
-- type: itemLoadout
-  id: ChemistLabCoat
-  equipment: ChemistLabCoat
-
-- type: startingGear
+- type: loadout
   id: ChemistLabCoat
   equipment:
     outerClothing: ClothingOuterCoatLabChem
 
-- type: itemLoadout
-  id: ChemistWintercoat
-  equipment: ChemistWintercoat
-
-- type: startingGear
+- type: loadout
   id: ChemistWintercoat
   equipment:
     outerClothing: ClothingOuterWinterChem
 
-# PDA
-
-- type: itemLoadout # WD added
-  id: ChemistPDA
-  equipment: ChemistPDA
-- type: startingGear
-  id: ChemistPDA
-  equipment:
-    id: ChemistryPDA

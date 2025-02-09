@@ -134,10 +134,10 @@ public sealed partial class SpeciesPrototype : IPrototype
     public int MaxAge = 120;
 
     [DataField]
-    public bool SponsorOnly { get; }
+    public bool SponsorOnly { get; } // WD
 
     [DataField]
-    public bool ForAdmins { get; }
+    public bool ForAdmins { get; } // WD
 }
 
 public enum SpeciesNaming : byte

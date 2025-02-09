@@ -48,4 +48,8 @@
     back: ClothingBackpackCMOFilled
     shoes: ClothingShoesColorBrown
     id: CMOPDA
-    ears: ClothingHeadsetAltMedical
+    ears: ClothingHeadsetAltMedical # WD
+    belt: ClothingBeltMedicalFilled
+  storage:
+    back:
+    - Flash

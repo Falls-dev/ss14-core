@@ -1,149 +1,72 @@
-# Jumpsuit
-- type: itemLoadout
-  id: ChiefMedicalOfficerJumpsuit
-  equipment: ChiefMedicalOfficerJumpsuit
+# For mantles
+- type: loadoutEffectGroup
+  id: MasterCMO
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobChiefMedicalOfficer
+      time: 72000 #20 hrs
 
-- type: startingGear
+# Jumpsuit
+- type: loadout
   id: ChiefMedicalOfficerJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitCMO
 
-- type: itemLoadout
-  id: ChiefMedicalOfficerJumpskirt
-  equipment: ChiefMedicalOfficerJumpskirt
-
-- type: startingGear
+- type: loadout
   id: ChiefMedicalOfficerJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtCMO
 
-- type: itemLoadout
-  id: ChiefMedicalOfficerTurtleneckJumpsuit
-  equipment: ChiefMedicalOfficerTurtleneckJumpsuit
-
-- type: startingGear
+- type: loadout
   id: ChiefMedicalOfficerTurtleneckJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitCMOTurtle
 
-- type: itemLoadout
-  id: ChiefMedicalOfficerTurtleneckJumpskirt
-  equipment: ChiefMedicalOfficerTurtleneckJumpskirt
-
-- type: startingGear
+- type: loadout
   id: ChiefMedicalOfficerTurtleneckJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtCMOTurtle
 
 # Head
-- type: itemLoadout
-  id: ChiefMedicalOfficerBeret
-  equipment: ChiefMedicalOfficerBeret
-
-- type: startingGear
+- type: loadout
   id: ChiefMedicalOfficerBeret
   equipment:
     head: ClothingHeadHatBeretCmo
 
-- type: itemLoadout
-  id: CMOMedicalHeadMirror
-  equipment: CMOMedicalHeadMirror
-
-- type: startingGear
+- type: loadout
   id: CMOMedicalHeadMirror
   equipment:
     head: ClothingHeadMirror
 
 # Neck
-- type: itemLoadout
-  id: ChiefMedicalOfficerCloak
-  equipment: ChiefMedicalOfficerCloak
-
-- type: startingGear
+- type: loadout
   id: ChiefMedicalOfficerCloak
   equipment:
     neck: ClothingCloakCmo
 
-- type: itemLoadout
+- type: loadout
   id: ChiefMedicalOfficerMantle
-  equipment: ChiefMedicalOfficerMantle
+  equipment:
+    neck: ClothingNeckMantleCMO
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MasterCMO
 
 - type: startingGear
   id: ChiefMedicalOfficerMantle
   equipment:
     neck: ClothingNeckMantleCMO
 
-# Back
-- type: itemLoadout
-  id: ChiefMedicalOfficerBackpack
-  equipment: ChiefMedicalOfficerBackpack
-
-- type: startingGear
-  id: ChiefMedicalOfficerBackpack
-  equipment:
-    back: ClothingBackpackCMOFilled
-
-- type: itemLoadout
-  id: ChiefMedicalOfficerSatchel
-  equipment: ChiefMedicalOfficerSatchel
-
-- type: startingGear
-  id: ChiefMedicalOfficerSatchel
-  equipment:
-    back: ClothingBackpackSatchelCMOFilled
-
-- type: itemLoadout
-  id: ChiefMedicalOfficerDuffel
-  equipment: ChiefMedicalOfficerDuffel
-
-- type: startingGear
-  id: ChiefMedicalOfficerDuffel
-  equipment:
-    back: ClothingBackpackDuffelCMOFilled
-
 # Outer clothing
-- type: itemLoadout
-  id: ChiefMedicalOfficerLabCoat
-  equipment: ChiefMedicalOfficerLabCoat
-
-- type: startingGear
+- type: loadout
   id: ChiefMedicalOfficerLabCoat
   equipment:
     outerClothing: ClothingOuterCoatLabCmo
 
-- type: itemLoadout
-  id: ChiefMedicalOfficerWintercoat
-  equipment: ChiefMedicalOfficerWintercoat
-
-- type: startingGear
+- type: loadout
   id: ChiefMedicalOfficerWintercoat
   equipment:
     outerClothing: ClothingOuterWinterCMO
 
-# Ears
-
-- type: itemLoadout # WD
-  id: CMOHeadset
-  equipment: CMOHeadset
-- type: startingGear
-  id: CMOHeadset
-  equipment:
-    ears: ClothingHeadsetCMO
-
-- type: itemLoadout # WD
-  id: CMOHeadsetAlt
-  equipment: CMOHeadsetAlt
-- type: startingGear
-  id: CMOHeadsetAlt
-  equipment:
-    ears: ClothingHeadsetAltMedical
-
-# PDA
-
-- type: itemLoadout # WD
-  id: ChiefMedicalOfficerPDA
-  equipment: ChiefMedicalOfficerPDA
-- type: startingGear
-  id: ChiefMedicalOfficerPDA
-  equipment:
-    id: CMOPDA

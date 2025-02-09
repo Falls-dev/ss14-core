@@ -207,10 +207,13 @@ namespace Content.Client.Light
 
         public static Color GetCurrentRgbColor(TimeSpan curTime, TimeSpan offset, Entity<RgbLightControllerComponent> rgb)
         {
-            offset = TimeSpan.Zero; // WD EDIT, Fix black RGB
+            offset = TimeSpan.Zero; // WD EDIT, Fix black RGB // TODO WD check this
 
+            var delta = (float)(curTime - offset).TotalSeconds;
+            var entOffset = Math.Abs(rgb.Owner.Id * 0.09817f);
+            var hue = (delta * rgb.Comp.CycleRate + entOffset) % 1;
             return Color.FromHsv(new Vector4(
-                (float) (((curTime.TotalSeconds - offset.TotalSeconds) * rgb.Comp.CycleRate + Math.Abs(rgb.Owner.Id * 0.1)) % 1),
+                MathF.Abs(hue),
                 1.0f,
                 1.0f,
                 1.0f

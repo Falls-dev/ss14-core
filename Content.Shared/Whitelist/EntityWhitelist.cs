@@ -2,7 +2,6 @@ using Content.Shared.Item;
 using Content.Shared.Tag;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 
 namespace Content.Shared.Whitelist;
 
@@ -34,6 +33,12 @@ public sealed partial class EntityWhitelist
     // TODO yaml validation
 
     /// <summary>
+    ///     Mind Role Prototype names that are allowed in the whitelist.
+    /// </summary>
+    [DataField] public string[]? MindRoles;
+    // TODO yaml validation
+
+    /// <summary>
     ///     Item sizes that are allowed in the whitelist.
     /// </summary>
     [DataField]
@@ -41,9 +46,6 @@ public sealed partial class EntityWhitelist
 
     [NonSerialized, Access(typeof(EntityWhitelistSystem))]
     public List<ComponentRegistration>? Registrations;
-
-    [DataField(customTypeSerializer:typeof(PrototypeIdListSerializer<EntityPrototype>))]
-    public List<string>? Entities;
 
     /// <summary>
     ///     Tags that are allowed in the whitelist.
@@ -58,14 +60,4 @@ public sealed partial class EntityWhitelist
     /// </summary>
     [DataField]
     public bool RequireAll;
-
-    [Obsolete("Use WhitelistSystem")]
-    public bool IsValid(EntityUid uid, IEntityManager? man = null)
-    {
-        var sys = man?.System<EntityWhitelistSystem>() ??
-                  IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<EntityWhitelistSystem>();
-
-        return sys.IsValid(this, uid);
-
-    }
 }

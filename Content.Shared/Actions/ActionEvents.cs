@@ -103,6 +103,13 @@ public sealed class RequestPerformActionEvent : EntityEventArgs
         Action = action;
         EntityCoordinatesTarget = entityCoordinatesTarget;
     }
+
+    public RequestPerformActionEvent(NetEntity action, NetEntity entityTarget, NetCoordinates entityCoordinatesTarget)
+    {
+        Action = action;
+        EntityTarget = entityTarget;
+        EntityCoordinatesTarget = entityCoordinatesTarget;
+    }
 }
 
 // WD START
@@ -156,6 +163,27 @@ public abstract partial class WorldTargetActionEvent : BaseActionEvent
 }
 
 /// <summary>
+///     This is the type of event that gets raised when an <see cref="EntityWorldTargetActionComponent"/> is performed.
+///     The <see cref="BaseActionEvent.Performer"/>, <see cref="Entity"/>, and <see cref="Coords"/>
+///     fields will automatically be filled out by the <see cref="SharedActionsSystem"/>.
+/// </summary>
+/// <remarks>
+///     To define a new action for some system, you need to create an event that inherits from this class.
+/// </remarks>
+public abstract partial class EntityWorldTargetActionEvent : BaseActionEvent
+{
+    /// <summary>
+    ///     The entity that the user targeted.
+    /// </summary>
+    public EntityUid? Entity;
+
+    /// <summary>
+    ///     The coordinates of the location that the user targeted.
+    /// </summary>
+    public EntityCoordinates? Coords;
+}
+
+/// <summary>
 ///     Base class for events that are raised when an action gets performed. This should not generally be used outside of the action
 ///     system.
 /// </summary>
@@ -170,15 +198,20 @@ public abstract partial class BaseActionEvent : HandledEntityEventArgs
     /// <summary>
     ///     The action that was performed.
     /// </summary>
-    public EntityUid Action;
+    public Entity<BaseActionComponent> Action;
 
-    public ActionUseType ActionUseType = ActionUseType.Default;
+    public ActionUseType ActionUseType = ActionUseType.Default; // WD
 
     public int ChargeLevel;
+
+    /// <summary>
+    /// Should we toggle the action entity?
+    /// </summary>
+    public bool Toggle;
 }
 
 [Serializable, NetSerializable]
-public enum ActionUseType
+public enum ActionUseType // WD
 {
     Default, // left mouse click.
     Charge, // Holding right mouse click(has 4 charges).

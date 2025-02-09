@@ -92,7 +92,7 @@ public abstract partial class SharedGunSystem
         if (component.SelectedMode == fire)
             return;
 
-        DebugTools.Assert((component.AvailableModes  & fire) != 0x0);
+        DebugTools.Assert((component.AvailableModes & fire) != 0x0);
         component.SelectedMode = fire;
 
         if (!Paused(uid))
@@ -138,13 +138,16 @@ public abstract partial class SharedGunSystem
 
     private void OnGunSelected(EntityUid uid, GunComponent component, HandSelectedEvent args)
     {
+        if (Timing.ApplyingState)
+            return;
+
         // WD EDIT START
         if (component.FireRateModified <= 0f)
             component.FireRateModified = component.FireRate;
-
-        if (component.FireRateModified <= 0f)
-            return;
         // WD EDIT END
+
+        if (component.FireRateModified <= 0)
+            return;
 
         var fireDelay = 1f / component.FireRateModified;
         if (fireDelay.Equals(0f))

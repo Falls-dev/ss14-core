@@ -1,4 +1,4 @@
-﻿- type: constructionGraph
+- type: constructionGraph
   id: Shutters
   start: start
   graph:
@@ -45,7 +45,7 @@
               anchored: true
           steps:
             - component: DoorElectronics
-              name: микросхема шлюза
+              name: микросхема шлюза # WD
               icon:
                 sprite: "Objects/Misc/module.rsi"
                 state: "door_electronics"

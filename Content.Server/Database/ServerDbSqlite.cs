@@ -10,6 +10,7 @@ using Content.Server.IP;
 using Content.Server.Preferences.Managers;
 using Content.Server._White;
 using Content.Shared.CCVar;
+using Content.Shared.Database;
 using Microsoft.EntityFrameworkCore;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
@@ -21,7 +22,7 @@ namespace Content.Server.Database
     ///     Provides methods to retrieve and update character preferences.
     ///     Don't use this directly, go through <see cref="ServerPreferencesManager" /> instead.
     /// </summary>
-    public sealed class ServerDbSqlite : ServerDbBase
+    public sealed class ServerDbSqlite : ServerDbBase // TODO WD
     {
         private readonly Func<DbContextOptions<SqliteServerDbContext>> _options;
 
@@ -82,37 +83,55 @@ namespace Content.Server.Database
             IPAddress? address,
             NetUserId? userId,
             ImmutableArray<byte>? hwId,
+            ImmutableArray<ImmutableArray<byte>>? modernHWIds)
+        {
+            await using var db = await GetDbImpl();
+
+            return (await GetServerBanQueryAsync(db, address, userId, hwId, modernHWIds, includeUnbanned: false)).FirstOrDefault();
+        }
+
+        public override async Task<List<ServerBanDef>> GetServerBansAsync(
+            IPAddress? address,
+            NetUserId? userId,
+            ImmutableArray<byte>? hwId,
+            ImmutableArray<ImmutableArray<byte>>? modernHWIds,
+            bool includeUnbanned,
             string serverName = GlobalServerName)
         {
             await using var db = await GetDbImpl();
 
-            var exempt = await GetBanExemptionCore(db, userId);
-
-            // SQLite can't do the net masking stuff we need to match IP address ranges.
-            // So just pull down the whole list into memory.
-            var bans = await GetAllBans(db.SqliteDbContext, includeUnbanned: false, exempt);
-
-            return bans.FirstOrDefault(b => BanMatches(b, address, userId, hwId, exempt, serverName)) is { } foundBan
-                ? ConvertBan(foundBan)
-                : null;
+            return (await GetServerBanQueryAsync(db, address, userId, hwId, modernHWIds, includeUnbanned)).ToList();
         }
 
-        public override async Task<List<ServerBanDef>> GetServerBansAsync(IPAddress? address,
+        private async Task<IEnumerable<ServerBanDef>> GetServerBanQueryAsync(
+            DbGuardImpl db,
+            IPAddress? address,
             NetUserId? userId,
-            ImmutableArray<byte>? hwId, bool includeUnbanned, string serverName = GlobalServerName)
+            ImmutableArray<byte>? hwId,
+            ImmutableArray<ImmutableArray<byte>>? modernHWIds,
+            bool includeUnbanned)
         {
-            await using var db = await GetDbImpl();
-
             var exempt = await GetBanExemptionCore(db, userId);
+
+            var newPlayer = !await db.SqliteDbContext.Player.AnyAsync(p => p.UserId == userId);
 
             // SQLite can't do the net masking stuff we need to match IP address ranges.
             // So just pull down the whole list into memory.
             var queryBans = await GetAllBans(db.SqliteDbContext, includeUnbanned, exempt);
 
+            var playerInfo = new BanMatcher.PlayerInfo
+            {
+                Address = address,
+                UserId = userId,
+                ExemptFlags = exempt ?? default,
+                HWId = hwId,
+                ModernHWIds = modernHWIds,
+                IsNewPlayer = newPlayer,
+            };
+
             return queryBans
-                .Where(b => BanMatches(b, address, userId, hwId, exempt, serverName))
                 .Select(ConvertBan)
-                .ToList()!;
+                .Where(b => BanMatcher.BanMatches(b!, playerInfo))!;
         }
 
         private static async Task<List<ServerBan>> GetAllBans(
@@ -129,36 +148,14 @@ namespace Content.Server.Database
 
             if (exemptFlags is { } exempt)
             {
+                // Any flag to bypass BlacklistedRange bans.
+                if (exempt != ServerBanExemptFlags.None)
+                    exempt |= ServerBanExemptFlags.BlacklistedRange;
+
                 query = query.Where(b => (b.ExemptFlags & exempt) == 0);
             }
 
             return await query.ToListAsync();
-        }
-
-        private static bool BanMatches(ServerBan ban,
-            IPAddress? address,
-            NetUserId? userId,
-            ImmutableArray<byte>? hwId,
-            ServerBanExemptFlags? exemptFlags,
-            string serverName = GlobalServerName)
-        {
-            if (serverName != GlobalServerName && ban.ServerName != GlobalServerName && serverName != ban.ServerName)
-            {
-                return false;
-            }
-
-            if (!exemptFlags.GetValueOrDefault(ServerBanExemptFlags.None).HasFlag(ServerBanExemptFlags.IP)
-                && address != null && ban.Address is not null && address.IsInSubnet(ban.Address.ToTuple().Value))
-            {
-                return true;
-            }
-
-            if (userId is { } id && ban.PlayerUserId == id.UserId)
-            {
-                return true;
-            }
-
-            return hwId is { Length: > 0 } hwIdVar && hwIdVar.AsSpan().SequenceEqual(ban.HWId);
         }
 
         public override async Task AddServerBanAsync(ServerBanDef serverBan)
@@ -171,13 +168,14 @@ namespace Content.Server.Database
                 Reason = serverBan.Reason,
                 Severity = serverBan.Severity,
                 BanningAdmin = serverBan.BanningAdmin?.UserId,
-                HWId = serverBan.HWId?.ToArray(),
+                HWId = serverBan.HWId,
                 BanTime = serverBan.BanTime.UtcDateTime,
                 ExpirationTime = serverBan.ExpirationTime?.UtcDateTime,
                 RoundId = serverBan.RoundId,
                 PlaytimeAtNote = serverBan.PlaytimeAtNote,
                 PlayerUserId = serverBan.UserId?.UserId,
-                ServerName = serverBan.ServerName
+                ExemptFlags = serverBan.ExemptFlags,
+                ServerName = serverBan.ServerName // WD
             });
 
             await db.SqliteDbContext.SaveChangesAsync();
@@ -215,8 +213,9 @@ namespace Content.Server.Database
             IPAddress? address,
             NetUserId? userId,
             ImmutableArray<byte>? hwId,
+            ImmutableArray<ImmutableArray<byte>>? modernHWIds,
             bool includeUnbanned,
-            string serverName = GlobalServerName)
+            string serverName = GlobalServerName) // WD
         {
             await using var db = await GetDbImpl();
 
@@ -225,7 +224,7 @@ namespace Content.Server.Database
             var queryBans = await GetAllRoleBans(db.SqliteDbContext, includeUnbanned);
 
             return queryBans
-                .Where(b => RoleBanMatches(b, address, userId, hwId, serverName))
+                .Where(b => RoleBanMatches(b, address, userId, hwId, modernHWIds, serverName))
                 .Select(ConvertRoleBan)
                 .ToList()!;
         }
@@ -249,7 +248,8 @@ namespace Content.Server.Database
             IPAddress? address,
             NetUserId? userId,
             ImmutableArray<byte>? hwId,
-            string serverName)
+            ImmutableArray<ImmutableArray<byte>>? modernHWIds,
+            string serverName) // WD
         {
             if (serverName != GlobalServerName && ban.ServerName != GlobalServerName && serverName != ban.ServerName)
             {
@@ -266,7 +266,27 @@ namespace Content.Server.Database
                 return true;
             }
 
-            return hwId is { Length: > 0 } hwIdVar && hwIdVar.AsSpan().SequenceEqual(ban.HWId);
+            switch (ban.HWId?.Type)
+            {
+                case HwidType.Legacy:
+                    if (hwId is { Length: > 0 } hwIdVar && hwIdVar.AsSpan().SequenceEqual(ban.HWId.Hwid))
+                        return true;
+                    break;
+
+                case HwidType.Modern:
+                    if (modernHWIds != null)
+                    {
+                        foreach (var modernHWId in modernHWIds)
+                        {
+                            if (modernHWId.AsSpan().SequenceEqual(ban.HWId.Hwid))
+                                return true;
+                        }
+                    }
+
+                    break;
+            }
+
+            return false;
         }
 
         public override async Task<ServerRoleBanDef> AddServerRoleBanAsync(ServerRoleBanDef serverBan)
@@ -279,7 +299,7 @@ namespace Content.Server.Database
                 Reason = serverBan.Reason,
                 Severity = serverBan.Severity,
                 BanningAdmin = serverBan.BanningAdmin?.UserId,
-                HWId = serverBan.HWId?.ToArray(),
+                HWId = serverBan.HWId,
                 BanTime = serverBan.BanTime.UtcDateTime,
                 ExpirationTime = serverBan.ExpirationTime?.UtcDateTime,
                 RoundId = serverBan.RoundId,
@@ -334,7 +354,7 @@ namespace Content.Server.Database
                 ban.Id,
                 uid,
                 ban.Address.ToTuple(),
-                ban.HWId == null ? null : ImmutableArray.Create(ban.HWId),
+                ban.HWId,
                 // SQLite apparently always reads DateTime as unspecified, but we always write as UTC.
                 DateTime.SpecifyKind(ban.BanTime, DateTimeKind.Utc),
                 ban.ExpirationTime == null ? null : DateTime.SpecifyKind(ban.ExpirationTime.Value, DateTimeKind.Utc),
@@ -369,6 +389,7 @@ namespace Content.Server.Database
         }
         #endregion
 
+        [return: NotNullIfNotNull(nameof(ban))]
         private static ServerBanDef? ConvertBan(ServerBan? ban)
         {
             if (ban == null)
@@ -394,7 +415,7 @@ namespace Content.Server.Database
                 ban.Id,
                 uid,
                 ban.Address.ToTuple(),
-                ban.HWId == null ? null : ImmutableArray.Create(ban.HWId),
+                ban.HWId,
                 // SQLite apparently always reads DateTime as unspecified, but we always write as UTC.
                 DateTime.SpecifyKind(ban.BanTime, DateTimeKind.Utc),
                 ban.ExpirationTime == null ? null : DateTime.SpecifyKind(ban.ExpirationTime.Value, DateTimeKind.Utc),
@@ -431,7 +452,8 @@ namespace Content.Server.Database
             NetUserId userId,
             string userName,
             IPAddress address,
-            ImmutableArray<byte> hwId,
+            ImmutableTypedHwid? hwId,
+            float trust,
             ConnectionDenyReason? denied,
             int serverId)
         {
@@ -443,9 +465,10 @@ namespace Content.Server.Database
                 Time = DateTime.UtcNow,
                 UserId = userId.UserId,
                 UserName = userName,
-                HWId = hwId.ToArray(),
+                HWId = hwId,
                 Denied = denied,
-                ServerId = serverId
+                ServerId = serverId,
+                Trust = trust,
             };
 
             db.SqliteDbContext.ConnectionLog.Add(connectionLog);
@@ -462,8 +485,8 @@ namespace Content.Server.Database
 
             var admins = await db.SqliteDbContext.Admin
                 .Include(a => a.Flags)
-                .GroupJoin(db.SqliteDbContext.Player, a => a.UserId, p => p.UserId, (a, grouping) => new {a, grouping})
-                .SelectMany(t => t.grouping.DefaultIfEmpty(), (t, p) => new {t.a, p!.LastSeenUserName})
+                .GroupJoin(db.SqliteDbContext.Player, a => a.UserId, p => p.UserId, (a, grouping) => new { a, grouping })
+                .SelectMany(t => t.grouping.DefaultIfEmpty(), (t, p) => new { t.a, p!.LastSeenUserName })
                 .ToArrayAsync(cancel);
 
             var adminRanks = await db.DbContext.AdminRank.Include(a => a.Flags).ToArrayAsync(cancel);

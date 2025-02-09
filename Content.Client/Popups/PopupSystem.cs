@@ -5,17 +5,18 @@ using Content.Shared.Chat;
 using Content.Shared.GameTicking;
 using Content.Shared.Popups;
 using Content.Shared._White;
+using JetBrains.Annotations;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
+using Robust.Shared.Collections;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Replays;
 using Robust.Shared.Timing;
-using Robust.Shared.Utility;
 
 namespace Content.Client.Popups
 {
@@ -32,11 +33,11 @@ namespace Content.Client.Popups
         [Dependency] private readonly ExamineSystemShared _examine = default!;
         [Dependency] private readonly SharedTransformSystem _transform = default!;
 
-        public IReadOnlyList<WorldPopupLabel> WorldLabels => _aliveWorldLabels;
-        public IReadOnlyList<CursorPopupLabel> CursorLabels => _aliveCursorLabels;
+        public IReadOnlyCollection<WorldPopupLabel> WorldLabels => _aliveWorldLabels.Values;
+        public IReadOnlyCollection<CursorPopupLabel> CursorLabels => _aliveCursorLabels.Values;
 
-        private readonly List<WorldPopupLabel> _aliveWorldLabels = new();
-        private readonly List<CursorPopupLabel> _aliveCursorLabels = new();
+        private readonly Dictionary<WorldPopupData, WorldPopupLabel> _aliveWorldLabels = new();
+        private readonly Dictionary<CursorPopupData, CursorPopupLabel> _aliveCursorLabels = new();
 
         public const float MinimumPopupLifetime = 0.7f;
         public const float MaximumPopupLifetime = 5f;
@@ -72,6 +73,15 @@ namespace Content.Client.Popups
             _overlay.RemoveOverlay<PopupOverlay>();
         }
 
+        private void WrapAndRepeatPopup(PopupLabel existingLabel, string popupMessage)
+        {
+            existingLabel.TotalTime = 0;
+            existingLabel.Repeats += 1;
+            existingLabel.Text = Loc.GetString("popup-system-repeated-popup-stacking-wrap",
+                ("popup-message", popupMessage),
+                ("count", existingLabel.Repeats));
+        }
+
         private void PopupMessage(string? message, PopupType type, EntityCoordinates coordinates, EntityUid? entity, bool recordReplay)
         {
             if (message == null)
@@ -85,13 +95,18 @@ namespace Content.Client.Popups
                     _replayRecording.RecordClientMessage(new PopupCoordinatesEvent(message, type, GetNetCoordinates(coordinates)));
             }
 
+            var popupData = new WorldPopupData(message, type, coordinates, entity);
+            if (_aliveWorldLabels.TryGetValue(popupData, out var existingLabel))
+            {
+                WrapAndRepeatPopup(existingLabel, popupData.Message);
+                return;
+            }
+
             var label = new WorldPopupLabel(coordinates)
             {
                 Text = message,
                 Type = type,
             };
-
-            _aliveWorldLabels.Add(label);
 
             // START WhiteDream
             if (!_isLogging)
@@ -122,6 +137,7 @@ namespace Content.Client.Popups
             _uiManager.GetUIController<ChatUIController>().ProcessChatMessage(chatMsg);
 
             // END WhiteDream
+            _aliveWorldLabels.Add(popupData, label);
         }
 
         #region Abstract Method Implementations
@@ -150,17 +166,29 @@ namespace Content.Client.Popups
             if (recordReplay && _replayRecording.IsRecording)
                 _replayRecording.RecordClientMessage(new PopupCursorEvent(message, type));
 
+            var popupData = new CursorPopupData(message, type);
+            if (_aliveCursorLabels.TryGetValue(popupData, out var existingLabel))
+            {
+                WrapAndRepeatPopup(existingLabel, popupData.Message);
+                return;
+            }
+
             var label = new CursorPopupLabel(_inputManager.MouseScreenPosition)
             {
                 Text = message,
                 Type = type,
             };
 
-            _aliveCursorLabels.Add(label);
+            _aliveCursorLabels.Add(popupData, label);
         }
 
         public override void PopupCursor(string? message, PopupType type = PopupType.Small)
-            => PopupCursorInternal(message, type, true);
+        {
+            if (!_timing.IsFirstTimePredicted)
+                return;
+
+            PopupCursorInternal(message, type, true);
+        }
 
         public override void PopupCursor(string? message, ICommonSession recipient, PopupType type = PopupType.Small)
         {
@@ -286,27 +314,37 @@ namespace Content.Client.Popups
             if (_aliveWorldLabels.Count == 0 && _aliveCursorLabels.Count == 0)
                 return;
 
-            for (var i = 0; i < _aliveWorldLabels.Count; i++)
+            if (_aliveWorldLabels.Count > 0)
             {
-                var label = _aliveWorldLabels[i];
-                label.TotalTime += frameTime;
-
-                if (label.TotalTime > GetPopupLifetime(label) || Deleted(label.InitialPos.EntityId))
+                var aliveWorldToRemove = new ValueList<WorldPopupData>();
+                foreach (var (data, label) in _aliveWorldLabels)
                 {
-                    _aliveWorldLabels.RemoveSwap(i);
-                    i--;
+                    label.TotalTime += frameTime;
+                    if (label.TotalTime > GetPopupLifetime(label) || Deleted(label.InitialPos.EntityId))
+                    {
+                        aliveWorldToRemove.Add(data);
+                    }
+                }
+                foreach (var data in aliveWorldToRemove)
+                {
+                    _aliveWorldLabels.Remove(data);
                 }
             }
 
-            for (var i = 0; i < _aliveCursorLabels.Count; i++)
+            if (_aliveCursorLabels.Count > 0)
             {
-                var label = _aliveCursorLabels[i];
-                label.TotalTime += frameTime;
-
-                if (label.TotalTime > GetPopupLifetime(label))
+                var aliveCursorToRemove = new ValueList<CursorPopupData>();
+                foreach (var (data, label) in _aliveCursorLabels)
                 {
-                    _aliveCursorLabels.RemoveSwap(i);
-                    i--;
+                    label.TotalTime += frameTime;
+                    if (label.TotalTime > GetPopupLifetime(label))
+                    {
+                        aliveCursorToRemove.Add(data);
+                    }
+                }
+                foreach (var data in aliveCursorToRemove)
+                {
+                    _aliveCursorLabels.Remove(data);
                 }
             }
         }
@@ -316,11 +354,7 @@ namespace Content.Client.Popups
             public PopupType Type = PopupType.Small;
             public string Text { get; set; } = string.Empty;
             public float TotalTime { get; set; }
-        }
-
-        public sealed class CursorPopupLabel(ScreenCoordinates screenCoords) : PopupLabel
-        {
-            public ScreenCoordinates InitialPos = screenCoords;
+            public int Repeats = 1;
         }
 
         public sealed class WorldPopupLabel(EntityCoordinates coordinates) : PopupLabel
@@ -330,5 +364,22 @@ namespace Content.Client.Popups
             /// </summary>
             public EntityCoordinates InitialPos = coordinates;
         }
+
+        public sealed class CursorPopupLabel(ScreenCoordinates screenCoords) : PopupLabel
+        {
+            public ScreenCoordinates InitialPos = screenCoords;
+        }
+
+        [UsedImplicitly]
+        private record struct WorldPopupData(
+            string Message,
+            PopupType Type,
+            EntityCoordinates Coordinates,
+            EntityUid? Entity);
+
+        [UsedImplicitly]
+        private record struct CursorPopupData(
+            string Message,
+            PopupType Type);
     }
 }

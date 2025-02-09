@@ -14,3 +14,4 @@ store-currency-display-space-cash = {$amount ->
     [one] One Dollar
     *[other] Dollars
 }
+store-currency-display-wizcoin = Wiz€oin™

@@ -7,8 +7,6 @@
     contents:
       - id: ClothingHeadHatCaptain
       - id: ClothingHeadHatCapcap
-      - id: ClothingNeckCloakCap
-      - id: ClothingNeckCloakCapFormal
       - id: ClothingUniformJumpsuitCapFormal
       - id: ClothingUniformJumpskirtCapFormalDress
       - id: ClothingHandsGlovesCaptain
@@ -22,7 +20,7 @@
       - id: ClothingUnderwearBottomBoxersCap # WD
       - id: ClothingUnderwearBottomPantiesCap # WD
       - id: ClothingUnderwearTopBraCap # WD
-
+      - id: ClothingNeckCloakCap
 
 - type: entity
   id: DresserChiefEngineerFilled
@@ -31,10 +29,8 @@
   components:
   - type: StorageFill
     contents:
-      - id: ClothingNeckMantleCE
       - id: ClothingUniformJumpsuitChiefEngineerTurtle
       - id: ClothingUniformJumpskirtChiefEngineerTurtle
-      - id: ClothingNeckCloakCe
       - id: ClothingHeadHatBeretEngineering
       - id: ClothingEyesGlassesMeson
       - id: ClothingHeadsetAltEngineering
@@ -43,6 +39,8 @@
       - id: ClothingUnderwearBottomBoxersCE # WD
       - id: ClothingUnderwearBottomPantiesCE # WD
       - id: ClothingUnderwearTopBraCE # WD
+      - id: ClothingOuterWinterCE
+      - id: ClothingNeckCloakCe
 
 - type: entity
   id: DresserChiefMedicalOfficerFilled
@@ -69,6 +67,7 @@
       - id: ClothingUnderwearBottomBoxersCMO # WD
       - id: ClothingUnderwearBottomPantiesCMO # WD
       - id: ClothingUnderwearTopBraCMO # WD
+      - id: ClothingEyesGlasses
 
 - type: entity
   id: DresserHeadOfPersonnelFilled
@@ -77,8 +76,6 @@
   components:
   - type: StorageFill
     contents:
-      - id: ClothingNeckMantleHOP
-      - id: ClothingNeckCloakHop
       - id: ClothingHeadHatHopcap
       - id: ClothingOuterWinterHoP
       - id: ClothingEyesGlasses
@@ -90,6 +87,7 @@
       - id: ClothingUnderwearBottomBoxersHOP # WD
       - id: ClothingUnderwearBottomPantiesHOP # WD
       - id: ClothingUnderwearTopBraHOP # WD
+      - id: ClothingNeckCloakHop
 
 - type: entity
   id: DresserHeadOfSecurityFilled
@@ -98,10 +96,8 @@
   components:
   - type: StorageFill
     contents:
-      - id: ClothingNeckMantleHOS
       - id: ClothingHeadHatBeretHoS
       - id: ClothingHeadHatHoshat
-      - id: ClothingNeckCloakHos
       - id: ClothingUniformJumpskirtHoSAlt
       - id: ClothingUniformJumpsuitHoSAlt
       - id: ClothingUniformJumpskirtHosFormal
@@ -115,6 +111,8 @@
       - id: ClothingUnderwearBottomBoxersHOS # WD
       - id: ClothingUnderwearBottomPantiesHOS # WD
       - id: ClothingUnderwearTopBraHOS # WD
+      - id: ClothingOuterWinterHoS
+      - id: ClothingNeckCloakHos
 
 - type: entity
   id: DresserQuarterMasterFilled
@@ -123,7 +121,6 @@
   components:
   - type: StorageFill
     contents:
-      - id: ClothingNeckCloakQm
       - id: ClothingHeadHatBeretQM
       - id: ClothingUniformJumpsuitQMFormal
       - id: ClothingHeadsetCargo
@@ -139,6 +136,7 @@
       - id: ClothingUnderwearBottomBoxersQM # WD
       - id: ClothingUnderwearBottomPantiesQM # WD
       - id: ClothingUnderwearTopBraQM # WD
+      - id: ClothingNeckCloakQm
 
 - type: entity
   id: DresserResearchDirectorFilled
@@ -147,8 +145,6 @@
   components:
   - type: StorageFill
     contents:
-      - id: ClothingNeckMantleRD
-      - id: ClothingNeckCloakRd
       - id: ClothingHeadHatBeretRND
       - id: ClothingHandsGlovesColorPurple
       - id: ClothingHeadsetAltScience
@@ -159,6 +155,7 @@
       - id: ClothingUnderwearBottomBoxersRD # WD
       - id: ClothingUnderwearBottomPantiesRD # WD
       - id: ClothingUnderwearTopBraRD # WD
+      - id: ClothingNeckCloakRd
 
 - type: entity
   id: DresserWardenFilled

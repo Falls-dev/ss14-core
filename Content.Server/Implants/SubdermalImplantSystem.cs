@@ -1,10 +1,11 @@
-﻿using Content.Server.Cuffs;
+using Content.Server.Cuffs;
 using Content.Server.Forensics;
 using Content.Server.Humanoid;
 using Content.Server.Implants.Components;
 using Content.Server.Store.Components;
 using Content.Server.Store.Systems;
 using Content.Shared.Cuffs.Components;
+using Content.Shared.Forensics;
 using Content.Shared.Humanoid;
 using Content.Shared.Implants;
 using Content.Shared.Implants.Components;
@@ -21,6 +22,7 @@ using System.Numerics;
 using Content.Server.IdentityManagement;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
+using Content.Shared.Store.Components;
 using Robust.Shared.Collections;
 using Robust.Shared.Map.Components;
 using Content.Server.Ensnaring;
@@ -128,6 +130,10 @@ public sealed class SubdermalImplantSystem : SharedSubdermalImplantSystem
         if (TryComp<PullableComponent>(ent, out var pull) && _pullingSystem.IsPulled(ent, pull))
             _pullingSystem.TryStopPull(ent, pull);
 
+        // Check if the user is pulling anything, and drop it if so
+        if (TryComp<PullerComponent>(ent, out var puller) && TryComp<PullableComponent>(puller.Pulling, out var pullable))
+            _pullingSystem.TryStopPull(puller.Pulling.Value, pullable);
+
         var xform = Transform(ent);
         var targetCoords = SelectRandomTileInRange(xform, implant.TeleportRadius);
 
@@ -231,6 +237,9 @@ public sealed class SubdermalImplantSystem : SharedSubdermalImplantSystem
             if (TryComp<DnaComponent>(ent, out var dna))
             {
                 dna.DNA = _forensicsSystem.GenerateDNA();
+
+                var ev = new GenerateDnaEvent { Owner = ent, DNA = dna.DNA };
+                RaiseLocalEvent(ent, ref ev);
             }
             if (TryComp<FingerprintComponent>(ent, out var fingerprint))
             {

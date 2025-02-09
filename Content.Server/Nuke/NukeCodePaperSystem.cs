@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Server.Chat.Systems;
 using Content.Server.Fax;
 using Content.Shared.Fax.Components;
-using Content.Server.Paper;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.Paper;
@@ -23,7 +22,7 @@ namespace Content.Server.Nuke
         {
             base.Initialize();
             SubscribeLocalEvent<NukeCodePaperComponent, MapInitEvent>(OnMapInit,
-                after: new []{ typeof(NukeLabelSystem) });
+                after: new[] { typeof(NukeLabelSystem) });
         }
 
         private void OnMapInit(EntityUid uid, NukeCodePaperComponent component, MapInitEvent args)
@@ -38,7 +37,8 @@ namespace Content.Server.Nuke
 
             if (TryGetRelativeNukeCode(uid, out var paperContent, station, onlyCurrentStation: component.AllNukesAvailable))
             {
-                _paper.SetContent(uid, paperContent);
+                if (TryComp<PaperComponent>(uid, out var paperComp))
+                    _paper.SetContent((uid, paperComp), paperContent);
             }
         }
 
@@ -122,12 +122,12 @@ namespace Content.Server.Nuke
                 }
 
                 codesMessage.PushNewline();
-                codesMessage.AddMarkup(Loc.GetString("nuke-codes-list", ("name", MetaData(nukeUid).EntityName), ("code", nuke.Code)));
+                codesMessage.AddMarkupOrThrow(Loc.GetString("nuke-codes-list", ("name", MetaData(nukeUid).EntityName), ("code", nuke.Code)));
                 break;
             }
 
             if (!codesMessage.IsEmpty)
-                nukeCode = Loc.GetString("nuke-codes-message")+codesMessage;
+                nukeCode = Loc.GetString("nuke-codes-message") + codesMessage;
             return !codesMessage.IsEmpty;
         }
     }

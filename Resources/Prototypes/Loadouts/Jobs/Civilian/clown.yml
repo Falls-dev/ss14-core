@@ -1,258 +1,69 @@
-# Timers
-- type: loadoutEffectGroup # WD
-  id: TrueClownTimer
-  effects:
-  - !type:JobRequirementLoadoutEffect
-    requirement:
-      !type:RoleTimeRequirement
-      role: JobClown
-      time: 999999999 # 30 hours as clown required to ascend 108000
-
-- type: loadoutEffectGroup # WD
-  id: MedalClownTimer
-  effects:
-  - !type:JobRequirementLoadoutEffect
-    requirement:
-      !type:RoleTimeRequirement
-      role: JobClown
-      time: 999999999 # 10 hours 36000
-
 # Head
-- type: itemLoadout
+- type: loadout
   id: JesterHat
-  equipment: JesterHat
+  equipment:
+    head: ClothingHeadHatJester
 
-- type: startingGear
-  id: JesterHat
+- type: loadout
+  id: JesterAltHat
   equipment:
     head: ClothingHeadHatJesterAlt
 
 # Jumpsuit
-- type: itemLoadout
-  id: ClownSuit
-  equipment: ClownSuit
-
-- type: startingGear
+- type: loadout
   id: ClownSuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitClown
 
-- type: itemLoadout
-  id: JesterSuit
-  equipment: JesterSuit
+- type: loadout
+  id: ClownSkirt
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtClown
 
-- type: startingGear
+- type: loadout
   id: JesterSuit
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitJester
+
+- type: loadout
+  id: JesterAltSuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitJesterAlt
 
 # Back
-- type: itemLoadout
-  id: ClownBackpack
-  equipment: ClownBackpack
-
-- type: startingGear
+- type: loadout
   id: ClownBackpack
   equipment:
-    back: ClothingBackpackClownFilled
+    back: ClothingBackpackClown
 
-- type: itemLoadout
-  id: ClownSatchel
-  equipment: ClownSatchel
-
-- type: startingGear
+- type: loadout
   id: ClownSatchel
   equipment:
-    back: ClothingBackpackSatchelClownFilled
+    back: ClothingBackpackSatchelClown
 
-- type: itemLoadout
-  id: ClownDuffel
-  equipment: ClownDuffel
-
-- type: startingGear
+- type: loadout
   id: ClownDuffel
   equipment:
-    back: ClothingBackpackDuffelClownFilled
+    back: ClothingBackpackDuffelClown
 
 # Shoes
-- type: itemLoadout
-  id: ClownShoes
-  equipment: ClownShoes
-
-- type: startingGear
+- type: loadout
   id: ClownShoes
   equipment:
     shoes: ClothingShoesClown
 
-- type: itemLoadout
-  id: JesterShoes
-  equipment: JesterShoes
-
-- type: startingGear
+- type: loadout
   id: JesterShoes
   equipment:
     shoes: ClothingShoesJester
 
-- type: itemLoadout # WD
-  id: ClownShoesLarge
-  equipment: ClownShoesLarge
-- type: startingGear
-  id: ClownShoesLarge
-  equipment:
-    shoes: ClothingShoesClownLarge
-
 # Outer clothing
-- type: itemLoadout
-  id: ClownRobes
-  equipment: ClownRobes
-
-- type: startingGear
+- type: loadout
   id: ClownRobes
   equipment:
     outerClothing: ClothingOuterClownPriest
 
-- type: itemLoadout
-  id: ClownWintercoat
-  equipment: ClownWintercoat
-
-- type: startingGear
+- type: loadout
   id: ClownWintercoat
   equipment:
     outerClothing: ClothingOuterWinterClown
-
-# Neck
-
-- type: itemLoadout # WD
-  id: ClownMedal
-  equipment: ClownMedal
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: MedalClownTimer
-- type: startingGear
-  id: ClownMedal
-  equipment:
-    neck: ClothingNeckClownmedal
-
-# Mask
-
-- type: itemLoadout # WD
-  id: ClownMask
-  equipment: ClownMask
-- type: startingGear
-  id: ClownMask
-  equipment:
-    mask: ClothingMaskClown
-
-- type: itemLoadout # WD
-  id: ClownMaskSexy
-  equipment: ClownMaskSexy
-- type: startingGear
-  id: ClownMaskSexy
-  equipment:
-    mask: ClothingMaskSexyClown
-
-- type: itemLoadout # WD
-  id: ClownMaskCluwne
-  equipment: ClownMaskCluwne
-- type: startingGear
-  id: ClownMaskCluwne
-  equipment:
-    mask: ClothingMaskCluwne
-
-# PDA
-
-- type: itemLoadout # WD
-  id: ClownPDA
-  equipment: ClownPDA
-- type: startingGear
-  id: ClownPDA
-  equipment:
-    id: ClownPDA
-
-# Trinkets
-
-- type: itemLoadout # WD
-  id: ClownTrinketRecorder
-  equipment: ClownTrinketRecorder
-- type: startingGear
-  id: ClownTrinketRecorder
-  storage:
-    back:
-    - ClownRecorder
-
-- type: itemLoadout # WD
-  id: ClownTrinketCrayon
-  equipment: ClownTrinketCrayon
-- type: startingGear
-  id: ClownTrinketCrayon
-  storage:
-    back:
-    - CrayonRainbow
-
-- type: itemLoadout # WD
-  id: ClownTrinketStamp
-  equipment: ClownTrinketStamp
-- type: startingGear
-  id: ClownTrinketStamp
-  storage:
-    back:
-    - RubberStampClown
-
-# Ascended clown items
-
-- type: itemLoadout # WD
-  id: ClownMaskBanana
-  equipment: ClownMaskBanana
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: TrueClownTimer
-- type: startingGear
-  id: ClownMaskBanana
-  equipment:
-    mask: ClothingMaskClownBanana
-
-- type: itemLoadout # WD
-  id: ClownJumpsuitBanana
-  equipment: ClownJumpsuitBanana
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: TrueClownTimer
-- type: startingGear
-  id: ClownJumpsuitBanana
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitClownBanana
-
-- type: itemLoadout # WD
-  id: ClownShoesBanana
-  equipment: ClownShoesBanana
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: TrueClownTimer
-- type: startingGear
-  id: ClownShoesBanana
-  equipment:
-    shoes: ClothingShoesClownBanana
-
-- type: itemLoadout # WD
-  id: ClownPhoneBanana
-  equipment: ClownPhoneBanana
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: TrueClownTimer
-- type: startingGear
-  id: ClownPhoneBanana
-  storage:
-    back:
-    - BananaPhoneInstrument
-
-- type: itemLoadout # WD
-  id: ClownBikeHornGolden
-  equipment: ClownBikeHornGolden
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: TrueClownTimer
-- type: startingGear
-  id: ClownBikeHornGolden
-  storage:
-    back:
-    - GoldenBikeHorn

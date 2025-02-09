@@ -67,7 +67,7 @@
   - type: GhostTakeoverAvailable
   - type: Speech
     speechVerb: LargeMob
-  - type: Penetrated
+  - type: Penetrated # WD
 
 - type: entity
   name: space bear
@@ -122,7 +122,7 @@
 - type: entity
   name: space kangaroo
   id: MobKangarooSpace
-  parent: MobSpaceBasic
+  parent: [MobSpaceBasic, StripableInventoryBase]
   description: It looks friendly. Why don't you give it a hug?
   components:
   - type: Sprite
@@ -168,12 +168,6 @@
       collection: FootstepBounce
   - type: ReplacementAccent
     accent: kangaroo
-  - type: InventorySlots
-  - type: Strippable
-  - type: UserInterface
-    interfaces:
-      enum.StrippingUiKey.Key:
-        type: StrippableBoundUserInterface
 
 - type: entity
   id: MobKangarooSpaceSalvage
@@ -264,6 +258,7 @@
   - type: Speech
     speechVerb: Arachnid
     speechSounds: Arachnid
+    allowedEmotes: ['Click', 'Chitter']
   - type: Vocal
     sounds:
       Male: AnimalArachnid
@@ -376,7 +371,7 @@
   components:
     - type: SalvageMobRestrictions
 
-- type: entity # WD Ahead of wizden
+- type: entity
   parent: SimpleMobBase # WD edit
   id: MobSnail
   name: snail
@@ -390,7 +385,7 @@
     allowMovement: true
     name: ghost-role-information-snail-name
     description: ghost-role-information-snail-description
-  # rules: ghost-role-information-freeagent-rules # WD TODO later
+    rules: ghost-role-information-freeagent-rules
   - type: GhostTakeoverAvailable
   - type: Emoting
   - type: Sprite
@@ -490,7 +485,6 @@
     price: 50
   - type: BadFood
   - type: NonSpreaderZombie
-  - type: PreventSpiller
   - type: FireVisuals
     sprite: Mobs/Effects/onfire.rsi
     normalState: Mouse_burning
@@ -513,7 +507,7 @@
         messages: [ "snail-hurt-by-salt-popup" ]
         probability: 0.66
 
-- type: entity # WD Ahead of wizden
+- type: entity
   parent: MobSnail
   id: MobSnailInstantDeath
   suffix: Smite
@@ -574,7 +568,7 @@
   - type: GhostRole
     name: ghost-role-information-snailspeed-name
     description: ghost-role-information-snailspeed-description
-  # rules: ghost-role-information-freeagent-rules # WD TODO later
+    rules: ghost-role-information-freeagent-rules
   - type: Sprite
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
@@ -593,7 +587,7 @@
 #  - type: ActiveJetpack # I think this will need a custom component to not make tests angry.
   - type: MovementAlwaysTouching
 
-- type: entity # WD Ahead of wizden
+- type: entity
   parent: MobSnail
   id: MobSnailMoth
   name: Snoth
@@ -603,7 +597,7 @@
   - type: GhostRole
     name: ghost-role-information-snoth-name
     description: ghost-role-information-snoth-description
-  # rules: ghost-role-information-freeagent-rules # WD TODO later
+    rules: ghost-role-information-freeagent-rules
   - type: Sprite
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]

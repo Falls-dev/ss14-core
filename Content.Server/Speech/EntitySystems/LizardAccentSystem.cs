@@ -19,10 +19,10 @@ public sealed class LizardAccentSystem : EntitySystem
     private static readonly Regex RussianRegexUpperS = new("С+");
     private static readonly Regex RussianRegexLowerZ = new("з+");
     private static readonly Regex RussianRegexUpperZ = new("З+");
-    private static readonly Regex RussianRegexLowerSh= new("ш+");
-    private static readonly Regex RussianRegexUpperSh= new("Ш+");
-    private static readonly Regex RussianRegexLowerСh= new("ч+");
-    private static readonly Regex RussianRegexUpperСh= new("Ч+");
+    private static readonly Regex RussianRegexLowerSh = new("ш+");
+    private static readonly Regex RussianRegexUpperSh = new("Ш+");
+    private static readonly Regex RussianRegexLowerСh = new("ч+");
+    private static readonly Regex RussianRegexUpperСh = new("Ч+");
 
     public override void Initialize()
     {

@@ -6,8 +6,7 @@
   # Ревенант
 
   <Box>
-    <GuideEntityEmbed Entity="MobRevenant" Caption=""/>
-    <GuideEntityEmbed Entity="Ectoplasm" Caption=""/>
+    <GuideEntityEmbed Entity="MobRevenant"/>
   </Box>
 
   Ревенант наделён способностью преследовать членов экипажа и красть у них жизненную энергию.
@@ -59,6 +58,8 @@
   <Box>
     <GuideEntityEmbed Entity="MobCarp" Caption=""/>
     <GuideEntityEmbed Entity="CarpRift" Caption=""/>
+    <GuideEntityEmbed Entity="MobDragon"/>
+    <GuideEntityEmbed Entity="CarpRift" Caption=""/>
     <GuideEntityEmbed Entity="MobCarp" Caption=""/>
   </Box>
 
@@ -73,4 +74,14 @@
   - После того, как разломы закончат заряжаться, они неуязвимы и будут продолжать порождать [color=#a4885c]Космического карпа[/color], пока жив дракон.
   - Если с момента появления Космического дракона или последней зарядки Разлома карпа пройдет пять минут, и если Космический дракон уже не контролирует максимум три Разлома карпа, Космический дракон исчезнет.
 
+  # Slimes and Spiders
+
+  <Box>
+    <GuideEntityEmbed Entity="MobAdultSlimesBlueAngry" Caption=""/>
+    <GuideEntityEmbed Entity="MobGiantSpiderAngry" Caption=""/>
+  </Box>
+
+  Slimes and spiders have no remarkable features, but will [color=cyan]infest the station[/color] from time to time regardless. Both will give chase and attack anything they see.
+  - Slimes may [bold]deal extra cellular or poison damage[/bold], based upon their color. Water hurts them just as it would hurt a slime person.
+  - Spiders have a venomous bite and can [bold]create webs[/bold] that are hard to move though. Webs are easily destroyed with a blade. They can also pry open airlocks.
 </Document>

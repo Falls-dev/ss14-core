@@ -59,6 +59,8 @@
       - !type:PlaySoundBehavior
         sound:
           collection: MetalGlassBreak
+  - type: StaticPrice
+    price: 75
 
 - type: entity
   id: PoweredLightPostSmallEmpty
@@ -74,9 +76,6 @@
     enabled: false
   - type: PoweredLight
     bulb: Tube
-    damage:
-      types:
-        Heat: 2
   - type: ContainerContainer
     containers:
       light_bulb: !type:ContainerSlot
@@ -105,6 +104,11 @@
       on: base
       broken: broken
       burned: burned
+  - type: DamageOnInteract
+    damage:
+      types:
+        Heat: 2
+    popupText: powered-light-component-burn-hand
 
 - type: entity
   id: PoweredLightPostSmall
@@ -119,11 +123,19 @@
     enabled: true
   - type: PoweredLight
     hasLampOnSpawn: LightTube
+  - type: StaticPrice
+    price: 25
+  - type: AmbientOnPowered
+  - type: AmbientSound
+    volume: -15
+    range: 3
+    sound:
+      path: /Audio/Ambience/Objects/light_hum.ogg
+  - type: DamageOnInteract
     damage:
       types:
         Heat: 2
-  - type: StaticPrice
-    price: 25
+    popupText: powered-light-component-burn-hand
 
 - type: entity
   id: PoweredLEDLightPostSmall
@@ -142,8 +154,16 @@
     color: "#EEEEFF"
   - type: PoweredLight
     hasLampOnSpawn: LedLightTube
+  - type: StaticPrice
+    price: 25
+  - type: AmbientOnPowered
+  - type: AmbientSound
+    volume: -15
+    range: 3
+    sound:
+      path: /Audio/Ambience/Objects/light_hum.ogg
+  - type: DamageOnInteract
     damage:
       types:
         Heat: 1
-  - type: StaticPrice
-    price: 25
+    popupText: powered-light-component-burn-hand

@@ -29,7 +29,7 @@ public sealed class ProjectileSystem : SharedProjectileSystem
     {
         base.Initialize();
 
-        _cfg.OnValueChanged(WhiteCVars.DamageModifier, SetDamage, true);
+        _cfg.OnValueChanged(WhiteCVars.DamageModifier, SetDamage, true); // WD
 
         SubscribeLocalEvent<ProjectileComponent, StartCollideEvent>(OnStartCollide);
     }
@@ -65,13 +65,12 @@ public sealed class ProjectileSystem : SharedProjectileSystem
         RaiseLocalEvent(uid, ref ev);
 
         var otherName = ToPrettyString(target);
-        var direction = args.OurBody.LinearVelocity.Normalized();
-        var modifiedDamage = _damageableSystem.TryChangeDamage(target, ev.Damage * DamageModifier, component.IgnoreResistances, origin: component.Shooter);
+        var modifiedDamage = _damageableSystem.TryChangeDamage(target, ev.Damage * DamageModifier, component.IgnoreResistances, origin: component.Shooter); // WD
         var deleted = Deleted(target);
 
         if (modifiedDamage is not null && (EntityManager.EntityExists(component.Shooter) || EntityManager.EntityExists(component.Weapon)))
         {
-            if (modifiedDamage.Any() && !deleted)
+            if (modifiedDamage.AnyPositive() && !deleted)
             {
                 _color.RaiseEffect(Color.Red, new List<EntityUid> { target }, Filter.Pvs(target, entityManager: EntityManager));
             }
@@ -95,7 +94,7 @@ public sealed class ProjectileSystem : SharedProjectileSystem
         if (component.DeleteOnCollide)
             QueueDel(uid);
 
-        if (component.ImpactEffect != null && TryComp<TransformComponent>(uid, out var xform))
+        if (component.ImpactEffect != null && TryComp(uid, out TransformComponent? xform))
         {
             RaiseNetworkEvent(new ImpactEffectEvent(component.ImpactEffect, GetNetCoordinates(xform.Coordinates)), Filter.Pvs(xform.Coordinates, entityMan: EntityManager));
         }

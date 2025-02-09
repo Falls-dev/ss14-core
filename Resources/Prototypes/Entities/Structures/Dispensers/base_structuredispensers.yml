@@ -1,7 +1,7 @@
 - type: entity
   abstract: true
   id: ReagentDispenserBase
-  parent: ConstructibleMachine
+  parent: SmallConstructibleMachine
   placement:
     mode: SnapgridCenter
   components:
@@ -63,6 +63,7 @@
       whitelist:
         components:
         - FitsInDispenser
+      priority: 9
   - type: ItemSlots
   - type: ContainerContainer
     containers:

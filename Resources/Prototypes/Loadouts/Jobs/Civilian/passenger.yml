@@ -8,104 +8,107 @@
       role: JobPassenger
       time: 36000 #10 hrs, silly reward for people who play passenger a lot
 
-# Face
-- type: itemLoadout
-  id: AssistantFace
-  equipment: GasMask
+# Head of Greytide (for grey mantle)
+- type: loadoutEffectGroup
+  id: MasterGrey
   effects:
-    - !type:GroupLoadoutEffect
-      proto: GreyTider
-- type: startingGear
-  id: GasMask
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobPassenger
+      time: 72000 #20 hrs, fun mantle for the most experienced greytiders
+
+# Face
+- type: loadout
+  id: PassengerFace
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: GreyTider
   equipment:
     mask: ClothingMaskGas
 
-# Jumpsuit
-- type: itemLoadout
-  id: GreyJumpsuit
-  equipment: GreyJumpsuit
-
-- type: startingGear
+# Jumpsuits
+# Grey
+- type: loadout
   id: GreyJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitColorGrey
 
-- type: itemLoadout
-  id: GreyJumpskirt
-  equipment: GreyJumpskirt
-
-- type: startingGear
+- type: loadout
   id: GreyJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtColorGrey
 
-- type: itemLoadout
-  id: AncientJumpsuit
-  equipment: AncientJumpsuit
+# Rainbow
+- type: loadout
+  id: RainbowJumpsuit
   effects:
-    - !type:GroupLoadoutEffect
-      proto: GreyTider
-- type: startingGear
+  - !type:GroupLoadoutEffect
+    proto: GreyTider
+  equipment:
+    jumpsuit: ClothingUniformColorRainbow
+
+# Ancient
+- type: loadout
   id: AncientJumpsuit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: GreyTider
   equipment:
     jumpsuit: ClothingUniformJumpsuitAncient
 
+# Neck
+- type: loadout
+  id: Mantle
+  equipment:
+    neck: ClothingNeckMantle
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MasterGrey
+
+- type: startingGear
+  id: Mantle
+  equipment:
+    neck: ClothingNeckMantle
+
 # Back
-- type: itemLoadout
-  id: CommonBackpack
-  equipment: CommonBackpack
-
-- type: startingGear
+- type: loadout
   id: CommonBackpack
   equipment:
-    back: ClothingBackpackFilled
+    back: ClothingBackpack
 
-- type: itemLoadout
-  id: CommonSatchel
-  equipment: CommonSatchel
-
-- type: startingGear
+- type: loadout
   id: CommonSatchel
   equipment:
-    back: ClothingBackpackSatchelFilled
+    back: ClothingBackpackSatchel
 
-- type: itemLoadout
-  id: CommonDuffel
-  equipment: CommonDuffel
-
-- type: startingGear
+- type: loadout
   id: CommonDuffel
   equipment:
-    back: ClothingBackpackDuffelFilled
+    back: ClothingBackpackDuffel
 
 # Gloves
-- type: itemLoadout
-  id: AssistantGloves
-  equipment: FingerlessInsulatedGloves
+- type: loadout
+  id: PassengerGloves
   effects:
-    - !type:GroupLoadoutEffect
-      proto: GreyTider
-- type: startingGear
-  id: FingerlessInsulatedGloves
+  - !type:GroupLoadoutEffect
+    proto: GreyTider
   equipment:
     gloves: ClothingHandsGlovesFingerlessInsulated
 
 # Outerclothing
-- type: itemLoadout
-  id: AssistantWintercoat
-  equipment: AssistantWintercoat
-
-- type: startingGear
-  id: AssistantWintercoat
+- type: loadout
+  id: PassengerWintercoat
   equipment:
     outerClothing: ClothingOuterWinterCoat
 
-# PDA
-
-- type: itemLoadout # WD
-  id: AssistantPDA
-  equipment: AssistantPDA
-- type: startingGear
-  id: AssistantPDA
+# Shoes
+- type: loadout
+  id: BlackShoes
   equipment:
-    id: PassengerPDA
+    shoes: ClothingShoesColorBlack
+
+- type: loadout
+  id: WinterBoots
+  equipment:
+    shoes: ClothingShoesBootsWinter

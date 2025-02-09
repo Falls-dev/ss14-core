@@ -37,7 +37,7 @@
     containers:
     - board
   - type: StaticPrice
-    price: 280
+    price: 500
 
 - type: entity
   id: BlastDoorOpen
@@ -67,7 +67,7 @@
   - type: InteractionOutline
   - type: Damageable
     damageContainer: StructuralInorganic
-    damageModifierSet: Metallic
+    damageModifierSet: StructuralMetallicStrong
   - type: Destructible
     thresholds:
     - trigger:

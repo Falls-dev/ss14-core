@@ -90,7 +90,7 @@
     color: orange
   - type: StaticPrice
     price: 10
-
+  - type: ItemTogglePointLight
 
 - type: entity
   name: cheap lighter
@@ -212,6 +212,7 @@
     netsync: false
     radius: 1.2 #slightly stronger than the other lighters
     color: orange
+  - type: ItemTogglePointLight
   - type: UseDelay
   - type: IgnitionSource
     ignited: false

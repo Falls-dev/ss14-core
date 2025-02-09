@@ -23,20 +23,18 @@ public sealed partial class RoboticsConsoleWindow : FancyWindow
     public Action<string>? OnDisablePressed;
     public Action<string>? OnDestroyPressed;
 
-    private Entity<RoboticsConsoleComponent, LockComponent?> _console;
     private string? _selected;
     private Dictionary<string, CyborgControlData> _cyborgs = new();
 
-    public RoboticsConsoleWindow(EntityUid console)
+    public EntityUid Entity;
+
+    public RoboticsConsoleWindow()
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
         _lock = _entMan.System<LockSystem>();
         _sprite = _entMan.System<SpriteSystem>();
-
-        _console = (console, _entMan.GetComponent<RoboticsConsoleComponent>(console), null);
-        _entMan.TryGetComponent(_console, out _console.Comp2);
 
         Cyborgs.OnItemSelected += args =>
         {
@@ -66,12 +64,17 @@ public sealed partial class RoboticsConsoleWindow : FancyWindow
         DestroyButton.StyleClasses.Add(StyleBase.ButtonCaution);
     }
 
+    public void SetEntity(EntityUid uid)
+    {
+        Entity = uid;
+    }
+
     public void UpdateState(RoboticsConsoleState state)
     {
         _cyborgs = state.Cyborgs;
 
         // clear invalid selection
-        if (_selected is {} selected && !_cyborgs.ContainsKey(selected))
+        if (_selected is { } selected && !_cyborgs.ContainsKey(selected))
             _selected = null;
 
         var hasCyborgs = _cyborgs.Count > 0;
@@ -81,7 +84,7 @@ public sealed partial class RoboticsConsoleWindow : FancyWindow
 
         PopulateData();
 
-        var locked = _lock.IsLocked((_console, _console.Comp2));
+        var locked = _lock.IsLocked(Entity);
         DangerZone.Visible = !locked;
         LockedMessage.Visible = locked;
     }
@@ -101,7 +104,7 @@ public sealed partial class RoboticsConsoleWindow : FancyWindow
 
     private void PopulateData()
     {
-        if (_selected is not {} selected)
+        if (_selected is not { } selected)
         {
             SelectCyborg.Visible = true;
             BorgContainer.Visible = false;
@@ -116,7 +119,8 @@ public sealed partial class RoboticsConsoleWindow : FancyWindow
 
         BorgSprite.Texture = _sprite.Frame0(data.ChassisSprite!);
 
-        var batteryColor = data.Charge switch {
+        var batteryColor = data.Charge switch
+        {
             < 0.2f => "red",
             < 0.4f => "orange",
             < 0.6f => "yellow",
@@ -125,23 +129,29 @@ public sealed partial class RoboticsConsoleWindow : FancyWindow
         };
 
         var text = new FormattedMessage();
-        text.PushMarkup(Loc.GetString("robotics-console-model", ("name", model)));
-        text.AddMarkup(Loc.GetString("robotics-console-designation"));
+        text.AddMarkupOrThrow($"{Loc.GetString("robotics-console-model", ("name", model))}\n");
+        text.AddMarkupOrThrow(Loc.GetString("robotics-console-designation"));
         text.AddText($" {data.Name}\n"); // prevent players trolling by naming borg [color=red]satan[/color]
-        text.PushMarkup(Loc.GetString("robotics-console-battery", ("charge", (int) (data.Charge * 100f)), ("color", batteryColor)));
-        text.PushMarkup(Loc.GetString("robotics-console-brain", ("brain", data.HasBrain)));
-        text.AddMarkup(Loc.GetString("robotics-console-modules", ("count", data.ModuleCount)));
+        text.AddMarkupOrThrow($"{Loc.GetString("robotics-console-battery", ("charge", (int)(data.Charge * 100f)), ("color", batteryColor))}\n");
+        text.AddMarkupOrThrow($"{Loc.GetString("robotics-console-brain", ("brain", data.HasBrain))}\n");
+        text.AddMarkupOrThrow(Loc.GetString("robotics-console-modules", ("count", data.ModuleCount)));
         BorgInfo.SetMessage(text);
 
         // how the turntables
-        DisableButton.Disabled = !data.HasBrain;
-        DestroyButton.Disabled = _timing.CurTime < _console.Comp1.NextDestroy;
+        DisableButton.Disabled = !(data.HasBrain && data.CanDisable);
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
 
-        DestroyButton.Disabled = _timing.CurTime < _console.Comp1.NextDestroy;
+        if (_entMan.TryGetComponent(Entity, out RoboticsConsoleComponent? console))
+        {
+            DestroyButton.Disabled = _timing.CurTime < console.NextDestroy;
+        }
+        else
+        {
+            DestroyButton.Disabled = true;
+        }
     }
 }

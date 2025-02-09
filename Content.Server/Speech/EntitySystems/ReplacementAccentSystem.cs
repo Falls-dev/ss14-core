@@ -39,6 +39,9 @@ namespace Content.Server.Speech.EntitySystems
             if (!_proto.TryIndex<ReplacementAccentPrototype>(accent, out var prototype))
                 return message;
 
+            if (!_random.Prob(prototype.ReplacementChance))
+                return message;
+
             // Prioritize fully replacing if that exists--
             // ideally both aren't used at the same time (but we don't have a way to enforce that in serialization yet)
             if (prototype.FullReplacements != null)

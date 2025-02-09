@@ -29,6 +29,10 @@
     ClothingHeadHatShrineMaidenWig: 2
     ClothingOuterSuitShrineMaiden: 2
     Gohei: 2
+    ClothingOuterSuitWitchRobes: 2
+    ClothingHeadHatWitch1: 2
+    ClothingHeadHatRedRacoon: 2
+    ClothingOuterRedRacoon: 2
     ClothingHeadPaperSack: 2
     ClothingHeadPaperSackSmile: 2
     ClothingEyesBlindfold: 1
@@ -56,8 +60,6 @@
     ClothingNeckCloakMoth: 2
     ClothingOuterDogi: 1
     ClothingHeadHatMagician: 1
-    ClothingHeadHatRedRacoon: 2
-    ClothingOuterRedRacoon: 2
     ClothingHeadHatGladiator: 1
     ClothingUniformJumpsuitGladiator: 1
     ClothingHeadHatCowboyBrown: 1

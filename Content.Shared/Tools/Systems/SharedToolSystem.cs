@@ -1,6 +1,7 @@
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.DoAfter;
+using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Maps;
@@ -17,21 +18,24 @@ namespace Content.Shared.Tools.Systems;
 
 public abstract partial class SharedToolSystem : EntitySystem
 {
-    [Dependency] private   readonly IMapManager _mapManager = default!;
-    [Dependency] private   readonly IPrototypeManager _protoMan = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly IPrototypeManager _protoMan = default!;
     [Dependency] protected readonly ISharedAdminLogManager AdminLogger = default!;
-    [Dependency] private   readonly ITileDefinitionManager _tileDefManager = default!;
-    [Dependency] private   readonly SharedAudioSystem _audioSystem = default!;
-    [Dependency] private   readonly SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private readonly ITileDefinitionManager _tileDefManager = default!;
+    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] protected readonly SharedInteractionSystem InteractionSystem = default!;
-    [Dependency] protected readonly SharedItemToggleSystem ItemToggle = default!;
-    [Dependency] private   readonly SharedMapSystem _maps = default!;
-    [Dependency] private   readonly SharedPopupSystem _popup = default!;
+    [Dependency] protected readonly ItemToggleSystem ItemToggle = default!;
+    [Dependency] private readonly SharedMapSystem _maps = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] protected readonly SharedSolutionContainerSystem SolutionContainerSystem = default!;
-    [Dependency] private   readonly SharedTransformSystem _transformSystem = default!;
-    [Dependency] private   readonly TileSystem _tiles = default!;
-    [Dependency] private   readonly TurfSystem _turfs = default!;
+    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
+    [Dependency] private readonly TileSystem _tiles = default!;
+    [Dependency] private readonly TurfSystem _turfs = default!;
     [Dependency] protected readonly SharedSolutionContainerSystem SolutionContainer = default!;
+
+    public const string CutQuality = "Cutting";
+    public const string PulseQuality = "Pulsing";
 
     public override void Initialize()
     {
@@ -39,6 +43,7 @@ public abstract partial class SharedToolSystem : EntitySystem
         InitializeTile();
         InitializeWelder();
         SubscribeLocalEvent<ToolComponent, ToolDoAfterEvent>(OnDoAfter);
+        SubscribeLocalEvent<ToolComponent, ExaminedEvent>(OnExamine);
     }
 
     private void OnDoAfter(EntityUid uid, ToolComponent tool, ToolDoAfterEvent args)
@@ -50,9 +55,37 @@ public abstract partial class SharedToolSystem : EntitySystem
         ev.DoAfter = args.DoAfter;
 
         if (args.OriginalTarget != null)
-            RaiseLocalEvent(GetEntity(args.OriginalTarget.Value), (object) ev);
+            RaiseLocalEvent(GetEntity(args.OriginalTarget.Value), (object)ev);
         else
-            RaiseLocalEvent((object) ev);
+            RaiseLocalEvent((object)ev);
+    }
+
+    private void OnExamine(Entity<ToolComponent> ent, ref ExaminedEvent args)
+    {
+        // If the tool has no qualities, exit early
+        if (ent.Comp.Qualities.Count == 0)
+            return;
+
+        var message = new FormattedMessage();
+
+        // Create a list to store tool quality names
+        var toolQualities = new List<string>();
+
+        // Loop through tool qualities and add localized names to the list
+        foreach (var toolQuality in ent.Comp.Qualities)
+        {
+            if (_protoMan.TryIndex<ToolQualityPrototype>(toolQuality ?? string.Empty, out var protoToolQuality))
+            {
+                toolQualities.Add(Loc.GetString(protoToolQuality.Name));
+            }
+        }
+
+        // Combine the qualities into a single string and localize the final message
+        var qualitiesString = string.Join(", ", toolQualities);
+
+        // Add the localized message to the FormattedMessage object
+        message.AddMarkupPermissive(Loc.GetString("tool-component-qualities", ("qualities", qualitiesString)));
+        args.PushMessage(message);
     }
 
     public void PlayToolSound(EntityUid uid, ToolComponent tool, EntityUid? user)
@@ -217,7 +250,7 @@ public abstract partial class SharedToolSystem : EntitySystem
             return false;
 
         // check if the tool allows being used
-        var beforeAttempt = new ToolUseAttemptEvent(user);
+        var beforeAttempt = new ToolUseAttemptEvent(user, fuel);
         RaiseLocalEvent(tool, beforeAttempt);
         if (beforeAttempt.Cancelled)
             return false;
@@ -271,12 +304,17 @@ public abstract partial class SharedToolSystem : EntitySystem
 
             return new ToolDoAfterEvent(Fuel, evClone, OriginalTarget);
         }
+
+        public override bool IsDuplicate(DoAfterEvent other)
+        {
+            return other is ToolDoAfterEvent toolDoAfter && WrappedEvent.IsDuplicate(toolDoAfter.WrappedEvent);
+        }
     }
 
     [Serializable, NetSerializable]
     protected sealed partial class LatticeCuttingCompleteEvent : DoAfterEvent
     {
-        [DataField(required:true)]
+        [DataField(required: true)]
         public NetCoordinates Coordinates;
 
         private LatticeCuttingCompleteEvent()
@@ -296,4 +334,3 @@ public abstract partial class SharedToolSystem : EntitySystem
 public sealed partial class CableCuttingFinishedEvent : SimpleDoAfterEvent;
 
 #endregion
-

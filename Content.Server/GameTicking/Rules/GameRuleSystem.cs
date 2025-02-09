@@ -1,6 +1,6 @@
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Chat.Managers;
-using Content.Server.GameTicking.Components;
+using Content.Shared.GameTicking.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -41,11 +41,18 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
             if (args.Players.Length >= minPlayers)
                 continue;
 
-            ChatManager.SendAdminAnnouncement(Loc.GetString("preset-not-enough-ready-players",
-                ("readyPlayersCount", args.Players.Length),
-                ("minimumPlayers", minPlayers),
-                ("presetName", ToPrettyString(uid))));
-            args.Cancel();
+            if (gameRule.CancelPresetOnTooFewPlayers)
+            {
+                ChatManager.SendAdminAnnouncement(Loc.GetString("preset-not-enough-ready-players",
+                    ("readyPlayersCount", args.Players.Length),
+                    ("minimumPlayers", minPlayers), // TODO WD Check
+                    ("presetName", ToPrettyString(uid))));
+                args.Cancel();
+            }
+            else
+            {
+                ForceEndSelf(uid, gameRule);
+            }
         }
     }
 
@@ -76,7 +83,7 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
         while (query.MoveNext(out var uid, out var comp))
         {
             if (!TryComp<GameRuleComponent>(uid, out var ruleData))
-                return;
+                continue;
 
             AppendRoundEndText(uid, comp, ruleData, ref ev);
         }

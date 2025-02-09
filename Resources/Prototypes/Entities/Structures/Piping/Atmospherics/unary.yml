@@ -21,7 +21,7 @@
     - type: CollideOnAnchor
 
 - type: entity
-  parent: GasUnaryBase
+  parent: [GasUnaryBase, AirSensorBase]
   id: GasVentPump
   name: air vent
   description: Has a valve and a pump attached to it.
@@ -31,9 +31,6 @@
     - type: ApcPowerReceiver
     - type: ExtensionCableReceiver
     - type: DeviceNetwork
-      deviceNetId: AtmosDevices
-      receiveFrequencyId: AtmosMonitor
-      transmitFrequencyId: AtmosMonitor
       prefix: device-address-prefix-vent
       sendBroadcastAttemptEvent: true
       examinableAddress: true
@@ -87,6 +84,7 @@
             In: { state: vent_in }
             Out: { state: vent_out }
             Welded: { state: vent_welded }
+            Lockout: { state: vent_lockout }
     - type: GasVentPump
     - type: Construction
       graph: GasUnary
@@ -99,6 +97,8 @@
       sound:
         path: /Audio/Ambience/Objects/gas_vent.ogg
     - type: Weldable
+    - type: AtmosMonitoringConsoleDevice
+      navMapBlip: GasVentOpening
 
 - type: entity
   parent: GasUnaryBase
@@ -108,7 +108,6 @@
   placement:
     mode: SnapgridCenter
   components:
-    # TODO ATMOS: Find sprite for this.
     - type: Sprite
       drawdepth: FloorObjects
       sprite: Structures/Piping/Atmospherics/vent.rsi
@@ -116,7 +115,7 @@
         - sprite: Structures/Piping/Atmospherics/pipe.rsi
           state: pipeHalf
           map: [ "enum.PipeVisualLayers.Pipe" ]
-        - state: vent_off
+        - state: vent_passive
           map: [ "enum.SubfloorLayers.FirstLayer" ]
     - type: Appearance
     - type: PipeColorVisuals
@@ -124,9 +123,11 @@
     - type: Construction
       graph: GasUnary
       node: passivevent
+    - type: AtmosMonitoringConsoleDevice
+      navMapBlip: GasVentOpening
 
 - type: entity
-  parent: GasUnaryBase
+  parent: [GasUnaryBase, AirSensorBase]
   id: GasVentScrubber
   name: air scrubber
   description: Has a valve and pump attached to it.
@@ -136,9 +137,6 @@
     - type: ApcPowerReceiver
     - type: ExtensionCableReceiver
     - type: DeviceNetwork
-      deviceNetId: AtmosDevices
-      receiveFrequencyId: AtmosMonitor
-      transmitFrequencyId: AtmosMonitor
       prefix: device-address-prefix-scrubber
       examinableAddress: true
     - type: DeviceNetworkRequiresPower
@@ -202,6 +200,8 @@
       sound:
         path: /Audio/Ambience/Objects/gas_vent.ogg
     - type: Weldable
+    - type: AtmosMonitoringConsoleDevice
+      navMapBlip: GasVentScrubber
 
 - type: entity
   parent: GasUnaryBase
@@ -241,6 +241,8 @@
       visibleLayers:
       - enum.SubfloorLayers.FirstLayer
       - enum.LightLayers.Unshaded
+    - type: AtmosMonitoringConsoleDevice
+      navMapBlip: GasVentOpening
 
 - type: entity
   parent: [ BaseMachinePowered, ConstructibleMachine ]
@@ -268,6 +270,7 @@
       key: enum.ThermomachineUiKey.Key
     - type: WiresPanel
     - type: WiresVisuals
+    - type: PipeRestrictOverlap
     - type: NodeContainer
       nodes:
         pipe:
@@ -284,6 +287,8 @@
       examinableAddress: true
     - type: WiredNetworkConnection
     - type: PowerSwitch
+    - type: AtmosMonitoringConsoleDevice
+      navMapBlip: Thermoregulator
 
 - type: entity
   parent: BaseGasThermoMachine
@@ -293,6 +298,7 @@
   placement:
     mode: SnapgridCenter
   components:
+    - type: StationAiWhitelist
     - type: Sprite
       granularLayersRendering: true
       layers:
@@ -337,6 +343,7 @@
   placement:
     mode: SnapgridCenter
   components:
+    - type: StationAiWhitelist
     - type: Sprite
       granularLayersRendering : true
       layers:
@@ -404,7 +411,7 @@
     board: HellfireHeaterMachineCircuitBoard
 
 - type: entity
-  parent: [ BaseMachinePowered, ConstructibleMachine ]
+  parent: [ BaseMachinePowered, SmallConstructibleMachine ]
   id: BaseGasCondenser
   name: condenser
   description: Condenses gases into liquids. Now we just need some plumbing.
@@ -442,6 +449,7 @@
   - type: GasCondenser
   - type: AtmosPipeColor
   - type: AtmosDevice
+  - type: PipeRestrictOverlap
   - type: ApcPowerReceiver
     powerLoad: 10000
   - type: Machine
@@ -486,3 +494,5 @@
   - type: ExaminableSolution
     solution: tank
   - type: PowerSwitch
+  - type: AtmosMonitoringConsoleDevice
+    navMapBlip: Thermoregulator

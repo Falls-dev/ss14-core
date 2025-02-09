@@ -9,7 +9,7 @@ using Robust.Client.UserInterface.XAML;
 namespace Content.Client.Lobby.UI
 {
     [GenerateTypedNameReferences]
-    internal sealed partial class LobbyGui : UIScreen
+    public sealed partial class LobbyGui : UIScreen
     {
         [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
         [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
@@ -44,9 +44,19 @@ namespace Content.Client.Lobby.UI
                 case LobbyGuiState.CharacterSetup:
                     CharacterSetupState.Visible = true;
                     Center.Visible = false;
-                    RightSide.Visible = false;
                     LabelName.Visible = false;
                     Changelog.Visible = false;
+
+                    var actualWidth = (float)UserInterfaceManager.RootControl.PixelWidth;
+                    var setupWidth = (float)LeftSide.PixelWidth;
+
+                    if (1 - (setupWidth / actualWidth) > 0.30)
+                    {
+                        RightSide.Visible = false;
+                    }
+
+                    UserInterfaceManager.GetUIController<LobbyUIController>().ReloadCharacterSetup();
+
                     break;
             }
         }

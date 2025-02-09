@@ -33,6 +33,12 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitWarden
     back: ClothingBackpackSecurityFilled
+    eyes: ClothingEyesGlassesSecurity
     shoes: ClothingShoesBootsCombatFilled
     id: WardenPDA
-    ears: ClothingHeadsetAltSecurity
+    ears: ClothingHeadsetAltSecurity # WD
+    pocket1: WeaponPistolMk58
+  storage:
+    back:
+    - Flash
+    - MagazinePistol

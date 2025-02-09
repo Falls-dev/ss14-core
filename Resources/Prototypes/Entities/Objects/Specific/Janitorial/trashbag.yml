@@ -18,6 +18,12 @@
       collection: trashBagRustle
     storageInsertSound:
       collection: trashBagRustle
+    whitelist:
+      tags:
+        - Cartridge
+        - Trash
+  - type: UseDelay
+    delay: 0.5
   - type: Tag
     tags:
     - TrashBag

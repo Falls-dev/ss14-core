@@ -1,6 +1,7 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Damage.Components;
 using Content.Server.Weapons.Ranged.Systems;
+using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Camera;
 using Content.Server._White.Crossbow;
 using Content.Shared._White.Cult.Systems;
@@ -13,6 +14,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee;
+using Content.Shared.Wires;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 
@@ -26,18 +28,22 @@ namespace Content.Server.Damage.Systems
         [Dependency] private readonly DamageExamineSystem _damageExamine = default!;
         [Dependency] private readonly SharedCameraRecoilSystem _sharedCameraRecoil = default!;
         [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
-        [Dependency] private readonly ThrownItemSystem _thrownItem = default!;
+        [Dependency] private readonly ThrownItemSystem _thrownItem = default!; // WD
 
         public override void Initialize()
         {
             SubscribeLocalEvent<DamageOtherOnHitComponent, ThrowDoHitEvent>(OnDoHit,
-                before: new[] {typeof(MeleeThrowOnHitSystem)},
-                after: new[] {typeof(BloodSpearSystem)}); // WD EDIT
+                before: new[] { typeof(MeleeThrowOnHitSystem) },
+                after: new[] { typeof(BloodSpearSystem) }); // WD EDIT
             SubscribeLocalEvent<DamageOtherOnHitComponent, DamageExamineEvent>(OnDamageExamine);
+            SubscribeLocalEvent<DamageOtherOnHitComponent, AttemptPacifiedThrowEvent>(OnAttemptPacifiedThrow);
         }
 
         private void OnDoHit(EntityUid uid, DamageOtherOnHitComponent component, ThrowDoHitEvent args)
         {
+            if (TerminatingOrDeleted(args.Target))
+                return;
+
             // WD EDIT START
             if (args.Handled)
                 return;
@@ -77,6 +83,14 @@ namespace Content.Server.Damage.Systems
         private void OnDamageExamine(EntityUid uid, DamageOtherOnHitComponent component, ref DamageExamineEvent args)
         {
             _damageExamine.AddDamageExamine(args.Message, component.Damage, Loc.GetString("damage-throw"));
+        }
+
+        /// <summary>
+        /// Prevent players with the Pacified status effect from throwing things that deal damage.
+        /// </summary>
+        private void OnAttemptPacifiedThrow(Entity<DamageOtherOnHitComponent> ent, ref AttemptPacifiedThrowEvent args)
+        {
+            args.Cancel("pacified-cannot-throw");
         }
     }
 }

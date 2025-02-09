@@ -9,6 +9,7 @@ using Content.Shared.Item;
 using Content.Shared.Polymorph;
 using Content.Shared.Polymorph.Components;
 using Content.Shared.Popups;
+using Content.Shared.Storage.Components;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
@@ -28,6 +29,7 @@ namespace Content.Shared.Polymorph.Systems;
 public abstract class SharedChameleonProjectorSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly ISerializationManager _serMan = default!;
@@ -43,8 +45,10 @@ public abstract class SharedChameleonProjectorSystem : EntitySystem
 
         SubscribeLocalEvent<ChameleonDisguiseComponent, InteractHandEvent>(OnDisguiseInteractHand, before: [typeof(SharedItemSystem)]);
         SubscribeLocalEvent<ChameleonDisguiseComponent, DamageChangedEvent>(OnDisguiseDamaged);
-        SubscribeLocalEvent<ChameleonDisguiseComponent, ComponentShutdown>(OnDisguiseShutdown);
+
         SubscribeLocalEvent<ChameleonDisguiseComponent, GotEquippedHandEvent>(OnPickup); // WD
+        SubscribeLocalEvent<ChameleonDisguiseComponent, InsertIntoEntityStorageAttemptEvent>(OnDisguiseInsertAttempt);
+        SubscribeLocalEvent<ChameleonDisguiseComponent, ComponentShutdown>(OnDisguiseShutdown);
 
         SubscribeLocalEvent<ChameleonProjectorComponent, AfterInteractEvent>(OnInteract);
         SubscribeLocalEvent<ChameleonProjectorComponent, GetVerbsEvent<UtilityVerb>>(OnGetVerbs);
@@ -71,12 +75,18 @@ public abstract class SharedChameleonProjectorSystem : EntitySystem
         Timer.Spawn(100, () => TryReveal(ent.Comp.User));
     }
 
+
     private void OnDisguiseDamaged(Entity<ChameleonDisguiseComponent> ent, ref DamageChangedEvent args)
     {
-        // anything that would damage both like an explosion gets doubled
-        // feature? projector makes your atoms weaker or some bs
+        // this mirrors damage 1:1
         if (args.DamageDelta is { } damage)
             _damageable.TryChangeDamage(ent.Comp.User, damage);
+    }
+
+    private void OnDisguiseInsertAttempt(Entity<ChameleonDisguiseComponent> ent, ref InsertIntoEntityStorageAttemptEvent args)
+    {
+        // stay parented to the user, not the storage
+        args.Cancelled = true;
     }
 
     private void OnDisguiseShutdown(Entity<ChameleonDisguiseComponent> ent, ref ComponentShutdown args)
@@ -118,17 +128,17 @@ public abstract class SharedChameleonProjectorSystem : EntitySystem
     {
         if (_container.IsEntityInContainer(target))
         {
-            _popup.PopupClient(Loc.GetString(ent.Comp.ContainerPopup), target, user);
+            _popup.PopupClient(Loc.GetString("chameleon-projector-inside-container"), target, user);
             return false;
         }
 
         if (IsInvalid(ent.Comp, target))
         {
-            _popup.PopupClient(Loc.GetString(ent.Comp.InvalidPopup), target, user);
+            _popup.PopupClient(Loc.GetString("chameleon-projector-invalid"), target, user);
             return false;
         }
 
-        _popup.PopupClient(Loc.GetString(ent.Comp.SuccessPopup), target, user);
+        _popup.PopupClient(Loc.GetString("chameleon-projector-success"), target, user);
         Disguise(ent, user, target);
         return true;
     }
@@ -182,8 +192,8 @@ public abstract class SharedChameleonProjectorSystem : EntitySystem
     /// </summary>
     public bool IsInvalid(ChameleonProjectorComponent comp, EntityUid target)
     {
-        return (comp.Whitelist?.IsValid(target, EntityManager) == false)
-            || (comp.Blacklist?.IsValid(target, EntityManager) == true);
+        return _whitelist.IsWhitelistFail(comp.Whitelist, target)
+            || _whitelist.IsBlacklistPass(comp.Blacklist, target);
     }
 
     /// <summary>

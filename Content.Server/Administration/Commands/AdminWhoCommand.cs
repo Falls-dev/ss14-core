@@ -23,7 +23,7 @@ public sealed class AdminWhoCommand : IConsoleCommand
         var first = true;
 
         // WD start
-        var isAdmin = shell.Player is {} player && adminMgr.HasAdminFlag(player, AdminFlags.Admin);
+        var isAdmin = shell.Player is { } player && adminMgr.HasAdminFlag(player, AdminFlags.Admin);
         foreach (var admin in adminMgr.ActiveAdmins)
         {
             var adminData = adminMgr.GetAdminData(admin)!;

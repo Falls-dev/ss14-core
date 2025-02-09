@@ -9,8 +9,9 @@ namespace Content.Shared.Standing
     [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(SharedStandingStateSystem), typeof(StandingStateSystem))]
     public sealed partial class StandingStateComponent : Component
     {
-        [ViewVariables(VVAccess.ReadWrite), DataField]
-        public SoundSpecifier DownSound { get; private set; } = new SoundCollectionSpecifier("BodyFall");
+        [ViewVariables(VVAccess.ReadWrite)]
+        [DataField]
+        public SoundSpecifier? DownSound { get; private set; } = new SoundCollectionSpecifier("BodyFall");
 
         [DataField, AutoNetworkedField]
         public StandingState CurrentState { get; set; } = StandingState.Standing; // WD EDIT

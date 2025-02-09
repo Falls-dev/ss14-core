@@ -3,821 +3,580 @@
   id: JobCaptain
   groups:
   - CaptainHead
-  - CaptainEyes
-  - CommonCommandHeadset # WD
-  - CommonMaskCigar # WD
   - CaptainNeck
   - CaptainJumpsuit
   - CaptainBackpack
   - CaptainOuterClothing
-  - CaptainGloves # WD
-  - CaptainShoes
-  - CaptainPDA # WD
-  - SelfDefenceDevices # WD
+  - Survival
   - Trinkets
-  - CommonUnderwearBottomCaptain
-  - CommonUnderwearBraCaptain
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobHeadOfPersonnel
   groups:
+  - GroupTankHarness
   - HoPHead
-  - CommonGlasses # WD
-  - CommonCommandHeadset # WD
-  - CommonMaskCigar
   - HoPNeck
   - HoPJumpsuit
-  - HoPGloves # WD
   - HoPBackpack
   - HoPOuterClothing
-  - HoPShoes
-  - HoPPDA # WD
-  - SelfDefenceDevices # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottomHOP
-  - CommonUnderwearBraHOP
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
+# Silicons
 - type: roleLoadout
-  id: JobMaid
-  groups:
-  - MaidGlasses # WD
-  - CommonCommandHeadset # WD
-  - MaidHead
-  - MaidJumpsuit
-  - MaidGloves # WD
-  - MaidBackpack
-  - MaidShoes
-  - MaidPDA # WD
-  - MaidSelfDefenceDevices # WD
-  - MaidJobTrinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  id: JobStationAi
+  nameDataset: NamesAI
 
 # Civilian
 - type: roleLoadout
   id: JobPassenger
   groups:
-  - AssistantHead # WD
-  - AssistantHeadset # WD
-  - CommonGlasses # WD
-  - CommonMaskCigarette # WD
-  - AssistantJumpsuit
+  - GroupTankHarness
+  - PassengerJumpsuit
   - CommonBackpack
-  - CommonGloves # WD
-  - AssistantOuterClothing
-  - CommonShoes # WD
-  - AssistantPDA # WD
+  - PassengerNeck
+  - PassengerFace
+  - PassengerGloves
+  - PassengerOuterClothing
+  - PassengerShoes
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobBartender
   groups:
+  - GroupTankHarness
   - BartenderHead
-  - CommonServiceHeadset # WD
-  - CommonGlasses # WD
-  - CommonMaskCigarette # WD
   - BartenderJumpsuit
   - CommonBackpack
   - BartenderOuterClothing
-  - CommonShoes # WD
-  - BartenderPDA
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobServiceWorker
   groups:
-  - CommonServiceHeadset # WD
-  - CommonGlasses # WD
-  - CommonMaskCigarette # WD
+  - GroupTankHarness
   - BartenderJumpsuit
   - CommonBackpack
-  - CommonShoes # WD
-  - ServiceWorkerPDA # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobChef
   groups:
+  - GroupTankHarness
   - ChefHead
-  - CommonServiceHeadset # WD
-  - CommonGlasses # WD
   - ChefMask
   - ChefJumpsuit
   - CommonBackpack
   - ChefOuterClothing
-  - CommonShoes # WD
-  - ChefPDA # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobLibrarian
   groups:
-  - CommonServiceHeadset # WD
-  - CommonGlasses # WD
-  - CommonMaskCigarette # WD
+  - GroupTankHarness
   - LibrarianJumpsuit
   - CommonBackpack
-  - CommonShoes # WD
-  - LibrarianPDA
-  - ItemCane # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
+
+- type: roleLoadout
+  id: JobLawyer
+  groups:
+  - GroupTankHarness
+  - LawyerNeck
+  - LawyerJumpsuit
+  - CommonBackpack
+  - Glasses
+  - Survival
+  - Trinkets
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobChaplain
   groups:
+  - GroupTankHarness
   - ChaplainHead
-  - CommonGlasses # WD
-  - CommonServiceHeadset # WD
   - ChaplainMask
   - ChaplainNeck
   - ChaplainJumpsuit
-  - CommonGloves # WD
-  - ChaplainBackpack
+  - CommonBackpack
   - ChaplainOuterClothing
-  - ChaplainNullRod # WD
-  - CommonShoes # WD
-  - ChaplainPDA # WD
-  - ChaplainJobTrinkets # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobJanitor
   groups:
+  - GroupTankHarness
   - JanitorHead
-  - CommonServiceHeadset # WD
-  - CommonGlasses # WD
-  - CommonMaskCigarette # WD
   - JanitorJumpsuit
-  - CommonGloves # WD
+  - JanitorGloves
   - CommonBackpack
   - JanitorOuterClothing
-  - CommonShoes # WD
-  - JanitorPDA # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - JanitorPlunger
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobBotanist
   groups:
+  - GroupTankHarness
   - BotanistHead
-  - CommonServiceHeadset # WD
-  - CommonGlasses # WD
-  - BotanistMask # WD
   - BotanistJumpsuit
   - BotanistBackpack
   - BotanistOuterClothing
-  - BotanistGloves # WD
-  - CommonShoes # WD
-  - BotanistPDA # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobClown
   groups:
+  - GroupTankHarness
   - ClownHead
-  - CommonServiceHeadset # WD
-  - CommonGlasses # WD
-  - ClownMask # WD
-  - ClownNeck # WD
   - ClownJumpsuit
   - ClownBackpack
   - ClownOuterClothing
   - ClownShoes
-  - ClownPDA # WD
-  - ClownTrinkets # WD
+  - Glasses
+  - SurvivalClown
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobMime
   groups:
+  - GroupTankHarness
   - MimeHead
-  - CommonServiceHeadset # WD
   - MimeMask
   - MimeJumpsuit
   - MimeBackpack
   - MimeOuterClothing
-  - MimeGloves # WD
-  - CommonShoes # WD
-  - MimePDA
+  - MimeBelt
+  - Glasses
+  - SurvivalMime
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
 
 - type: roleLoadout
   id: JobMusician
   groups:
-  - MusicianHead # WD
-  - CommonGlasses # WD
-  - CommonServiceHeadset # WD
-  - MusicianJumpsuit # WD
+  - GroupTankHarness
+  - MusicianJumpsuit
+  - CommonBackpack
   - MusicianOuterClothing
-  - MusicianBackpack
-  - MusicianPDA # WD
-  - CommonShoes # WD
+  - Glasses
+  - Survival
   - Trinkets
   - Instruments
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
-
-- type: roleLoadout
-  id: JobBomzh
-  groups:
-  - BomzhJumpsuit
-  - BomzhPDA
-  - BomzhHead
-  - BomzhOuterclothing
-  - BomzhJobTrinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
+  - GroupSpeciesBreathTool
 
 # Cargo
 - type: roleLoadout
   id: JobQuartermaster
   groups:
+  - GroupTankHarness
   - QuartermasterHead
-  - QuartermasterHeadset # WD
-  - CommonGlasses # WD
   - QuartermasterNeck
   - QuartermasterJumpsuit
-  - QuartermasterBackpack
+  - CargoTechnicianBackpack
   - QuartermasterOuterClothing
-  - CommonGloves # WD
   - QuartermasterShoes
-  - QuartermasterPDA # WD
-  - SelfDefenceDevices # WD
-  - CommonCargoJobTrinkets
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottomQM
-  - CommonUnderwearBraQM
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobCargoTechnician
   groups:
+  - GroupTankHarness
   - CargoTechnicianHead
-  - CommonCargoHeadset # WD
-  - CommonGlasses # WD
   - CargoTechnicianJumpsuit
   - CargoTechnicianBackpack
   - CargoTechnicianOuterClothing
-  - CommonGloves # WD
   - CargoTechnicianShoes
-  - CargoTechnicianPDA
-  - CommonCargoJobTrinkets
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobSalvageSpecialist
   groups:
-  - SalvageSpecialistHead # WD
-  - SalvageSpecialistHeadset # WD
-  - SalvageSpecialistEyes # WD
-  - SalvageSpecialistMask # WD
-  - SalvageSpecialistJumpsuit # WD
-  - SalvageSpecialistOuterClothing
-  - SalvageSpecialistBelt # WD
+  - GroupTankHarness
   - SalvageSpecialistBackpack
-  - SalvageSpecialistGloves # WD
+  - SalvageSpecialistOuterClothing
   - SalvageSpecialistShoes
-  - SalvagePDA # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
+
 # Engineering
 - type: roleLoadout
   id: JobChiefEngineer
   groups:
+  - GroupTankHarness
   - ChiefEngineerHead
-  - ChiefEngineerHeadset # WD
   - ChiefEngineerJumpsuit
-  - ChiefEngineerBackpack
+  - StationEngineerBackpack
   - ChiefEngineerNeck
   - ChiefEngineerOuterClothing
-  - CommonGloves # WD
   - ChiefEngineerShoes
-  - ChiefEngineerPDA # WD
-  - SelfDefenceDevices # WD
+  - SurvivalExtended
   - Trinkets
-  - CommonUnderwearBottomCE
-  - CommonUnderwearBraCE
-  - CommonUnderwearSocks
-
-- type: roleLoadout
-  id: JobSeniorEngineer
-  groups:
-  - SeniorEngineerHead
-  - CommonEngineeringHeadset
-  - SeniorEngineerJumpsuit
-  - StationEngineerBackpack
-  - StationEngineerOuterClothing
-  - CommonGloves # WD
-  - StationEngineerShoes
-  - SeniorEngineerPDA
-  - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobTechnicalAssistant
   groups:
-  - StationEngineerHead
-  - CommonEngineeringHeadset
+  - GroupTankHarness
   - TechnicalAssistantJumpsuit
   - StationEngineerBackpack
-  - StationEngineerOuterClothing
-  - CommonGloves # WD
-  - StationEngineerShoes
-  - TechnicalAssistantPDA
+  - SurvivalExtended
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobStationEngineer
   groups:
+  - GroupTankHarness
   - StationEngineerHead
-  - CommonEngineeringHeadset
   - StationEngineerJumpsuit
   - StationEngineerBackpack
   - StationEngineerOuterClothing
-  - CommonGloves # WD
   - StationEngineerShoes
-  - StationEngineerPDA
+  - StationEngineerID
+  - SurvivalExtended
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobAtmosphericTechnician
   groups:
-  - StationEngineerHead
-  - CommonEngineeringHeadset
+  - GroupTankHarness
   - AtmosphericTechnicianJumpsuit
   - AtmosphericTechnicianBackpack
   - AtmosphericTechnicianOuterClothing
-  - CommonGloves # WD
   - AtmosphericTechnicianShoes
-  - AtmosphericTechnicianPDA
+  - SurvivalExtended
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 # Science
 - type: roleLoadout
   id: JobResearchDirector
   groups:
+  - GroupTankHarness
   - ResearchDirectorHead
-  - ResearchDirectorHeadset # WD
   - ResearchDirectorNeck
   - ResearchDirectorJumpsuit
-  - ResearchDirectorBackpack
-  - ResearchDirectorOuterClothing
-  - ResearchDirectorShoes
-  - CommonScienceGloves
-  - ResearchDirectorPDA
-  - SelfDefenceDevices # WD
-  - Trinkets
-  - CommonUnderwearBottomRD
-  - CommonUnderwearBraRD
-  - CommonUnderwearSocks
-
-- type: roleLoadout
-  id: JobSeniorResearcher
-  groups:
-  - ScientistHead
-  - CommonScienceHeadset
-  - CommonScientistNeck
-  - SeniorResearcherJumpsuit
   - ScientistBackpack
-  - SeniorResearcherOuterclothing
-  - CommonScienceGloves
-  - ScientistShoes
-  - SeniorResearcherPDA
+  - ResearchDirectorOuterClothing
+  - ScientistGloves
+  - ResearchDirectorShoes
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobScientist
   groups:
+  - GroupTankHarness
   - ScientistHead
-  - CommonScienceHeadset
-  - CommonScientistNeck
+  - ScientistNeck
   - ScientistJumpsuit
   - ScientistBackpack
   - ScientistOuterClothing
-  - CommonScienceGloves
+  - ScientistGloves
   - ScientistShoes
   - ScientistPDA
-  - CommonGlasses # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobResearchAssistant
   groups:
-  - CommonScienceHeadset
-  - CommonScientistNeck
+  - GroupTankHarness
   - ResearchAssistantJumpsuit
-  - ScientistOuterClothing
   - ScientistBackpack
-  - CommonScienceGloves
-  - ScientistShoes
-  - ResearchAssistantPDA
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 # Security
 - type: roleLoadout
   id: JobHeadOfSecurity
   groups:
   - HeadofSecurityHead
-  - HeadofSecurityEyes # WD
-  - CommonSecurityCommandHeadset # WD
-  - CommonSecurityCommandMask # WD
   - HeadofSecurityNeck
   - HeadofSecurityJumpsuit
-  - CommonGlovesSecurity # WD
-  - CommonSecurityBelt # WD
-  - CommonSecurityBackpack
-  - CommonSecurityShoes
-  - HeadofSecurityPDA
-  - SelfDefenceDevices # WD
-  - CommonSecurityJobTrinkets # WD
+  - SecurityBackpack
+  - SecurityBelt
+  - HeadofSecurityOuterClothing
+  - SecurityShoes
+  - SurvivalSecurity
   - Trinkets
-  - CommonUnderwearBottomHOS
-  - CommonUnderwearBraHOS
-  - CommonUnderwearSocks
+  - SecurityStar
+  - GroupSpeciesBreathToolSecurity
 
 - type: roleLoadout
   id: JobWarden
   groups:
   - WardenHead
-  - CommonSecurityHeadsetFull # WD
-  - CommonSecurityCommandMask # WD
-  - CommonSecurityNeck
   - WardenJumpsuit
-  - CommonSecurityBackpack
-  - CommonGlovesSecurity # WD
-  - CommonSecurityBelt # WD
-  - CommonSecurityShoes
-  - WardenPDA
-  - CommonSecurityJobTrinkets # WD
+  - SecurityBackpack
+  - SecurityBelt
+  - WardenOuterClothing
+  - SecurityShoes
+  - SurvivalSecurity
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
-
-- type: roleLoadout
-  id: JobSeniorOfficer
-  groups:
-  - CommonSecurityHead
-  - CommonSecurityHeadsetFull # WD
-  - CommonSecurityCommandMask # WD
-  - CommonSecurityNeck
-  - SeniorOfficerJumpsuit
-  - CommonSecurityBackpack
-  - SecurityOuterClothing
-  - CommonSecurityBelt # WD
-  - CommonGlovesSecurity # WD
-  - CommonSecurityShoes
-  - SeniorOfficerPDA
-  - CommonSecurityJobTrinkets # WD
-  - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
-
-- type: roleLoadout
-  id: JobBrigmedic
-  groups:
-  - BrigmedicHead
-  - BrigmedicHeadset
-  - BrigmedicUniform
-  - BrigmedicBackpack
-  - BrigmedicOuterClothing
-  - CommonMedicalGloves
-  - BrigmedicShoes
-  - CommonMedicalMask
-  - BrigmedicPDA
-  - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - SecurityStar
+  - GroupSpeciesBreathToolSecurity
 
 - type: roleLoadout
   id: JobSecurityOfficer
   groups:
-  - CommonSecurityHead
-  - CommonSecurityHeadsetFull # WD
-  - CommonSecurityMask # WD
-  - CommonSecurityNeck # WD
+  - SecurityHead
   - SecurityJumpsuit
-  - CommonSecurityBackpack
+  - SecurityBackpack
   - SecurityOuterClothing
-  - CommonSecurityBelt # WD
-  - CommonGlovesSecurity # WD
-  - CommonSecurityShoes
+  - SecurityShoes
   - SecurityPDA
-  - CommonSecurityJobTrinkets # WD
+  - SecurityBelt
+  - SurvivalSecurity
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - SecurityStar
+  - GroupSpeciesBreathToolSecurity
 
 - type: roleLoadout
   id: JobDetective
   groups:
   - DetectiveHead
-  - CommonSecurityHeadsetFull # WD
-  - CommonMaskCigarette # WD
-  - CommonSecurityNeck
+  - DetectiveNeck
   - DetectiveJumpsuit
-  - DetectiveBackpack
+  - SecurityBackpack
   - DetectiveOuterClothing
-  - DetectiveGloves
-  - DetectiveShoes
-  - DetectivePDA # WD
-  - CommonSecurityJobTrinkets # WD
+  - SecurityShoes
+  - SurvivalSecurity
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - SecurityStar
+  - GroupSpeciesBreathToolSecurity
 
 - type: roleLoadout
   id: JobSecurityCadet
   groups:
-  - CommonSecurityHead
-  - CommonSecurityHeadsetFull # WD
-  - CommonSecurityNeck
   - SecurityCadetJumpsuit
-  - CommonSecurityBackpack
-  - CommonGlovesSecurity # WD
-  - CommonSecurityShoes
-  - SecurityCadetPDA
-  - CommonSecurityJobTrinkets # WD
+  - SecurityBackpack
+  - SurvivalSecurity
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathToolSecurity
 
 # Medical
 - type: roleLoadout
   id: JobChiefMedicalOfficer
   groups:
+  - GroupTankHarness
   - ChiefMedicalOfficerHead
-  - ChiefMedicalOfficerHeadset # WD
-  - CommonMedicalMask # WD
-  - ChiefMedicalOfficerNeck
+  - MedicalMask
   - ChiefMedicalOfficerJumpsuit
-  - ChiefMedicalOfficerBackpack
-  - ChiefMedicalOfficerOuterClothing
-  - CommonMedicalGloves
-  - ChiefMedicalOfficerShoes
-  - ChiefMedicalOfficerPDA
-  - SelfDefenceDevices # WD
-  - Trinkets
-  - CommonUnderwearBottomCMO
-  - CommonUnderwearBraCMO
-  - CommonUnderwearSocks
-
-- type: roleLoadout
-  id: JobSeniorPhysician
-  groups:
-  - SeniorPhysicianHead
-  - CommonMedicalHeadset # WD
-  - CommonMedicalMask
-  - SeniorPhysicianJumpsuit
+  - MedicalGloves
   - MedicalBackpack
-  - SeniorPhysicianOuterClothing
-  - CommonMedicalShoes
-  - CommonMedicalGloves
-  - SeniorPhysicianPDA
+  - ChiefMedicalOfficerOuterClothing
+  - ChiefMedicalOfficerNeck
+  - ChiefMedicalOfficerShoes
+  - Glasses
+  - SurvivalMedical
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathToolMedical
 
 - type: roleLoadout
   id: JobMedicalDoctor
   groups:
+  - GroupTankHarness
   - MedicalDoctorHead
-  - CommonMedicalHeadset # WD
-  - CommonMedicalMask # WD
+  - MedicalMask
   - MedicalDoctorJumpsuit
+  - MedicalGloves
   - MedicalBackpack
   - MedicalDoctorOuterClothing
-  - CommonMedicalShoes # WD
-  - CommonMedicalGloves # WD
-  - MedicalDoctorPDA # WD
+  - MedicalShoes
+  - MedicalDoctorPDA
+  - Glasses
+  - SurvivalMedical
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathToolMedical
 
 - type: roleLoadout
   id: JobMedicalIntern
   groups:
-  - MedicalDoctorHead
-  - CommonMedicalHeadset # WD
-  - CommonMedicalMask # WD
+  - GroupTankHarness
   - MedicalInternJumpsuit
   - MedicalBackpack
-  - CommonMedicalOuterClothing
-  - CommonMedicalGloves
-  - CommonMedicalShoes
-  - MedicalInternPDA
+  - Glasses
+  - SurvivalMedical
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathToolMedical
 
 - type: roleLoadout
   id: JobChemist
   groups:
-  - ChemistHead # WD
-  - CommonMedicalHeadset # WD
-  - ChemistEyes
-  - CommonMedicalMask # WD
+  - GroupTankHarness
+  - MedicalMask
   - ChemistJumpsuit
+  - MedicalGloves
   - ChemistBackpack
   - ChemistOuterClothing
-  - CommonMedicalGloves # WD
-  - ChemistShoes
-  - ChemistPDA
+  - MedicalShoes
+  - SurvivalMedical
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathToolMedical
 
 - type: roleLoadout
   id: JobParamedic
   groups:
+  - GroupTankHarness
   - ParamedicHead
-  - CommonMedicalHeadset # WD
-  - CommonMedicalMask # WD
+  - MedicalMask
   - ParamedicJumpsuit
-  - ParamedicBackpack
+  - MedicalGloves
+  - MedicalBackpack
   - ParamedicOuterClothing
-  - ParamedicBelt # WD
-  - CommonMedicalGloves # WD
-  - CommonMedicalShoes # WD
-  - ParamedicPDA # WD
+  - ParamedicShoes
+  - Glasses
+  - SurvivalMedical
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
-
-# Justice
-
-- type: roleLoadout # WD
-  id: JobInspector
-  groups:
-  - InspectorHead
-  - InspectorGlasses
-  - CommonSecurityCommandHeadset
-  - InspectorMask
-  - InspectorNeck
-  - InspectorJumpsuit
-  - InspectorOuterclothing
-  - InspectorBackpack
-  - InspectorGloves
-  - InspectorShoes
-  - InspectorPDA
-  - BriefcaseInhand
-  - SelfDefenceDevices # WD
-  - InspectorJobTrinkets
-  - Trinkets
-  - CommonUnderwearBottomInspector
-  - CommonUnderwearBraInspector
-  - CommonUnderwearSocks
-
-- type: roleLoadout
-  id: JobLawyer
-  groups:
-  - LawyerHead # WD
-  - CommonGlasses # WD
-  - BasicSecurityHeadset # WD
-  - CommonMaskCigarette # WD
-  - LawyerNeck
-  - LawyerJumpsuit
-  - CommonBackpack
-  - CommonShoes # WD
-  - LawyerPDA
-  - BriefcaseInhand # WD
-  - LawyerJobTrinkets # WD
-  - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathToolMedical
 
 # Wildcards
 - type: roleLoadout
   id: JobZookeeper
   groups:
-  - ZookeeperHead # WD
-  - CommonServiceHeadset # WD
-  - CommonGlasses # WD
-  - ZookeeperJumpsuit # WD
+  - GroupTankHarness
   - CommonBackpack
-  - CommonShoes # WD
-  - ZookeeperPDA # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobReporter
   groups:
-  - ReporterHat # WD
-  - CommonGlasses # WD
-  - CommonServiceHeadset # WD
-  - CommonMaskCigarette # WD
+  - GroupTankHarness
   - ReporterJumpsuit
-  - CommonGloves # WD
   - CommonBackpack
-  - CommonShoes # WD
-  - ReporterPDA # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobPsychologist
   groups:
-  - PsychologistHead # WD
-  - CommonGlasses # WD
-  - CommonMedicalHeadset # WD
-  - CommonMedicalMask # WD
-  - PsychologistJumpsuit # WD
-  - CommonMedicalGloves # WD
+  - GroupTankHarness
+  - PsychologistJumpsuit
   - MedicalBackpack
-  - MedicalDoctorOuterClothing
-  - CommonMedicalShoes # WD
-  - PsychologistPDA # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
 
 - type: roleLoadout
   id: JobBoxer
   groups:
-  - CommonServiceHeadset # WD
-  - CommonGlasses # WD
+  - GroupTankHarness
   - BoxerJumpsuit
   - BoxerGloves
   - CommonBackpack
-  - BoxerBelt # WD
-  - CommonShoes # WD
-  - BoxerPDA # WD
+  - Glasses
+  - Survival
   - Trinkets
-  - CommonUnderwearBottom
-  - CommonUnderwearBra
-  - CommonUnderwearSocks
+  - GroupSpeciesBreathTool
+
+# These loadouts are used for non-crew spawns, like off-station antags and event mobs
+# They will be used without player configuration, thus they will only ever apply what is forced by MinLimit
+
+- type: roleLoadout
+  id: RoleSurvivalVoxSupport
+  groups:
+  - GroupSpeciesBreathTool
+  - GroupTankHarness
+
+- type: roleLoadout
+  id: RoleSurvivalStandard
+  groups:
+  - Survival
+  - GroupSpeciesBreathTool
+  - GroupTankHarness
+
+- type: roleLoadout
+  id: RoleSurvivalClown
+  groups:
+  - SurvivalClown
+  - GroupTankHarness
+
+- type: roleLoadout
+  id: RoleSurvivalExtended
+  groups:
+  - SurvivalExtended
+  - GroupSpeciesBreathTool
+  - GroupTankHarness
+
+- type: roleLoadout
+  id: RoleSurvivalMedical
+  groups:
+  - SurvivalMedical
+  - GroupSpeciesBreathToolMedical
+  - GroupTankHarness
+
+- type: roleLoadout
+  id: RoleSurvivalSecurity
+  groups:
+  - SurvivalSecurity
+  - GroupSpeciesBreathToolSecurity
+  - GroupTankHarness
+
+- type: roleLoadout
+  id: RoleSurvivalSyndicate
+  groups:
+  - SurvivalSyndicate
+  - GroupSpeciesBreathTool
+  - GroupTankHarness
+
+- type: roleLoadout
+  id: RoleSurvivalNukie
+  groups:
+  - SurvivalSyndicate
+  - GroupSpeciesBreathTool
+  - GroupPocketTankDouble
+
+- type: roleLoadout
+  id: RoleSurvivalEVA
+  groups:
+  - GroupEVATank
+  - SurvivalExtended

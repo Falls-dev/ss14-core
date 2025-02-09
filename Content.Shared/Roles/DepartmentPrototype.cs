@@ -1,12 +1,12 @@
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 
 namespace Content.Shared.Roles;
 
 [Prototype("department")]
 public sealed partial class DepartmentPrototype : IPrototype
 {
-    [IdDataField] public string ID { get; } = default!;
+    [IdDataField]
+    public string ID { get; } = string.Empty;
 
     /// <summary>
     /// The name LocId of the department that will be displayed in the various menus.
@@ -21,10 +21,10 @@ public sealed partial class DepartmentPrototype : IPrototype
     public LocId Description = string.Empty;
 
     /// <summary>
-    ///     A color representing this department to use for text.
+    /// A color representing this department to use for text.
     /// </summary>
     [DataField(required: true)]
-    public Color Color = default!;
+    public Color Color;
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public List<ProtoId<JobPrototype>> Roles = new();
@@ -40,13 +40,13 @@ public sealed partial class DepartmentPrototype : IPrototype
     /// Departments with a higher weight sorted before other departments in UI.
     /// </summary>
     [DataField]
-    public int Weight { get; private set; } = 0;
+    public int Weight { get; private set; }
 
     /// <summary>
-    /// A style string references to style in StyleNano.cs
+    /// Toggles the display of the department in the priority setting menu in the character editor.
     /// </summary>
     [DataField]
-    public string ButtonStyle = default!;
+    public bool EditorHidden;
 }
 
 /// <summary>
@@ -61,14 +61,14 @@ public sealed class DepartmentUIComparer : IComparer<DepartmentPrototype>
     {
         if (ReferenceEquals(x, y))
             return 0;
+
         if (ReferenceEquals(null, y))
             return 1;
+
         if (ReferenceEquals(null, x))
             return -1;
 
         var cmp = -x.Weight.CompareTo(y.Weight);
-        if (cmp != 0)
-            return cmp;
-        return string.Compare(x.ID, y.ID, StringComparison.Ordinal);
+        return cmp != 0 ? cmp : string.Compare(x.ID, y.ID, StringComparison.Ordinal);
     }
 }

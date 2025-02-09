@@ -26,8 +26,14 @@ namespace Content.Client.Info
 
             var rootContainer = new TabContainer();
 
-            var rulesList = new Info();
-            var tutorialList = new Info();
+            var rulesList = new RulesControl
+            {
+                Margin = new Thickness(10)
+            };
+            var tutorialList = new Info
+            {
+                Margin = new Thickness(10)
+            };
 
             rootContainer.AddChild(rulesList);
             rootContainer.AddChild(tutorialList);

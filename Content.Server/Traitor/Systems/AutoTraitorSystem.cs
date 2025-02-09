@@ -21,6 +21,6 @@ public sealed class AutoTraitorSystem : EntitySystem
 
     private void OnMindAdded(EntityUid uid, AutoTraitorComponent comp, MindAddedMessage args)
     {
-        _antag.ForceMakeAntag<AutoTraitorComponent>(args.Mind.Comp.Session, comp.Profile); // WD EDIT AHEAD OF WIZDEN UPSTREAM
+        _antag.ForceMakeAntag<AutoTraitorComponent>(args.Mind.Comp.Session, comp.Profile);
     }
 }

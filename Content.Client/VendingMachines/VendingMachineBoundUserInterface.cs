@@ -41,6 +41,9 @@ namespace Content.Client.VendingMachines
             _menu.Populate(_cachedInventory, component.PriceMultiplier, component.Credits);
 
             _menu.OpenCenteredLeft();
+            _menu.Title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
+            _menu.OnItemSelected += OnItemSelected;
+            Refresh();
         }
 
         // WD EDIT START
@@ -56,12 +59,19 @@ namespace Content.Client.VendingMachines
 
         protected override void UpdateState(BoundUserInterfaceState state)
         {
-            base.UpdateState(state);
+            var system = EntMan.System<VendingMachineSystem>();
+            _cachedInventory = system.GetAllInventory(Owner);
 
-            if (state is not VendingMachineInterfaceState newState)
+            _menu?.Populate(_cachedInventory);
+        }
+
+        private void OnItemSelected(GUIBoundKeyEventArgs args, ListData data) // TODO WD Fix
+        {
+            if (args.Function != EngineKeyFunctions.UIClick)
                 return;
 
-            _cachedInventory = newState.Inventory;
+            if (data is not VendorItemsListData { ItemIndex: var itemIndex })
+                return;
 
             _menu?.Populate(_cachedInventory, newState.PriceMultiplier, newState.Credits);
         }

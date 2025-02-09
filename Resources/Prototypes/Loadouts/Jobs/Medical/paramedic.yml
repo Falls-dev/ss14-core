@@ -1,104 +1,34 @@
 # Head
-- type: itemLoadout
-  id: ParamedicHead
-  equipment: ParamedicHead
-
-- type: startingGear
+- type: loadout
   id: ParamedicHead
   equipment:
     head: ClothingHeadHatParamedicsoft
 
 # Jumpsuit
-- type: itemLoadout
-  id: ParamedicJumpsuit
-  equipment: ParamedicJumpsuit
-
-- type: startingGear
+- type: loadout
   id: ParamedicJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitParamedic
 
-- type: itemLoadout
-  id: ParamedicJumpskirt
-  equipment: ParamedicJumpskirt
-
-- type: startingGear
+- type: loadout
   id: ParamedicJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtParamedic
 
-# Back
-- type: itemLoadout
-  id: ParamedicBackpack
-  equipment: ParamedicBackpack
-
-- type: startingGear
-  id: ParamedicBackpack
-  equipment:
-    back: ClothingBackpackParamedicFilled
-
-- type: itemLoadout
-  id: ParamedicSatchel
-  equipment: ParamedicSatchel
-
-- type: startingGear
-  id: ParamedicSatchel
-  equipment:
-    back: ClothingBackpackSatchelParamedicFilled
-
-- type: itemLoadout
-  id: ParamedicDuffel
-  equipment: ParamedicDuffel
-
-- type: startingGear
-  id: ParamedicDuffel
-  equipment:
-    back: ClothingBackpackDuffelParamedicFilled
-
 # Outer clothing
-- type: itemLoadout
-  id: ParamedicWindbreaker
-  equipment: ParamedicWindbreaker
-
-- type: startingGear
+- type: loadout
   id: ParamedicWindbreaker
   equipment:
     outerClothing: ClothingOuterCoatParamedicWB
 
-- type: itemLoadout
-  id: ParamedicWintercoat
-  equipment: ParamedicWintercoat
-
-- type: startingGear
+- type: loadout
   id: ParamedicWintercoat
   equipment:
     outerClothing: ClothingOuterWinterPara
 
 # Shoes
-- type: itemLoadout
-  id: BlueShoes
-  equipment: BlueShoes
-
-- type: startingGear
+- type: loadout
   id: BlueShoes
   equipment:
     shoes: ClothingShoesColorBlue
 
-# Belt
-- type: itemLoadout # WD
-  id: ParamedicBelt
-  equipment: ParamedicBelt
-- type: startingGear
-  id: ParamedicBelt
-  equipment:
-    belt: ClothingBeltMedicalEMT
-
-
-# PDA
-- type: itemLoadout # WD
-  id: ParamedicPDA
-  equipment: ParamedicPDA
-- type: startingGear
-  id: ParamedicPDA
-  equipment:
-    id: ParamedicPDA

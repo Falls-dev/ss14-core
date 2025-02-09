@@ -7,6 +7,7 @@
   - type: Sprite
     layers:
     - state: closed
+      map: ["closeLayer"]
     - state: open
       map: ["openLayer"]
       visible: false
@@ -77,6 +78,7 @@
   - type: Sprite
     layers:
     - state: closed
+      map: ["closeLayer"]
     - state: open
       map: ["openLayer"]
       visible: false
@@ -184,7 +186,7 @@
 
 - type: entity
   id: CigPackSyndicate
-  parent: CigPackBase
+  parent: [CigPackBase, BaseSyndicateContraband]
   name: Interdyne herbals packet
   description: Elite cigarettes for elite syndicate agents. Infused with medicine for when you need to do more than calm your nerves.
   components:
@@ -195,7 +197,7 @@
   - type: StorageFill
     contents:
     - id: CigaretteSyndicate
-      amount: 5
+      amount: 10
 
 - type: entity
   id: CigPackMixedMedical

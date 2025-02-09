@@ -1,84 +1,43 @@
 # Jumpsuit
-- type: itemLoadout
-  id: AtmosphericTechnicianJumpsuit
-  equipment: AtmosphericTechnicianJumpsuit
-
-- type: startingGear
+- type: loadout
   id: AtmosphericTechnicianJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitAtmos
 
-- type: itemLoadout
-  id: AtmosphericTechnicianJumpskirt
-  equipment: AtmosphericTechnicianJumpskirt
-
-- type: startingGear
+- type: loadout
   id: AtmosphericTechnicianJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtAtmos
 
-- type: itemLoadout
-  id: AtmosphericTechnicianJumpsuitCasual
-  equipment: AtmosphericTechnicianJumpsuitCasual
-
-- type: startingGear
+- type: loadout
   id: AtmosphericTechnicianJumpsuitCasual
   equipment:
     jumpsuit: ClothingUniformJumpsuitAtmosCasual
 
 # Back
-- type: itemLoadout
-  id: AtmosphericTechnicianBackpack
-  equipment: AtmosphericTechnicianBackpack
-
-- type: startingGear
+- type: loadout
   id: AtmosphericTechnicianBackpack
   equipment:
-    back: ClothingBackpackAtmosphericsFilled
+    back: ClothingBackpackAtmospherics
 
-- type: itemLoadout
-  id: AtmosphericTechnicianSatchel
-  equipment: AtmosphericTechnicianSatchel
-
-- type: startingGear
+- type: loadout
   id: AtmosphericTechnicianSatchel
   equipment:
-    back: ClothingBackpackSatchelAtmosphericsFilled
+    back: ClothingBackpackSatchelAtmospherics
 
-- type: itemLoadout
-  id: AtmosphericTechnicianDuffel
-  equipment: AtmosphericTechnicianDuffel
-
-- type: startingGear
+- type: loadout
   id: AtmosphericTechnicianDuffel
   equipment:
-    back: ClothingBackpackDuffelAtmosphericsFilled
+    back: ClothingBackpackDuffelAtmospherics
 
 # OuterClothing
-- type: itemLoadout
-  id: AtmosphericTechnicianWintercoat
-  equipment: AtmosphericTechnicianWintercoat
-
-- type: startingGear
+- type: loadout
   id: AtmosphericTechnicianWintercoat
   equipment:
     outerClothing: ClothingOuterWinterAtmos
 
 # Shoes
-- type: itemLoadout
-  id: WhiteShoes
-  equipment: WhiteShoes
-
-- type: startingGear
+- type: loadout
   id: WhiteShoes
   equipment:
     shoes: ClothingShoesColorWhite
-
-# PDA
-- type: itemLoadout # WD
-  id: AtmosphericTechnicianPDA
-  equipment: AtmosphericTechnicianPDA
-- type: startingGear
-  id: AtmosphericTechnicianPDA
-  equipment:
-    id: AtmosPDA

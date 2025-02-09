@@ -24,3 +24,6 @@
     shoes: ClothingShoesColorWhite
     id: AtmosPDA
     ears: ClothingHeadsetEngineering
+  #storage:
+    #back:
+    #- Stuff

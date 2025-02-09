@@ -10,13 +10,13 @@ using Robust.Shared.Utility;
 namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
 {
     [GenerateTypedNameReferences]
-    public sealed partial class GhostRoleButtonsBox : BoxContainer // WD Edit ahead of wizden upstream
+    public sealed partial class GhostRoleButtonsBox : BoxContainer
     {
         private SpriteSystem _spriteSystem;
         public event Action<GhostRoleInfo>? OnRoleSelected;
         public event Action<GhostRoleInfo>? OnRoleFollow;
 
-        public GhostRoleButtonsBox(bool hasAccess, FormattedMessage? reason, IEnumerable<GhostRoleInfo> roles, SpriteSystem spriteSystem) // WD Edit ahead of wizden upstream
+        public GhostRoleButtonsBox(bool hasAccess, FormattedMessage? reason, IEnumerable<GhostRoleInfo> roles, SpriteSystem spriteSystem)
         {
             RobustXamlLoader.Load(this);
             _spriteSystem = spriteSystem;

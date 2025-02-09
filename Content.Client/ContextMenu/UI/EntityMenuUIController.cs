@@ -18,6 +18,7 @@ using Content.Shared.Input;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Ninja.Components;
 using Content.Shared.Popups;
+using Content.Shared.Verbs;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -80,7 +81,7 @@ namespace Content.Client.ContextMenu.UI
             _context.OnContextKeyEvent += OnKeyBindDown;
 
             CommandBinds.Builder
-                .Bind(EngineKeyFunctions.UseSecondary,  new PointerInputCmdHandler(HandleOpenEntityMenu, outsidePrediction: true))
+                .Bind(EngineKeyFunctions.UseSecondary, new PointerInputCmdHandler(HandleOpenEntityMenu, outsidePrediction: true))
                 .Register<EntityMenuUIController>();
         }
 
@@ -228,7 +229,7 @@ namespace Content.Client.ContextMenu.UI
             if (_combatMode.IsInCombatMode(args.Session?.AttachedEntity))
                 return false;
 
-            var coords = args.Coordinates.ToMap(_entityManager, _xform);
+            var coords = _xform.ToMapCoordinates(args.Coordinates);
 
             if (_verbSystem.TryGetEntityMenuEntities(coords, out var entities))
                 OpenRootMenu(entities);
@@ -252,8 +253,20 @@ namespace Content.Client.ContextMenu.UI
                 return;
 
             // Do we need to do in-range unOccluded checks?
-            var ignoreFov = !_eyeManager.CurrentEye.DrawFov ||
-                (_verbSystem.Visibility & MenuVisibility.NoFov) == MenuVisibility.NoFov;
+            var visibility = _verbSystem.Visibility;
+
+            if (!_eyeManager.CurrentEye.DrawFov)
+            {
+                visibility &= ~MenuVisibility.NoFov;
+            }
+
+            var ev = new MenuVisibilityEvent()
+            {
+                Visibility = visibility,
+            };
+
+            _entityManager.EventBus.RaiseLocalEvent(player, ref ev);
+            visibility = ev.Visibility;
 
             _entityManager.TryGetComponent(player, out ExaminerComponent? examiner);
             var xformQuery = _entityManager.GetEntityQuery<TransformComponent>();
@@ -267,7 +280,7 @@ namespace Content.Client.ContextMenu.UI
                     continue;
                 }
 
-                if (ignoreFov)
+                if ((visibility & MenuVisibility.NoFov) == MenuVisibility.NoFov)
                     continue;
 
                 var pos = new MapCoordinates(_xform.GetWorldPosition(xform, xformQuery), xform.MapID);

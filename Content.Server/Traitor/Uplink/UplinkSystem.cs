@@ -1,16 +1,18 @@
+using System.Linq;
 using Content.Server.Store.Systems;
+using Content.Server.StoreDiscount.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Implants;
 using Content.Shared.Inventory;
 using Content.Shared.PDA;
 using Content.Shared.Store;
-using Content.Server.Store.Components;
+using Content.Shared.Store.Components;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Traitor.Uplink;
 
-public sealed class UplinkSystem : EntitySystem // WD EDIT AHEAD OF WIZDEN UPSTREAM
+public sealed class UplinkSystem : EntitySystem
 {
     [Dependency] private readonly InventorySystem _inventorySystem = default!;
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
@@ -38,7 +40,9 @@ public sealed class UplinkSystem : EntitySystem // WD EDIT AHEAD OF WIZDEN UPSTR
         bool giveDiscounts = false)
     {
         // Try to find target item if none passed
+
         uplinkEntity ??= FindUplinkTarget(user);
+
         if (uplinkEntity == null)
             return ImplantUplink(user, balance, giveDiscounts);
 
@@ -59,19 +63,19 @@ public sealed class UplinkSystem : EntitySystem // WD EDIT AHEAD OF WIZDEN UPSTR
     {
         var store = EnsureComp<StoreComponent>(uplink);
         store.AccountOwner = user;
-        _store.InitializeFromPreset("StorePresetUplink", uplink, store); // WD
+        //_store.InitializeFromPreset("StorePresetUplink", uplink, store); // TODO WD
         store.Balance.Clear();
         _store.TryAddCurrency(new Dictionary<string, FixedPoint2> { { TelecrystalCurrencyPrototype, balance } },
             uplink,
             store);
-        // WD REMOVED UNTIL PROPER UPSTREAM
-        // var uplinkInitializedEvent = new StoreInitializedEvent(
-        //     TargetUser: user,
-        //     Store: uplink,
-        //     UseDiscounts: giveDiscounts,
-        //     Listings: _store.GetAvailableListings(user, uplink, store)
-        //         .ToArray());
-        // RaiseLocalEvent(ref uplinkInitializedEvent);
+
+        var uplinkInitializedEvent = new StoreInitializedEvent(
+            TargetUser: user,
+            Store: uplink,
+            UseDiscounts: giveDiscounts,
+            Listings: _store.GetAvailableListings(user, uplink, store)
+                .ToArray());
+        RaiseLocalEvent(ref uplinkInitializedEvent);
     }
 
     /// <summary>
@@ -114,10 +118,12 @@ public sealed class UplinkSystem : EntitySystem // WD EDIT AHEAD OF WIZDEN UPSTR
             {
                 if (!pdaUid.ContainedEntity.HasValue)
                     continue;
+
                 if (HasComp<PdaComponent>(pdaUid.ContainedEntity.Value) || HasComp<StoreComponent>(pdaUid.ContainedEntity.Value))
                     return pdaUid.ContainedEntity.Value;
             }
         }
+
         // Also check hands
         foreach (var item in _handsSystem.EnumerateHeld(user))
         {

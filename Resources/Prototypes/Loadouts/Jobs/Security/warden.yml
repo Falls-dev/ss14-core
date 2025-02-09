@@ -1,66 +1,32 @@
 # Head
-- type: itemLoadout
-  id: WardenHead
-  equipment: WardenHead
-
-- type: startingGear
+- type: loadout
   id: WardenHead
   equipment:
     head: ClothingHeadHatWarden
 
-- type: itemLoadout
-  id: WardenBeret
-  equipment: WardenBeret
-
-- type: startingGear
+- type: loadout
   id: WardenBeret
   equipment:
     head: ClothingHeadHatBeretWarden
 
 # Jumpsuit
-- type: itemLoadout
-  id: WardenJumpsuit
-  equipment: WardenJumpsuit
-
-- type: startingGear
+- type: loadout
   id: WardenJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitWarden
 
-- type: itemLoadout
-  id: WardenJumpskirt
-  equipment: WardenJumpskirt
-
-- type: startingGear
+- type: loadout
   id: WardenJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtWarden
 
 # OuterClothing
-- type: itemLoadout
-  id: WardenCoat
-  equipment: WardenCoat
-
-- type: startingGear
+- type: loadout
   id: WardenCoat
   equipment:
     outerClothing: ClothingOuterCoatWarden
 
-- type: itemLoadout
-  id: WardenArmoredWinterCoat
-  equipment: WardenArmoredWinterCoat
-
-- type: startingGear
+- type: loadout
   id: WardenArmoredWinterCoat
   equipment:
     outerClothing: ClothingOuterWinterWarden
-
-# PDA
-
-- type: itemLoadout # WD
-  id: WardenPDA
-  equipment: WardenPDA
-- type: startingGear
-  id: WardenPDA
-  equipment:
-    id: WardenPDA

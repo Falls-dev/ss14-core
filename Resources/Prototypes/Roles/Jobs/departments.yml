@@ -1,12 +1,31 @@
 - type: department
+  id: CentralCommand
+  name: department-CentralCommand
+  description: department-CentralCommand-description
+  color: "#0c344d"
+  roles:
+  - CentralCommandOfficial
+  - CBURN
+  - ERTLeader
+  - ERTChaplain
+  - ERTJanitor
+  - ERTMedical
+  - ERTSecurity
+  - ERTEngineer
+  - DeathSquad
+  editorHidden: true
+  buttonStyle: ButtonColorCommandDepartment
+  weight: 210
+
+- type: department
   id: Command
   name: department-Command
   description: department-Command-description
   color: "#334E6D"
-  weight: 200
   roles:
-  - CentralCommandOfficial
   - Captain
+  - ChiefEngineer
+  - ChiefMedicalOfficer
   - HeadOfPersonnel
   - HeadOfSecurity
   - ChiefEngineer
@@ -15,8 +34,18 @@
   - Quartermaster
   - Inspector
   - Maid
+  - CentralCommandOfficial
+  - CBURN
+  - ERTLeader
+  - ERTChaplain
+  - ERTJanitor
+  - ERTMedical
+  - ERTSecurity
+  - ERTEngineer
+  - DeathSquad
   primary: false
   buttonStyle: ButtonColorCommandDepartment
+  weight: 200
 
 - type: department
   id: Security
@@ -108,7 +137,6 @@
   weight: 60
   roles:
   - HeadOfPersonnel
-  - Borg
   - Bartender
   - Janitor
   - Botanist
@@ -126,6 +154,17 @@
   - Passenger
   - Bomzh
   buttonStyle: ButtonColorCivilianDepartment
+
+- type: department
+  id: Silicon
+  name: department-Silicon
+  description: department-Silicon-description
+  color: "#D381C9"
+  weight: 40
+  roles:
+  - Borg
+  - StationAi
+  buttonStyle: ButtonColorScienceDepartment
 
 - type: department
   id: Specific

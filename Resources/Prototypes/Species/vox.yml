@@ -1,127 +1,159 @@
-- type: species
-  id: Vox
-  name: species-name-vox
-  roundStart: false # sad...
-  prototype: MobVox
-  bodyTypes:
-  - VoxNormal
-  markingLimits: MobVoxMarkingLimits
-  dollPrototype: MobVoxDummy
-  skinColoration: Hues
-  maleFirstNames: names_vox
-  femaleFirstNames: names_vox
-  naming: First
-  sexes:
-    - Unsexed
+# ! WD Deleted Voxes
+# - type: species
+#   id: Vox
+#   name: species-name-vox
+#   roundStart: true
+#   prototype: MobVox
+#   bodyTypes:
+#   - VoxNormal
+#   markingLimits: MobVoxMarkingLimits
+#   dollPrototype: MobVoxDummy
+#   skinColoration: VoxFeathers
+#   defaultSkinTone: "#6c741d"
+#   maleFirstNames: names_vox
+#   femaleFirstNames: names_vox
+#   naming: First
+#   sexes:
+#   - Unsexed
 
-- type: markingPoints
-  id: MobVoxMarkingLimits
-  onlyWhitelisted: true
-  points:
-    Hair:
-      points: 1
-      required: false
-    FacialHair:
-      points: 1
-      required: false
-    Chest:
-      points: 1
-      required: false
-    Legs:
-      points: 2
-      required: false
-    Arms:
-      points: 2
-      required: false
+# - type: speciesBaseSprites
+#   id: MobVoxSprites
+#   sprites:
+#     Head: MobVoxHead
+#     Snout: MobHumanoidAnyMarking
+#     Hair: MobHumanoidAnyMarking
+#     FacialHair: MobHumanoidAnyMarking
+#     Chest: MobVoxTorso
+#     Eyes: MobVoxEyes
+#     LArm: MobVoxLArm
+#     RArm: MobVoxRArm
+#     LHand: MobVoxLHand
+#     RHand: MobVoxRHand
+#     LLeg: MobVoxLLeg
+#     RLeg: MobVoxRLeg
+#     LFoot: MobVoxLFoot
+#     RFoot: MobVoxRFoot
+#     Tail: MobHumanoidAnyMarking
 
-- type: humanoidBaseSprite
-  id: MobVoxEyes
-  baseSprite:
-    sprite: Mobs/Customization/eyes.rsi
-    state: vox_eyes_s
+# - type: markingPoints
+#   id: MobVoxMarkingLimits
+#   onlyWhitelisted: true
+#   points:
+#     Hair:
+#       points: 1
+#       required: false
+#     FacialHair:
+#       points: 1
+#       required: false
+#     Head:
+#       points: 1
+#       required: true
+#     Snout:
+#       points: 1
+#       required: true
+#       defaultMarkings: [ VoxBeak ]
+#     Arms:
+#       points: 4
+#       required: true
+#       defaultMarkings: [ VoxLArmScales, VoxRArmScales, VoxRHandScales, VoxLHandScales ]
+#     Legs:
+#       points: 4
+#       required: true
+#       defaultMarkings: [ VoxLLegScales, VoxRLegScales, VoxRFootScales, VoxLFootScales ]
+#     Chest:
+#       points: 1
+#       required: false
+#     Tail:
+#       points: 1
+#       required: true
+#       defaultMarkings: [ VoxTail ]
 
-- type: humanoidBaseSprite
-  id: MobVoxHead
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: head_m
+# - type: humanoidBaseSprite
+#   id: MobVoxEyes
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: eyes
 
-- type: humanoidBaseSprite
-  id: MobVoxHeadMale
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: head_m
+# - type: humanoidBaseSprite
+#   id: MobVoxHead
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: head
 
-- type: humanoidBaseSprite
-  id: MobVoxHeadFemale
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: head_f
+# - type: humanoidBaseSprite
+#   id: MobVoxHeadMale
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: head
 
-- type: humanoidBaseSprite
-  id: MobVoxTorso
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: torso_m
+# - type: humanoidBaseSprite
+#   id: MobVoxHeadFemale
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: head
 
-- type: humanoidBaseSprite
-  id: MobVoxTorsoMale
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: torso_m
+# - type: humanoidBaseSprite
+#   id: MobVoxTorso
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: torso
 
-- type: humanoidBaseSprite
-  id: MobVoxTorsoFemale
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: torso_f
+# - type: humanoidBaseSprite
+#   id: MobVoxTorsoMale
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: torso
 
-- type: humanoidBaseSprite
-  id: MobVoxLLeg
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: l_leg
+# - type: humanoidBaseSprite
+#   id: MobVoxTorsoFemale
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: torso
 
-- type: humanoidBaseSprite
-  id: MobVoxLArm
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: l_arm
+# - type: humanoidBaseSprite
+#   id: MobVoxLLeg
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: l_leg
 
-- type: humanoidBaseSprite
-  id: MobVoxLHand
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: l_hand
+# - type: humanoidBaseSprite
+#   id: MobVoxLArm
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: l_arm
 
-- type: humanoidBaseSprite
-  id: MobVoxLFoot
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: l_foot
+# - type: humanoidBaseSprite
+#   id: MobVoxLHand
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: l_hand
 
-- type: humanoidBaseSprite
-  id: MobVoxRLeg
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: r_leg
+# - type: humanoidBaseSprite
+#   id: MobVoxLFoot
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: l_foot
 
-- type: humanoidBaseSprite
-  id: MobVoxRArm
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: r_arm
+# - type: humanoidBaseSprite
+#   id: MobVoxRLeg
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: r_leg
 
-- type: humanoidBaseSprite
-  id: MobVoxRHand
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: r_hand
+# - type: humanoidBaseSprite
+#   id: MobVoxRArm
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: r_arm
 
-- type: humanoidBaseSprite
-  id: MobVoxRFoot
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: r_foot
+# - type: humanoidBaseSprite
+#   id: MobVoxRHand
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: r_hand
 
-#
+# - type: humanoidBaseSprite
+#   id: MobVoxRFoot
+#   baseSprite:
+#     sprite: Mobs/Species/Vox/parts.rsi
+#     state: r_foot

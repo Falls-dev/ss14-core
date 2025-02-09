@@ -35,8 +35,11 @@
       behaviors:
       - !type:DoActsBehavior
         acts: ["Destruction"]
+  - type: IconSmooth
+    key: walls
+    mode: NoSprite
   - type: StaticPrice
-    price: 83
+    price: 100
 
 - type: entity
   id: PlasticFlapsClear

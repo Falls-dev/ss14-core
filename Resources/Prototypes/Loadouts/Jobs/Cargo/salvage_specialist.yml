@@ -1,96 +1,27 @@
-# Ears
-
-- type: itemLoadout # WD
-  id: SalvageSpecialistHeadset
-  equipment: SalvageSpecialistHeadset
-- type: startingGear
-  id: SalvageSpecialistHeadset
-  equipment:
-    ears: ClothingHeadsetMining
-
-# Mask
-
-- type: itemLoadout # WD
-  id: SalvageSpecialistMaskGas
-  equipment: SalvageSpecialistMaskGas
-- type: startingGear
-  id: SalvageSpecialistMaskGas
-  equipment:
-    mask: ClothingMaskGasExplorer
-
-# Jumpsuit
-
-- type: itemLoadout # WD
-  id: SalvageSpecialistJumpsuit
-  equipment: SalvageSpecialistJumpsuit
-- type: startingGear
-  id: SalvageSpecialistJumpsuit
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitSalvageSpecialist
-
 # Back
-- type: itemLoadout
-  id: SalvageSpecialistBackpack
-  equipment: SalvageSpecialistBackpack
-
-- type: startingGear
+- type: loadout
   id: SalvageSpecialistBackpack
   equipment:
-    back: ClothingBackpackSalvageFilled
+    back: ClothingBackpackSalvage
 
-- type: itemLoadout
-  id: SalvageSpecialistSatchel
-  equipment: SalvageSpecialistSatchel
-
-- type: startingGear
+- type: loadout
   id: SalvageSpecialistSatchel
   equipment:
-    back: ClothingBackpackSatchelSalvageFilled
+    back: ClothingBackpackSatchelSalvage
 
-- type: itemLoadout
-  id: SalvageSpecialistDuffel
-  equipment: SalvageSpecialistDuffel
-
-- type: startingGear
+- type: loadout
   id: SalvageSpecialistDuffel
   equipment:
-    back: ClothingBackpackDuffelSalvageFilled
+    back: ClothingBackpackDuffelSalvage
 
 # OuterClothing
-- type: itemLoadout
-  id: SalvageSpecialistWintercoat
-  equipment: SalvageSpecialistWintercoat
-
-- type: startingGear
+- type: loadout
   id: SalvageSpecialistWintercoat
   equipment:
     outerClothing: ClothingOuterWinterMiner
 
 # Shoes
-- type: itemLoadout
-  id: SalvageBoots
-  equipment: SalvageBoots
-
-- type: startingGear
+- type: loadout
   id: SalvageBoots
   equipment:
     shoes: ClothingShoesBootsSalvage
-
-# Belt
-- type: itemLoadout
-  id: SalvageSpecialistWebbing
-  equipment: SalvageSpecialistWebbing
-- type: startingGear
-  id: SalvageSpecialistWebbing
-  equipment:
-    belt: ClothingBeltSalvageWebbing
-
-# PDA
-
-- type: itemLoadout
-  id: SalvagePDA
-  equipment: SalvagePDA
-- type: startingGear
-  id: SalvagePDA
-  equipment:
-    id: SalvagePDA

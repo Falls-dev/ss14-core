@@ -1,4 +1,5 @@
 using Content.Server.Chat.Managers;
+using Content.Server.Administration.Managers;
 using Content.Server.Station.Systems;
 using Content.Server._White.Stalin;
 using Content.Shared.Administration;
@@ -18,8 +19,9 @@ namespace Content.Server.GameTicking.Commands
     {
         [Dependency] private readonly IEntityManager _entManager = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] private readonly StalinManager _stalinManager = default!;
-        [Dependency] private readonly IConfigurationManager _configurationManager = default!;
+        [Dependency] private readonly StalinManager _stalinManager = default!; // WD
+        [Dependency] private readonly IConfigurationManager _cfg = default!;
+        [Dependency] private readonly IAdminManager _adminManager = default!;
 
         public string Command => "joingame";
         public string Description => "";
@@ -56,7 +58,7 @@ namespace Content.Server.GameTicking.Commands
 
             var chatManager = IoCManager.Resolve<IChatManager>();
 
-            if (_configurationManager.GetCVar(WhiteCVars.StalinEnabled))
+            if (_cfg.GetCVar(WhiteCVars.StalinEnabled))
             {
                 var allowEnterRequest = await _stalinManager.AllowEnter(player);
 
@@ -83,11 +85,17 @@ namespace Content.Server.GameTicking.Commands
 
                 var station = _entManager.GetEntity(new NetEntity(sid));
                 var jobPrototype = _prototypeManager.Index<JobPrototype>(id);
-                if(stationJobs.TryGetJobSlot(station, jobPrototype, out var slots) == false || slots == 0)
+                if (stationJobs.TryGetJobSlot(station, jobPrototype, out var slots) == false || slots == 0)
                 {
                     shell.WriteLine($"{jobPrototype.LocalizedName} has no available slots.");
                     return;
                 }
+
+                if (_adminManager.IsAdmin(player) && _cfg.GetCVar(CCVars.AdminDeadminOnJoin))
+                {
+                    _adminManager.DeAdmin(player);
+                }
+
                 ticker.MakeJoinGame(player, station, id);
                 return;
             }

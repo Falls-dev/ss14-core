@@ -38,41 +38,40 @@ public sealed class MaterialArbitrageTest
         await server.WaitIdleAsync();
 
         var entManager = server.ResolveDependency<IEntityManager>();
-        var sysManager = server.ResolveDependency<IEntitySystemManager>();
         var mapManager = server.ResolveDependency<IMapManager>();
-        Assert.That(mapManager.IsMapInitialized(testMap.MapId));
-
         var protoManager = server.ResolveDependency<IPrototypeManager>();
-        var pricing = sysManager.GetEntitySystem<PricingSystem>();
-        var stackSys = sysManager.GetEntitySystem<StackSystem>();
+
+        var pricing = entManager.System<PricingSystem>();
+        var stackSys = entManager.System<StackSystem>();
+        var mapSystem = server.System<SharedMapSystem>();
+        var latheSys = server.System<SharedLatheSystem>();
         var compFact = server.ResolveDependency<IComponentFactory>();
+
+        Assert.That(mapSystem.IsInitialized(testMap.MapId));
 
         var constructionName = compFact.GetComponentName(typeof(ConstructionComponent));
         var compositionName = compFact.GetComponentName(typeof(PhysicalCompositionComponent));
         var materialName = compFact.GetComponentName(typeof(MaterialComponent));
         var destructibleName = compFact.GetComponentName(typeof(DestructibleComponent));
 
-        // construct inverted lathe recipe dictionary
-        Dictionary<string, List<LatheRecipePrototype>> latheRecipes = new();
-        foreach (var proto in protoManager.EnumeratePrototypes<LatheRecipePrototype>())
-        {
-            latheRecipes.GetOrNew(proto.Result).Add(proto);
-        }
+        // get the inverted lathe recipe dictionary
+        var latheRecipes = latheSys.InverseRecipes;
 
         // Lets assume the possible lathe for resource multipliers:
-        var multiplier = MathF.Pow(LatheComponent.DefaultPartRatingMaterialUseMultiplier, MachinePartComponent.MaxRating - 1);
+        // TODO: each recipe can technically have its own cost multiplier associated with it, so this test needs redone to factor that in.
+        var multiplier = MathF.Pow(0.85f, 3);
 
         // create construction dictionary
         Dictionary<string, ConstructionComponent> constructionRecipes = new();
         foreach (var proto in protoManager.EnumeratePrototypes<EntityPrototype>())
         {
-            if (proto.NoSpawn || proto.Abstract || pair.IsTestPrototype(proto))
+            if (proto.HideSpawnMenu || proto.Abstract || pair.IsTestPrototype(proto))
                 continue;
 
             if (!proto.Components.TryGetValue(constructionName, out var destructible))
                 continue;
 
-            var comp = (ConstructionComponent) destructible.Component;
+            var comp = (ConstructionComponent)destructible.Component;
             constructionRecipes.Add(proto.ID, comp);
         }
 
@@ -109,7 +108,7 @@ public sealed class MaterialArbitrageTest
                         !spawnProto.Components.TryGetValue(compositionName, out var compositionReg))
                         continue;
 
-                    var mat = (PhysicalCompositionComponent) compositionReg.Component;
+                    var mat = (PhysicalCompositionComponent)compositionReg.Component;
                     foreach (var (matId, amount) in mat.MaterialComposition)
                     {
                         materials[matId] = materialStep.Amount * amount + materials.GetValueOrDefault(matId);
@@ -126,13 +125,13 @@ public sealed class MaterialArbitrageTest
         // Here we get the set of entities/materials spawned when destroying an entity.
         foreach (var proto in protoManager.EnumeratePrototypes<EntityPrototype>())
         {
-            if (proto.NoSpawn || proto.Abstract || pair.IsTestPrototype(proto))
+            if (proto.HideSpawnMenu || proto.Abstract || pair.IsTestPrototype(proto))
                 continue;
 
             if (!proto.Components.TryGetValue(destructibleName, out var destructible))
                 continue;
 
-            var comp = (DestructibleComponent) destructible.Component;
+            var comp = (DestructibleComponent)destructible.Component;
 
             var spawnedEnts = new Dictionary<string, int>();
             var spawnedMats = new Dictionary<string, int>();
@@ -160,7 +159,7 @@ public sealed class MaterialArbitrageTest
                             !spawnProto.Components.TryGetValue(compositionName, out var compositionReg))
                             continue;
 
-                        var mat = (PhysicalCompositionComponent) compositionReg.Component;
+                        var mat = (PhysicalCompositionComponent)compositionReg.Component;
                         foreach (var (matId, amount) in mat.MaterialComposition)
                         {
                             spawnedMats[matId] = value.Max * amount + spawnedMats.GetValueOrDefault(matId);
@@ -191,7 +190,7 @@ public sealed class MaterialArbitrageTest
                 {
                     foreach (var recipe in recipes)
                     {
-                        foreach (var (matId, amount) in recipe.RequiredMaterials)
+                        foreach (var (matId, amount) in recipe.Materials)
                         {
                             var actualAmount = SharedLatheSystem.AdjustMaterial(amount, recipe.ApplyMaterialDiscount, multiplier);
                             if (spawnedMats.TryGetValue(matId, out var numSpawned))
@@ -243,7 +242,7 @@ public sealed class MaterialArbitrageTest
                         !spawnProto.Components.TryGetValue(compositionName, out var compositionReg))
                         continue;
 
-                    var mat = (PhysicalCompositionComponent) compositionReg.Component;
+                    var mat = (PhysicalCompositionComponent)compositionReg.Component;
                     foreach (var (matId, amount) in mat.MaterialComposition)
                     {
                         materials[matId] = spawnCompletion.Amount * amount + materials.GetValueOrDefault(matId);
@@ -271,7 +270,7 @@ public sealed class MaterialArbitrageTest
                 {
                     foreach (var recipe in recipes)
                     {
-                        foreach (var (matId, amount) in recipe.RequiredMaterials)
+                        foreach (var (matId, amount) in recipe.Materials)
                         {
                             var actualAmount = SharedLatheSystem.AdjustMaterial(amount, recipe.ApplyMaterialDiscount, multiplier);
                             if (deconstructedMats.TryGetValue(matId, out var numSpawned))
@@ -297,13 +296,13 @@ public sealed class MaterialArbitrageTest
         Dictionary<string, PhysicalCompositionComponent> physicalCompositions = new();
         foreach (var proto in protoManager.EnumeratePrototypes<EntityPrototype>())
         {
-            if (proto.NoSpawn || proto.Abstract || pair.IsTestPrototype(proto))
+            if (proto.HideSpawnMenu || proto.Abstract || pair.IsTestPrototype(proto))
                 continue;
 
             if (!proto.Components.TryGetValue(compositionName, out var composition))
                 continue;
 
-            var comp = (PhysicalCompositionComponent) composition.Component;
+            var comp = (PhysicalCompositionComponent)composition.Component;
             physicalCompositions.Add(proto.ID, comp);
         }
 
@@ -326,7 +325,7 @@ public sealed class MaterialArbitrageTest
                 {
                     foreach (var recipe in recipes)
                     {
-                        foreach (var (matId, amount) in recipe.RequiredMaterials)
+                        foreach (var (matId, amount) in recipe.Materials)
                         {
                             var actualAmount = SharedLatheSystem.AdjustMaterial(amount, recipe.ApplyMaterialDiscount, multiplier);
                             if (compositionComponent.MaterialComposition.TryGetValue(matId, out var numSpawned))

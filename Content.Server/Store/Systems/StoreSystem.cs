@@ -5,11 +5,11 @@ using Content.Shared.Implants.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
-using Content.Shared.Store;
+using Content.Shared.Store.Components;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
-using System.Linq;
 using Robust.Shared.Utility;
+using System.Linq;
 
 namespace Content.Server.Store.Systems;
 
@@ -43,7 +43,6 @@ public sealed partial class StoreSystem : EntitySystem
     private void OnMapInit(EntityUid uid, StoreComponent component, MapInitEvent args)
     {
         RefreshAllListings(component);
-        InitializeFromPreset(component.Preset, uid, component);
         component.StartingMap = Transform(uid).MapUid;
     }
 
@@ -53,7 +52,6 @@ public sealed partial class StoreSystem : EntitySystem
         if (MetaData(uid).EntityLifeStage == EntityLifeStage.MapInitialized)
         {
             RefreshAllListings(component);
-            InitializeFromPreset(component.Preset, uid, component);
         }
 
         var ev = new StoreAddedEvent();
@@ -111,6 +109,10 @@ public sealed partial class StoreSystem : EntitySystem
     /// Gets the value from an entity's currency component.
     /// Scales with stacks.
     /// </summary>
+    /// <remarks>
+    /// If this result is intended to be used with <see cref="TryAddCurrency(Robust.Shared.GameObjects.Entity{Content.Server.Store.Components.CurrencyComponent?},Robust.Shared.GameObjects.Entity{Content.Shared.Store.Components.StoreComponent?})"/>,
+    /// consider using <see cref="TryAddCurrency(Robust.Shared.GameObjects.Entity{Content.Server.Store.Components.CurrencyComponent?},Robust.Shared.GameObjects.Entity{Content.Shared.Store.Components.StoreComponent?})"/> instead to ensure that the currency is consumed in the process.
+    /// </remarks>
     /// <param name="uid"></param>
     /// <param name="component"></param>
     /// <returns>The value of the currency</returns>
@@ -127,16 +129,20 @@ public sealed partial class StoreSystem : EntitySystem
     {
         if (!Resolve(currency.Owner, ref currency.Comp))
             return false;
+
         if (!Resolve(store.Owner, ref store.Comp))
             return false;
+
         var value = currency.Comp.Price;
         if (TryComp(currency.Owner, out StackComponent? stack) && stack.Count != 1)
         {
             value = currency.Comp.Price
                 .ToDictionary(v => v.Key, p => p.Value * stack.Count);
         }
+
         if (!TryAddCurrency(value, store, store.Comp))
             return false;
+
         // Avoid having the currency accidentally be re-used. E.g., if multiple clients try to use the currency in the
         // same tick
         currency.Comp.Price.Clear();
@@ -173,45 +179,6 @@ public sealed partial class StoreSystem : EntitySystem
 
         UpdateUserInterface(null, uid, store);
         return true;
-    }
-
-    /// <summary>
-    /// Initializes a store based on a preset ID
-    /// </summary>
-    /// <param name="preset">The ID of a store preset prototype</param>
-    /// <param name="uid"></param>
-    /// <param name="component">The store being initialized</param>
-    public void InitializeFromPreset(string? preset, EntityUid uid, StoreComponent component)
-    {
-        if (preset == null)
-            return;
-
-        if (!_proto.TryIndex<StorePresetPrototype>(preset, out var proto))
-            return;
-
-        InitializeFromPreset(proto, uid, component);
-    }
-
-    /// <summary>
-    /// Initializes a store based on a given preset
-    /// </summary>
-    /// <param name="preset">The StorePresetPrototype</param>
-    /// <param name="uid"></param>
-    /// <param name="component">The store being initialized</param>
-    public void InitializeFromPreset(StorePresetPrototype preset, EntityUid uid, StoreComponent component)
-    {
-        component.Preset = preset.ID;
-        component.CurrencyWhitelist.UnionWith(preset.CurrencyWhitelist);
-        component.Categories.UnionWith(preset.Categories);
-        if (component.Balance == new Dictionary<string, FixedPoint2>() && preset.InitialBalance != null) //if we don't have a value stored, use the preset
-            TryAddCurrency(preset.InitialBalance, uid, component);
-
-        ApplySales(component.Listings, preset); // WD
-
-        if (_ui.HasUi(uid, StoreUiKey.Key))
-        {
-            _ui.SetUiState(uid, StoreUiKey.Key, new StoreInitializeState(preset.StoreName));
-        }
     }
 }
 

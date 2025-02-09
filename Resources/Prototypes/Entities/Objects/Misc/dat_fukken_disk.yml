@@ -1,6 +1,6 @@
 - type: entity
   name: nuclear authentication disk
-  parent: BaseItem
+  parent: [BaseItem, BaseGrandTheftContraband]
   id: NukeDisk
   description: A nuclear auth disk, capable of arming a nuke if used along with a code. Note from nanotrasen reads "THIS IS YOUR MOST IMPORTANT POSESSION, SECURE DAT FUKKEN DISK!"
   components:
@@ -38,7 +38,7 @@
 
 - type: entity
   name: nuclear authentication disk
-  parent: BaseItem
+  parent: [BaseItem, BaseGrandTheftContraband]
   id: NukeDiskFake
   suffix: Fake
   description: A nuclear auth disk, capable of arming a nuke if used along with a code. Note from nanotrasen reads "THIS IS YOUR MOST IMPORTANT POSESSION, SECURE DAT FUKKEN DISK!"
@@ -61,3 +61,6 @@
     sound:
       path: /Audio/White/Items/handling/disk_drop.ogg
     # WD edit sounds end
+  - type: Tag
+    tags:
+    - FakeNukeDisk

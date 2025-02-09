@@ -19,7 +19,7 @@ namespace Content.Server.Preferences.Managers
     /// Sends <see cref="MsgPreferencesAndSettings"/> before the client joins the lobby.
     /// Receives <see cref="MsgSelectCharacter"/> and <see cref="MsgUpdateCharacter"/> at any time.
     /// </summary>
-    public sealed class ServerPreferencesManager : IServerPreferencesManager
+    public sealed class ServerPreferencesManager : IServerPreferencesManager, IPostInjectInit
     {
         [Dependency] private readonly IServerNetManager _netManager = default!;
         [Dependency] private readonly IConfigurationManager _cfg = default!;
@@ -31,12 +31,16 @@ namespace Content.Server.Preferences.Managers
         [Dependency] private readonly SponsorsManager _sponsors = default!;
         [Dependency] private readonly IAdminManager _adminManager = default!;
         // WD-EDIT
+        [Dependency] private readonly ILogManager _log = default!;
+        [Dependency] private readonly UserDbDataManager _userDb = default!;
 
         // Cache player prefs on the server so we don't need as much async hell related to them.
         private readonly Dictionary<NetUserId, PlayerPrefData> _cachedPlayerPrefs =
             new();
 
-        private readonly ISawmill _sawmill = default!;
+        private ISawmill _sawmill = default!;
+
+        private int MaxCharacterSlots => _cfg.GetCVar(CCVars.GameMaxCharacterSlots);
 
         public void Init()
         {
@@ -44,6 +48,7 @@ namespace Content.Server.Preferences.Managers
             _netManager.RegisterNetMessage<MsgSelectCharacter>(HandleSelectCharacterMessage);
             _netManager.RegisterNetMessage<MsgUpdateCharacter>(HandleUpdateCharacterMessage);
             _netManager.RegisterNetMessage<MsgDeleteCharacter>(HandleDeleteCharacterMessage);
+            _sawmill = _log.GetSawmill("prefs");
         }
 
         private async void HandleSelectCharacterMessage(MsgSelectCharacter message)
@@ -106,7 +111,7 @@ namespace Content.Server.Preferences.Managers
             // WD-EDIT
             var allowedMarkings = _sponsors.TryGetInfo(userId, out var sponsor)
                 ? sponsor.AllowedMarkings
-                : new string[] {};
+                : new string[] { };
 
             var isAdminSpecie = _adminManager.HasAdminFlag(session, Shared.Administration.AdminFlags.AdminSpecies);
 
@@ -211,7 +216,7 @@ namespace Content.Server.Preferences.Managers
                     {
                         var allowedMarkings = _sponsors.TryGetInfo(session.UserId, out var sponsor)
                             ? sponsor.AllowedMarkings
-                            : new string[] {};
+                            : new string[] { };
 
                         var isAdminSpecie =
                             _adminManager.HasAdminFlag(session, Shared.Administration.AdminFlags.AdminSpecies);
@@ -233,19 +238,16 @@ namespace Content.Server.Preferences.Managers
             // And play time info is loaded concurrently from the DB with preferences.
             var prefsData = _cachedPlayerPrefs[session.UserId];
             DebugTools.Assert(prefsData.Prefs != null);
-            prefsData.Prefs = SanitizePreferences(session, prefsData.Prefs, _dependencies, session.UserId);
+            prefsData.Prefs = SanitizePreferences(session, prefsData.Prefs, _dependencies);
 
             prefsData.PrefsLoaded = true;
 
-            var msg = new MsgPreferencesAndSettings
+            var msg = new MsgPreferencesAndSettings();
+            msg.Preferences = prefsData.Prefs;
+            msg.Settings = new GameSettings
             {
-                Preferences = prefsData.Prefs,
-                Settings = new GameSettings
-                {
-                    MaxCharacterSlots = GetMaxUserCharacterSlots(session.UserId)
-                }
+                MaxCharacterSlots = MaxCharacterSlots
             };
-
             _netManager.ServerSendMessage(msg, session.Channel);
         }
 
@@ -288,7 +290,6 @@ namespace Content.Server.Preferences.Managers
 
         /// <summary>
         /// Retrieves preferences for the given username from storage.
-        /// Creates and saves default preferences if they are not found, then returns them.
         /// </summary>
         public PlayerPreferences GetPreferences(NetUserId userId)
         {
@@ -303,7 +304,6 @@ namespace Content.Server.Preferences.Managers
 
         /// <summary>
         /// Retrieves preferences for the given username from storage or returns null.
-        /// Creates and saves default preferences if they are not found, then returns them.
         /// </summary>
         public PlayerPreferences? GetPreferencesOrNull(NetUserId? userId)
         {
@@ -326,12 +326,23 @@ namespace Content.Server.Preferences.Managers
             return prefs;
         }
 
+        private PlayerPreferences SanitizePreferences(ICommonSession session, PlayerPreferences prefs, IDependencyCollection collection)
+        {
+            var prefs = await _db.GetPlayerPreferencesAsync(userId, cancel); // TODO WD CHECK
+            if (prefs is null)
+            {
+                return await _db.InitPrefsAsync(userId, HumanoidCharacterProfile.Random(), cancel);
+            }
+
+            return prefs;
+        }
+
         private PlayerPreferences SanitizePreferences(ICommonSession session, PlayerPreferences prefs, IDependencyCollection collection, NetUserId userId)
         {
             // WD-EDIT
             var allowedMarkings = _sponsors.TryGetInfo(userId, out var sponsor)
                 ? sponsor.AllowedMarkings
-                : new string[] {};
+                : new string[] { };
 
             var isAdminSpecie = false;
             isAdminSpecie = _adminManager.HasAdminFlag(session, Shared.Administration.AdminFlags.AdminSpecies);
@@ -351,11 +362,7 @@ namespace Content.Server.Preferences.Managers
             return usernames
                 .Select(p => (_cachedPlayerPrefs[p].Prefs, p))
                 .Where(p => p.Prefs != null)
-                .Select(p =>
-                {
-                    var idx = p.Prefs!.SelectedCharacterIndex;
-                    return new KeyValuePair<NetUserId, ICharacterProfile>(p.p, p.Prefs!.GetProfile(idx));
-                });
+                .Select(p => new KeyValuePair<NetUserId, ICharacterProfile>(p.p, p.Prefs!.SelectedCharacter));
         }
 
         internal static bool ShouldStorePrefs(LoginType loginType)
@@ -367,6 +374,13 @@ namespace Content.Server.Preferences.Managers
         {
             public bool PrefsLoaded;
             public PlayerPreferences? Prefs;
+        }
+
+        void IPostInjectInit.PostInject()
+        {
+            _userDb.AddOnLoadPlayer(LoadData);
+            _userDb.AddOnFinishLoad(FinishLoad);
+            _userDb.AddOnPlayerDisconnect(OnClientDisconnected);
         }
     }
 }

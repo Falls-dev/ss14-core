@@ -25,6 +25,8 @@
   - Maintenance
   - Service
   - Detective
+  - Cryogenics
+  - External
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
@@ -36,4 +38,11 @@
     back: ClothingBackpackSecurityFilledDetective
     shoes: ClothingShoesBootsCombatFilled
     id: DetectivePDA
-    ears: ClothingHeadsetAltSecurity
+    ears: ClothingHeadsetAltSecurity # WD
+    eyes: ClothingEyesGlassesSecurity
+    belt: ClothingBeltHolsterFilled
+  storage:
+    back:
+    - Flash
+    - ForensicPad
+    - ForensicScanner

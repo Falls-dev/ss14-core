@@ -9,6 +9,7 @@
     - Revolutionary
     - Cultist
     - Changeling
+    - AllHostile
 
 - type: npcFaction
   id: NanoTrasen
@@ -21,11 +22,14 @@
   - Cultist
   - Wizard
   - Changeling
+  - Dragon
+  - AllHostile
 
 - type: npcFaction
   id: Mouse
   hostile:
     - PetsNT
+    - AllHostile
 
 - type: npcFaction
   id: Passive
@@ -37,6 +41,7 @@
   - SimpleHostile
   - Zombie
   - Xeno
+  - AllHostile
 
 - type: npcFaction
   id: SimpleHostile
@@ -49,6 +54,7 @@
   - Revolutionary
   - Cultist
   - Changeling
+  - AllHostile
 
 - type: npcFaction
   id: SimpleNeutral
@@ -64,6 +70,8 @@
   - Cultist
   - Wizard
   - Changeling
+  - Dragon
+  - AllHostile
 
 - type: npcFaction
   id: Xeno
@@ -76,6 +84,7 @@
   - Revolutionary
   - Cultist
   - Changeling
+  - AllHostile
 
 - type: npcFaction
   id: Zombie
@@ -90,6 +99,7 @@
   - Cultist
   - Wizard
   - Changeling
+  - AllHostile
 
 - type: npcFaction
   id: Revolutionary
@@ -98,6 +108,25 @@
   - Zombie
   - SimpleHostile
   - Dragon
+  - Cultist
+  - Wizard
+  - Changeling
+  - AllHostile
+
+- type: npcFaction
+  id: AllHostile
+  hostile:
+  - NanoTrasen
+  - Dragon
+  - Mouse
+  - Passive
+  - PetsNT
+  - SimpleHostile
+  - SimpleNeutral
+  - Syndicate
+  - Xeno
+  - Zombie
+  - Revolutionary
   - Cultist
   - Wizard
   - Changeling
@@ -113,6 +142,7 @@
     - Syndicate
     - Wizard
     - Changeling
+    - AllHostile
 
 - type: npcFaction
   id: Wizard
@@ -123,6 +153,7 @@
   - Revolutionary
   - Zombie
   - Changeling
+  - AllHostile
 
 - type: npcFaction
   id: Changeling
@@ -136,4 +167,5 @@
   - Revolutionary
   - Zombie
   - Wizard
+  - AllHostile
 # WD EDIT END

@@ -73,9 +73,8 @@
   - type: InputMover
   - type: MobMover
   - type: ZombieImmune
-  - type: Penetrated
-  - type: ClothingRequiredStepTriggerImmune
-    slots: All
+  - type: Penetrated # WD
+  - type: ProtectedFromStepTriggers
 
 - type: entity
   abstract: true
@@ -225,7 +224,7 @@
         acts: [ "Destruction" ]
 
 - type: entity
-  name: Reagent slime
+  name: reagent slime
   id: ReagentSlime
   suffix: Water
   parent: [ MobAdultSlimes, MobCombat ]
@@ -234,6 +233,7 @@
   - type: GhostRole
     prob: 0
     description: ghost-role-information-angry-slimes-description
+    rules: ghost-role-information-angry-slimes-rules
     raffle:
       settings: short
   - type: NpcFactionMember

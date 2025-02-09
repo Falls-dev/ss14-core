@@ -141,8 +141,8 @@ namespace Content.Server.RoundEnd
             EntityUid? requester = null,
             bool checkCooldown = true,
             string text = "round-end-system-shuttle-called-announcement",
-            string name = "Station",
-            string? reason = null)
+            string name = "round-end-system-shuttle-sender-announcement",
+            string? reason = null) // WD
         {
             var duration = DefaultCountdownDuration;
 
@@ -165,8 +165,8 @@ namespace Content.Server.RoundEnd
             EntityUid? requester = null,
             bool checkCooldown = true,
             string text = "round-end-system-shuttle-called-announcement",
-            string name = "Station",
-            string? reason = null)
+            string name = "round-end-system-shuttle-sender-announcement",
+            string? reason = null) // WD
         {
             if (_gameTicker.RunLevel != GameRunLevel.InRound)
                 return;
@@ -228,7 +228,7 @@ namespace Content.Server.RoundEnd
             ExpectedCountdownEnd = _gameTiming.CurTime + countdownTime;
 
             // TODO full game saves
-            Timer.Spawn(countdownTime, _shuttle.CallEmergencyShuttle, _countdownTokenSource.Token);
+            Timer.Spawn(countdownTime, _shuttle.DockEmergencyShuttle, _countdownTokenSource.Token);
 
             ActivateCooldown();
             RaiseLocalEvent(RoundEndSystemChangedEvent.Default);
@@ -447,14 +447,14 @@ namespace Content.Server.RoundEnd
             if (_countdownTokenSource == null)
                 return;
 
-            var countdown =  ExpectedCountdownEnd - _gameTiming.CurTime + delay;
+            var countdown = ExpectedCountdownEnd - _gameTiming.CurTime + delay;
             ExpectedCountdownEnd = _gameTiming.CurTime + countdown;
 
             _countdownTokenSource.Cancel();
-            _countdownTokenSource = new ();
+            _countdownTokenSource = new();
 
             if (countdown != null)
-                Timer.Spawn(countdown.Value, _shuttle.CallEmergencyShuttle, _countdownTokenSource.Token);
+                Timer.Spawn(countdown.Value, _shuttle.DockEmergencyShuttle, _countdownTokenSource.Token);
 
             _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("round-end-system-shuttle-curse-delayed-announcement"),
                 Loc.GetString("Station"), colorOverride: Color.Gold);

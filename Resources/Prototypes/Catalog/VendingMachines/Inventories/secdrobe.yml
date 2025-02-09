@@ -23,9 +23,12 @@
     ClothingShoesBootsJack: 4
     ClothingShoesBootsCombat: 4
     ClothingHeadHatBeretSecurity: 3
+    ClothingMaskNeckGaiterRed: 3
     ClothingHandsGlovesFingerless: 3
     ClothingUniformJumpskirtSecGrey: 3
     ClothingNeckScarfStripedRed: 3
     ClothingShoesBootsWinterSec: 3
     ClothingShoesBootsCowboyBlack: 3
     ClothingHeadHatCowboyBlack: 3
+  contrabandInventory:
+    ClothingMaskClownSecurity: 1

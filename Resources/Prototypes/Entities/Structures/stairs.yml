@@ -15,7 +15,7 @@
     anchored: true
   - type: Damageable
     damageContainer: StructuralInorganic
-    damageModifierSet: StructuralMetallic
+    damageModifierSet: Metallic
   - type: Destructible
     thresholds:
     - trigger:
@@ -59,7 +59,7 @@
 - type: entity
   id: StairStageWhite
   parent: Stairs
-  suffix: White, stage 
+  suffix: White, stage
   components:
   - type: Sprite
     sprite: Structures/stairs.rsi

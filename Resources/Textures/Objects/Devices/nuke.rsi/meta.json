@@ -11,13 +11,25 @@
             "name": "nuclearbomb_base"
         },
         {
-            "name": "nuclearbomb_exploding"
+            "name": "nuclearbomb_exploding",
+            "delays": [
+                [
+                    0.1,
+                    0.1
+                ]
+            ]
         },
         {
             "name": "nuclearbomb_safetyoff"
         },
         {
-            "name": "nuclearbomb_timing"
+            "name": "nuclearbomb_timing",
+            "delays": [
+                [
+                    0.5,
+                    0.5
+                ]
+            ]
         }
     ]
 }

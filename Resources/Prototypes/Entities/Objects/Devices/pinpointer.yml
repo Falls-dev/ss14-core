@@ -43,7 +43,7 @@
 - type: entity
   name: pinpointer
   id: PinpointerNuclear
-  parent: PinpointerBase
+  parent: [ PinpointerBase, BaseCommandContraband ]
   components:
   - type: Pinpointer
     component: NukeDisk
@@ -53,7 +53,7 @@
   name: syndicate pinpointer
   description: Produced specifically for nuclear operative missions, get that disk!
   id: PinpointerSyndicateNuclear
-  parent: PinpointerBase
+  parent: [ PinpointerBase, BaseSyndicateContraband ]
   components:
   - type: Sprite
     layers:

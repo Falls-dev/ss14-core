@@ -1,11 +1,14 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared._White.TTS;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.IdentityManagement;
+using Content.Shared.Item.ItemToggle;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.PowerCell.Components;
 using Content.Shared.Silicons.Borgs.Components;
+using Content.Shared.UserInterface;
 using Content.Shared.Wires;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
@@ -20,11 +23,12 @@ public abstract partial class SharedBorgSystem : EntitySystem
 {
     [Dependency] protected readonly SharedContainerSystem Container = default!;
     [Dependency] protected readonly ItemSlotsSystem ItemSlots = default!;
+    [Dependency] protected readonly ItemToggleSystem Toggle = default!;
     [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] protected readonly IPrototypeManager PrototypeManager = default!; // Giedi EDIT
-    [Dependency] protected readonly IRobustRandom RobustRandom = default!; // Giedi EDIT
+    [Dependency] protected readonly IPrototypeManager PrototypeManager = default!; // WD EDIT
+    [Dependency] protected readonly IRobustRandom RobustRandom = default!; // WD EDIT
 
-    private HashSet<TTSVoicePrototype> _voices = new ();
+    private HashSet<TTSVoicePrototype> _voices = new();
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -37,6 +41,8 @@ public abstract partial class SharedBorgSystem : EntitySystem
         SubscribeLocalEvent<BorgChassisComponent, EntInsertedIntoContainerMessage>(OnInserted);
         SubscribeLocalEvent<BorgChassisComponent, EntRemovedFromContainerMessage>(OnRemoved);
         SubscribeLocalEvent<BorgChassisComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeedModifiers);
+        SubscribeLocalEvent<BorgChassisComponent, ActivatableUIOpenAttemptEvent>(OnUIOpenAttempt);
+        SubscribeLocalEvent<TryGetIdentityShortInfoEvent>(OnTryGetIdentityShortInfo);
 
         // WD edit
         SubscribeLocalEvent<SharedTTSComponent, ComponentInit>(EnsureRandomTTS);
@@ -45,7 +51,7 @@ public abstract partial class SharedBorgSystem : EntitySystem
         GenerateVoiceList(); // WD edit
     }
 
-    // Giedi added
+    // WD added
     private void EnsureRandomTTS(EntityUid uid, SharedTTSComponent component, ComponentInit args)
     {
         if (!HasComp<BorgChassisComponent>(uid))
@@ -63,7 +69,23 @@ public abstract partial class SharedBorgSystem : EntitySystem
             .Where(x => x.BorgVoice)
             .ToHashSet();
     }
-    // Giedi added
+    // WD added
+
+    private void OnTryGetIdentityShortInfo(TryGetIdentityShortInfoEvent args)
+    {
+        if (args.Handled)
+        {
+            return;
+        }
+
+        if (!HasComp<BorgChassisComponent>(args.ForActor))
+        {
+            return;
+        }
+
+        args.Title = Name(args.ForActor).Trim();
+        args.Handled = true;
+    }
 
     private void OnItemSlotInsertAttempt(EntityUid uid, BorgChassisComponent component, ref ItemSlotInsertAttemptEvent args)
     {
@@ -106,6 +128,13 @@ public abstract partial class SharedBorgSystem : EntitySystem
         component.ModuleContainer = Container.EnsureContainer<Container>(uid, component.ModuleContainerId, containerManager);
     }
 
+    private void OnUIOpenAttempt(EntityUid uid, BorgChassisComponent component, ActivatableUIOpenAttemptEvent args)
+    {
+        // borgs can't view their own ui
+        if (args.User == uid)
+            args.Cancel();
+    }
+
     protected virtual void OnInserted(EntityUid uid, BorgChassisComponent component, EntInsertedIntoContainerMessage args)
     {
 
@@ -118,7 +147,7 @@ public abstract partial class SharedBorgSystem : EntitySystem
 
     private void OnRefreshMovementSpeedModifiers(EntityUid uid, BorgChassisComponent component, RefreshMovementSpeedModifiersEvent args)
     {
-        if (component.Activated)
+        if (Toggle.IsActivated(uid))
             return;
 
         if (!TryComp<MovementSpeedModifierComponent>(uid, out var movement))
@@ -126,5 +155,14 @@ public abstract partial class SharedBorgSystem : EntitySystem
 
         var sprintDif = movement.BaseWalkSpeed / movement.BaseSprintSpeed;
         args.ModifySpeed(1f, sprintDif);
+    }
+
+    /// <summary>
+    /// Sets <see cref="BorgModuleComponent.DefaultModule"/>.
+    /// </summary>
+    public void SetBorgModuleDefault(Entity<BorgModuleComponent> ent, bool newDefault)
+    {
+        ent.Comp.DefaultModule = newDefault;
+        Dirty(ent);
     }
 }

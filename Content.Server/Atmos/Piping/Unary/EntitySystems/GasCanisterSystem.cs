@@ -140,7 +140,7 @@ public sealed class GasCanisterSystem : EntitySystem
         }
 
         _adminLogger.Add(LogType.CanisterValve, impact, $"{ToPrettyString(args.Actor):player} set the valve on {ToPrettyString(uid):canister} to {args.Valve:valveState} while it contained [{string.Join(", ", containedGasDict)}]");
-        if (args.Valve && containedGasDict[Gas.Plasma] >= _plasmaThreshold)
+        if (args.Valve && containedGasDict[Gas.Plasma] >= _plasmaThreshold) // WD
         {
             _chatManager.SendAdminAnnouncement(Loc.GetString("admin-chatalert-plasma-canister-opened",
                 ("player", ToPrettyString(args.Actor)), ("canister", ToPrettyString(uid))));
@@ -161,7 +161,7 @@ public sealed class GasCanisterSystem : EntitySystem
         if (!_nodeContainer.TryGetNode(nodeContainer, canister.PortName, out PortablePipeNode? portNode))
             return;
 
-        if (portNode.NodeGroup is PipeNet {NodeCount: > 1} net)
+        if (portNode.NodeGroup is PipeNet { NodeCount: > 1 } net)
         {
             MixContainerWithPipeNet(canister.Air, net.Air);
         }
@@ -209,6 +209,9 @@ public sealed class GasCanisterSystem : EntitySystem
 
     private void OnCanisterActivate(EntityUid uid, GasCanisterComponent component, ActivateInWorldEvent args)
     {
+        if (!args.Complex)
+            return;
+
         if (!TryComp<ActorComponent>(args.User, out var actor))
             return;
 

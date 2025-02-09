@@ -183,6 +183,13 @@
   - type: Clothing
     sprite: Clothing/OuterClothing/Misc/santa.rsi
 
+- type: entity
+  abstract: true
+  parent: ClothingOuterBase
+  id: ClothingOuterWizardBase
+  components:
+  - type: WizardClothes # TODO WD God help me
+
 # Is this wizard wearing a fanny pack???
 - type: entity
   parent: ClothingOuterMiscBase # WD edit
@@ -310,7 +317,7 @@
       - state: equipped-OUTERCLOTHING-lines
         color: "#000000"
   - type: TemperatureProtection
-    coefficient: 0.3
+    coolingCoefficient: 0.3
 
 - type: entity
   parent: ClothingOuterBase
@@ -346,7 +353,7 @@
       - state: equipped-OUTERCLOTHING-lines
         color: "#000000"
   - type: TemperatureProtection
-    coefficient: 0.3
+    coolingCoefficient: 0.3
 
 - type: entity
   parent: ClothingOuterBase
@@ -382,7 +389,7 @@
       - state: equipped-OUTERCLOTHING-lines
         color: "#000000"
   - type: TemperatureProtection
-    coefficient: 0.3
+    coolingCoefficient: 0.3
 
 - type: entity
   parent: ClothingOuterBase

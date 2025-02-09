@@ -50,4 +50,9 @@
     back: ClothingBackpackChiefEngineerFilled
     shoes: ClothingShoesColorBrown
     id: CEPDA
-    ears: ClothingHeadsetAltEngineering
+    ears: ClothingHeadsetAltEngineering # WD
+    eyes: ClothingEyesGlassesMeson
+    belt: ClothingBeltUtilityEngineering
+  storage:
+    back:
+    - Flash

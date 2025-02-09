@@ -21,3 +21,6 @@
     shoes: ClothingShoesColorWhite
     id: SciencePDA
     ears: ClothingHeadsetScience
+  #storage:
+    #back:
+    #- Stuff

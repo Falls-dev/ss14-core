@@ -27,3 +27,7 @@
     ears: ClothingHeadsetSecurity
   inhand:
     - BriefcaseBrownFilled
+  storage:
+    back:
+    - RubberStampLawyer
+    - BookSpaceLaw

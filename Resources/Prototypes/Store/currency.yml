@@ -10,14 +10,18 @@
   displayName: store-currency-display-stolen-essence
   canWithdraw: false
 
-- type: currency
+- type: currency # WD
   id: ChangelingPoint
   displayName: store-currency-display-changeling-point
   canWithdraw: false
-  
-- type: currency
+
+- type: currency # WD
   id: MeatyOreCoin
   displayName: Meaty Ore Coin
+
+- type: currency
+  id: WizCoin
+  displayName: store-currency-display-wizcoin
   canWithdraw: false
 
 #debug
@@ -25,7 +29,7 @@
   id: DebugDollar
   displayName: store-currency-display-debugdollar
 
-- type: currency
+- type: currency # WD
   id: SpaceCash
   cash :
     1: SpaceCash

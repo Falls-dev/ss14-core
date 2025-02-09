@@ -1,8 +1,8 @@
 - type: entity
-  id: BulletCaselessRifle
+  id: [BulletCaselessRifle, BaseBulletTrail]
   name: bullet (.25 caseless)
-  parent: [BaseBullet, BaseBulletTrail]
-  noSpawn: true
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
   components:
   - type: Projectile
     damage:
@@ -10,10 +10,10 @@
         Piercing: 19
 
 - type: entity
-  id: BulletCaselessRiflePractice
+  id: [BulletCaselessRiflePractice, BaseBulletTrail]
   name: bullet (.25 caseless practice)
-  parent: [BaseBulletPractice, BaseBulletTrail]
-  noSpawn: true
+  parent: BaseBulletPractice
+  categories: [ HideSpawnMenu ]
   components:
   - type: Projectile
     damage:
@@ -24,7 +24,7 @@
   id: BulletCaselessRifleRubber
   name: bullet (.25 caseless rubber)
   parent: [BaseBulletRubber, BaseBulletTrail]
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   - type: Projectile
     damage:

@@ -7,7 +7,6 @@
         <tabs:GraphicsTab Name="GraphicsTab" />
         <tabs:KeyRebindTab Name="KeyRebindTab" />
         <tabs:AudioTab Name="AudioTab" />
-        <tabs:NetworkTab Name="NetworkTab" />
-        <tabs:AdminSettingsTab Name="AdminSettingsTab"/>
+        <tabs:AccessibilityTab Name="AccessibilityTab" />
     </TabContainer>
 </DefaultWindow>

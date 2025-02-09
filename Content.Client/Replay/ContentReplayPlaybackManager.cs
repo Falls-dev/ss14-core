@@ -98,7 +98,6 @@ public sealed class ContentReplayPlaybackManager
         Action? retryAction = null;
         Action? cancelAction = null;
 
-        // Add button for attempting to re-load the replay while ignoring some errors.
         if (!_cfg.GetCVar(CVars.ReplayIgnoreErrors) && LastLoad is { } last)
         {
             retryAction = () =>
@@ -208,7 +207,7 @@ public sealed class ContentReplayPlaybackManager
 
     private void OnReplayPlaybackStopped()
     {
-        _conGrp.Implementation = (IClientConGroupImplementation) _adminMan;
+        _conGrp.Implementation = (IClientConGroupImplementation)_adminMan;
         ReturnToDefaultState();
     }
 }

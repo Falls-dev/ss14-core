@@ -3,10 +3,14 @@ using Content.Shared._White.ShitSilo;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Lathe;
+using Content.Shared.Mobs;
 using Content.Shared.Stacks;
+using Content.Shared.Whitelist;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
+using Content.Shared.Research.Components;
 
 namespace Content.Shared.Materials;
 
@@ -19,6 +23,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
 
     /// <summary>
     /// Default volume for a sheet if the material's entity prototype has no material composition.
@@ -32,6 +37,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
 
         SubscribeLocalEvent<MaterialStorageComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<MaterialStorageComponent, InteractUsingEvent>(OnInteractUsing);
+        SubscribeLocalEvent<MaterialStorageComponent, TechnologyDatabaseModifiedEvent>(OnDatabaseModified);
     }
 
     public override void Update(float frameTime)
@@ -120,7 +126,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         }
 
         if (!Resolve(uid, ref component))
-                return false;
+            return false;
 
         return component.StorageLimit == null || GetTotalMaterialAmount(uid, component) + volume <= component.StorageLimit;
     }
@@ -144,7 +150,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return false;
 
-        if (!CanTakeVolume(uid, volume, component, gridUid:gridUid, gridStorage:gridStorage))
+        if (!CanTakeVolume(uid, volume, component, gridUid: gridUid, gridStorage: gridStorage))
             return false;
 
         // WD edit - added checkWhitelist bool
@@ -164,7 +170,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     /// <param name="entity"></param>
     /// <param name="materials"></param>
     /// <returns>If the amount can be changed</returns>
-    public bool CanChangeMaterialAmount(Entity<MaterialStorageComponent?> entity, Dictionary<string,int> materials)
+    public bool CanChangeMaterialAmount(Entity<MaterialStorageComponent?> entity, Dictionary<string, int> materials)
     {
         if (!Resolve(entity, ref entity.Comp))
             return false;
@@ -201,13 +207,16 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
             return false;
 
         // WD edit - added checkWhitelist bool
-        if (!CanChangeMaterialAmount(uid, materialId, volume, component, gridUid:gridUid, gridStorage:gridStorage, checkWhitelist: checkWhitelist))
+        if (!CanChangeMaterialAmount(uid, materialId, volume, component, gridUid: gridUid, gridStorage: gridStorage, checkWhitelist: checkWhitelist))
             return false;
 
-        var rightStorage = gridStorage ?? component;
+        var existing = component.Storage.GetOrNew(materialId);
+        existing += volume;
 
-        rightStorage.Storage.TryAdd(materialId, 0);
-        rightStorage.Storage[materialId] += volume;
+        if (existing == 0)
+            component.Storage.Remove(materialId);
+        else
+            component.Storage[materialId] = existing;
 
         var ev = new MaterialAmountChangedEvent();
         RaiseLocalEvent(uid, ref ev);
@@ -236,7 +245,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     /// <param name="entity"></param>
     /// <param name="materials"></param>
     /// <returns>If the amount can be changed</returns>
-    public bool TryChangeMaterialAmount(Entity<MaterialStorageComponent?> entity, Dictionary<string,int> materials)
+    public bool TryChangeMaterialAmount(Entity<MaterialStorageComponent?> entity, Dictionary<string, int> materials)
     {
         if (!Resolve(entity, ref entity.Comp))
             return false;
@@ -293,7 +302,7 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (!Resolve(toInsert, ref material, ref composition, false))
             return false;
 
-        if (storage.Whitelist?.IsValid(toInsert) == false)
+        if (_whitelistSystem.IsWhitelistFail(storage.Whitelist, toInsert))
             return false;
 
 
@@ -318,17 +327,17 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
 
         foreach (var (mat, vol) in composition.MaterialComposition)
         {
-            if (!CanChangeMaterialAmount(receiver, mat, vol * multiplier, storage, gridUid:gridUid, gridStorage:gridStorage))
+            if (!CanChangeMaterialAmount(receiver, mat, vol * multiplier, storage, gridUid: gridUid, gridStorage: gridStorage))
                 return false;
             totalVolume += vol * multiplier;
         }
 
-        if (!CanTakeVolume(receiver, totalVolume, storage, gridUid:gridUid, gridStorage: gridStorage))
+        if (!CanTakeVolume(receiver, totalVolume, storage, gridUid: gridUid, gridStorage: gridStorage))
             return false;
 
         foreach (var (mat, vol) in composition.MaterialComposition)
         {
-            TryChangeMaterialAmount(receiver, mat, vol * multiplier, gridUid:gridUid, gridStorage:gridStorage);
+            TryChangeMaterialAmount(receiver, mat, vol * multiplier, gridUid: gridUid, gridStorage: gridStorage);
         }
 
 
@@ -370,6 +379,11 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (args.Handled || !component.InsertOnInteract)
             return;
         args.Handled = TryInsertMaterialEntity(args.User, args.Used, uid, component);
+    }
+
+    private void OnDatabaseModified(Entity<MaterialStorageComponent> ent, ref TechnologyDatabaseModifiedEvent args)
+    {
+        UpdateMaterialWhitelist(ent);
     }
 
     public int GetSheetVolume(MaterialPrototype material)

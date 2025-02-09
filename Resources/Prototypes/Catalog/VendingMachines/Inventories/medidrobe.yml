@@ -18,7 +18,7 @@
     ClothingUniformJumpsuitParamedic: 4
     ClothingUniformJumpskirtParamedic: 4
     ClothingHandsGlovesLatex: 4
-    ClothingShoesColorWhite: 9
+    ClothingShoesColorWhite: 6
     ClothingOuterHospitalGown: 5
     UniformScrubsColorGreen: 5
     UniformScrubsColorBlue: 5
@@ -28,3 +28,10 @@
     ClothingEyesEyepatchHudMedical: 1
     ClothingHeadHatBeretMedic: 4
     ClothingShoesBootsWinterMed: 2
+    ClothingBeltMedical: 2
+    ClothingHandsGlovesNitrile: 1
+    ClothingHeadHatSurgcapGreen: 4
+    ClothingHeadHatSurgcapBlue: 4
+    ClothingHeadHatSurgcapPurple: 4
+  contrabandInventory:
+    ClothingUniformJumpskirtOfLife: 1

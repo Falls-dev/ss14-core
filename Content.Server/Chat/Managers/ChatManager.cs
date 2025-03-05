@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Content.Server._White.PandaSocket.Main;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
@@ -44,6 +45,8 @@ internal sealed partial class ChatManager : IChatManager
     [Dependency] private readonly INetConfigurationManager _netConfigManager = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly PlayerRateLimitManager _rateLimitManager = default!;
+    [Dependency] private readonly PandaWebManager _pandaWeb = default!;
+
 
     /// <summary>
     /// The maximum length a player-sent message can be sent
@@ -260,6 +263,17 @@ internal sealed partial class ChatManager : IChatManager
         ChatMessageToAll(ChatChannel.OOC, message, wrappedMessage, EntityUid.Invalid, hideChat: false, recordReplay: true, colorOverride: colorOverride, author: player.UserId);
         _mommiLink.SendOOCMessage(player.Name, message.Replace("@", "\\@").Replace("<", "\\<").Replace("/", "\\/")); // @ and < are both problematic for discord due to pinging. / is sanitized solely to kneecap links to murder embeds via blunt force
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"OOC from {player:Player}: {message}");
+
+        //WD-EDIT
+        var toUtkaMessage = new UtkaChatMessageEvent()
+        {
+            Command = "ooc",
+            Ckey = player.Name,
+            Message = message,
+        };
+
+        _pandaWeb.SendBotPostMessage(toUtkaMessage);
+        //WD-EDIT
     }
 
     private void SendAdminChat(ICommonSession player, string message)
@@ -290,6 +304,17 @@ internal sealed partial class ChatManager : IChatManager
         }
 
         _adminLogger.Add(LogType.Chat, $"Admin chat from {player:Player}: {message}");
+
+        //WD-EDIT
+        var asayEventMessage = new UtkaChatMessageEvent
+        {
+            Command = "asay",
+            Ckey = player.Name,
+            Message = message
+        };
+
+        _pandaWeb.SendBotPostMessage(asayEventMessage);
+        //WD-EDIT
     }
 
     #endregion

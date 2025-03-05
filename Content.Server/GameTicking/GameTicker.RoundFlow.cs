@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Server._White.PandaSocket.Main;
 using Content.Server.Announcements;
 using Content.Server.Discord;
 using Content.Server.GameTicking.Events;
@@ -32,6 +33,8 @@ namespace Content.Server.GameTicking
         [Dependency] private readonly DiscordWebhook _discord = default!;
         [Dependency] private readonly RoleSystem _role = default!;
         [Dependency] private readonly ITaskManager _taskManager = default!;
+        [Dependency] private readonly PandaWebManager _pandaWeb = default!;
+
 
         private static readonly Counter RoundNumberMetric = Metrics.CreateCounter(
             "ss14_round_number",
@@ -464,6 +467,7 @@ namespace Content.Server.GameTicking
             _roundStartFailCount = 0;
 #endif
             _startingRound = false;
+            SendRoundStatus("game_started"); //WD-EDIT
         }
 
         private void RefreshLateJoinAllowed()
@@ -677,6 +681,8 @@ namespace Content.Server.GameTicking
 
                 ReqWindowAttentionAll();
             }
+
+            SendRoundStatus("lobby_loaded"); //WD-EDIT
         }
 
         private async void SendRoundStartingDiscordMessage()
@@ -818,6 +824,20 @@ namespace Content.Server.GameTicking
             {
                 Log.Error($"Error while sending discord round start message:\n{e}");
             }
+        }
+
+        private void SendRoundStatus(string status)
+        {
+            if (!_postInitialized)
+                return;
+
+            var utkaRoundStatusEvent = new UtkaRoundStatusEvent()
+            {
+                Message = status
+            };
+
+            _pandaWeb.SendBotPostMessage(utkaRoundStatusEvent);
+
         }
     }
 

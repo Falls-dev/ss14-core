@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Content.Server._White.PandaSocket.Main;
 using Content.Server.Administration.Managers;
 using Content.Server.Afk;
 using Content.Server.Database;
@@ -43,6 +44,8 @@ namespace Content.Server.Administration.Systems
         [Dependency] private readonly IAfkManager _afkManager = default!;
         [Dependency] private readonly IServerDbManager _dbManager = default!;
         [Dependency] private readonly PlayerRateLimitManager _rateLimit = default!;
+        [Dependency] private readonly PandaWebManager _pandaWeb = default!;
+
 
         [GeneratedRegex(@"^https://discord\.com/api/webhooks/(\d+)/((?!.*/).*)$")]
         private static partial Regex DiscordRegex();
@@ -859,6 +862,90 @@ namespace Content.Server.Administration.Systems
             /// Did we relay this interaction to OnCall previously.
             /// </summary>
             public bool OnCall;
+        }
+
+
+        //WD-EDIT
+        public void SendUtkaBwoinkMessage(NetUserId receiver, string sender, string text)
+        {
+            var bwoinkText = $"[color=red](D) {sender}[/color]: {text}";
+            _playerManager.TryGetUserId(sender, out var senderId);
+
+            var msg = new BwoinkTextMessage(receiver, senderId, bwoinkText, playSound: true);
+
+            LogBwoink(msg);
+
+            var admins = GetTargetAdmins();
+
+            // Notify all admins
+            foreach (var channel in admins)
+            {
+                RaiseNetworkEvent(msg, channel);
+            }
+
+            // Notify player
+            if (_playerManager.TryGetSessionById(receiver, out var session))
+            {
+                if (!admins.Contains(session.Channel))
+                    RaiseNetworkEvent(msg, session.Channel);
+            }
+
+            var sendsWebhook = _webhookUrl != string.Empty;
+
+            if (sendsWebhook)
+            {
+                if (!_messageQueues.ContainsKey(msg.UserId))
+                    _messageQueues[msg.UserId] = new Queue<DiscordRelayedData>();
+
+                var str = text;
+                var unameLength = sender.Length;
+
+                if (unameLength + str.Length + _maxAdditionalChars > DescriptionMax)
+                {
+                    str = str[..(DescriptionMax - _maxAdditionalChars - unameLength)];
+                }
+
+                var messageParams = new AHelpMessageParams(sender,
+                    str,
+                    true,
+                    _gameTicker.RoundDuration().ToString(),
+                    _gameTicker.RunLevel,
+                    true);
+
+                _messageQueues[msg.UserId].Enqueue(GenerateAHelpMessage(messageParams));
+            }
+
+            var utkaCkey = _playerManager.GetSessionById(receiver).Data.UserName;
+            UtkaSendAhelpPm(text, utkaCkey, sender);
+        }
+
+        private void UtkaSendAhelpPm(string message, string ckey, string sender)
+        {
+            var adminManager = IoCManager.Resolve<IAdminManager>();
+            var admins = adminManager.ActiveAdmins.Any();
+
+            var entity = ckey;
+
+            if (!_playerManager.TryGetSessionByUsername(ckey, out var session))
+                return;
+
+            if (session.AttachedEntity != null)
+            {
+                var meta = MetaData(session.AttachedEntity.Value);
+                entity = meta.EntityName;
+            }
+
+            var utkaAhelpEvent = new UtkaAhelpPmEvent()
+            {
+                Message = message,
+                Ckey = ckey,
+                Sender = sender,
+                Rid = Get<GameTicker>().RoundId,
+                NoAdmins = !admins,
+                Entity = entity
+            };
+
+            _pandaWeb.SendBotPostMessage(utkaAhelpEvent);
         }
     }
 

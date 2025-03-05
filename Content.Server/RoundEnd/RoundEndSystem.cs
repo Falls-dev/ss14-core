@@ -1,4 +1,5 @@
 using System.Threading;
+using Content.Server._White.PandaSocket.Main;
 using Content.Server.Administration.Logs;
 using Content.Server.AlertLevel;
 using Content.Shared.CCVar;
@@ -42,6 +43,7 @@ namespace Content.Server.RoundEnd
         [Dependency] private readonly EmergencyShuttleSystem _shuttle = default!;
         [Dependency] private readonly SharedAudioSystem _audio = default!;
         [Dependency] private readonly StationSystem _stationSystem = default!;
+        [Dependency] private readonly PandaWebManager _pandaWeb = default!;
 
         public TimeSpan DefaultCooldownDuration { get; set; } = TimeSpan.FromSeconds(30);
 
@@ -213,6 +215,8 @@ namespace Content.Server.RoundEnd
                 };
                 _deviceNetworkSystem.QueuePacket(shuttle.Value, null, payload, net.TransmitFrequency);
             }
+
+            SendRoundStatus("shuttle_called");
         }
 
         public void CancelRoundEndCountdown(EntityUid? requester = null, bool checkCooldown = true)
@@ -259,6 +263,10 @@ namespace Content.Server.RoundEnd
                 };
                 _deviceNetworkSystem.QueuePacket(shuttle.Value, null, payload, net.TransmitFrequency);
             }
+
+            //WD-EDIT
+            SendRoundStatus("shuttle_recalled");
+            //WD-EDIT
         }
 
         public void EndRound(TimeSpan? countdownTime = null)
@@ -366,6 +374,18 @@ namespace Content.Server.RoundEnd
                 SetAutoCallTime();
             }
         }
+
+        //WD-EDIT
+        private void SendRoundStatus(string status)
+        {
+            var utkaRoundStatusEvent = new UtkaRoundStatusEvent()
+            {
+                Message = status
+            };
+
+            _pandaWeb.SendBotPostMessage(utkaRoundStatusEvent);
+        }
+        //WD-EDIT
     }
 
     public sealed class RoundEndSystemChangedEvent : EntityEventArgs

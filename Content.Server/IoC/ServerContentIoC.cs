@@ -1,3 +1,4 @@
+using Content.Server._White.PandaSocket.Main;
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
@@ -77,6 +78,11 @@ namespace Content.Server.IoC
             IoCManager.Register<ConnectionManager>();
             IoCManager.Register<MultiServerKickManager>();
             IoCManager.Register<CVarControlManager>();
+
+            //WD-EDIT
+            IoCManager.Register<PandaStatusHost>();
+            IoCManager.Register<PandaWebManager>();
+            //WD-EDIT END
         }
     }
 }

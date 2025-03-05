@@ -1,3 +1,4 @@
+using Content.Server._White.PandaSocket.Main;
 using Content.Server.Acz;
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
@@ -117,6 +118,11 @@ namespace Content.Server.Entry
                 _watchlistWebhookManager.Initialize();
                 IoCManager.Resolve<JobWhitelistManager>().Initialize();
                 IoCManager.Resolve<PlayerRateLimitManager>().Initialize();
+
+                //WD-EDIT
+                IoCManager.Resolve<PandaStatusHost>().Start();
+                IoCManager.Resolve<PandaWebManager>().Initialize();
+                //WD-EDIT END
             }
         }
 

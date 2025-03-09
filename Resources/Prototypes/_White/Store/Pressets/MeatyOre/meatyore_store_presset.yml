@@ -1,0 +1,24 @@
+﻿- type: entity
+  id: StorePresetMeatyOre
+  components:
+  - type: Store
+    name: MeatyOreStore
+    refundAllowed: false
+    categories:
+    - MeatyOreHats
+    - MeatyOreMasks
+    - MeatyOreBoots
+    - MeatyOreGlasses
+    - MeatyOrePersonal
+    - MeatyOreSuits
+    - MeatyOreUniforms
+    - MeatyOreGloves
+    - MeatyOreCloaks
+    - MeatyOreToys
+    - MeatyOreMisc
+    - MeatyOreCapes
+    - MeatyOreNew
+    - MeatyOreAntag
+    - DjJukeboxCategory
+    currencyWhitelist:
+    - MeatyOreCoin

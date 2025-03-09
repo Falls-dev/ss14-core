@@ -85,5 +85,9 @@ namespace Content.Shared.Verbs
         public static readonly VerbCategory SelectType = new("verb-categories-select-type", null);
 
         public static readonly VerbCategory PowerLevel = new("verb-categories-power-level", null);
+
+        //WD-EDIT
+        public static readonly VerbCategory MeatyOre =
+            new("MeatyOre", null);
     }
 }

@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server._White.Sponsors;
 using Content.Server.Antag.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
@@ -22,6 +23,7 @@ using Content.Shared.Ghost;
 using Content.Shared.Humanoid;
 using Content.Shared.Mind;
 using Content.Shared.Players;
+using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Content.Shared.Whitelist;
 using Robust.Server.Audio;
@@ -49,6 +51,8 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
     [Dependency] private readonly RoleSystem _role = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private readonly SponsorsManager _sponsorsManager = default!;
+
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
 
     // arbitrary random number to give late joining some mild interest.
@@ -253,7 +257,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         AntagSelectionDefinition def,
         bool midround = false)
     {
-        var playerPool = GetPlayerPool(ent, pool, def);
+        var playerPool = GetPlayerPoolWithPremium(ent, pool, def);
         var count = GetTargetAntagCount(ent, GetTotalPlayerCount(pool), def);
 
         // if there is both a spawner and players getting picked, let it fall back to a spawner.
@@ -482,6 +486,66 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
 
         return new AntagSelectionPlayerPool(new() { preferredList, fallbackList });
     }
+
+    //WD-EDIT
+    public AntagSelectionPlayerPool GetPlayerPoolWithPremium(Entity<AntagSelectionComponent> ent, IList<ICommonSession> sessions, AntagSelectionDefinition def)
+    {
+        var premiumPool = new List<ICommonSession>();
+        var defaultPool = new List<ICommonSession>();
+
+        foreach (var session in sessions)
+        {
+            if (!IsSessionValid(ent, session, def) ||
+                !IsEntityValid(session.AttachedEntity, def))
+                continue;
+
+            var pref = (HumanoidCharacterProfile) _pref.GetPreferences(session.UserId).SelectedCharacter;
+            var hasPreference = def.PrefRoles.Count != 0 && pref.AntagPreferences.Any(p => def.PrefRoles.Contains(p));
+            var hasFallbackPreference = def.FallbackRoles.Count != 0 && pref.AntagPreferences.Any(p => def.FallbackRoles.Contains(p));
+
+            if (RobustRandom.Prob(GetPremiumPoolChance(session)))
+            {
+                if (hasPreference || hasFallbackPreference)
+                    premiumPool.Add(session);
+            }
+            else
+            {
+                if (hasPreference)
+                    defaultPool.Add(session);
+                else if (hasFallbackPreference)
+                    defaultPool.Add(session);
+            }
+        }
+
+
+        if (premiumPool.Count == 0 && defaultPool.Count == 0)
+        {
+            foreach (var session in sessions)
+            {
+                if (IsSessionValid(ent, session, def) && IsEntityValid(session.AttachedEntity, def))
+                {
+                    defaultPool.Add(session);
+                }
+            }
+        }
+
+        return new AntagSelectionPlayerPool(new() { premiumPool, defaultPool });
+    }
+
+    public float GetPremiumPoolChance(ICommonSession session)
+    {
+        if (!_sponsorsManager.TryGetInfo(session.UserId, out var info))
+            return 0f;
+
+        var antagChance = info.AntagChance;
+
+        // Ensure antagChance is within 0-100 range
+        antagChance = Math.Clamp(antagChance, 0, 100);
+
+        // Convert clamped antagChance from 0-100 range to 0-1 range
+        return antagChance / 100f;
+    }
+    //WD-EDIT END
 
     /// <summary>
     /// Checks if a given session is valid for an antagonist.

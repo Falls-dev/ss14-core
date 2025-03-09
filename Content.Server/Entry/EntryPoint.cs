@@ -1,4 +1,5 @@
 using Content.Server._White.PandaSocket.Main;
+using Content.Server._White.Sponsors;
 using Content.Server.Acz;
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
@@ -122,6 +123,7 @@ namespace Content.Server.Entry
                 //WD-EDIT
                 IoCManager.Resolve<PandaStatusHost>().Start();
                 IoCManager.Resolve<PandaWebManager>().Initialize();
+                IoCManager.Resolve<SponsorsManager>().Initialize();
                 //WD-EDIT END
             }
         }

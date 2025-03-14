@@ -1,3 +1,4 @@
+using Content.Client._White.Jukebox;
 using Content.Client._White.Sponsors;
 using Content.Client._White.TTS;
 using Content.Client.Administration.Managers;
@@ -65,6 +66,7 @@ namespace Content.Client.IoC
             //WD-EDIT
             collection.Register<SponsorsManager>();
             collection.Register<TTSManager>();
+            collection.Register<ClientJukeboxSongsSyncManager>();
             //WD-EDIT END
         }
     }

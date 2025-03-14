@@ -1,3 +1,4 @@
+using Content.Client._White.Jukebox;
 using Content.Client._White.Sponsors;
 using Content.Client._White.TTS;
 using Content.Client.Administration.Managers;
@@ -76,6 +77,7 @@ namespace Content.Client.Entry
         [Dependency] private readonly TitleWindowManager _titleWindowManager = default!;
         [Dependency] private readonly SponsorsManager _sponsorsManager = default!;
         [Dependency] private readonly TTSManager _ttsManager = default!;
+        [Dependency] private readonly ClientJukeboxSongsSyncManager _jukeboxSongsSync = default!;
 
 
         public override void Init()
@@ -177,6 +179,7 @@ namespace Content.Client.Entry
             //WD-EDIT
             _sponsorsManager.Initialize();
             _ttsManager.Initialize();
+            _jukeboxSongsSync.Initialize();
             //WD-EDIT END
 
             _baseClient.RunLevelChanged += (_, args) =>

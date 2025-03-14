@@ -1,3 +1,4 @@
+using Content.Server._White.Jukebox;
 using Content.Server._White.PandaSocket.Main;
 using Content.Server._White.Sponsors;
 using Content.Server._White.TTS;
@@ -26,6 +27,7 @@ using Content.Server.Preferences.Managers;
 using Content.Server.ServerInfo;
 using Content.Server.ServerUpdates;
 using Content.Server.Voting.Managers;
+using Content.Shared._White.Jukebox;
 using Content.Shared.CCVar;
 using Content.Shared.Kitchen;
 using Content.Shared.Localizations;
@@ -126,6 +128,7 @@ namespace Content.Server.Entry
                 IoCManager.Resolve<PandaWebManager>().Initialize();
                 IoCManager.Resolve<SponsorsManager>().Initialize();
                 IoCManager.Resolve<TTSManager>().Initialize();
+                IoCManager.Resolve<ServerJukeboxSongsSyncManager>().Initialize();
                 //WD-EDIT END
             }
         }

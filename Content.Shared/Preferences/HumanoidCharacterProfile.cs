@@ -1,5 +1,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
+using Content.Shared._White.HumanoidCharacterProfileExtensions;
+using Content.Shared._White.TTS;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
@@ -31,6 +33,11 @@ namespace Content.Shared.Preferences
         public const int MaxNameLength = 32;
         public const int MaxLoadoutNameLength = 32;
         public const int MaxDescLength = 512;
+
+        //WD-EDIT
+        [DataField]
+        public WhiteHumanoidProfileExtension WhiteHumanoidProfileExtension { get; set; } = WhiteHumanoidProfileExtension.Default();
+        //WD EDIT END
 
         /// <summary>
         /// Job preferences for initial spawn.
@@ -139,7 +146,8 @@ namespace Content.Shared.Preferences
             PreferenceUnavailableMode preferenceUnavailable,
             HashSet<ProtoId<AntagPrototype>> antagPreferences,
             HashSet<ProtoId<TraitPrototype>> traitPreferences,
-            Dictionary<string, RoleLoadout> loadouts)
+            Dictionary<string, RoleLoadout> loadouts,
+            WhiteHumanoidProfileExtension wdExtension)
         {
             Name = name;
             FlavorText = flavortext;
@@ -154,6 +162,8 @@ namespace Content.Shared.Preferences
             _antagPreferences = antagPreferences;
             _traitPreferences = traitPreferences;
             _loadouts = loadouts;
+
+            WhiteHumanoidProfileExtension = wdExtension;
 
             var hasHighPrority = false;
             foreach (var (key, value) in _jobPriorities)
@@ -184,7 +194,8 @@ namespace Content.Shared.Preferences
                 other.PreferenceUnavailable,
                 new HashSet<ProtoId<AntagPrototype>>(other.AntagPreferences),
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
-                new Dictionary<string, RoleLoadout>(other.Loadouts))
+                new Dictionary<string, RoleLoadout>(other.Loadouts),
+                other.WhiteHumanoidProfileExtension)
         {
         }
 
@@ -252,7 +263,7 @@ namespace Content.Shared.Preferences
 
             var name = GetName(species, gender);
 
-            return new HumanoidCharacterProfile()
+            return new HumanoidCharacterProfile
             {
                 Name = name,
                 Sex = sex,
@@ -260,6 +271,7 @@ namespace Content.Shared.Preferences
                 Gender = gender,
                 Species = species,
                 Appearance = HumanoidCharacterAppearance.Random(species, sex),
+                WhiteHumanoidProfileExtension = WhiteHumanoidProfileExtension.DefaultWithSex(sex) //WD-EDIT
             };
         }
 
@@ -302,6 +314,11 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile WithSpawnPriorityPreference(SpawnPriorityPreference spawnPriority)
         {
             return new(this) { SpawnPriority = spawnPriority };
+        }
+
+        public HumanoidCharacterProfile WithWhiteExtensions(WhiteHumanoidProfileExtension extension)
+        {
+            return new(this) { WhiteHumanoidProfileExtension = extension };
         }
 
         public HumanoidCharacterProfile WithJobPriorities(IEnumerable<KeyValuePair<ProtoId<JobPrototype>, JobPriority>> jobPriorities)
@@ -470,6 +487,7 @@ namespace Content.Shared.Preferences
             if (!_traitPreferences.SequenceEqual(other._traitPreferences)) return false;
             if (!Loadouts.SequenceEqual(other.Loadouts)) return false;
             if (FlavorText != other.FlavorText) return false;
+            if (!WhiteHumanoidProfileExtension.Equals(other.WhiteHumanoidProfileExtension)) return false;
             return Appearance.MemberwiseEquals(other.Appearance);
         }
 
@@ -756,5 +774,12 @@ namespace Content.Shared.Preferences
         {
             return new HumanoidCharacterProfile(this);
         }
+
+        //WD-EDIT
+        public static bool CanHaveVoice(TTSVoicePrototype voice, Sex sex)
+        {
+            return voice.RoundStart && sex == Sex.Unsexed || voice.Sex == sex || voice.Sex == Sex.Unsexed;
+        }
+        //WD-EDIT END
     }
 }

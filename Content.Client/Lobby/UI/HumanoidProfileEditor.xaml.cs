@@ -9,6 +9,8 @@ using Content.Client.Players.PlayTimeTracking;
 using Content.Client.Sprite;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Guidebook;
+using Content.Shared._White.HumanoidCharacterProfileExtensions;
+using Content.Shared._White.TTS;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
 using Content.Shared.GameTicking;
@@ -194,6 +196,14 @@ namespace Content.Client.Lobby.UI
             };
 
             #endregion Age
+
+            //WD-EDIT
+            #region Voice
+
+            InitializeVoice();
+
+            #endregion
+            //WD-EDIT END
 
             #region Gender
 
@@ -756,6 +766,7 @@ namespace Content.Client.Lobby.UI
             UpdateHairPickers();
             UpdateCMarkingsHair();
             UpdateCMarkingsFacialHair();
+            UpdateTTSVoicesControls();
 
             RefreshAntags();
             RefreshJobs();
@@ -1167,6 +1178,23 @@ namespace Content.Client.Lobby.UI
             ReloadPreview();
         }
 
+        //WD-EDIT
+        private void SetVoice(ProtoId<TTSVoicePrototype> newVoice)
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            var extensions = Profile.WhiteHumanoidProfileExtension.Copy();
+            extensions.VoiceId = newVoice;
+
+            Profile = Profile.WithWhiteExtensions(extensions);
+
+            SetDirty();
+        }
+        //WD-EDIT
+
         private void SetSex(Sex newSex)
         {
             Profile = Profile?.WithSex(newSex);
@@ -1186,6 +1214,7 @@ namespace Content.Client.Lobby.UI
 
             UpdateGenderControls();
             Markings.SetSex(newSex);
+            UpdateTTSVoicesControls(); //WD-EDIT
             ReloadPreview();
         }
 

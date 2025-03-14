@@ -1,4 +1,5 @@
 using Content.Client._White.Sponsors;
+using Content.Client._White.TTS;
 using Content.Client.Administration.Managers;
 using Content.Client.Changelog;
 using Content.Client.Chat.Managers;
@@ -63,6 +64,7 @@ namespace Content.Client.IoC
 
             //WD-EDIT
             collection.Register<SponsorsManager>();
+            collection.Register<TTSManager>();
             //WD-EDIT END
         }
     }

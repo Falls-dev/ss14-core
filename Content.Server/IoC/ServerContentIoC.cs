@@ -1,5 +1,6 @@
 using Content.Server._White.PandaSocket.Main;
 using Content.Server._White.Sponsors;
+using Content.Server._White.TTS;
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
@@ -84,6 +85,7 @@ namespace Content.Server.IoC
             IoCManager.Register<PandaStatusHost>();
             IoCManager.Register<PandaWebManager>();
             IoCManager.Register<SponsorsManager>();
+            IoCManager.Register<TTSManager>();
             //WD-EDIT END
         }
     }

@@ -371,6 +371,18 @@ namespace Content.Server.Database
                 .OwnsOne(p => p.HWId)
                 .Property(p => p.Type)
                 .HasDefaultValue(HwidType.Legacy);
+
+
+            //WD-EDIT
+            modelBuilder.Entity<WhiteHumanoidExtension>()
+                .HasOne(p => p.Profile)
+                .WithOne(p => p.WhiteHumanoidExtension)
+                .HasForeignKey<WhiteHumanoidExtension>(p => p.ProfileId);
+
+            modelBuilder.Entity<WhiteHumanoidExtension>()
+                .Property(p => p.VoiceId)
+                .HasDefaultValue("Nord");
+            //WD-EDIT END
         }
 
         public virtual IQueryable<AdminLog> SearchLogs(IQueryable<AdminLog> query, string searchText)
@@ -423,6 +435,8 @@ namespace Content.Server.Database
 
         public int PreferenceId { get; set; }
         public Preference Preference { get; set; } = null!;
+
+        public WhiteHumanoidExtension WhiteHumanoidExtension { get; set; } = new();
     }
 
     public class Job
@@ -1329,4 +1343,21 @@ namespace Content.Server.Database
         /// </summary>
         public float Score { get; set; }
     }
+
+    //WD-EDIT
+    [Table("wd_humanoid_extensions")]
+    public class WhiteHumanoidExtension
+    {
+        [Key]
+        public Guid Id { get; set; }
+
+        [Required]
+        public string? VoiceId { get; set; } = "Nord";
+
+        //Link
+        public int ProfileId { get; set; }
+        public Profile Profile { get; set; } = null!;
+    }
+
+    //
 }

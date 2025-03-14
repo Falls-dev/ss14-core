@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using Content.Shared._White.TTS;
 using Content.Shared.CCVar;
 using Content.Shared.Decals;
 using Content.Shared.Examine;
@@ -39,6 +40,11 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
 
     [ValidatePrototypeId<SpeciesPrototype>]
     public const string DefaultSpecies = "Human";
+
+    //WD-EDIT
+    [ValidatePrototypeId<TTSVoicePrototype>]
+    public const string DefaultVoice = "Nord";
+    //WD-EDIT END
 
     public override void Initialize()
     {

@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
+using Content.Shared._White.HumanoidCharacterProfileExtensions;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Humanoid;
@@ -48,6 +49,7 @@ namespace Content.Server.Database
                 .Include(p => p.Profiles).ThenInclude(h => h.Jobs)
                 .Include(p => p.Profiles).ThenInclude(h => h.Antags)
                 .Include(p => p.Profiles).ThenInclude(h => h.Traits)
+                .Include(p => p.Profiles).ThenInclude(h => h.WhiteHumanoidExtension) // WD-EDIT
                 .Include(p => p.Profiles)
                     .ThenInclude(h => h.Loadouts)
                     .ThenInclude(l => l.Groups)
@@ -103,6 +105,7 @@ namespace Content.Server.Database
                 .Include(p => p.Loadouts)
                     .ThenInclude(l => l.Groups)
                     .ThenInclude(group => group.Loadouts)
+                .Include(p => p.WhiteHumanoidExtension) // WD-EDIT
                 .AsSplitQuery()
                 .SingleOrDefault(h => h.Slot == slot);
 
@@ -240,6 +243,11 @@ namespace Content.Server.Database
                 loadouts[role.RoleName] = loadout;
             }
 
+            var wdExtensions = new WhiteHumanoidProfileExtension
+            {
+                VoiceId = profile.WhiteHumanoidExtension.VoiceId ?? WhiteHumanoidProfileExtension.DefaultSexVoice[sex],
+            };
+
             return new HumanoidCharacterProfile(
                 profile.CharacterName,
                 profile.FlavorText,
@@ -262,7 +270,8 @@ namespace Content.Server.Database
                 (PreferenceUnavailableMode) profile.PreferenceUnavailable,
                 antags.ToHashSet(),
                 traits.ToHashSet(),
-                loadouts
+                loadouts,
+                wdExtensions
             );
         }
 
@@ -343,6 +352,10 @@ namespace Content.Server.Database
 
                 profile.Loadouts.Add(dz);
             }
+
+            //WD-EDIT
+            profile.WhiteHumanoidExtension.VoiceId = humanoid.WhiteHumanoidProfileExtension.VoiceId;
+            //WD-EDIT END
 
             return profile;
         }

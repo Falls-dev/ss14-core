@@ -1,3 +1,5 @@
+using Content.Shared._White.TTS;
+using Content.Shared.Humanoid;
 using Content.Shared.Speech;
 using Robust.Shared.Prototypes;
 
@@ -37,4 +39,7 @@ public sealed partial class VoiceMaskComponent : Component
     /// </summary>
     [DataField]
     public EntityUid? ActionEntity;
+
+    [DataField]
+    public ProtoId<TTSVoicePrototype> VoiceId = SharedHumanoidAppearanceSystem.DefaultVoice; //WD-EDIT
 }

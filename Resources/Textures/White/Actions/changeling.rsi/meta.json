@@ -1,0 +1,74 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "By SS14 Giedi Prime, hive_head by .keki4",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "absorb"
+        },
+        {
+            "name": "adrenaline_sacs"
+        },
+        {
+            "name": "arm_blade"
+        },
+        {
+            "name": "armor"
+        },
+        {
+            "name": "biodegrade"
+        },
+        {
+            "name": "augmented_eyesight"
+        },
+        {
+            "name": "dissonant_shriek"
+        },
+        {
+            "name": "organic_suit"
+        },
+        {
+            "name": "hive_head"
+        },
+        {
+            "name": "fleshmend"
+        },
+        {
+            "name": "lesser_form"
+        },
+        {
+            "name": "reviving_stasis"
+        },
+        {
+            "name": "shield"
+        },
+        {
+            "name": "sting_blind"
+        },
+        {
+            "name": "sting_cryo"
+        },
+        {
+            "name": "sting_extract"
+        },
+        {
+            "name": "sting_hallucination"
+        },
+        {
+            "name": "sting_mute"
+        },
+        {
+            "name": "sting_transform"
+        },
+        {
+            "name": "tentacle_arm"
+        },
+        {
+            "name": "transform"
+        }
+    ]
+}

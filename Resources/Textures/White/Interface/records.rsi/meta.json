@@ -1,0 +1,39 @@
+{
+	"license": "CC-BY-SA-3.0",
+    "copyright": "https://github.com/tgstation/tgstation/blob/8e49222b72f6fdcbe741d2a6ce0a8425d95010b7/icons/mob/huds/hud.dmi",
+    "version": 1,
+    "size": { "y": 8, "x": 8 },
+    "states": [
+        {
+            "name": "hud_demote"
+        },
+        {
+            "name": "hud_incarcerated"
+        },
+        {
+            "name": "hud_monitoring"
+        },
+        {
+            "name": "hud_paroled"
+        },
+        {
+            "name": "hud_released"
+        },
+        {
+            "name": "hud_search"
+        },
+        {
+            "name": "hud_suspected"
+        },
+        {
+            "name": "hud_wanted"
+        },
+        {
+            "name": "hud_execute",
+            "delays":
+            [
+                [0.5, 0.5, 1.0]
+            ]
+        }
+    ]
+}

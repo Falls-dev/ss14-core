@@ -1,0 +1,53 @@
+﻿- type: entity
+  parent: ClothingHeadHatBeretHoS
+  id: ClothingHeadHatBeretWaggier
+  name: потрепанный берет
+  description: "На нем вышито слово 'Waggier'. Наверное это название фирмы?"
+
+- type: entity
+  name: встанислав шишкин
+  parent: ExperimentalStunbaton
+  id: ExperimentalStunbatonWaggier
+  description: "Литая сталь. Прочный пластик. Дубинка Ветерана СБ Регины Хьюи."
+
+- type: sponsorLoadout
+  id: WaggierBeretLoadout
+  entity: ClothingHeadHatBeretWaggier
+  sponsorOnly: true
+  whitelistJobs: [ Detective, HeadOfSecurity, SecurityCadet, SecurityOfficer, Warden, SeniorOfficer ]
+
+- type: sponsorLoadout
+  id: WaggierUniformLoadout
+  entity: ClothingUniformJumpsuitSeniorOfficer
+  sponsorOnly: true
+  whitelistJobs: [ Detective, HeadOfSecurity, SecurityCadet, SecurityOfficer, Warden ]
+
+- type: sponsorLoadout
+  id: WaggierUniformSkirtLoadout
+  entity: ClothingUniformJumpskirtSeniorOfficer
+  sponsorOnly: true
+  whitelistJobs: [ Detective, HeadOfSecurity, SecurityCadet, SecurityOfficer, Warden ]
+
+- type: sponsorLoadout
+  id: WaggierShoesLoadout
+  entity: ClothingShoesBootsCombatFilled
+  sponsorOnly: true
+  whitelistJobs: [ Detective, HeadOfSecurity, SecurityCadet, SecurityOfficer, Warden ]
+
+- type: sponsorLoadout
+  id: WaggierGlovesLoadout
+  entity: ClothingHandsGlovesCombat
+  sponsorOnly: true
+  whitelistJobs: [ Detective, HeadOfSecurity, SecurityCadet, SecurityOfficer, Warden ]
+
+- type: sponsorLoadout
+  id: WaggierStunBatonLoadout
+  entity: ExperimentalStunbatonWaggier
+  sponsorOnly: true
+  whitelistJobs: [ Detective, HeadOfSecurity, SecurityCadet, SecurityOfficer, Warden, SeniorOfficer ]
+
+- type: sponsorLoadout
+  id: WaggierOuterCoatLoadout
+  entity: ClothingOuterCoatHoSTrench
+  sponsorOnly: true
+  whitelistJobs: [ Detective, HeadOfSecurity, SecurityCadet, SecurityOfficer, Warden, SeniorOfficer ]

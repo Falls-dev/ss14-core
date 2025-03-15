@@ -1,0 +1,86 @@
+# Utilizator
+- type: entity
+  parent: ClothingOuterHardsuitSalvage
+  id: ClothingOuterHardsuitSalvageCenturion
+  name: Штурмовой Скафандр
+  suffix: fluff
+  description: Робаст.
+  components:
+    - type: Sprite
+      sprite: White/Fluff/centurion/breacher.rsi
+    - type: Clothing
+      sprite: White/Fluff/centurion/breacher.rsi
+    - type: ToggleableClothing
+      clothingPrototype: ClothingHeadHelmetHardsuitSalvageCenturion
+    - type: GiftIgnore
+
+- type: entity
+  parent: ClothingHeadHelmetHardsuitSalvage
+  id: ClothingHeadHelmetHardsuitSalvageCenturion
+  name: Штурмовой Шлем
+  suffix: fluff
+  description: Анробаст.
+  components:
+    - type: Sprite
+      sprite: White/Fluff/centurion/breacher-helmet.rsi
+    - type: Clothing
+      sprite: White/Fluff/centurion/breacher-helmet.rsi
+    - type: GiftIgnore
+
+# Security
+- type: entity
+  parent: ClothingOuterHardsuitSecurity
+  id: ClothingOuterHardsuitSecurityCenturion
+  name: Штурмовой Скафандр
+  suffix: fluff
+  description: Робаст.
+  components:
+    - type: Sprite
+      sprite: White/Fluff/centurion/breacher.rsi
+    - type: Clothing
+      sprite: White/Fluff/centurion/breacher.rsi
+    - type: ToggleableClothing
+      clothingPrototype: ClothingHeadHelmetHardsuitSecurityCenturion
+    - type: GiftIgnore
+
+# poxuy
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingCenturionNeckFluff
+  name: Мяукательный плащ
+  suffix: fluff
+  description: мяукает
+  components:
+    - type: Sprite
+      sprite: White/Fluff/centurion/fluff-coat-cent.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetHardsuitSecurity
+  id: ClothingHeadHelmetHardsuitSecurityCenturion
+  name: Штурмовой Шлем
+  suffix: fluff
+  description: Анробаст.
+  components:
+    - type: Sprite
+      sprite: White/Fluff/centurion/breacher-helmet.rsi
+    - type: Clothing
+      sprite: White/Fluff/centurion/breacher-helmet.rsi
+    - type: GiftIgnore
+
+- type: sponsorLoadout
+  id: SecLoadoutCenturion
+  entity: ClothingOuterHardsuitSecurityCenturion
+  sponsorOnly: true
+  whitelistJobs: [Warden, SecurityCadet, SecurityOfficer, Detective]
+
+- type: sponsorLoadout
+  id: SalvageLoadoutCenturion
+  entity: ClothingOuterHardsuitSalvageCenturion
+  sponsorOnly: true
+  whitelistJobs: [SalvageSpecialist]
+
+- type: sponsorLoadout
+  id: centCoatMeowLoadout
+  entity: ClothingCenturionNeckFluff
+  sponsorOnly: true

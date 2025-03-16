@@ -1,6 +1,8 @@
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using Content.Client._White.Sponsors;
+using Content.Client.Administration.Managers;
 using Content.Client.Humanoid;
 using Content.Client.Lobby.UI.Loadouts;
 using Content.Client.Lobby.UI.Roles;
@@ -11,6 +13,7 @@ using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Guidebook;
 using Content.Shared._White.HumanoidCharacterProfileExtensions;
 using Content.Shared._White.TTS;
+using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
 using Content.Shared.GameTicking;
@@ -51,6 +54,11 @@ namespace Content.Client.Lobby.UI
         private readonly MarkingManager _markingManager;
         private readonly JobRequirementsManager _requirements;
         private readonly LobbyUIController _controller;
+
+        //WD-EDIT
+        private readonly SponsorsManager _sponsorsManager;
+        private readonly IClientAdminManager _adminManager;
+        //WD-EDIT END
 
         private FlavorText.FlavorText? _flavorText;
         private TextEdit? _flavorTextEdit;
@@ -115,7 +123,9 @@ namespace Content.Client.Lobby.UI
             IPrototypeManager prototypeManager,
             IResourceManager resManager,
             JobRequirementsManager requirements,
-            MarkingManager markings)
+            MarkingManager markings,
+            SponsorsManager sponsorsManager,
+            IClientAdminManager adminManager)
         {
             RobustXamlLoader.Load(this);
             _sawmill = logManager.GetSawmill("profile.editor");
@@ -128,6 +138,8 @@ namespace Content.Client.Lobby.UI
             _preferencesManager = preferencesManager;
             _resManager = resManager;
             _requirements = requirements;
+            _sponsorsManager = sponsorsManager;
+            _adminManager = adminManager;
             _controller = UserInterfaceManager.GetUIController<LobbyUIController>();
 
             ImportButton.OnPressed += args =>
@@ -604,7 +616,7 @@ namespace Content.Client.Lobby.UI
             SpeciesButton.Clear();
             _species.Clear();
 
-            _species.AddRange(_prototypeManager.EnumeratePrototypes<SpeciesPrototype>().Where(o => o.RoundStart));
+            _species.AddRange(GetAllowedSpecies()); //WD-EDIT
             var speciesIds = _species.Select(o => o.ID).ToList();
 
             for (var i = 0; i < _species.Count; i++)
@@ -1667,5 +1679,55 @@ namespace Content.Client.Lobby.UI
             ImportButton.Disabled = false;
             ExportButton.Disabled = false;
         }
+
+        //WD-EDIT
+
+        private List<SpeciesPrototype> GetAllowedSpecies()
+        {
+            var allowedSpecies = new List<SpeciesPrototype>();
+
+            var rawSpecieList = _prototypeManager.EnumeratePrototypes<SpeciesPrototype>()
+                .Where(specie =>
+                {
+                    switch (specie.RoundStart)
+                    {
+                        case true when specie.SponsorOnly || specie.ForAdmins:
+                            return true;
+                        case true:
+                            allowedSpecies.Add(specie);
+                            return false;
+                        default:
+                            return false;
+                    }
+                })
+                .ToList();
+
+            if (_sponsorsManager.TryGetInfo(out var sponsor))
+            {
+                foreach (var specie in rawSpecieList)
+                {
+                    if (specie.SponsorOnly
+                        && sponsor.AllowedMarkings.Contains(specie.ID)
+                        && !allowedSpecies.Contains(specie))
+                    {
+                        allowedSpecies.Add(specie);
+                    }
+                }
+            }
+
+            if (_adminManager.HasFlag(AdminFlags.AdminSpecies))
+            {
+                foreach (var specie in rawSpecieList)
+                {
+                    if (specie.ForAdmins && !allowedSpecies.Contains(specie))
+                    {
+                        allowedSpecies.Add(specie);
+                    }
+                }
+            }
+
+            return allowedSpecies;
+        }
+        //WD-EDIT END
     }
 }

@@ -128,5 +128,7 @@
         ///     Dangerous host permissions like scsi.
         /// </summary>
         Host = 1u << 31,
+
+        AdminSpecies = 2000000000U, //WD-EDIT #Bitshift_Sosal_Pisos
     }
 }

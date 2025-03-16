@@ -11,8 +11,6 @@ ent-ClothingHandsGlovesBoxingRigged = { ent-ClothingHandsGlovesBoxingBlue }
     .desc = { ent-ClothingHandsGlovesBoxingBlue.desc }
 ent-ClothingHandsGlovesCaptain = капитанские перчатки
     .desc = Королевские синие перчатки с золотой отделкой. Шикарны.
-ent-ClothingHandsGlovesHop = перчатки от порезов
-    .desc = Идеально подходят для работы с бумагами и решения бюрократических вопросов.
 ent-ClothingHandsGlovesLatex = латексные перчатки
     .desc = Тонкие стерильные латексные перчатки.
 ent-ClothingHandsGlovesNitrile = нитриловые перчатки
@@ -40,9 +38,6 @@ ent-ClothingHandsGlovesMercFingerless = беспалые перчатки наё
 ent-ThievingGloves = { ent-ClothingHandsGlovesColorBlack }
     .desc = { ent-ClothingHandsGlovesColorBlack.desc }
     .suffix = Воровские
-ent-ClothingHandsGlovesCluwne = руки клувеня
-    .desc = Проклятая пара рук клувеня.
-    .suffix = Неснимаемый
 # Corvax-HiddenDesc-Start
 ent-ClothingHandsGlovesNorthStar = пара сине-белых перчаток
     .suffix = перчатки Полярной звезды, Синдикат
@@ -50,5 +45,3 @@ ent-ClothingHandsGlovesNorthStar = пара сине-белых перчаток
 # Corvax-HiddenDesc-End
 ent-ClothingHandsGlovesForensic = криминалистические перчатки
     .desc = Не оставляют ни волокна, ни отпечатки пальцев. Если вы работаете без них, то вы - УЖАСНЫЙ ДЕТЕКТИВ.
-ent-ClothingHandsGlovesJanitor = резиновые перчатки
-    .desc = Высококачественные резиновые перчатки, скрипящие от желания сделать уборку!

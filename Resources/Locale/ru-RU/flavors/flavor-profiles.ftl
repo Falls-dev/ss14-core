@@ -181,8 +181,6 @@ flavor-complex-pyrotton = как горящий рот
 flavor-complex-mothballs = как нафталиновые шарики
 flavor-complex-paint-thinner = как растворитель для краски
 flavor-complex-numbing-tranquility = как оцепенелое спокойствие
-flavor-complex-true-nature = как истинная природа реальности
-flavor-complex-false-meat = как не совсем не мясо
 flavor-complex-paper = как кашеобразная масса
 flavor-complex-compressed-meat = как спрессованное мясо
 

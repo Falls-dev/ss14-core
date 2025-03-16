@@ -1,10 +1,7 @@
 # Errors
 loadout-group-species-restriction = Этот предмет недоступен для вашей текущей расы.
 # Miscellaneous
-loadout-group-trinkets = Безделушки
 loadout-group-glasses = Очки
-loadout-group-backpack = Рюкзак
-loadout-group-instruments = Инструменты
 loadout-group-survival-basic = Аварийный запас
 loadout-group-survival-extended = Расширенный аварийный запас
 loadout-group-survival-clown = Клоунский аварийный запас

@@ -50,5 +50,3 @@ ent-FoodMealEnchiladas = энчилада
     .desc = Вива Ля Мексика!
 ent-FoodSaladWatermelonFruitBowl = фруктовый арбузный боул
     .desc = Единственный салат, в котором можно съесть миску.
-ent-FoodMealCornInButter = кукуруза в сливочном масле
-    .desc = Маслянистенько.

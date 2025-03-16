@@ -1,7 +1,5 @@
 ent-SalvageMaterialCrateSpawner = спавнер обломок ящик материалов
     .desc = { ent-MarkerBase.desc }
-ent-SalvageLootSpawner = спавнер обломок добыча
-    .desc = { ent-MarkerBase.desc }
 ent-SalvageMobSpawner = спавнер обломок моб
     .desc = { ent-MarkerBase.desc }
     .suffix = 25
@@ -17,8 +15,3 @@ ent-SpawnMobKangarooSalvage = спавнер обломок космически
     .desc = { ent-MarkerBase.desc }
 ent-SpawnMobSpiderSalvage = спавнер обломок космический паук
     .desc = { ent-MarkerBase.desc }
-ent-SpawnMobCobraSalvage = спавнер обломок космическая кобра
-    .desc = { ent-MarkerBase.desc }
-ent-SalvageFleshSpawner = спавнер обломок плоть
-    .suffix = 100
-    .desc = { ent-SalvageMobSpawner.desc }

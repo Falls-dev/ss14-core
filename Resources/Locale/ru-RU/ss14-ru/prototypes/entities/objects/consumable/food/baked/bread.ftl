@@ -70,5 +70,3 @@ ent-FoodBreadButteredToast = тост со сливочным маслом
     .desc = Хрустящий.
 ent-FoodBreadTwoSlice = два ломтика
     .desc = Классика.
-ent-MobBreadDog = хлебака
-    .desc = Это хлеб. Это собака. Это... хлебака?

@@ -1,8 +1,4 @@
 # Spells
-spellbook-fireball-name = Огненный шар
-spellbook-fireball-desc = Пусть большинство членов экипажа взорвутся от ярости, когда увидят летящий в них огненный шар!
-spellbook-blink-name = Прыжок
-spellbook-blink-desc = Не моргайте, иначе вы не заметите, как телепортируетесь.
 spellbook-voidapplause-name = Хлопок пустоты
 spellbook-voidapplause-desc = Поменяйтесь местами с целью, разве вам не захотелось потанцевать буги?
 spellbook-force-wall-name = Силовой барьер
@@ -19,10 +15,6 @@ spellbook-mind-swap-name = Обмен разумом
 spellbook-mind-swap-description = Обменяйтесь телами с другим человеком!
 spellbook-animate-name = Оживление
 spellbook-animate-description = Оживите неодушевлённый предмет!
-spellbook-smite-name = Кара
-spellbook-smite-desc = Не любите кого-то? РАЗОРВИТЕ его на кусочки! Необходимо иметь шляпу и робу волшебника.
-spellbook-cluwne-name = Проклятие клувня
-spellbook-cluwne-desc = Для случаев, когда вы кого-то по настоящему ненавидите и кары недостаточно. Необходимо иметь шляпу и робу волшебника.
 spellbook-slip-name = Скользкая дорожка
 spellbook-slip-desc = Изучите древние приёмы уборщиков и прокляните вашу цель, чтобы та была скользкой. Необходимо иметь шляпу и робу волшебника.
 spellbook-item-recall-name = Отозвать предмет

@@ -1,5 +1,3 @@
-ent-BodyBag = мешок для тела
-    .desc = Пластиковый мешок, предназначенный для хранения и транспортировки трупов, и предотвращения их гниения.
 ent-BodyBagFolded = { ent-BodyBag }
     .desc = { ent-BodyBag.desc }
     .suffix = Сложенный

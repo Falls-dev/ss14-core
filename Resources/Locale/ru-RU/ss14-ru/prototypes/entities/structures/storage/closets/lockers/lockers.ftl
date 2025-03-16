@@ -1,7 +1,5 @@
 ent-LockerBooze = шкафчик со спиртным
     .desc = Здесь бармен хранит алкоголь.
-ent-LockerSteel = защищённый шкаф
-    .desc = { ent-LockerBaseSecure.desc }
 ent-LockerQuarterMaster = шкаф квартирмейстера
     .desc = { ent-LockerBaseSecure.desc }
 ent-LockerSalvageSpecialist = снаряжение специалиста по утилизации
@@ -67,6 +65,4 @@ ent-LockerBluespaceStation = блюспейс шкаф
 ent-LockerClown = шкаф клоуна
     .desc = { ent-LockerBaseSecure.desc }
 ent-LockerMime = шкаф мима
-    .desc = { ent-LockerBaseSecure.desc }
-ent-LockerRepresentative = шкаф представителя Nanotrasen
     .desc = { ent-LockerBaseSecure.desc }

@@ -1,7 +1,7 @@
 using Content.Shared.Examine;
 using Robust.Server.Player;
 
-namespace Content.Server._White.Other.CustomFluffSystems.merkka;
+namespace Content.Server._White.FluffSystems.merkka;
 
 public sealed class CustomCatExamineSystem : EntitySystem
 {

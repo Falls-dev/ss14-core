@@ -306,13 +306,13 @@
   sprites:
     - sprite: Mobs/Customization/human_hair.rsi
       state: classicbigafro
-- type: marking
-  id: HumanHairClassicBusiness
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: Mobs/Customization/human_hair.rsi
-      state: classicbusiness
+#- type: marking                                      #WD-EDIT
+#  id: HumanHairClassicBusiness                       #WD-EDIT
+#  bodyPart: Hair                                     #WD-EDIT
+#  markingCategory: Hair                              #WD-EDIT
+#  sprites:                                           #WD-EDIT
+#    - sprite: Mobs/Customization/human_hair.rsi      #WD-EDIT
+#      state: classicbusiness                         #WD-EDIT
 - type: marking
   id: HumanHairClassicCia
   bodyPart: Hair

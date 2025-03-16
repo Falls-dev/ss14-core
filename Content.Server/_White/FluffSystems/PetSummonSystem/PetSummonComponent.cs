@@ -1,19 +1,22 @@
 ﻿using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
-namespace Content.Server._White.Other.CustomFluffSystems.Pets;
+namespace Content.Server._White.FluffSystems.PetSummonSystem;
 
 [RegisterComponent]
 public sealed partial class PetSummonComponent : Component
 {
-    [DataField("petSummonAction", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string PetSummonAction = "PetSummonAction";
+    [DataField("petSummonAction")]
+    public EntProtoId PetSummonAction = "PetSummonAction";
 
-    [DataField("petGhostSummonAction", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string PetGhostSummonAction = "PetGhostSummonAction";
+    [DataField("petGhostSummonAction")]
+    public EntProtoId PetGhostSummonAction = "PetGhostSummonAction";
 
-    [DataField("petSummonActionEntity")] public EntityUid? PetSummonActionEntity;
-    [DataField("petGhostSummonActionEntity")] public EntityUid? PetGhostSummonActionEntity;
+    [DataField("petSummonActionEntity")]
+    public EntityUid? PetSummonActionEntity;
+
+    [DataField("petGhostSummonActionEntity")]
+    public EntityUid? PetGhostSummonActionEntity;
 
     public int UsesLeft = 10;
 

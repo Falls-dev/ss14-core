@@ -1,14 +1,13 @@
+using Content.Shared._White.FlufSystems.merkka;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
-using Content.Shared._White.Events;
-using Robust.Server.GameObjects;
 using Robust.Shared.Player;
 
-namespace Content.Server._White.Other.CustomFluffSystems.merkka;
+namespace Content.Server._White.FluffSystems.merkka;
 
 public sealed class EarsSpawnSystem : EntitySystem
 {
@@ -31,22 +30,24 @@ public sealed class EarsSpawnSystem : EntitySystem
     private const string Cat = "MobCatMurka";
     private const string UserNeededKey = "merkkaa";
 
-    private void OnExamined(EntityUid u, EarsSpawnComponent comp, ExaminedEvent ev)
+    private void OnExamined(Entity<EarsSpawnComponent> entity, ref ExaminedEvent ev)
     {
-        ev.PushMarkup($"Зарядов для ушей: {comp.CatEarsUses}\n" +
-                      $"Зарядов для создания кота: {comp.СatSpawnUses}");
+        ev.PushMarkup($"Зарядов для ушей: {entity.Comp.CatEarsUses}\n" +
+                      $"Зарядов для создания кота: {entity.Comp.СatSpawnUses}");
     }
 
-    private void AddSummonVerb(EntityUid uid, EarsSpawnComponent component, GetVerbsEvent<AlternativeVerb> args)
+    private void AddSummonVerb(Entity<EarsSpawnComponent> entity, ref GetVerbsEvent<AlternativeVerb> args)
     {
         if (!args.CanInteract || !args.CanAccess)
             return;
+
+        var user = args.User;
 
         AlternativeVerb verb = new()
         {
             Act = () =>
             {
-                AttemptSummon(component, args.User);
+                AttemptSummon(entity, user);
             },
             Text = Loc.GetString("summon cat ears"),
             Priority = 2
@@ -56,7 +57,7 @@ public sealed class EarsSpawnSystem : EntitySystem
         {
             Act = () =>
             {
-                AttemptSummonCat(component, args.User);
+                AttemptSummonCat(entity, user);
             },
             Text = Loc.GetString("summon cat"),
             Priority = 3
@@ -66,19 +67,19 @@ public sealed class EarsSpawnSystem : EntitySystem
         args.Verbs.Add(verbCat);
     }
 
-    private void OnSummon(EntityUid uid, EarsSpawnComponent component, SummonActionEarsEvent args)
+    private void OnSummon(Entity<EarsSpawnComponent> entity, ref SummonActionEarsEvent args)
     {
-        AttemptSummon(component, args.Performer);
+        AttemptSummon(entity, args.Performer);
     }
 
-    private void OnSummonCat(EntityUid uid, EarsSpawnComponent component, SummonActionCatEvent args)
+    private void OnSummonCat(Entity<EarsSpawnComponent> entity, ref SummonActionCatEvent args)
     {
-        AttemptSummonCat(component, args.Performer);
+        AttemptSummonCat(entity, args.Performer);
     }
 
-    private void AttemptSummon(EarsSpawnComponent component, EntityUid user)
+    private void AttemptSummon(Entity<EarsSpawnComponent> entity, EntityUid user)
     {
-        if (!_blocker.CanInteract(user, component.Owner))
+        if (!_blocker.CanInteract(user, entity))
             return;
 
         if (TryComp<ActorComponent>(user, out var actorComponent))
@@ -91,18 +92,18 @@ public sealed class EarsSpawnSystem : EntitySystem
             }
         }
 
-        if (component.CatEarsUses == 0)
+        if (entity.Comp.CatEarsUses == 0)
         {
             _popupSystem.PopupEntity("Больше нет зарядов!", user, PopupType.Medium);
             return;
         }
 
-        SpawnEars(user, component);
+        SpawnEars(user, entity.Comp);
     }
 
-    private void AttemptSummonCat(EarsSpawnComponent component, EntityUid user)
+    private void AttemptSummonCat(Entity<EarsSpawnComponent> entity, EntityUid user)
     {
-        if (!_blocker.CanInteract(user, component.Owner))
+        if (!_blocker.CanInteract(user, entity.Owner))
             return;
 
         if (TryComp<ActorComponent>(user, out var actorComponent))
@@ -115,13 +116,13 @@ public sealed class EarsSpawnSystem : EntitySystem
             }
         }
 
-        if (component.СatSpawnUses == 0)
+        if (entity.Comp.СatSpawnUses == 0)
         {
             _popupSystem.PopupEntity("Больше нет зарядов!", user, PopupType.Medium);
             return;
         }
 
-        SpawnCat(user, component);
+        SpawnCat(user, entity);
     }
 
     private void SpawnEars(EntityUid player, EarsSpawnComponent comp)

@@ -1,9 +1,11 @@
+using Content.Server._White.GiftSystem;
 using Content.Server.Administration.Logs;
 using Content.Server.Hands.Systems;
 using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
+using Content.Shared.Prototypes;
 using Content.Shared.Whitelist;
 using Robust.Server.Audio;
 using Robust.Shared.Map.Components;
@@ -101,6 +103,13 @@ public sealed class RandomGiftSystem : EntitySystem
         {
             if (proto.Abstract || proto.HideSpawnMenu || proto.Components.ContainsKey(mapGridCompName) || !proto.Components.ContainsKey(physicsCompName))
                 continue;
+
+            //WD-EDIT
+            if (proto.HasComponent<GiftIgnoreComponent>())
+            {
+                continue;
+            }
+            //WD-EDIT END
 
             _possibleGiftsUnsafe.Add(proto.ID);
 

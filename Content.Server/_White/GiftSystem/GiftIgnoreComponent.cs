@@ -1,6 +1,4 @@
 ﻿namespace Content.Server._White.GiftSystem;
 
-public sealed class GiftIgnoreComponent
-{
-    
-}
+[RegisterComponent]
+public sealed partial class GiftIgnoreComponent : Component;

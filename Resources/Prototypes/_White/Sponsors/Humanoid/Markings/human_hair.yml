@@ -569,28 +569,6 @@
       state: ziegler
 
 
-
-- type: marking
-  id: HumanHairClassicAfro
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: White/Mobs/Customization/old_human_hair.rsi
-      state: afro
-- type: marking
-  id: HumanHairClassicAfro2
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: White/Mobs/Customization/old_human_hair.rsi
-      state: afro2
-- type: marking
-  id: HumanHairClassicBigafro
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: White/Mobs/Customization/old_human_hair.rsi
-      state: bigafro
 - type: marking
   id: HumanHairClassicAntenna
   bodyPart: Hair
@@ -640,13 +618,6 @@
   sprites:
     - sprite: White/Mobs/Customization/old_human_hair.rsi
       state: long_bedhead2
-- type: marking
-  id: HumanHairClassicFloorlengthBedhead
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: White/Mobs/Customization/old_human_hair.rsi
-      state: floorlength_bedhead
 - type: marking
   id: HumanHairClassicBeehive
   bodyPart: Hair
@@ -851,13 +822,6 @@
     - sprite: White/Mobs/Customization/old_human_hair.rsi
       state: buzzcut
 - type: marking
-  id: HumanHairClassicCia
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: White/Mobs/Customization/old_human_hair.rsi
-      state: cia
-- type: marking
   id: HumanHairClassicCoffeehouse
   bodyPart: Hair
   markingCategory: Hair
@@ -878,13 +842,6 @@
   sprites:
     - sprite: White/Mobs/Customization/old_human_hair.rsi
       state: cornrows
-- type: marking
-  id: HumanHairClassicCornrows2
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: White/Mobs/Customization/old_human_hair.rsi
-      state: cornrows2
 - type: marking
   id: HumanHairClassicCornrowbun
   bodyPart: Hair
@@ -1194,20 +1151,6 @@
     - sprite: White/Mobs/Customization/old_human_hair.rsi
       state: long
 - type: marking
-  id: HumanHairClassicLong2
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: White/Mobs/Customization/old_human_hair.rsi
-      state: long2
-- type: marking
-  id: HumanHairClassicLong3
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: White/Mobs/Customization/old_human_hair.rsi
-      state: long3
-- type: marking
   id: HumanHairClassicLongWithBundles
   bodyPart: Hair
   markingCategory: Hair
@@ -1264,13 +1207,6 @@
     - sprite: White/Mobs/Customization/old_human_hair.rsi
       state: messy
 - type: marking
-  id: HumanHairClassicModern
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: White/Mobs/Customization/old_human_hair.rsi
-      state: modern
-- type: marking
   id: HumanHairClassicMohawk
   bodyPart: Hair
   markingCategory: Hair
@@ -1298,13 +1234,6 @@
   sprites:
     - sprite: White/Mobs/Customization/old_human_hair.rsi
       state: unshaven_mohawk
-- type: marking
-  id: HumanHairClassicMulder
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: White/Mobs/Customization/old_human_hair.rsi
-      state: mulder
 - type: marking
   id: HumanHairClassicOdango
   bodyPart: Hair
@@ -1837,13 +1766,6 @@
   sprites:
     - sprite: White/Mobs/Customization/old_human_hair.rsi
       state: volaju
-- type: marking
-  id: HumanHairClassicWisp
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: White/Mobs/Customization/old_human_hair.rsi
-      state: wisp
 - type: marking
   id: HumanHairClassicUneven
   bodyPart: Hair

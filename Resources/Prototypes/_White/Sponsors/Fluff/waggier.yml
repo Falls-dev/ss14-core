@@ -6,7 +6,7 @@
 
 - type: entity
   name: встанислав шишкин
-  parent: ExperimentalStunbaton
+  parent: Stunbaton
   id: ExperimentalStunbatonWaggier
   description: "Литая сталь. Прочный пластик. Дубинка Ветерана СБ Регины Хьюи."
 

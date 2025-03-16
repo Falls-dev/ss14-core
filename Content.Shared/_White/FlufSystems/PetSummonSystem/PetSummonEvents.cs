@@ -1,6 +1,6 @@
 using Content.Shared.Actions;
 
-namespace Content.Shared._White.Events;
+namespace Content.Shared._White.FlufSystems.PetSummonSystem;
 
 public sealed partial class PetSummonActionEvent : InstantActionEvent
 {

@@ -1,4 +1,4 @@
-namespace Content.Server._White.Other.CustomFluffSystems.merkka;
+namespace Content.Server._White.FluffSystems.merkka;
 
 [RegisterComponent]
 public sealed partial class CustomCatExamineComponent : Component

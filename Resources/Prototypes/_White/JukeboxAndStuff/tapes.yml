@@ -9,12 +9,11 @@
   components:
     - type: Tape
     - type: Sprite
-      sprite: Objects/Devices/jukeboxStuff/tape.rsi
+      sprite: White/Objects/Devices/jukeboxStuff/tape.rsi
       layers:
         - state: tape
-      netsync: false
     - type: Item
-      sprite: Objects/Devices/jukeboxStuff/tape.rsi
+      sprite: White/Objects/Devices/jukeboxStuff/tape.rsi
       heldPrefix: tape
     - type: EmitSoundOnLand
       sound:

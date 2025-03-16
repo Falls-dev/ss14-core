@@ -24,7 +24,7 @@ public sealed class SponsorItemSpawnerSystem : EntitySystem
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawned);
     }
 
-    private void OnPlayerSpawned(ref PlayerSpawnCompleteEvent ev)
+    private void OnPlayerSpawned(PlayerSpawnCompleteEvent ev)
     {
         if (!_sponsorsManager.TryGetInfo(ev.Player.UserId, out var sponsor))
         {

@@ -384,7 +384,7 @@
   suffix: fluff
   components:
     - type: Sprite
-      sprite: Objects/Misc/books.rsi
+      sprite: White/Misc/books.rsi
       layers:
         - state: summon_book
     - type: Item
@@ -394,24 +394,24 @@
     - type: PetSummon
 
 # 2sh0nka
-- type: entity
-  parent: ClothingUnderwearSocksBase
-  id: ClothingUnderwearSocksBlack2sh0nka
-  name: чёрные чулки
-  description: Вау. Они.. чёрные?
-  components:
-    - type: Sprite
-      sprite: White/Fluff/deadman1740/black.rsi
+# - type: entity
+#  parent: ClothingUnderwearSocksBase
+#  id: ClothingUnderwearSocksBlack2sh0nka
+#  name: чёрные чулки
+#  description: Вау. Они.. чёрные?
+#  components:
+#    - type: Sprite
+#      sprite: White/Fluff/deadman1740/black.rsi
 
-- type: entity
-  parent: ClothingUnderwearSocksBase
-  id: ClothingUnderwearSocksGray2sh0nka
-  name: серые чулки
-  suffix: fluff
-  description: Вау. Они.. серые?
-  components:
-    - type: Sprite
-      sprite: White/Fluff/deadman1740/gray.rsi
+# - type: entity
+#  parent: ClothingUnderwearSocksBase
+#  id: ClothingUnderwearSocksGray2sh0nka
+#  name: серые чулки
+#  suffix: fluff
+#  description: Вау. Они.. серые?
+#  components:
+#    - type: Sprite
+#      sprite: White/Fluff/deadman1740/gray.rsi
 
 # Derderiot
 - type: entity
@@ -478,9 +478,8 @@
       sprite: White/Fluff/koitorra/koitorra_mask.rsi
     - type: Clothing
       sprite:
-    - type: VoiceMasker
-      default: ClothingMaskGas
-    - type: ClothingMidi
+    - type: VoiceMask
+#    - type: ClothingMidi
       midiAction: MidiActionKoitorra
     - type: Instrument
       allowPercussion: false
@@ -584,7 +583,7 @@
     - type: EyeProtection
 
 - type: entity
-  parent: [ClothingUniformBase, ClothingUniformFoldableBase]
+  parent: [ClothingUniformBase]
   id: ClothingUniformJumpsuitSerafimSalvageSpecialist
   name: экспедиторская униформа
   suffix: fluff
@@ -603,11 +602,11 @@
   description: Коллекционная чеканная монета с родины вульпканин, редкая находка обладающая не столь реальной, сколько символической ценностью.
   components:
     - type: UseDelay
-    - type: CoinDice
-      sound:
-        collection: CoinDrop
-      sides: 2
-      currentValue: 1
+#    - type: CoinDice
+#      sound:
+#        collection: CoinDrop
+#      sides: 2
+#      currentValue: 1
     - type: Sprite
       sprite: White/Fluff/Serafim547/vulp_coin.rsi
       state: coin_1
@@ -830,7 +829,7 @@
         Slash: 14
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
-  - type: HolyWeapon
+#  - type: HolyWeapon
   - type: Unremoveable
     deleteOnDrop: true
   - type: Sharp

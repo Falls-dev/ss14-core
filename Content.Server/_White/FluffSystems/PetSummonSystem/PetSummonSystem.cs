@@ -1,4 +1,5 @@
 ﻿using Content.Server.Ghost.Roles.Components;
+using Content.Shared._White.FlufSystems.PetSummonSystem;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Examine;
@@ -6,10 +7,9 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
-using Content.Shared._White.Events;
 using Robust.Shared.Player;
 
-namespace Content.Server._White.Other.CustomFluffSystems.Pets;
+namespace Content.Server._White.FluffSystems.PetSummonSystem;
 
 public sealed class PetSummonSystem : EntitySystem
 {
@@ -17,7 +17,7 @@ public sealed class PetSummonSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
 
-    private IReadOnlyDictionary<string, string> MobMap = new Dictionary<string, string>()
+    private readonly IReadOnlyDictionary<string, string> _mobMap = new Dictionary<string, string>()
     {
         { "Wanderer_", "KommandantPetSpider" },
     };
@@ -33,26 +33,28 @@ public sealed class PetSummonSystem : EntitySystem
         SubscribeLocalEvent<PetSummonComponent, PetGhostSummonActionEvent>(OnGhostSummon);
     }
 
-    private void OnGhostSummon(EntityUid uid, PetSummonComponent component, PetGhostSummonActionEvent args)
+    private void OnGhostSummon(Entity<PetSummonComponent> entity, ref PetGhostSummonActionEvent args)
     {
-        AttemptSummon(component, args.Performer, true);
+        AttemptSummon(entity, args.Performer, true);
     }
 
-    private void OnSummon(EntityUid uid, PetSummonComponent component, PetSummonActionEvent args)
+    private void OnSummon(Entity<PetSummonComponent> entity, ref PetSummonActionEvent args)
     {
-        AttemptSummon(component, args.Performer, false);
+        AttemptSummon(entity, args.Performer, false);
     }
 
-    private void AddSummonVerb(EntityUid uid, PetSummonComponent component, GetVerbsEvent<AlternativeVerb> args)
+    private void AddSummonVerb(Entity<PetSummonComponent> entity, ref GetVerbsEvent<AlternativeVerb> args)
     {
         if (!args.CanInteract || !args.CanAccess)
             return;
+
+        var user = args.User;
 
         AlternativeVerb verb = new()
         {
             Act = () =>
             {
-                AttemptSummon(component, args.User, false);
+                AttemptSummon(entity, user, false);
             },
             Text = "Призвать питомца",
             Priority = 2
@@ -62,7 +64,7 @@ public sealed class PetSummonSystem : EntitySystem
         {
             Act = () =>
             {
-                AttemptSummon(component, args.User, true);
+                AttemptSummon(entity, user, true);
             },
             Text = "Призвать питомца-призрак",
             Priority = 2
@@ -77,9 +79,9 @@ public sealed class PetSummonSystem : EntitySystem
         args.PushMarkup($"Осталось призывов: {component.UsesLeft}");
     }
 
-    private void AttemptSummon(PetSummonComponent component, EntityUid user, bool ghostRole)
+    private void AttemptSummon(Entity<PetSummonComponent> entity, EntityUid user, bool ghostRole)
     {
-        if (!_blocker.CanInteract(user, component.Owner))
+        if (!_blocker.CanInteract(user, entity))
             return;
 
         string? mobProto = null;
@@ -87,7 +89,7 @@ public sealed class PetSummonSystem : EntitySystem
         {
             var userKey = actorComponent.PlayerSession.Name;
 
-            if (!MobMap.TryGetValue(userKey, out var proto))
+            if (!_mobMap.TryGetValue(userKey, out var proto))
             {
                 _popupSystem.PopupEntity("Вы не достойны", user, PopupType.Medium);
                 return;
@@ -96,22 +98,22 @@ public sealed class PetSummonSystem : EntitySystem
             mobProto = proto;
         }
 
-        if (component.UsesLeft == 0)
+        if (entity.Comp.UsesLeft == 0)
         {
             _popupSystem.PopupEntity("Больше нет зарядов!", user, PopupType.Medium);
             return;
         }
 
-        if (component.SummonedEntity != null)
+        if (entity.Comp.SummonedEntity != null)
         {
-            if (!TryComp<MobStateComponent>(component.SummonedEntity, out var mobState))
+            if (!TryComp<MobStateComponent>(entity.Comp.SummonedEntity, out var mobState))
             {
-                component.SummonedEntity = null;
+                entity.Comp.SummonedEntity = null;
             }
             else
             {
                 if (mobState.CurrentState is MobState.Dead or MobState.Invalid)
-                    component.SummonedEntity = null;
+                    entity.Comp.SummonedEntity = null;
                 else
                 {
                     _popupSystem.PopupEntity("Ваш питомец уже призван", user, PopupType.Medium);
@@ -122,7 +124,7 @@ public sealed class PetSummonSystem : EntitySystem
         }
 
         if (mobProto != null)
-            SummonPet(user, component, mobProto, ghostRole);
+            SummonPet(user, entity, mobProto, ghostRole);
     }
 
     private void SummonPet(EntityUid user, PetSummonComponent component, string mobProto, bool ghostRole)

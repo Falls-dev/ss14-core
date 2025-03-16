@@ -2,11 +2,8 @@
   id: FloorPlanetDirt
   name: tiles-dirt-floor
   sprite: /Textures/Tiles/Planet/dirt.rsi/dirt.png
-  variants: 4
+  variants: 1
   placementVariants:
-  - 1.0
-  - 1.0
-  - 1.0
   - 1.0
   isSubfloor: true
   footstepSounds:

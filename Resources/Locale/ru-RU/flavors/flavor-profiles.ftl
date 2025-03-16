@@ -180,7 +180,6 @@ flavor-complex-violets = как фиалки
 flavor-complex-pyrotton = как горящий рот
 flavor-complex-mothballs = как нафталиновые шарики
 flavor-complex-paint-thinner = как растворитель для краски
-flavor-complex-numbing-tranquility = как оцепенелое спокойствие
 flavor-complex-paper = как кашеобразная масса
 flavor-complex-compressed-meat = как спрессованное мясо
 

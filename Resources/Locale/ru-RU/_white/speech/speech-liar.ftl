@@ -34,9 +34,6 @@ liar-word-replacement-11 = я
 liar-word-12 = никто
 liar-word-replacement-12 = все
 
-liar-word-12 = не
-liar-word-replacement-12 = ""
-
 liar-word-13 = мим
 liar-word-replacement-13 = клоун
 
@@ -127,6 +124,3 @@ liar-word-replacement-41 = нравится
 
 liar-word-42 = плохой
 liar-word-replacement-42 = хороший
-
-liar-word-42 = хороший
-liar-word-replacement-42 = говно

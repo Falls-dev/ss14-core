@@ -10,7 +10,8 @@ namespace Content.Shared.Localizations
         [Dependency] private readonly ILocalizationManager _loc = default!;
 
         // If you want to change your codebase's language, do it here.
-        private const string Culture = "en-US";
+        private const string Culture = "ru-RU"; //WD-EDIT
+        private const string FallbackCulture = "en-US"; //WD-EDIT
 
         /// <summary>
         /// Custom format strings used for parsing and displaying minutes:seconds timespans.
@@ -26,8 +27,12 @@ namespace Content.Shared.Localizations
         public void Initialize()
         {
             var culture = new CultureInfo(Culture);
+            var fallbackCulture = new CultureInfo(FallbackCulture); //WD-EDIT
 
             _loc.LoadCulture(culture);
+            _loc.LoadCulture(fallbackCulture); // WD-EDIT
+            _loc.SetFallbackCluture(fallbackCulture); // WD-EDIT
+
             _loc.AddFunction(culture, "PRESSURE", FormatPressure);
             _loc.AddFunction(culture, "POWERWATTS", FormatPowerWatts);
             _loc.AddFunction(culture, "POWERJOULES", FormatPowerJoules);

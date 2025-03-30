@@ -2,6 +2,7 @@
 using Content.Server.DoAfter;
 using Content.Shared._White.BodyArmor;
 using Content.Shared.DoAfter;
+using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Robust.Server.Containers;
 using Robust.Shared.Containers;
@@ -18,6 +19,24 @@ public sealed class ArmorPlateSystem : EntitySystem
 
         SubscribeLocalEvent<ArmorPlateComponent, AfterInteractEvent>(OnInteract);
         SubscribeLocalEvent<ArmorPlateComponent, PutPlateDoAfterEvent>(OnPutPlateDoAfter);
+        SubscribeLocalEvent<ArmorPlateComponent, ExaminedEvent>(OnExamined);
+    }
+
+    private void OnExamined(EntityUid uid, ArmorPlateComponent component, ExaminedEvent args)
+    {
+        var hasDamage = component.ReceivedDamage > 0 ? "имеются визуальные повреждения." : "визуальные повреждения отсутствуют.";
+        Dictionary<PlateTier, string> tierList = new()
+        {
+            { PlateTier.TierOne, "первый уровень броне-защиты" },
+            { PlateTier.TierTwo, "второй уровень броне-защиты" },
+            { PlateTier.TierThree, "третий уровень броне-защиты" }
+        };
+
+        using (args.PushGroup(nameof(ArmorPlateComponent)))
+        {
+            args.PushMarkup(Loc.GetString("armorplate-tier", ("tier", tierList[component.PlateTier])));
+            args.PushMarkup(Loc.GetString("armorplate-damage", ("hasdamage", hasDamage)));
+        }
     }
 
     private void OnInteract(EntityUid uid, ArmorPlateComponent component, AfterInteractEvent args)

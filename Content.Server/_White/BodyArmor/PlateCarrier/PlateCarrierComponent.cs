@@ -14,6 +14,9 @@ public sealed partial class PlateCarrierComponent : Component
     public bool HasPlate = false;
 
     [DataField]
+    public int PlateCarrierDamage = 0;
+
+    [DataField]
     [ViewVariables(VVAccess.ReadWrite)]
     public SoundSpecifier OpenSound = new SoundPathSpecifier("/Audio/White/BodyArmor/PlateCarrier/open.ogg");
 

@@ -1,10 +1,17 @@
 ﻿using System.Linq;
+using Content.Server._White.BodyArmor.ArmorPlates;
 using Content.Server.DoAfter;
 using Content.Server.Hands.Systems;
 using Content.Shared._White.BodyArmor;
 using Content.Shared.Coordinates;
+using Content.Shared.Damage;
 using Content.Shared.DoAfter;
+using Content.Shared.Examine;
+using Content.Shared.FixedPoint;
+using Content.Shared.Hands.Components;
+using Content.Shared.Inventory.Events;
 using Content.Shared.Verbs;
+using Content.Shared.Weapons.Ranged.Components;
 using Robust.Server.Audio;
 using Robust.Server.Containers;
 using Robust.Shared.Containers;
@@ -22,7 +29,23 @@ public sealed class PlateCarrierSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<GetVerbsEvent<AlternativeVerb>>(OnAltVerb);
+        SubscribeLocalEvent<PlateCarrierComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<PlateCarrierComponent, GetPlateDoAfterEvent>(OnGetPlateDoAfter);
+        SubscribeLocalEvent<PlateCarrierComponent, GotEquippedEvent>(OnEquipped);
+        SubscribeLocalEvent<PlateCarrierComponent, GotUnequippedEvent>(OnUnequipped);
+        SubscribeLocalEvent<PlateCarrierOnUserComponent, DamageModifyEvent>(OnUserGetDamage);
+    }
+
+    private void OnExamined(EntityUid uid, PlateCarrierComponent component, ExaminedEvent args)
+    {
+        var hasPlate = component.HasPlate ? "установлена." : "не установлена.";
+        var hasDamage = component.PlateCarrierDamage > 0 ? "имеются визуальные повреждения." : "визуальные повреждения отсутствуют.";
+
+        using (args.PushGroup(nameof(PlateCarrierComponent)))
+        {
+            args.PushMarkup(Loc.GetString("armorplate-place", ("hasplate", hasPlate)));
+            args.PushMarkup(Loc.GetString("platecarrier-damage", ("hasdamage", hasDamage)));
+        }
     }
 
     private void OnAltVerb(GetVerbsEvent<AlternativeVerb> args)
@@ -50,7 +73,7 @@ public sealed class PlateCarrierSystem : EntitySystem
         {
             Act = () =>
             {
-                SetPlateCarrierClosed(args.User, args.Target, plateCarrierComponent);
+                SetPlateCarrierClosed(args.Target, plateCarrierComponent);
             },
             Disabled = false,
             Priority = 3,
@@ -60,7 +83,66 @@ public sealed class PlateCarrierSystem : EntitySystem
         args.Verbs.Add(verb);
     }
 
-    private void SetPlateCarrierClosed(EntityUid uid, EntityUid platecarrier, PlateCarrierComponent plateCarrierComponent)
+    private void OnEquipped(EntityUid uid, PlateCarrierComponent component, GotEquippedEvent args)
+    {
+        if(HasComp<PlateCarrierOnUserComponent>(args.Equipee))
+            return;
+
+        var userComp = EnsureComp<PlateCarrierOnUserComponent>(args.Equipee);
+        userComp.PlateCarrier = args.Equipment;
+    }
+
+    private void OnUnequipped(EntityUid uid, PlateCarrierComponent component, GotUnequippedEvent args)
+    {
+        UnequipHelper(args.Equipee);
+    }
+
+    private void OnUserGetDamage(EntityUid uid, PlateCarrierOnUserComponent component, DamageModifyEvent args)
+    {
+        if(args.Origin == null)
+            return;
+
+        var attacker = args.Origin;
+
+        if (!_handsSystem.TryGetActiveHand((Entity<HandsComponent?>) attacker, out var activeHand))
+            return;
+
+        if(activeHand.Container == null)
+            return;
+
+        if(!HasComp<GunComponent>(activeHand.Container.ContainedEntities[0]))
+            return;
+
+        if(!TryComp<PlateCarrierComponent>(component.PlateCarrier, out var plateCarrierComponent))
+            return;
+
+        var intDamage = (int)args.OriginalDamage.DamageDict.First().Value;
+
+        if (!plateCarrierComponent.HasPlate)
+        {
+            plateCarrierComponent.PlateCarrierDamage += intDamage;
+            return;
+        }
+
+        plateCarrierComponent.PlateCarrierDamage += (intDamage / 2);
+        var armorPlate = GetArmorPlateInContainer((EntityUid)component.PlateCarrier, plateCarrierComponent);
+
+        if(!TryComp<ArmorPlateComponent>(armorPlate, out var armorPlateComponent))
+            return;
+
+        armorPlateComponent.ReceivedDamage += (intDamage / 2);
+
+        var newDamageSpecifier = new DamageSpecifier();
+
+        foreach (var damage in args.OriginalDamage.DamageDict)
+        {
+            newDamageSpecifier.DamageDict.Add(damage.Key, (damage.Value - ApplyDamage(armorPlateComponent)));
+        }
+
+        args.Damage = newDamageSpecifier;
+    }
+
+    private void SetPlateCarrierClosed(EntityUid platecarrier, PlateCarrierComponent plateCarrierComponent)
     {
         _audioSystem.PlayPvs((plateCarrierComponent.PlateIsClosed ? plateCarrierComponent.OpenSound : plateCarrierComponent.CloseSound), platecarrier.ToCoordinates());
         plateCarrierComponent.PlateIsClosed = !plateCarrierComponent.PlateIsClosed;
@@ -80,8 +162,7 @@ public sealed class PlateCarrierSystem : EntitySystem
             NeedHand = true
         };
 
-        if(!_doAfterSystem.TryStartDoAfter(doAfterEventArgs))
-            return;
+        _doAfterSystem.TryStartDoAfter(doAfterEventArgs);
     }
 
     private void OnGetPlateDoAfter(EntityUid uid, PlateCarrierComponent component, GetPlateDoAfterEvent args)
@@ -110,5 +191,35 @@ public sealed class PlateCarrierSystem : EntitySystem
         component.HasPlate = false;
 
         args.Handled = true;
+    }
+
+    private EntityUid? GetArmorPlateInContainer(EntityUid platecarrier, PlateCarrierComponent component)
+    {
+        if(!component.HasPlate)
+            return null;
+
+        var container =
+            _containerSystem.EnsureContainer<Container>(platecarrier, PlateCarrierComponent.ArmorPlateContainer);
+
+        return container.ContainedEntities[0];
+    }
+
+    private FixedPoint2 ApplyDamage(ArmorPlateComponent armorPlateComponent)
+    {
+        if (armorPlateComponent.ReceivedDamage >= armorPlateComponent.AllowedDamage)
+            return 0;
+
+        if (armorPlateComponent.ReceivedDamage >= (armorPlateComponent.AllowedDamage / 2))
+            return (armorPlateComponent.DamageOfTier[armorPlateComponent.PlateTier] / 2);
+
+        return armorPlateComponent.DamageOfTier[armorPlateComponent.PlateTier];
+    }
+
+    private void UnequipHelper(EntityUid user)
+    {
+        if(!HasComp<PlateCarrierOnUserComponent>(user))
+            return;
+
+        RemComp<PlateCarrierOnUserComponent>(user);
     }
 }

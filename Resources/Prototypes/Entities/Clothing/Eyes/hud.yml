@@ -12,6 +12,7 @@
   abstract: true
   noSpawn: true
   components:
+  - type: ShowDeadWithoutMind
   - type: ShowHealthBars
     damageContainers:
     - Biological
@@ -29,6 +30,7 @@
     sprite: Clothing/Eyes/Hud/diag.rsi
   - type: Clothing
     sprite: Clothing/Eyes/Hud/diag.rsi
+  - type: ShowDeadWithoutMind
   - type: ShowHealthBars
     damageContainers:
     - Inorganic

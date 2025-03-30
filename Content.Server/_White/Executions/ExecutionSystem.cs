@@ -1,8 +1,12 @@
-﻿using Content.Shared.ActionBlocker;
+﻿using Content.Server.DoAfter;
+using Content.Server.Interaction;
+using Content.Server.Kitchen.Components;
+using Content.Server.Popups;
+using Content.Shared._White.Executions;
+using Content.Shared.ActionBlocker;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
-using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -19,14 +23,14 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._White.Executions;
+namespace Content.Server._White.Executions;
 
 public sealed class ExecutionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+    [Dependency] private readonly DoAfterSystem _doAfterSystem = default!;
+    [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
-    [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private readonly InteractionSystem _interactionSystem = default!;
     [Dependency] private readonly ActionBlockerSystem _actionBlockerSystem = default!;
     [Dependency] private readonly DamageableSystem _damageableSystem = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
@@ -37,33 +41,32 @@ public sealed class ExecutionSystem : EntitySystem
 
     private const float MeleeExecutionTimeModifier = 5.0f;
     private const float GunExecutionTime = 6.0f;
-    private const float DamageModifier = 9.0f;
+    private const float DamageModifier = 10.0f;
 
-    /// <inheritdoc/>
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<ExecutionComponent, GetVerbsEvent<UtilityVerb>>(OnGetInteractionVerbsMelee);
+        SubscribeLocalEvent<SharpComponent, GetVerbsEvent<UtilityVerb>>(OnGetInteractionVerbsMelee);
         SubscribeLocalEvent<GunComponent, GetVerbsEvent<UtilityVerb>>(OnGetInteractionVerbsGun);
 
-        SubscribeLocalEvent<ExecutionComponent, ExecutionDoAfterEvent>(OnDoafterMelee);
+        SubscribeLocalEvent<SharpComponent, ExecutionDoAfterEvent>(OnDoafterMelee);
         SubscribeLocalEvent<GunComponent, ExecutionDoAfterEvent>(OnDoafterGun);
     }
 
     private void OnGetInteractionVerbsMelee(
         EntityUid uid,
-        ExecutionComponent component,
+        SharpComponent component,
         GetVerbsEvent<UtilityVerb> args)
     {
         if (args.Hands == null || args.Using == null || !args.CanAccess || !args.CanInteract)
             return;
 
         var attacker = args.User;
-        var weapon = args.Using!.Value;
+        var weapon = args.Using.Value;
         var victim = args.Target;
 
-        if (!CanExecuteWithMelee(weapon, victim, attacker))
+        if (!CanExecute(weapon, victim, attacker, true))
             return;
 
         UtilityVerb verb = new()
@@ -92,7 +95,7 @@ public sealed class ExecutionSystem : EntitySystem
         var weapon = args.Using!.Value;
         var victim = args.Target;
 
-        if (!CanExecuteWithGun(weapon, victim, attacker))
+        if (!CanExecute(weapon, victim, attacker, false))
             return;
 
         UtilityVerb verb = new()
@@ -123,37 +126,26 @@ public sealed class ExecutionSystem : EntitySystem
         if (!_actionBlockerSystem.CanAttack(attacker, victim))
             return false;
 
-        if (victim != attacker && _actionBlockerSystem.CanInteract(victim, null))
-            return false;
-
-        return true;
+        return victim == attacker || !_actionBlockerSystem.CanInteract(victim, null);
     }
 
-    private bool CanExecuteWithMelee(EntityUid weapon, EntityUid victim, EntityUid user)
+    private bool CanExecute(EntityUid weapon, EntityUid victim, EntityUid user, bool isMelee)
     {
         if (!CanExecuteWithAny( victim, user))
             return false;
 
-        if (!TryComp<MeleeWeaponComponent>(weapon, out var melee) && melee!.Damage.GetTotal() > 0.0f)
-            return false;
+        if (isMelee)
+        {
+            if (!TryComp<MeleeWeaponComponent>(weapon, out var melee) && melee!.Damage.GetTotal() > 0.0f)
+                return false;
+        }
 
-        return true;
-    }
-
-    private bool CanExecuteWithGun(EntityUid weapon, EntityUid victim, EntityUid user)
-    {
-        if (!CanExecuteWithAny( victim, user))
-            return false;
-
-        if (!TryComp<GunComponent>(weapon, out var gun) && _gunSystem.CanShoot(gun!))
-            return false;
-
-        return true;
+        return TryComp<GunComponent>(weapon, out var gun) || !_gunSystem.CanShoot(gun!);
     }
 
     private void TryStartMeleeExecutionDoafter(EntityUid weapon, EntityUid victim, EntityUid attacker)
     {
-        if (!CanExecuteWithMelee(weapon, victim, attacker))
+        if (!CanExecute(weapon, victim, attacker, true))
             return;
 
         var executionTime = (1.0f / Comp<MeleeWeaponComponent>(weapon).AttackRate) * MeleeExecutionTimeModifier;
@@ -183,7 +175,7 @@ public sealed class ExecutionSystem : EntitySystem
 
     private void TryStartGunExecutionDoafter(EntityUid weapon, EntityUid victim, EntityUid attacker)
     {
-        if (!CanExecuteWithGun(weapon, victim, attacker))
+        if (!CanExecute(weapon, victim, attacker, false))
             return;
 
         if (attacker == victim)
@@ -209,16 +201,16 @@ public sealed class ExecutionSystem : EntitySystem
         _doAfterSystem.TryStartDoAfter(doAfter);
     }
 
-    private void OnDoafterMelee(EntityUid uid, ExecutionComponent component, DoAfterEvent args)
+    private void OnDoafterMelee(EntityUid uid, SharpComponent component, DoAfterEvent args)
     {
         if (args.Handled || args.Cancelled || args.Used == null || args.Target == null)
             return;
 
         var attacker = args.User;
-        var victim = args.Target!.Value;
-        var weapon = args.Used!.Value;
+        var victim = args.Target.Value;
+        var weapon = args.Used.Value;
 
-        if (!CanExecuteWithMelee(weapon, victim, attacker))
+        if (!CanExecute(weapon, victim, attacker, true))
             return;
 
         if (!TryComp<MeleeWeaponComponent>(weapon, out var melee) && melee!.Damage.GetTotal() > 0.0f)
@@ -246,10 +238,10 @@ public sealed class ExecutionSystem : EntitySystem
             return;
 
         var attacker = args.User;
-        var weapon = args.Used!.Value;
-        var victim = args.Target!.Value;
+        var weapon = args.Used.Value;
+        var victim = args.Target.Value;
 
-        if (!CanExecuteWithGun(weapon, victim, attacker))
+        if (!CanExecute(weapon, victim, attacker, false))
             return;
 
         var prevention = new ShotAttemptedEvent
@@ -322,9 +314,9 @@ public sealed class ExecutionSystem : EntitySystem
                 throw new ArgumentOutOfRangeException();
         }
 
-        if (TryComp<ClumsyComponent>(attacker, out var clumsy) && component.ClumsyProof == false)
+        if (TryComp<ClumsyComponent>(attacker, out var clumsy) && !component.ClumsyProof)
         {
-            if (_interactionSystem.TryRollClumsy(attacker, 0.33333333f, clumsy))
+            if (_interactionSystem.TryRollClumsy(attacker, 0.3F, clumsy))
             {
                 ShowExecutionPopup("execution-popup-gun-clumsy-internal",  PopupType.Medium, attacker, victim, weapon, true);
                 ShowExecutionPopup("execution-popup-gun-clumsy-external",  PopupType.MediumCaution, attacker, victim, weapon, false);
@@ -348,6 +340,8 @@ public sealed class ExecutionSystem : EntitySystem
             ShowExecutionPopup("suicide-popup-gun-complete-internal", PopupType.LargeCaution, attacker, victim, weapon, true);
             ShowExecutionPopup("suicide-popup-gun-complete-external", PopupType.LargeCaution, attacker, victim, weapon, false);
         }
+
+        args.Handled = true;
     }
 
     private void ShowExecutionPopup(string locString,
@@ -357,26 +351,18 @@ public sealed class ExecutionSystem : EntitySystem
         EntityUid weapon,
         bool isClient)
     {
+        var message = Loc.GetString(locString,
+            ("attacker", attacker),
+            ("victim", victim),
+            ("weapon", weapon));
+
         if (isClient)
         {
-            _popupSystem.PopupEntity(Loc.GetString(
-                    locString,
-                    ("attacker", attacker),
-                    ("victim", victim),
-                    ("weapon", weapon)),
-                uid: attacker,
-                recipient: attacker,
-                type);
+            _popupSystem.PopupEntity(message, attacker, attacker, type);
         }
         else
         {
-            _popupSystem.PopupEntity(Loc.GetString(
-                    locString,
-                    ("attacker", attacker),
-                    ("victim", victim),
-                    ("weapon", weapon)),
-                uid: attacker,
-                type);
+            _popupSystem.PopupEntity(message, attacker, type);
         }
     }
 }

@@ -1,10 +1,8 @@
-﻿using Content.Client.Mind;
-using Content.Client.Overlays;
+﻿using Content.Client.Overlays;
 using Content.Shared._White.DeadWithoutMind;
-using Content.Shared.Damage;
-using Content.Shared.Humanoid;
-using Content.Shared.Mobs;
+using Content.Shared.Mind;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Robust.Shared.Prototypes;
@@ -14,7 +12,8 @@ namespace Content.Client._White.DeadWithoutMind;
 public sealed class ShowDeadWithoutMindSystem : EquipmentHudSystem<ShowDeadWithoutMindComponent>
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly MindSystem _mindSystem = default!;
+    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
+    [Dependency] private readonly SharedMindSystem _mind = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -27,13 +26,13 @@ public sealed class ShowDeadWithoutMindSystem : EquipmentHudSystem<ShowDeadWitho
         if (!IsActive || args.InContainer)
             return;
 
-        if(_mindSystem.TryGetMind(entity.Owner, out _, out _))
-            return;
+        var dead = _mobStateSystem.IsDead(entity.Owner);
+        var hasUserId = CompOrNull<MindComponent>(_mind.GetMind(entity.Owner))?.UserId;
 
-        if(entity.Comp.CurrentState is MobState.Alive or MobState.Critical)
-            return;
-
-        if (_prototype.TryIndex<StatusIconPrototype>(entity.Comp.DeadWithoutMindIcon.Id, out var iconPrototype))
-            args.StatusIcons.Add(iconPrototype);
+        if (dead && hasUserId == null)
+        {
+            if (_prototype.TryIndex<StatusIconPrototype>(entity.Comp.DeadWithoutMindIcon.Id, out var iconPrototype))
+                args.StatusIcons.Add(iconPrototype);
+        }
     }
 }

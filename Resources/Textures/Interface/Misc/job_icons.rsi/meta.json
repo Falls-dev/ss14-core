@@ -181,11 +181,7 @@
             ]
         },
         {
-            "name": "DeadWithoutMind",
-            "delays":
-            [
-                [1.0,1.0]
-            ]
+            "name": "DeadWithoutMind"
         },
         {
             "name": "Syndicate"

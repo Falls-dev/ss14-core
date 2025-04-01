@@ -136,11 +136,10 @@ public sealed class ExecutionSystem : EntitySystem
 
         if (isMelee)
         {
-            if (!TryComp<MeleeWeaponComponent>(weapon, out var melee) && melee!.Damage.GetTotal() > 0.0f)
-                return false;
+            return (TryComp<MeleeWeaponComponent>(weapon, out var melee) || melee!.Damage.GetTotal() <= 0.0f);
         }
 
-        return TryComp<GunComponent>(weapon, out var gun) || !_gunSystem.CanShoot(gun!);
+        return (TryComp<GunComponent>(weapon, out var gun) || !_gunSystem.CanShoot(gun!));
     }
 
     private void TryStartMeleeExecutionDoafter(EntityUid weapon, EntityUid victim, EntityUid attacker)
@@ -150,16 +149,13 @@ public sealed class ExecutionSystem : EntitySystem
 
         var executionTime = (1.0f / Comp<MeleeWeaponComponent>(weapon).AttackRate) * MeleeExecutionTimeModifier;
 
-        if (attacker == victim)
-        {
-            ShowExecutionPopup("suicide-popup-melee-initial-internal",  PopupType.Medium, attacker, victim, weapon, true);
-            ShowExecutionPopup("suicide-popup-melee-initial-external",  PopupType.MediumCaution, attacker, victim, weapon, false);
-        }
-        else
-        {
-            ShowExecutionPopup("execution-popup-melee-initial-internal",  PopupType.Medium, attacker, victim, weapon, true);
-            ShowExecutionPopup("execution-popup-melee-initial-external", PopupType.MediumCaution, attacker, victim, weapon, false);
-        }
+        ShowExecutionPopup(
+            attacker == victim ? "suicide-popup-melee-initial-external" : "execution-popup-melee-initial-external",
+            PopupType.MediumCaution,
+            attacker,
+            victim,
+            weapon,
+            false);
 
         var doAfter =
             new DoAfterArgs(EntityManager, attacker, executionTime, new ExecutionDoAfterEvent(), weapon, target: victim, used: weapon)
@@ -178,16 +174,13 @@ public sealed class ExecutionSystem : EntitySystem
         if (!CanExecute(weapon, victim, attacker, false))
             return;
 
-        if (attacker == victim)
-        {
-            ShowExecutionPopup("suicide-popup-gun-initial-internal", PopupType.Medium, attacker, victim, weapon, true);
-            ShowExecutionPopup("suicide-popup-gun-initial-external", PopupType.MediumCaution, attacker, victim, weapon, false);
-        }
-        else
-        {
-            ShowExecutionPopup("execution-popup-gun-initial-internal", PopupType.Medium, attacker, victim, weapon, true);
-            ShowExecutionPopup("execution-popup-gun-initial-external", PopupType.MediumCaution, attacker, victim, weapon, false);
-        }
+        ShowExecutionPopup(
+            attacker == victim ? "suicide-popup-gun-initial-external" : "execution-popup-gun-initial-external",
+            PopupType.MediumCaution,
+            attacker,
+            victim,
+            weapon,
+            false);
 
         var doAfter =
             new DoAfterArgs(EntityManager, attacker, GunExecutionTime, new ExecutionDoAfterEvent(), weapon, target: victim, used: weapon)
@@ -219,19 +212,15 @@ public sealed class ExecutionSystem : EntitySystem
         _damageableSystem.TryChangeDamage(victim, melee.Damage * DamageModifier, true);
         _audioSystem.PlayEntity(melee.HitSound, Filter.Pvs(weapon), weapon, true, AudioParams.Default);
 
-        if (attacker == victim)
-        {
-            ShowExecutionPopup("suicide-popup-melee-complete-internal",  PopupType.Medium, attacker, victim, weapon, true);
-            ShowExecutionPopup("suicide-popup-melee-complete-external",  PopupType.MediumCaution, attacker, victim, weapon, false);
-        }
-        else
-        {
-            ShowExecutionPopup("execution-popup-melee-complete-internal", PopupType.Medium, attacker, victim, weapon, true);
-            ShowExecutionPopup("execution-popup-melee-complete-external",  PopupType.MediumCaution, attacker, victim, weapon, false);
-        }
+        ShowExecutionPopup(
+            attacker == victim ? "suicide-popup-melee-complete-external" : "execution-popup-melee-complete-external",
+            PopupType.MediumCaution,
+            attacker,
+            victim,
+            weapon,
+            false);
     }
 
-    // TODO: This repeats a lot of the code of the serverside GunSystem, make it not do that
     private void OnDoafterGun(EntityUid uid, GunComponent component, DoAfterEvent args)
     {
         if (args.Handled || args.Cancelled || args.Used == null || args.Target == null)
@@ -318,7 +307,6 @@ public sealed class ExecutionSystem : EntitySystem
         {
             if (_interactionSystem.TryRollClumsy(attacker, 0.3F, clumsy))
             {
-                ShowExecutionPopup("execution-popup-gun-clumsy-internal",  PopupType.Medium, attacker, victim, weapon, true);
                 ShowExecutionPopup("execution-popup-gun-clumsy-external",  PopupType.MediumCaution, attacker, victim, weapon, false);
 
                 _damageableSystem.TryChangeDamage(attacker, damage, origin: attacker);
@@ -330,16 +318,13 @@ public sealed class ExecutionSystem : EntitySystem
         _damageableSystem.TryChangeDamage(victim, damage * DamageModifier, true);
         _audioSystem.PlayEntity(component.SoundGunshot, Filter.Pvs(weapon), weapon, false, AudioParams.Default);
 
-        if (attacker != victim)
-        {
-            ShowExecutionPopup("execution-popup-gun-complete-internal", PopupType.Medium, attacker, victim, weapon, true);
-            ShowExecutionPopup("execution-popup-gun-complete-external",  PopupType.LargeCaution, attacker, victim, weapon, false);
-        }
-        else
-        {
-            ShowExecutionPopup("suicide-popup-gun-complete-internal", PopupType.LargeCaution, attacker, victim, weapon, true);
-            ShowExecutionPopup("suicide-popup-gun-complete-external", PopupType.LargeCaution, attacker, victim, weapon, false);
-        }
+        ShowExecutionPopup(
+            attacker != victim ? "execution-popup-gun-complete-external" : "suicide-popup-gun-complete-external",
+            PopupType.LargeCaution,
+            attacker,
+            victim,
+            weapon,
+            false);
 
         args.Handled = true;
     }

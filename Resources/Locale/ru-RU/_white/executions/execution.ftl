@@ -1,5 +1,5 @@
 execution-verb-name = Казнить
-execution-verb-message = Используйте оружие, чтобы казнить.
+execution-verb-message = Казнить кого-либо при помощи вашего оружия.
 
 execution-popup-gun-initial-internal = Вы приставляете {$weapon} к голове {$victim}.
 execution-popup-gun-initial-external = {$attacker} приставляет {$weapon} к голове {$victim}.

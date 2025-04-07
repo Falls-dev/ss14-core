@@ -64,7 +64,7 @@ public sealed class CultistFactoryBUI : BoundUserInterface
 
     private void Select(string id)
     {
-        SendMessage(new CultistFactoryItemSelectedMessage(id));
+        SendPredictedMessage(new CultistFactoryItemSelectedMessage(id));
         ResetUI();
         Close();
     }

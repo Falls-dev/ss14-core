@@ -1,6 +1,7 @@
 ﻿using Content.Client.Overlays;
 using Content.Shared._White.DeadWithoutMind;
 using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.StatusIcon;
@@ -26,13 +27,16 @@ public sealed class ShowDeadWithoutMindSystem : EquipmentHudSystem<ShowDeadWitho
         if (!IsActive || args.InContainer)
             return;
 
-        var dead = _mobStateSystem.IsDead(entity.Owner);
-        var hasUserId = CompOrNull<MindComponent>(_mind.GetMind(entity.Owner))?.UserId;
+        if(!TryComp<MindContainerComponent>(entity.Owner, out var mindContainer))
+            return;
 
-        if (dead && hasUserId == null)
-        {
-            if (_prototype.TryIndex<StatusIconPrototype>(entity.Comp.DeadWithoutMindIcon.Id, out var iconPrototype))
-                args.StatusIcons.Add(iconPrototype);
-        }
+        var dead = _mobStateSystem.IsDead(entity.Owner);
+        var hasUserId = CompOrNull<MindComponent>(mindContainer.Mind)?.UserId;
+
+        if (!dead || hasUserId != null)
+            return;
+
+        if (_prototype.TryIndex<StatusIconPrototype>(entity.Comp.DeadWithoutMindIcon.Id, out var iconPrototype))
+            args.StatusIcons.Add(iconPrototype);
     }
 }

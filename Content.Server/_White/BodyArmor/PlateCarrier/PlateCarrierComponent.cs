@@ -14,6 +14,19 @@ public sealed partial class PlateCarrierComponent : Component
     public bool HasPlate = false;
 
     [DataField]
+    public string PlateCarrierSlot = "outerClothing";
+
+    [DataField]
+    public bool IsBreak = false;
+
+    [DataField]
+    public float ChanceOfBreak = 0.05F;
+
+    [DataField]
+    [ViewVariables(VVAccess.ReadWrite)]
+    public SoundSpecifier BreakSound = new SoundPathSpecifier("/Audio/White/BodyArmor/PlateCarrier/break.ogg");
+
+    [DataField]
     public int PlateCarrierDamage = 0;
 
     [DataField]

@@ -9,12 +9,14 @@ using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.Components;
+using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Verbs;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Server.Audio;
 using Robust.Server.Containers;
 using Robust.Shared.Containers;
+using Robust.Shared.Random;
 
 namespace Content.Server._White.BodyArmor.PlateCarrier;
 
@@ -24,6 +26,8 @@ public sealed class PlateCarrierSystem : EntitySystem
     [Dependency] private readonly ContainerSystem _containerSystem = default!;
     [Dependency] private readonly HandsSystem _handsSystem = default!;
     [Dependency] private readonly DoAfterSystem _doAfterSystem = default!;
+    [Dependency] private readonly IRobustRandom _robustRandom = default!;
+    [Dependency] private readonly InventorySystem _inventorySystem = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -34,17 +38,20 @@ public sealed class PlateCarrierSystem : EntitySystem
         SubscribeLocalEvent<PlateCarrierComponent, GotEquippedEvent>(OnEquipped);
         SubscribeLocalEvent<PlateCarrierComponent, GotUnequippedEvent>(OnUnequipped);
         SubscribeLocalEvent<PlateCarrierOnUserComponent, DamageModifyEvent>(OnUserGetDamage);
+        SubscribeLocalEvent<PlateCarrierComponent, BeingEquippedAttemptEvent>(BeforeEquipPlateCarrier);
     }
 
     private void OnExamined(EntityUid uid, PlateCarrierComponent component, ExaminedEvent args)
     {
         var hasPlate = component.HasPlate ? "установлена." : "не установлена.";
         var hasDamage = component.PlateCarrierDamage > 0 ? "имеются визуальные повреждения." : "визуальные повреждения отсутствуют.";
+        var isBreak = component.IsBreak;
 
         using (args.PushGroup(nameof(PlateCarrierComponent)))
         {
             args.PushMarkup(Loc.GetString("armorplate-place", ("hasplate", hasPlate)));
             args.PushMarkup(Loc.GetString("platecarrier-damage", ("hasdamage", hasDamage)));
+            args.PushMarkup(isBreak ? Loc.GetString("platecarrier-break") : Loc.GetString("platecarrier-nobreak"));
         }
     }
 
@@ -81,6 +88,14 @@ public sealed class PlateCarrierSystem : EntitySystem
         };
 
         args.Verbs.Add(verb);
+    }
+
+    private void BeforeEquipPlateCarrier(EntityUid uid, PlateCarrierComponent component, BeingEquippedAttemptEvent args)
+    {
+        if (component.IsBreak)
+        {
+            args.Cancel();
+        }
     }
 
     private void OnEquipped(EntityUid uid, PlateCarrierComponent component, GotEquippedEvent args)
@@ -136,7 +151,7 @@ public sealed class PlateCarrierSystem : EntitySystem
 
         foreach (var damage in args.OriginalDamage.DamageDict)
         {
-            newDamageSpecifier.DamageDict.Add(damage.Key, (damage.Value - ApplyDamage(armorPlateComponent)));
+            newDamageSpecifier.DamageDict.Add(damage.Key, (damage.Value - ApplyDamage(uid, armorPlateComponent, plateCarrierComponent)));
         }
 
         args.Damage = newDamageSpecifier;
@@ -204,15 +219,30 @@ public sealed class PlateCarrierSystem : EntitySystem
         return container.ContainedEntities[0];
     }
 
-    private FixedPoint2 ApplyDamage(ArmorPlateComponent armorPlateComponent)
+    private FixedPoint2 ApplyDamage(EntityUid target, ArmorPlateComponent armorPlateComponent, PlateCarrierComponent plateCarrierComponent)
     {
         if (armorPlateComponent.ReceivedDamage >= armorPlateComponent.AllowedDamage)
+        {
+            ChanceOfBreak(target, plateCarrierComponent);
             return 0;
+        }
 
         if (armorPlateComponent.ReceivedDamage >= (armorPlateComponent.AllowedDamage / 2))
             return (armorPlateComponent.DamageOfTier[armorPlateComponent.PlateTier] / 2);
 
         return armorPlateComponent.DamageOfTier[armorPlateComponent.PlateTier];
+    }
+
+    private void ChanceOfBreak(EntityUid target, PlateCarrierComponent plateCarrierComponent)
+    {
+        var isBreak = _robustRandom.Prob(plateCarrierComponent.ChanceOfBreak);
+
+        if(!isBreak)
+            return;
+
+        _audioSystem.PlayPvs(plateCarrierComponent.BreakSound, target);
+        _inventorySystem.TryUnequip(target, plateCarrierComponent.PlateCarrierSlot, true, true, true);
+        plateCarrierComponent.IsBreak = true;
     }
 
     private void UnequipHelper(EntityUid user)

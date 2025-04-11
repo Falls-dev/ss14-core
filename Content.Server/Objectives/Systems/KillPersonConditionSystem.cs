@@ -4,8 +4,11 @@ using Content.Server._Miracle.GulagSystem;
 using Content.Server._White.Cult.GameRule;
 using Content.Server.Objectives.Components;
 using Content.Server.Shuttles.Systems;
+using Content.Shared._White.Cult.Components;
 using Content.Shared.CCVar;
+using Content.Shared.Humanoid;
 using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Roles.Jobs;
 using Robust.Shared.Configuration;
@@ -25,6 +28,7 @@ public sealed class KillPersonConditionSystem : EntitySystem
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly TargetObjectiveSystem _target = default!;
     [Dependency] private readonly GulagSystem _gulag = default!; // WD
+    [Dependency] private readonly CultRuleSystem _cultRuleSystem = default!; // WD
 
     public override void Initialize()
     {
@@ -121,13 +125,12 @@ public sealed class KillPersonConditionSystem : EntitySystem
         if (target.Target != null)
             return;
 
-        var cultistRule = EntityManager.EntityQuery<CultRuleComponent>().FirstOrDefault();
-        if (cultistRule?.CultTarget is null)
-        {
-            return;
-        }
+        var potentialTargets = _cultRuleSystem.FindPotentialTargets();
 
-        _target.SetTarget(ent.Owner, cultistRule.CultTarget.Value);
+        var entityUid = _random.PickAndTake(potentialTargets).Mind;
+
+        if (entityUid != null)
+            _target.SetTarget(ent.Owner, entityUid.Value);
     }
 
     private float GetProgress(EntityUid target, bool requireDead)

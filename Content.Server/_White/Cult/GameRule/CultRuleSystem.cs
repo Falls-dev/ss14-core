@@ -25,7 +25,6 @@ using Content.Shared.Alert;
 using Content.Shared.Cloning;
 using Content.Shared.Mind;
 using Robust.Server.Containers;
-using Robust.Shared.Random;
 
 namespace Content.Server._White.Cult.GameRule;
 
@@ -42,7 +41,6 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     [Dependency] private readonly ContainerSystem _container = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
     [Dependency] private readonly GulagSystem _gulag = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly AlertsSystem _alertsSystem = default!;
 
     public override void Initialize()
@@ -61,9 +59,6 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
     protected override void Added(EntityUid uid, CultRuleComponent rule, GameRuleComponent gameRule, GameRuleAddedEvent args)
     {
         base.Added(uid, rule, gameRule, args);
-
-        var potentialTargets = FindPotentialTargets();
-        rule.CultTarget = _random.PickAndTake(potentialTargets).Mind;
     }
 
     private void OnClone(Entity<CultistComponent> ent, ref CloningEvent args)
@@ -333,21 +328,20 @@ public sealed class CultRuleSystem : GameRuleSystem<CultRuleComponent>
         RemComp<CultistComponent>(transferFrom);
     }
 
-    private List<MindContainerComponent> FindPotentialTargets()
+    public List<MindContainerComponent> FindPotentialTargets()
     {
-        var querry =
-            EntityManager.EntityQueryEnumerator<MindContainerComponent, HumanoidAppearanceComponent, ActorComponent>();
+        var query = EntityQueryEnumerator<MindContainerComponent, HumanoidAppearanceComponent>();
 
         var potentialTargets = new List<MindContainerComponent>();
 
-        while (querry.MoveNext(out var uid, out var mind, out _, out var actor))
+        while (query.MoveNext(out var uid, out var mind, out _))
         {
             var entity = mind.Mind;
 
-            if (entity == default)
+            if (entity is not { } entityUid)
                 continue;
 
-            if (_gulag.IsUserGulagged(actor.PlayerSession.UserId, out _))
+            if (_gulag.IsMindGulagged(entityUid))
                 continue;
 
             if (HasComp<CultistComponent>(entity))

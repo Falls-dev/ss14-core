@@ -1336,7 +1336,6 @@ public sealed partial class CultSystem : EntitySystem
             return false;
 
         _mindSystem.TransferTo(mindComponent.Mind.Value, shard);
-        _mindSystem.UnVisit(mindComponent.Mind.Value);
 
         _bodySystem.GibBody(target);
 

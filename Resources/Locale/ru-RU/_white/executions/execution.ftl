@@ -3,7 +3,7 @@ execution-verb-message = Казнить кого-либо при помощи в
 
 execution-popup-gun-initial-external = {$attacker} приставляет {$weapon} к голове {$victim}.
 execution-popup-gun-complete-external = {$attacker} стреляет в голову {$victim}!
-execution-popup-gun-clumsy-external = {$attacker} промахивается в {$victim} и {$attacker} стреляет в себя!
+execution-popup-gun-clumsy-external = {$attacker} промахивается в {$victim} и стреляет в себя!
 execution-popup-gun-empty = {CAPITALIZE($weapon)} щелкает.
 suicide-popup-gun-initial-external = {$attacker} направляет ствол {$weapon} в свой рот.
 suicide-popup-gun-complete-external = {$attacker} стреляет {REFLEXIVE($attacker)} себе в голову!

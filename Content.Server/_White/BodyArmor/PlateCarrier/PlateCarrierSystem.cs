@@ -223,7 +223,9 @@ public sealed class PlateCarrierSystem : EntitySystem
     {
         if (armorPlateComponent.ReceivedDamage >= armorPlateComponent.AllowedDamage)
         {
-            ChanceOfBreak(target, plateCarrierComponent);
+            if(!plateCarrierComponent.IsBreak)
+                ChanceOfBreak(target, plateCarrierComponent);
+
             return 0;
         }
 

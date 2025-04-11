@@ -1,9 +1,6 @@
 using Content.Shared.Damage;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.StatusIcon;
 using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
 
 namespace Content.Shared.Mobs.Components
 {
@@ -22,10 +19,6 @@ namespace Content.Shared.Mobs.Components
         //default mobstate is always the lowest state level
         [AutoNetworkedField, ViewVariables]
         public MobState CurrentState { get; set; } = MobState.Alive;
-
-        // Parsec
-        [DataField, ViewVariables(VVAccess.ReadWrite)]
-        public ProtoId<StatusIconPrototype> DeadWithoutMindIcon = "DeadWithoutMindIcon";
 
         [DataField]
         [AutoNetworkedField]

@@ -1,8 +1,8 @@
 ﻿using Content.Client.Overlays;
 using Content.Shared._White.DeadWithoutMind;
+using Content.Shared.Humanoid;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
@@ -19,10 +19,10 @@ public sealed class ShowDeadWithoutMindSystem : EquipmentHudSystem<ShowDeadWitho
     {
         base.Initialize();
 
-        SubscribeLocalEvent<MobStateComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent);
+        SubscribeLocalEvent<HumanoidAppearanceComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent);
     }
 
-    private void OnGetStatusIconsEvent(Entity<MobStateComponent> entity, ref GetStatusIconsEvent args)
+    private void OnGetStatusIconsEvent(Entity<HumanoidAppearanceComponent> entity, ref GetStatusIconsEvent args)
     {
         if (!IsActive || args.InContainer)
             return;
@@ -31,9 +31,11 @@ public sealed class ShowDeadWithoutMindSystem : EquipmentHudSystem<ShowDeadWitho
             return;
 
         var dead = _mobStateSystem.IsDead(entity.Owner);
-        var hasUserId = CompOrNull<MindComponent>(mindContainer.Mind)?.UserId;
 
-        if (!dead || hasUserId != null)
+        if (!dead)
+            return;
+
+        if (mindContainer.Mind != null)
             return;
 
         if (_prototype.TryIndex<StatusIconPrototype>(entity.Comp.DeadWithoutMindIcon.Id, out var iconPrototype))

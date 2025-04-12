@@ -418,7 +418,7 @@
         Caustic: 0.5
         Heat: 0.6
   - type: ClothingSpeedModifier
-    walkModifier: 0.95
+    walkModifier: 0.9
     sprintModifier: 0.9
   - type: HeldSpeedModifier
   - type: ToggleableClothing

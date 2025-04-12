@@ -1,7 +1,6 @@
 ﻿using Content.Client.Overlays;
 using Content.Shared._White.DeadWithoutMind;
 using Content.Shared.Humanoid;
-using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.StatusIcon;
@@ -14,7 +13,6 @@ public sealed class ShowDeadWithoutMindSystem : EquipmentHudSystem<ShowDeadWitho
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -27,7 +25,7 @@ public sealed class ShowDeadWithoutMindSystem : EquipmentHudSystem<ShowDeadWitho
         if (!IsActive || args.InContainer)
             return;
 
-        if(!TryComp<MindContainerComponent>(entity.Owner, out var mindContainer))
+        if (!TryComp<MindContainerComponent>(entity.Owner, out var mindContainer))
             return;
 
         var dead = _mobStateSystem.IsDead(entity.Owner);

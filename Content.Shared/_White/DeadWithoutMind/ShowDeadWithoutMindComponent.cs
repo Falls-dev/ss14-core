@@ -1,11 +1,9 @@
-﻿using Content.Shared.StatusIcon;
-using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
+﻿using Robust.Shared.GameStates;
 
 namespace Content.Shared._White.DeadWithoutMind;
 
 /// <summary>
-/// This component uses to see no mind dead players
+/// PARSEC. This component adds hud to see no mind dead players.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ShowDeadWithoutMindComponent : Component

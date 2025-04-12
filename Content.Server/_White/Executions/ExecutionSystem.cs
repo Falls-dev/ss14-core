@@ -22,6 +22,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server._White.Executions;
 
@@ -38,10 +39,12 @@ public sealed class ExecutionSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
     [Dependency] private readonly SharedGunSystem _gunSystem = default!;
+    [Dependency] private readonly IGameTiming _gameTiming = default!;
 
     private const float MeleeExecutionTimeModifier = 5.0f;
     private const float GunExecutionTime = 6.0f;
     private const float DamageModifier = 10.0f;
+    private const float ExecutionDelay = 10; // Seconds
 
     public override void Initialize()
     {
@@ -67,6 +70,11 @@ public sealed class ExecutionSystem : EntitySystem
         var victim = args.Target;
 
         if (!CanExecute(weapon, victim, attacker, true))
+            return;
+
+        EnsureComp<ExecutionComponent>(weapon, out var comp);
+
+        if (IsDelayed(comp))
             return;
 
         UtilityVerb verb = new()
@@ -96,6 +104,11 @@ public sealed class ExecutionSystem : EntitySystem
         var victim = args.Target;
 
         if (!CanExecute(weapon, victim, attacker, false))
+            return;
+
+        EnsureComp<ExecutionComponent>(weapon, out var comp);
+
+        if (IsDelayed(comp))
             return;
 
         UtilityVerb verb = new()
@@ -131,7 +144,7 @@ public sealed class ExecutionSystem : EntitySystem
 
     private bool CanExecute(EntityUid weapon, EntityUid victim, EntityUid user, bool isMelee)
     {
-        if (!CanExecuteWithAny( victim, user))
+        if (!CanExecuteWithAny(victim, user))
             return false;
 
         if (isMelee)
@@ -142,6 +155,7 @@ public sealed class ExecutionSystem : EntitySystem
         return (TryComp<GunComponent>(weapon, out var gun) || !_gunSystem.CanShoot(gun!));
     }
 
+
     private void TryStartMeleeExecutionDoafter(EntityUid weapon, EntityUid victim, EntityUid attacker)
     {
         if (!CanExecute(weapon, victim, attacker, true))
@@ -151,11 +165,10 @@ public sealed class ExecutionSystem : EntitySystem
 
         ShowExecutionPopup(
             attacker == victim ? "suicide-popup-melee-initial-external" : "execution-popup-melee-initial-external",
-            PopupType.MediumCaution,
+            PopupType.Medium,
             attacker,
             victim,
-            weapon,
-            false);
+            weapon);
 
         var doAfter =
             new DoAfterArgs(EntityManager, attacker, executionTime, new ExecutionDoAfterEvent(), weapon, target: victim, used: weapon)
@@ -167,6 +180,10 @@ public sealed class ExecutionSystem : EntitySystem
             };
 
         _doAfterSystem.TryStartDoAfter(doAfter);
+
+        EnsureComp<ExecutionComponent>(weapon, out var comp);
+
+        comp.Delay = _gameTiming.CurTime + TimeSpan.FromSeconds(ExecutionDelay);
     }
 
     private void TryStartGunExecutionDoafter(EntityUid weapon, EntityUid victim, EntityUid attacker)
@@ -176,11 +193,10 @@ public sealed class ExecutionSystem : EntitySystem
 
         ShowExecutionPopup(
             attacker == victim ? "suicide-popup-gun-initial-external" : "execution-popup-gun-initial-external",
-            PopupType.MediumCaution,
+            PopupType.Medium,
             attacker,
             victim,
-            weapon,
-            false);
+            weapon);
 
         var doAfter =
             new DoAfterArgs(EntityManager, attacker, GunExecutionTime, new ExecutionDoAfterEvent(), weapon, target: victim, used: weapon)
@@ -192,6 +208,10 @@ public sealed class ExecutionSystem : EntitySystem
             };
 
         _doAfterSystem.TryStartDoAfter(doAfter);
+
+        EnsureComp<ExecutionComponent>(weapon, out var comp);
+
+        comp.Delay = _gameTiming.CurTime + TimeSpan.FromSeconds(ExecutionDelay);
     }
 
     private void OnDoafterMelee(EntityUid uid, SharpComponent component, DoAfterEvent args)
@@ -217,8 +237,7 @@ public sealed class ExecutionSystem : EntitySystem
             PopupType.MediumCaution,
             attacker,
             victim,
-            weapon,
-            false);
+            weapon);
     }
 
     private void OnDoafterGun(EntityUid uid, GunComponent component, DoAfterEvent args)
@@ -263,7 +282,7 @@ public sealed class ExecutionSystem : EntitySystem
         if (ev.Ammo.Count <= 0)
         {
             _audioSystem.PlayEntity(component.SoundEmpty, Filter.Pvs(weapon), weapon, true, AudioParams.Default);
-            ShowExecutionPopup("execution-popup-gun-empty",  PopupType.Medium, attacker, victim, weapon, false);
+            ShowExecutionPopup("execution-popup-gun-empty", PopupType.Medium, attacker, victim, weapon);
             return;
         }
 
@@ -307,7 +326,7 @@ public sealed class ExecutionSystem : EntitySystem
         {
             if (_interactionSystem.TryRollClumsy(attacker, 0.3F, clumsy))
             {
-                ShowExecutionPopup("execution-popup-gun-clumsy-external",  PopupType.MediumCaution, attacker, victim, weapon, false);
+                ShowExecutionPopup("execution-popup-gun-clumsy-external", PopupType.MediumCaution, attacker, victim, weapon);
 
                 _damageableSystem.TryChangeDamage(attacker, damage, origin: attacker);
                 _audioSystem.PlayEntity(component.SoundGunshot, Filter.Pvs(weapon), weapon, true, AudioParams.Default);
@@ -323,8 +342,7 @@ public sealed class ExecutionSystem : EntitySystem
             PopupType.LargeCaution,
             attacker,
             victim,
-            weapon,
-            false);
+            weapon);
 
         args.Handled = true;
     }
@@ -333,21 +351,18 @@ public sealed class ExecutionSystem : EntitySystem
         PopupType type,
         EntityUid attacker,
         EntityUid victim,
-        EntityUid weapon,
-        bool isClient)
+        EntityUid weapon)
     {
         var message = Loc.GetString(locString,
             ("attacker", attacker),
             ("victim", victim),
             ("weapon", weapon));
 
-        if (isClient)
-        {
-            _popupSystem.PopupEntity(message, attacker, attacker, type);
-        }
-        else
-        {
-            _popupSystem.PopupEntity(message, attacker, type);
-        }
+        _popupSystem.PopupEntity(message, attacker, type);
+    }
+
+    private bool IsDelayed(ExecutionComponent comp)
+    {
+        return comp.Delay >= _gameTiming.CurTime;
     }
 }

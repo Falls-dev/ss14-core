@@ -8,9 +8,6 @@ public sealed partial class ExecutionComponent : Component
     [DataField]
     public bool Enabled = true;
 
-    [DataField]
-    public float Cooldown = 0F;
-
     [ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan NextAttempt = TimeSpan.FromSeconds(3);
 

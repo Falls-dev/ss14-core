@@ -44,7 +44,6 @@ public sealed class ExecutionSystem : EntitySystem
     private const float MeleeExecutionTimeModifier = 5.0f;
     private const float GunExecutionTime = 6.0f;
     private const float DamageModifier = 10.0f;
-    private const float ExecutionDelay = 10; // Seconds
 
     public override void Initialize()
     {
@@ -183,7 +182,7 @@ public sealed class ExecutionSystem : EntitySystem
 
         EnsureComp<ExecutionComponent>(weapon, out var comp);
 
-        comp.Delay = _gameTiming.CurTime + TimeSpan.FromSeconds(ExecutionDelay);
+        comp.NextUse = _gameTiming.CurTime + comp.NextAttempt;
     }
 
     private void TryStartGunExecutionDoafter(EntityUid weapon, EntityUid victim, EntityUid attacker)
@@ -211,7 +210,7 @@ public sealed class ExecutionSystem : EntitySystem
 
         EnsureComp<ExecutionComponent>(weapon, out var comp);
 
-        comp.Delay = _gameTiming.CurTime + TimeSpan.FromSeconds(ExecutionDelay);
+        comp.NextUse = _gameTiming.CurTime + comp.NextAttempt;
     }
 
     private void OnDoafterMelee(EntityUid uid, SharpComponent component, DoAfterEvent args)
@@ -363,6 +362,6 @@ public sealed class ExecutionSystem : EntitySystem
 
     private bool IsDelayed(ExecutionComponent comp)
     {
-        return comp.Delay >= _gameTiming.CurTime;
+        return comp.NextUse > _gameTiming.CurTime;
     }
 }

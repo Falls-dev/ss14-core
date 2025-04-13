@@ -9,5 +9,11 @@ public sealed partial class ExecutionComponent : Component
     public bool Enabled = true;
 
     [DataField]
-    public TimeSpan Delay = TimeSpan.Zero;
+    public float Cooldown = 0F;
+
+    [ViewVariables(VVAccess.ReadWrite)]
+    public TimeSpan NextAttempt = TimeSpan.FromSeconds(3);
+
+    [ViewVariables(VVAccess.ReadOnly)]
+    public TimeSpan NextUse = TimeSpan.Zero;
 }

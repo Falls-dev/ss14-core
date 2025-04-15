@@ -1,5 +1,6 @@
 using Content.Server.Body.Systems;
 using Content.Server.Popups;
+using Content.Shared._White.Guardian;
 using Content.Shared.Actions;
 using Content.Shared.Audio;
 using Content.Shared.Damage;
@@ -35,6 +36,7 @@ namespace Content.Server.Guardian
         [Dependency] private readonly BodySystem _bodySystem = default!;
         [Dependency] private readonly SharedContainerSystem _container = default!;
         [Dependency] private readonly SharedTransformSystem _transform = default!;
+        [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
 
         public override void Initialize()
         {
@@ -172,6 +174,7 @@ namespace Content.Server.Guardian
             args.Handled = true;
             UseCreator(args.User, args.Target.Value, uid, component);
         }
+
         private void UseCreator(EntityUid user, EntityUid target, EntityUid injector, GuardianCreatorComponent component)
         {
             if (component.Used)
@@ -194,7 +197,10 @@ namespace Content.Server.Guardian
                 return;
             }
 
-            _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, user, component.InjectionDelay, new GuardianCreatorDoAfterEvent(), injector, target: target, used: injector){BreakOnMove = true});
+            _ui.SetUiState(injector, GuardianSelectorUiKey.Key, new GuardianSelectorBUIState(component.GuardiansAvaliable));
+            _ui.OpenUi(injector, GuardianSelectorUiKey.Key, target);
+
+            //_doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, user, component.InjectionDelay, new GuardianCreatorDoAfterEvent(), injector, target: target, used: injector){BreakOnMove = true});
         }
 
         private void OnDoAfter(EntityUid uid, GuardianCreatorComponent component, DoAfterEvent args)

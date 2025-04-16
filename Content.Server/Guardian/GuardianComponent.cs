@@ -1,3 +1,5 @@
+using Content.Shared._White.Guardian;
+
 namespace Content.Server.Guardian
 {
     /// <summary>
@@ -30,5 +32,7 @@ namespace Content.Server.Guardian
         [DataField]
         public bool GuardianLoose;
 
+        [DataField]
+        public GuardianSelector GuardianType = GuardianSelector.Standart;
     }
 }

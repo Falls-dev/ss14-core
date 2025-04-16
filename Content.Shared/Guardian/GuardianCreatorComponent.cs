@@ -36,5 +36,14 @@ namespace Content.Shared.Guardian
 
         [DataField("guardiansAvaliable")]
         public IReadOnlyCollection<string> GuardiansAvaliable = ArraySegment<string>.Empty;
+
+        [DataField]
+        public Dictionary<GuardianSelector, string> GuardianSelectorToProto = new()
+        {
+            { GuardianSelector.Assasin, "" },
+            { GuardianSelector.Standart, "" },
+            { GuardianSelector.Charger, "" },
+            { GuardianSelector.Lighting, "" }
+        };
     }
 }

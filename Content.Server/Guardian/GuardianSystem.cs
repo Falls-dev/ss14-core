@@ -60,6 +60,18 @@ namespace Content.Server.Guardian
             SubscribeLocalEvent<GuardianHostComponent, GuardianToggleActionEvent>(OnPerformAction);
 
             SubscribeLocalEvent<GuardianComponent, AttackAttemptEvent>(OnGuardianAttackAttempt);
+
+            // PARSEC EDIT START
+            SubscribeLocalEvent<GuardianCreatorComponent, GuardianSelectorSelectedBuiMessage>(OnGuardianSelected);
+        }
+
+        // PARSEC EDIT START
+        private void OnGuardianSelected(EntityUid uid,
+            GuardianCreatorComponent component,
+            GuardianSelectorSelectedBuiMessage args)
+        {
+            var target = GetEntity(args.Target);
+            _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.Actor, component.InjectionDelay, new GuardianCreatorDoAfterEvent{SelectedType = args.GuardianType}, uid, target: target, used: uid){BreakOnMove = true});
         }
 
         private void OnGuardianShutdown(EntityUid uid, GuardianComponent component, ComponentShutdown args)
@@ -197,13 +209,11 @@ namespace Content.Server.Guardian
                 return;
             }
 
-            _ui.SetUiState(injector, GuardianSelectorUiKey.Key, new GuardianSelectorBUIState(component.GuardiansAvaliable));
-            _ui.OpenUi(injector, GuardianSelectorUiKey.Key, target);
-
-            //_doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, user, component.InjectionDelay, new GuardianCreatorDoAfterEvent(), injector, target: target, used: injector){BreakOnMove = true});
+            _ui.SetUiState(injector, GuardianSelectorUiKey.Key, new GuardianSelectorBUIState(component.GuardiansAvaliable, GetNetEntity(target)));
+            _ui.OpenUi(injector, GuardianSelectorUiKey.Key, user);
         }
 
-        private void OnDoAfter(EntityUid uid, GuardianCreatorComponent component, DoAfterEvent args)
+        private void OnDoAfter(EntityUid uid, GuardianCreatorComponent component, GuardianCreatorDoAfterEvent args)
         {
             if (args.Handled || args.Args.Target == null)
                 return;
@@ -213,14 +223,16 @@ namespace Content.Server.Guardian
 
             var hostXform = Transform(args.Args.Target.Value);
             var host = EnsureComp<GuardianHostComponent>(args.Args.Target.Value);
+            var guardianProto = component.GuardianSelectorToProto[args.SelectedType]; // Parsec
             // Use map position so it's not inadvertantly parented to the host + if it's in a container it spawns outside I guess.
-            var guardian = Spawn(component.GuardianProto, _transform.GetMapCoordinates(args.Args.Target.Value, xform: hostXform));
+            var guardian = Spawn(guardianProto, _transform.GetMapCoordinates(args.Args.Target.Value, xform: hostXform)); // Parsec edit
 
             _container.Insert(guardian, host.GuardianContainer);
             host.HostedGuardian = guardian;
 
             if (TryComp<GuardianComponent>(guardian, out var guardianComp))
             {
+                guardianComp.GuardianType = args.SelectedType;
                 guardianComp.Host = args.Args.Target.Value;
                 _audio.PlayPvs("/Audio/Effects/guardian_inject.ogg", args.Args.Target.Value);
                 _popupSystem.PopupEntity(Loc.GetString("guardian-created"), args.Args.Target.Value, args.Args.Target.Value);

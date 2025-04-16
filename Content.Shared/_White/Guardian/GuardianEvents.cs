@@ -21,9 +21,12 @@ public sealed class GuardianSelectorBUIState : BoundUserInterfaceState
 {
     public IReadOnlyCollection<string> Ids { get; set; }
 
-    public GuardianSelectorBUIState(IReadOnlyCollection<string> ids)
+    public NetEntity Target { get; set; }
+
+    public GuardianSelectorBUIState(IReadOnlyCollection<string> ids, NetEntity target)
     {
         Ids = ids;
+        Target = target;
     }
 }
 
@@ -31,9 +34,11 @@ public sealed class GuardianSelectorBUIState : BoundUserInterfaceState
 public sealed class GuardianSelectorSelectedBuiMessage : BoundUserInterfaceMessage
 {
     public GuardianSelector GuardianType;
+    public NetEntity Target;
 
-    public GuardianSelectorSelectedBuiMessage(GuardianSelector guardianType)
+    public GuardianSelectorSelectedBuiMessage(GuardianSelector guardianType, NetEntity target)
     {
         GuardianType = guardianType;
+        Target = target;
     }
 }

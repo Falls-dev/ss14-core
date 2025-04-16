@@ -58,7 +58,7 @@ public sealed class GuardianSelectorBUI : BoundUserInterface
         _updated = false;
     }
 
-    private void PopulateRadial(IReadOnlyCollection<string> ids)
+    private void PopulateRadial(IReadOnlyCollection<string> ids, NetEntity target)
     {
         foreach (var id in ids)
         {
@@ -74,14 +74,14 @@ public sealed class GuardianSelectorBUI : BoundUserInterface
             var button = _radialContainer.AddButton(name, icon);
             button.Controller.OnPressed += _ =>
             {
-                Select(guardianSelector);
+                Select(guardianSelector, target);
             };
         }
     }
 
-    private void Select(GuardianSelector type)
+    private void Select(GuardianSelector type, NetEntity target)
     {
-        SendMessage(new GuardianSelectorSelectedBuiMessage(type));
+        SendMessage(new GuardianSelectorSelectedBuiMessage(type, target));
         UIReset();
         Close();
     }
@@ -101,7 +101,7 @@ public sealed class GuardianSelectorBUI : BoundUserInterface
 
         if (state is GuardianSelectorBUIState newState)
         {
-            PopulateRadial(newState.Ids);
+            PopulateRadial(newState.Ids, newState.Target);
         }
 
         if (_radialContainer == null)

@@ -40,10 +40,10 @@ namespace Content.Shared.Guardian
         [DataField]
         public Dictionary<GuardianSelector, string> GuardianSelectorToProto = new()
         {
-            { GuardianSelector.Assasin, "" },
-            { GuardianSelector.Standart, "" },
-            { GuardianSelector.Charger, "" },
-            { GuardianSelector.Lighting, "" }
+            { GuardianSelector.Assasin, "MobHoloparasiteGuardianAssasin" },
+            { GuardianSelector.Standart, "MobHoloparasiteGuardianStandart" },
+            { GuardianSelector.Charger, "MobHoloparasiteGuardianCharger" },
+            { GuardianSelector.Lighting, "MobHoloparasiteGuardianLighting" }
         };
     }
 }

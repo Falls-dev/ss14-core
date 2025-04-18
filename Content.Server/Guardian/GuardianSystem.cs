@@ -189,11 +189,10 @@ namespace Content.Server.Guardian
 
             var host = (EntityUid) component.Host;
 
-            if(TryComp<GuardianHostComponent>(host, out var guardianHostComponent))
+            if(!TryComp<GuardianHostComponent>(host, out var guardianHostComponent))
                 return;
 
-            if (guardianHostComponent != null)
-                ToggleGuardian(host, guardianHostComponent);
+            ToggleGuardian(host, guardianHostComponent);
 
             args.Handled = true;
         }

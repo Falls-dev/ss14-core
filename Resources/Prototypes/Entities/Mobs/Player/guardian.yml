@@ -114,11 +114,16 @@
         settings: default
     - type: GhostTakeoverAvailable
     - type: Sprite
+      drawdepth: Mobs
+      sprite: White/Mobs/Aliens/Guardians/guardians.rsi
       layers:
+      - state: tech_base
+        map: [ "enum.DamageStateVisualLayers.Base" ]
       - state: tech_flare
         map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
         color: "#707070"
         shader: unshaded
+      noRot: true
     - type: Guardian
       damageShare: 0.5
       distance: 6
@@ -167,11 +172,16 @@
       settings: default
   - type: GhostTakeoverAvailable
   - type: Sprite
+    drawdepth: Mobs
+    sprite: White/Mobs/Aliens/Guardians/guardians.rsi
     layers:
+    - state: tech_base
+      map: [ "enum.DamageStateVisualLayers.Base" ]
     - state: tech_flare
       map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
       color: "#9d0016"
       shader: unshaded
+    noRot: true
   - type: Guardian
     damageShare: 1
     distance: 10
@@ -220,11 +230,16 @@
       settings: default
   - type: GhostTakeoverAvailable
   - type: Sprite
+    drawdepth: Mobs
+    sprite: White/Mobs/Aliens/Guardians/guardians.rsi
     layers:
+    - state: tech_base
+      map: [ "enum.DamageStateVisualLayers.Base" ]
     - state: tech_flare
       map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
       color: "#54f3ff"
       shader: unshaded
+    noRot: true
   - type: MovementSpeedModifier
     baseWalkSpeed: 6
     baseSprintSpeed: 7.5
@@ -270,11 +285,16 @@
       settings: default
   - type: GhostTakeoverAvailable
   - type: Sprite
+    drawdepth: Mobs
+    sprite: White/Mobs/Aliens/Guardians/guardians.rsi
     layers:
+    - state: tech_base
+      map: [ "enum.DamageStateVisualLayers.Base" ]
     - state: tech_flare
       map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
       color: "#2000c8"
       shader: unshaded
+    noRot: true
   - type: NameIdentifier
     group: Holoparasite
   - type: TypingIndicator

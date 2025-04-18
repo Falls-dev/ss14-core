@@ -100,11 +100,8 @@ namespace Content.Server.Guardian
             if(component.PowerToggleActionEntity == null)
                 return;
 
-            if (component.IsInPowerMode == false)
+            if (component is { IsInPowerMode: false, GuardianLoose: true })
             {
-                if(!component.GuardianLoose)
-                    return;
-
                 _popupSystem.PopupEntity("Вы должны находится в теле, чтобы активировать способность!", uid, PopupType.MediumCaution);
                 return;
             }
@@ -130,7 +127,9 @@ namespace Content.Server.Guardian
                 component.IsInPowerMode = false;
                 return;
             }
-            EnsureComp<IncorporealComponent>(uid).Effect = false;
+
+            var incorporealComp = EnsureComp<IncorporealComponent>(uid);
+            incorporealComp.Effect = false;
         }
 
         private void OnPerformChargerPowerAction(EntityUid uid, GuardianComponent component, ChargerPowerActionEvent args)

@@ -53,8 +53,6 @@ public sealed class IncorporealSystem : EntitySystem
             _visibilitySystem.RefreshVisibility(uid);
         }
 
-        if(component.Effect)
-            Spawn("EffectEmpPulse", Transform(uid).Coordinates);
         EnsureComp<StealthComponent>(uid);
         _stealth.SetVisibility(uid, -1);
         if (TryComp(uid, out PullableComponent? pullable))
@@ -80,7 +78,12 @@ public sealed class IncorporealSystem : EntitySystem
         }
 
         component.MovementSpeedBuff = 1;
-        Spawn("EffectEmpPulse", _transform.GetMapCoordinates(uid));
+
+        if (component.Effect)
+        {
+            Spawn("EffectEmpPulse", _transform.GetMapCoordinates(uid));
+        }
+
         _stealth.SetVisibility(uid, 1);
         RemComp<StealthComponent>(uid);
         _movement.RefreshMovementSpeedModifiers(uid);

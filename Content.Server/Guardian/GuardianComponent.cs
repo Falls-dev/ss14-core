@@ -1,4 +1,5 @@
 using Content.Shared._White.Guardian;
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
@@ -57,5 +58,11 @@ namespace Content.Server.Guardian
 
         [ViewVariables(VVAccess.ReadWrite), DataField("assasinDamageModifier")]
         public float AssasinDamageModifier = 3F;
+
+        [ViewVariables(VVAccess.ReadWrite), DataField]
+        public int LightingCount = 3;
+
+        [ViewVariables(VVAccess.ReadWrite), DataField]
+        public SoundSpecifier? ChargerSound = new SoundPathSpecifier("/Audio/White/Guardian/charger.ogg")
     }
 }

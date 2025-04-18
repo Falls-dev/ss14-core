@@ -133,10 +133,12 @@ namespace Content.Server.Guardian
                 return;
 
             args.Handled = true;
+
             if(component.IsCharged)
                 return;
 
             component.IsCharged = true;
+            _audio.PlayPvs(component.ChargerSound, uid);
         }
 
         //Parsec edit end
@@ -246,10 +248,10 @@ namespace Content.Server.Guardian
 
             if (component.GuardianType == GuardianSelector.Lighting)
             {
-                if (!component.IsInPowerMode)
-                    return;
-
-                _lightningSystem.ShootLightning(uid, target);
+                for (var i = 0; i < component.LightingCount; i++)
+                {
+                    _lightningSystem.ShootLightning(uid, target);
+                }
             }
 
             if (component.GuardianType == GuardianSelector.Assasin)

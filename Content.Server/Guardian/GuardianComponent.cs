@@ -78,5 +78,7 @@ namespace Content.Server.Guardian
         public EntProtoId Action = "ActionToggleGuardian";
 
         [DataField] public EntityUid? ActionEntity;
+
+        [DataField] public TimeSpan KnockDownCharger = TimeSpan.FromSeconds(2);
     }
 }

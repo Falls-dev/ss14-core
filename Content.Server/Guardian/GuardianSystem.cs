@@ -2,6 +2,7 @@ using Content.Server._White.IncorporealSystem;
 using Content.Server.Body.Systems;
 using Content.Server.Lightning;
 using Content.Server.Popups;
+using Content.Server.Stunnable;
 using Content.Shared._White.Guardian;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
@@ -40,6 +41,7 @@ namespace Content.Server.Guardian
         [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
         [Dependency] private readonly LightningSystem _lightningSystem = default!;
         [Dependency] private readonly DamageableSystem _damageableSystem = default!;
+        [Dependency] private readonly StunSystem _stunSystem = default!;
 
         public override void Initialize()
         {
@@ -304,6 +306,8 @@ namespace Content.Server.Guardian
                 {
                     _handsSystem.TryDrop(target, hand);
                 }
+
+                _stunSystem.TryKnockdown(target, component.KnockDownCharger, true);
 
                 component.IsCharged = false;
             }

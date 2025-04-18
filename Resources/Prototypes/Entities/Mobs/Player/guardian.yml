@@ -172,7 +172,7 @@
 
 - type: entity
   name: HoloparasiteAssasin
-  id: MobHoloparasiteAssasin
+  id: MobHoloparasiteGuardianAssasin
   parent: MobGuardianBase
   description: A mesmerising whirl of hard-light patterns weaves a marvelous, yet oddly familiar visage. It stands proud, tuning into its owner's life to sustain itself.
   components:
@@ -231,7 +231,7 @@
 
 - type: entity
   name: HoloparasiteCharger
-  id: MobHoloparasiteCharger
+  id: MobHoloparasiteGuardianCharger
   parent: MobGuardianBase
   description: A mesmerising whirl of hard-light patterns weaves a marvelous, yet oddly familiar visage. It stands proud, tuning into its owner's life to sustain itself.
   components:
@@ -287,7 +287,7 @@
 
 - type: entity
   name: HoloparasiteLighting
-  id: MobHoloparasiteLighting
+  id: MobHoloparasiteGuardianLighting
   parent: MobGuardianBase
   description: A mesmerising whirl of hard-light patterns weaves a marvelous, yet oddly familiar visage. It stands proud, tuning into its owner's life to sustain itself.
   components:

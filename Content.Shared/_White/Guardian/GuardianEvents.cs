@@ -1,4 +1,5 @@
-﻿using Robust.Shared.Serialization;
+﻿using Content.Shared.Actions;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._White.Guardian;
 
@@ -41,4 +42,12 @@ public sealed class GuardianSelectorSelectedBuiMessage : BoundUserInterfaceMessa
         GuardianType = guardianType;
         Target = target;
     }
+}
+
+public sealed partial class ToggleGuardianPowerActionEvent : InstantActionEvent
+{
+}
+
+public sealed partial class ChargerPowerActionEvent : InstantActionEvent
+{
 }

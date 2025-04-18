@@ -1,4 +1,6 @@
 using Content.Shared._White.Guardian;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server.Guardian
 {
@@ -34,5 +36,26 @@ namespace Content.Server.Guardian
 
         [DataField]
         public GuardianSelector GuardianType = GuardianSelector.Standart;
+
+        [DataField("powerToggleAction", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+        public string PowerToggleAction = "ActionGuardianPowerToggle";
+
+        [DataField]
+        public EntityUid? PowerToggleActionEntity;
+
+        [ViewVariables(VVAccess.ReadWrite), DataField]
+        public bool IsInPowerMode;
+
+        [DataField("chargerPowerAction", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+        public string ChargerPowerAction = "ActionChargerPower";
+
+        [DataField]
+        public EntityUid? ChargerPowerActionEntity;
+
+        [ViewVariables(VVAccess.ReadWrite), DataField]
+        public bool IsCharged;
+
+        [ViewVariables(VVAccess.ReadWrite), DataField("assasinDamageModifier")]
+        public float AssasinDamageModifier = 3F;
     }
 }

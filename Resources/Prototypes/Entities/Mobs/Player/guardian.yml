@@ -21,7 +21,6 @@
     - type: MobMover
     - type: InputMover
     - type: Puller
-    - type: Pullable
     - type: MovementSpeedModifier
       baseWalkSpeed: 4
       baseSprintSpeed: 5.5
@@ -31,20 +30,6 @@
           Blunt: 5
       soundHit:
         collection: MetalThud
-    - type: RandomSprite
-      available:
-        - enum.DamageStateVisualLayers.Base:
-            magic_base: ""
-          enum.DamageStateVisualLayers.BaseUnshaded:
-            magic_flare: Sixteen
-        - enum.DamageStateVisualLayers.Base:
-            miner_base: ""
-          enum.DamageStateVisualLayers.BaseUnshaded:
-            miner_flare: Sixteen
-        - enum.DamageStateVisualLayers.Base:
-            tech_base: ""
-          enum.DamageStateVisualLayers.BaseUnshaded:
-            tech_flare: Sixteen
     - type: Sprite
       drawdepth: Mobs
       sprite: White/Mobs/Aliens/Guardians/guardians.rsi
@@ -128,18 +113,6 @@
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
-    - type: RandomSprite
-      available:
-      - enum.DamageStateVisualLayers.BaseUnshaded:
-          magic_flare: Sixteen
-    - type: Sprite
-      layers:
-      - state: magic_base
-        map: [ "enum.DamageStateVisualLayers.Base" ]
-      - state: magic_flare
-        map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
-        color: "#8e0022"
-        shader: unshaded
     - type: Guardian
       damageShare: 0.5
       distance: 6
@@ -149,7 +122,7 @@
     - type: DamageOnHighSpeedImpact
       damage:
         types:
-          Blunt: 3
+          Blunt: 5
       soundHit:
         collection: MetalThud
     - type: MeleeWeapon
@@ -162,8 +135,8 @@
         collection: Punch
       damage:
         types:
-          Blunt: 15
-          Structural: 15
+          Blunt: 24
+          Structural: 24
     - type: NameIdentifier
       group: Holoparasite
     - type: TypingIndicator
@@ -187,18 +160,6 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: RandomSprite
-    available:
-    - enum.DamageStateVisualLayers.BaseUnshaded:
-        magic_flare: Sixteen
-  - type: Sprite
-    layers:
-    - state: magic_base
-      map: [ "enum.DamageStateVisualLayers.Base" ]
-    - state: magic_flare
-      map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
-      color: "#999999"
-      shader: unshaded
   - type: Guardian
     damageShare: 1
     distance: 10
@@ -208,7 +169,7 @@
   - type: DamageOnHighSpeedImpact
     damage:
       types:
-        Blunt: 3
+        Blunt: 5
     soundHit:
       collection: MetalThud
   - type: MeleeWeapon
@@ -221,8 +182,8 @@
       collection: Punch
     damage:
       types:
-        Blunt: 8
-        Structural: 8
+        Blunt: 15
+        Structural: 15
   - type: NameIdentifier
     group: Holoparasite
   - type: TypingIndicator
@@ -246,25 +207,13 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: RandomSprite
-    available:
-    - enum.DamageStateVisualLayers.BaseUnshaded:
-        magic_flare: Sixteen
-  - type: Sprite
-    layers:
-    - state: magic_base
-      map: [ "enum.DamageStateVisualLayers.Base" ]
-    - state: magic_flare
-      map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
-      color: "#00ebc6"
-      shader: unshaded
   - type: MovementSpeedModifier
     baseWalkSpeed: 6
     baseSprintSpeed: 7.5
   - type: DamageOnHighSpeedImpact
     damage:
       types:
-        Blunt: 3
+        Blunt: 5
     soundHit:
       collection: MetalThud
   - type: MeleeWeapon
@@ -277,8 +226,8 @@
       collection: Punch
     damage:
       types:
-        Blunt: 8
-        Structural: 8
+        Blunt: 12
+        Structural: 12
   - type: NameIdentifier
     group: Holoparasite
   - type: TypingIndicator
@@ -302,18 +251,6 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: RandomSprite
-    available:
-    - enum.DamageStateVisualLayers.BaseUnshaded:
-        magic_flare: Sixteen
-  - type: Sprite
-    layers:
-    - state: magic_base
-      map: [ "enum.DamageStateVisualLayers.Base" ]
-    - state: magic_flare
-      map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
-      color: "#0007d3"
-      shader: unshaded
   - type: NameIdentifier
     group: Holoparasite
   - type: TypingIndicator

@@ -14,13 +14,10 @@ using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Popups;
-using Content.Shared.Stealth.Components;
-using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
-using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
@@ -43,7 +40,6 @@ namespace Content.Server.Guardian
         [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
         [Dependency] private readonly LightningSystem _lightningSystem = default!;
         [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-        [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
 
         public override void Initialize()
         {
@@ -72,6 +68,7 @@ namespace Content.Server.Guardian
             SubscribeLocalEvent<GuardianCreatorComponent, GuardianSelectorSelectedBuiMessage>(OnGuardianSelected);
             SubscribeLocalEvent<GuardianComponent, ToggleGuardianPowerActionEvent>(OnPerformGuardianPowerAction);
             SubscribeLocalEvent<GuardianComponent, ChargerPowerActionEvent>(OnPerformChargerPowerAction);
+            SubscribeLocalEvent<GuardianComponent, GuardianToggleActionEvent>(OnPerformGuardianAction);
         }
 
         // PARSEC EDIT START
@@ -105,6 +102,15 @@ namespace Content.Server.Guardian
             if(component.PowerToggleActionEntity == null)
                 return;
 
+            if (component.IsInPowerMode == false)
+            {
+                if(!component.GuardianLoose)
+                    return;
+
+                _popupSystem.PopupEntity("Вы должны находится в теле, чтобы активировать способность!", uid, PopupType.MediumCaution);
+                return;
+            }
+
             _actionSystem.SetToggled(component.PowerToggleActionEntity, component.IsInPowerMode);
             SetupPower(uid, component, component.GuardianType);
         }
@@ -124,7 +130,7 @@ namespace Content.Server.Guardian
                 component.IsInPowerMode = false;
                 return;
             }
-            EnsureComp<IncorporealComponent>(uid);
+            EnsureComp<IncorporealComponent>(uid).Effect = false;
         }
 
         private void OnPerformChargerPowerAction(EntityUid uid, GuardianComponent component, ChargerPowerActionEvent args)
@@ -173,6 +179,25 @@ namespace Content.Server.Guardian
             args.Handled = true;
         }
 
+        private void OnPerformGuardianAction(EntityUid uid, GuardianComponent component, GuardianToggleActionEvent args)
+        {
+            if (args.Handled)
+                return;
+
+            if(component.Host == null)
+                return;
+
+            var host = (EntityUid) component.Host;
+
+            if(TryComp<GuardianHostComponent>(host, out var guardianHostComponent))
+                return;
+
+            if (guardianHostComponent != null)
+                ToggleGuardian(host, guardianHostComponent);
+
+            args.Handled = true;
+        }
+
         private void OnGuardianPlayerDetached(EntityUid uid, GuardianComponent component, PlayerDetachedEvent args)
         {
             var host = component.Host;
@@ -197,7 +222,9 @@ namespace Content.Server.Guardian
 
             _popupSystem.PopupEntity(Loc.GetString("guardian-available"), host.Value, host.Value);
 
-            if(component.GuardianType == GuardianSelector.Standart)
+            _actionSystem.AddAction(uid, ref component.ActionEntity, component.Action);
+
+            if (component.GuardianType == GuardianSelector.Standart || component.GuardianType == GuardianSelector.Lighting)
                 return;
 
             if (component.GuardianType == GuardianSelector.Charger)

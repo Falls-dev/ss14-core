@@ -53,7 +53,8 @@ public sealed class IncorporealSystem : EntitySystem
             _visibilitySystem.RefreshVisibility(uid);
         }
 
-        Spawn("EffectEmpPulse", Transform(uid).Coordinates);
+        if(component.Effect)
+            Spawn("EffectEmpPulse", Transform(uid).Coordinates);
         EnsureComp<StealthComponent>(uid);
         _stealth.SetVisibility(uid, -1);
         if (TryComp(uid, out PullableComponent? pullable))

@@ -60,9 +60,14 @@ namespace Content.Server.Guardian
         public float AssasinDamageModifier = 3F;
 
         [ViewVariables(VVAccess.ReadWrite), DataField]
-        public int LightingCount = 3;
+        public int LightingCount = 1;
 
         [ViewVariables(VVAccess.ReadWrite), DataField]
-        public SoundSpecifier? ChargerSound = new SoundPathSpecifier("/Audio/White/Guardian/charger.ogg")
+        public SoundSpecifier? ChargerSound = new SoundPathSpecifier("/Audio/White/Guardian/charger.ogg");
+
+        [DataField]
+        public EntProtoId Action = "ActionToggleGuardian";
+
+        [DataField] public EntityUid? ActionEntity;
     }
 }

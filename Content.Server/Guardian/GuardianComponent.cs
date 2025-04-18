@@ -27,7 +27,7 @@ namespace Content.Server.Guardian
         /// Maximum distance the guardian can travel before it's forced to recall, use YAML to set
         /// </summary>
         [DataField("distance")]
-        public float DistanceAllowed { get; set; } = 5f;
+        public float DistanceAllowed { get; set; } = 10f;
 
         /// <summary>
         /// Maximum default distance the guardian can travel before it's forced to recall, use YAML to set
@@ -78,5 +78,8 @@ namespace Content.Server.Guardian
         public EntProtoId Action = "ActionToggleGuardian";
 
         [DataField] public EntityUid? ActionEntity;
+
+        [ViewVariables(VVAccess.ReadWrite), DataField]
+        public TimeSpan KnockDownChargerTime = TimeSpan.FromSeconds(2);
     }
 }

@@ -295,6 +295,18 @@
       color: "#2000c8"
       shader: unshaded
     noRot: true
+  - type: MeleeWeapon
+    hidden: false
+    altDisarm: false
+    animation: WeaponArcFist
+    attackRate: 1.8
+    autoAttack: true
+    soundHit:
+      collection: Punch
+    damage:
+      types:
+        Blunt: 8
+        Structural: 8
   - type: NameIdentifier
     group: Holoparasite
   - type: TypingIndicator

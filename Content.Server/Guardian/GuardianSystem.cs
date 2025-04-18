@@ -97,8 +97,6 @@ namespace Content.Server.Guardian
             if (component.IsInPowerMode == toggleValue)
                 return;
 
-            component.IsInPowerMode = toggleValue;
-
             if(component.PowerToggleActionEntity == null)
                 return;
 
@@ -110,6 +108,8 @@ namespace Content.Server.Guardian
                 _popupSystem.PopupEntity("Вы должны находится в теле, чтобы активировать способность!", uid, PopupType.MediumCaution);
                 return;
             }
+
+            component.IsInPowerMode = toggleValue;
 
             _actionSystem.SetToggled(component.PowerToggleActionEntity, component.IsInPowerMode);
             SetupPower(uid, component, component.GuardianType);
@@ -223,7 +223,7 @@ namespace Content.Server.Guardian
 
             _actionSystem.AddAction(uid, ref component.ActionEntity, component.Action);
 
-            if (component.GuardianType == GuardianSelector.Standart || component.GuardianType == GuardianSelector.Lighting)
+            if (component.GuardianType is GuardianSelector.Standart or GuardianSelector.Lighting)
                 return;
 
             if (component.GuardianType == GuardianSelector.Charger)

@@ -204,8 +204,8 @@
       collection: Punch
     damage:
       types:
-        Blunt: 15
-        Structural: 15
+        Blunt: 14
+        Structural: 14
   - type: NameIdentifier
     group: Holoparasite
   - type: TypingIndicator
@@ -259,8 +259,8 @@
       collection: Punch
     damage:
       types:
-        Blunt: 12
-        Structural: 12
+        Blunt: 15
+        Structural: 15
   - type: NameIdentifier
     group: Holoparasite
   - type: TypingIndicator
@@ -305,8 +305,8 @@
       collection: Punch
     damage:
       types:
-        Blunt: 8
-        Structural: 8
+        Blunt: 5
+        Structural: 5
   - type: NameIdentifier
     group: Holoparasite
   - type: TypingIndicator

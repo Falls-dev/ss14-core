@@ -30,6 +30,15 @@ namespace Content.Server.Guardian
         public float DistanceAllowed { get; set; } = 5f;
 
         /// <summary>
+        /// Maximum default distance the guardian can travel before it's forced to recall, use YAML to set
+        /// </summary>
+        [DataField("distanceDefault")]
+        public float DistanceAllowedDefault { get; set; } = 10f;
+
+        [DataField]
+        public float DistancePowerAssasin { get; set; } = 25f;
+
+        /// <summary>
         /// If the guardian is currently manifested
         /// </summary>
         [DataField]

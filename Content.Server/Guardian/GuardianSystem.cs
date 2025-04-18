@@ -102,7 +102,7 @@ namespace Content.Server.Guardian
 
             if (component is { IsInPowerMode: false, GuardianLoose: true })
             {
-                _popupSystem.PopupEntity("Вы должны находится в теле, чтобы активировать способность!", uid, PopupType.MediumCaution);
+                _popupSystem.PopupEntity("Вы должны находится в теле, чтобы активировать способность!", uid, uid, PopupType.MediumCaution);
                 return;
             }
 
@@ -125,11 +125,13 @@ namespace Content.Server.Guardian
                 RemComp<IncorporealComponent>(uid);
                 _actionSystem.SetToggled(component.PowerToggleActionEntity, !component.IsInPowerMode);
                 component.IsInPowerMode = false;
+                component.DistanceAllowed = component.DistanceAllowedDefault;
                 return;
             }
 
             var incorporealComp = EnsureComp<IncorporealComponent>(uid);
             incorporealComp.Effect = false;
+            component.DistanceAllowed = component.DistancePowerAssasin;
         }
 
         private void OnPerformChargerPowerAction(EntityUid uid, GuardianComponent component, ChargerPowerActionEvent args)
@@ -514,7 +516,7 @@ namespace Content.Server.Guardian
             guardianComponent.GuardianLoose = true;
         }
 
-        private void RetractGuardian(EntityUid host,GuardianHostComponent hostComponent, EntityUid guardian, GuardianComponent guardianComponent)
+        private void RetractGuardian(EntityUid host, GuardianHostComponent hostComponent, EntityUid guardian, GuardianComponent guardianComponent)
         {
             if (!guardianComponent.GuardianLoose)
             {
@@ -525,6 +527,20 @@ namespace Content.Server.Guardian
             _container.Insert(guardian, hostComponent.GuardianContainer);
             DebugTools.Assert(hostComponent.GuardianContainer.Contains(guardian));
             _popupSystem.PopupEntity(Loc.GetString("guardian-entity-recall"), host);
+            if (guardianComponent.IsInPowerMode)
+            {
+                if (guardianComponent.GuardianType == GuardianSelector.Assasin)
+                {
+                    SetupPower(guardian, guardianComponent, guardianComponent.GuardianType);
+                    return;
+                }
+
+                guardianComponent.IsInPowerMode = false;
+                if (guardianComponent.PowerToggleActionEntity != null)
+                {
+                    _actionSystem.SetToggled(guardianComponent.PowerToggleActionEntity, guardianComponent.IsInPowerMode);
+                }
+            }
             guardianComponent.GuardianLoose = false;
         }
     }

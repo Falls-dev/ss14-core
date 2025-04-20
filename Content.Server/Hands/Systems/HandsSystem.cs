@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Server._White.Other.ChangeThrowForceSystem;
+using Content.Server.Body.Systems;
 using Content.Server.Damage.Components;
 using Content.Server.Inventory;
 using Content.Server.Stack;
@@ -8,6 +9,7 @@ using Content.Shared._White.Cult.Systems;
 using Content.Shared._White.MagGloves;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Ensnaring.Components;
@@ -42,6 +44,7 @@ namespace Content.Server.Hands.Systems
         [Dependency] private readonly PullingSystem _pullingSystem = default!;
         [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
         [Dependency] private readonly CultItemSystem _cultItem = default!;
+        [Dependency] private readonly SharedBodySystem _body = default!; // Parsec
 
         public override void Initialize()
         {
@@ -59,10 +62,33 @@ namespace Content.Server.Hands.Systems
 
             SubscribeLocalEvent<HandsComponent, BeforeExplodeEvent>(OnExploded);
 
+            // PARSEC SUBS EDIT
+            SubscribeLocalEvent<HandsComponent, TargetingBodyPartEnabledEvent>(HandleBodyPartEnabled);
+            SubscribeLocalEvent<HandsComponent, TargetingBodyPartDisabledEvent>(HandleBodyPartDisabled);
+            // PARSEC SUBS EDIT END
+
             CommandBinds.Builder
                 .Bind(ContentKeyFunctions.ThrowItemInHand, new PointerInputCmdHandler(HandleThrowItem))
                 .Register<HandsSystem>();
         }
+
+        // PARSEC EDIT START
+        private void HandleBodyPartEnabled(EntityUid uid, HandsComponent component, ref TargetingBodyPartEnabledEvent args)
+        {
+            BeforeAddHand(uid, component, args.Entity, args.BodyPartComponent, SharedBodySystem.GetPartSlotContainerId(args.BodyPartComponent.ParentSlot?.Id ?? string.Empty));
+        }
+
+        private void HandleBodyPartDisabled(EntityUid uid, HandsComponent component, ref TargetingBodyPartDisabledEvent args)
+        {
+            if(TerminatingOrDeleted(uid))
+                return;
+
+            if (args.BodyPartComponent.PartType != BodyPartType.Hand)
+                return;
+
+            RemoveHand(uid, SharedBodySystem.GetPartSlotContainerId(args.BodyPartComponent.ParentSlot?.Id ?? string.Empty));
+        }
+        // PARSEC EDIT END
 
         public override void Shutdown()
         {
@@ -109,22 +135,33 @@ namespace Content.Server.Hands.Systems
             args.Handled = true; // no shove/stun.
         }
 
-        private void HandleBodyPartAdded(EntityUid uid, HandsComponent component, ref BodyPartAddedEvent args)
+        private void BeforeAddHand(EntityUid uid, HandsComponent component, EntityUid partUid, BodyPartComponent? partComponent, string partSlot)
         {
-            if (args.Part.Comp.PartType != BodyPartType.Hand)
+            if (partComponent is null || partComponent.PartType != BodyPartType.Hand)
                 return;
 
-            // If this annoys you, which it should.
-            // Ping Smugleaf.
-            var location = args.Part.Comp.Symmetry switch
+            var location = partComponent.Symmetry switch
             {
                 BodyPartSymmetry.None => HandLocation.Middle,
                 BodyPartSymmetry.Left => HandLocation.Left,
                 BodyPartSymmetry.Right => HandLocation.Right,
-                _ => throw new ArgumentOutOfRangeException(nameof(args.Part.Comp.Symmetry))
+                _ => throw new ArgumentOutOfRangeException(nameof(partComponent.Symmetry))
+                {
+                    HelpLink = null,
+                    HResult = 0,
+                    Source = null
+                }
             };
 
-            AddHand(uid, args.Slot, location);
+            if (_body.TryGetParentBodyPart(partUid, out _, out var parentPartComp) && partComponent.Enabled && parentPartComp.Enabled)
+            {
+                AddHand(uid, partSlot, location);
+            }
+        }
+
+        private void HandleBodyPartAdded(EntityUid uid, HandsComponent component, ref BodyPartAddedEvent args)
+        {
+            BeforeAddHand(uid, component, args.Part.Owner, args.Part.Comp, args.Slot);
         }
 
         private void HandleBodyPartRemoved(EntityUid uid, HandsComponent component, ref BodyPartRemovedEvent args)

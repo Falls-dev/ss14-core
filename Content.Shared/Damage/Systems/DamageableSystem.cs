@@ -9,10 +9,12 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Radiation.Events;
 using Content.Shared.Rejuvenate;
 using Content.Shared._White;
+using Content.Shared._White.Targeting.Components;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Damage
@@ -24,6 +26,7 @@ namespace Content.Shared.Damage
         [Dependency] private readonly INetManager _netMan = default!;
         [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
         [Dependency] private readonly IConfigurationManager _cfg = default!;
+        [Dependency] private readonly IRobustRandom _random = default!;
 
         private float DamageGetModifier { get; set; }
 
@@ -48,6 +51,27 @@ namespace Content.Shared.Damage
             _damageableQuery = GetEntityQuery<DamageableComponent>();
             _mindContainerQuery = GetEntityQuery<MindContainerComponent>();
         }
+
+        // PARSEC EDIT START
+        public TargetingBodyParts? GetRandomBodyPart(EntityUid uid, TargetingComponent? target = null)
+        {
+            if (!Resolve(uid, ref target))
+                return null;
+
+            var totalWeight = target.TargetingChance.Values.Sum();
+            var randomValue = _random.NextFloat() * totalWeight;
+
+            foreach (var (part, weight) in target.TargetingChance)
+            {
+                if (randomValue <= weight)
+                    return part;
+
+                randomValue -= weight;
+            }
+
+            return TargetingBodyParts.Chest;
+        }
+        // PARSEC EDIT END
 
         /// <summary>
         ///     Initialize a damageable component
@@ -107,11 +131,32 @@ namespace Content.Shared.Damage
         ///     This updates cached damage information, flags the component as dirty, and raises a damage changed event.
         ///     The damage changed event is used by other systems, such as damage thresholds.
         /// </remarks>
-        public void DamageChanged(EntityUid uid, DamageableComponent component, DamageSpecifier? damageDelta = null,
-            bool interruptsDoAfters = true, EntityUid? origin = null)
+        public void DamageChanged(EntityUid uid,
+            DamageableComponent component,
+            DamageSpecifier? damageDelta = null,
+            bool interruptsDoAfters = true,
+            EntityUid? origin = null,
+            bool sever = true,
+            float partDamageMultiplier = 1F)
         {
             component.Damage.GetDamagePerGroup(_prototypeManager, component.DamagePerGroup);
             component.TotalDamage = component.Damage.GetTotal();
+            TargetingBodyParts? targetingBodyPart = null; // PARSEC EDIT
+
+            // START PARSEC EDIT
+            if (TryComp<TargetingComponent>(uid, out var target))
+            {
+                if (origin.HasValue && TryComp<TargetingComponent>(origin.Value, out var targeter))
+                {
+                    targetingBodyPart = targeter.TargetBodyPart;
+                }
+                else
+                {
+                    targetingBodyPart = GetRandomBodyPart(uid, target);
+                }
+            }
+            // END PARSEC EDIT
+
             Dirty(uid, component);
 
             if (_appearanceQuery.TryGetComponent(uid, out var appearance) && damageDelta != null)
@@ -119,7 +164,7 @@ namespace Content.Shared.Damage
                 var data = new DamageVisualizerGroupData(component.DamagePerGroup.Keys.ToList());
                 _appearance.SetData(uid, DamageVisualizerKeys.DamageUpdateGroups, data, appearance);
             }
-            RaiseLocalEvent(uid, new DamageChangedEvent(component, damageDelta, interruptsDoAfters, origin));
+            RaiseLocalEvent(uid, new DamageChangedEvent(component, damageDelta, interruptsDoAfters, origin, targetingBodyPart, sever, partDamageMultiplier));
         }
 
         /// <summary>
@@ -134,8 +179,14 @@ namespace Content.Shared.Damage
         ///     Returns a <see cref="DamageSpecifier"/> with information about the actual damage changes. This will be
         ///     null if the user had no applicable components that can take damage.
         /// </returns>
-        public DamageSpecifier? TryChangeDamage(EntityUid? uid, DamageSpecifier damage, bool ignoreResistances = false,
-            bool interruptsDoAfters = true, DamageableComponent? damageable = null, EntityUid? origin = null)
+        public DamageSpecifier? TryChangeDamage(EntityUid? uid,
+            DamageSpecifier damage,
+            bool ignoreResistances = false,
+            bool interruptsDoAfters = true,
+            DamageableComponent? damageable = null,
+            EntityUid? origin = null,
+            bool? sever = true,
+            float? partDamageMultiplier = 1F)
         {
             if (!uid.HasValue || !_damageableQuery.Resolve(uid.Value, ref damageable, false))
             {
@@ -198,7 +249,15 @@ namespace Content.Shared.Damage
             }
 
             if (delta.DamageDict.Count > 0)
-                DamageChanged(uid.Value, damageable, delta, interruptsDoAfters, origin);
+            {
+                DamageChanged(uid.Value,
+                    damageable,
+                    delta,
+                    interruptsDoAfters,
+                    origin,
+                    sever ?? true,
+                    partDamageMultiplier ?? 1.00f);
+            }
 
             return delta;
         }
@@ -358,11 +417,31 @@ namespace Content.Shared.Damage
         /// </summary>
         public readonly EntityUid? Origin;
 
-        public DamageChangedEvent(DamageableComponent damageable, DamageSpecifier? damageDelta, bool interruptsDoAfters, EntityUid? origin)
+        // PARSEC EDIT START
+        public readonly float PartDamageMultiplier;
+
+        public readonly bool Sever;
+
+        public readonly TargetingBodyParts? TargetBodyPart;
+
+        public readonly bool DamageDecreased;
+        // PARSEC EDIT END
+
+        public DamageChangedEvent(DamageableComponent damageable,
+            DamageSpecifier? damageDelta,
+            bool interruptsDoAfters,
+            EntityUid? origin,
+            TargetingBodyParts? targetBodyPart = null,
+            bool sever = true,
+            float partDamageMultiplier = 1F)
         {
             Damageable = damageable;
             DamageDelta = damageDelta;
             Origin = origin;
+            TargetBodyPart = targetBodyPart;
+            Sever = sever;
+            PartDamageMultiplier = partDamageMultiplier;
+
 
             if (DamageDelta == null)
                 return;
@@ -372,6 +451,12 @@ namespace Content.Shared.Damage
                 if (damageChange > 0)
                 {
                     DamageIncreased = true;
+                    break;
+                }
+
+                if (damageChange < 0)
+                {
+                    DamageDecreased = true;
                     break;
                 }
             }

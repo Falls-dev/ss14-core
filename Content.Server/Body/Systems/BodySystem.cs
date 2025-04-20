@@ -10,8 +10,8 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Robust.Shared.Audio;
-using Robust.Shared.Timing;
 using System.Numerics;
+using Robust.Shared.Timing;
 
 namespace Content.Server.Body.Systems;
 
@@ -22,6 +22,7 @@ public sealed class BodySystem : SharedBodySystem
     [Dependency] private readonly HumanoidAppearanceSystem _humanoidSystem = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedMindSystem _mindSystem = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
     public override void Initialize()
     {
@@ -92,9 +93,15 @@ public sealed class BodySystem : SharedBodySystem
         if (layer is null)
             return;
 
+        _appearance.SetData(bodyEnt, layer, true);  // PARSEC
+
         var layers = HumanoidVisualLayersExtension.Sublayers(layer.Value);
         _humanoidSystem.SetLayersVisibility(
-            bodyEnt, layers, visible: false, permanent: true, humanoid);
+            bodyEnt,
+            layers,
+            visible: false,
+            permanent: true,
+            humanoid);
     }
 
     public override HashSet<EntityUid> GibBody(
@@ -119,8 +126,13 @@ public sealed class BodySystem : SharedBodySystem
         if (xform.MapUid is null)
             return new HashSet<EntityUid>();
 
-        var gibs = base.GibBody(bodyId, gibOrgans, body, launchGibs: launchGibs,
-            splatDirection: splatDirection, splatModifier: splatModifier, splatCone:splatCone);
+        var gibs = base.GibBody(bodyId,
+            gibOrgans,
+            body,
+            launchGibs: launchGibs,
+            splatDirection: splatDirection,
+            splatModifier: splatModifier,
+            splatCone:splatCone);
 
         var ev = new BeingGibbedEvent(gibs);
         RaiseLocalEvent(bodyId, ref ev);

@@ -1,5 +1,6 @@
 ﻿using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
+using Content.Shared.Containers.ItemSlots;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
@@ -79,6 +80,34 @@ public sealed partial class BodyPartComponent : Component
             return temp;
         }
     }
+
+    //parsec edit start
+    [DataField, AutoNetworkedField]
+    public float PartIntegrity = 70f;
+    public const float MaxPartIntegrity = 70;
+
+    [DataField, AutoNetworkedField]
+    public bool Enabled = true;
+
+    [DataField]
+    public float PartHealingTime = 30;
+    public float PartHealingTimer = 0;
+
+    [DataField]
+    public float SelfHealingAmount = 5;
+
+    [DataField]
+    public string ContainerName { get; set; } = "part_slot";
+
+    [DataField, AutoNetworkedField]
+    public ItemSlot ItemInsertionSlot = new();
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? OwnerBodyPart;
+
+    [DataField, AutoNetworkedField]
+    public BodyPartSlot? ParentSlot;
+    //parsec edit end
 }
 
 /// <summary>

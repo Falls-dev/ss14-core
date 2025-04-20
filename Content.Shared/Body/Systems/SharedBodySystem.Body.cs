@@ -4,15 +4,18 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Prototypes;
+using Content.Shared.Damage;
 using Content.Shared.DragDrop;
 using Content.Shared.Gibbing.Components;
 using Content.Shared.Gibbing.Events;
 using Content.Shared.Gibbing.Systems;
 using Content.Shared.Inventory;
+using Content.Shared.Standing.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Body.Systems;
@@ -29,6 +32,7 @@ public partial class SharedBodySystem
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly GibbingSystem _gibbingSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
+    [Dependency] private readonly IGameTiming _gameTiming = default!; // PARSEC
 
     private const float GibletLaunchImpulse = 8;
     private const float GibletLaunchImpulseVariance = 3;
@@ -42,7 +46,38 @@ public partial class SharedBodySystem
         SubscribeLocalEvent<BodyComponent, ComponentInit>(OnBodyInit);
         SubscribeLocalEvent<BodyComponent, MapInitEvent>(OnBodyMapInit);
         SubscribeLocalEvent<BodyComponent, CanDragEvent>(OnBodyCanDrag);
+
+        // PARSEC EDIT START
+        SubscribeLocalEvent<BodyComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<BodyComponent, StandAttemptEvent>(OnStandAttempt);
+        // PARSEC EDIT END
     }
+
+    // PARSEC EDIT START
+    private void OnStandAttempt(Entity<BodyComponent> ent, ref StandAttemptEvent args)
+    {
+        if (ent.Comp.LegEntities.Count == 0)
+            args.Cancel();
+    }
+
+    private void OnDamageChanged(Entity<BodyComponent> ent, ref DamageChangedEvent args)
+    {
+        if (args.PartDamageMultiplier == 0
+            || args.TargetBodyPart is null
+            || args.DamageDelta is null
+            || !args.DamageIncreased
+            && !args.DamageDecreased)
+            return;
+
+        var (targetType, targetSymmetry) = ConvertTargetBodyPart(args.TargetBodyPart.Value);
+        foreach (var part in GetBodyChildrenOfType(ent, targetType, ent.Comp)
+                     .Where(part => part.Component.Symmetry == targetSymmetry))
+        {
+            if (_gameTiming.IsFirstTimePredicted)
+                ApplyPartDamage(part, args.DamageDelta, targetType, args.TargetBodyPart.Value, args.Sever, args.PartDamageMultiplier);
+        }
+    }
+    // PARSEC EDIT END
 
     private void OnBodyInserted(Entity<BodyComponent> ent, ref EntInsertedIntoContainerMessage args)
     {

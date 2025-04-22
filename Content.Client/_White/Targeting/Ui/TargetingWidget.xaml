@@ -105,25 +105,25 @@
                             Visible="False"/>
                     </TextureButton>
                     <PanelContainer
-                        MinSize="45 42"
+                        MinSize="45 45"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Center">
                         <TextureButton
                             Name="StomachButton"
-                            MinSize="33 24"
+                            MinSize="33 28"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Center"
                             StyleClasses="TargetingButtonStomach">
                             <TextureRect
                                 TexturePath="/Textures/White/Targeting/Doll/stomach.png"
                                 Stretch="KeepAspectCentered"
-                                SetSize="33 12"
+                                SetSize="33 22"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center"/>
                             <TextureRect
                                 TexturePath="/Textures/White/Targeting/Doll/stomach_hover.png"
                                 Stretch="KeepAspectCentered"
-                                SetSize="33 12"
+                                SetSize="33 22"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center"
                                 Visible="False"/>

@@ -11,31 +11,30 @@ public sealed class TargetingSystem : EntitySystem
 
     public event Action<TargetingComponent>? TargetingStartup;
     public event Action? TargetingShutdown;
-    public event Action<TargetingBodyParts>? TargetChange;
     public event Action<TargetingComponent>? PartStatusStartup;
     public event Action<TargetingComponent>? PartStatusUpdate;
     public event Action? PartStatusShutdown;
+
     public override void Initialize()
     {
         base.Initialize();
 
-        // Local Events Subscribers
-        SubscribeLocalEvent<TargetingComponent, LocalPlayerAttachedEvent>(HandlePlayerAttached);
-        SubscribeLocalEvent<TargetingComponent, LocalPlayerDetachedEvent>(HandlePlayerDetached);
+        SubscribeLocalEvent<TargetingComponent, LocalPlayerAttachedEvent>(PlayerAttached);
+        SubscribeLocalEvent<TargetingComponent, LocalPlayerDetachedEvent>(PlayerDetached);
+
         SubscribeLocalEvent<TargetingComponent, ComponentStartup>(OnTargetingStartup);
         SubscribeLocalEvent<TargetingComponent, ComponentShutdown>(OnTargetingShutdown);
 
-        // Network Events Subscribers
         SubscribeNetworkEvent<TargetingIntegrityChangeEvent>(OnTargetingIntegrityChange);
     }
 
-    private void HandlePlayerAttached(EntityUid uid, TargetingComponent component, LocalPlayerAttachedEvent args)
+    private void PlayerAttached(EntityUid uid, TargetingComponent component, LocalPlayerAttachedEvent args)
     {
         TargetingStartup?.Invoke(component);
         PartStatusStartup?.Invoke(component);
     }
 
-    private void HandlePlayerDetached(EntityUid uid, TargetingComponent component, LocalPlayerDetachedEvent args)
+    private void PlayerDetached(EntityUid uid, TargetingComponent component, LocalPlayerDetachedEvent args)
     {
         TargetingShutdown?.Invoke();
         PartStatusShutdown?.Invoke();
@@ -43,20 +42,20 @@ public sealed class TargetingSystem : EntitySystem
 
     private void OnTargetingStartup(EntityUid uid, TargetingComponent component, ComponentStartup args)
     {
-        if (_playerManager.LocalEntity == uid)
-        {
-            TargetingStartup?.Invoke(component);
-            PartStatusStartup?.Invoke(component);
-        }
+        if (_playerManager.LocalEntity != uid)
+            return;
+
+        TargetingStartup?.Invoke(component);
+        PartStatusStartup?.Invoke(component);
     }
 
     private void OnTargetingShutdown(EntityUid uid, TargetingComponent component, ComponentShutdown args)
     {
-        if (_playerManager.LocalEntity == uid)
-        {
-            TargetingShutdown?.Invoke();
-            PartStatusShutdown?.Invoke();
-        }
+        if (_playerManager.LocalEntity != uid)
+            return;
+
+        TargetingShutdown?.Invoke();
+        PartStatusShutdown?.Invoke();
     }
 
     private void OnTargetingIntegrityChange(TargetingIntegrityChangeEvent args)
@@ -71,13 +70,5 @@ public sealed class TargetingSystem : EntitySystem
             return;
 
         PartStatusUpdate?.Invoke(component);
-    }
-
-    private void HandleTargetingChange(ICommonSession? session, TargetingBodyParts target)
-    {
-        if (session is not { AttachedEntity: { } uid } || !TryComp<TargetingComponent>(uid, out _))
-            return;
-
-        TargetChange?.Invoke(target);
     }
 }

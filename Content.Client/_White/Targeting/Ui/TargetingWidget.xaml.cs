@@ -22,6 +22,7 @@ public sealed partial class TargetingWidget : UIWidget
         foreach (var bodyPartButton in _bodyPartControls)
         {
             bodyPartButton.Value.MouseFilter = MouseFilterMode.Stop;
+
             bodyPartButton.Value.OnPressed += _ => SetActiveBodyPart(bodyPartButton.Key);
             bodyPartButton.Value.OnMouseEntered += _ => SetHoverBodyPart(bodyPartButton.Key);
             bodyPartButton.Value.OnMouseExited += _ => SetHoverBodyPart(bodyPartButton.Key);
@@ -75,12 +76,9 @@ public sealed partial class TargetingWidget : UIWidget
 
     public void SetHoverBodyPart(TargetingBodyParts bodyPart)
     {
-        foreach (var bodyPartButton in _bodyPartControls)
+        foreach (var bodyPartButton in _bodyPartControls.Where(bodyPartButton => bodyPartButton.Key == bodyPart && !bodyPartButton.Value.Children.First().Visible))
         {
-            if (bodyPartButton.Key == bodyPart && !bodyPartButton.Value.Children.First().Visible)
-            {
-                bodyPartButton.Value.Children.Last().Visible = !bodyPartButton.Value.Children.Last().Visible;
-            }
+            bodyPartButton.Value.Children.Last().Visible = !bodyPartButton.Value.Children.Last().Visible;
         }
     }
 }

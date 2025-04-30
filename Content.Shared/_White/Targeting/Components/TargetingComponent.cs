@@ -1,5 +1,4 @@
-﻿using Robust.Shared.Audio;
-using Robust.Shared.GameStates;
+﻿using Robust.Shared.GameStates;
 
 namespace Content.Shared._White.Targeting.Components;
 

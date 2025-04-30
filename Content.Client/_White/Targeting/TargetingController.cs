@@ -21,14 +21,12 @@ public sealed class TargetingController : UIController, IOnStateEntered<Gameplay
     {
         system.TargetingStartup += AddTargetingControl;
         system.TargetingShutdown += RemoveTargetingControl;
-        system.TargetChange += CycleTarget;
     }
 
     public void OnSystemUnloaded(TargetingSystem system)
     {
         system.TargetingStartup -= AddTargetingControl;
         system.TargetingShutdown -= RemoveTargetingControl;
-        system.TargetChange -= CycleTarget;
     }
 
     public void OnStateEntered(GameplayState state)

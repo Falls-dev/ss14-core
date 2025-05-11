@@ -144,6 +144,7 @@ public partial class SharedBodySystem
         var partIdSlot = GetParentPartAndSlotOrNull(partEnt)?.Slot;
         var originalPartIntegrity = partEnt.Comp.PartIntegrity;
         partEnt.Comp.PartIntegrity = Math.Min(BodyPartComponent.MaxPartIntegrity, partEnt.Comp.PartIntegrity - partIntegrity);
+
         if (canSever
             && !partEnt.Comp.Enabled
             && partEnt.Comp.PartIntegrity <= 0
@@ -159,6 +160,7 @@ public partial class SharedBodySystem
                 RaiseLocalEvent(partEnt, ref ev);
                 break;
             }
+
             case false
             when partEnt.Comp.PartIntegrity >= 80.0f:
             {

@@ -132,7 +132,6 @@ public partial class SharedBodySystem
                     var ev = new TargetingBodyPartEnabledEvent(partEnt.Owner, partEnt.Comp);
                     RaiseLocalEvent(partEnt.Comp.Body.Value, ref ev);
                 }
-
                 break;
             }
 

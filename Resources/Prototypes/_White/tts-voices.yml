@@ -352,12 +352,6 @@
   speaker: demoman
 
 - type: ttsVoice
-  id: Valtos
-  name: tts-voice-name-valtos
-  sex: Female
-  speaker: valtos
-
-- type: ttsVoice
   id: Khajiit
   name: tts-voice-name-khajiit
   sex: Male

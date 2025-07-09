@@ -58,15 +58,12 @@
 #            - type: TradeStation
 #          paths:
 #            - /Maps/Shuttles/trading_outpost.yml
-        mining:
-          paths:
-          - /Maps/White/Shuttles/mining.yml
         # Spawn last
         ruins:
           hide: true
           nameGrid: true
-          minCount: 2
-          maxCount: 2
+          minCount: 43
+          maxCount: 43
           stationGrid: false
           paths:
           - /Maps/Ruins/biodome_satellite.yml
@@ -77,7 +74,42 @@
           - /Maps/Ruins/syndicate_dropship.yml
           - /Maps/Ruins/whiteship_ancient.yml
           - /Maps/Ruins/whiteship_bluespacejumper.yml
-
+          - /Maps/Salvage/asteroid-base.yml
+          - /Maps/Salvage/cargo-1.yml
+          - /Maps/Salvage/engineering-chunk.yml
+          - /Maps/Salvage/hauling-shuttle.yml
+          - /Maps/Salvage/meatball.yml
+          - /Maps/Salvage/medium-1.yml
+          - /Maps/Salvage/medium-crashed-shuttle.yml
+          - /Maps/Salvage/medium-dock.yml
+          - /Maps/Salvage/medium-library.yml
+          - /Maps/Salvage/medium-pet-hospital.yml
+          - /Maps/Salvage/medium-pirate.yml
+          - /Maps/Salvage/medium-ruined-emergency-shuttle.yml
+          - /Maps/Salvage/medium-silent-orchestra.yml
+          - /Maps/Salvage/medium-template.yml
+          - /Maps/Salvage/medium-vault-1.yml
+          - /Maps/Salvage/outpost-arm.yml
+          - /Maps/Salvage/ruin-cargo-salvage.yml
+          - /Maps/Salvage/security-chunk.yml
+          - /Maps/Salvage/small-1.yml
+          - /Maps/Salvage/small-2.yml
+          - /Maps/Salvage/small-3.yml
+          - /Maps/Salvage/small-4.yml
+          - /Maps/Salvage/small-a-1.yml
+          - /Maps/Salvage/small-ai-survey-drone.yml
+          - /Maps/Salvage/small-cargo.yml
+          - /Maps/Salvage/small-chapel.yml
+          - /Maps/Salvage/small-chef.yml
+          - /Maps/Salvage/small-party.yml
+          - /Maps/Salvage/small-ship-1.yml
+          - /Maps/Salvage/small-syndicate.yml
+          - /Maps/Salvage/small-template.yml
+          - /Maps/Salvage/small-tesla.yml
+          - /Maps/Salvage/stationstation.yml
+          - /Maps/Salvage/tick-colony.yml
+          - /Maps/Salvage/vegan-meatball.yml
+          - /Maps/Salvage/wh-salvage.yml
 - type: entity
   id: BaseStationCentcomm
   abstract: true

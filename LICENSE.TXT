@@ -511,6 +511,9 @@ License.
 13.9 Entire Agreement. This License constitutes the entire agreement between
 the parties with respect to the subject matter hereof.
 
+14.0 We, the owners of Frosty-Dev, do not grant any permissions for the code of SS14(ss14-core) to WWDP (https://github.com/WWhiteDreamProject) and 
+looking at the repository contents by them is not allowed.
+
 EXHIBIT A
 
 The License Notice below must appear in each file of the Source Code of any

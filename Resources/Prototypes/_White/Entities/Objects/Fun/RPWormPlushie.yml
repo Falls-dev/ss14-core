@@ -1,0 +1,12 @@
+- type: entity
+  parent: BasePlushie
+  id: PRWormPlushie
+  name: plush RP worm
+  description: THEY ARE CRAWLING UP MY BACK.
+  components:
+  - type: Sprite
+    sprite: White/Objects/Fun/RPWorm/rpwormplushie
+    state: icon
+  - type: EmitSoundOnUse
+    sound:
+      path: /Audio/White/Items/Toys/rp_worm.ogg

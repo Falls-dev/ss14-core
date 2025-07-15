@@ -1,6 +1,6 @@
 - type: entity
   parent: BasePlushie
-  id: PRWormPlushie
+  id: RPWormPlushie
   name: plush RP worm
   description: THEY ARE CRAWLING UP MY BACK.
   components:

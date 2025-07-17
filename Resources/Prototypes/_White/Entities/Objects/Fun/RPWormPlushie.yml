@@ -5,7 +5,7 @@
   description: THEY ARE CRAWLING UP MY BACK.
   components:
   - type: Sprite
-    sprite: White/Objects/Fun/RPWorm/rpwormplushie
+    sprite: White/Objects/Fun/RPWorm/rpwormplushie.rsi
     state: icon
   - type: EmitSoundOnUse
     sound:

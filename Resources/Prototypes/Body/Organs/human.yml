@@ -43,6 +43,7 @@
   - type: Sprite
     state: brain
   - type: Organ
+    slotId: "brain"
   - type: Input
     context: "ghost"
   - type: Brain
@@ -74,6 +75,8 @@
   name: eyes
   description: "I see you!"
   components:
+  - type: Organ
+    slotId: eyes
   - type: Sprite
     layers:
       - state: eyeball-l
@@ -119,6 +122,8 @@
       - state: lung-l
       - state: lung-r
   - type: Lung
+  - type: Organ
+    slotId: lungs
   - type: Metabolizer
     removeEmpty: true
     solutionOnBody: false
@@ -148,6 +153,8 @@
   name: heart
   description: "I feel bad for the heartless bastard who lost this."
   components:
+  - type: Organ
+    slotId: heart
   - type: Sprite
     state: heart-on
   # The heart 'metabolizes' medicines and poisons that aren't filtered out by other organs.
@@ -167,6 +174,8 @@
   name: stomach
   description: "Gross. This is hard to stomach."
   components:
+  - type: Organ
+    slotId: stomach
   - type: Sprite
     state: stomach
   - type: SolutionContainerManager
@@ -196,6 +205,8 @@
   name: liver
   description: "Pairing suggestion: chianti and fava beans."
   components:
+  - type: Organ
+    slotId: liver
   - type: Sprite
     state: liver
   - type: Metabolizer # The liver metabolizes certain chemicals only, like alcohol.

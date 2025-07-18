@@ -279,7 +279,7 @@ public sealed class BarotraumaSystem : EntitySystem
     private void ActLowPressure(EntityUid uid, BarotraumaComponent barotrauma)
     {
         // Deal damage and ignore resistances. Resistance to pressure damage should be done via pressure protection gear.
-        _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * Atmospherics.LowPressureDamage, true, false);
+        _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * Atmospherics.LowPressureDamage, true, false, sever: false);
 
         if (!barotrauma.TakingDamage)
         {
@@ -299,7 +299,7 @@ public sealed class BarotraumaSystem : EntitySystem
         );
 
         // Deal damage and ignore resistances. Resistance to pressure damage should be done via pressure protection gear.
-        _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * damageScale, true, false);
+        _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * damageScale, true, false, sever: false);
 
         if (!barotrauma.TakingDamage)
         {

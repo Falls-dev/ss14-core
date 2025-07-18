@@ -1,6 +1,7 @@
 using Content.Client.Clothing;
 using Content.Client.Examine;
 using Content.Client.Verbs.UI;
+using Content.Shared._White.Targeting;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
@@ -46,7 +47,22 @@ namespace Content.Client.Inventory
                 _equipEventsQueue.Enqueue((comp, args)));
             SubscribeLocalEvent<InventorySlotsComponent, DidUnequipEvent>((_, comp, args) =>
                 _equipEventsQueue.Enqueue((comp, args)));
+
+            // PARSEC EDIT START
+            SubscribeLocalEvent<InventorySlotsComponent, RefreshInventorySlotsEvent>(RefreshInventorySlots);
+            // PARSEC EDIT END
         }
+
+        // PARSEC EDIT START
+        public void RefreshInventorySlots(EntityUid uid, InventorySlotsComponent component, RefreshInventorySlotsEvent args)
+        {
+            if (component.SlotData.TryGetValue(args.SlotName, out var slotData)
+                && _playerManager.LocalEntity == uid)
+            {
+                OnSlotRemoved?.Invoke(slotData);
+            }
+        }
+        // PARSEC EDIT END
 
         public override void Update(float frameTime)
         {

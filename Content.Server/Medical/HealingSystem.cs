@@ -1,11 +1,15 @@
+using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
 using Content.Server.Medical.Components;
 using Content.Server.Popups;
 using Content.Server.Stack;
+using Content.Shared._White.Targeting.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Audio;
+using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
@@ -37,6 +41,7 @@ public sealed class HealingSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private readonly SharedBodySystem _body = default!; // PARSEC
 
     public override void Initialize()
     {
@@ -84,6 +89,19 @@ public sealed class HealingSystem : EntitySystem
 
         if (healed == null && healing.BloodlossModifier != 0)
             return;
+
+        if (healed != null && healed.GetTotal() == 0)
+        {
+            if (TryComp<TargetingComponent>(args.User, out var user)
+                && TryComp<TargetingComponent>(args.Target, out var target)
+                && healing.Damage.GetTotal() < 0)
+            {
+                var (type, symmetry) = _body.ConvertTargetBodyPart(user.TargetBodyPart);
+                if (_body.GetBodyChildrenOfType(args.Target.Value, type).FirstOrDefault() is { } bodyPart
+                    && bodyPart.Component.PartIntegrity < BodyPartComponent.MaxPartIntegrity)
+                    _body.TryChangePartIntegrity(bodyPart, healing.Damage.GetTotal().Float(), false, target.TargetBodyPart, out _);
+            }
+        }
 
         var total = healed?.GetTotal() ?? FixedPoint2.Zero;
 

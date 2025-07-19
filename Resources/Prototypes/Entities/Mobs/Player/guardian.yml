@@ -21,6 +21,7 @@
     - type: MobMover
     - type: InputMover
     - type: Puller
+      needsHands: false
     - type: MovementSpeedModifier
       baseWalkSpeed: 4
       baseSprintSpeed: 5.5
@@ -99,7 +100,7 @@
 
 # From the uplink injector
 - type: entity
-  name: HoloparasiteStandart
+  name: Holoparasite
   id: MobHoloparasiteGuardianStandart
   parent: MobGuardianBase
   description: A mesmerising whirl of hard-light patterns weaves a marvelous, yet oddly familiar visage. It stands proud, tuning into its owner's life to sustain itself.
@@ -157,7 +158,7 @@
         task: SimpleHumanoidHostileCompound
 
 - type: entity
-  name: HoloparasiteAssasin
+  name: Holoparasite
   id: MobHoloparasiteGuardianAssasin
   parent: MobGuardianBase
   description: A mesmerising whirl of hard-light patterns weaves a marvelous, yet oddly familiar visage. It stands proud, tuning into its owner's life to sustain itself.
@@ -215,7 +216,7 @@
       task: SimpleHumanoidHostileCompound
 
 - type: entity
-  name: HoloparasiteCharger
+  name: Holoparasite
   id: MobHoloparasiteGuardianCharger
   parent: MobGuardianBase
   description: A mesmerising whirl of hard-light patterns weaves a marvelous, yet oddly familiar visage. It stands proud, tuning into its owner's life to sustain itself.
@@ -270,7 +271,7 @@
       task: SimpleHumanoidHostileCompound
 
 - type: entity
-  name: HoloparasiteLighting
+  name: Holoparasite
   id: MobHoloparasiteGuardianLighting
   parent: MobGuardianBase
   description: A mesmerising whirl of hard-light patterns weaves a marvelous, yet oddly familiar visage. It stands proud, tuning into its owner's life to sustain itself.

@@ -1,0 +1,13 @@
+- type: entity
+  parent: BaseItem
+  id: SyndicateContractUplink
+  name: Аплинк контрактника
+  description: Suspiciously looking...
+  components:
+  - type: Sprite
+    sprite: White/Contract/contractor.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: White/Contract/contractor.rsi
+  - type: GiftIgnore

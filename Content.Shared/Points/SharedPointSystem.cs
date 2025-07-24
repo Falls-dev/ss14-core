@@ -75,6 +75,33 @@ public abstract class SharedPointSystem : EntitySystem
     {
         return new FormattedMessage();
     }
+
+    // WD EDIT START. Team points for Violence gamemode
+
+    /// <summary>
+    /// Ensures that a player is being tracked by the PointManager, giving them a default score of 0.
+    /// </summary>
+    public void EnsureTeam(ushort team, EntityUid uid, PointManagerComponent? component = null)
+    {
+        if (!Resolve(uid, ref component))
+            return;
+
+        if (component.TeamPoints.ContainsKey(team))
+            return;
+
+        component.TeamPoints.Add(team, FixedPoint2.Zero);
+    }
+
+    /// <summary>
+    /// Returns a formatted message containing a ranking of all the teams and their scores.
+    /// I don't even know if i should leave this here. Why do you even need PointSystem AND SharedPointSystem?
+    /// </summary>
+    public virtual FormattedMessage GetTeamScoreboard(EntityUid uid, PointManagerComponent? component = null)
+    {
+        return new FormattedMessage();
+    }
+
+    // WD EDIT END
 }
 
 /// <summary>
@@ -84,3 +111,11 @@ public abstract class SharedPointSystem : EntitySystem
 /// <param name="Points"></param>
 [ByRefEvent]
 public readonly record struct PlayerPointChangedEvent(NetUserId Player, FixedPoint2 Points);
+
+/// <summary>
+/// WD EDIT. Event raised on the point manager entity and broadcasted whenever a team's points change.
+/// </summary>
+/// <param name="Team"></param>
+/// <param name="Points"></param>
+[ByRefEvent]
+public readonly record struct TeamPointChangedEvent(ushort Team, FixedPoint2 Points);

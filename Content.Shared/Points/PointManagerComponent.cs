@@ -19,8 +19,21 @@ public sealed partial class PointManagerComponent : Component
     public Dictionary<NetUserId, FixedPoint2> Points = new();
 
     /// <summary>
+    /// WHITE EDIT. A dictionary for team points, used for Violence gamemode.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public Dictionary<ushort, FixedPoint2> TeamPoints = new();
+
+
+    /// <summary>
     /// A text-only version of the scoreboard used by the client.
     /// </summary>
     [DataField, AutoNetworkedField]
     public FormattedMessage Scoreboard = new();
+
+    /// <summary>
+    /// A text-only version of the scoreboard used by the client.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public FormattedMessage TeamScoreboard = new();
 }

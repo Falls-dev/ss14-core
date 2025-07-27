@@ -5,22 +5,17 @@
 - type: entity
   parent: [ClothingOuterBase, AllowSuitStorageClothing]
   id: ClothingOuterArmorBasic
-  name: armor vest
-  description: A standard Type I armored vest that provides decent protection against most types of damage.
+  name: plate carrier
+  description: A standard plate carrier.
   components:
   - type: Sprite
     sprite: White/Clothing/OuterClothing/kevlar.rsi
   - type: Clothing
     sprite: White/Clothing/OuterClothing/kevlar.rsi
-  - type: Armor #Based on /tg/ but slightly compensated to fit the fact that armor stacks in SS14.
-    modifiers:
-      coefficients:
-        Blunt: 0.70
-        Slash: 0.70
-        Piercing: 0.70 #Can save you, but bullets will still hurt. Will take about 10 shots from a Viper before critting, as opposed to 7 while unarmored and 16~ with a bulletproof vest.
-        Heat: 0.80
-  - type: ExplosionResistance
-    damageCoefficient: 0.90
+  - type: PlateCarrier
+  - type: ContainerContainer
+    containers:
+      armor_plate: !type:Container
   # WD edit sounds start
   - type: EmitSoundOnPickup
     sound:

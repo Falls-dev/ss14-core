@@ -491,6 +491,7 @@
   alpha: 0.9
   ghostName: Nekovich
   ghostDescription: Law's Left Hand.
+  size: 0.75, 0.75
 
 #Feda_Plevajecki
 - type: customGhost
@@ -527,7 +528,7 @@
   sprite: White/Ghosts/deliko-ghost.rsi
   alpha: 0.9
   ghostName: МГЕ Русланчек
-  ghostDescription: Будешь машинистом в тепловозе.
+  ghostDescription: Будешь машинистом в паравозике.
 
 #Dragon4ik
 - type: customGhost

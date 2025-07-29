@@ -1,0 +1,39 @@
+﻿- type: entity
+  id: CMSurgeryBase
+  noSpawn: true
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMSurgeryOpenIncision
+  name: Open Incision
+  components:
+  - type: CMSurgery
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMSurgeryCloseIncision
+  name: Close Incision
+  components:
+  - type: CMSurgery
+    priority: 1
+    steps:
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMSurgeryOpenRibcage
+  name: Open Ribcage
+  components:
+  - type: CMSurgery
+    requirement: CMSurgeryOpenIncision
+    steps:
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+  - type: CMSurgeryPartCondition
+    part: Torso

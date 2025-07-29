@@ -67,6 +67,7 @@ namespace Content.Client.Ghost
             SubscribeLocalEvent<EyeComponent, ToggleLightingActionEvent>(OnToggleLighting);
             SubscribeLocalEvent<EyeComponent, ToggleFoVActionEvent>(OnToggleFoV);
             SubscribeLocalEvent<GhostComponent, ToggleGhostsActionEvent>(OnToggleGhosts);
+            SubscribeLocalEvent<GhostComponent, ToggleGhostHudActionEvent>(OnToggleGhostHud); // WD
         }
 
         private void OnStartup(EntityUid uid, GhostComponent component, ComponentStartup args)
@@ -89,6 +90,15 @@ namespace Content.Client.Ghost
 
             Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-lighting-manager-popup"), args.Performer);
             _contentEye.RequestToggleLight(uid, component);
+            args.Handled = true;
+        }
+
+        private void OnToggleGhostHud(EntityUid uid, GhostComponent component, ToggleGhostHudActionEvent args) // WD start
+        {
+            if (args.Handled)
+                return;
+
+            Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-hud-popup"), args.Performer);
             args.Handled = true;
         }
 
@@ -121,6 +131,7 @@ namespace Content.Client.Ghost
             _actions.RemoveAction(uid, component.ToggleFoVActionEntity);
             _actions.RemoveAction(uid, component.ToggleGhostsActionEntity);
             _actions.RemoveAction(uid, component.ToggleGhostHearingActionEntity);
+            _actions.RemoveAction(uid, component.ToggleGhostHudActionEntity); // WD
 
             if (uid != _playerManager.LocalEntity)
                 return;

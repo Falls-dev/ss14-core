@@ -1,0 +1,116 @@
+﻿# WD EDIT ALERT - ALL OF THIS FROM WHITE DRIST
+
+# Ears
+- type: marking
+  id: BullishHorns
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Human]
+  sponsorOnly: true
+  coloring:
+    default:
+      type:
+        !type:CategoryColoring
+        category: Hair
+      fallbackTypes:
+      - !type:SkinColoring
+    layers:
+      ears_cat_inner:
+        type:
+          !type:SimpleColoring
+          color: "#FFFFFF"
+  sprites:
+  - sprite: Mobs/Customization/Felinid/felinids-ears.rsi
+    state: bullishhorns
+
+- type: marking
+  id: BunnyEars
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Human]
+  sponsorOnly: true
+  coloring:
+    default:
+      type:
+        !type:CategoryColoring
+        category: Hair
+      fallbackTypes:
+      - !type:SkinColoring
+    layers:
+      ears_cat_inner:
+        type:
+          !type:SimpleColoring
+          color: "#FFFFFF"
+  sprites:
+  - sprite: Mobs/Customization/Felinid/felinids-ears.rsi
+    state: bunnyearstone1
+  - sprite: Mobs/Customization/Felinid/felinids-ears.rsi
+    state: bunnyearstone2
+
+- type: marking
+  id: FoxEars
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Human]
+  sponsorOnly: true
+  coloring:
+    default:
+      type:
+        !type:CategoryColoring
+        category: Hair
+      fallbackTypes:
+      - !type:SkinColoring
+    layers:
+      ears_cat_inner:
+        type:
+          !type:SimpleColoring
+          color: "#FFFFFF"
+  sprites:
+  - sprite: Mobs/Customization/Felinid/felinids-ears.rsi
+    state: foxears
+
+- type: marking
+  id: GoatThorn
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Human]
+  sponsorOnly: true
+  coloring:
+    default:
+      type:
+        !type:CategoryColoring
+        category: Hair
+      fallbackTypes:
+      - !type:SkinColoring
+    layers:
+      ears_cat_inner:
+        type:
+          !type:SimpleColoring
+          color: "#FFFFFF"
+  sprites:
+  - sprite: Mobs/Customization/Felinid/felinids-ears.rsi
+    state: goathornstone1
+  - sprite: Mobs/Customization/Felinid/felinids-ears.rsi
+    state: goathornstone2
+
+# Tails
+# TODO: додобавить
+
+- type: marking
+  id: CatTail
+  bodyPart: Tail
+  markingCategory: Tail
+  speciesRestriction: [Human]
+  sponsorOnly: true
+  coloring:
+    default:
+      type:
+        !type:CategoryColoring
+        category: Hair
+      fallbackTypes:
+      - !type:CategoryColoring
+        category: FacialHair
+      - !type:SkinColoring
+  sprites:
+  - sprite: Mobs/Customization/Felinid/felinids-tails.rsi
+    state: tail_cat
